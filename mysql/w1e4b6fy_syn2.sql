@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_6ll8yh` (
+    `table_6ll8yh_customer_id` INT,
+    `table_6ll8yh_status` VARCHAR(50)
+);
+INSERT INTO `table_6ll8yh` (`table_6ll8yh_customer_id`, `table_6ll8yh_status`) VALUES (1, 'test');
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_f1vjlk(customer_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_573e5k INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO mysql_var_573e5k
+    FROM table_6ll8yh
+    WHERE table_6ll8yh_customer_id = customer_id_param AND table_6ll8yh_status = 'ACTIVE';
+
+    RETURN mysql_var_573e5k;
+END//
+
+DELIMITER ;

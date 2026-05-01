@@ -1,0 +1,104 @@
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS pg_tbl_jqwvvg (
+    pg_col_pyhgll INTEGER,
+    key INTEGER,
+    pg_col_rbgjmw INTEGER
+);
+INSERT INTO pg_tbl_jqwvvg (pg_col_pyhgll, key, pg_col_rbgjmw) VALUES
+(1, 10, 100),
+(2, 10, 200),
+(3, 20, 300),
+(4, 20, 400),
+(5, 30, 500),
+(6, 30, 600);
+
+CREATE TABLE IF NOT EXISTS pg_tbl_azjhbn (
+    pg_col_sloprp INTEGER PRIMARY KEY,
+    pg_col_cqotyh INTEGER NOT NULL,
+    pg_col_zksbsw INTEGER NOT NULL
+);
+INSERT INTO pg_tbl_azjhbn (pg_col_sloprp, pg_col_cqotyh, pg_col_zksbsw) VALUES
+(101, 50000, 5),
+(102, 75000, 2);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure pg_proc_nenwsv----- */
+CREATE OR REPLACE FUNCTION pg_proc_nenwsv(pg_var_wewpep INTEGER, pg_var_mhpjya INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_alxjus INTEGER;
+    pg_var_jsbhke INTEGER;
+    pg_var_eyqmcy INTEGER := 30000;
+BEGIN
+    SELECT pg_col_cqotyh INTO pg_var_alxjus FROM pg_tbl_azjhbn WHERE pg_col_sloprp = pg_var_wewpep;
+    
+    IF pg_var_alxjus < pg_var_eyqmcy THEN
+        pg_var_jsbhke := 1;
+    ELSIF pg_var_mhpjya > 7 THEN
+        pg_var_jsbhke := 2;
+    ELSE
+        pg_var_jsbhke := 3;
+    END IF;
+    
+    RETURN pg_var_jsbhke;
+END;
+$$ LANGUAGE plpgsql;
+
+/* -----Synthesized Procedure----- */
+CREATE OR REPLACE FUNCTION pg_proc_jidtrh(pg_var_xwqkxk INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_zckpdf INTEGER;
+    pg_var_btgljo INTEGER;
+    pg_var_rrcaxo INTEGER;
+    pg_var_cliqix INTEGER := 0;
+BEGIN
+    -- pg_col_eaffod first aggregate logic
+    SELECT key, MIN(pg_col_rbgjmw), MAX(pg_col_rbgjmw)
+    INTO pg_var_rrcaxo, pg_var_zckpdf, pg_var_btgljo
+    FROM pg_tbl_jqwvvg
+    WHERE key = pg_var_xwqkxk
+    GROUP BY key;
+
+    IF pg_var_rrcaxo IS NOT NULL THEN
+        pg_var_cliqix := (((SELECT pg_proc_nenwsv(-68, 0))::INTEGER ) - (3) + COALESCE(pg_var_cliqix, 0));
+    END IF;
+
+    -- pg_col_eaffod second query logic
+    SELECT pg_col_pyhgll, MIN(pg_col_rbgjmw), MAX(pg_col_rbgjmw)
+    INTO pg_var_rrcaxo, pg_var_zckpdf, pg_var_btgljo
+    FROM pg_tbl_jqwvvg
+    WHERE pg_col_pyhgll = pg_var_xwqkxk
+    GROUP BY pg_col_pyhgll;
+
+    IF pg_var_rrcaxo IS NOT NULL THEN
+        pg_var_cliqix := pg_var_cliqix + (pg_var_zckpdf - pg_var_btgljo);
+    END IF;
+
+    -- pg_col_eaffod third query logic with expression
+    SELECT (pg_col_pyhgll % 5), MIN(pg_col_rbgjmw), MAX(pg_col_rbgjmw)
+    INTO pg_var_rrcaxo, pg_var_zckpdf, pg_var_btgljo
+    FROM pg_tbl_jqwvvg
+    WHERE (pg_col_pyhgll % 5) = (pg_var_xwqkxk % 5)
+    GROUP BY (pg_col_pyhgll % 5);
+
+    IF pg_var_rrcaxo IS NOT NULL THEN
+        pg_var_cliqix := pg_var_cliqix + (pg_var_zckpdf * pg_var_btgljo);
+    END IF;
+
+    -- pg_col_eaffod text aggregate logic converted pg_col_twkoge integer
+    DECLARE
+        pg_var_jihmys TEXT := '0';
+        pg_var_bygkcl TEXT;
+    BEGIN
+        FOR pg_var_bygkcl IN SELECT pg_col_rbgjmw::TEXT FROM pg_tbl_jqwvvg WHERE key = pg_var_xwqkxk ORDER BY pg_col_pyhgll
+        LOOP
+            pg_var_jihmys := (pg_var_jihmys::FLOAT8 + pg_var_bygkcl::FLOAT8)::TEXT;
+        END LOOP;
+        
+        pg_var_cliqix := pg_var_cliqix + COALESCE(pg_var_jihmys::INTEGER, 0);
+    END;
+
+    RETURN pg_var_cliqix;
+END;
+$$ LANGUAGE plpgsql;

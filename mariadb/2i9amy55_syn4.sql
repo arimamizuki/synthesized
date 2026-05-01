@@ -1,0 +1,85 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_fz1nda` (
+    `table_fz1nda_campaign_id` INT,
+    `table_fz1nda_budget` INT,
+    `table_fz1nda_start_date` DATE,
+    `table_fz1nda_end_date` DATE
+);
+CREATE TABLE IF NOT EXISTS `table_off5xw` (
+    `table_off5xw_conversion_id` INT,
+    `table_off5xw_campaign_id` INT,
+    `table_off5xw_conversion_value` INT
+);
+INSERT INTO `table_fz1nda` (`table_fz1nda_campaign_id`, `table_fz1nda_budget`, `table_fz1nda_start_date`, `table_fz1nda_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+INSERT INTO `table_off5xw` (`table_off5xw_conversion_id`, `table_off5xw_campaign_id`, `table_off5xw_conversion_value`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_kg3p4e----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_kg3p4e(a INT, b INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+IF a > b THEN
+        RETURN a;
+    END IF;
+    RETURN b;
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_kiarba----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_kiarba(n INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_vrpwl4 VARCHAR(100) DEFAULT '';
+    DECLARE mysql_var_tk96nu INT DEFAULT 0;
+    DECLARE mysql_var_r34fqu INT DEFAULT 0;
+    DECLARE mysql_var_64gwwt INT DEFAULT 1;
+
+    SET mysql_var_tk96nu = ABS(n);
+
+    IF mysql_var_tk96nu = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE mysql_var_tk96nu > 0 DO
+        SET mysql_var_r34fqu = mysql_var_tk96nu % 2;
+        SET mysql_var_vrpwl4 = CONCAT(CAST(mysql_var_r34fqu AS CHAR), mysql_var_vrpwl4);
+        SET mysql_var_tk96nu = mysql_var_tk96nu / 2;
+    END WHILE;
+
+    RETURN CAST(mysql_var_vrpwl4 AS SIGNED);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_suc38r(campaign_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_osg46d INT DEFAULT 0;
+    DECLARE mysql_var_qjjo0e INT DEFAULT 0;
+    DECLARE mysql_var_h19r2r INT DEFAULT 0;
+
+    SELECT COALESCE(table_fz1nda_budget, 0)
+    INTO mysql_var_osg46d
+    FROM table_fz1nda
+    WHERE table_fz1nda_campaign_id = campaign_id_param;
+
+    SELECT COALESCE(SUM(table_off5xw_conversion_value), 0)
+    INTO mysql_var_qjjo0e
+    FROM table_off5xw
+    WHERE table_off5xw_campaign_id = campaign_id_param;
+
+    IF mysql_var_osg46d = 0 THEN
+        RETURN (mysql_func_kg3p4e(5, -7) - ((mysql_func_kiarba(5) - (0) + COALESCE(0, 0))) + COALESCE(0, 0));
+    END IF;
+
+    SET mysql_var_h19r2r = ((mysql_var_qjjo0e - mysql_var_osg46d) * 100) / mysql_var_osg46d;
+
+    RETURN mysql_var_h19r2r;
+END//
+
+DELIMITER ;

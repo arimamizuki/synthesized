@@ -1,0 +1,139 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_szzcym` (
+    `table_szzcym_campaign_id` INT,
+    `table_szzcym_status` VARCHAR(50),
+    `table_szzcym_budget` INT,
+    `table_szzcym_channel` INT
+);
+INSERT INTO `table_szzcym` (`table_szzcym_campaign_id`, `table_szzcym_status`, `table_szzcym_budget`, `table_szzcym_channel`) VALUES (1, 'test', 1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_drbjif` (
+    `table_drbjif_restaurant_id` INT,
+    `table_drbjif_customer_id` INT,
+    `table_drbjif_rating` DECIMAL(3,1),
+    `table_drbjif_food_quality` INT,
+    `table_drbjif_service_score` INT,
+    `table_drbjif_comment_date` DATE
+);
+CREATE TABLE IF NOT EXISTS `table_1yurit` (
+    `table_1yurit_restaurant_id` INT,
+    `table_1yurit_name` VARCHAR(50),
+    `table_1yurit_cuisine_type` VARCHAR(50),
+    `table_1yurit_avg_price` DECIMAL(10,2)
+);
+INSERT INTO `table_drbjif` (`table_drbjif_restaurant_id`, `table_drbjif_customer_id`, `table_drbjif_rating`, `table_drbjif_food_quality`, `table_drbjif_service_score`, `table_drbjif_comment_date`) VALUES (1, 1, 1.0, 1, 1, '2024-01-01');
+INSERT INTO `table_1yurit` (`table_1yurit_restaurant_id`, `table_1yurit_name`, `table_1yurit_cuisine_type`, `table_1yurit_avg_price`) VALUES (1, '2024-01-01', '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `table_alddzr` (
+    `table_alddzr_project_id` INT,
+    `table_alddzr_client_id` INT,
+    `table_alddzr_project_type` VARCHAR(50),
+    `table_alddzr_estimated_hours` INT,
+    `table_alddzr_actual_hours` INT,
+    `table_alddzr_labor_rate` INT,
+    `table_alddzr_material_cost` DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS `table_pq3dfa` (
+    `table_pq3dfa_contractor_id` INT,
+    `table_pq3dfa_name` VARCHAR(50),
+    `table_pq3dfa_specialty` INT,
+    `table_pq3dfa_hourly_rate` INT
+);
+INSERT INTO `table_alddzr` (`table_alddzr_project_id`, `table_alddzr_client_id`, `table_alddzr_project_type`, `table_alddzr_estimated_hours`, `table_alddzr_actual_hours`, `table_alddzr_labor_rate`, `table_alddzr_material_cost`) VALUES (1, 1, 'test', 1, 1, 1, 1.0);
+INSERT INTO `table_pq3dfa` (`table_pq3dfa_contractor_id`, `table_pq3dfa_name`, `table_pq3dfa_specialty`, `table_pq3dfa_hourly_rate`) VALUES (1, 'test', 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_r48e6l----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_r48e6l(project_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_ltdhky INT DEFAULT 0;
+    DECLARE mysql_var_lsdn18 INT DEFAULT 0;
+    DECLARE mysql_var_9f6m68 INT DEFAULT 0;
+    DECLARE mysql_var_lajz4o INT DEFAULT 0;
+    DECLARE mysql_var_ntzx99 INT DEFAULT 0;
+    DECLARE mysql_var_5rx55n INT DEFAULT 0;
+    DECLARE mysql_var_tjjzll INT DEFAULT 0;
+
+    SELECT COALESCE(table_alddzr_estimated_hours, 0), COALESCE(table_alddzr_actual_hours, 0), COALESCE(table_alddzr_labor_rate, 50)
+    INTO mysql_var_ltdhky, mysql_var_lsdn18, mysql_var_9f6m68
+    FROM table_alddzr
+    WHERE table_alddzr_project_id = project_id_param;
+
+    SELECT COALESCE(SUM(table_alddzr_material_cost), 0) INTO mysql_var_lajz4o
+    FROM table_alddzr
+    WHERE table_alddzr_project_id = project_id_param;
+
+    SET mysql_var_ntzx99 = (mysql_var_lsdn18 * mysql_var_9f6m68) + mysql_var_lajz4o;
+    SET mysql_var_5rx55n = mysql_var_ltdhky * mysql_var_9f6m68;
+
+    IF mysql_var_5rx55n = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET mysql_var_tjjzll = ((mysql_var_5rx55n - mysql_var_ntzx99) * 100) / mysql_var_5rx55n;
+
+    RETURN CAST(mysql_var_tjjzll AS SIGNED);
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_ijktus----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_ijktus(restaurant_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_mfrqcq INT DEFAULT 0;
+    DECLARE mysql_var_u4zx9x INT DEFAULT 0;
+    DECLARE mysql_var_xti8ey INT DEFAULT 0;
+    DECLARE mysql_var_z40c50 INT DEFAULT 0;
+    DECLARE mysql_var_bpu46h INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(table_drbjif_rating), 0), COALESCE(AVG(table_drbjif_food_quality), 0), COALESCE(AVG(table_drbjif_service_score), 0), COUNT(*)
+    INTO mysql_var_mfrqcq, mysql_var_u4zx9x, mysql_var_xti8ey, mysql_var_z40c50
+    FROM table_drbjif
+    WHERE table_drbjif_restaurant_id = restaurant_id_param;
+
+    IF mysql_var_z40c50 = 0 THEN
+        RETURN (mysql_func_r48e6l(-3) - (0) + COALESCE(0, 0));
+    END IF;
+
+    SET mysql_var_bpu46h = (mysql_var_mfrqcq * 40 / 100) + (mysql_var_u4zx9x * 35 / 100) + (mysql_var_xti8ey * 25 / 100);
+
+    IF mysql_var_z40c50 > 100 THEN
+        SET mysql_var_bpu46h = mysql_var_bpu46h + 10;
+    END IF;
+
+    RETURN CAST(mysql_var_bpu46h AS SIGNED);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_zfxqjb(campaign_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_6bf3u3 VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE mysql_var_ppl3ml INT DEFAULT 0;
+    DECLARE mysql_var_qd6yoz VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE mysql_var_xz2zmd DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT table_szzcym_status, COALESCE(table_szzcym_budget, 0), table_szzcym_channel,
+           COALESCE(SUM(cv.conversion_value), 0)
+    INTO mysql_var_6bf3u3, mysql_var_ppl3ml, mysql_var_qd6yoz, mysql_var_xz2zmd
+    FROM table_szzcym c
+    LEFT JOIN conversions cv ON table_szzcym_campaign_id = cv.campaign_id
+    WHERE table_szzcym_campaign_id = campaign_id_param
+    GROUP BY table_szzcym_campaign_id;
+
+    IF mysql_var_6bf3u3 != 'ACTIVE' OR mysql_var_ppl3ml = 0 THEN
+        RETURN (mysql_func_ijktus(8) - (0) + COALESCE(0, 0));
+    END IF;
+
+    RETURN FLOOR((mysql_var_xz2zmd * 100) / mysql_var_ppl3ml);
+END//
+
+DELIMITER ;

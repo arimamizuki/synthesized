@@ -1,0 +1,50 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_knrrtx` (
+    `table_knrrtx_customer_id` INT,
+    `table_knrrtx_country` INT
+);
+INSERT INTO `table_knrrtx` (`table_knrrtx_customer_id`, `table_knrrtx_country`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_5p08x1----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_5p08x1(num INT, bit_positions INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_5e8ltw INT DEFAULT 0;
+    DECLARE mysql_var_xkl0q1 INT DEFAULT 0;
+    DECLARE mysql_var_glknh0 INT;
+
+    toggle_loop: WHILE bit_positions > 0 DO
+        SET mysql_var_xkl0q1 = bit_positions MOD 10;
+        SET mysql_var_glknh0 = (num >> mysql_var_xkl0q1) & 1;
+
+        IF mysql_var_glknh0 = 0 THEN
+            SET mysql_var_5e8ltw = mysql_var_5e8ltw | (1 << mysql_var_xkl0q1);
+        END IF;
+
+        SET bit_positions = bit_positions DIV 10;
+    END WHILE toggle_loop;
+
+    RETURN mysql_var_5e8ltw;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_sqx70w(country_param VARCHAR(50)) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_muq4pv INT DEFAULT 0;
+
+    SELECT (mysql_func_5p08x1(-6, 10) - (0) + COALESCE(COUNT(*), 0))
+    INTO mysql_var_muq4pv
+    FROM orders o
+    JOIN table_knrrtx c ON o.customer_id = table_knrrtx_customer_id
+    WHERE table_knrrtx_country = country_param;
+
+    RETURN mysql_var_muq4pv;
+END//
+
+DELIMITER ;

@@ -1,0 +1,72 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_d8ttny` (
+    `table_d8ttny_dept_id` INT,
+    `table_d8ttny_name` VARCHAR(50),
+    `table_d8ttny_budget` INT,
+    `table_d8ttny_headcount` INT
+);
+CREATE TABLE IF NOT EXISTS `table_ihl8s5` (
+    `table_ihl8s5_emp_id` INT,
+    `table_ihl8s5_dept_id` INT,
+    `table_ihl8s5_salary` INT
+);
+INSERT INTO `table_d8ttny` (`table_d8ttny_dept_id`, `table_d8ttny_name`, `table_d8ttny_budget`, `table_d8ttny_headcount`) VALUES (1, 'test', 1, 1);
+INSERT INTO `table_ihl8s5` (`table_ihl8s5_emp_id`, `table_ihl8s5_dept_id`, `table_ihl8s5_salary`) VALUES (1, 1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_l34icx` (
+    `table_l34icx_emp_id` INT,
+    `table_l34icx_hire_date` DATE
+);
+INSERT INTO `table_l34icx` (`table_l34icx_emp_id`, `table_l34icx_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_xi9ude----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_xi9ude(emp_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_kqxshs INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, table_l34icx_hire_date, CURDATE())
+    INTO mysql_var_kqxshs
+    FROM table_l34icx
+    WHERE table_l34icx_emp_id = emp_id_param;
+
+    RETURN mysql_var_kqxshs;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_yq9p9p(dept_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_mju19s INT DEFAULT 0;
+    DECLARE mysql_var_4mm4nq INT DEFAULT 0;
+    DECLARE mysql_var_pijnqh INT DEFAULT 0;
+    DECLARE mysql_var_ufx7kh INT DEFAULT 0;
+
+    SELECT COALESCE(table_d8ttny_budget, 0), COUNT(*)
+    INTO mysql_var_mju19s, mysql_var_4mm4nq
+    FROM table_d8ttny d
+    LEFT JOIN table_ihl8s5 e ON table_d8ttny_dept_id = table_ihl8s5_dept_id
+    WHERE table_d8ttny_dept_id = dept_id_param
+    GROUP BY table_d8ttny_dept_id;
+
+    SELECT COALESCE(SUM(table_ihl8s5_salary), 0)
+    INTO mysql_var_pijnqh
+    FROM table_ihl8s5
+    WHERE table_ihl8s5_dept_id = dept_id_param;
+
+    IF mysql_var_4mm4nq = 0 THEN
+        RETURN (mysql_func_xi9ude(-4) - (0) + COALESCE(0, 0));
+    END IF;
+
+    SET mysql_var_ufx7kh = (mysql_var_mju19s - mysql_var_pijnqh) / mysql_var_4mm4nq;
+
+    RETURN mysql_var_ufx7kh;
+END//
+
+DELIMITER ;

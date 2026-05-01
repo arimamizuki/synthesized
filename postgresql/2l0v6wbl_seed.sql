@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS pg_tbl_berrqc (
+    pg_col_nuleov INTEGER PRIMARY KEY,
+    pg_col_zzeqhu INTEGER NOT NULL,
+    pg_col_iunhkl INTEGER
+);
+INSERT INTO pg_tbl_berrqc (pg_col_nuleov, pg_col_zzeqhu, pg_col_iunhkl) VALUES
+(101, 48, 1200),
+(102, 24, 600);
+
+/* -----Seed Procedure----- */
+CREATE OR REPLACE FUNCTION pg_proc_tiijer(pg_var_sbbijt INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_utncdv INTEGER;
+BEGIN
+    SELECT COALESCE(SUM(pg_col_iunhkl), 0)
+    INTO pg_var_utncdv
+    FROM pg_tbl_berrqc
+    WHERE pg_col_zzeqhu > pg_var_sbbijt;
+    
+    RETURN pg_var_utncdv;
+END;
+$$ LANGUAGE plpgsql;

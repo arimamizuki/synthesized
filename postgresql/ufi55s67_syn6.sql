@@ -1,0 +1,143 @@
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS pg_tbl_jiwejm (
+    pg_col_geibox INTEGER PRIMARY KEY,
+    pg_col_yejovy INTEGER NOT NULL,
+    pg_col_juggbv INTEGER
+);
+INSERT INTO pg_tbl_jiwejm (pg_col_geibox, pg_col_yejovy, pg_col_juggbv) VALUES
+(101, 48, 5),
+(102, 72, 8);
+
+CREATE TABLE IF NOT EXISTS pg_tbl_qojewi (
+    pg_col_xtakfs INTEGER PRIMARY KEY,
+    pg_col_huarde INTEGER NOT NULL,
+    pg_col_bcxfsw INTEGER
+);
+INSERT INTO pg_tbl_qojewi (pg_col_xtakfs, pg_col_huarde, pg_col_bcxfsw) VALUES
+(101, 12500, 3750),
+(102, 18750, 5625);
+
+CREATE TABLE IF NOT EXISTS pg_tbl_ivtngb (
+    pg_col_hnghzb TEXT,
+    pg_var_htprgf BIGINT,
+    pg_var_tivzfq BIGINT,
+    pg_col_cqgtep INTEGER,
+    pg_col_ubahlq BIGINT,
+    pg_col_dqkmnk TIMESTAMP,
+    pg_col_tagkiw TIMESTAMP,
+    duration INTERVAL,
+    pg_col_jyyjok TEXT,
+    pg_col_petnrw TEXT
+);
+INSERT INTO pg_tbl_ivtngb (pg_col_hnghzb, pg_var_htprgf, pg_var_tivzfq, pg_col_cqgtep, pg_col_ubahlq, 
+                                pg_col_dqkmnk, pg_col_tagkiw, duration, pg_col_jyyjok, pg_col_petnrw)
+    VALUES ('pg_proc_ycorsk', pg_var_htprgf, pg_var_tivzfq, pg_var_mlvqfq, pg_var_comdrc,
+            pg_var_wdklsk, pg_var_ifyqxy, pg_var_ifyqxy - pg_var_wdklsk, 'SUCCESS', 
+            format('Found %s primes, sum: %s', pg_var_mlvqfq, pg_var_comdrc));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure pg_proc_fpmgmr----- */
+CREATE OR REPLACE FUNCTION pg_proc_fpmgmr(pg_var_ikexei INTEGER, pg_var_biqtta INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_nkhvup INTEGER;
+    pg_var_bqpnnc INTEGER;
+BEGIN
+    SELECT COALESCE(pg_col_bcxfsw, 0) INTO pg_var_nkhvup
+    FROM pg_tbl_qojewi
+    WHERE pg_col_xtakfs = pg_var_ikexei;
+    
+    IF pg_var_nkhvup = 0 THEN
+        RETURN -100;
+    END IF;
+    
+    pg_var_bqpnnc := ((pg_var_nkhvup - pg_var_biqtta) * 100) / pg_var_biqtta;
+    
+    IF pg_var_bqpnnc < -50 THEN
+        RETURN -50;
+    ELSIF pg_var_bqpnnc > 500 THEN
+        RETURN 500;
+    ELSE
+        RETURN pg_var_bqpnnc;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+/* -----Procedure pg_proc_ycorsk----- */
+CREATE OR REPLACE FUNCTION pg_proc_ycorsk(pg_var_htprgf INTEGER, pg_var_tivzfq INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_wdklsk TIMESTAMP;
+    pg_var_ifyqxy TIMESTAMP;
+    pg_var_mlvqfq INTEGER := 0;
+    pg_var_jpromx BIGINT;
+    pg_var_comdrc BIGINT := 0;
+    pg_var_zbymps BOOLEAN;
+    pg_var_epzbhl BIGINT;
+    pg_var_mfmxdv BIGINT;
+BEGIN
+    pg_var_wdklsk := clock_timestamp();
+    
+    IF pg_var_htprgf <= 2 AND pg_var_tivzfq >= 2 THEN
+        pg_var_comdrc := pg_var_comdrc + 2;
+        pg_var_mlvqfq := pg_var_mlvqfq + 1;
+    END IF;
+    
+    pg_var_jpromx := CASE WHEN pg_var_htprgf <= 3 THEN 3 
+                  WHEN pg_var_htprgf % 2 = 0 THEN pg_var_htprgf + 1
+                  ELSE pg_var_htprgf 
+             END;
+    
+    WHILE pg_var_jpromx <= pg_var_tivzfq LOOP
+        pg_var_zbymps := TRUE;
+        pg_var_mfmxdv := floor(sqrt(pg_var_jpromx))::BIGINT;
+        
+        FOR pg_var_epzbhl IN 3..pg_var_mfmxdv BY 2 LOOP
+            IF pg_var_jpromx % pg_var_epzbhl = 0 THEN
+                pg_var_zbymps := FALSE;
+                EXIT;
+            END IF;
+        END LOOP;
+        
+        IF pg_var_zbymps THEN
+            pg_var_comdrc := pg_var_comdrc + pg_var_jpromx;
+            pg_var_mlvqfq := pg_var_mlvqfq + 1;
+        END IF;
+        
+        pg_var_jpromx := pg_var_jpromx + 2;
+    END LOOP;
+    
+    pg_var_ifyqxy := clock_timestamp();
+    
+    INSERT INTO pg_tbl_ivtngb (pg_col_hnghzb, pg_var_htprgf, pg_var_tivzfq, pg_col_cqgtep, pg_col_ubahlq, 
+                                pg_col_dqkmnk, pg_col_tagkiw, duration, pg_col_jyyjok, pg_col_petnrw)
+    VALUES ('pg_proc_ycorsk', pg_var_htprgf, pg_var_tivzfq, pg_var_mlvqfq, pg_var_comdrc,
+            pg_var_wdklsk, pg_var_ifyqxy, pg_var_ifyqxy - pg_var_wdklsk, 'SUCCESS', 
+            format('Found %s primes, sum: %s', pg_var_mlvqfq, pg_var_comdrc));
+    
+    RETURN pg_var_mlvqfq;
+END;
+$$ LANGUAGE plpgsql;
+
+/* -----Synthesized Procedure----- */
+CREATE OR REPLACE FUNCTION pg_proc_ulqppe(pg_var_wvjqzj INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_zerzeu INTEGER := 0;
+    pg_var_kaklia RECORD;
+BEGIN
+    FOR pg_var_kaklia IN 
+        SELECT pg_col_yejovy, pg_col_juggbv 
+        FROM pg_tbl_jiwejm 
+        WHERE pg_col_yejovy > pg_var_wvjqzj
+    LOOP
+        pg_var_zerzeu := (((SELECT pg_proc_fpmgmr(-91, 72))::INTEGER ) - (0) + COALESCE(pg_var_zerzeu, 0));
+    END LOOP;
+    
+    IF pg_var_zerzeu > 1000 THEN
+        pg_var_zerzeu := 1000;
+    END IF;
+    
+    RETURN (((SELECT pg_proc_ycorsk(-34, 95))::INTEGER) - (24) + COALESCE(pg_var_zerzeu, 0));
+END;
+$$ LANGUAGE plpgsql;

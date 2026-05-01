@@ -1,0 +1,224 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_faumsp` (
+    `table_faumsp_order_id` INT,
+    `table_faumsp_customer_id` INT,
+    `table_faumsp_order_date` DATE,
+    `table_faumsp_total_amount` DECIMAL(10,2),
+    `table_faumsp_status` VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS `table_hjz1g1` (
+    `table_hjz1g1_customer_id` INT,
+    `table_hjz1g1_country` INT
+);
+INSERT INTO `table_faumsp` (`table_faumsp_order_id`, `table_faumsp_customer_id`, `table_faumsp_order_date`, `table_faumsp_total_amount`, `table_faumsp_status`) VALUES (1, 1, '2024-01-01', 1.0, '2024-01-01');
+INSERT INTO `table_hjz1g1` (`table_hjz1g1_customer_id`, `table_hjz1g1_country`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_j5lhw9` (
+    `table_j5lhw9_customer_id` INT
+);
+INSERT INTO `table_j5lhw9` (`table_j5lhw9_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `table_gq3cyv` (
+    `table_gq3cyv_product_id` INT,
+    `table_gq3cyv_category_id` INT,
+    `table_gq3cyv_price` DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS `table_zw3pv7` (
+    `table_zw3pv7_category_id` INT,
+    `table_zw3pv7_name` VARCHAR(50),
+    `table_zw3pv7_parent_category_id` INT
+);
+INSERT INTO `table_gq3cyv` (`table_gq3cyv_product_id`, `table_gq3cyv_category_id`, `table_gq3cyv_price`) VALUES (1, 1, 1.0);
+INSERT INTO `table_zw3pv7` (`table_zw3pv7_category_id`, `table_zw3pv7_name`, `table_zw3pv7_parent_category_id`) VALUES (1, 'test', 1);
+
+CREATE TABLE IF NOT EXISTS `table_9qqrr0` (
+    `table_9qqrr0_product_id` INT,
+    `table_9qqrr0_category_id` INT,
+    `table_9qqrr0_price` DECIMAL(10,2)
+);
+INSERT INTO `table_9qqrr0` (`table_9qqrr0_product_id`, `table_9qqrr0_category_id`, `table_9qqrr0_price`) VALUES (1, 1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `table_5abvnq` (
+    `table_5abvnq_order_id` INT,
+    `table_5abvnq_customer_id` INT,
+    `table_5abvnq_order_date` DATE,
+    `table_5abvnq_total_amount` DECIMAL(10,2),
+    `table_5abvnq_status` VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS `table_wwhmdw` (
+    `table_wwhmdw_order_id` INT,
+    `table_wwhmdw_product_id` INT,
+    `table_wwhmdw_quantity` INT
+);
+INSERT INTO `table_5abvnq` (`table_5abvnq_order_id`, `table_5abvnq_customer_id`, `table_5abvnq_order_date`, `table_5abvnq_total_amount`, `table_5abvnq_status`) VALUES (1, 1, '2024-01-01', 1.0, '2024-01-01');
+INSERT INTO `table_wwhmdw` (`table_wwhmdw_order_id`, `table_wwhmdw_product_id`, `table_wwhmdw_quantity`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `table_tgvv2e` (
+    `table_tgvv2e_zone_id` INT,
+    `table_tgvv2e_hourly_rate` INT,
+    `table_tgvv2e_max_capacity` INT,
+    `table_tgvv2e_current_occupied` INT
+);
+CREATE TABLE IF NOT EXISTS `table_zir43i` (
+    `table_zir43i_trans_id` INT,
+    `table_zir43i_vehicle_id` INT,
+    `table_zir43i_zone_id` INT,
+    `table_zir43i_entry_time` DATE,
+    `table_zir43i_exit_time` DATE,
+    `table_zir43i_amount_paid` INT
+);
+INSERT INTO `table_tgvv2e` (`table_tgvv2e_zone_id`, `table_tgvv2e_hourly_rate`, `table_tgvv2e_max_capacity`, `table_tgvv2e_current_occupied`) VALUES (1, 1, 1, 1);
+INSERT INTO `table_zir43i` (`table_zir43i_trans_id`, `table_zir43i_vehicle_id`, `table_zir43i_zone_id`, `table_zir43i_entry_time`, `table_zir43i_exit_time`, `table_zir43i_amount_paid`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_s4f4en----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_s4f4en(zone_id_param INT, hours_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_cn144x INT DEFAULT 0;
+    DECLARE mysql_var_r1e4me INT DEFAULT 0;
+    DECLARE mysql_var_s916ob INT DEFAULT 0;
+    DECLARE mysql_var_zuthxv INT DEFAULT 0;
+    DECLARE mysql_var_ds975b INT DEFAULT 0;
+    DECLARE mysql_var_fugk9j INT DEFAULT 0;
+
+    SELECT COALESCE(table_tgvv2e_hourly_rate, 10), COALESCE(table_tgvv2e_max_capacity, 100)
+    INTO mysql_var_cn144x, mysql_var_r1e4me
+    FROM table_tgvv2e
+    WHERE table_tgvv2e_zone_id = zone_id_param;
+
+    SELECT COUNT(*) INTO mysql_var_s916ob
+    FROM table_zir43i
+    WHERE table_zir43i_zone_id = zone_id_param AND table_zir43i_exit_time IS NULL;
+
+    SET mysql_var_zuthxv = hours_param * mysql_var_cn144x;
+
+    IF mysql_var_s916ob > mysql_var_r1e4me * 80 / 100 THEN
+        SET mysql_var_ds975b = mysql_var_zuthxv * 25 / 100;
+    END IF;
+
+    SET mysql_var_fugk9j = mysql_var_zuthxv + mysql_var_ds975b;
+
+    RETURN CAST(mysql_var_fugk9j AS SIGNED);
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_3vrsvx----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_3vrsvx(customer_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_e6pt3j INT DEFAULT 0;
+
+    SELECT (mysql_func_s4f4en(2, -5) - (0) + COALESCE(COUNT(*), 0))
+    INTO mysql_var_e6pt3j
+    FROM orders
+    WHERE table_j5lhw9_customer_id = customer_id_param;
+
+    RETURN mysql_var_e6pt3j;
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_z1hejx----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_z1hejx(category_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_wfps89 INT DEFAULT 0;
+    DECLARE mysql_var_sk8swd INT DEFAULT 0;
+    DECLARE mysql_var_fpyo75 INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(table_gq3cyv_price), 0), COALESCE(MIN(table_gq3cyv_price), 0)
+    INTO mysql_var_wfps89, mysql_var_sk8swd
+    FROM table_gq3cyv
+    WHERE table_gq3cyv_category_id = category_id_param;
+
+    IF mysql_var_sk8swd = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET mysql_var_fpyo75 = (mysql_var_wfps89 - mysql_var_sk8swd) / mysql_var_sk8swd;
+
+    RETURN mysql_var_fpyo75;
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_t9xm76----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_t9xm76(category_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_2ksbu9 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(table_9qqrr0_price), 0)
+    INTO mysql_var_2ksbu9
+    FROM table_9qqrr0
+    WHERE table_9qqrr0_category_id = category_id_param;
+
+    RETURN FLOOR(mysql_var_2ksbu9);
+END//
+
+DELIMITER ;
+
+/* -----Procedure mysql_func_5fc22p----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_5fc22p(order_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_t48rhl INT DEFAULT 0;
+    DECLARE mysql_var_z8f5qz INT DEFAULT 0;
+    DECLARE mysql_var_ivf6fv INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT p.category_id), COALESCE(SUM(table_wwhmdw_quantity), 0)
+    INTO mysql_var_t48rhl, mysql_var_z8f5qz
+    FROM table_wwhmdw oi
+    JOIN products p ON table_wwhmdw_product_id = p.product_id
+    WHERE table_wwhmdw_order_id = order_id_param;
+
+    IF mysql_var_z8f5qz = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET mysql_var_ivf6fv = (mysql_var_t48rhl * 100) / mysql_var_z8f5qz;
+
+    RETURN mysql_var_ivf6fv;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_yoxal7(customer_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_2od0b2 INT DEFAULT 0;
+    DECLARE mysql_var_lc1mhz INT DEFAULT 0;
+    DECLARE mysql_var_c548cz INT DEFAULT 0;
+
+    SELECT (mysql_func_z1hejx(5) - (0) + COALESCE((mysql_func_t9xm76(6) - (0) + COALESCE((mysql_func_5fc22p(-4) - (0) + COALESCE(COUNT(*), 0)), 0)), 0))
+    INTO mysql_var_2od0b2
+    FROM table_faumsp
+    WHERE table_faumsp_customer_id = customer_id_param;
+
+    SELECT COUNT(*)
+    INTO mysql_var_lc1mhz
+    FROM table_faumsp o
+    JOIN table_hjz1g1 c1 ON table_faumsp_customer_id = table_hjz1g1_customer_id
+    JOIN table_hjz1g1 c2 ON table_hjz1g1_country != table_hjz1g1_country
+    WHERE table_faumsp_customer_id = customer_id_param;
+
+    IF mysql_var_2od0b2 = 0 THEN
+        RETURN (mysql_func_3vrsvx(-9) - (0) + COALESCE(0, 0));
+    END IF;
+
+    SET mysql_var_c548cz = (mysql_var_lc1mhz * 100) / mysql_var_2od0b2;
+
+    RETURN mysql_var_c548cz;
+END//
+
+DELIMITER ;

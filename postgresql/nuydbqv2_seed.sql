@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS pg_tbl_caaedm (
+    pg_col_khksyn INTEGER PRIMARY KEY,
+    pg_col_hzioeu INTEGER NOT NULL,
+    pg_col_ogiial INTEGER NOT NULL
+);
+INSERT INTO pg_tbl_caaedm (pg_col_khksyn, pg_col_hzioeu, pg_col_ogiial) VALUES
+(101, 2, 8),
+(102, 3, 12);
+
+/* -----Seed Procedure----- */
+CREATE OR REPLACE FUNCTION pg_proc_xlvytl(pg_var_jmugsk INTEGER, pg_var_mclein INTEGER)
+RETURNS INTEGER AS $$
+DECLARE
+    pg_var_xbxcel INTEGER;
+    pg_var_dhwmll INTEGER;
+    pg_var_fvyxdw INTEGER;
+BEGIN
+    SELECT pg_col_hzioeu, pg_col_ogiial INTO pg_var_xbxcel, pg_var_dhwmll
+    FROM pg_tbl_caaedm
+    WHERE pg_col_khksyn = pg_var_jmugsk;
+    
+    IF pg_var_xbxcel IS NULL THEN
+        RETURN -1;
+    END IF;
+    
+    pg_var_dhwmll := pg_var_dhwmll + pg_var_mclein;
+    
+    pg_var_fvyxdw := pg_var_xbxcel * 10 + (pg_var_dhwmll / 5);
+    
+    IF pg_var_dhwmll > 20 THEN
+        pg_var_fvyxdw := pg_var_fvyxdw + 5;
+    END IF;
+    
+    RETURN pg_var_fvyxdw;
+END;
+$$ LANGUAGE plpgsql;

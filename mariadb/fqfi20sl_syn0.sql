@@ -1,0 +1,105 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_3vsyd4` (
+    `table_3vsyd4_item_id` INT,
+    `table_3vsyd4_sku` INT,
+    `table_3vsyd4_name` VARCHAR(50),
+    `table_3vsyd4_warehouse_id` INT,
+    `table_3vsyd4_quantity_on_hand` INT,
+    `table_3vsyd4_reorder_point` INT,
+    `table_3vsyd4_unit_cost` DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS `table_inida3` (
+    `table_inida3_txn_id` INT,
+    `table_inida3_item_id` INT,
+    `table_inida3_txn_type` VARCHAR(50),
+    `table_inida3_quantity` INT,
+    `table_inida3_txn_date` DATE
+);
+INSERT INTO `table_3vsyd4` (`table_3vsyd4_item_id`, `table_3vsyd4_sku`, `table_3vsyd4_name`, `table_3vsyd4_warehouse_id`, `table_3vsyd4_quantity_on_hand`, `table_3vsyd4_reorder_point`, `table_3vsyd4_unit_cost`) VALUES (1, 1, '2024-01-01', 1, 1, 1, 1.0);
+INSERT INTO `table_inida3` (`table_inida3_txn_id`, `table_inida3_item_id`, `table_inida3_txn_type`, `table_inida3_quantity`, `table_inida3_txn_date`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_d8ttny` (
+    `table_d8ttny_dept_id` INT,
+    `table_d8ttny_name` VARCHAR(50),
+    `table_d8ttny_budget` INT,
+    `table_d8ttny_headcount` INT
+);
+CREATE TABLE IF NOT EXISTS `table_ihl8s5` (
+    `table_ihl8s5_emp_id` INT,
+    `table_ihl8s5_dept_id` INT,
+    `table_ihl8s5_salary` INT
+);
+INSERT INTO `table_d8ttny` (`table_d8ttny_dept_id`, `table_d8ttny_name`, `table_d8ttny_budget`, `table_d8ttny_headcount`) VALUES (1, 'test', 1, 1);
+INSERT INTO `table_ihl8s5` (`table_ihl8s5_emp_id`, `table_ihl8s5_dept_id`, `table_ihl8s5_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure mysql_func_yq9p9p----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_yq9p9p(dept_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_mju19s INT DEFAULT 0;
+    DECLARE mysql_var_4mm4nq INT DEFAULT 0;
+    DECLARE mysql_var_pijnqh INT DEFAULT 0;
+    DECLARE mysql_var_ufx7kh INT DEFAULT 0;
+
+    SELECT COALESCE(table_d8ttny_budget, 0), COUNT(*)
+    INTO mysql_var_mju19s, mysql_var_4mm4nq
+    FROM table_d8ttny d
+    LEFT JOIN table_ihl8s5 e ON table_d8ttny_dept_id = table_ihl8s5_dept_id
+    WHERE table_d8ttny_dept_id = dept_id_param
+    GROUP BY table_d8ttny_dept_id;
+
+    SELECT COALESCE(SUM(table_ihl8s5_salary), 0)
+    INTO mysql_var_pijnqh
+    FROM table_ihl8s5
+    WHERE table_ihl8s5_dept_id = dept_id_param;
+
+    IF mysql_var_4mm4nq = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET mysql_var_ufx7kh = (mysql_var_mju19s - mysql_var_pijnqh) / mysql_var_4mm4nq;
+
+    RETURN mysql_var_ufx7kh;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION mysql_func_jo4vzr(item_id_param INT) RETURNS INT DETERMINISTIC NO SQL
+BEGIN
+DECLARE mysql_var_s12rp4 INT DEFAULT 0;
+    DECLARE mysql_var_rv9wi1 INT DEFAULT 0;
+    DECLARE mysql_var_h8iq3n INT DEFAULT 0;
+    DECLARE mysql_var_wqqezn INT DEFAULT 0;
+    DECLARE mysql_var_lwbban INT DEFAULT 0;
+
+    SELECT COALESCE(table_3vsyd4_quantity_on_hand, 0), COALESCE(table_3vsyd4_reorder_point, 0), COALESCE(table_3vsyd4_unit_cost, 0)
+    INTO mysql_var_s12rp4, mysql_var_rv9wi1, mysql_var_h8iq3n
+    FROM table_3vsyd4
+    WHERE table_3vsyd4_item_id = item_id_param;
+
+    SELECT COALESCE(SUM(ABS(table_inida3_quantity)), 0) INTO mysql_var_wqqezn
+    FROM table_inida3
+    WHERE table_inida3_item_id = item_id_param
+      AND table_inida3_txn_type IN ('OUT', 'SALE', 'TRANSFER')
+      AND table_inida3_txn_date >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF mysql_var_s12rp4 = 0 THEN
+        RETURN (mysql_func_yq9p9p(0) - (0) + COALESCE(0, 0));
+    END IF;
+
+    SET mysql_var_lwbban = (mysql_var_wqqezn * mysql_var_h8iq3n) / mysql_var_s12rp4;
+
+    IF mysql_var_s12rp4 < mysql_var_rv9wi1 THEN
+        SET mysql_var_lwbban = mysql_var_lwbban - 10;
+    END IF;
+
+    RETURN CAST(mysql_var_lwbban AS SIGNED);
+END//
+
+DELIMITER ;
