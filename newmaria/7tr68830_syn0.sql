@@ -1,0 +1,848 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h4zt6m` (
+    `table_rkvm7b_emp_id` INT,
+    `table_rkvm7b_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_h4zt6m` (`table_rkvm7b_emp_id`, `table_rkvm7b_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j08jvt` (
+    `table_fsh4pg_order_id` INT,
+    `table_fsh4pg_customer_id` INT,
+    `table_fsh4pg_order_status` VARCHAR(50),
+    `table_fsh4pg_total_amount` DECIMAL(10,2),
+    `table_fsh4pg_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_j08jvt` (`table_fsh4pg_order_id`, `table_fsh4pg_customer_id`, `table_fsh4pg_order_status`, `table_fsh4pg_total_amount`, `table_fsh4pg_order_date`) VALUES (1, 1, '2024-01-01', 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wktknw` (
+    `table_foynbe_customer_id` INT,
+    `table_foynbe_plan_type` VARCHAR(50),
+    `table_foynbe_monthly_cost` DECIMAL(10,2),
+    `table_foynbe_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_wktknw` (`table_foynbe_customer_id`, `table_foynbe_plan_type`, `table_foynbe_monthly_cost`, `table_foynbe_start_date`) VALUES (1, '2024-01-01', 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8jd0iz` (
+    `table_a17oac_policy_id` INT,
+    `table_a17oac_customer_id` INT,
+    `table_a17oac_policy_type` VARCHAR(50),
+    `table_a17oac_premium_monthly` INT,
+    `table_a17oac_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nanhwy` (
+    `table_2vldgz_claim_id` INT,
+    `table_2vldgz_policy_id` INT,
+    `table_2vldgz_claim_date` DATE,
+    `table_2vldgz_claim_amount` DECIMAL(10,2),
+    `table_2vldgz_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_8jd0iz` (`table_a17oac_policy_id`, `table_a17oac_customer_id`, `table_a17oac_policy_type`, `table_a17oac_premium_monthly`, `table_a17oac_coverage_amount`) VALUES (1, 1, '2024-01-01', 1, 1.0);
+
+INSERT INTO `mysql_tbl_nanhwy` (`table_2vldgz_claim_id`, `table_2vldgz_policy_id`, `table_2vldgz_claim_date`, `table_2vldgz_claim_amount`, `table_2vldgz_status`) VALUES (1, 1, '2024-01-01', 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_76l8qd` (
+    `table_73hwya_doctor_id` INT,
+    `table_73hwya_specialization` INT,
+    `table_73hwya_years_experience` INT,
+    `table_73hwya_consultation_fee` INT,
+    `table_73hwya_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_w702xm` (
+    `table_45zu3n_appointment_id` INT,
+    `table_45zu3n_doctor_id` INT,
+    `table_45zu3n_patient_id` INT,
+    `table_45zu3n_appointment_date` DATE,
+    `table_45zu3n_duration_minutes` INT,
+    `table_45zu3n_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_76l8qd` (`table_73hwya_doctor_id`, `table_73hwya_specialization`, `table_73hwya_years_experience`, `table_73hwya_consultation_fee`, `table_73hwya_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `mysql_tbl_w702xm` (`table_45zu3n_appointment_id`, `table_45zu3n_doctor_id`, `table_45zu3n_patient_id`, `table_45zu3n_appointment_date`, `table_45zu3n_duration_minutes`, `table_45zu3n_status`) VALUES (1, 1, 1, '2024-01-01', 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9cvnbe` (
+    `table_13k63l_order_id` INT,
+    `table_13k63l_customer_id` INT,
+    `table_13k63l_store_id` INT,
+    `table_13k63l_order_date` DATE,
+    `table_13k63l_total_amount` DECIMAL(10,2),
+    `table_13k63l_delivery_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g8jqey` (
+    `table_iddkc1_store_id` INT,
+    `table_iddkc1_name` VARCHAR(50),
+    `table_iddkc1_region` INT,
+    `table_iddkc1_delivery_radius_miles` INT
+);
+
+INSERT INTO `mysql_tbl_9cvnbe` (`table_13k63l_order_id`, `table_13k63l_customer_id`, `table_13k63l_store_id`, `table_13k63l_order_date`, `table_13k63l_total_amount`, `table_13k63l_delivery_fee`) VALUES (1, 1, 1, '2024-01-01', 1.0, 1);
+
+INSERT INTO `mysql_tbl_g8jqey` (`table_iddkc1_store_id`, `table_iddkc1_name`, `table_iddkc1_region`, `table_iddkc1_delivery_radius_miles`) VALUES (1, '2024-01-01', 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r72kk5` (
+    `table_82gjqg_order_id` INT,
+    `table_82gjqg_customer_id` INT,
+    `table_82gjqg_order_date` DATE,
+    `table_82gjqg_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8ybjp9` (
+    `table_re3oh6_customer_id` INT,
+    `table_re3oh6_country` INT
+);
+
+INSERT INTO `mysql_tbl_r72kk5` (`table_82gjqg_order_id`, `table_82gjqg_customer_id`, `table_82gjqg_order_date`, `table_82gjqg_total_amount`) VALUES (1, 1, '2024-01-01', 1.0);
+
+INSERT INTO `mysql_tbl_8ybjp9` (`table_re3oh6_customer_id`, `table_re3oh6_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fz51xw` (
+    `table_1dt01k_supplier_id` INT,
+    `table_1dt01k_lead_time_days` DATE,
+    `table_1dt01k_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_fz51xw` (`table_1dt01k_supplier_id`, `table_1dt01k_lead_time_days`, `table_1dt01k_supplier_rating`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4eo70y` (
+    `table_f4tyek_customer_id` INT,
+    `table_f4tyek_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_4eo70y` (`table_f4tyek_customer_id`, `table_f4tyek_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zl29qo` (
+    `table_j2jhz6_product_id` INT,
+    `table_j2jhz6_category_id` INT,
+    `table_j2jhz6_price` DECIMAL(10,2),
+    `table_j2jhz6_stock_quantity` INT,
+    `table_j2jhz6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pbw9nr` (
+    `table_qrw383_supplier_id` INT,
+    `table_qrw383_supplier_rating` DECIMAL(3,1),
+    `table_qrw383_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_khsrw4` (
+    `table_gq218t_order_id` INT,
+    `table_gq218t_product_id` INT,
+    `table_gq218t_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_zl29qo` (`table_j2jhz6_product_id`, `table_j2jhz6_category_id`, `table_j2jhz6_price`, `table_j2jhz6_stock_quantity`, `table_j2jhz6_supplier_id`) VALUES (1, 1, 1.0, 1, 1);
+
+INSERT INTO `mysql_tbl_pbw9nr` (`table_qrw383_supplier_id`, `table_qrw383_supplier_rating`, `table_qrw383_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `mysql_tbl_khsrw4` (`table_gq218t_order_id`, `table_gq218t_product_id`, `table_gq218t_quantity`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e08yfc` (
+    `table_0h8tj4_campaign_id` INT,
+    `table_0h8tj4_status` VARCHAR(50),
+    `table_0h8tj4_budget` INT
+);
+
+INSERT INTO `mysql_tbl_e08yfc` (`table_0h8tj4_campaign_id`, `table_0h8tj4_status`, `table_0h8tj4_budget`) VALUES (1, 'test', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_swx7yr` (
+    `table_ya8vgy_campaign_id` INT,
+    `table_ya8vgy_start_date` DATE,
+    `table_ya8vgy_end_date` DATE,
+    `table_ya8vgy_budget` INT
+);
+
+INSERT INTO `mysql_tbl_swx7yr` (`table_ya8vgy_campaign_id`, `table_ya8vgy_start_date`, `table_ya8vgy_end_date`, `table_ya8vgy_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fcw7rm` (
+    `table_ff7pki_campaign_id` INT,
+    `table_ff7pki_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_fcw7rm` (`table_ff7pki_campaign_id`, `table_ff7pki_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bp9rbw` (
+    `table_h9wxsq_product_id` INT,
+    `table_h9wxsq_category_id` INT,
+    `table_h9wxsq_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_bp9rbw` (`table_h9wxsq_product_id`, `table_h9wxsq_category_id`, `table_h9wxsq_price`) VALUES (1, 1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_90m5g5` (
+    `table_jsszc1_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_90m5g5` (`table_jsszc1_total_amount`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bcue2o` (
+    `table_n8rdpy_customer_id` INT,
+    `table_n8rdpy_status` VARCHAR(50),
+    `table_n8rdpy_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_bcue2o` (`table_n8rdpy_customer_id`, `table_n8rdpy_status`, `table_n8rdpy_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS test.t1 (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.t1 (col1, col2) VALUES ('foo', 42);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rl2h5c` (
+    `table_t8n5jz_customer_id` INT,
+    `table_t8n5jz_country` INT
+);
+
+INSERT INTO `mysql_tbl_rl2h5c` (`table_t8n5jz_customer_id`, `table_t8n5jz_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e1ozcx` (table_z8coiu_id INT, customer_table_z8coiu_id INT, table_z8coiu_order_date DATE, table_z8coiu_status VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s0dv18` (table_v2o1di_status VARCHAR(20), table_v2o1di_count INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_eg5ovo` (
+    `table_h04zny_donation_id` INT,
+    `table_h04zny_donor_id` INT,
+    `table_h04zny_campaign_id` INT,
+    `table_h04zny_amount` DECIMAL(10,2),
+    `table_h04zny_donation_date` DATE,
+    `table_h04zny_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jehveg` (
+    `table_f7g9hy_campaign_id` INT,
+    `table_f7g9hy_name` VARCHAR(50),
+    `table_f7g9hy_goal_amount` DECIMAL(10,2),
+    `table_f7g9hy_raised_amount` DECIMAL(10,2),
+    `table_f7g9hy_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_eg5ovo` (`table_h04zny_donation_id`, `table_h04zny_donor_id`, `table_h04zny_campaign_id`, `table_h04zny_amount`, `table_h04zny_donation_date`, `table_h04zny_payment_method`) VALUES (1, 1, 1, 1.0, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_jehveg` (`table_f7g9hy_campaign_id`, `table_f7g9hy_name`, `table_f7g9hy_goal_amount`, `table_f7g9hy_raised_amount`, `table_f7g9hy_start_date`) VALUES (1, '2024-01-01', 1.0, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7klfn0` (
+    `table_mybgsz_policy_id` INT,
+    `table_mybgsz_customer_id` INT,
+    `table_mybgsz_bike_value` INT,
+    `table_mybgsz_bike_type` VARCHAR(50),
+    `table_mybgsz_annual_premium` INT,
+    `table_mybgsz_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dts590` (
+    `table_p8wno0_claim_id` INT,
+    `table_p8wno0_policy_id` INT,
+    `table_p8wno0_claim_date` DATE,
+    `table_p8wno0_claim_amount` DECIMAL(10,2),
+    `table_p8wno0_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7klfn0` (`table_mybgsz_policy_id`, `table_mybgsz_customer_id`, `table_mybgsz_bike_value`, `table_mybgsz_bike_type`, `table_mybgsz_annual_premium`, `table_mybgsz_deductible_amount`) VALUES (1, 1, 1, '2024-01-01', 1, 1.0);
+
+INSERT INTO `mysql_tbl_dts590` (`table_p8wno0_claim_id`, `table_p8wno0_policy_id`, `table_p8wno0_claim_date`, `table_p8wno0_claim_amount`, `table_p8wno0_status`) VALUES (1, 1, '2024-01-01', 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_COUNT_PENDING_ORDERS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PENDING_ORDERS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PENDING_COUNT INT DEFAULT 0;
+    DECLARE V_PROCESSING_COUNT INT DEFAULT 0;
+    DECLARE V_SHIPPED_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_PENDING INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_PENDING_COUNT
+    FROM `mysql_tbl_j08jvt`
+    WHERE TABLE_FSH4PG_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_FSH4PG_ORDER_STATUS = 'PENDING';
+
+    SELECT COUNT(*) INTO V_PROCESSING_COUNT
+    FROM `mysql_tbl_j08jvt`
+    WHERE TABLE_FSH4PG_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_FSH4PG_ORDER_STATUS = 'PROCESSING';
+
+    SELECT COUNT(*) INTO V_SHIPPED_COUNT
+    FROM `mysql_tbl_j08jvt`
+    WHERE TABLE_FSH4PG_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_FSH4PG_ORDER_STATUS = 'SHIPPED';
+
+    SET V_TOTAL_PENDING = V_PENDING_COUNT + V_PROCESSING_COUNT;
+
+    RETURN V_TOTAL_PENDING;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TENURE_YEARS DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TIMESTAMPDIFF(YEAR, TABLE_FOYNBE_START_DATE, CURDATE()), 0)
+    INTO V_TENURE_YEARS
+    FROM `mysql_tbl_wktknw`
+    WHERE TABLE_FOYNBE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN FLOOR(V_TENURE_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSION_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_0H8TJ4_STATUS, COALESCE(TABLE_0H8TJ4_BUDGET, 0), COALESCE(SUM(CV.CONVERSION_VALUE), 0)
+    INTO V_STATUS, V_BUDGET, V_CONVERSION_VALUE
+    FROM `mysql_tbl_e08yfc` C
+    LEFT JOIN CONVERSIONS CV ON TABLE_0H8TJ4_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE TABLE_0H8TJ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY TABLE_0H8TJ4_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' OR V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CONVERSION_VALUE * 100) / V_BUDGET);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FOOSP----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP() RETURNS INT DETERMINISTIC
+BEGIN
+    INSERT INTO TEST.T1
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_FF7PKI_START_DATE)
+    INTO V_YEAR
+    FROM `mysql_tbl_fcw7rm`
+    WHERE TABLE_FF7PKI_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TOTAL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_JSSZC1_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_90m5g5`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_rl2h5c`
+    WHERE TABLE_T8N5JZ_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT / 10;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_SUBSCRIPTION_MONTHS INT DEFAULT 0;
+
+    SELECT TABLE_N8RDPY_STATUS, COALESCE(TABLE_N8RDPY_MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_STATUS, V_MONTHLY_COST, V_SUBSCRIPTION_MONTHS
+    FROM `mysql_tbl_bcue2o`
+    WHERE TABLE_N8RDPY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_MONTHLY_COST * V_SUBSCRIPTION_MONTHS) / 10;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_YA8VGY_BUDGET, 0), DATEDIFF(TABLE_YA8VGY_END_DATE, TABLE_YA8VGY_START_DATE) + 1
+    INTO V_BUDGET, V_DAYS
+    FROM `mysql_tbl_swx7yr`
+    WHERE TABLE_YA8VGY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DAYS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_H9WXSQ_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_bp9rbw`
+    WHERE TABLE_H9WXSQ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_H9WXSQ_PRICE), 1)
+    INTO V_OVERALL_AVG
+    FROM `mysql_tbl_bp9rbw`;
+
+    RETURN FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J2JHZ6_PRICE, 0), COALESCE(TABLE_J2JHZ6_STOCK_QUANTITY, 0), COALESCE(TABLE_QRW383_SUPPLIER_RATING, 3.0), COALESCE(TABLE_QRW383_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_zl29qo` P
+    LEFT JOIN `mysql_tbl_pbw9nr` S ON TABLE_J2JHZ6_SUPPLIER_ID = TABLE_QRW383_SUPPLIER_ID
+    WHERE TABLE_J2JHZ6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_GQ218T_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM `mysql_tbl_khsrw4`
+    WHERE TABLE_GQ218T_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (V_SUPPLIER_RATING * 20) - (V_LEAD_TIME * 2) + (V_SALES_VOLUME / 10);
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_ARMSTRONG_NUMBER----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER(P_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+    DECLARE V_DIGIT INT;
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    SET V_ORIGINAL = MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO(-72);
+    SET V_TEMP = MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE(96);
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT_COUNT = MYSQL_FUNC_CALCULATE_TOTAL(-74);
+        SET V_TEMP = MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET(73);
+    END WHILE COUNT_LOOP;
+
+    SET V_TEMP = MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX(-46);
+
+    POWER_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + CAST(POW(V_DIGIT, V_DIGIT_COUNT) AS UNSIGNED);
+        SET V_TEMP = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE(7);
+    END WHILE POWER_LOOP;
+
+    IF V_SUM = V_ORIGINAL THEN
+        RETURN ((MYSQL_FUNC_FOOSP()) - (((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX(-82)) - (0) + 0)) + 1);
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR(20)) - (0) + 0);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_PROC_COUNT_BY_STATUS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_PROC_CURSOR_PROC_COUNT_BY_STATUS()
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE return_value INT DEFAULT 0;
+
+    DECLARE DONE INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_PREV_STATUS VARCHAR(20) DEFAULT '';
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT STATUS FROM `mysql_tbl_h3wupv` ORDER BY STATUS;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_STATUS;
+        IF DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_STATUS != V_PREV_STATUS AND V_PREV_STATUS != '' THEN
+            INSERT INTO `mysql_tbl_f1evup` (STATUS, COUNT) VALUES (V_PREV_STATUS, V_COUNT);
+            SET V_COUNT = 0;
+        END IF;
+        SET V_PREV_STATUS = V_STATUS;
+SET return_value = V_COUNT + 1;UNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    IF V_PREV_STATUS != '' THEN
+        INSERT INTO `mysql_tbl_f1evup` (STATUS, COUNT) VALUES (V_PREV_STATUS, V_COUNT);
+    END IF;
+
+    RETURN return_value;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_F7G9HY_GOAL_AMOUNT, 1000), COALESCE(TABLE_F7G9HY_RAISED_AMOUNT, 0)
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM `mysql_tbl_jehveg`
+    WHERE TABLE_F7G9HY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_H04ZNY_AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM `mysql_tbl_eg5ovo`
+    WHERE TABLE_H04ZNY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * 100) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_PROGRESS_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM(POLICY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MYBGSZ_BIKE_VALUE, 10000), COALESCE(TABLE_MYBGSZ_ANNUAL_PREMIUM, 500), COALESCE(TABLE_MYBGSZ_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM `mysql_tbl_7klfn0`
+    WHERE TABLE_MYBGSZ_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = V_BIKE_VALUE / 1000;
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_REPEAT_ORDER_PROBABILITY----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_ORDER_PROBABILITY(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_PROBABILITY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_r72kk5`
+    WHERE TABLE_82GJQG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(DATEDIFF(CURDATE(), MAX(TABLE_82GJQG_ORDER_DATE)), 0)
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM `mysql_tbl_r72kk5`
+    WHERE TABLE_82GJQG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM(-73)) - (0) + 0);
+    END IF;
+
+    SET V_PROBABILITY = MYSQL_FUNC_CURSOR_PROC_COUNT_BY_STATUS();
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS(47)) - (0) + (GREATEST(V_PROBABILITY, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_F4TYEK_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM `mysql_tbl_4eo70y`
+    WHERE TABLE_F4TYEK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_FACTORIAL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL()
+RETURNS BIGINT
+DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION RETURN NULL;
+
+    IF N < 0 THEN
+        RETURN NULL;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_1DT01K_LEAD_TIME_DAYS, 7), COALESCE(TABLE_1DT01K_SUPPLIER_RATING, 3.0)
+    INTO V_LEAD_TIME, V_RATING
+    FROM `mysql_tbl_fz51xw`
+    WHERE TABLE_1DT01K_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) - (V_LEAD_TIME * 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE(DOCTOR_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_73HWYA_YEARS_EXPERIENCE, 0), COALESCE(TABLE_73HWYA_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM `mysql_tbl_76l8qd`
+    WHERE TABLE_73HWYA_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM `mysql_tbl_w702xm`
+    WHERE TABLE_45ZU3N_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_45ZU3N_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_45ZU3N_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = MYSQL_FUNC_CALCULATE_REPEAT_ORDER_PROBABILITY(0);
+    SET V_UTILIZATION_RATE = MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX(89);
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS(-69);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_FACTORIAL(-14)) - (0) + (LEAST(V_UTILIZATION_RATE, 100)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BASE_DELIVERY_FEE INT DEFAULT 5;
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_ADDITIONAL_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_DELIVERY_FEE INT DEFAULT 0;
+
+    SELECT TABLE_IDDKC1_DELIVERY_RADIUS_MILES INTO V_DELIVERY_RADIUS
+    FROM `mysql_tbl_9cvnbe` O
+    JOIN `mysql_tbl_g8jqey` S ON TABLE_13K63L_STORE_ID = TABLE_IDDKC1_STORE_ID
+    WHERE TABLE_13K63L_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_DELIVERY_RADIUS > 10 THEN
+        SET V_ADDITIONAL_FEE = (V_DELIVERY_RADIUS - 10) * 2;
+    END IF;
+
+    SET V_TOTAL_DELIVERY_FEE = V_BASE_DELIVERY_FEE + V_ADDITIONAL_FEE;
+
+    RETURN CAST(V_TOTAL_DELIVERY_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO(POLICY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_A17OAC_PREMIUM_MONTHLY, 0) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM `mysql_tbl_8jd0iz`
+    WHERE TABLE_A17OAC_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2VLDGZ_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM `mysql_tbl_nanhwy`
+    WHERE TABLE_2VLDGZ_POLICY_ID = POLICY_ID_PARAM AND TABLE_2VLDGZ_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE(96)) - (((MYSQL_FUNC_IS_ARMSTRONG_NUMBER(15)) - (((MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE(-38)) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_RKVM7B_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM `mysql_tbl_h4zt6m`
+    WHERE TABLE_RKVM7B_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_COUNT_PENDING_ORDERS(8)) - (((MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO(-62)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS(98)) - (0) + (QUARTER(V_HIRE_DATE)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_HIRE_QUARTER(1);

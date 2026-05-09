@@ -1,0 +1,411 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rzripa` (
+    `table_1ljou9_customer_id` INT,
+    `table_1ljou9_order_id` INT
+);
+
+INSERT INTO `mysql_tbl_rzripa` (`table_1ljou9_customer_id`, `table_1ljou9_order_id`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mhbzcn` (
+    `table_5agv9l_order_id` INT,
+    `table_5agv9l_customer_id` INT,
+    `table_5agv9l_order_date` DATE,
+    `table_5agv9l_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3keurt` (
+    `table_lk55os_customer_id` INT,
+    `table_lk55os_country` INT
+);
+
+INSERT INTO `mysql_tbl_mhbzcn` (`table_5agv9l_order_id`, `table_5agv9l_customer_id`, `table_5agv9l_order_date`, `table_5agv9l_total_amount`) VALUES (1, 1, '2024-01-01', 1.0);
+
+INSERT INTO `mysql_tbl_3keurt` (`table_lk55os_customer_id`, `table_lk55os_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0rlybj` (
+    `table_qfa3p6_campaign_id` INT,
+    `table_qfa3p6_channel` INT,
+    `table_qfa3p6_budget` INT,
+    `table_qfa3p6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5t280p` (
+    `table_l7gt1s_conversion_id` INT,
+    `table_l7gt1s_campaign_id` INT,
+    `table_l7gt1s_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_0rlybj` (`table_qfa3p6_campaign_id`, `table_qfa3p6_channel`, `table_qfa3p6_budget`, `table_qfa3p6_status`) VALUES (1, 1, 1, 'test');
+
+INSERT INTO `mysql_tbl_5t280p` (`table_l7gt1s_conversion_id`, `table_l7gt1s_campaign_id`, `table_l7gt1s_conversion_value`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2qgsce` (
+    `table_ls96uj_emp_id` INT,
+    `table_ls96uj_department_id` INT,
+    `table_ls96uj_salary` INT,
+    `table_ls96uj_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_l8sq28` (
+    `table_a3n3ui_department_id` INT,
+    `table_a3n3ui_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_2qgsce` (`table_ls96uj_emp_id`, `table_ls96uj_department_id`, `table_ls96uj_salary`, `table_ls96uj_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_l8sq28` (`table_a3n3ui_department_id`, `table_a3n3ui_name`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_q358bh` (
+    `table_zui5d1_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_q358bh` (`table_zui5d1_price`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n0wq6k` (
+    `table_08skwy_donation_id` INT,
+    `table_08skwy_donor_id` INT,
+    `table_08skwy_campaign_id` INT,
+    `table_08skwy_amount` DECIMAL(10,2),
+    `table_08skwy_donation_date` DATE,
+    `table_08skwy_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6ziyw6` (
+    `table_ri7ge0_campaign_id` INT,
+    `table_ri7ge0_name` VARCHAR(50),
+    `table_ri7ge0_goal_amount` DECIMAL(10,2),
+    `table_ri7ge0_raised_amount` DECIMAL(10,2),
+    `table_ri7ge0_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_n0wq6k` (`table_08skwy_donation_id`, `table_08skwy_donor_id`, `table_08skwy_campaign_id`, `table_08skwy_amount`, `table_08skwy_donation_date`, `table_08skwy_payment_method`) VALUES (1, 1, 1, 1.0, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_6ziyw6` (`table_ri7ge0_campaign_id`, `table_ri7ge0_name`, `table_ri7ge0_goal_amount`, `table_ri7ge0_raised_amount`, `table_ri7ge0_start_date`) VALUES (1, '2024-01-01', 1.0, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0exu3g` (
+    `table_xrbs9v_customer_id` INT,
+    `table_xrbs9v_country` INT,
+    `table_xrbs9v_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_0exu3g` (`table_xrbs9v_customer_id`, `table_xrbs9v_country`, `table_xrbs9v_registration_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6inuzc` (
+    `table_i8vf8z_campaign_id` INT,
+    `table_i8vf8z_status` VARCHAR(50),
+    `table_i8vf8z_channel` INT
+);
+
+INSERT INTO `mysql_tbl_6inuzc` (`table_i8vf8z_campaign_id`, `table_i8vf8z_status`, `table_i8vf8z_channel`) VALUES (1, 'test', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s5lgc0` (
+    `table_boc8ze_employee_id` INT,
+    `table_boc8ze_department_id` INT,
+    `table_boc8ze_salary` INT,
+    `table_boc8ze_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_17me9h` (
+    `table_jx11oa_bonus_id` INT,
+    `table_jx11oa_employee_id` INT,
+    `table_jx11oa_bonus_amount` DECIMAL(10,2),
+    `table_jx11oa_bonus_date` DATE
+);
+
+INSERT INTO `mysql_tbl_s5lgc0` (`table_boc8ze_employee_id`, `table_boc8ze_department_id`, `table_boc8ze_salary`, `table_boc8ze_performance_rating`) VALUES (1, 1, 1, 1.0);
+
+INSERT INTO `mysql_tbl_17me9h` (`table_jx11oa_bonus_id`, `table_jx11oa_employee_id`, `table_jx11oa_bonus_amount`, `table_jx11oa_bonus_date`) VALUES (1, 1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nn3yku` (
+    `table_93t9mc_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_nn3yku` (`table_93t9mc_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT C.CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM CUSTOMERS C
+    JOIN `mysql_tbl_o76nru` O ON C.CUSTOMER_ID = O.CUSTOMER_ID
+    WHERE C.COUNTRY = COUNTRY_PARAM
+    GROUP BY C.CUSTOMER_ID
+    HAVING COUNT(O.ORDER_ID) > 1;
+
+    RETURN COALESCE(V_REPEAT_CUSTOMERS, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM `mysql_tbl_bfoz9o`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM `mysql_tbl_bfoz9o`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(STDDEV(SALARY), 0)
+    INTO V_TURNOVER_RATE
+    FROM `mysql_tbl_bfoz9o`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_EMPLOYEE_COUNT * 5) + (V_AVG_TENURE * 10) - (V_TURNOVER_RATE / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_SIMPLE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SIMPLE(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_pcs2p6`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS(START_NUM INT, END_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF START_NUM > END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT C.STATUS, C.CHANNEL, COUNT(CV.CONVERSION_ID)
+    INTO V_STATUS, V_CHANNEL, V_CONVERSION_COUNT
+    FROM `mysql_tbl_yyeyc2` C
+    LEFT JOIN CONVERSIONS CV ON C.CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE C.CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY C.CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SATISFACTION----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SATISFACTION(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(O.ORDER_ID), COUNT(DISTINCT C.CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM CUSTOMERS C
+    LEFT JOIN `mysql_tbl_o76nru` O ON C.CUSTOMER_ID = O.CUSTOMER_ID AND O.STATUS = 'COMPLETED'
+    WHERE C.COUNTRY = COUNTRY_PARAM;
+
+    IF V_CUSTOMER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_2zezzl`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS(EMPLOYEE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PREVIOUS_BONUS_TOTAL INT DEFAULT 0;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+    DECLARE V_RATING_MULTIPLIER DECIMAL(3,2) DEFAULT 1.00;
+
+    SELECT COALESCE(SALARY, 0), COALESCE(PERFORMANCE_RATING, 3.00)
+    INTO V_SALARY, V_PERFORMANCE_RATING
+    FROM `mysql_tbl_bfoz9o`
+    WHERE EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(SUM(BONUS_AMOUNT), 0)
+    INTO V_PREVIOUS_BONUS_TOTAL
+    FROM `mysql_tbl_gffsv0`
+    WHERE EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_RATING_MULTIPLIER = V_PERFORMANCE_RATING / 3.00;
+
+    SET V_BONUS_AMOUNT = (V_SALARY * V_RATING_MULTIPLIER) / 10;
+
+    IF V_PERFORMANCE_RATING >= 4.5 THEN
+        SET V_BONUS_AMOUNT = V_BONUS_AMOUNT + (V_BONUS_AMOUNT * 50 / 100);
+    END IF;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(GOAL_AMOUNT, 1000), COALESCE(RAISED_AMOUNT, 0)
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM `mysql_tbl_yyeyc2`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM `mysql_tbl_1wsg8i`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SATISFACTION(75)) - (((MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY(-93)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE(-17)) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS(1)) - (0) + (CAST(V_PROGRESS_PERCENT AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ATTRIBUTION_VALUE_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ATTRIBUTION_VALUE_INDEX(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ATTR_INDEX INT DEFAULT 0;
+
+    SELECT CHANNEL, COUNT(*), COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO V_CHANNEL, V_CONVERSIONS, V_REVENUE
+    FROM `mysql_tbl_yyeyc2` C
+    LEFT JOIN CONVERSIONS CV ON C.CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE C.CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY C.CAMPAIGN_ID;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_ATTR_INDEX = (MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX(53));
+        WHEN 'ORGANIC' THEN SET V_ATTR_INDEX = (MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS(33));
+        WHEN 'SOCIAL' THEN SET V_ATTR_INDEX = (V_CONVERSIONS * 6) + (V_REVENUE / 100);
+        ELSE SET V_ATTR_INDEX = (MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS(-8, -13)) END;
+    END;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PRICE_SIMPLE(-19)) - (0) + V_ATTR_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MAX(ORDER_ID)
+    INTO V_ORDER_ID
+    FROM `mysql_tbl_o76nru`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT(-67)) - (0) + ((MYSQL_FUNC_CALCULATE_ATTRIBUTION_VALUE_INDEX(-36)) - (0) + V_ORDER_ID % 1000));
+END //
+
+DELIMITER ;

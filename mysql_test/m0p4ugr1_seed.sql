@@ -1,0 +1,36 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS pg_tbl_hsffzz (
+    pg_col_sikshr VARCHAR(50),
+    pg_col_uryaul INTEGER
+);
+INSERT INTO pg_tbl_hsffzz (pg_col_sikshr, pg_col_uryaul) VALUES
+    ('Late Return', 5),
+    ('Lost Book', 40),
+    ('Damaged Book', 20),
+    ('Lost Library Card', 10);
+INSERT INTO pg_tbl_hsffzz (pg_col_sikshr, pg_col_uryaul)
+    VALUES
+        ('Late Return', 5),
+        ('Lost Book', 40),
+        ('Damaged Book', 20),
+        ('Lost Library Card', 10);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE OR REPLACE FUNCTION pg_proc_smysar()
+RETURNS INTEGER AS $$
+DETERMINISTIC
+BEGIN
+    INSERT INTO pg_tbl_hsffzz (pg_col_sikshr, pg_col_uryaul)
+    VALUES
+        ('Late Return', 5),
+        ('Lost Book', 40),
+        ('Damaged Book', 20),
+        ('Lost Library Card', 10);
+    
+    RETURN 1;
+END;
+$$ LANGUAGE plpgsql;
+
+DELIMITER ;

@@ -1,0 +1,290 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4448jr` (
+    `table_cic9op_emp_id` INT,
+    `table_cic9op_salary` INT
+);
+
+INSERT INTO `mysql_tbl_4448jr` (`table_cic9op_emp_id`, `table_cic9op_salary`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ien6nt` (
+    `table_yrkw1c_product_id` INT,
+    `table_yrkw1c_category_id` INT,
+    `table_yrkw1c_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_irx8ib` (
+    `table_walg8d_category_id` INT,
+    `table_walg8d_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ien6nt` (`table_yrkw1c_product_id`, `table_yrkw1c_category_id`, `table_yrkw1c_price`) VALUES (1, 1, 1.0);
+
+INSERT INTO `mysql_tbl_irx8ib` (`table_walg8d_category_id`, `table_walg8d_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fyttbv` (
+    `table_kchrx1_customer_id` INT,
+    `table_kchrx1_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_fyttbv` (`table_kchrx1_customer_id`, `table_kchrx1_plan_type`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_frrhi2` (
+    `table_3mkat0_emp_id` INT,
+    `table_3mkat0_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_frrhi2` (`table_3mkat0_emp_id`, `table_3mkat0_department_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fn5e37` (
+    `table_kql1m2_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_fn5e37` (`table_kql1m2_campaign_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jywuw0` (
+    `table_2hwh6v_campaign_id` INT,
+    `table_2hwh6v_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_jywuw0` (`table_2hwh6v_campaign_id`, `table_2hwh6v_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_idmhpp` (
+    `table_3nbm7t_product_id` INT,
+    `table_3nbm7t_name` VARCHAR(50),
+    `table_3nbm7t_category_id` INT,
+    `table_3nbm7t_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0qkwz8` (
+    `table_njzyqe_order_id` INT,
+    `table_njzyqe_product_id` INT,
+    `table_njzyqe_quantity` INT,
+    `table_njzyqe_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_idmhpp` (`table_3nbm7t_product_id`, `table_3nbm7t_name`, `table_3nbm7t_category_id`, `table_3nbm7t_price`) VALUES (1, '2024-01-01', 1, 1.0);
+
+INSERT INTO `mysql_tbl_0qkwz8` (`table_njzyqe_order_id`, `table_njzyqe_product_id`, `table_njzyqe_quantity`, `table_njzyqe_order_date`) VALUES (1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jiyo59` (
+    `table_zfinep_customer_id` INT,
+    `table_zfinep_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8f69l7` (
+    `table_8punij_order_id` INT,
+    `table_8punij_customer_id` INT,
+    `table_8punij_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_jiyo59` (`table_zfinep_customer_id`, `table_zfinep_country`) VALUES (1, 1);
+
+INSERT INTO `mysql_tbl_8f69l7` (`table_8punij_order_id`, `table_8punij_customer_id`, `table_8punij_total_amount`) VALUES (1, 1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_9ba7lp`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(O.TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM `mysql_tbl_d413ys` O
+    JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID
+    WHERE C.COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_d413ys`;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_MARKET_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_QUANTITY_PER_ORDER INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_QUANTITY, V_ORDER_COUNT
+    FROM `mysql_tbl_d413ys`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT DATEDIFF(CURDATE(), MAX(ORDER_DATE))
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM `mysql_tbl_d413ys`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_QUANTITY_PER_ORDER = V_TOTAL_QUANTITY / V_ORDER_COUNT;
+
+    SET V_POPULARITY_SCORE = (V_ORDER_COUNT * 10) + (V_AVG_QUANTITY_PER_ORDER * 5);
+
+    IF V_DAYS_SINCE_LAST_ORDER <= 7 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER <= 30 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 10;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE - 30;
+    END IF;
+
+    RETURN V_POPULARITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_j3ozrs`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PLAN_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_SCORE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM `mysql_tbl_lmpj5f`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT(63)) - (0) + ((MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE(-12)) - (0) + 100));
+        WHEN 'PREMIUM' THEN RETURN 50;
+        WHEN 'BASIC' THEN RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE(89)) - (0) + ((MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE(63)) - (0) + 20));
+        ELSE RETURN 5 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_MANAGER_LEVEL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_MANAGER_LEVEL(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_LEVEL INT DEFAULT 0;
+
+    SELECT DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_v7iyk0`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(DISTINCT MANAGER_ID)
+    INTO V_LEVEL
+    FROM `mysql_tbl_v7iyk0`
+    WHERE DEPARTMENT_ID = V_DEPT_ID AND MANAGER_ID IS NOT NULL;
+
+    RETURN V_LEVEL + 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOP_PRODUCT_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONCENTRATION INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(P.PRICE * COALESCE(SUM(OI.QUANTITY), 0)), 0)
+    INTO V_TOP_PRODUCT_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN PRODUCTS P ON OI.PRODUCT_ID = P.PRODUCT_ID
+    WHERE P.CATEGORY_ID = CATEGORY_ID_PARAM
+    GROUP BY P.PRODUCT_ID;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN PRODUCTS P ON OI.PRODUCT_ID = P.PRODUCT_ID
+    WHERE P.CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_PLAN_SCORE(56)) - (((MYSQL_FUNC_CALCULATE_DEPARTMENT_MANAGER_LEVEL(-37)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_CONCENTRATION = (V_TOP_PRODUCT_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_CONCENTRATION;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_MOD(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_v7iyk0`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO(65)) - (0) + (FLOOR(V_SALARY) % 1000));
+END //
+
+DELIMITER ;

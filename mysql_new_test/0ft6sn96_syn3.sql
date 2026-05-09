@@ -1,0 +1,153 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6kkmu7` (
+    `table_ed3213_product_id` INT,
+    `table_ed3213_price` DECIMAL(10,2),
+    `table_ed3213_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_6kkmu7` (`table_ed3213_product_id`, `table_ed3213_price`, `table_ed3213_category_id`) VALUES (1, 1.0, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bwgpoq` (
+    `table_7rccg8_customer_id` INT,
+    `table_7rccg8_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_bwgpoq` (`table_7rccg8_customer_id`, `table_7rccg8_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pc0r8q` (
+    `table_8kr4wm_product_id` INT,
+    `table_8kr4wm_category_id` INT,
+    `table_8kr4wm_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pc0r8q` (`table_8kr4wm_product_id`, `table_8kr4wm_category_id`, `table_8kr4wm_price`) VALUES (1, 1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t4vruh` (
+    `table_8jix8y_customer_id` INT,
+    `table_8jix8y_country` INT
+);
+
+INSERT INTO `mysql_tbl_t4vruh` (`table_8jix8y_customer_id`, `table_8jix8y_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5rj4zh` (
+    `table_2q7c7l_cbin` INT
+);
+
+INSERT INTO `mysql_tbl_5rj4zh` (`table_2q7c7l_cbin`) VALUES (1), (2), (3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_caovyp` (
+    `table_g22mrk_emp_id` INT,
+    `table_g22mrk_salary` INT
+);
+
+INSERT INTO `mysql_tbl_caovyp` (`table_g22mrk_emp_id`, `table_g22mrk_salary`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_BUCKET----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_BUCKET(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_m27pby`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 70000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIN----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT CBIN INTO RESULT FROM `TABLE3` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_TOTAL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_d3el2g`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_PROC_BIN()) - (0) + (((MYSQL_FUNC_CALCULATE_SALARY_BUCKET(60)) - (0) + (FLOOR(V_TOTAL)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(PRICE), 0)
+    INTO V_AVG
+    FROM `mysql_tbl_4uqwig`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_ACTIVE_CUSTOMERS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ACTIVE_CUSTOMERS(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ACTIVE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID)
+    INTO V_ACTIVE
+    FROM SUBSCRIPTIONS S
+    JOIN CUSTOMERS C ON S.CUSTOMER_ID = C.CUSTOMER_ID
+    WHERE C.COUNTRY = COUNTRY_PARAM AND S.STATUS = 'ACTIVE';
+
+    RETURN V_ACTIVE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(PRICE), ((MYSQL_FUNC_CALCULATE_ORDER_TOTAL(34)) - (((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG(-4)) - (((MYSQL_FUNC_CALCULATE_COUNTRY_ACTIVE_CUSTOMERS(94)) - (0) + 0)) + 0)) + 0))
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_4uqwig`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE / 10);
+END //
+
+DELIMITER ;

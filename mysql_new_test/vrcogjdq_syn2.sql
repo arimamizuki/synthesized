@@ -1,0 +1,165 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u1lnei` (
+    `table_divyse_campaign_id` INT,
+    `table_divyse_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_u1lnei` (`table_divyse_campaign_id`, `table_divyse_status`) VALUES (1, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wq0crj` (
+    `table_uu9euf_campaign_id` INT,
+    `table_uu9euf_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_wq0crj` (`table_uu9euf_campaign_id`, `table_uu9euf_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9bfc3l` (
+    `table_nlyvhy_emp_id` INT,
+    `table_nlyvhy_salary` INT
+);
+
+INSERT INTO `mysql_tbl_9bfc3l` (`table_nlyvhy_emp_id`, `table_nlyvhy_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_prrtkw` (
+    `table_w09wfm_supplier_id` INT,
+    `table_w09wfm_supplier_rating` DECIMAL(3,1),
+    `table_w09wfm_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_prrtkw` (`table_w09wfm_supplier_id`, `table_w09wfm_supplier_rating`, `table_w09wfm_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1saejp` (
+    `table_ccwebq_supplier_id` INT,
+    `table_ccwebq_lead_time_days` DATE,
+    `table_ccwebq_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_1saejp` (`table_ccwebq_supplier_id`, `table_ccwebq_lead_time_days`, `table_ccwebq_supplier_rating`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_km7tre` (
+    `table_7eg1j8_product_id` INT,
+    `table_7eg1j8_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_km7tre` (`table_7eg1j8_product_id`, `table_7eg1j8_supplier_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_DATA_CONTRATO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_CONTRATO(DATA_INICIO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATA_ATUAL DATE;
+    SET DATA_ATUAL = CURDATE();
+    RETURN YEAR(DATA_ATUAL) - DATA_INICIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(SUPPLIER_RATING, 3.0), COALESCE(LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_7fawpu`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_DATA_CONTRATO(11)) - (0) + (FLOOR((V_RATING * 10) - (V_LEAD_TIME * 3))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN SUPPLIER_ID_PARAM % 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7), COALESCE(SUPPLIER_RATING, 3.0)
+    INTO V_LEAD_TIME, V_RATING
+    FROM `mysql_tbl_7fawpu`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) - (V_LEAD_TIME * 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HOURLY_RATE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HOURLY_RATE(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_aopti2`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR((V_SALARY / 2080) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT START_DATE
+    INTO V_START_DATE
+    FROM `mysql_tbl_6x2eas`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HOURLY_RATE(17)) - (((MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX(15)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE(-19)) - (0) + (((MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX(49)) - (0) + (TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE())))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CHECK(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_6x2eas`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS(17)) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'COMPLETED' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0 END;
+    END);
+END //
+
+DELIMITER ;

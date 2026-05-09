@@ -1,0 +1,213 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yqtkla` (
+    `table_wyun5r_order_id` INT,
+    `table_wyun5r_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_yqtkla` (`table_wyun5r_order_id`, `table_wyun5r_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gj5j6m` (
+    `table_ikc59f_emp_id` INT,
+    `table_ikc59f_department_id` INT,
+    `table_ikc59f_salary` INT,
+    `table_ikc59f_hire_date` DATE,
+    `table_ikc59f_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_gj5j6m` (`table_ikc59f_emp_id`, `table_ikc59f_department_id`, `table_ikc59f_salary`, `table_ikc59f_hire_date`, `table_ikc59f_performance_rating`) VALUES (1, 1, 1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3zn5y9` (
+    `table_dwojhg_product_id` INT,
+    `table_dwojhg_supplier_id` INT,
+    `table_dwojhg_price` DECIMAL(10,2),
+    `table_dwojhg_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dljp64` (
+    `table_bjg787_supplier_id` INT,
+    `table_bjg787_supplier_rating` DECIMAL(3,1),
+    `table_bjg787_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_3zn5y9` (`table_dwojhg_product_id`, `table_dwojhg_supplier_id`, `table_dwojhg_price`, `table_dwojhg_stock_quantity`) VALUES (1, 1, 1.0, 1);
+
+INSERT INTO `mysql_tbl_dljp64` (`table_bjg787_supplier_id`, `table_bjg787_supplier_rating`, `table_bjg787_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lhjv0u` (
+    `table_j01oa7_campaign_id` INT,
+    `table_j01oa7_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_lhjv0u` (`table_j01oa7_campaign_id`, `table_j01oa7_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_96efvx` (
+    `table_rubafu_product_id` INT,
+    `table_rubafu_category_id` INT,
+    `table_rubafu_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_96efvx` (`table_rubafu_product_id`, `table_rubafu_category_id`, `table_rubafu_price`) VALUES (1, 1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tzuh56` (
+    `table_m4pbnb_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_tzuh56` (`table_m4pbnb_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5wckfr` (
+    `table_3cc9lm_customer_id` INT,
+    `table_3cc9lm_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_5wckfr` (`table_3cc9lm_customer_id`, `table_3cc9lm_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_fto3hm`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_ORDERS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_ORDERS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_sodxb2`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_t54g0d`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(PRICE), 1)
+    INTO V_OVERALL_AVG
+    FROM `mysql_tbl_t54g0d`;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_ORDERS(14)) - (0) + (((MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT(72)) - (0) + (FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(PERFORMANCE_RATING), 0), COALESCE(AVG(SALARY), 0)
+    INTO V_AVG_PERFORMANCE, V_AVG_SALARY
+    FROM `mysql_tbl_m7arac`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_SCORE = (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO(1));
+
+    RETURN V_PERFORMANCE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_SCORE(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT C.STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_STATUS, V_CONVERSION_COUNT
+    FROM CAMPAIGNS C
+    LEFT JOIN CONVERSIONS CV ON C.CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE C.CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY C.CAMPAIGN_ID;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN 100 + V_CONVERSION_COUNT;
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN 50 + V_CONVERSION_COUNT;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN 75 + V_CONVERSION_COUNT;
+    ELSE
+        RETURN 10 + V_CONVERSION_COUNT;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUPPLIER_RATING, 3.0), COALESCE(LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_4grb6u`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COALESCE(SUM(STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_t54g0d`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_RISK_SCORE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_SCORE(-29));
+
+    RETURN V_RISK_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(ORDER_DATE)
+    INTO V_YEAR
+    FROM `mysql_tbl_sodxb2`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG(74)) - (0) + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE(76)) - (0) + V_YEAR));
+END //
+
+DELIMITER ;

@@ -1,0 +1,323 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t1wnar` (
+    table_fpdj9a_rental_id INT,
+    table_fpdj9a_inventory_id INT,
+    table_fpdj9a_return_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_571r8x` (
+    table_nk9jk4_inventory_id INT
+);
+
+INSERT INTO `mysql_tbl_t1wnar` (`table_fpdj9a_rental_id`, `table_fpdj9a_inventory_id`, `table_fpdj9a_return_date`) VALUES
+(1, 100, '2024-01-01'),
+(2, 100, NULL),
+(3, 200, '2024-01-02'),
+(4, 200, '2024-01-03');
+
+INSERT INTO `mysql_tbl_571r8x` (`table_nk9jk4_inventory_id`) VALUES
+(100),
+(200),
+(300);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_iky8pe` (
+    `table_w760jh_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_iky8pe` (`table_w760jh_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t8qk6j` (
+    `table_50dvu8_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_t8qk6j` (`table_50dvu8_supplier_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_srxbmk` (
+    `table_7hbm0r_customer_id` INT,
+    `table_7hbm0r_registration_date` DATE,
+    `table_7hbm0r_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pqi768` (
+    `table_sr6bcb_order_id` INT,
+    `table_sr6bcb_customer_id` INT,
+    `table_sr6bcb_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_srxbmk` (`table_7hbm0r_customer_id`, `table_7hbm0r_registration_date`, `table_7hbm0r_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_pqi768` (`table_sr6bcb_order_id`, `table_sr6bcb_customer_id`, `table_sr6bcb_order_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6b162v` (
+    `table_2ukl6e_employee_id` INT,
+    `table_2ukl6e_department_id` INT,
+    `table_2ukl6e_salary` INT,
+    `table_2ukl6e_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7sgyb7` (
+    `table_1iduft_review_id` INT,
+    `table_1iduft_employee_id` INT,
+    `table_1iduft_review_date` DATE,
+    `table_1iduft_score` INT
+);
+
+INSERT INTO `mysql_tbl_6b162v` (`table_2ukl6e_employee_id`, `table_2ukl6e_department_id`, `table_2ukl6e_salary`, `table_2ukl6e_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_7sgyb7` (`table_1iduft_review_id`, `table_1iduft_employee_id`, `table_1iduft_review_date`, `table_1iduft_score`) VALUES (1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_poa46t` (
+    `table_uf7eci_customer_id` INT,
+    `table_uf7eci_country` INT
+);
+
+INSERT INTO `mysql_tbl_poa46t` (`table_uf7eci_customer_id`, `table_uf7eci_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_56wzw3` (
+    `table_68vms2_campaign_id` INT,
+    `table_68vms2_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_56wzw3` (`table_68vms2_campaign_id`, `table_68vms2_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7zskmr` (
+    `table_ni70zj_order_id` INT,
+    `table_ni70zj_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_7zskmr` (`table_ni70zj_order_id`, `table_ni70zj_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_07lgju` (
+    `table_84q4xp_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_07lgju` (`table_84q4xp_supplier_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y7bajn` (
+    `table_gvsgn8_emp_id` INT,
+    `table_gvsgn8_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_y7bajn` (`table_gvsgn8_emp_id`, `table_gvsgn8_department_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_COUNT_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_COUNT_INDEX(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_8e9y5b`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7)
+    INTO V_DAYS
+    FROM `mysql_tbl_00ho2m`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_COUNT_INDEX(54)) - (0) + V_DAYS);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_CONCENTRATION_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_CONCENTRATION_SCORE(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_COUNT
+    FROM `mysql_tbl_e2lksj`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_COUNT
+    FROM `mysql_tbl_e2lksj`;
+
+    IF V_TOTAL_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_DEPT_COUNT * 100) / V_TOTAL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM `mysql_tbl_qg5fj2`
+    WHERE COUNTRY = COUNTRY_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_CONCENTRATION_SCORE(-63)) - (0) + V_CUSTOMER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_DIVERSITY----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_DIVERSITY(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT CATEGORY_ID)
+    INTO V_CATEGORY_COUNT
+    FROM `mysql_tbl_8e9y5b`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE(-98)) - (0) + (V_CATEGORY_COUNT * 10));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_byg9uu`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL / 50);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(START_DATE)
+    INTO V_YEAR
+    FROM `mysql_tbl_ye0rpf`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NEW INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_NEW, V_TOTAL
+    FROM `mysql_tbl_qg5fj2`
+    WHERE COUNTRY = COUNTRY_PARAM
+      AND REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR(59)) - (0) + (((MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET(-52)) - (0) + ((V_NEW * 100) / V_TOTAL))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TENURE_BONUS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS(EMPLOYEE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE_SCORE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM `mysql_tbl_e2lksj`
+    WHERE EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(AVG(SCORE), 0.00)
+    INTO V_AVG_PERFORMANCE_SCORE
+    FROM `mysql_tbl_4eeitu`
+    WHERE EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT SALARY
+    INTO V_BASE_SALARY
+    FROM `mysql_tbl_e2lksj`
+    WHERE EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_BONUS_PERCENTAGE = LEAST(V_YEARS_EMPLOYED * 2, 20);
+
+    IF V_AVG_PERFORMANCE_SCORE >= 4.5 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 15;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 4.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 10;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 3.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 5;
+    END IF;
+
+    SET V_TOTAL_BONUS = (V_BASE_SALARY * V_BONUS_PERCENTAGE) / 100;
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INVENTORY_IN_STOCK(P_INVENTORY_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RENTALS INT;
+    DECLARE V_OUT INT;
+
+    SELECT COUNT(*) INTO V_RENTALS
+    FROM `mysql_tbl_4yi6up`
+    WHERE INVENTORY_ID = P_INVENTORY_ID;
+
+    IF V_RENTALS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DAYS(82)) - (((MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_DIVERSITY(16)) - (0) + 0)) + 1);
+    END IF;
+
+    SELECT COUNT(RENTAL_ID) INTO V_OUT
+    FROM INVENTORY LEFT JOIN `mysql_tbl_4yi6up` USING(INVENTORY_ID)
+    WHERE INVENTORY.INVENTORY_ID = P_INVENTORY_ID
+    AND mysql_tbl_4yi6up.RETURN_DATE IS NULL;
+
+    IF V_OUT > 0 THEN
+        RETURN 0;
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE(4)) - (0) + ((MYSQL_FUNC_CALCULATE_TENURE_BONUS(73)) - (0) + 1));
+    END IF;
+END //
+
+DELIMITER ;

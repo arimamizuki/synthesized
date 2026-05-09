@@ -1,0 +1,52 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4bq3h5` (
+    `table_s61x1o_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `mysql_tbl_4bq3h5` (`table_s61x1o_cmediumint`) VALUES (1), (2), (3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t32tay` (
+    `table_4y6y32_product_id` INT,
+    `table_4y6y32_category_id` INT,
+    `table_4y6y32_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_t32tay` (`table_4y6y32_product_id`, `table_4y6y32_category_id`, `table_4y6y32_price`) VALUES (1, 1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_TOTAL DECIMAL(10,2) DEFAULT 1.00;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT CATEGORY_ID, COALESCE(PRICE, 0)
+    INTO V_CATEGORY_ID, V_PRICE
+    FROM `mysql_tbl_imzb65`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(PRICE), 1)
+    INTO V_CATEGORY_TOTAL
+    FROM `mysql_tbl_imzb65`
+    WHERE CATEGORY_ID = V_CATEGORY_ID;
+
+    RETURN FLOOR((V_PRICE * 100) / V_CATEGORY_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE3`;
+    RETURN ((MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE(-76)) - (0) + RESULT);
+END //
+
+DELIMITER ;

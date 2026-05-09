@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_515tff` (
+    `table_515tff_campaign_id` INT,
+    `table_515tff_status` VARCHAR(50)
+);
+
+INSERT INTO `table_515tff` (`table_515tff_campaign_id`, `table_515tff_status`) VALUES (1, 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT STATUS
+    INTO V_STATUS
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE WHEN V_STATUS = 'ACTIVE' THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;

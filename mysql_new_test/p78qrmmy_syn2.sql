@@ -1,0 +1,377 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u2bles` (
+    `table_1ljou9_customer_id` INT,
+    `table_1ljou9_order_id` INT
+);
+
+INSERT INTO `mysql_tbl_u2bles` (`table_1ljou9_customer_id`, `table_1ljou9_order_id`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n661a0` (
+    `table_l4hgxn_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_n661a0` (`table_l4hgxn_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ntmkge` (
+    `table_zfwqwf_product_id` INT,
+    `table_zfwqwf_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_ntmkge` (`table_zfwqwf_product_id`, `table_zfwqwf_stock_quantity`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ecqt3j` (
+    `table_g4nnxu_campaign_id` INT,
+    `table_g4nnxu_channel` INT,
+    `table_g4nnxu_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ecqt3j` (`table_g4nnxu_campaign_id`, `table_g4nnxu_channel`, `table_g4nnxu_status`) VALUES (1, 1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vxwupp` (
+    `table_7fn18m_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_vxwupp` (`table_7fn18m_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2nwy9y` (
+    `table_002grk_product_id` INT,
+    `table_002grk_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_2nwy9y` (`table_002grk_product_id`, `table_002grk_price`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mlw72o` (
+    `table_f9i851_warranty_id` INT,
+    `table_f9i851_product_id` INT,
+    `table_f9i851_purchase_date` DATE,
+    `table_f9i851_warranty_months` INT,
+    `table_f9i851_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_mlw72o` (`table_f9i851_warranty_id`, `table_f9i851_product_id`, `table_f9i851_purchase_date`, `table_f9i851_warranty_months`, `table_f9i851_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ee0zf7` (
+    `table_kchrx1_customer_id` INT,
+    `table_kchrx1_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ee0zf7` (`table_kchrx1_customer_id`, `table_kchrx1_plan_type`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_511gj0` (
+    `table_oy64r8_part_id` INT,
+    `table_oy64r8_part_name` VARCHAR(50),
+    `table_oy64r8_category_id` INT,
+    `table_oy64r8_price` DECIMAL(10,2),
+    `table_oy64r8_stock_quantity` INT,
+    `table_oy64r8_reorder_point` INT
+);
+
+INSERT INTO `mysql_tbl_511gj0` (`table_oy64r8_part_id`, `table_oy64r8_part_name`, `table_oy64r8_category_id`, `table_oy64r8_price`, `table_oy64r8_stock_quantity`, `table_oy64r8_reorder_point`) VALUES (1, 'test', 1, 1.0, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jrmq2c` (
+    `table_ta3yca_loan_id` INT,
+    `table_ta3yca_customer_id` INT,
+    `table_ta3yca_principal` INT,
+    `table_ta3yca_interest_rate` INT,
+    `table_ta3yca_term_months` INT,
+    `table_ta3yca_start_date` DATE,
+    `table_ta3yca_remaining_balance` INT
+);
+
+INSERT INTO `mysql_tbl_jrmq2c` (`table_ta3yca_loan_id`, `table_ta3yca_customer_id`, `table_ta3yca_principal`, `table_ta3yca_interest_rate`, `table_ta3yca_term_months`, `table_ta3yca_start_date`, `table_ta3yca_remaining_balance`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a13ena` (
+    `table_tiyy93_res_id` INT,
+    `table_tiyy93_room_id` INT,
+    `table_tiyy93_guest_id` INT,
+    `table_tiyy93_check_in_date` DATE,
+    `table_tiyy93_check_out_date` DATE,
+    `table_tiyy93_total_price` DECIMAL(10,2),
+    `table_tiyy93_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_a13ena` (`table_tiyy93_res_id`, `table_tiyy93_room_id`, `table_tiyy93_guest_id`, `table_tiyy93_check_in_date`, `table_tiyy93_check_out_date`, `table_tiyy93_total_price`, `table_tiyy93_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM `mysql_tbl_s25azp`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_TOTAL_SPENT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT C.CHANNEL, C.STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_CHANNEL, V_STATUS, V_CONVERSION_COUNT
+    FROM CAMPAIGNS C
+    LEFT JOIN CONVERSIONS CV ON C.CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE C.CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY C.CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PLAN_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_SCORE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM `mysql_tbl_0sidaj`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 100;
+        WHEN 'PREMIUM' THEN RETURN 50;
+        WHEN 'BASIC' THEN RETURN 20;
+        ELSE RETURN 5 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LOAN_INTEREST----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOAN_INTEREST(LOAN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+    DECLARE V_MONTHLY_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(PRINCIPAL, 0), COALESCE(INTEREST_RATE, 0), COALESCE(TERM_MONTHS, 0), COALESCE(REMAINING_BALANCE, 0)
+    INTO V_PRINCIPAL, V_INTEREST_RATE, V_TERM_MONTHS, V_REMAINING_BALANCE
+    FROM `mysql_tbl_sn2sty`
+    WHERE LOAN_ID = LOAN_ID_PARAM;
+
+    IF V_PRINCIPAL = 0 OR V_TERM_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MONTHLY_INTEREST = (V_REMAINING_BALANCE * V_INTEREST_RATE) / (100 * 12);
+
+    RETURN CAST(V_MONTHLY_INTEREST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STAY_NIGHTS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STAY_NIGHTS(RES_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+
+    SELECT CHECK_IN_DATE, CHECK_OUT_DATE
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM `mysql_tbl_8emtft`
+    WHERE RES_ID = RES_ID_PARAM;
+
+    IF V_CHECK_IN IS NULL OR V_CHECK_OUT IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS < 0 THEN
+        SET V_NIGHTS = 0;
+    END IF;
+
+    RETURN V_NIGHTS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_WARRANTY_STATUS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS(WARRANTY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT PURCHASE_DATE, WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM `mysql_tbl_rfsrp1`
+    WHERE WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY(PART_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(STOCK_QUANTITY, 0), COALESCE(REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM `mysql_tbl_6gjvlx`
+    WHERE PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_STOCK_RATIO = (V_STOCK * 100) / V_REORDER_POINT;
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = 100;
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = 80;
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = 60;
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = 40;
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = 20;
+        ELSE SET V_PRIORITY = 0;
+    END;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_vdvcxs`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN ((MYSQL_FUNC_CHECK_WARRANTY_STATUS(23)) - (0) + ((MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY(-97)) - (0) + 5));
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_PLAN_SCORE(-78)) - (0) + ((MYSQL_FUNC_CALCULATE_LOAN_INTEREST(-24)) - (0) + 3));
+    ELSEIF V_PRICE > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_STAY_NIGHTS(62)) - (0) + 1);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_cfbtrw`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_LEAD_TIME;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_vdvcxs`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK < 10 THEN
+        RETURN 1;
+    ELSEIF V_STOCK < 50 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX(-76)) - (0) + 2);
+    ELSEIF V_STOCK < 100 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME(52)) - (0) + 3);
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX(23)) - (0) + 4);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MAX(ORDER_ID)
+    INTO V_ORDER_ID
+    FROM `mysql_tbl_s25azp`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE(-65)) - (0) + ((MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL(-47)) - (0) + V_ORDER_ID % 1000));
+END //
+
+DELIMITER ;

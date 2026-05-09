@@ -1,0 +1,85 @@
+/* -----Seed Dependency----- */
+CREATE TABLE pg_tbl_drbdqc INSERT statements are required.
+
+CREATE OR REPLACE FUNCTION pg_proc_qvxgiv(pg_var_krzynt INTEGER) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN CASE
+        WHEN pg_var_krzynt BETWEEN 136 AND 137       THEN 2190
+        WHEN pg_var_krzynt BETWEEN 472 AND 479       THEN 630
+        WHEN pg_var_krzynt BETWEEN 501 AND 504       THEN 560
+        WHEN pg_var_krzynt BETWEEN 1800 AND 2000     THEN 160
+        WHEN pg_var_krzynt BETWEEN 3500 AND 4000     THEN 80
+        WHEN pg_var_krzynt BETWEEN 5102 AND 54065    THEN 60
+        WHEN pg_var_krzynt BETWEEN 7000 AND 7300     THEN 40
+        WHEN pg_var_krzynt BETWEEN 10000 AND 10150   THEN 30
+        WHEN pg_var_krzynt BETWEEN 14000 AND 14350   THEN 20
+        WHEN pg_var_krzynt BETWEEN 18000 AND 18168   THEN 17
+        WHEN pg_var_krzynt BETWEEN 21000 AND 21450   THEN 15
+        WHEN pg_var_krzynt BETWEEN 24890 AND 24999   THEN 12
+        WHEN pg_var_krzynt BETWEEN 28000 AND 29700   THEN 10
+        WHEN pg_var_krzynt BETWEEN 50000 AND 54000   THEN 6
+        WHEN pg_var_krzynt BETWEEN 70000 AND 71000   THEN 4
+        WHEN pg_var_krzynt BETWEEN 144000 AND 148000 THEN 2
+        WHEN pg_var_krzynt BETWEEN 222000 AND 225000 THEN 125
+        WHEN pg_var_krzynt BETWEEN 420000 AND 450000 THEN 70
+        WHEN pg_var_krzynt BETWEEN 902000 AND 928000 THEN 33
+        WHEN pg_var_krzynt BETWEEN 1240000 AND 1300000 THEN 23
+        WHEN pg_var_krzynt BETWEEN 2300000 AND 2450000 THEN 13
+        WHEN pg_var_krzynt BETWEEN 3300000 AND 3500000 THEN 9
+        WHEN pg_var_krzynt BETWEEN 5650000 AND 5925000 THEN 6
+        WHEN pg_var_krzynt BETWEEN 10000000 AND 10500000 THEN 3
+        WHEN pg_var_krzynt BETWEEN 24000000 AND 24250000 THEN 125
+        WHEN pg_var_krzynt BETWEEN 47000000 AND 47200000 THEN 6
+        WHEN pg_var_krzynt BETWEEN 75500000 AND 81000000 THEN 4
+        WHEN pg_var_krzynt BETWEEN 119980000 AND 120020000 THEN 25
+        WHEN pg_var_krzynt BETWEEN 142000000 AND 149000000 THEN 2
+        WHEN pg_var_krzynt BETWEEN 241000000 AND 250000000 THEN 1
+        ELSE NULL
+    END;
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE OR REPLACE FUNCTION pg_proc_qvxgiv(pg_var_krzynt INTEGER)
+RETURNS INTEGER AS $$
+DETERMINISTIC
+BEGIN
+    RETURN CASE
+        WHEN pg_var_krzynt BETWEEN 136 AND 137       THEN 2190
+        WHEN pg_var_krzynt BETWEEN 472 AND 479       THEN 630
+        WHEN pg_var_krzynt BETWEEN 501 AND 504       THEN 560
+        WHEN pg_var_krzynt BETWEEN 1800 AND 2000     THEN 160
+        WHEN pg_var_krzynt BETWEEN 3500 AND 4000     THEN 80
+        WHEN pg_var_krzynt BETWEEN 5102 AND 54065    THEN 60
+        WHEN pg_var_krzynt BETWEEN 7000 AND 7300     THEN 40
+        WHEN pg_var_krzynt BETWEEN 10000 AND 10150   THEN 30
+        WHEN pg_var_krzynt BETWEEN 14000 AND 14350   THEN 20
+        WHEN pg_var_krzynt BETWEEN 18000 AND 18168   THEN 17
+        WHEN pg_var_krzynt BETWEEN 21000 AND 21450   THEN 15
+        WHEN pg_var_krzynt BETWEEN 24890 AND 24999   THEN 12
+        WHEN pg_var_krzynt BETWEEN 28000 AND 29700   THEN 10
+        WHEN pg_var_krzynt BETWEEN 50000 AND 54000   THEN 6
+        WHEN pg_var_krzynt BETWEEN 70000 AND 71000   THEN 4
+        WHEN pg_var_krzynt BETWEEN 144000 AND 148000 THEN 2
+        WHEN pg_var_krzynt BETWEEN 222000 AND 225000 THEN 125
+        WHEN pg_var_krzynt BETWEEN 420000 AND 450000 THEN 70
+        WHEN pg_var_krzynt BETWEEN 902000 AND 928000 THEN 33
+        WHEN pg_var_krzynt BETWEEN 1240000 AND 1300000 THEN 23
+        WHEN pg_var_krzynt BETWEEN 2300000 AND 2450000 THEN 13
+        WHEN pg_var_krzynt BETWEEN 3300000 AND 3500000 THEN 9
+        WHEN pg_var_krzynt BETWEEN 5650000 AND 5925000 THEN 6
+        WHEN pg_var_krzynt BETWEEN 10000000 AND 10500000 THEN 3
+        WHEN pg_var_krzynt BETWEEN 24000000 AND 24250000 THEN 125
+        WHEN pg_var_krzynt BETWEEN 47000000 AND 47200000 THEN 6
+        WHEN pg_var_krzynt BETWEEN 75500000 AND 81000000 THEN 4
+        WHEN pg_var_krzynt BETWEEN 119980000 AND 120020000 THEN 25
+        WHEN pg_var_krzynt BETWEEN 142000000 AND 149000000 THEN 2
+        WHEN pg_var_krzynt BETWEEN 241000000 AND 250000000 THEN 1
+        ELSE NULL
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+DELIMITER ;

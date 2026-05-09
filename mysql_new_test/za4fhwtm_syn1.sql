@@ -1,0 +1,260 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_04n7v2` (
+    `table_iusqwn_product_id` INT,
+    `table_iusqwn_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_04n7v2` (`table_iusqwn_product_id`, `table_iusqwn_price`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_289wxt` (
+    `table_4dnjbr_customer_id` INT,
+    `table_4dnjbr_plan_type` VARCHAR(50),
+    `table_4dnjbr_monthly_cost` DECIMAL(10,2),
+    `table_4dnjbr_start_date` DATE,
+    `table_4dnjbr_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_289wxt` (`table_4dnjbr_customer_id`, `table_4dnjbr_plan_type`, `table_4dnjbr_monthly_cost`, `table_4dnjbr_start_date`, `table_4dnjbr_status`) VALUES (1, '2024-01-01', 1.0, '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5mft7w` (
+    `table_fcgctj_table_id` INT,
+    `table_fcgctj_restaurant_id` INT,
+    `table_fcgctj_capacity` INT,
+    `table_fcgctj_is_outdoor` INT,
+    `table_fcgctj_view_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_azb1ix` (
+    `table_77z9qy_reservation_id` INT,
+    `table_77z9qy_table_id` INT,
+    `table_77z9qy_customer_id` INT,
+    `table_77z9qy_party_size` INT,
+    `table_77z9qy_reservation_date` DATE,
+    `table_77z9qy_duration_minutes` INT
+);
+
+INSERT INTO `mysql_tbl_5mft7w` (`table_fcgctj_table_id`, `table_fcgctj_restaurant_id`, `table_fcgctj_capacity`, `table_fcgctj_is_outdoor`, `table_fcgctj_view_type`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_azb1ix` (`table_77z9qy_reservation_id`, `table_77z9qy_table_id`, `table_77z9qy_customer_id`, `table_77z9qy_party_size`, `table_77z9qy_reservation_date`, `table_77z9qy_duration_minutes`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qx5shn` (
+    `table_ygtl70_customer_id` INT,
+    `table_ygtl70_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_qx5shn` (`table_ygtl70_customer_id`, `table_ygtl70_order_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9mvw1u` (
+    `table_dfh0pu_product_id` INT,
+    `table_dfh0pu_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_9mvw1u` (`table_dfh0pu_product_id`, `table_dfh0pu_supplier_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f1krqc` (
+    `table_o5qdug_customer_id` INT,
+    `table_o5qdug_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_f1krqc` (`table_o5qdug_customer_id`, `table_o5qdug_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wfyhlr` (
+    `table_hya7fo_customer_id` INT,
+    `table_hya7fo_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_wfyhlr` (`table_hya7fo_customer_id`, `table_hya7fo_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ujo4gh` (
+    `table_iwly1o_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_ujo4gh` (`table_iwly1o_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jx8579` (
+    `table_fryjgi_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_jx8579` (`table_fryjgi_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE(TABLE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 4;
+    DECLARE V_IS_OUTDOOR INT DEFAULT 0;
+    DECLARE V_RESERVATION_COUNT INT DEFAULT 0;
+    DECLARE V_REVENUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(CAPACITY, 4), COALESCE(IS_OUTDOOR, 0)
+    INTO V_CAPACITY, V_IS_OUTDOOR
+    FROM `mysql_tbl_ovo0u4`
+    WHERE TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVATION_COUNT
+    FROM `mysql_tbl_8rsa8x`
+    WHERE TABLE_ID = TABLE_ID_PARAM
+      AND RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_REVENUE_SCORE = V_CAPACITY * V_RESERVATION_COUNT;
+
+    IF V_IS_OUTDOOR = 1 THEN
+        SET V_REVENUE_SCORE = V_REVENUE_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_REVENUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_irmrj7`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM `mysql_tbl_ji2rbc`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+
+    SELECT SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM `mysql_tbl_76ibe5`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT CATEGORY_ID)
+    INTO @V_CATEGORY_COUNT
+    FROM `mysql_tbl_76ibe5`
+    WHERE SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN @V_CATEGORY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_irmrj7`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN (CUSTOMER_ID_PARAM % 10) + 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MAX(ORDER_DATE)
+    INTO V_LAST_ORDER
+    FROM `mysql_tbl_irmrj7`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER IS NULL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET(-22)) - (0) + (-1));
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT(-48)) - (0) + (DATEDIFF(CURDATE(), V_LAST_ORDER)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT PLAN_TYPE, COALESCE(MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_PLAN_TYPE, V_MONTHLY_COST, V_TENURE_MONTHS
+    FROM `mysql_tbl_7qxq53`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_HEALTH_SCORE = (MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE(-85));
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS(-71);
+        WHEN 'PREMIUM' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT(-82);
+        WHEN 'BASIC' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX(36);
+    END;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS(-12)) - (0) + V_HEALTH_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_76ibe5`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE(30)) - (0) + (FLOOR(V_PRICE)));
+END //
+
+DELIMITER ;

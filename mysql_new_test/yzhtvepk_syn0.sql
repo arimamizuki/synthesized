@@ -1,0 +1,262 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tbuncy` (
+    `table_faxfs7_customer_id` INT,
+    `table_faxfs7_order_id` INT,
+    `table_faxfs7_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_tbuncy` (`table_faxfs7_customer_id`, `table_faxfs7_order_id`, `table_faxfs7_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lj4lcf` (
+    `table_0koq9b_campaign_id` INT,
+    `table_0koq9b_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_lj4lcf` (`table_0koq9b_campaign_id`, `table_0koq9b_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0jm8vg` (
+    `table_epsi7i_product_id` INT,
+    `table_epsi7i_category_id` INT,
+    `table_epsi7i_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_itgv3n` (
+    `table_kulsed_category_id` INT,
+    `table_kulsed_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_0jm8vg` (`table_epsi7i_product_id`, `table_epsi7i_category_id`, `table_epsi7i_price`) VALUES (1, 1, 1.0);
+
+INSERT INTO `mysql_tbl_itgv3n` (`table_kulsed_category_id`, `table_kulsed_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_66zevw` (
+    `table_47zagg_customer_id` INT,
+    `table_47zagg_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_66zevw` (`table_47zagg_customer_id`, `table_47zagg_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8pa916` (
+    `table_1am2rz_emp_id` INT,
+    `table_1am2rz_department_id` INT,
+    `table_1am2rz_hire_date` DATE,
+    `table_1am2rz_salary` INT
+);
+
+INSERT INTO `mysql_tbl_8pa916` (`table_1am2rz_emp_id`, `table_1am2rz_department_id`, `table_1am2rz_hire_date`, `table_1am2rz_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9offz7` (
+    `table_rptl5s_product_id` INT,
+    `table_rptl5s_category_id` INT,
+    `table_rptl5s_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_atgt7w` (
+    `table_kr9nla_category_id` INT,
+    `table_kr9nla_name` VARCHAR(50),
+    `table_kr9nla_parent_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_9offz7` (`table_rptl5s_product_id`, `table_rptl5s_category_id`, `table_rptl5s_price`) VALUES (1, 1, 1.0);
+
+INSERT INTO `mysql_tbl_atgt7w` (`table_kr9nla_category_id`, `table_kr9nla_name`, `table_kr9nla_parent_category_id`) VALUES (1, 'test', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y86hxv` (
+    `table_lf1ale_campaign_id` INT,
+    `table_lf1ale_start_date` DATE,
+    `table_lf1ale_end_date` DATE
+);
+
+INSERT INTO `mysql_tbl_y86hxv` (`table_lf1ale_campaign_id`, `table_lf1ale_start_date`, `table_lf1ale_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gnf38l` (
+    `table_ey1hoe_customer_id` INT,
+    `table_ey1hoe_status` VARCHAR(50),
+    `table_ey1hoe_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_gnf38l` (`table_ey1hoe_customer_id`, `table_ey1hoe_status`, `table_ey1hoe_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_RANGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(PRICE), 0), COALESCE(MIN(PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM `mysql_tbl_4oeqpe`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MIN_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RANGE_RATIO = (V_MAX_PRICE - V_MIN_PRICE) / V_MIN_PRICE;
+
+    RETURN V_RANGE_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT END_DATE
+    INTO V_END_DATE
+    FROM `mysql_tbl_5v83z2`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN GREATEST(DATEDIFF(V_END_DATE, CURDATE()), 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE(SUM INT, INTEREST INT, YEARS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING(-63)) - (0) + (CAST(SUM * POW(1 + INTEREST / 100.0, YEARS) AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_SUBSCRIPTION_MONTHS INT DEFAULT 0;
+
+    SELECT STATUS, COALESCE(MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_STATUS, V_MONTHLY_COST, V_SUBSCRIPTION_MONTHS
+    FROM `mysql_tbl_h4648t`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_MONTHLY_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_MONTHLY_COST * V_SUBSCRIPTION_MONTHS) / 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(AVG(SALARY), 0),
+           COALESCE(AVG(TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM `mysql_tbl_fzi66h`
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI(-59)) - (0) + (FLOOR((V_AVG_SALARY * V_AVG_TENURE) / GREATEST(V_EMP_COUNT, 1))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_4oeqpe`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_4oeqpe`
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_PROFITABILITY_INDEX = MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE(65, 80, 90);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX(55)) - (0) + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO(24)) - (0) + V_PROFITABILITY_INDEX));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM `mysql_tbl_n53qjk`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_5v83z2`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX(-70)) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX(-54)) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10 END;
+    END));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_YEAR(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(MIN(ORDER_DATE))
+    INTO V_YEAR
+    FROM `mysql_tbl_l22ayj`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE(-94)) - (0) + V_YEAR);
+END //
+
+DELIMITER ;

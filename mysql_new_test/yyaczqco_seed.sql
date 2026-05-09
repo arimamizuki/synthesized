@@ -1,0 +1,31 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_4kehz2` (
+    `table_4kehz2_customer_id` INT,
+    `table_4kehz2_country` INT,
+    `table_4kehz2_registration_date` DATE
+);
+
+INSERT INTO `table_4kehz2` (`table_4kehz2_customer_id`, `table_4kehz2_country`, `table_4kehz2_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NEW_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_NEW_CUSTOMERS, V_TOTAL_CUSTOMERS
+    FROM CUSTOMERS
+    WHERE COUNTRY = COUNTRY_PARAM
+      AND REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_NEW_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;

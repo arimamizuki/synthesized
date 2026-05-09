@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_d883ef` (
+    `table_d883ef_supplier_id` INT,
+    `table_d883ef_lead_time_days` DATE
+);
+
+INSERT INTO `table_d883ef` (`table_d883ef_supplier_id`, `table_d883ef_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_VALUE(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM SUPPLIERS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - V_LEAD_TIME;
+END //
+
+DELIMITER ;
