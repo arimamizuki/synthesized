@@ -1,0 +1,109 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6n8pek` (
+    `mysql_tbl_6n8pek_customer_id` INT,
+    `mysql_tbl_6n8pek_status` VARCHAR(50),
+    `mysql_tbl_6n8pek_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_6n8pek` (`mysql_tbl_6n8pek_customer_id`, `mysql_tbl_6n8pek_status`, `mysql_tbl_6n8pek_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8109hc` (mysql_tbl_8109hc_id INT, author_mysql_tbl_8109hc_id INT, mysql_tbl_8109hc_status VARCHAR(20), mysql_tbl_8109hc_published_at DATETIME);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yv4349` (mysql_tbl_yv4349_id INT, mysql_tbl_yv4349_banned INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7nv8lz` (
+    `mysql_tbl_7nv8lz_customer_id` INT,
+    `mysql_tbl_7nv8lz_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7nv8lz` (`mysql_tbl_7nv8lz_customer_id`, `mysql_tbl_7nv8lz_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(POST_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_AUTHOR_BANNED INT;
+    SELECT mysql_tbl_8109hc_STATUS, mysql_tbl_yv4349_BANNED INTO V_STATUS, V_AUTHOR_BANNED
+    FROM `mysql_tbl_8109hc` P JOIN `mysql_tbl_yv4349` U ON mysql_tbl_8109hc_AUTHOR_ID = mysql_tbl_yv4349_ID WHERE mysql_tbl_8109hc_ID = POST_ID;
+    IF V_STATUS = 'PUBLISHED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'POST IS ALREADY PUBLISHED';
+    END IF;
+    IF V_AUTHOR_BANNED = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT PUBLISH POST FROM `mysql_tbl_yv4349`_BANNED AUTHOR';
+    END IF;
+    UPDATE `mysql_tbl_8109hc` SET mysql_tbl_8109hc_STATUS = 'PUBLISHED', mysql_tbl_8109hc_PUBLISHED_AT = NOW() WHERE ID = POST_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_7nv8lz`
+    WHERE mysql_tbl_7nv8lz_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_7nv8lz_STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_6n8pek_STATUS, COALESCE(mysql_tbl_6n8pek_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM `mysql_tbl_6n8pek`
+    WHERE mysql_tbl_6n8pek_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(46)) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i(-70)) - (0) + (V_MONTHLY_COST * 5))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(1);

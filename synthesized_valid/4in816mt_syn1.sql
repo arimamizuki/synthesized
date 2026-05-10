@@ -1,0 +1,70 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n9dh5b` (
+    mysql_tbl_n9dh5b_emp_no INT,
+    mysql_tbl_n9dh5b_salary INT
+);
+
+INSERT INTO `mysql_tbl_n9dh5b` (`mysql_tbl_n9dh5b_emp_no`, `mysql_tbl_n9dh5b_salary`) VALUES (1, 2);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SRS_COUNT INT DEFAULT 0;
+    
+    CREATE SPATIAL REFERENCE SYSTEM 4120 NAME 'GREEK' DEFINITION 'GEOGCS["GREEK",DATUM["GREEK",SPHEROID["BESSEL 1841",6377397.155,299.1528128]],PRIMEM["GREENWICH",0],UNIT["DEGREE",0.017453292519943295]]';
+    SET SRS_COUNT = SRS_COUNT + 1;
+    
+    RETURN SRS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_d6207g USERS FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_4chao2_UPDATE `mysql_tbl_4chao2` UPDATE `mysql_tbl_d6207g` USERS FOR EACH ROW INSERT INTO `mysql_tbl_xlaynh` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se()) - (0) + TRIG_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(mysql_tbl_n9dh5b_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_n9dh5b`
+        WHERE mysql_tbl_n9dh5b_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(mysql_tbl_n9dh5b_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_n9dh5b`
+        WHERE mysql_tbl_n9dh5b_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(mysql_tbl_n9dh5b_SALARY) - MIN(mysql_tbl_n9dh5b_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_n9dh5b`
+        WHERE mysql_tbl_n9dh5b_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN ((MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2()) - (0) + (IFNULL(SALARY_CALC, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(1, 1);

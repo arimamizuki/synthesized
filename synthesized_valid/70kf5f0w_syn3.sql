@@ -1,0 +1,39 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1azvlz` (
+    `mysql_tbl_1azvlz_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_1azvlz` (`mysql_tbl_1azvlz_lead_time_days`) VALUES ('2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_RANDOM_DATETIME_BETWEEN_qw3u1r----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RANDOM_DATETIME_BETWEEN_qw3u1r(DATE_FROM `mysql_tbl_o2mc0n`, DATE_TO mysql_tbl_o2mc0n) RETURNS mysql_tbl_o2mc0n DETERMINISTIC
+BEGIN
+    DECLARE RESULT mysql_tbl_o2mc0n;
+    SET RESULT = UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_FROM)) + FLOOR(RAND() * (UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_TO)) - UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_FROM)) + 1));
+    RETURN UNIX_TIMESTAMP(FROM_UNIXTIME(RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEAD_TIME_VALUE_yo48nb(SUPPLIER_ID_PARAM mysql_tbl_o2mc0n) RETURNS mysql_tbl_o2mc0n DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME mysql_tbl_o2mc0n DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_1azvlz_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_1azvlz`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_RANDOM_DATETIME_BETWEEN_qw3u1r(-46, -50)) - (0) + V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_LEAD_TIME_VALUE_yo48nb(1);

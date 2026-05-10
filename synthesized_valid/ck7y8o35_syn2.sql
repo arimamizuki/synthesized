@@ -1,0 +1,50 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rjmvbc` (
+    `mysql_tbl_rjmvbc_product_id` INT,
+    `mysql_tbl_rjmvbc_category_id` INT,
+    `mysql_tbl_rjmvbc_price` DECIMAL(10,2),
+    `mysql_tbl_rjmvbc_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_rjmvbc` (`mysql_tbl_rjmvbc_product_id`, `mysql_tbl_rjmvbc_category_id`, `mysql_tbl_rjmvbc_price`, `mysql_tbl_rjmvbc_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y978zv` (mysql_tbl_y978zv_id INT, mysql_tbl_y978zv_log_level INT, mysql_tbl_y978zv_message VARCHAR(200));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm() RETURNS INT DETERMINISTIC
+BEGIN
+    UPDATE `mysql_tbl_y978zv`
+    SET mysql_tbl_y978zv_MESSAGE = CASE mysql_tbl_y978zv_LOG_LEVEL
+        WHEN 1 THEN CONCAT('ERROR: ', mysql_tbl_y978zv_MESSAGE)
+        WHEN 2 THEN CONCAT('WARNING: ', mysql_tbl_y978zv_MESSAGE)
+        WHEN 3 THEN CONCAT('INFO: ', mysql_tbl_y978zv_MESSAGE)
+        ELSE mysql_tbl_y978zv_MESSAGE END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_ESTIMATE_4jnhyp(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_rjmvbc` P ON OI.PRODUCT_ID = mysql_tbl_rjmvbc_PRODUCT_ID
+    WHERE mysql_tbl_rjmvbc_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm()) - (0) + (FLOOR(V_REVENUE / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_ESTIMATE_4jnhyp(1);

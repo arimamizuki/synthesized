@@ -1,0 +1,150 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_upljov` (
+    `mysql_tbl_upljov_project_id` INT,
+    `mysql_tbl_upljov_team_lead_id` INT,
+    `mysql_tbl_upljov_start_date` DATE,
+    `mysql_tbl_upljov_deadline` INT,
+    `mysql_tbl_upljov_budget` INT,
+    `mysql_tbl_upljov_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r3jk22` (
+    `mysql_tbl_r3jk22_task_id` INT,
+    `mysql_tbl_r3jk22_project_id` INT,
+    `mysql_tbl_r3jk22_assignee_id` INT,
+    `mysql_tbl_r3jk22_status` VARCHAR(50),
+    `mysql_tbl_r3jk22_priority` INT
+);
+
+INSERT INTO `mysql_tbl_upljov` (`mysql_tbl_upljov_project_id`, `mysql_tbl_upljov_team_lead_id`, `mysql_tbl_upljov_start_date`, `mysql_tbl_upljov_deadline`, `mysql_tbl_upljov_budget`, `mysql_tbl_upljov_status`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_r3jk22` (`mysql_tbl_r3jk22_task_id`, `mysql_tbl_r3jk22_project_id`, `mysql_tbl_r3jk22_assignee_id`, `mysql_tbl_r3jk22_status`, `mysql_tbl_r3jk22_priority`) VALUES (1, 2, 3, 'test', 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dk41p1` (
+    `mysql_tbl_dk41p1_emp_id` INT,
+    `mysql_tbl_dk41p1_manager_id` INT,
+    `mysql_tbl_dk41p1_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_dk41p1` (`mysql_tbl_dk41p1_emp_id`, `mysql_tbl_dk41p1_manager_id`, `mysql_tbl_dk41p1_department_id`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cf4n37` (
+    `mysql_tbl_cf4n37_product_id` INT,
+    `mysql_tbl_cf4n37_category_id` INT,
+    `mysql_tbl_cf4n37_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_cf4n37` (`mysql_tbl_cf4n37_product_id`, `mysql_tbl_cf4n37_category_id`, `mysql_tbl_cf4n37_price`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys(PROJECT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_TASKS INT DEFAULT 0;
+    DECLARE V_COMPLETED_TASKS INT DEFAULT 0;
+    DECLARE V_OVERDUE_TASKS INT DEFAULT 0;
+    DECLARE V_DAYS_TO_DEADLINE INT DEFAULT 0;
+    DECLARE V_COMPLETION_PROBABILITY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_TASKS
+    FROM `mysql_tbl_r3jk22`
+    WHERE mysql_tbl_r3jk22_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COUNT(CASE WHEN mysql_tbl_r3jk22_STATUS = 'COMPLETED' THEN 1 END),
+           COUNT(CASE WHEN mysql_tbl_r3jk22_STATUS != 'COMPLETED' AND DUE_DATE < CURDATE() THEN 1 END)
+    INTO V_COMPLETED_TASKS, V_OVERDUE_TASKS
+    FROM `mysql_tbl_r3jk22`
+    WHERE mysql_tbl_r3jk22_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT DATEDIFF(mysql_tbl_upljov_DEADLINE, CURDATE())
+    INTO V_DAYS_TO_DEADLINE
+    FROM `mysql_tbl_upljov`
+    WHERE mysql_tbl_upljov_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_TOTAL_TASKS > 0 THEN
+        SET V_COMPLETION_PROBABILITY = (V_COMPLETED_TASKS * 100) / V_TOTAL_TASKS;
+    END IF;
+
+    IF V_DAYS_TO_DEADLINE < 7 AND V_OVERDUE_TASKS > 0 THEN
+        SET V_COMPLETION_PROBABILITY = V_COMPLETION_PROBABILITY - 30;
+    END IF;
+
+    RETURN GREATEST(V_COMPLETION_PROBABILITY, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_cf4n37_PRICE), 0), COALESCE(MIN(mysql_tbl_cf4n37_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM `mysql_tbl_cf4n37`
+    WHERE mysql_tbl_cf4n37_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_MAX_PRICE - V_MIN_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_dk41p1_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_dk41p1`
+    WHERE mysql_tbl_dk41p1_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(-84)) - (0) + V_DEPT_ID);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys(-18)) - (0) + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(16)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6();

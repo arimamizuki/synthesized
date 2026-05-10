@@ -1,0 +1,46 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2uf0sy` (
+    `mysql_tbl_2uf0sy_product_id` INT,
+    `mysql_tbl_2uf0sy_supplier_id` INT,
+    `mysql_tbl_2uf0sy_price` DECIMAL(10,2),
+    `mysql_tbl_2uf0sy_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0riq16` (
+    `mysql_tbl_0riq16_supplier_id` INT,
+    `mysql_tbl_0riq16_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_2uf0sy` (`mysql_tbl_2uf0sy_product_id`, `mysql_tbl_2uf0sy_supplier_id`, `mysql_tbl_2uf0sy_price`, `mysql_tbl_2uf0sy_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_0riq16` (`mysql_tbl_0riq16_supplier_id`, `mysql_tbl_0riq16_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_0riq16_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_0riq16`
+    WHERE mysql_tbl_0riq16_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_2uf0sy_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM `mysql_tbl_2uf0sy`
+    WHERE mysql_tbl_2uf0sy_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 5) + (V_AVG_PRICE / 10);
+
+    RETURN V_VALUE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(1);
