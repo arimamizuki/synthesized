@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7ZPL3E(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5BPFL6 INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(QUANTITY), 0)
+    INTO MYSQL_VAR_5BPFL6
+    FROM ORDER_ITEMS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_5BPFL6;
+END//
+
+DELIMITER ;

@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ONYN3G(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_SU5AFQ INT DEFAULT 0;
+    DECLARE MYSQL_VAR_5JUFKF INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE MYSQL_VAR_5JUFKF <= N DO
+        SET MYSQL_VAR_SU5AFQ = MYSQL_VAR_SU5AFQ + MYSQL_VAR_5JUFKF;
+        SET MYSQL_VAR_5JUFKF = MYSQL_VAR_5JUFKF + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN MYSQL_VAR_SU5AFQ;
+END//
+
+DELIMITER ;

@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_8LYO9F(RADIUS INT, CAP_HEIGHT INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WHB4FS DECIMAL(10,2) DEFAULT 0.00;
+    SET MYSQL_VAR_WHB4FS = 3.14159 * CAP_HEIGHT * CAP_HEIGHT * (3 * RADIUS - CAP_HEIGHT) / 3;
+    RETURN FLOOR(MYSQL_VAR_WHB4FS);
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RKNOYH(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_3TXRO2 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_3TXRO2
+    FROM CONVERSIONS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_3TXRO2;
+END//
+
+DELIMITER ;

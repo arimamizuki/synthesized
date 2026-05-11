@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_7TCKQH----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7TCKQH() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_LIHAX6 INT DEFAULT 0;
+    SELECT CBIT10 INTO MYSQL_VAR_LIHAX6 FROM TABLE_XZY4U5.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_LIHAX6;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RO8V5G(X INT) RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_7TCKQH();
+END//
+
+DELIMITER ;

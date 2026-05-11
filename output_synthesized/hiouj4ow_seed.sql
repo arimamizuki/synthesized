@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4KR4GY(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_6S15TV INT DEFAULT 0;
+
+    SELECT DEPARTMENT_ID
+    INTO MYSQL_VAR_6S15TV
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_6S15TV;
+END//
+
+DELIMITER ;

@@ -1,0 +1,28 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_2DP93L(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_RJV8F4 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_J3R339 INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN -1;
+    END IF;
+
+    IF N = 0 OR N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    COUNTER_LOOP: WHILE MYSQL_VAR_J3R339 <= N DO
+        SET MYSQL_VAR_RJV8F4 = MYSQL_VAR_RJV8F4 * MYSQL_VAR_J3R339;
+        SET MYSQL_VAR_J3R339 = MYSQL_VAR_J3R339 + 1;
+    END WHILE COUNTER_LOOP;
+
+    RETURN MYSQL_VAR_RJV8F4;
+END//
+
+DELIMITER ;

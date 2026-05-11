@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_8WG8DN(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_YQKYEJ INT DEFAULT 0;
+
+    SELECT DAYOFWEEK(ORDER_DATE)
+    INTO MYSQL_VAR_YQKYEJ
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_YQKYEJ;
+END//
+
+DELIMITER ;

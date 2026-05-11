@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IP2KIK() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_90X96D INT DEFAULT 0;
+    SELECT COUNT(*) INTO MYSQL_VAR_90X96D FROM TABLE_VB60CU.`TABLE3`;
+    RETURN MYSQL_VAR_90X96D;
+END//
+
+DELIMITER ;

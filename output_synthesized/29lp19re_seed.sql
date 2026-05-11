@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BLX130(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_GMUGGZ INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())
+    INTO MYSQL_VAR_GMUGGZ
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_GMUGGZ;
+END//
+
+DELIMITER ;

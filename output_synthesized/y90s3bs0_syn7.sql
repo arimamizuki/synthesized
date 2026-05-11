@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HHMQJV() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_THXPVL INT DEFAULT 0;
+    SELECT CSET INTO MYSQL_VAR_THXPVL FROM TABLE_7UF0YV.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_THXPVL;
+END//
+
+DELIMITER ;

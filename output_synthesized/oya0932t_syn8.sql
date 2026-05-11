@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FPRO7X(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_MHH7YR INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_MHH7YR
+    FROM CUSTOMERS
+    WHERE COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_MHH7YR;
+END//
+
+DELIMITER ;

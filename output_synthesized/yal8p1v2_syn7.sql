@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_R8K8RL(INPUT_STRING VARCHAR(255)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_Q5M2YQ INT DEFAULT 0;
+    SET MYSQL_VAR_Q5M2YQ = CHAR_LENGTH(INPUT_STRING);
+    RETURN MYSQL_VAR_Q5M2YQ;
+END//
+
+DELIMITER ;

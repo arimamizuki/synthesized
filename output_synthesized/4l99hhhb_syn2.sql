@@ -1,0 +1,36 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_BBBXW3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BBBXW3(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_YHXEQR DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO MYSQL_VAR_YHXEQR
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_YHXEQR / 500);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FCGW2L(A INT, B INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_ONFGF5 INT DEFAULT 0;
+    WHILE B != 0 DO
+        SET MYSQL_VAR_ONFGF5 = B;
+        SET B = A % B;
+        SET A = MYSQL_VAR_ONFGF5;
+    END WHILE;
+    RETURN MYSQL_FUNC_BBBXW3(10);
+END//
+
+DELIMITER ;

@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_F966I9() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_28AKRI INT DEFAULT 0;
+    SELECT VEC INTO MYSQL_VAR_28AKRI FROM TABLE_S8EO5F.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_28AKRI;
+END//
+
+DELIMITER ;

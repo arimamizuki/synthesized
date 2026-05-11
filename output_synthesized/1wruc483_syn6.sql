@@ -1,0 +1,38 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_AYUY1Q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_AYUY1Q(DEPARTMENT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_4PPG7W DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(SALARY), 0)
+    INTO MYSQL_VAR_4PPG7W
+    FROM EMPLOYEES
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_4PPG7W);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0TP8FN(N INT) RETURNS INT
+BEGIN
+IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN MYSQL_FUNC_AYUY1Q(30);
+END//
+
+DELIMITER ;

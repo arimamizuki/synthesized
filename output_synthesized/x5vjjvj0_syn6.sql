@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_QI0ATH----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_QI0ATH(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_8TS3V8 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_8TS3V8
+    FROM CUSTOMERS
+    WHERE COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_8TS3V8;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0ZK3C6() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_QI0ATH('test_0_0');
+END//
+
+DELIMITER ;

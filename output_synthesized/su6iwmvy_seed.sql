@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5H5DM7(CATEGORY_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5RJ61V INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_5RJ61V
+    FROM PRODUCTS
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN MYSQL_VAR_5RJ61V;
+END//
+
+DELIMITER ;

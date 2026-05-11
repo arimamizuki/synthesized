@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_9JMF6W(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_2EAH10 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO MYSQL_VAR_2EAH10
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_2EAH10 / 1000);
+END//
+
+DELIMITER ;

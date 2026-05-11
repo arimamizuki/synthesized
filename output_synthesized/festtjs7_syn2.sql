@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_1PRWD4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1PRWD4(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_89SLRQ INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_89SLRQ
+    FROM SUBSCRIPTIONS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'ACTIVE';
+
+    RETURN MYSQL_VAR_89SLRQ;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7H9996() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_1PRWD4(30);
+END//
+
+DELIMITER ;

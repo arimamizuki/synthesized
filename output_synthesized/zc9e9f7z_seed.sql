@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ICQU6Q(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_ILNNPW DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO MYSQL_VAR_ILNNPW
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_ILNNPW / 100);
+END//
+
+DELIMITER ;

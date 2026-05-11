@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GKH3AH() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_KV6GRG INT DEFAULT 0;
+    SELECT SUM(CTINYINT) INTO MYSQL_VAR_KV6GRG FROM TABLE_Q76FBJ.`TABLE3`;
+    RETURN MYSQL_VAR_KV6GRG;
+END//
+
+DELIMITER ;

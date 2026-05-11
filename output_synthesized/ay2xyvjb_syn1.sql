@@ -1,0 +1,31 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_KMGW26----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_KMGW26(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_S1VGZE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_S1VGZE
+    FROM ORDERS O
+    JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID
+    WHERE C.COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_S1VGZE;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_STNAGE(X INT) RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_KMGW26('test_0_0') - (0) + COALESCE(X, 0));
+END//
+
+DELIMITER ;

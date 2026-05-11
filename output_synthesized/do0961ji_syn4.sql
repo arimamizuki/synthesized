@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_78ONKA(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_F05FE4 INT DEFAULT 0;
+
+    SELECT COALESCE(BUDGET, 0)
+    INTO MYSQL_VAR_F05FE4
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_F05FE4;
+END//
+
+DELIMITER ;

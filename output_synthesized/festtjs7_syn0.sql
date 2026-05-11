@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_ZYRUGJ----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ZYRUGJ(PRODUCT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_YBQUY5 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(PRICE, 0)
+    INTO MYSQL_VAR_YBQUY5
+    FROM PRODUCTS
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_YBQUY5);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7H9996() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_ZYRUGJ(10);
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_QQ10BJ(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_YK4CE2 INT DEFAULT 0;
+
+    SELECT QUARTER(ORDER_DATE)
+    INTO MYSQL_VAR_YK4CE2
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_YK4CE2;
+END//
+
+DELIMITER ;

@@ -1,0 +1,22 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_gtl32x (
+    item_id INT,
+    quantity INT
+);
+INSERT INTO table_gtl32x (item_id, quantity) VALUES (1, 10), (2, 5), (3, 8);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SYZ9DK(ITEM_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_V58PZ5 INT;
+    
+    SELECT QUANTITY * ITEM_ID_PARAM INTO MYSQL_VAR_V58PZ5
+    FROM TABLE_GTL32X
+    WHERE ITEM_ID = ITEM_ID_PARAM;
+    
+    RETURN MYSQL_VAR_V58PZ5;
+END//
+
+DELIMITER ;

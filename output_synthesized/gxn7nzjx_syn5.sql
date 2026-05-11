@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_GVB9YE----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GVB9YE(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_899W6O DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SALARY, 0)
+    INTO MYSQL_VAR_899W6O
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR((MYSQL_VAR_899W6O / 2080) / 100);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1UM166() RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_GVB9YE(10) - (0) + COALESCE(0, 0));
+END//
+
+DELIMITER ;

@@ -1,0 +1,42 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_YDIDVT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_YDIDVT(A INT, B INT, C INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_JRXPVI INT DEFAULT 0;
+    DECLARE MYSQL_VAR_MPUZB4 INT DEFAULT 0;
+
+    IF A IS NULL OR B IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF B = 0 THEN
+        SET MYSQL_VAR_JRXPVI = 0;
+    ELSE
+        SET MYSQL_VAR_JRXPVI = A / B;
+    END IF;
+
+    IF C IS NOT NULL AND C != 0 THEN
+        SET MYSQL_VAR_JRXPVI = MYSQL_VAR_JRXPVI + (A / C);
+        SET MYSQL_VAR_MPUZB4 = MYSQL_VAR_MPUZB4 + 1;
+    END IF;
+
+    RETURN MYSQL_VAR_JRXPVI;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1GOY23() RETURNS INT
+BEGIN
+SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'THIS IS A WARNING MESSAGE';
+    RETURN MYSQL_FUNC_YDIDVT(20, 21, 22);
+END//
+
+DELIMITER ;

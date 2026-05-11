@@ -1,0 +1,47 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_JL9RI2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_JL9RI2() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_JEJG4Z(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_RQ0E5J INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET MYSQL_VAR_RQ0E5J = MYSQL_FUNC_JL9RI2();
+
+    UGLY_LOOP: WHILE MYSQL_VAR_RQ0E5J % 2 = 0 DO
+        SET MYSQL_VAR_RQ0E5J = MYSQL_VAR_RQ0E5J / 2;
+    END WHILE;
+
+    UGLY_LOOP2: WHILE MYSQL_VAR_RQ0E5J % 3 = 0 DO
+        SET MYSQL_VAR_RQ0E5J = MYSQL_VAR_RQ0E5J / 3;
+    END WHILE;
+
+    UGLY_LOOP3: WHILE MYSQL_VAR_RQ0E5J % 5 = 0 DO
+        SET MYSQL_VAR_RQ0E5J = MYSQL_VAR_RQ0E5J / 5;
+    END WHILE;
+
+    IF MYSQL_VAR_RQ0E5J = 1 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END//
+
+DELIMITER ;

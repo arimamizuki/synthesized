@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SVJI5D(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_R0H1C8 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO MYSQL_VAR_R0H1C8
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_R0H1C8);
+END//
+
+DELIMITER ;

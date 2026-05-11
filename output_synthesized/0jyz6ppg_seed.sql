@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_G1IY3W(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_DH2A0L INT DEFAULT 2;
+    DECLARE MYSQL_VAR_0MPKNI INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN 2;
+    END IF;
+
+    SET MYSQL_VAR_0MPKNI = FLOOR(SQRT(N));
+    SET MYSQL_VAR_DH2A0L = 3;
+
+    WHILE MYSQL_VAR_DH2A0L <= MYSQL_VAR_0MPKNI DO
+        IF N % MYSQL_VAR_DH2A0L = 0 THEN
+            RETURN MYSQL_VAR_DH2A0L;
+        END IF;
+        SET MYSQL_VAR_DH2A0L = MYSQL_VAR_DH2A0L + 2;
+    END WHILE;
+
+    RETURN N;
+END//
+
+DELIMITER ;

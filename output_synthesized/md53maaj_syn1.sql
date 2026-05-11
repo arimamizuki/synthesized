@@ -1,0 +1,66 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_j38zvc (
+    emp_no INT,
+    first_name VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS table_rz96xv (
+    emp_no INT,
+    salary DECIMAL(10,2)
+);
+INSERT INTO table_j38zvc (emp_no, first_name) VALUES (10001, 'Georgi');
+INSERT INTO table_rz96xv (emp_no, salary) VALUES (10001, 60117);
+INSERT INTO table_rz96xv (emp_no, salary) VALUES (10001, 62102);
+INSERT INTO table_rz96xv (emp_no, salary) VALUES (10001, 66074);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_MBHXX9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MBHXX9(A INT, M INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5K0Z3L INT DEFAULT 0;
+    DECLARE MYSQL_VAR_YARSLI INT DEFAULT 1;
+    DECLARE MYSQL_VAR_KN5ZKK INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE MYSQL_VAR_YARSLI < M DO
+        IF ((A * MYSQL_VAR_YARSLI) % M) = 1 THEN
+            SET MYSQL_VAR_5K0Z3L = MYSQL_VAR_YARSLI;
+            SET MYSQL_VAR_KN5ZKK = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET MYSQL_VAR_YARSLI = MYSQL_VAR_YARSLI + 1;
+    END WHILE MY_LOOP;
+
+    IF MYSQL_VAR_KN5ZKK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MYSQL_VAR_5K0Z3L;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_16Y21S(P_EMP_NO INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_PODF59 INT;
+    
+    SELECT CAST(AVG(S.SALARY) AS UNSIGNED) INTO MYSQL_VAR_PODF59
+    FROM TABLE_J38ZVC E 
+    JOIN TABLE_RZ96XV S ON E.EMP_NO = S.EMP_NO
+    WHERE E.EMP_NO = P_EMP_NO;
+    
+    RETURN (MYSQL_FUNC_MBHXX9(10, 11) - (0) + COALESCE(MYSQL_VAR_PODF59, 0));
+END//
+
+DELIMITER ;

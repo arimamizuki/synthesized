@@ -1,0 +1,44 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_1ZB9QN----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1ZB9QN(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+RETURN (EMP_ID_PARAM * 17) % 100;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4FO6UN(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_K2BRZ1 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_1DUASY INT DEFAULT 2;
+
+    IF N <= 1 THEN
+        RETURN (MYSQL_FUNC_1ZB9QN(30) - (0) + COALESCE(0, 0));
+    END IF;
+
+    WHILE MYSQL_VAR_1DUASY * MYSQL_VAR_1DUASY <= N DO
+        IF N % MYSQL_VAR_1DUASY = 0 THEN
+            SET MYSQL_VAR_K2BRZ1 = MYSQL_VAR_K2BRZ1 + MYSQL_VAR_1DUASY;
+            IF MYSQL_VAR_1DUASY != N / MYSQL_VAR_1DUASY THEN
+                SET MYSQL_VAR_K2BRZ1 = MYSQL_VAR_K2BRZ1 + (N / MYSQL_VAR_1DUASY);
+            END IF;
+        END IF;
+        SET MYSQL_VAR_1DUASY = MYSQL_VAR_1DUASY + 1;
+    END WHILE;
+
+    IF MYSQL_VAR_K2BRZ1 = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END//
+
+DELIMITER ;

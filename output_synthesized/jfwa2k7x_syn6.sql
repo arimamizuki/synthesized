@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_L2R0N9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_L2R0N9(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_Z2FZP9 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_Z2FZP9
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_Z2FZP9;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_72QXGW(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN (MYSQL_FUNC_L2R0N9(10) - (0) + COALESCE(A / B, 0));
+END//
+
+DELIMITER ;

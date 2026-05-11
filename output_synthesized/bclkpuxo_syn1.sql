@@ -1,0 +1,63 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_r2pva5 (
+    name VARCHAR(50)
+);
+INSERT INTO table_r2pva5 (name) VALUES 
+('Sofia'),
+('Plovdiv'),
+('Varna'),
+('Burgas'),
+('Stara Zagora'),
+('Pleven'),
+('Ruse'),
+('Shumen'),
+('Sliven'),
+('Smolyan');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_XPYY7D----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_XPYY7D(START_STR INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_FM8ECE INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO MYSQL_VAR_FM8ECE 
+    FROM TABLE_R2PVA5 
+    WHERE NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN MYSQL_VAR_FM8ECE;
+END//
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_3R2C15----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_3R2C15(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_VQP915 INT DEFAULT 0;
+    DECLARE MYSQL_VAR_JHXY9D DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT MYSQL_FUNC_XPYY7D(20)
+    INTO MYSQL_VAR_VQP915, MYSQL_VAR_JHXY9D
+    FROM SUPPLIERS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_VAR_JHXY9D * 10) - (MYSQL_VAR_VQP915 * 2);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0FU1RE() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_3R2C15(10);
+END//
+
+DELIMITER ;

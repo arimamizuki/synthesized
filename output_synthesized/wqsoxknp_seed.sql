@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VDTWGK(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_8N96DV INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_8N96DV
+    FROM EMPLOYEES
+    WHERE MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_8N96DV;
+END//
+
+DELIMITER ;

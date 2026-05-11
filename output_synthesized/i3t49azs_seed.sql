@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_J64Y2M(RADIUS INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_0W87JE DECIMAL(10,2) DEFAULT 0.00;
+    SET MYSQL_VAR_0W87JE = 4 * 3.14159 * RADIUS * RADIUS;
+    RETURN FLOOR(MYSQL_VAR_0W87JE);
+END//
+
+DELIMITER ;

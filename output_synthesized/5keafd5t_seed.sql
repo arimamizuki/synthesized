@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NPXOIY(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_B8434H INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())
+    INTO MYSQL_VAR_B8434H
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_B8434H;
+END//
+
+DELIMITER ;

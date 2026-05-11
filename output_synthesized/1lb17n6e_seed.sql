@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5DZW0D(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_J6SI5A INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_J6SI5A
+    FROM CUSTOMERS
+    WHERE COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_J6SI5A;
+END//
+
+DELIMITER ;

@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_W6569M() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_463QXV INT DEFAULT 0;
+    SELECT COUNT(*) INTO MYSQL_VAR_463QXV FROM TABLE_SXJKDS.`TABLE3`;
+    RETURN MYSQL_VAR_463QXV;
+END//
+
+DELIMITER ;

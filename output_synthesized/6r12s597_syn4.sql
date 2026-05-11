@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_H87GHX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_H87GHX(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_N0LU55 DATE;
+
+    SELECT REGISTRATION_DATE
+    INTO MYSQL_VAR_N0LU55
+    FROM CUSTOMERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN QUARTER(MYSQL_VAR_N0LU55);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CJJN0T(N INT) RETURNS INT
+BEGIN
+IF N < 0 THEN
+        RETURN -MYSQL_FUNC_H87GHX(20);
+    END IF;
+    RETURN N;
+END//
+
+DELIMITER ;

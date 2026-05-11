@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FG9V9Y(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_B7T2TM DATE;
+
+    SELECT HIRE_DATE
+    INTO MYSQL_VAR_B7T2TM
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    IF MYSQL_VAR_B7T2TM IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(MYSQL_VAR_B7T2TM);
+END//
+
+DELIMITER ;

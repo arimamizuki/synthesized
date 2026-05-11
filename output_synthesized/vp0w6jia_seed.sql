@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_P71A6V(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WDABXB DATE;
+
+    SELECT MIN(ORDER_DATE)
+    INTO MYSQL_VAR_WDABXB
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF MYSQL_VAR_WDABXB IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MONTH(MYSQL_VAR_WDABXB);
+END//
+
+DELIMITER ;

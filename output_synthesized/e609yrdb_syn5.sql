@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_OB3DBV----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_OB3DBV(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_ZVN24B INT DEFAULT 0;
+
+    SELECT YEAR(ORDER_DATE)
+    INTO MYSQL_VAR_ZVN24B
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_ZVN24B;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4K1EFO(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN (MYSQL_FUNC_OB3DBV(20) - (0) + COALESCE(A % B, 0));
+END//
+
+DELIMITER ;

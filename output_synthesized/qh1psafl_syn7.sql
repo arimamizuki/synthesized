@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_P0ZIHI(PRODUCT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_UKWO26 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(PRICE, 0)
+    INTO MYSQL_VAR_UKWO26
+    FROM PRODUCTS
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((MYSQL_VAR_UKWO26 * 0.3) / 10);
+END//
+
+DELIMITER ;

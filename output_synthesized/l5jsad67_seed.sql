@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_pv3mjs (
+    inventory_id INT,
+    customer_id INT,
+    return_date DATE
+);
+INSERT INTO table_pv3mjs (inventory_id, customer_id, return_date) VALUES
+(1, 100, NULL),
+(1, 200, '2024-01-01'),
+(2, 300, NULL),
+(3, 400, NULL),
+(4, 500, '2024-02-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_P1HZ3Q(P_INVENTORY_ID INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_LYYUWL INT;
+  
+
+  SELECT CUSTOMER_ID INTO MYSQL_VAR_LYYUWL
+  FROM TABLE_PV3MJS
+  WHERE RETURN_DATE IS NULL
+  AND INVENTORY_ID = P_INVENTORY_ID;
+
+  RETURN MYSQL_VAR_LYYUWL;
+END//
+
+DELIMITER ;

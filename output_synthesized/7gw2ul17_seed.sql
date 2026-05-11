@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_Z4FKH2() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_2T4CUU INT DEFAULT 0;
+    SELECT CSMALLINT INTO MYSQL_VAR_2T4CUU FROM TABLE_LI79AG.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_2T4CUU;
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LTQ4E4(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_JMMGWD INT DEFAULT 0;
+
+    SELECT CUSTOMER_ID
+    INTO MYSQL_VAR_JMMGWD
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_JMMGWD % 50;
+END//
+
+DELIMITER ;

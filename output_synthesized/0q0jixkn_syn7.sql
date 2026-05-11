@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_EOWVPD----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EOWVPD() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UAF0IX(CATEGORY_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_6316AC DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(PRICE * STOCK_QUANTITY), 0)
+    INTO MYSQL_VAR_6316AC
+    FROM PRODUCTS
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN MYSQL_FUNC_EOWVPD();
+END//
+
+DELIMITER ;

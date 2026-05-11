@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6FFIYL() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_KJU462 INT DEFAULT 0;
+    SELECT COUNT(*) INTO MYSQL_VAR_KJU462 FROM TABLE_9AEQOO.`TABLE3`;
+    RETURN MYSQL_VAR_KJU462;
+END//
+
+DELIMITER ;

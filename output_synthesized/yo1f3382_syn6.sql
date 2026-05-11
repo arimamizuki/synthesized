@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_OPJIKX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_OPJIKX(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_3DWQDS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_3DWQDS
+    FROM PRODUCTS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN MYSQL_VAR_3DWQDS;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_72QXGW(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN MYSQL_FUNC_OPJIKX(30);
+END//
+
+DELIMITER ;

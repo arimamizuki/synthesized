@@ -1,0 +1,22 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LY8IXF(A INT, B INT, C INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_88CD4J DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE MYSQL_VAR_YA61UO DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN 0;
+    END IF;
+
+    SET MYSQL_VAR_88CD4J = (A + B + C) / 2;
+    SET MYSQL_VAR_YA61UO = SQRT(MYSQL_VAR_88CD4J * (MYSQL_VAR_88CD4J - A) * (MYSQL_VAR_88CD4J - B) * (MYSQL_VAR_88CD4J - C));
+
+    RETURN FLOOR(MYSQL_VAR_YA61UO);
+END//
+
+DELIMITER ;

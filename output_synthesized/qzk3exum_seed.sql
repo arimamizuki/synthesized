@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VEK1LI(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5K6WW3 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_5K6WW3
+    FROM CONVERSIONS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_5K6WW3;
+END//
+
+DELIMITER ;

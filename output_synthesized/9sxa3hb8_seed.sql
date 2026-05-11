@@ -1,0 +1,55 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_L1EC92(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_3ICN4M INT DEFAULT 3;
+    DECLARE MYSQL_VAR_7KI3RG INT DEFAULT 1;
+    DECLARE MYSQL_VAR_1GWVZS INT DEFAULT 0;
+
+    IF N <= 2 OR N % 2 != 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET MYSQL_VAR_3ICN4M = 3;
+
+    OUTER_LOOP: WHILE MYSQL_VAR_3ICN4M <= N / 2 DO
+        SET MYSQL_VAR_7KI3RG = 1;
+        SET MYSQL_VAR_1GWVZS = 2;
+
+        INNER_LOOP: WHILE MYSQL_VAR_1GWVZS * MYSQL_VAR_1GWVZS <= MYSQL_VAR_3ICN4M DO
+            IF MYSQL_VAR_3ICN4M % MYSQL_VAR_1GWVZS = 0 THEN
+                SET MYSQL_VAR_7KI3RG = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET MYSQL_VAR_1GWVZS = MYSQL_VAR_1GWVZS + 1;
+        END WHILE INNER_LOOP;
+
+        IF MYSQL_VAR_7KI3RG = 1 THEN
+            SET MYSQL_VAR_1GWVZS = N - MYSQL_VAR_3ICN4M;
+            SET MYSQL_VAR_7KI3RG = 1;
+            SET MYSQL_VAR_1GWVZS = 2;
+
+            CHECK_LOOP: WHILE MYSQL_VAR_1GWVZS * MYSQL_VAR_1GWVZS <= MYSQL_VAR_1GWVZS DO
+                IF MYSQL_VAR_1GWVZS % MYSQL_VAR_1GWVZS = 0 THEN
+                    SET MYSQL_VAR_7KI3RG = 0;
+                    LEAVE CHECK_LOOP;
+                END IF;
+                SET MYSQL_VAR_1GWVZS = MYSQL_VAR_1GWVZS + 1;
+            END WHILE CHECK_LOOP;
+
+            IF MYSQL_VAR_7KI3RG = 1 THEN
+                RETURN MYSQL_VAR_3ICN4M;
+            END IF;
+        END IF;
+
+        SET MYSQL_VAR_3ICN4M = MYSQL_VAR_3ICN4M + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN 0;
+END//
+
+DELIMITER ;

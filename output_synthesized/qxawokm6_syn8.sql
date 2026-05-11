@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_WF953G(CATEGORY_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_GBLMVM INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_GBLMVM
+    FROM PRODUCTS
+    WHERE CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN MYSQL_VAR_GBLMVM * 5;
+END//
+
+DELIMITER ;

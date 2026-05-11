@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4MLORP(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_QQX0ZX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_QQX0ZX
+    FROM PRODUCTS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN MYSQL_VAR_QQX0ZX;
+END//
+
+DELIMITER ;

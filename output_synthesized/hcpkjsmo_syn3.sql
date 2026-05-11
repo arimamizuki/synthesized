@@ -1,0 +1,52 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_w67prt (
+    emp_no INT,
+    salary INT
+);
+INSERT INTO table_w67prt (emp_no, salary) VALUES
+(10001, 60117),
+(10001, 62102),
+(10001, 66074),
+(10002, 65828),
+(10002, 65909),
+(10002, 67534);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_O5NBRR----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_O5NBRR(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_QYIACO INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(SALARY) INTO MYSQL_VAR_QYIACO
+        FROM TABLE_W67PRT
+        WHERE EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(SALARY) INTO MYSQL_VAR_QYIACO
+        FROM TABLE_W67PRT
+        WHERE EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(SALARY) - MIN(SALARY) INTO MYSQL_VAR_QYIACO
+        FROM TABLE_W67PRT
+        WHERE EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN IFNULL(MYSQL_VAR_QYIACO, 0);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_YG2KGB() RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_O5NBRR(20, 21) - (0) + COALESCE(0, 0));
+END//
+
+DELIMITER ;

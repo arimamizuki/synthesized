@@ -1,0 +1,28 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6JTA8K(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_7GOS61 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_NUX5VN INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    WHILE MYSQL_VAR_NUX5VN <= N DO
+        SET MYSQL_VAR_7GOS61 = MYSQL_VAR_7GOS61 * MYSQL_VAR_NUX5VN;
+        SET MYSQL_VAR_NUX5VN = MYSQL_VAR_NUX5VN + 1;
+    END WHILE;
+
+    RETURN MYSQL_VAR_7GOS61;
+END//
+
+DELIMITER ;

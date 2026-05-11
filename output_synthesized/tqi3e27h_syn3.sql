@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_RO8V5G----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RO8V5G(X INT) RETURNS INT
+BEGIN
+RETURN -X;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_J5135R(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_XIKD8Q INT DEFAULT 0;
+
+    SELECT MYSQL_FUNC_RO8V5G(10)
+    INTO MYSQL_VAR_XIKD8Q
+    FROM SUBSCRIPTIONS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_XIKD8Q;
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_3ST54L(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5ED5V6 INT DEFAULT 0;
+
+    SELECT YEAR(HIRE_DATE)
+    INTO MYSQL_VAR_5ED5V6
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_5ED5V6;
+END//
+
+DELIMITER ;

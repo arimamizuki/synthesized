@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6HYJG5(DEPARTMENT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_FX0IE6 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_FX0IE6
+    FROM EMPLOYEES
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN MYSQL_VAR_FX0IE6;
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHGNSC(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_1VSD7N INT DEFAULT 0;
+
+    SELECT WEEK(ORDER_DATE)
+    INTO MYSQL_VAR_1VSD7N
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_1VSD7N;
+END//
+
+DELIMITER ;

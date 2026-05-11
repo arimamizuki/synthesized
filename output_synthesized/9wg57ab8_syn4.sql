@@ -1,0 +1,86 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_kqlixh (
+    employee_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    salary INT
+);
+INSERT INTO table_kqlixh (employee_id, first_name, last_name, salary) VALUES
+(1, 'John', 'Doe', 40000),
+(2, 'Jane', 'Smith', 30000),
+(3, 'Bob', 'Johnson', 50000),
+(4, 'Alice', 'Williams', 25000);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_UQJS1G----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UQJS1G() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_6DKJ4A INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO MYSQL_VAR_6DKJ4A
+    FROM TABLE_KQLIXH
+    WHERE SALARY > 35000
+    ORDER BY FIRST_NAME, LAST_NAME, EMPLOYEE_ID;
+    
+    RETURN MYSQL_VAR_6DKJ4A;
+END//
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HVABBX----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HVABBX(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_N7JFGF INT DEFAULT 0;
+    DECLARE MYSQL_VAR_DLFY8S DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(BUDGET, 0)
+    INTO MYSQL_VAR_N7JFGF
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO MYSQL_VAR_DLFY8S
+    FROM CONVERSIONS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF MYSQL_VAR_N7JFGF = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_UQJS1G() - (0) + COALESCE(FLOOR((MYSQL_VAR_DLFY8S * 100) / MYSQL_VAR_N7JFGF), 0));
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5VEW2G(A INT, B INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_PWDNAK INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET MYSQL_VAR_PWDNAK = B;
+        SET B = A % B;
+        SET A = MYSQL_VAR_PWDNAK;
+    END WHILE;
+
+    RETURN (MYSQL_FUNC_HVABBX(30) - (0) + COALESCE(A, 0));
+END//
+
+DELIMITER ;

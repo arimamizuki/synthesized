@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MBHXX9(A INT, M INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5K0Z3L INT DEFAULT 0;
+    DECLARE MYSQL_VAR_YARSLI INT DEFAULT 1;
+    DECLARE MYSQL_VAR_KN5ZKK INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE MYSQL_VAR_YARSLI < M DO
+        IF ((A * MYSQL_VAR_YARSLI) % M) = 1 THEN
+            SET MYSQL_VAR_5K0Z3L = MYSQL_VAR_YARSLI;
+            SET MYSQL_VAR_KN5ZKK = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET MYSQL_VAR_YARSLI = MYSQL_VAR_YARSLI + 1;
+    END WHILE MY_LOOP;
+
+    IF MYSQL_VAR_KN5ZKK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MYSQL_VAR_5K0Z3L;
+END//
+
+DELIMITER ;

@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_VXU5PT----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VXU5PT() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_XFYLYM INT DEFAULT 0;
+    SELECT COUNT(*) INTO MYSQL_VAR_XFYLYM FROM TABLE_XP6WNG.`TABLE3`;
+    RETURN MYSQL_VAR_XFYLYM;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_L5K2W8(NUM1 INT, NUM2 INT) RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_VXU5PT() - (0) + COALESCE(NUM1 + NUM2, 0));
+END//
+
+DELIMITER ;

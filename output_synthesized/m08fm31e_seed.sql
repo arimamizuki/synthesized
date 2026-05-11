@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1PVB2M(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_B8NFQT INT DEFAULT 0;
+    DECLARE MYSQL_VAR_W4LXBD INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE MYSQL_VAR_W4LXBD <= N DO
+        SET MYSQL_VAR_B8NFQT = MYSQL_VAR_B8NFQT * 2;
+        SET MYSQL_VAR_B8NFQT = MYSQL_VAR_B8NFQT + 1;
+        SET MYSQL_VAR_W4LXBD = MYSQL_VAR_W4LXBD + 1;
+    END WHILE MY_LOOP;
+
+    RETURN MYSQL_VAR_B8NFQT;
+END//
+
+DELIMITER ;

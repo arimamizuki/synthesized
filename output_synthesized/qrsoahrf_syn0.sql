@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_JGBLFF----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_JGBLFF(RADIUS INT, ANGLE_DEGREES INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_E3NOQQ DECIMAL(10,2) DEFAULT 0.00;
+    SET MYSQL_VAR_E3NOQQ = 3.14159 * RADIUS * RADIUS * ANGLE_DEGREES / 360;
+    RETURN FLOOR(MYSQL_VAR_E3NOQQ);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1UM166() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_JGBLFF(10, 11);
+END//
+
+DELIMITER ;

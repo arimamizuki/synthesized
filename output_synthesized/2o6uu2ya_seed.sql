@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RVJPST(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_YHJ82J INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_YHJ82J
+    FROM CUSTOMERS
+    WHERE COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_YHJ82J;
+END//
+
+DELIMITER ;

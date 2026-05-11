@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_WAWX6T() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_D9LLWW INT DEFAULT 0;
+    SELECT SUM(CDOUBLE) INTO MYSQL_VAR_D9LLWW FROM TABLE_F5DBG8.`TABLE3`;
+    RETURN MYSQL_VAR_D9LLWW;
+END//
+
+DELIMITER ;

@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_66M6LO() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_SXOA4Q INT DEFAULT 0;
+    SELECT ID INTO MYSQL_VAR_SXOA4Q FROM TABLE_CQ0LX2.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_SXOA4Q;
+END//
+
+DELIMITER ;

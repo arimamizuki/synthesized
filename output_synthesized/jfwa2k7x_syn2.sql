@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FIPA22----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIPA22(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_D8BAXM DATE;
+
+    SELECT END_DATE
+    INTO MYSQL_VAR_D8BAXM
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF MYSQL_VAR_D8BAXM IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN GREATEST(DATEDIFF(MYSQL_VAR_D8BAXM, CURDATE()), 0);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_72QXGW(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN (MYSQL_FUNC_FIPA22(10) - (0) + COALESCE(A / B, 0));
+END//
+
+DELIMITER ;

@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_K3EM8Q(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_LT293B INT DEFAULT 1;
+    DECLARE MYSQL_VAR_WGLVKP INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE MYSQL_VAR_WGLVKP <= N DO
+        SET MYSQL_VAR_LT293B = MYSQL_VAR_LT293B * MYSQL_VAR_WGLVKP;
+        SET MYSQL_VAR_WGLVKP = MYSQL_VAR_WGLVKP + 1;
+    END WHILE;
+
+    RETURN MYSQL_VAR_LT293B;
+END//
+
+DELIMITER ;

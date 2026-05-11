@@ -1,0 +1,46 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_XO4DVP----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_XO4DVP(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_PFGPB3 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO MYSQL_VAR_PFGPB3
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_PFGPB3);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5VEW2G(A INT, B INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_PWDNAK INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET MYSQL_VAR_PWDNAK = B;
+        SET B = A % B;
+        SET A = MYSQL_VAR_PWDNAK;
+    END WHILE;
+
+    RETURN (MYSQL_FUNC_XO4DVP(10) - (0) + COALESCE(A, 0));
+END//
+
+DELIMITER ;

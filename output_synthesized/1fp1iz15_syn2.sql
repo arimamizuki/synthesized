@@ -1,0 +1,31 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_JL9RI2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_JL9RI2() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_KMGW26(COUNTRY_PARAM VARCHAR(50)) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_S1VGZE INT DEFAULT 0;
+
+    SELECT (MYSQL_FUNC_JL9RI2() - (0) + COALESCE(COUNT(*), 0))
+    INTO MYSQL_VAR_S1VGZE
+    FROM ORDERS O
+    JOIN CUSTOMERS C ON O.CUSTOMER_ID = C.CUSTOMER_ID
+    WHERE C.COUNTRY = COUNTRY_PARAM;
+
+    RETURN MYSQL_VAR_S1VGZE;
+END//
+
+DELIMITER ;

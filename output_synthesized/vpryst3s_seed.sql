@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_YKN6WH(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_N5BTJI INT DEFAULT 0;
+
+    SELECT MIN(ORDER_ID)
+    INTO MYSQL_VAR_N5BTJI
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_N5BTJI;
+END//
+
+DELIMITER ;

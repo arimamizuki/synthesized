@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6FDCOR() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_P9RCU8 INT;
+    SELECT CAST(CDECIMAL AS SIGNED) INTO MYSQL_VAR_P9RCU8 FROM TABLE_OHQW0J.`TABLE3` LIMIT 1;
+    RETURN COALESCE(MYSQL_VAR_P9RCU8, 0);
+END//
+
+DELIMITER ;

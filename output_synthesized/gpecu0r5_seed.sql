@@ -1,0 +1,28 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EDMHXC(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_OHSN01 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_8BGXVC INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE MYSQL_VAR_8BGXVC <= N DO
+        SET MYSQL_VAR_OHSN01 = MYSQL_VAR_OHSN01 * MYSQL_VAR_8BGXVC;
+        SET MYSQL_VAR_8BGXVC = MYSQL_VAR_8BGXVC + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN MYSQL_VAR_OHSN01;
+END//
+
+DELIMITER ;

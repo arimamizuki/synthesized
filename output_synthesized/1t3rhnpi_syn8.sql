@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_ENP0WR----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ENP0WR(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_ZD2JFV INT DEFAULT 0;
+    SET MYSQL_VAR_ZD2JFV = ABS(X1 - X2) + ABS(Y1 - Y2);
+    RETURN MYSQL_VAR_ZD2JFV;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_9EQZJR(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_Q5ALXP INT DEFAULT 0;
+    WHILE N > 0 DO
+        SET MYSQL_VAR_Q5ALXP = MYSQL_VAR_Q5ALXP + (N & 1);
+        SET N = N >> 1;
+    END WHILE;
+    RETURN (MYSQL_FUNC_ENP0WR(20, 21, 22, 23) - (0) + COALESCE(MYSQL_VAR_Q5ALXP, 0));
+END//
+
+DELIMITER ;

@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_1ENVDN----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1ENVDN(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_GUQNF5 INT DEFAULT 0;
+
+    SELECT MONTH(START_DATE)
+    INTO MYSQL_VAR_GUQNF5
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_GUQNF5;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_JL9RI2() RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_1ENVDN(10);
+END//
+
+DELIMITER ;

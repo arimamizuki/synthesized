@@ -1,0 +1,31 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DAHM1Z(N INT, K INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_2RFIRC INT DEFAULT 1;
+    DECLARE MYSQL_VAR_CFYYWX INT DEFAULT 0;
+
+    IF K < 0 OR K > N THEN
+        RETURN 0;
+    END IF;
+
+    IF K > N - K THEN
+        SET K = N - K;
+    END IF;
+
+    SET MYSQL_VAR_CFYYWX = 0;
+
+    WHILE MYSQL_VAR_CFYYWX < K DO
+        SET MYSQL_VAR_2RFIRC = MYSQL_VAR_2RFIRC * (N - MYSQL_VAR_CFYYWX);
+        SET MYSQL_VAR_2RFIRC = MYSQL_VAR_2RFIRC / (MYSQL_VAR_CFYYWX + 1);
+        SET MYSQL_VAR_CFYYWX = MYSQL_VAR_CFYYWX + 1;
+    END WHILE;
+
+    RETURN FLOOR(MYSQL_VAR_2RFIRC);
+END//
+
+DELIMITER ;

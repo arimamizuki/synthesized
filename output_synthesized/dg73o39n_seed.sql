@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_XPWVU1(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_7TNE5M DATE;
+
+    SELECT HIRE_DATE
+    INTO MYSQL_VAR_7TNE5M
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    IF MYSQL_VAR_7TNE5M IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DAYOFYEAR(MYSQL_VAR_7TNE5M);
+END//
+
+DELIMITER ;

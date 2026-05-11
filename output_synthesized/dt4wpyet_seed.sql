@@ -1,0 +1,42 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_1mqtm4 (
+    `id` INT,
+    `username` VARCHAR(30)
+);
+CREATE TABLE IF NOT EXISTS table_lswxkq (
+    `user_id` INT
+);
+INSERT INTO table_1mqtm4 (`id`, `username`) VALUES
+(1, 'user1'),
+(2, 'user2'),
+(3, 'user3');
+INSERT INTO table_lswxkq (`user_id`) VALUES
+(1),
+(1),
+(2),
+(1),
+(3);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ULSHLV(P_USERNAME_ID INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_HLD3V1 VARCHAR(30);
+    DECLARE MYSQL_VAR_6KX7X1 INT;
+    
+    SELECT `USERNAME` INTO MYSQL_VAR_HLD3V1 FROM TABLE_1MQTM4 WHERE `ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF MYSQL_VAR_HLD3V1 IS NULL THEN
+        RETURN 0;
+    END IF;
+    
+    SELECT COUNT(UP.`USER_ID`) INTO MYSQL_VAR_6KX7X1
+    FROM TABLE_LSWXKQ AS UP
+    LEFT JOIN TABLE_1MQTM4 AS U ON U.`ID` = UP.`USER_ID`
+    WHERE U.`USERNAME` = MYSQL_VAR_HLD3V1;
+    
+    RETURN COALESCE(MYSQL_VAR_6KX7X1, 0);
+END//
+
+DELIMITER ;

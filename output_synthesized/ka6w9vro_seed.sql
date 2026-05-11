@@ -1,0 +1,21 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6AIDK2(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_XMB0EJ INT DEFAULT 0;
+    DECLARE MYSQL_VAR_OISSFY INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET MYSQL_VAR_OISSFY = N % 10;
+        SET MYSQL_VAR_XMB0EJ = MYSQL_VAR_XMB0EJ + MYSQL_VAR_OISSFY;
+        SET N = N / 10;
+    END WHILE;
+
+    RETURN MYSQL_VAR_XMB0EJ;
+END//
+
+DELIMITER ;

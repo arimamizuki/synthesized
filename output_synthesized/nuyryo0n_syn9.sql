@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_8L3VST----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_8L3VST() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7SAXU7(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_7RZCCJ INT DEFAULT 0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7)
+    INTO MYSQL_VAR_7RZCCJ
+    FROM SUPPLIERS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_8L3VST() - (0) + COALESCE(MYSQL_VAR_7RZCCJ, 0));
+END//
+
+DELIMITER ;

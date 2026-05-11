@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7TTZ7S(DEPARTMENT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_9WMJW2 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_9WMJW2
+    FROM EMPLOYEES
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN MYSQL_VAR_9WMJW2;
+END//
+
+DELIMITER ;

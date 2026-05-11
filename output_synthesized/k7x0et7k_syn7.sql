@@ -1,0 +1,64 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_t7j0h0 (
+    table_t7j0h0_id INT PRIMARY KEY,
+    film_id INT,
+    store_id INT
+);
+INSERT INTO table_t7j0h0 (table_t7j0h0_id, film_id, store_id) VALUES
+(1, 1, 1),
+(2, 1, 1),
+(3, 1, 2),
+(4, 2, 1),
+(5, 2, 2);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_LGBTYU----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LGBTYU(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_QPKTNT INT DEFAULT 0;
+    
+    SELECT COUNT(*)
+    FROM TABLE_T7J0H0
+    WHERE FILM_ID = P_FILM_ID
+    AND STORE_ID = P_STORE_ID
+    AND TABLE_T7J0H0_IN_STOCK(TABLE_T7J0H0_ID)
+    INTO MYSQL_VAR_QPKTNT;
+    
+    RETURN MYSQL_VAR_QPKTNT;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_XS82MK(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_4DHPT0 INT DEFAULT 0;
+    DECLARE MYSQL_VAR_TRA3SS INT DEFAULT 1;
+    DECLARE MYSQL_VAR_MHR2TL INT DEFAULT 0;
+    DECLARE MYSQL_VAR_Y5BOTZ INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE MYSQL_VAR_Y5BOTZ <= N DO
+        SET MYSQL_VAR_MHR2TL = MYSQL_VAR_4DHPT0 + MYSQL_VAR_TRA3SS;
+        SET MYSQL_VAR_4DHPT0 = MYSQL_VAR_TRA3SS;
+        SET MYSQL_VAR_TRA3SS = MYSQL_VAR_MHR2TL;
+        SET MYSQL_VAR_Y5BOTZ = MYSQL_VAR_Y5BOTZ + 1;
+    END WHILE;
+
+    RETURN (MYSQL_FUNC_LGBTYU(10, 11) - (0) + COALESCE(MYSQL_VAR_TRA3SS, 0));
+END//
+
+DELIMITER ;

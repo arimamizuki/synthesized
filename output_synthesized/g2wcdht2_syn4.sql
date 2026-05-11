@@ -1,0 +1,48 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_apa1cd (
+    emp_no INT,
+    first_name VARCHAR(50)
+);
+INSERT INTO table_apa1cd (emp_no, first_name) VALUES
+(10001, 'Georgi'),
+(10002, 'Bezalel'),
+(10003, 'Parto');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_OEY2GY----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_OEY2GY(P_EMP_NO INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_04RCMJ INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO MYSQL_VAR_04RCMJ
+    FROM TABLE_APA1CD E 
+    WHERE E.EMP_NO = P_EMP_NO;
+    
+    RETURN MYSQL_VAR_04RCMJ;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_KBE89Q(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WL4RL0 DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO MYSQL_VAR_WL4RL0
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+      AND STATUS = 'COMPLETED';
+
+    RETURN (MYSQL_FUNC_OEY2GY(20) - (0) + COALESCE(FLOOR(MYSQL_VAR_WL4RL0), 0));
+END//
+
+DELIMITER ;

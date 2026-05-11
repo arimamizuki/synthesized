@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VXU5PT() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_XFYLYM INT DEFAULT 0;
+    SELECT COUNT(*) INTO MYSQL_VAR_XFYLYM FROM TABLE_XP6WNG.`TABLE3`;
+    RETURN MYSQL_VAR_XFYLYM;
+END//
+
+DELIMITER ;

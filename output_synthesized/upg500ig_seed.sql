@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_1J189G(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_5DZKQX INT DEFAULT 0;
+
+    SELECT CUSTOMER_ID
+    INTO MYSQL_VAR_5DZKQX
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_5DZKQX % 100;
+END//
+
+DELIMITER ;

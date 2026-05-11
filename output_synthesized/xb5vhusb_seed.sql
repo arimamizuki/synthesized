@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_AIYQQL(DEPARTMENT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_EZRSXH INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_EZRSXH
+    FROM EMPLOYEES
+    WHERE DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN MYSQL_VAR_EZRSXH;
+END//
+
+DELIMITER ;

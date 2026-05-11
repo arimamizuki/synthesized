@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_O18V9L----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_O18V9L() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4KR4GY(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_6S15TV INT DEFAULT 0;
+
+    SELECT DEPARTMENT_ID
+    INTO MYSQL_VAR_6S15TV
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_O18V9L() - (0) + COALESCE(MYSQL_VAR_6S15TV, 0));
+END//
+
+DELIMITER ;

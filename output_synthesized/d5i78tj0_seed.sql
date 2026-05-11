@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_2356KZ(N INT, CURRENT_DEPTH INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_EUABTD INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET MYSQL_VAR_EUABTD = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET MYSQL_VAR_EUABTD = MYSQL_VAR_EUABTD + MYSQL_FUNC_2356KZ(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN MYSQL_VAR_EUABTD;
+END//
+
+DELIMITER ;

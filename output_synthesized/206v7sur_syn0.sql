@@ -1,0 +1,76 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_kqlixh (
+    employee_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    salary INT
+);
+INSERT INTO table_kqlixh (employee_id, first_name, last_name, salary) VALUES
+(1, 'John', 'Doe', 40000),
+(2, 'Jane', 'Smith', 30000),
+(3, 'Bob', 'Johnson', 50000),
+(4, 'Alice', 'Williams', 25000);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_UQJS1G----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UQJS1G() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_6DKJ4A INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO MYSQL_VAR_6DKJ4A
+    FROM TABLE_KQLIXH
+    WHERE SALARY > 35000
+    ORDER BY FIRST_NAME, LAST_NAME, EMPLOYEE_ID;
+    
+    RETURN MYSQL_VAR_6DKJ4A;
+END//
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_EDMHXC----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EDMHXC(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_OHSN01 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_8BGXVC INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE MYSQL_VAR_8BGXVC <= N DO
+        SET MYSQL_VAR_OHSN01 = MYSQL_VAR_OHSN01 * MYSQL_VAR_8BGXVC;
+        SET MYSQL_VAR_8BGXVC = MYSQL_VAR_8BGXVC + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN MYSQL_VAR_OHSN01;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SOVDFJ(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_VRO317 INT DEFAULT 0;
+
+    SELECT MYSQL_FUNC_EDMHXC(30)
+    INTO MYSQL_VAR_VRO317
+    FROM CUSTOMERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_FUNC_UQJS1G();
+END//
+
+DELIMITER ;

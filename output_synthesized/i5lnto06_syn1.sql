@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_RD09C6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RD09C6(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_LHRLI9 INT DEFAULT 0;
+
+    SELECT DAY(START_DATE)
+    INTO MYSQL_VAR_LHRLI9
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_LHRLI9;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RO8V5G(X INT) RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_RD09C6(10) - (0) + COALESCE(-X, 0));
+END//
+
+DELIMITER ;

@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0XEUQB(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_W8GB6D INT DEFAULT 0;
+
+    SELECT MONTH(HIRE_DATE)
+    INTO MYSQL_VAR_W8GB6D
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_W8GB6D;
+END//
+
+DELIMITER ;

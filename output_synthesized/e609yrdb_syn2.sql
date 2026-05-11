@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_PYMD0R----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PYMD0R(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_ELXOQY INT DEFAULT 0;
+
+    SELECT COALESCE(LEAD_TIME_DAYS, 7)
+    INTO MYSQL_VAR_ELXOQY
+    FROM SUPPLIERS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - MYSQL_VAR_ELXOQY;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4K1EFO(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN (MYSQL_FUNC_PYMD0R(10) - (0) + COALESCE(A % B, 0));
+END//
+
+DELIMITER ;

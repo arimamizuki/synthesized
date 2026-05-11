@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_XY1NEG----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_XY1NEG(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_UZ44GM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TOTAL_AMOUNT, 0)
+    INTO MYSQL_VAR_UZ44GM
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_UZ44GM);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CJJN0T(N INT) RETURNS INT
+BEGIN
+IF N < 0 THEN
+        RETURN -MYSQL_FUNC_XY1NEG(10);
+    END IF;
+    RETURN N;
+END//
+
+DELIMITER ;

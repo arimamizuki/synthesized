@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_8B1DWL(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_FJRPUT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_FJRPUT
+    FROM SUBSCRIPTIONS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_FJRPUT;
+END//
+
+DELIMITER ;

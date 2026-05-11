@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_GQH2SH----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GQH2SH(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_QHFK20 INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())
+    INTO MYSQL_VAR_QHFK20
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_QHFK20;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0ZK3C6() RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_GQH2SH(10) - (0) + COALESCE(0, 0));
+END//
+
+DELIMITER ;

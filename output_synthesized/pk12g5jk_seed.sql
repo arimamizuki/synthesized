@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_P7D01M(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_N8574Y INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_N8574Y
+    FROM CONVERSIONS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_VAR_N8574Y;
+END//
+
+DELIMITER ;

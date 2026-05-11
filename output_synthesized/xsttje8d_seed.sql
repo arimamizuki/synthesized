@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BRQHOO(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_HBU1L7 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_HBU1L7
+    FROM PRODUCTS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN MYSQL_VAR_HBU1L7 * 5;
+END//
+
+DELIMITER ;

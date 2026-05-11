@@ -1,0 +1,38 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_5XF1EU----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5XF1EU(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WMUIXN DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(SUPPLIER_RATING, 3.0)
+    INTO MYSQL_VAR_WMUIXN
+    FROM SUPPLIERS
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(MYSQL_VAR_WMUIXN);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0TP8FN(N INT) RETURNS INT
+BEGIN
+IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN MYSQL_FUNC_5XF1EU(10);
+END//
+
+DELIMITER ;

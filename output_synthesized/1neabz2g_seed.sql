@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ENB4I7(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_3RHDU4 INT DEFAULT 0;
+    DECLARE MYSQL_VAR_ZBDLVQ INT DEFAULT N;
+    DECLARE MYSQL_VAR_MAPY5G INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET MYSQL_VAR_MAPY5G = N % 10;
+        SET MYSQL_VAR_3RHDU4 = MYSQL_VAR_3RHDU4 * 10 + MYSQL_VAR_MAPY5G;
+        SET N = N / 10;
+    END WHILE;
+
+    IF MYSQL_VAR_3RHDU4 = MYSQL_VAR_ZBDLVQ THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END//
+
+DELIMITER ;

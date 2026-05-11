@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_3IOARL(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WR7UQO INT DEFAULT 0;
+
+    SELECT WEEK(HIRE_DATE)
+    INTO MYSQL_VAR_WR7UQO
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_WR7UQO;
+END//
+
+DELIMITER ;

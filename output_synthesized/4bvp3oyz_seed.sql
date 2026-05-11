@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_9L484X(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_1NJDTL INT DEFAULT 0;
+
+    SELECT MONTH(ORDER_DATE)
+    INTO MYSQL_VAR_1NJDTL
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_1NJDTL;
+END//
+
+DELIMITER ;

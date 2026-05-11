@@ -1,0 +1,59 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_hbda4d (
+    `id` INT PRIMARY KEY,
+    `age` INT
+);
+CREATE TABLE IF NOT EXISTS table_jgsjl0 (
+    `user_id` INT,
+    `address` VARCHAR(30),
+    `town` VARCHAR(30)
+);
+INSERT INTO table_hbda4d (`id`, `age`) VALUES (1, 25), (2, 30), (3, 40);
+INSERT INTO table_jgsjl0 (`user_id`, `address`, `town`) VALUES (1, '123 Main St', 'Springfield'), (2, '456 Oak Ave', 'Shelbyville'), (3, '789 Pine Rd', 'Springfield');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_EDMHXC----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EDMHXC(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_OHSN01 INT DEFAULT 1;
+    DECLARE MYSQL_VAR_8BGXVC INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE MYSQL_VAR_8BGXVC <= N DO
+        SET MYSQL_VAR_OHSN01 = MYSQL_VAR_OHSN01 * MYSQL_VAR_8BGXVC;
+        SET MYSQL_VAR_8BGXVC = MYSQL_VAR_8BGXVC + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN MYSQL_VAR_OHSN01;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_Y60I2T(P_ADDRESS INT, V_TOWN INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_UA5ZC8 INT DEFAULT 0;
+    
+    UPDATE TABLE_HBDA4D AS U
+    JOIN TABLE_JGSJL0 AS A
+    ON U.`ID` = A.`USER_ID`
+    SET `AGE` = `AGE` + 10
+    WHERE A.`ADDRESS` = CAST(P_ADDRESS AS CHAR) AND A.`TOWN` = CAST(V_TOWN AS CHAR);
+    
+    SET MYSQL_VAR_UA5ZC8 = ROW_COUNT();
+    
+    RETURN (MYSQL_FUNC_EDMHXC(20) - (0) + COALESCE(MYSQL_VAR_UA5ZC8, 0));
+END//
+
+DELIMITER ;

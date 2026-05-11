@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_7ZE1B4(RADIUS INT, HEIGHT INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_UGPS2E DECIMAL(10,2) DEFAULT 0.00;
+    SET MYSQL_VAR_UGPS2E = 3.14159 * RADIUS * RADIUS * HEIGHT;
+    RETURN FLOOR(MYSQL_VAR_UGPS2E);
+END//
+
+DELIMITER ;

@@ -1,0 +1,20 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HUI270(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_2Q1VMG INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_2Q1VMG
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    RETURN MYSQL_VAR_2Q1VMG;
+END//
+
+DELIMITER ;

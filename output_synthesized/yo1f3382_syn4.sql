@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_P71A6V----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_P71A6V(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_WDABXB DATE;
+
+    SELECT MIN(ORDER_DATE)
+    INTO MYSQL_VAR_WDABXB
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF MYSQL_VAR_WDABXB IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MONTH(MYSQL_VAR_WDABXB);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_72QXGW(A INT, B INT) RETURNS INT
+BEGIN
+IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN MYSQL_FUNC_P71A6V(10);
+END//
+
+DELIMITER ;

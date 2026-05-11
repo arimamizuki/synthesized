@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_VNO6BO----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VNO6BO(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_MZR8N8 INT DEFAULT 0;
+
+    SELECT MONTH(MIN(ORDER_DATE))
+    INTO MYSQL_VAR_MZR8N8
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_MZR8N8;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BE7ASW(N INT) RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_VNO6BO(30) - (0) + COALESCE(N * N, 0));
+END//
+
+DELIMITER ;

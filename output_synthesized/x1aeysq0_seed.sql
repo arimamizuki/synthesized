@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_51HY7D(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_Y418EP DATE;
+
+    SELECT MAX(ORDER_DATE)
+    INTO MYSQL_VAR_Y418EP
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF MYSQL_VAR_Y418EP IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MONTH(MYSQL_VAR_Y418EP);
+END//
+
+DELIMITER ;

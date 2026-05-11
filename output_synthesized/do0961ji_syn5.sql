@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_5WJCBM----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_5WJCBM() RETURNS INT
+BEGIN
+RETURN 0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_78ONKA(CAMPAIGN_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_F05FE4 INT DEFAULT 0;
+
+    SELECT COALESCE(BUDGET, 0)
+    INTO MYSQL_VAR_F05FE4
+    FROM CAMPAIGNS
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN MYSQL_FUNC_5WJCBM();
+END//
+
+DELIMITER ;

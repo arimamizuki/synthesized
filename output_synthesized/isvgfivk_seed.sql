@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_9FWZ13(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_9FBV1T INT DEFAULT 0;
+
+    SELECT YEAR(MIN(ORDER_DATE))
+    INTO MYSQL_VAR_9FBV1T
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN MYSQL_VAR_9FBV1T;
+END//
+
+DELIMITER ;

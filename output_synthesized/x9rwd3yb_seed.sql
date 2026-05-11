@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_86P4DA(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_CV3REF INT DEFAULT 0;
+
+    SELECT DEPARTMENT_ID
+    INTO MYSQL_VAR_CV3REF
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_CV3REF % 100;
+END//
+
+DELIMITER ;

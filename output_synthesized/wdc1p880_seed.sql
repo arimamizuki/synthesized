@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_09I8EV(PRODUCT_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_HYX2D1 INT DEFAULT 0;
+
+    SELECT SUPPLIER_ID
+    INTO MYSQL_VAR_HYX2D1
+    FROM PRODUCTS
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN MYSQL_VAR_HYX2D1 % 100;
+END//
+
+DELIMITER ;

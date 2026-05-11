@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IAX85K(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_VYRDM9 INT DEFAULT 0;
+
+    SELECT MONTH(HIRE_DATE)
+    INTO MYSQL_VAR_VYRDM9
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_VYRDM9;
+END//
+
+DELIMITER ;

@@ -1,0 +1,35 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_ZNQHPG----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ZNQHPG(A INT, B INT, C INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_JKTAJ0 INT DEFAULT 0;
+    SET MYSQL_VAR_JKTAJ0 = A;
+    IF B > MYSQL_VAR_JKTAJ0 THEN SET MYSQL_VAR_JKTAJ0 = B; END IF;
+    IF C > MYSQL_VAR_JKTAJ0 THEN SET MYSQL_VAR_JKTAJ0 = C; END IF;
+    RETURN MYSQL_VAR_JKTAJ0;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_0TP8FN(N INT) RETURNS INT
+BEGIN
+IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN MYSQL_FUNC_ZNQHPG(20, 21, 22);
+END//
+
+DELIMITER ;

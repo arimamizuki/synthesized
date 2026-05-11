@@ -1,0 +1,14 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_R0IO0R() RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_RR9KUH INT DEFAULT 0;
+    SELECT CBIN INTO MYSQL_VAR_RR9KUH FROM TABLE_BEPX1F.`TABLE3` LIMIT 1;
+    RETURN MYSQL_VAR_RR9KUH;
+END//
+
+DELIMITER ;

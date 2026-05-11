@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FYO27X----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FYO27X(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_OSQYNG INT DEFAULT 0;
+
+    SELECT YEAR(ORDER_DATE)
+    INTO MYSQL_VAR_OSQYNG
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_OSQYNG;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_C8XQV4(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_FYO27X(30);
+END//
+
+DELIMITER ;

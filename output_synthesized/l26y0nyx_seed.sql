@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_6Y7O93(N INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_H0JO5N INT DEFAULT 0;
+    DECLARE MYSQL_VAR_2PQK1B INT DEFAULT 0;
+
+    SET MYSQL_VAR_2PQK1B = N;
+
+    WHILE MYSQL_VAR_2PQK1B > 0 DO
+        IF (MYSQL_VAR_2PQK1B & 1) = 1 THEN
+            SET MYSQL_VAR_H0JO5N = MYSQL_VAR_H0JO5N + 1;
+        END IF;
+        SET MYSQL_VAR_2PQK1B = MYSQL_VAR_2PQK1B >> 1;
+    END WHILE;
+
+    RETURN MYSQL_VAR_H0JO5N;
+END//
+
+DELIMITER ;

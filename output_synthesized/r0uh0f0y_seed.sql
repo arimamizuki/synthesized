@@ -1,0 +1,31 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS table_t7j0h0 (
+    table_t7j0h0_id INT PRIMARY KEY,
+    film_id INT,
+    store_id INT
+);
+INSERT INTO table_t7j0h0 (table_t7j0h0_id, film_id, store_id) VALUES
+(1, 1, 1),
+(2, 1, 1),
+(3, 1, 2),
+(4, 2, 1),
+(5, 2, 2);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LGBTYU(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_QPKTNT INT DEFAULT 0;
+    
+    SELECT COUNT(*)
+    FROM TABLE_T7J0H0
+    WHERE FILM_ID = P_FILM_ID
+    AND STORE_ID = P_STORE_ID
+    AND TABLE_T7J0H0_IN_STOCK(TABLE_T7J0H0_ID)
+    INTO MYSQL_VAR_QPKTNT;
+    
+    RETURN MYSQL_VAR_QPKTNT;
+END//
+
+DELIMITER ;

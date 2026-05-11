@@ -1,0 +1,59 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_3y0d8a (
+    produto_id INT,
+    Quantidade_produto INT
+);
+INSERT INTO table_3y0d8a (produto_id, Quantidade_produto) VALUES (1, 10);
+INSERT INTO table_3y0d8a (produto_id, Quantidade_produto) VALUES (2, 5);
+INSERT INTO table_3y0d8a (produto_id, Quantidade_produto) VALUES (3, 0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_4G9A5W----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_4G9A5W(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_4MCEPB INT;
+    DECLARE MYSQL_VAR_ZAJVJ3 INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO MYSQL_VAR_4MCEPB FROM TABLE_3Y0D8A WHERE PRODUTO_ID = PROD_ID;
+
+    IF MYSQL_VAR_4MCEPB > 0 THEN
+        UPDATE TABLE_3Y0D8A SET QUANTIDADE_PRODUTO = QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE PRODUTO_ID = PROD_ID;
+        SET MYSQL_VAR_ZAJVJ3 = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_3Y0D8A (PRODUTO_ID, QUANTIDADE_PRODUTO) VALUES (1, NULL);
+        SET MYSQL_VAR_ZAJVJ3 = 1;
+    END IF;
+
+    RETURN MYSQL_VAR_ZAJVJ3;
+END//
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_V3BKAL----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V3BKAL(N INT) RETURNS INT
+BEGIN
+IF N % 2 = 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN MYSQL_FUNC_4G9A5W(30, 31);
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BE7ASW(N INT) RETURNS INT
+BEGIN
+RETURN MYSQL_FUNC_V3BKAL(10);
+END//
+
+DELIMITER ;

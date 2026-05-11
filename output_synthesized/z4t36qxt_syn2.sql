@@ -1,0 +1,69 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_hbda4d (
+    `id` INT PRIMARY KEY,
+    `age` INT
+);
+CREATE TABLE IF NOT EXISTS table_jgsjl0 (
+    `user_id` INT,
+    `address` VARCHAR(30),
+    `town` VARCHAR(30)
+);
+INSERT INTO table_hbda4d (`id`, `age`) VALUES (1, 25), (2, 30), (3, 40);
+INSERT INTO table_jgsjl0 (`user_id`, `address`, `town`) VALUES (1, '123 Main St', 'Springfield'), (2, '456 Oak Ave', 'Shelbyville'), (3, '789 Pine Rd', 'Springfield');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_Y60I2T----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_Y60I2T(P_ADDRESS INT, V_TOWN INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_UA5ZC8 INT DEFAULT 0;
+    
+    UPDATE TABLE_HBDA4D AS U
+    JOIN TABLE_JGSJL0 AS A
+    ON U.`ID` = A.`USER_ID`
+    SET `AGE` = `AGE` + 10
+    WHERE A.`ADDRESS` = CAST(P_ADDRESS AS CHAR) AND A.`TOWN` = CAST(V_TOWN AS CHAR);
+    
+    SET MYSQL_VAR_UA5ZC8 = ROW_COUNT();
+    
+    RETURN MYSQL_VAR_UA5ZC8;
+END//
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_D56L6L----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_D56L6L(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_4PX3B7 INT DEFAULT 0;
+    DECLARE MYSQL_VAR_P3N4N9 DATE;
+    DECLARE MYSQL_VAR_69WVNB DATE;
+
+    SELECT COUNT(*), MIN(ORDER_DATE), MAX(ORDER_DATE)
+    INTO MYSQL_VAR_4PX3B7, MYSQL_VAR_P3N4N9, MYSQL_VAR_69WVNB
+    FROM ORDERS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF MYSQL_VAR_4PX3B7 < 2 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_Y60I2T(10, 11) - (0) + COALESCE(FLOOR(DATEDIFF(MYSQL_VAR_69WVNB, MYSQL_VAR_P3N4N9) / (MYSQL_VAR_4PX3B7 - 1)), 0));
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DVE6U6(SUPPLIER_ID_PARAM INT) RETURNS INT
+BEGIN
+RETURN (MYSQL_FUNC_D56L6L(20) - (0) + COALESCE(SUPPLIER_ID_PARAM % 100, 0));
+END//
+
+DELIMITER ;

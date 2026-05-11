@@ -1,0 +1,33 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_PAZMHH----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PAZMHH(CUSTOMER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_9PQOL4 INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO MYSQL_VAR_9PQOL4
+    FROM SUBSCRIPTIONS
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'ACTIVE';
+
+    RETURN MYSQL_VAR_9PQOL4;
+END//
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_73SB2P(A INT, B INT) RETURNS INT
+BEGIN
+IF A > B THEN
+        RETURN A;
+    END IF;
+    RETURN MYSQL_FUNC_PAZMHH(30);
+END//
+
+DELIMITER ;

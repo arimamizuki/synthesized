@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_W2ID9N(EMP_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_SX4AFR INT DEFAULT 0;
+
+    SELECT YEAR(HIRE_DATE)
+    INTO MYSQL_VAR_SX4AFR
+    FROM EMPLOYEES
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN MYSQL_VAR_SX4AFR;
+END//
+
+DELIMITER ;

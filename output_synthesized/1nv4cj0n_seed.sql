@@ -1,0 +1,19 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EERRQA(ORDER_ID_PARAM INT) RETURNS INT
+BEGIN
+DECLARE MYSQL_VAR_V8XNB0 INT DEFAULT 0;
+
+    SELECT CUSTOMER_ID
+    INTO MYSQL_VAR_V8XNB0
+    FROM ORDERS
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN MYSQL_VAR_V8XNB0 % 1000;
+END//
+
+DELIMITER ;
