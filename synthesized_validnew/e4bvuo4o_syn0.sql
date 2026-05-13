@@ -1,0 +1,60 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_192_DO_STMT_pcdb7m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_192_DO_STMT_pcdb7m() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DO_COUNT INT DEFAULT 0;
+    
+    DO SLEEP(1);
+    SET DO_COUNT = DO_COUNT + 1;
+    
+    DO @VAR := 1 + 1;
+    SET DO_COUNT = DO_COUNT + 1;
+    
+    RETURN DO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE XA_COUNT INT DEFAULT 0;
+    
+    XA START 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA END 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA PREPARE 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA COMMIT 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    RETURN XA_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = MYSQL_FUNC_FUNC_192_DO_STMT_pcdb7m();
+    RETURN ((MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n()) - (0) + (FLOOR(V_VOLUME)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(1, 1);

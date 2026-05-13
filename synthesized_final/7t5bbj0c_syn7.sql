@@ -1,0 +1,82 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_w6b2qm` (
+    `mysql_tbl_w6b2qm_supplier_id` INT,
+    `mysql_tbl_w6b2qm_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_w6b2qm_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_w6b2qm` (`mysql_tbl_w6b2qm_supplier_id`, `mysql_tbl_w6b2qm_supplier_rating`, `mysql_tbl_w6b2qm_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 5 UNION SELECT 15 UNION SELECT 25 UNION SELECT 35 UNION SELECT 45 UNION SELECT 55 UNION SELECT 65;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_w6b2qm_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_w6b2qm_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_w6b2qm`
+    WHERE mysql_tbl_w6b2qm_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn()) - (0) + ((V_LEAD_TIME * 10) - (V_RATING * 15)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_125_ALTER_PARTITION_f33b8v() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE LOGS ADD PARTITION (PARTITION P2 VALUES LESS THAN (2025));
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE LOGS DROP PARTITION P0;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE LOGS TRUNCATE PARTITION P1;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(19)) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_125_ALTER_PARTITION_f33b8v();

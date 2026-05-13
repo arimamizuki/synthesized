@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS FOR CURRENT_USER;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;

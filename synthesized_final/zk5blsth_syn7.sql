@@ -1,0 +1,325 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hw9izq` (
+    `mysql_tbl_hw9izq_campaign_id` INT,
+    `mysql_tbl_hw9izq_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_hw9izq` (`mysql_tbl_hw9izq_campaign_id`, `mysql_tbl_hw9izq_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_odjb52` (
+    `mysql_tbl_odjb52_customer_id` INT,
+    `mysql_tbl_odjb52_plan_type` VARCHAR(50),
+    `mysql_tbl_odjb52_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_odjb52_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qik7uw` (
+    `mysql_tbl_qik7uw_customer_id` INT,
+    `mysql_tbl_qik7uw_tier_level` INT
+);
+
+INSERT INTO `mysql_tbl_odjb52` (`mysql_tbl_odjb52_customer_id`, `mysql_tbl_odjb52_plan_type`, `mysql_tbl_odjb52_monthly_cost`, `mysql_tbl_odjb52_status`) VALUES (1, 'test', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_qik7uw` (`mysql_tbl_qik7uw_customer_id`, `mysql_tbl_qik7uw_tier_level`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hekead` (
+    `mysql_tbl_hekead_customer_id` INT,
+    `mysql_tbl_hekead_country` INT
+);
+
+INSERT INTO `mysql_tbl_hekead` (`mysql_tbl_hekead_customer_id`, `mysql_tbl_hekead_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_27ua7i` (
+    `mysql_tbl_27ua7i_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_27ua7i` (`mysql_tbl_27ua7i_supplier_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1uolim` (
+    `mysql_tbl_1uolim_customer_id` INT,
+    `mysql_tbl_1uolim_order_date` DATE,
+    `mysql_tbl_1uolim_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_1uolim` (`mysql_tbl_1uolim_customer_id`, `mysql_tbl_1uolim_order_date`, `mysql_tbl_1uolim_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_l5st3b` (
+    `mysql_tbl_l5st3b_emp_id` INT,
+    `mysql_tbl_l5st3b_salary` INT
+);
+
+INSERT INTO `mysql_tbl_l5st3b` (`mysql_tbl_l5st3b_emp_id`, `mysql_tbl_l5st3b_salary`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM_DIGITS INT DEFAULT 0;
+    DECLARE V_PRODUCT_DIGITS INT DEFAULT 1;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    DIGIT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM_DIGITS = V_SUM_DIGITS + V_DIGIT;
+        IF V_DIGIT != 0 THEN
+            SET V_PRODUCT_DIGITS = V_PRODUCT_DIGITS * V_DIGIT;
+        END IF;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE DIGIT_LOOP;
+
+    SET V_RESULT = V_SUM_DIGITS - V_PRODUCT_DIGITS;
+
+    IF V_RESULT > 1 THEN
+        IF V_RESULT = 2 THEN RETURN 1; END IF;
+        IF V_RESULT % 2 = 0 THEN RETURN 0; END IF;
+
+        DECLARE_CHECK: BEGIN
+            DECLARE V_I INT DEFAULT 3;
+            WHILE V_I * V_I <= V_RESULT DO
+                IF V_RESULT % V_I = 0 THEN
+                    RETURN 0;
+                END IF;
+                SET V_I = V_I + 2;
+            END WHILE;
+        END DECLARE_CHECK;
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_hw9izq_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_hw9izq`
+    WHERE mysql_tbl_hw9izq_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(-72)) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2 END;
+    END);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(PART INT, TOTAL INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF TOTAL = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'TOTAL CANNOT BE ZERO';
+    END IF;
+    IF PART < 0 OR TOTAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUES CANNOT BE NEGATIVE';
+    END IF;
+    RETURN (PART / TOTAL) * 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_l5st3b_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_l5st3b`
+    WHERE mysql_tbl_l5st3b_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_SCORE_i2jxzn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_SCORE_i2jxzn(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AMOUNT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_1uolim_TOTAL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM `mysql_tbl_1uolim`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_AMOUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_POTENTIAL_dja7gl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_POTENTIAL_dja7gl(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_CUSTOMERS
+    FROM `mysql_tbl_hekead`
+    WHERE mysql_tbl_hekead_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM ORDERS O
+    JOIN `mysql_tbl_hekead` C ON O.CUSTOMER_ID = mysql_tbl_hekead_CUSTOMER_ID
+    WHERE mysql_tbl_hekead_COUNTRY = COUNTRY_PARAM;
+
+    IF V_COUNTRY_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_COUNTRY_ORDERS / V_COUNTRY_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_INDEX_1t8n5w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_INDEX_1t8n5w(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_jbbwa4`
+    WHERE mysql_tbl_27ua7i_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_PRODUCT_COUNT * 5;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_POTENTIAL_t6hd9q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_POTENTIAL_t6hd9q(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_UPGRADE_POTENTIAL INT DEFAULT 0;
+
+    SELECT mysql_tbl_odjb52_PLAN_TYPE, COALESCE(mysql_tbl_odjb52_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM `mysql_tbl_odjb52`
+    WHERE mysql_tbl_odjb52_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT mysql_tbl_qik7uw_TIER_LEVEL
+    INTO V_TIER
+    FROM `mysql_tbl_qik7uw`
+    WHERE mysql_tbl_qik7uw_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'BASIC' THEN SET V_UPGRADE_POTENTIAL = MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_POTENTIAL_dja7gl(54);
+        WHEN 'PREMIUM' THEN SET V_UPGRADE_POTENTIAL = MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(-45, 58);
+        WHEN 'ENTERPRISE' THEN SET V_UPGRADE_POTENTIAL = MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_INDEX_1t8n5w(-87);
+        ELSE SET V_UPGRADE_POTENTIAL = MYSQL_FUNC_CALCULATE_ORDER_SCORE_i2jxzn(5);
+    END CASE;
+
+    CASE V_TIER
+        WHEN 'PLATINUM' THEN SET V_UPGRADE_POTENTIAL = MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(36);
+        WHEN 'GOLD' THEN SET V_UPGRADE_POTENTIAL = V_UPGRADE_POTENTIAL - 15;
+    END CASE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(-14)) - (0) + V_UPGRADE_POTENTIAL);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET SESSION TRANSACTION READ ONLY;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-52)) - (0) + ((MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_POTENTIAL_t6hd9q(-30)) - (0) + SET_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_166_SELECT_DATE_qrlu32() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT DATE(CREATED_AT), YEAR(CREATED_AT), MONTH(CREATED_AT) INTO @mysql_synth_dummy FROM `mysql_tbl_odp9xh`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATEDIFF(NOW(), CREATED_AT) AS DAYS_SINCE INTO @mysql_synth_dummy FROM `mysql_tbl_odp9xh`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATE_FORMAT(CREATED_AT, '%Y-%M-%D') AS FORMATTED_DATE INTO @mysql_synth_dummy FROM `mysql_tbl_odp9xh`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy()) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_166_SELECT_DATE_qrlu32();

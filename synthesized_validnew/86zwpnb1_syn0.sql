@@ -1,0 +1,202 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9l3i78` (
+    `mysql_tbl_9l3i78_product_id` INT,
+    `mysql_tbl_9l3i78_category_id` INT,
+    `mysql_tbl_9l3i78_price` DECIMAL(10,2),
+    `mysql_tbl_9l3i78_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0k96ui` (
+    `mysql_tbl_0k96ui_order_id` INT,
+    `mysql_tbl_0k96ui_product_id` INT,
+    `mysql_tbl_0k96ui_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_9l3i78` (`mysql_tbl_9l3i78_product_id`, `mysql_tbl_9l3i78_category_id`, `mysql_tbl_9l3i78_price`, `mysql_tbl_9l3i78_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_0k96ui` (`mysql_tbl_0k96ui_order_id`, `mysql_tbl_0k96ui_product_id`, `mysql_tbl_0k96ui_quantity`) VALUES (1, 2, 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s3yrxg` (
+    `mysql_tbl_s3yrxg_product_id` INT,
+    `mysql_tbl_s3yrxg_category_id` INT,
+    `mysql_tbl_s3yrxg_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_s3yrxg` (`mysql_tbl_s3yrxg_product_id`, `mysql_tbl_s3yrxg_category_id`, `mysql_tbl_s3yrxg_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tztb20` (
+    `mysql_tbl_tztb20_emp_id` INT,
+    `mysql_tbl_tztb20_department_id` INT,
+    `mysql_tbl_tztb20_salary` INT,
+    `mysql_tbl_tztb20_hire_date` DATE,
+    `mysql_tbl_tztb20_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_tztb20` (`mysql_tbl_tztb20_emp_id`, `mysql_tbl_tztb20_department_id`, `mysql_tbl_tztb20_salary`, `mysql_tbl_tztb20_hire_date`, `mysql_tbl_tztb20_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_067_SHOW_BINLOG_yvvi0e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_067_SHOW_BINLOG_yvvi0e() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW BINLOG EVENTS LIMIT 10;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW RELAYLOG EVENTS LIMIT 10;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CHARACTER SET;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW COLLATION;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN 'FIZZBUZZ';
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN CAST(N AS CHAR);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_INNOVATION_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_tztb20_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_tztb20_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_tztb20_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM `mysql_tbl_tztb20`
+    WHERE mysql_tbl_tztb20_EMP_ID = EMP_ID_PARAM;
+
+    SET V_INNOVATION_INDEX = (V_PERFORMANCE * 30) + (V_TENURE_YEARS * 5) - (V_SALARY / 1000);
+
+    RETURN V_INNOVATION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7(51)) - (0) + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(-59)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_s3yrxg_PRICE), 0)
+    INTO V_AVG
+    FROM `mysql_tbl_s3yrxg`
+    WHERE mysql_tbl_s3yrxg_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-85)) - (0) + (((MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - (0) + (FLOOR(V_AVG)))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_SCORE_mx21is(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARGIN_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_9l3i78_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_9l3i78`
+    WHERE mysql_tbl_9l3i78_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(UNIT_PRICE), 1)
+    INTO V_AVG_ORDER_PRICE
+    FROM `mysql_tbl_0k96ui`
+    WHERE mysql_tbl_0k96ui_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARGIN_SCORE = MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(-87);
+
+    RETURN ((MYSQL_FUNC_FUNC_067_SHOW_BINLOG_yvvi0e()) - (0) + V_MARGIN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_SCORE_mx21is(1);

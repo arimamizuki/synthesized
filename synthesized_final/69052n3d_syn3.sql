@@ -1,0 +1,322 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_oeevnd` (
+    `mysql_tbl_oeevnd_product_id` INT,
+    `mysql_tbl_oeevnd_supplier_id` INT,
+    `mysql_tbl_oeevnd_price` DECIMAL(10,2),
+    `mysql_tbl_oeevnd_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n1p24a` (
+    `mysql_tbl_n1p24a_supplier_id` INT,
+    `mysql_tbl_n1p24a_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_oeevnd` (`mysql_tbl_oeevnd_product_id`, `mysql_tbl_oeevnd_supplier_id`, `mysql_tbl_oeevnd_price`, `mysql_tbl_oeevnd_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_n1p24a` (`mysql_tbl_n1p24a_supplier_id`, `mysql_tbl_n1p24a_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0r3hdt` (
+    `mysql_tbl_0r3hdt_emp_id` INT,
+    `mysql_tbl_0r3hdt_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_0r3hdt` (`mysql_tbl_0r3hdt_emp_id`, `mysql_tbl_0r3hdt_hire_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wtkgwe` (
+    `mysql_tbl_wtkgwe_emp_id` INT,
+    `mysql_tbl_wtkgwe_department_id` INT,
+    `mysql_tbl_wtkgwe_salary` INT,
+    `mysql_tbl_wtkgwe_hire_date` DATE,
+    `mysql_tbl_wtkgwe_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_wtkgwe` (`mysql_tbl_wtkgwe_emp_id`, `mysql_tbl_wtkgwe_department_id`, `mysql_tbl_wtkgwe_salary`, `mysql_tbl_wtkgwe_hire_date`, `mysql_tbl_wtkgwe_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1ytflh` (
+    `mysql_tbl_1ytflh_emp_id` INT,
+    `mysql_tbl_1ytflh_salary` INT,
+    `mysql_tbl_1ytflh_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_1ytflh` (`mysql_tbl_1ytflh_emp_id`, `mysql_tbl_1ytflh_salary`, `mysql_tbl_1ytflh_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tlu7rt` (
+    `mysql_tbl_tlu7rt_customer_id` INT,
+    `mysql_tbl_tlu7rt_status` VARCHAR(50),
+    `mysql_tbl_tlu7rt_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_tlu7rt` (`mysql_tbl_tlu7rt_customer_id`, `mysql_tbl_tlu7rt_status`, `mysql_tbl_tlu7rt_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zb7o3z` (
+    `mysql_tbl_zb7o3z_emp_id` INT,
+    `mysql_tbl_zb7o3z_department_id` INT,
+    `mysql_tbl_zb7o3z_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_114ms7` (
+    `mysql_tbl_114ms7_emp_id` INT,
+    `mysql_tbl_114ms7_bonus_amount` DECIMAL(10,2),
+    `mysql_tbl_114ms7_bonus_date` DATE
+);
+
+INSERT INTO `mysql_tbl_zb7o3z` (`mysql_tbl_zb7o3z_emp_id`, `mysql_tbl_zb7o3z_department_id`, `mysql_tbl_zb7o3z_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `mysql_tbl_114ms7` (`mysql_tbl_114ms7_emp_id`, `mysql_tbl_114ms7_bonus_amount`, `mysql_tbl_114ms7_bonus_date`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_1ytflh_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_1ytflh`
+    WHERE mysql_tbl_1ytflh_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 12);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_COUNT_DIGITS_pqsn4s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_DIGITS_pqsn4s(NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    IF V_TEMP = 0 THEN
+        RETURN 1;
+    END IF;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_COUNT = V_COUNT + 1;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUCCESSION_READINESS_SCORE_ee6s0k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUCCESSION_READINESS_SCORE_ee6s0k(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_wtkgwe_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_wtkgwe_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_wtkgwe`
+    WHERE mysql_tbl_wtkgwe_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM `mysql_tbl_wtkgwe`
+    WHERE MANAGER_ID = EMP_ID_PARAM;
+
+    SET V_READINESS_SCORE = (V_PERFORMANCE * 30) + (V_TENURE_YEARS * 8) + (V_DIRECT_REPORTS * 10);
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = 0 - V_NUMERIC_VAL;
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(SET_OF_LETTERS INT, WORD INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_OF_LETTERS_STR VARCHAR(50);
+    DECLARE WORD_STR VARCHAR(50);
+    
+    SET SET_OF_LETTERS_STR = CAST(SET_OF_LETTERS AS CHAR);
+    SET WORD_STR = CAST(WORD AS CHAR);
+    
+    RETURN (SELECT WORD_STR REGEXP SET_OF_LETTERS_STR);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE_3yd94i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE_3yd94i(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_SUBSCRIPTION_MONTHS INT DEFAULT 0;
+
+    SELECT mysql_tbl_tlu7rt_STATUS, COALESCE(mysql_tbl_tlu7rt_MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_STATUS, V_MONTHLY_COST, V_SUBSCRIPTION_MONTHS
+    FROM `mysql_tbl_tlu7rt`
+    WHERE mysql_tbl_tlu7rt_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(-93, 33)) - (((MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-62, -73)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN (V_MONTHLY_COST * V_SUBSCRIPTION_MONTHS) / 10;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_ANNUAL_COMPENSATION INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_zb7o3z_SALARY, 0) INTO V_BASE_SALARY
+    FROM `mysql_tbl_zb7o3z`
+    WHERE mysql_tbl_zb7o3z_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_114ms7_BONUS_AMOUNT), 0) INTO V_TOTAL_BONUS
+    FROM `mysql_tbl_114ms7`
+    WHERE mysql_tbl_114ms7_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ANNUAL_COMPENSATION = (V_BASE_SALARY * 12) + V_TOTAL_BONUS;
+
+    RETURN V_ANNUAL_COMPENSATION;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(PRINCIPAL INT, RATE INT, YEARS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_YEARLY_INTEREST INT DEFAULT 0;
+
+    IF PRINCIPAL <= 0 OR RATE <= 0 OR YEARS <= 0 THEN
+        RETURN ((MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(-67, 55)) - (((MYSQL_FUNC_CALCULATE_SUCCESSION_READINESS_SCORE_ee6s0k(-78)) - (0) + 0)) + 0);
+    END IF;
+
+    SET_LOOP: WHILE V_COUNTER <= YEARS DO
+        SET_LOOP_INNER: WHILE V_COUNTER <= 12 DO
+            SET V_RESULT = MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(-52);
+            SET V_COUNTER = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE_3yd94i(14);
+        END WHILE SET_LOOP_INNER;
+        SET V_COUNTER = MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(-79);
+    END WHILE SET_LOOP;
+
+    RETURN ((MYSQL_FUNC_COUNT_DIGITS_pqsn4s(60)) - (0) + (CAST(V_RESULT AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_0r3hdt_HIRE_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_0r3hdt`
+    WHERE mysql_tbl_0r3hdt_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(7, 86, -67)) - (0) + V_WEEK);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_n1p24a_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_n1p24a`
+    WHERE mysql_tbl_n1p24a_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_oeevnd_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM `mysql_tbl_oeevnd`
+    WHERE mysql_tbl_oeevnd_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(-14));
+
+    RETURN V_EFFICIENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(1);

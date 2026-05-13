@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP DATABASE OLD_DATABASE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP DATABASE IF EXISTS TEMP_DB;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SCHEMA IF EXISTS TEST_SCHEMA;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;

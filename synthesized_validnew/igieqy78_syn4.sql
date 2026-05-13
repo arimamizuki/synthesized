@@ -1,0 +1,250 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xlxgty` (
+    `mysql_tbl_xlxgty_campaign_id` INT,
+    `mysql_tbl_xlxgty_channel` INT,
+    `mysql_tbl_xlxgty_target_audience` INT,
+    `mysql_tbl_xlxgty_budget` INT,
+    `mysql_tbl_xlxgty_start_date` DATE,
+    `mysql_tbl_xlxgty_end_date` DATE,
+    `mysql_tbl_xlxgty_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_xlxgty` (`mysql_tbl_xlxgty_campaign_id`, `mysql_tbl_xlxgty_channel`, `mysql_tbl_xlxgty_target_audience`, `mysql_tbl_xlxgty_budget`, `mysql_tbl_xlxgty_start_date`, `mysql_tbl_xlxgty_end_date`, `mysql_tbl_xlxgty_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g1b3pu` (
+    `mysql_tbl_g1b3pu_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_g1b3pu` (`mysql_tbl_g1b3pu_registration_date`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_oodmlo` (
+    `mysql_tbl_oodmlo_campaign_id` INT,
+    `mysql_tbl_oodmlo_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_oodmlo` (`mysql_tbl_oodmlo_campaign_id`, `mysql_tbl_oodmlo_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u17l8x` (
+    `mysql_tbl_u17l8x_campaign_id` INT,
+    `mysql_tbl_u17l8x_channel` INT,
+    `mysql_tbl_u17l8x_start_date` DATE,
+    `mysql_tbl_u17l8x_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4yal9p` (
+    `mysql_tbl_4yal9p_conversion_id` INT,
+    `mysql_tbl_4yal9p_campaign_id` INT,
+    `mysql_tbl_4yal9p_conversion_date` DATE,
+    `mysql_tbl_4yal9p_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_u17l8x` (`mysql_tbl_u17l8x_campaign_id`, `mysql_tbl_u17l8x_channel`, `mysql_tbl_u17l8x_start_date`, `mysql_tbl_u17l8x_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_4yal9p` (`mysql_tbl_4yal9p_conversion_id`, `mysql_tbl_4yal9p_campaign_id`, `mysql_tbl_4yal9p_conversion_date`, `mysql_tbl_4yal9p_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 <> 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_oodmlo_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_oodmlo`
+    WHERE mysql_tbl_oodmlo_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(4)) - (0) + CASE WHEN V_STATUS = 'ACTIVE' THEN 1 ELSE 0 END) END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CHANNEL_ATTRIBUTION_SCORE_qxpq8i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_ATTRIBUTION_SCORE_qxpq8i(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ATTRIBUTION_SCORE INT DEFAULT 0;
+
+    SELECT mysql_tbl_u17l8x_CHANNEL, COUNT(*), COALESCE(SUM(mysql_tbl_4yal9p_CONVERSION_VALUE), 0)
+    INTO V_CHANNEL, V_CONVERSION_COUNT, V_TOTAL_VALUE
+    FROM `mysql_tbl_u17l8x` C
+    LEFT JOIN `mysql_tbl_4yal9p` CV ON mysql_tbl_u17l8x_CAMPAIGN_ID = mysql_tbl_4yal9p_CAMPAIGN_ID
+    WHERE mysql_tbl_u17l8x_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_u17l8x_CAMPAIGN_ID;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_ATTRIBUTION_SCORE = V_CONVERSION_COUNT * 3 + FLOOR(V_TOTAL_VALUE / 50);
+        WHEN 'ORGANIC' THEN SET V_ATTRIBUTION_SCORE = V_CONVERSION_COUNT * 5 + FLOOR(V_TOTAL_VALUE / 50);
+        WHEN 'SOCIAL' THEN SET V_ATTRIBUTION_SCORE = V_CONVERSION_COUNT * 4 + FLOOR(V_TOTAL_VALUE / 50);
+        ELSE SET V_ATTRIBUTION_SCORE = V_CONVERSION_COUNT * 2 + FLOOR(V_TOTAL_VALUE / 50);
+    END CASE;
+
+    RETURN V_ATTRIBUTION_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_9z8d10` (mysql_tbl_9z8d10_ID INT, mysql_tbl_9z8d10_REGION VARCHAR(10)) PARTITION BY LIST COLUMNS(mysql_tbl_9z8d10_REGION) (PARTITION P_NORTH VALUES IN ('NORTH', 'N'), PARTITION P_SOUTH VALUES IN ('SOUTH', 'S'), PARTITION P_OTHER VALUES IN (DEFAULT));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS_SINCE_REGISTRATION_1w2ahb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_REGISTRATION_1w2ahb(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, mysql_tbl_g1b3pu_REGISTRATION_DATE, CURDATE())
+    INTO V_DAYS
+    FROM `mysql_tbl_g1b3pu`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0()) - (0) + ((MYSQL_FUNC_CALCULATE_CHANNEL_ATTRIBUTION_SCORE_qxpq8i(68)) - (0) + V_DAYS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE USER_COUNT INT DEFAULT 0;
+    
+    CREATE USER 'NEWUSER'@'LOCALHOST' IDENTIFIED BY 'PASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    CREATE USER IF NOT EXISTS 'EXISTINGUSER'@'%' IDENTIFIED BY 'PASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    ALTER USER 'NEWUSER'@'LOCALHOST' IDENTIFIED BY 'NEWPASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    RETURN USER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_100_TO_200_cq6mib----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_TO_200_cq6mib() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 100 UNION SELECT 110 UNION SELECT 120 UNION SELECT 130 UNION SELECT 140
+        UNION SELECT 150 UNION SELECT 160 UNION SELECT 170 UNION SELECT 180 UNION SELECT 190 UNION SELECT 200;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_TOGGLE_BITS_b7n993----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TOGGLE_BITS_b7n993(NUM INT, BIT_POSITIONS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_BIT_POS INT DEFAULT 0;
+    DECLARE V_CURRENT_BIT INT;
+
+    TOGGLE_LOOP: WHILE BIT_POSITIONS > 0 DO
+        SET V_BIT_POS = BIT_POSITIONS MOD 10;
+        SET V_CURRENT_BIT = MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x();
+
+        IF V_CURRENT_BIT = 0 THEN
+            SET V_RESULT = MYSQL_FUNC_CURSOR_FUNC_SUM_100_TO_200_cq6mib();
+        END IF;
+
+        SET BIT_POSITIONS = BIT_POSITIONS DIV 10;
+    END WHILE TOGGLE_LOOP;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DAYS_SINCE_REGISTRATION_1w2ahb(28)) - (0) + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_xlxgty_START_DATE, mysql_tbl_xlxgty_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM `mysql_tbl_xlxgty`
+    WHERE mysql_tbl_xlxgty_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_TOGGLE_BITS_b7n993(13, 45)) - (0) + 0);
+    END IF;
+
+    SET V_DURATION_DAYS = DATEDIFF(V_END_DATE, V_START_DATE);
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(1);

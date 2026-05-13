@@ -1,0 +1,840 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dlsgnk` (
+    `mysql_tbl_dlsgnk_order_id` INT,
+    `mysql_tbl_dlsgnk_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_dlsgnk` (`mysql_tbl_dlsgnk_order_id`, `mysql_tbl_dlsgnk_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8avja1` (
+    `mysql_tbl_8avja1_customer_id` INT,
+    `mysql_tbl_8avja1_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_8avja1` (`mysql_tbl_8avja1_customer_id`, `mysql_tbl_8avja1_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nff8oc` (
+    `mysql_tbl_nff8oc_emp_id` INT,
+    `mysql_tbl_nff8oc_department_id` INT,
+    `mysql_tbl_nff8oc_salary` INT,
+    `mysql_tbl_nff8oc_hire_date` DATE,
+    `mysql_tbl_nff8oc_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_nff8oc` (`mysql_tbl_nff8oc_emp_id`, `mysql_tbl_nff8oc_department_id`, `mysql_tbl_nff8oc_salary`, `mysql_tbl_nff8oc_hire_date`, `mysql_tbl_nff8oc_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qutakf` (
+    `mysql_tbl_qutakf_budget` INT
+);
+
+INSERT INTO `mysql_tbl_qutakf` (`mysql_tbl_qutakf_budget`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s745g3` (
+    `mysql_tbl_s745g3_product_id` INT,
+    `mysql_tbl_s745g3_category_id` INT,
+    `mysql_tbl_s745g3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_s745g3` (`mysql_tbl_s745g3_product_id`, `mysql_tbl_s745g3_category_id`, `mysql_tbl_s745g3_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dg7syw` (
+    `mysql_tbl_dg7syw_part_id` INT,
+    `mysql_tbl_dg7syw_part_name` VARCHAR(50),
+    `mysql_tbl_dg7syw_category_id` INT,
+    `mysql_tbl_dg7syw_price` DECIMAL(10,2),
+    `mysql_tbl_dg7syw_stock_quantity` INT,
+    `mysql_tbl_dg7syw_reorder_point` INT
+);
+
+INSERT INTO `mysql_tbl_dg7syw` (`mysql_tbl_dg7syw_part_id`, `mysql_tbl_dg7syw_part_name`, `mysql_tbl_dg7syw_category_id`, `mysql_tbl_dg7syw_price`, `mysql_tbl_dg7syw_stock_quantity`, `mysql_tbl_dg7syw_reorder_point`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j3tpwt` (
+    `mysql_tbl_j3tpwt_customer_id` INT,
+    `mysql_tbl_j3tpwt_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_j3tpwt` (`mysql_tbl_j3tpwt_customer_id`, `mysql_tbl_j3tpwt_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dhgj2e` (
+    `mysql_tbl_dhgj2e_product_id` INT,
+    `mysql_tbl_dhgj2e_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_dhgj2e` (`mysql_tbl_dhgj2e_product_id`, `mysql_tbl_dhgj2e_price`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s0y2vb` (
+    `mysql_tbl_s0y2vb_emp_id` INT,
+    `mysql_tbl_s0y2vb_manager_id` INT,
+    `mysql_tbl_s0y2vb_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_s0y2vb` (`mysql_tbl_s0y2vb_emp_id`, `mysql_tbl_s0y2vb_manager_id`, `mysql_tbl_s0y2vb_department_id`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_k0d3lq` (
+    `mysql_tbl_k0d3lq_system_id` INT,
+    `mysql_tbl_k0d3lq_customer_id` INT,
+    `mysql_tbl_k0d3lq_system_type` VARCHAR(50),
+    `mysql_tbl_k0d3lq_monitoring_monthly` INT,
+    `mysql_tbl_k0d3lq_equipment_cost` DECIMAL(10,2),
+    `mysql_tbl_k0d3lq_installation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3uslpp` (
+    `mysql_tbl_3uslpp_alert_id` INT,
+    `mysql_tbl_3uslpp_system_id` INT,
+    `mysql_tbl_3uslpp_alert_date` DATE,
+    `mysql_tbl_3uslpp_alert_type` VARCHAR(50),
+    `mysql_tbl_3uslpp_response_time_minutes` DATE
+);
+
+INSERT INTO `mysql_tbl_k0d3lq` (`mysql_tbl_k0d3lq_system_id`, `mysql_tbl_k0d3lq_customer_id`, `mysql_tbl_k0d3lq_system_type`, `mysql_tbl_k0d3lq_monitoring_monthly`, `mysql_tbl_k0d3lq_equipment_cost`, `mysql_tbl_k0d3lq_installation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `mysql_tbl_3uslpp` (`mysql_tbl_3uslpp_alert_id`, `mysql_tbl_3uslpp_system_id`, `mysql_tbl_3uslpp_alert_date`, `mysql_tbl_3uslpp_alert_type`, `mysql_tbl_3uslpp_response_time_minutes`) VALUES (1, 2, '2024-01-01', 'test', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5v8w96` (
+    `mysql_tbl_5v8w96_customer_id` INT,
+    `mysql_tbl_5v8w96_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_5v8w96` (`mysql_tbl_5v8w96_customer_id`, `mysql_tbl_5v8w96_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gmc7rd` (
+    `mysql_tbl_gmc7rd_emp_id` INT,
+    `mysql_tbl_gmc7rd_name` VARCHAR(50),
+    `mysql_tbl_gmc7rd_salary` INT,
+    `mysql_tbl_gmc7rd_hire_date` DATE,
+    `mysql_tbl_gmc7rd_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y23ezu` (
+    `mysql_tbl_y23ezu_dept_id` INT,
+    `mysql_tbl_y23ezu_name` VARCHAR(50),
+    `mysql_tbl_y23ezu_location` INT
+);
+
+INSERT INTO `mysql_tbl_gmc7rd` (`mysql_tbl_gmc7rd_emp_id`, `mysql_tbl_gmc7rd_name`, `mysql_tbl_gmc7rd_salary`, `mysql_tbl_gmc7rd_hire_date`, `mysql_tbl_gmc7rd_department_id`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_y23ezu` (`mysql_tbl_y23ezu_dept_id`, `mysql_tbl_y23ezu_name`, `mysql_tbl_y23ezu_location`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tuvkld` (
+    `mysql_tbl_tuvkld_product_id` INT,
+    `mysql_tbl_tuvkld_category_id` INT,
+    `mysql_tbl_tuvkld_supplier_id` INT,
+    `mysql_tbl_tuvkld_price` DECIMAL(10,2),
+    `mysql_tbl_tuvkld_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ct98ov` (
+    `mysql_tbl_ct98ov_category_id` INT,
+    `mysql_tbl_ct98ov_name` VARCHAR(50),
+    `mysql_tbl_ct98ov_discount_percent` INT
+);
+
+INSERT INTO `mysql_tbl_tuvkld` (`mysql_tbl_tuvkld_product_id`, `mysql_tbl_tuvkld_category_id`, `mysql_tbl_tuvkld_supplier_id`, `mysql_tbl_tuvkld_price`, `mysql_tbl_tuvkld_stock_quantity`) VALUES (1, 2, 3, 1.0, 5);
+
+INSERT INTO `mysql_tbl_ct98ov` (`mysql_tbl_ct98ov_category_id`, `mysql_tbl_ct98ov_name`, `mysql_tbl_ct98ov_discount_percent`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lovgk6` (
+    `mysql_tbl_lovgk6_category_id` INT,
+    `mysql_tbl_lovgk6_price` DECIMAL(10,2),
+    `mysql_tbl_lovgk6_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_lovgk6` (`mysql_tbl_lovgk6_category_id`, `mysql_tbl_lovgk6_price`, `mysql_tbl_lovgk6_stock_quantity`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1orq5w` (
+    `mysql_tbl_1orq5w_cbigint` BIGINT
+);
+
+INSERT INTO `mysql_tbl_1orq5w` (`mysql_tbl_1orq5w_cbigint`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_OBJECT('ID', ID, 'NAME', NAME) INTO @mysql_synth_dummy FROM `mysql_tbl_5wjqpx`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT JSON_ARRAY(ID, NAME, EMAIL) INTO @mysql_synth_dummy FROM `mysql_tbl_5wjqpx`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT JSON_EXTRACT(DATA, '$.KEY') INTO @mysql_synth_dummy FROM `mysql_tbl_nc67u0`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE PWD_COUNT INT DEFAULT 0;
+    
+    SET PASSWORD FOR 'USER1'@'LOCALHOST' = 'NEWPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    SET PASSWORD = 'MYPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    RETURN PWD_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_nff8oc_SALARY, 0), COALESCE(mysql_tbl_nff8oc_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_nff8oc_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_nff8oc`
+    WHERE mysql_tbl_nff8oc_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (V_SALARY / 1000) + (V_PERFORMANCE * 10) + (V_TENURE_YEARS * 3);
+
+    RETURN V_COMP_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me(ARR_LEN INT, IDX INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF IDX < 0 OR IDX >= ARR_LEN THEN
+        SIGNAL SQLSTATE '22002' SET MESSAGE_TEXT = 'ARRAY INDEX OUT OF BOUNDS';
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(22)) - (0) + (IDX * 10));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_dlsgnk_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM `mysql_tbl_dlsgnk`
+    WHERE mysql_tbl_dlsgnk_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5()) - (0) + ((MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me(-5, 21)) - (0) + V_CUSTOMER_ID % 100));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_8avja1_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_8avja1`
+    WHERE mysql_tbl_8avja1_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_s745g3_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_s745g3`
+    WHERE mysql_tbl_s745g3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_s745g3_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_s745g3`
+    WHERE mysql_tbl_s745g3_CATEGORY_ID = (SELECT mysql_tbl_s745g3_CATEGORY_ID FROM `mysql_tbl_s745g3` WHERE mysql_tbl_s745g3_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_RATIO = (V_PRICE * 100) / V_CATEGORY_AVG;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_WEEKS_60zq2k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_WEEKS_60zq2k(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_WEEKS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(WEEK, mysql_tbl_j3tpwt_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_WEEKS
+    FROM `mysql_tbl_j3tpwt`
+    WHERE mysql_tbl_j3tpwt_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_WEEKS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_dhgj2e_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_dhgj2e`
+    WHERE mysql_tbl_dhgj2e_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SPEND_lvh120----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPEND_lvh120(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_qutakf_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_qutakf`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT mysql_tbl_1orq5w_CBIGINT FROM `mysql_tbl_1orq5w`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = RESULT + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_lovgk6_PRICE * mysql_tbl_lovgk6_STOCK_QUANTITY), 0)
+    INTO V_STOCK_VALUE
+    FROM `mysql_tbl_lovgk6`
+    WHERE mysql_tbl_lovgk6_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_STOCK_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(CARD_NUMBER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    IF CARD_NUMBER IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_INDEX <= CHAR_LENGTH(CARD_NUMBER) DO
+        SET V_CHAR = SUBSTRING(CARD_NUMBER, V_INDEX, 1);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        END IF;
+
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE;
+
+    IF V_DIGIT_COUNT >= 13 AND V_DIGIT_COUNT <= 19 THEN
+        SET V_RESULT = 1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_NULL_CHECK_s92jh9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_NULL_CHECK_s92jh9(VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE
+        WHEN VAL IS NULL THEN RETURN MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(-57);
+        WHEN VAL = 0 THEN RETURN MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(-57);
+        WHEN VAL > 0 THEN RETURN 'POSITIVE';
+        WHEN VAL < 0 THEN RETURN MYSQL_FUNC_PROC_BIGINT_elxddt();
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN LOG(X);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    DESCRIBE mysql_tbl_5wjqpx;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    EXPLAIN SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_5wjqpx` WHERE ID = 1;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT FOUND_ROWS();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT LAST_INSERT_ID();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RENAME TABLE OLD_USERS TO mysql_tbl_5wjqpx_BACKUP;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(24)) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    DECLARE DB_NAME VARCHAR(50);
+    DECLARE VER VARCHAR(50);
+    DECLARE NOW_TIME DATETIME;
+    
+    SELECT NOW() INTO NOW_TIME;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT DATABASE() INTO DB_NAME;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT VERSION() INTO VER;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SHOW TABLES;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SHOW COLUMNS FROM `mysql_tbl_5wjqpx`;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_5v8w96_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_5v8w96`
+    WHERE mysql_tbl_5v8w96_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(SYSTEM_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONITORING_MONTHLY INT DEFAULT 30;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_ALERT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_RESPONSE_TIME INT DEFAULT 0;
+    DECLARE V_SECURITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_k0d3lq_MONITORING_MONTHLY, 30), COALESCE(mysql_tbl_k0d3lq_EQUIPMENT_COST, 500)
+    INTO V_MONITORING_MONTHLY, V_EQUIPMENT_COST
+    FROM `mysql_tbl_k0d3lq`
+    WHERE mysql_tbl_k0d3lq_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_3uslpp_RESPONSE_TIME_MINUTES), 0)
+    INTO V_ALERT_COUNT, V_AVG_RESPONSE_TIME
+    FROM `mysql_tbl_3uslpp`
+    WHERE mysql_tbl_3uslpp_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SET V_SECURITY_SCORE = 100 - (V_ALERT_COUNT * 5) - (V_AVG_RESPONSE_TIME / 2);
+
+    RETURN CAST(V_SECURITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_s0y2vb_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_s0y2vb`
+    WHERE mysql_tbl_s0y2vb_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_DEPT_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > 1000 THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(PRODUCT_ID_PARAM INT, QUANTITY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_DISCOUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_tuvkld_PRICE, COALESCE(mysql_tbl_ct98ov_DISCOUNT_PERCENT, 0)
+    INTO V_BASE_PRICE, V_CATEGORY_DISCOUNT
+    FROM `mysql_tbl_tuvkld` P
+    LEFT JOIN `mysql_tbl_ct98ov` C ON mysql_tbl_tuvkld_CATEGORY_ID = mysql_tbl_ct98ov_CATEGORY_ID
+    WHERE mysql_tbl_tuvkld_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DISCOUNT = V_BASE_PRICE * V_CATEGORY_DISCOUNT / 100;
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 15 / 100;
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 10 / 100;
+    ELSEIF QUANTITY_PARAM >= 10 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 5 / 100;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - V_DISCOUNT - V_QUANTITY_DISCOUNT;
+
+    RETURN GREATEST(V_FINAL_PRICE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 50 UNION SELECT 100 UNION SELECT 150 UNION SELECT 200;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(-89, -13)) - (0) + ((MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(37, -2, 21)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(BASE INT, EXP INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF EXP < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * BASE;
+        SET EXP = EXP - 1;
+    UNTIL EXP <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(DEPT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_gmc7rd_SALARY), 0), COALESCE(MAX(mysql_tbl_gmc7rd_SALARY), 0), COALESCE(MIN(mysql_tbl_gmc7rd_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM `mysql_tbl_gmc7rd`
+    WHERE mysql_tbl_gmc7rd_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_MIN_SALARY > 0 THEN
+        SET V_VARIANCE = ((V_MAX_SALARY - V_MIN_SALARY) * 100.0) / V_MIN_SALARY;
+    END IF;
+
+    RETURN FLOOR(V_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(A INT, B INT, C INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN RETURN 'INVALID';
+        WHEN A = B AND B = C THEN RETURN 'EQUILATERAL';
+        WHEN A = B OR B = C OR A = C THEN RETURN 'ISOSCELES';
+        ELSE RETURN 'SCALENE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(PART_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_dg7syw_STOCK_QUANTITY, 0), COALESCE(mysql_tbl_dg7syw_REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM `mysql_tbl_dg7syw`
+    WHERE mysql_tbl_dg7syw_PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(-70, 44, 92)) - (0) + 0);
+    END IF;
+
+    SET V_STOCK_RATIO = MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(16);
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(87);
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(62);
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = 60;
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(-23);
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(46, -99);
+        ELSE SET V_PRIORITY = MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e();
+    END CASE;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk()) - (0) + V_PRIORITY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(TEXT INT, PATTERN INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEXT_LEN INT DEFAULT 0;
+    DECLARE V_PATTERN_LEN INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+    DECLARE V_MATCH_FOUND INT DEFAULT 0;
+
+    SET V_TEXT_LEN = MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(-48);
+    SET V_PATTERN_LEN = MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_NULL_CHECK_s92jh9(9);
+
+    IF V_PATTERN_LEN = 0 OR V_PATTERN_LEN > V_TEXT_LEN THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SPEND_lvh120(9)) - (0) + 0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_TEXT_LEN - V_PATTERN_LEN + 1 DO
+        SET V_J = 1;
+        SET V_MATCH_FOUND = 1;
+
+        INNER_LOOP: WHILE V_J <= V_PATTERN_LEN DO
+            IF SUBSTRING(TEXT, V_I + V_J - 1, 1) != SUBSTRING(PATTERN, V_J, 1) THEN
+                SET V_MATCH_FOUND = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(-96);
+        END WHILE INNER_LOOP;
+
+        IF V_MATCH_FOUND = 1 THEN
+            RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_WEEKS_60zq2k(-32)) - (0) + ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(68)) - (0) + V_I));
+        END IF;
+
+        SET V_I = MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30();
+    END WHILE OUTER_LOOP;
+
+    RETURN ((MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y()) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(40);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(1);
+    END IF;
+
+    SET V_RESULT = (MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i());
+
+    RETURN ((MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(46, -26)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(1, 1);

@@ -1,0 +1,153 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_twz1x0` (
+    `mysql_tbl_twz1x0_product_id` INT,
+    `mysql_tbl_twz1x0_category_id` INT,
+    `mysql_tbl_twz1x0_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rr26ho` (
+    `mysql_tbl_rr26ho_category_id` INT,
+    `mysql_tbl_rr26ho_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_twz1x0` (`mysql_tbl_twz1x0_product_id`, `mysql_tbl_twz1x0_category_id`, `mysql_tbl_twz1x0_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_rr26ho` (`mysql_tbl_rr26ho_category_id`, `mysql_tbl_rr26ho_name`) VALUES (1, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6ztgcu` (
+    mysql_tbl_6ztgcu_item_id INT,
+    mysql_tbl_6ztgcu_quantity INT
+);
+
+INSERT INTO `mysql_tbl_6ztgcu` (`mysql_tbl_6ztgcu_item_id`, `mysql_tbl_6ztgcu_quantity`) VALUES (1, 2);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_003_TABLE_OPS_1ig5ph----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_003_TABLE_OPS_1ig5ph() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE OP_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_h2tx8u` (mysql_tbl_h2tx8u_ID INT PRIMARY KEY, USER_mysql_tbl_h2tx8u_ID INT, mysql_tbl_h2tx8u_AMOUNT DECIMAL(10,2));
+    SET OP_COUNT = OP_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_lx8op6 ADD COLUMN PHONE VARCHAR(20);
+    SET OP_COUNT = OP_COUNT + 1;
+    
+    DROP TABLE IF EXISTS TEMP_TABLE;
+    SET OP_COUNT = OP_COUNT + 1;
+    
+    CREATE INDEX IDX_USER_EMAIL ON USERS(EMAIL);
+    SET OP_COUNT = OP_COUNT + 1;
+    
+    TRUNCATE TABLE TEMP_LOGS;
+    SET OP_COUNT = OP_COUNT + 1;
+    
+    RETURN OP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    REPEAT
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = MYSQL_FUNC_FUNC_003_TABLE_OPS_1ig5ph();
+        END IF;
+        SET V_I = V_I + 1;
+    UNTIL V_I > N END REPEAT;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_ITEM_TOTAL_x6544h----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ITEM_TOTAL_x6544h(ITEM_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TOTAL_AMOUNT_VAR INT;
+    
+    SELECT mysql_tbl_6ztgcu_QUANTITY * ITEM_ID_PARAM INTO TOTAL_AMOUNT_VAR
+    FROM `mysql_tbl_6ztgcu`
+    WHERE mysql_tbl_6ztgcu_ITEM_ID = ITEM_ID_PARAM;
+    
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(100)) - (0) + TOTAL_AMOUNT_VAR);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT STATUS, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_lx8op6` GROUP BY STATUS;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT USER_ID, SUM(AMOUNT) AS TOTAL INTO @mysql_synth_dummy FROM `mysql_tbl_7dnnq9` GROUP BY USER_ID HAVING TOTAL > 1000;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATE(CREATED_AT) AS DATE, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_7dnnq9` GROUP BY DATE WITH ROLLUP;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(STR INT, TIMES INT) RETURNS VARCHAR(500) DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+
+    REPEAT
+        SET V_RESULT = MYSQL_FUNC_ITEM_TOTAL_x6544h(-6);
+        SET TIMES = TIMES - 1;
+    UNTIL TIMES <= 0 END REPEAT;
+
+    RETURN MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6();
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(mysql_tbl_twz1x0_PRICE), 0), COALESCE(MAX(mysql_tbl_twz1x0_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM `mysql_tbl_twz1x0`
+    WHERE mysql_tbl_twz1x0_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(79, -80);
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(1);

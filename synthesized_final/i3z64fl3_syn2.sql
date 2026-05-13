@@ -1,0 +1,242 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u34990` (
+    `mysql_tbl_u34990_customer_id` INT,
+    `mysql_tbl_u34990_total_amount` DECIMAL(10,2),
+    `mysql_tbl_u34990_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_u34990` (`mysql_tbl_u34990_customer_id`, `mysql_tbl_u34990_total_amount`, `mysql_tbl_u34990_status`) VALUES (1, 1.0, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zyr75m` (
+    `mysql_tbl_zyr75m_campaign_id` INT,
+    `mysql_tbl_zyr75m_channel` INT,
+    `mysql_tbl_zyr75m_budget` INT,
+    `mysql_tbl_zyr75m_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_zyr75m` (`mysql_tbl_zyr75m_campaign_id`, `mysql_tbl_zyr75m_channel`, `mysql_tbl_zyr75m_budget`, `mysql_tbl_zyr75m_status`) VALUES (1, 1, 1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rh14hs` (
+    mysql_tbl_rh14hs_emp_no INT PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cjlm16` (
+    mysql_tbl_cjlm16_emp_no INT,
+    mysql_tbl_cjlm16_salary INT,
+    FOREIGN KEY (mysql_tbl_cjlm16_emp_no) REFERENCES table_2gq48u(mysql_tbl_cjlm16_emp_no)
+);
+
+INSERT INTO `mysql_tbl_rh14hs` (`mysql_tbl_rh14hs_emp_no`) VALUES (10001);
+
+INSERT INTO `mysql_tbl_cjlm16` (`mysql_tbl_cjlm16_emp_no`, `mysql_tbl_cjlm16_salary`) VALUES (10001, 60117);
+
+INSERT INTO `mysql_tbl_cjlm16` (`mysql_tbl_cjlm16_emp_no`, `mysql_tbl_cjlm16_salary`) VALUES (10001, 62102);
+
+INSERT INTO `mysql_tbl_cjlm16` (`mysql_tbl_cjlm16_emp_no`, `mysql_tbl_cjlm16_salary`) VALUES (10001, 66074);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kxu3va` (
+    mysql_tbl_kxu3va_category_id INT AUTO_INCREMENT PRIMARY KEY,
+    mysql_tbl_kxu3va_category_name VARCHAR(255) UNIQUE
+);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf(P_EMP_NO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY INT;
+    
+    SELECT AVG(mysql_tbl_cjlm16_SALARY) INTO V_AVG_SALARY
+    FROM `mysql_tbl_rh14hs` E
+    JOIN `mysql_tbl_cjlm16` S ON mysql_tbl_rh14hs_EMP_NO = mysql_tbl_cjlm16_EMP_NO
+    WHERE mysql_tbl_rh14hs_EMP_NO = P_EMP_NO;
+    
+    RETURN V_AVG_SALARY;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_TEST_FUNC_hd7sgv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_FUNC_hd7sgv() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INSERT_DUPLICATE TINYINT DEFAULT FALSE;
+    DECLARE MESSAGE_TEXT VARCHAR(255);
+    DECLARE RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR 1062
+        SET INSERT_DUPLICATE = TRUE;
+
+    INSERT INTO `mysql_tbl_kxu3va` (`mysql_tbl_kxu3va_CATEGORY_ID`, `mysql_tbl_kxu3va_CATEGORY_NAME`)
+    VALUES (DEFAULT, 'GUITARS');
+
+    IF INSERT_DUPLICATE = TRUE THEN
+        SET MESSAGE_TEXT = 'ROW WAS NOT INSERTED - DUPLICATE ENTRY.';
+        SET RESULT = 0;
+    ELSE
+        SET MESSAGE_TEXT = '1 ROW WAS INSERTED.';
+        SET RESULT = 1;
+    END IF;
+
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SANITIZE_INPUT_1v2j5i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(INPUT_STRING INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_CHAR_POS INT DEFAULT 1;
+    DECLARE V_CHAR_VAL INT;
+    DECLARE V_INPUT_LEN INT DEFAULT 0;
+    DECLARE V_DANGER_COUNT INT DEFAULT 0;
+    DECLARE V_DANGEROUS_CHARS VARCHAR(10) DEFAULT '''"'';--';
+
+    SET V_INPUT_LEN = CHAR_LENGTH(INPUT_STRING);
+
+    WHILE V_CHAR_POS <= V_INPUT_LEN DO
+        SET V_CHAR_VAL = ASCII(SUBSTRING(INPUT_STRING, V_CHAR_POS, 1));
+
+        IF V_CHAR_VAL IN (39, 34, 59, 45, 45) THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        IF V_CHAR_VAL < 32 OR V_CHAR_VAL > 126 THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        SET V_CHAR_POS = V_CHAR_POS + 1;
+    END WHILE;
+
+    RETURN V_DANGER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_zyr75m_CHANNEL, COALESCE(mysql_tbl_zyr75m_BUDGET, 0), mysql_tbl_zyr75m_STATUS
+    INTO V_CHANNEL, V_BUDGET, V_STATUS
+    FROM `mysql_tbl_zyr75m`
+    WHERE mysql_tbl_zyr75m_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(6)) - (((MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf(1)) - (((MYSQL_FUNC_TEST_FUNC_hd7sgv()) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - (0) + (((MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4()) - (0) + (CASE V_CHANNEL
+        WHEN 'PAID' THEN V_BUDGET / 100
+        WHEN 'ORGANIC' THEN V_BUDGET / 50
+        WHEN 'SOCIAL' THEN V_BUDGET / 75
+        ELSE V_BUDGET / 100
+    END))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM USERS INTERSECT SELECT USER_ID FROM `mysql_tbl_pvffl1`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM USERS EXCEPT SELECT USER_ID FROM `mysql_tbl_pvffl1`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_u34990_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_u34990`
+    WHERE mysql_tbl_u34990_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_u34990_STATUS = 'COMPLETED';
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(31)) - (0) + (((MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy()) - (0) + (FLOOR(V_TOTAL)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(1);

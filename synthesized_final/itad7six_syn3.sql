@@ -1,0 +1,200 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g0a16m` (
+    `mysql_tbl_g0a16m_customer_id` INT,
+    `mysql_tbl_g0a16m_country` INT,
+    `mysql_tbl_g0a16m_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_g0a16m` (`mysql_tbl_g0a16m_customer_id`, `mysql_tbl_g0a16m_country`, `mysql_tbl_g0a16m_registration_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vr5r4x` (
+    `mysql_tbl_vr5r4x_emp_id` INT,
+    `mysql_tbl_vr5r4x_manager_id` INT,
+    `mysql_tbl_vr5r4x_department_id` INT,
+    `mysql_tbl_vr5r4x_salary` INT,
+    `mysql_tbl_vr5r4x_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_vr5r4x` (`mysql_tbl_vr5r4x_emp_id`, `mysql_tbl_vr5r4x_manager_id`, `mysql_tbl_vr5r4x_department_id`, `mysql_tbl_vr5r4x_salary`, `mysql_tbl_vr5r4x_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_84j6n0` (
+    `mysql_tbl_84j6n0_customer_id` INT,
+    `mysql_tbl_84j6n0_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_84j6n0` (`mysql_tbl_84j6n0_customer_id`, `mysql_tbl_84j6n0_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_v14f46` (
+    `mysql_tbl_v14f46_supplier_id` INT,
+    `mysql_tbl_v14f46_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_v14f46` (`mysql_tbl_v14f46_supplier_id`, `mysql_tbl_v14f46_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_v14f46_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_v14f46`
+    WHERE mysql_tbl_v14f46_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        IF N MOD 2 = 0 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET N = N - 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT mysql_tbl_84j6n0_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM `mysql_tbl_84j6n0`
+    WHERE mysql_tbl_84j6n0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(-21)) - (0) + (QUARTER(V_REGISTRATION_DATE)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC1_dvat8j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RETENTION_kmob6s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RETENTION_kmob6s(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ACTIVE_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(*)
+    INTO V_ACTIVE_COUNT, V_TOTAL_COUNT
+    FROM `mysql_tbl_g0a16m` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_g0a16m_CUSTOMER_ID = S.CUSTOMER_ID AND S.STATUS = 'ACTIVE'
+    WHERE mysql_tbl_g0a16m_COUNTRY = COUNTRY_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - (0) + (((MYSQL_FUNC_FUNC1_dvat8j()) - (0) + ((V_ACTIVE_COUNT * 100) / V_TOTAL_COUNT))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_lasgiv` WHERE AMOUNT > ALL (SELECT AMOUNT FROM `mysql_tbl_lasgiv` WHERE STATUS = 'CANCELLED');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_lasgiv` WHERE AMOUNT > ANY (SELECT AMOUNT FROM `mysql_tbl_lasgiv` WHERE STATUS = 'COMPLETED');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_lasgiv` WHERE AMOUNT > SOME (SELECT AMOUNT FROM `mysql_tbl_lasgiv` WHERE STATUS = 'PENDING');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_150_DELETE_LIMIT_oj6a80----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_150_DELETE_LIMIT_oj6a80() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DEL_COUNT INT DEFAULT 0;
+    
+    DELETE FROM `mysql_tbl_mh26cq` ORDER BY CREATED_AT ASC LIMIT 1000;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_9bhttj` WHERE PROCESSED = 1 LIMIT 500;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    RETURN DEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM `mysql_tbl_vr5r4x`
+    WHERE mysql_tbl_vr5r4x_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use()) - (0) + ((MYSQL_FUNC_FUNC_150_DELETE_LIMIT_oj6a80()) - (0) + V_DIRECT_REPORTS));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2016_e7imwb()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    PREPARE STMT FROM 'CREATE TABLE IF NOT EXISTS `mysql_tbl_csioyi` ( mysql_tbl_csioyi_V1 VARCHAR(80))';
+    EXECUTE STMT;
+    RETURN 0;
+    DEALLOCATE PREPARE STMT;
+
+    SET V_RESULT = MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RETENTION_kmob6s(53);
+    SELECT MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(81) //
+END
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+CALL MYSQL_FUNC_FUNC_2016_e7imwb();

@@ -1,0 +1,82 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zhlsbj` (
+    `mysql_tbl_zhlsbj_customer_id` INT,
+    `mysql_tbl_zhlsbj_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_zhlsbj` (`mysql_tbl_zhlsbj_customer_id`, `mysql_tbl_zhlsbj_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CAST_COUNT INT DEFAULT 0;
+    
+    SELECT BINARY 'ABC' = 'ABC';
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CAST('123' AS UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CONVERT('123', UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT BIN(5);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT OCT(8);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    RETURN CAST_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOCK_COUNT INT DEFAULT 0;
+    
+    SELECT GET_LOCK('MYLOCK', 10);
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_FREE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_USED_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_ALL_LOCKS();
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    RETURN LOCK_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_zhlsbj_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_zhlsbj`
+    WHERE mysql_tbl_zhlsbj_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q()) - (0) + ((MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub()) - (0) + V_COST));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(1);

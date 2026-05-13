@@ -1,0 +1,243 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gzt2nl` (
+    `mysql_tbl_gzt2nl_campaign_id` INT,
+    `mysql_tbl_gzt2nl_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_gzt2nl` (`mysql_tbl_gzt2nl_campaign_id`, `mysql_tbl_gzt2nl_status`) VALUES (1, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vqwo2g` (
+    `mysql_tbl_vqwo2g_supplier_id` INT,
+    `mysql_tbl_vqwo2g_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_vqwo2g` (`mysql_tbl_vqwo2g_supplier_id`, `mysql_tbl_vqwo2g_lead_time_days`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lpqdeb` (
+    `mysql_tbl_lpqdeb_order_id` INT,
+    `mysql_tbl_lpqdeb_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_lpqdeb` (`mysql_tbl_lpqdeb_order_id`, `mysql_tbl_lpqdeb_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_if2zaf` (
+    `mysql_tbl_if2zaf_campaign_id` INT,
+    `mysql_tbl_if2zaf_channel` INT,
+    `mysql_tbl_if2zaf_budget` INT
+);
+
+INSERT INTO `mysql_tbl_if2zaf` (`mysql_tbl_if2zaf_campaign_id`, `mysql_tbl_if2zaf_channel`, `mysql_tbl_if2zaf_budget`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_INDEX_0kzn0o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_INDEX_0kzn0o(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_vqwo2g_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_vqwo2g`
+    WHERE mysql_tbl_vqwo2g_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - V_LEAD_TIME;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_TOTAL_rfzzo8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_TOTAL_rfzzo8(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_lpqdeb`
+    WHERE mysql_tbl_lpqdeb_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(88)) - (0) + V_ORDER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_if2zaf_CHANNEL, COALESCE(mysql_tbl_if2zaf_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM `mysql_tbl_if2zaf`
+    WHERE mysql_tbl_if2zaf_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM `mysql_tbl_u7ncig`
+    WHERE mysql_tbl_if2zaf_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN RETURN FLOOR((V_REVENUE * 2) / V_BUDGET);
+        WHEN 'ORGANIC' THEN RETURN FLOOR(V_REVENUE / V_BUDGET * 3);
+        WHEN 'SOCIAL' THEN RETURN FLOOR((V_REVENUE * 150) / V_BUDGET);
+        ELSE RETURN FLOOR(V_REVENUE / V_BUDGET);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UUID_COUNT INT DEFAULT 0;
+    
+    SELECT UUID();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UUID_SHORT();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT IS_UUID('550E8400-E29B-41D4-A716-446655440000');
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT FROM_UNIXTIME(1609459200);
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UNIX_TIMESTAMP();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    RETURN UUID_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(P_START_NUM INT, P_END_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+
+    IF P_START_NUM > P_END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = P_START_NUM;
+
+    OUTER_LOOP: WHILE V_CURRENT <= P_END_NUM DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_SCORE_dp0hn6(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_gzt2nl_STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_gzt2nl` C
+    LEFT JOIN `mysql_tbl_u7ncig` CV ON mysql_tbl_gzt2nl_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_gzt2nl_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_gzt2nl_CAMPAIGN_ID;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_INDEX_0kzn0o(26)) - (0) + (((MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_TOTAL_rfzzo8(-83)) - (0) + (((MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - (0) + (100 + V_CONVERSION_COUNT))))));
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN 50 + V_CONVERSION_COUNT;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm(15)) - (0) + (((MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl()) - (0) + (75 + V_CONVERSION_COUNT))));
+    ELSE
+        RETURN ((MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(-30, -80)) - (0) + (10 + V_CONVERSION_COUNT));
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_SCORE_dp0hn6(1);

@@ -1,0 +1,220 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1mrbnc` (
+    `mysql_tbl_1mrbnc_campaign_id` INT,
+    `mysql_tbl_1mrbnc_start_date` DATE,
+    `mysql_tbl_1mrbnc_end_date` DATE,
+    `mysql_tbl_1mrbnc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_10hutg` (
+    `mysql_tbl_10hutg_conversion_id` INT,
+    `mysql_tbl_10hutg_campaign_id` INT,
+    `mysql_tbl_10hutg_conversion_date` DATE
+);
+
+INSERT INTO `mysql_tbl_1mrbnc` (`mysql_tbl_1mrbnc_campaign_id`, `mysql_tbl_1mrbnc_start_date`, `mysql_tbl_1mrbnc_end_date`, `mysql_tbl_1mrbnc_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_10hutg` (`mysql_tbl_10hutg_conversion_id`, `mysql_tbl_10hutg_campaign_id`, `mysql_tbl_10hutg_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_04fsvx` (
+    `mysql_tbl_04fsvx_supplier_id` INT,
+    `mysql_tbl_04fsvx_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_04fsvx_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_04fsvx` (`mysql_tbl_04fsvx_supplier_id`, `mysql_tbl_04fsvx_supplier_rating`, `mysql_tbl_04fsvx_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8t1kpi` (mysql_tbl_8t1kpi_id INT, mysql_tbl_8t1kpi_balance DECIMAL(10,2));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s59xjd` (
+    `mysql_tbl_s59xjd_order_id` INT,
+    `mysql_tbl_s59xjd_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_s59xjd` (`mysql_tbl_s59xjd_order_id`, `mysql_tbl_s59xjd_order_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8nh7hp` (
+    `mysql_tbl_8nh7hp_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_8nh7hp` (`mysql_tbl_8nh7hp_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r8h2uz` (
+    `mysql_tbl_r8h2uz_customer_id` INT,
+    `mysql_tbl_r8h2uz_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_r8h2uz` (`mysql_tbl_r8h2uz_customer_id`, `mysql_tbl_r8h2uz_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(ACC_ID INT, AMOUNT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    DECLARE V_DAILY_LIMIT DECIMAL(10,2) DEFAULT 5000.00;
+    SELECT mysql_tbl_8t1kpi_BALANCE INTO V_BALANCE FROM `mysql_tbl_8t1kpi` WHERE mysql_tbl_8t1kpi_ID = ACC_ID;
+    IF AMOUNT > V_DAILY_LIMIT THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'AMOUNT EXCEEDS DAILY WITHDRAWAL LIMIT';
+    END IF;
+    IF AMOUNT > V_BALANCE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'INSUFFICIENT mysql_tbl_8t1kpi_BALANCE';
+    END IF;
+    UPDATE `mysql_tbl_8t1kpi` SET mysql_tbl_8t1kpi_BALANCE = mysql_tbl_8t1kpi_BALANCE - AMOUNT WHERE mysql_tbl_8t1kpi_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT mysql_tbl_r8h2uz_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_r8h2uz`
+    WHERE mysql_tbl_r8h2uz_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'PENDING' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TYPE_COUNT INT DEFAULT 0;
+    
+    SELECT DATA_TYPE('TEST', 'USERS', 'ID');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT DATETIME_PRECISION('TEST', 'USERS', 'CREATED_AT');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_COMMENT('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_NAME('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_TYPE('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(98)) - (0) + TYPE_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_8nh7hp_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_8nh7hp`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0()) - (0) + V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_s59xjd_ORDER_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_s59xjd`
+    WHERE mysql_tbl_s59xjd_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga(-21)) - (0) + V_WEEK);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_04fsvx_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_04fsvx_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_04fsvx`
+    WHERE mysql_tbl_04fsvx_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(-34, 61)) - (0) + (((MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(23)) - (0) + ((V_RATING * 10) + (30 - V_LEAD_TIME)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_DAYS_TO_CONVERT DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(DATEDIFF(mysql_tbl_10hutg_CONVERSION_DATE, mysql_tbl_1mrbnc_START_DATE)), 0)
+    INTO V_AVG_DAYS_TO_CONVERT
+    FROM `mysql_tbl_10hutg` C
+    JOIN `mysql_tbl_1mrbnc` CAMP ON mysql_tbl_10hutg_CAMPAIGN_ID = mysql_tbl_1mrbnc_CAMPAIGN_ID
+    WHERE mysql_tbl_10hutg_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z(-27);
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - (0) + V_EFFICIENCY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(1);

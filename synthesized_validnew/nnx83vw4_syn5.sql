@@ -1,0 +1,142 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4otf2l` (
+    `mysql_tbl_4otf2l_emp_id` INT,
+    `mysql_tbl_4otf2l_department_id` INT,
+    `mysql_tbl_4otf2l_salary` INT
+);
+
+INSERT INTO `mysql_tbl_4otf2l` (`mysql_tbl_4otf2l_emp_id`, `mysql_tbl_4otf2l_department_id`, `mysql_tbl_4otf2l_salary`) VALUES (1, 1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5tjbj1` (
+    `mysql_tbl_5tjbj1_customer_id` INT,
+    `mysql_tbl_5tjbj1_status` VARCHAR(50),
+    `mysql_tbl_5tjbj1_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_5tjbj1` (`mysql_tbl_5tjbj1_customer_id`, `mysql_tbl_5tjbj1_status`, `mysql_tbl_5tjbj1_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4zl6e7` (
+    `mysql_tbl_4zl6e7_supplier_id` INT,
+    `mysql_tbl_4zl6e7_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_4zl6e7_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_4zl6e7` (`mysql_tbl_4zl6e7_supplier_id`, `mysql_tbl_4zl6e7_supplier_rating`, `mysql_tbl_4zl6e7_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_4zl6e7_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_4zl6e7_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_4zl6e7`
+    WHERE mysql_tbl_4zl6e7_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_75igsx`
+    WHERE mysql_tbl_4zl6e7_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) + (30 - V_LEAD_TIME) + (V_PRODUCT_COUNT * 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    DECLARE DB_NAME VARCHAR(50);
+    DECLARE VER VARCHAR(50);
+    DECLARE NOW_TIME DATETIME;
+    
+    SELECT NOW() INTO NOW_TIME;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT DATABASE() INTO DB_NAME;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT VERSION() INTO VER;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SHOW TABLES;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SHOW COLUMNS FROM `mysql_tbl_51p0f4`;
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2(-98)) - (0) + INFO_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN 'LEAP_YEAR';
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN 'LEAP_YEAR';
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_5tjbj1_STATUS, COALESCE(mysql_tbl_5tjbj1_MONTHLY_COST, ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(55)) - (0) + 0))
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM `mysql_tbl_5tjbj1`
+    WHERE mysql_tbl_5tjbj1_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_FUNC_005_INFO_QUERIES_4tt14e()) - (0) + 0);
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_4otf2l_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM `mysql_tbl_4otf2l`
+    WHERE mysql_tbl_4otf2l_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_4otf2l_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM `mysql_tbl_4otf2l`;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(-87)) - (0) + (FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(1);

@@ -1,0 +1,185 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f5grqp` (
+    `mysql_tbl_f5grqp_campaign_id` INT,
+    `mysql_tbl_f5grqp_channel` INT,
+    `mysql_tbl_f5grqp_budget` INT,
+    `mysql_tbl_f5grqp_start_date` DATE,
+    `mysql_tbl_f5grqp_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_k5zt3h` (
+    `mysql_tbl_k5zt3h_conversion_id` INT,
+    `mysql_tbl_k5zt3h_campaign_id` INT,
+    `mysql_tbl_k5zt3h_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_f5grqp` (`mysql_tbl_f5grqp_campaign_id`, `mysql_tbl_f5grqp_channel`, `mysql_tbl_f5grqp_budget`, `mysql_tbl_f5grqp_start_date`, `mysql_tbl_f5grqp_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_k5zt3h` (`mysql_tbl_k5zt3h_conversion_id`, `mysql_tbl_k5zt3h_campaign_id`, `mysql_tbl_k5zt3h_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9wdn61` (
+    `mysql_tbl_9wdn61_salary` INT
+);
+
+INSERT INTO `mysql_tbl_9wdn61` (`mysql_tbl_9wdn61_salary`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t17kg8` (
+    `mysql_tbl_t17kg8_order_id` INT,
+    `mysql_tbl_t17kg8_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_t17kg8` (`mysql_tbl_t17kg8_order_id`, `mysql_tbl_t17kg8_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e8g8mu` (
+    `mysql_tbl_e8g8mu_campaign_id` INT,
+    `mysql_tbl_e8g8mu_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_e8g8mu` (`mysql_tbl_e8g8mu_campaign_id`, `mysql_tbl_e8g8mu_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_r26tya----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_r26tya(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_9wdn61_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_9wdn61`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_t17kg8_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM `mysql_tbl_t17kg8`
+    WHERE mysql_tbl_t17kg8_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 1000;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ADD COLUMN PHONE VARCHAR(20);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN AGE INT AFTER NAME;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN FIRST_NAME VARCHAR(50) FIRST;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_109_CREATE_EVENT_msjale----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_109_CREATE_EVENT_msjale() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EVENT_COUNT INT DEFAULT 0;
+    
+    CREATE EVENT EVT_CLEANUP ON SCHEDULE EVERY 1 DAY DO DELETE FROM `mysql_tbl_ryz13p` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    CREATE EVENT EVT_BACKUP ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR DO BACKUP TABLE USERS TO '/BACKUP'
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_e8g8mu_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_e8g8mu`
+    WHERE mysql_tbl_e8g8mu_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_109_CREATE_EVENT_msjale()) - (0) + ((MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb()) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10 END;
+    END));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_MIX_SCORE INT DEFAULT 0;
+
+    SELECT mysql_tbl_f5grqp_CHANNEL, COALESCE(mysql_tbl_f5grqp_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM `mysql_tbl_f5grqp`
+    WHERE mysql_tbl_f5grqp_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_k5zt3h_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM `mysql_tbl_k5zt3h`
+    WHERE mysql_tbl_k5zt3h_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_SCORE = (MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(51));
+        WHEN 'ORGANIC' THEN SET V_MIX_SCORE = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(99) * 3;
+        WHEN 'SOCIAL' THEN SET V_MIX_SCORE = (MYSQL_FUNC_CALCULATE_COMPENSATION_r26tya(19));
+        ELSE SET V_MIX_SCORE = MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(99);
+    END CASE;
+
+    RETURN V_MIX_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(1);

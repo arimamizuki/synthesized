@@ -1,0 +1,144 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8qp94k` (
+    `mysql_tbl_8qp94k_product_id` INT,
+    `mysql_tbl_8qp94k_supplier_id` INT,
+    `mysql_tbl_8qp94k_price` DECIMAL(10,2),
+    `mysql_tbl_8qp94k_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_8qp94k` (`mysql_tbl_8qp94k_product_id`, `mysql_tbl_8qp94k_supplier_id`, `mysql_tbl_8qp94k_price`, `mysql_tbl_8qp94k_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_00v3hp` (
+    `mysql_tbl_00v3hp_product_id` INT,
+    `mysql_tbl_00v3hp_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_00v3hp` (`mysql_tbl_00v3hp_product_id`, `mysql_tbl_00v3hp_category_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.`mysql_tbl_20g2w8` (
+    clusterset_id VARCHAR(36),
+    router_options JSON
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.`mysql_tbl_20g2w8` (clusterset_id, router_options) VALUES ('test', 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p6hfrl` (mysql_tbl_p6hfrl_id INT, mysql_tbl_p6hfrl_log_level INT, mysql_tbl_p6hfrl_message VARCHAR(200));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm() RETURNS INT DETERMINISTIC
+BEGIN
+    UPDATE `mysql_tbl_p6hfrl`
+    SET mysql_tbl_p6hfrl_MESSAGE = CASE mysql_tbl_p6hfrl_LOG_LEVEL
+        WHEN 1 THEN CONCAT('ERROR: ', mysql_tbl_p6hfrl_MESSAGE)
+        WHEN 2 THEN CONCAT('WARNING: ', mysql_tbl_p6hfrl_MESSAGE)
+        WHEN 3 THEN CONCAT('INFO: ', mysql_tbl_p6hfrl_MESSAGE)
+        ELSE mysql_tbl_p6hfrl_MESSAGE END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CATEGORY_PRODUCTS
+    FROM `mysql_tbl_00v3hp`
+    WHERE mysql_tbl_00v3hp_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM `mysql_tbl_00v3hp`;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm()) - (0) + 0);
+    END IF;
+
+    RETURN (V_CATEGORY_PRODUCTS * 100) / V_TOTAL_PRODUCTS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_V2_SET_GLOBAL_ROUTER_OPTION_skavvs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_SET_GLOBAL_ROUTER_OPTION_skavvs(ID INT, OPTION_NAME INT, OPTION_VALUE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_VAL JSON;
+    
+    IF OPTION_VALUE IS NULL THEN
+        UPDATE MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_20g2w8`
+        SET ROUTER_OPTIONS = JSON_REMOVE(ROUTER_OPTIONS, CONCAT('$.', OPTION_NAME))
+        WHERE CLUSTERSET_ID = ID;
+    ELSE
+        SET JSON_VAL = CAST(OPTION_VALUE AS JSON);
+        UPDATE MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_20g2w8`
+        SET ROUTER_OPTIONS = JSON_SET(IFNULL(ROUTER_OPTIONS, '{}'), CONCAT('$.', OPTION_NAME), JSON_VAL)
+        WHERE CLUSTERSET_ID = ID;
+    END IF;
+    
+    RETURN ROW_COUNT();
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_8qp94k_PRICE, 0), COALESCE(mysql_tbl_8qp94k_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM `mysql_tbl_8qp94k`
+    WHERE mysql_tbl_8qp94k_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = MYSQL_FUNC_V2_SET_GLOBAL_ROUTER_OPTION_skavvs(100, -74, -92);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(-79)) - (0) + V_INVENTORY_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 15 UNION SELECT 30 UNION SELECT 45 UNION SELECT 60 UNION SELECT 75 UNION SELECT 90 UNION SELECT 105 UNION SELECT 120 UNION SELECT 135 UNION SELECT 150 UNION SELECT 165 UNION SELECT 180 UNION SELECT 195 UNION SELECT 210 UNION SELECT 225;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(-7)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0();

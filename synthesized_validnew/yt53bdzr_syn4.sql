@@ -1,0 +1,136 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_foktew` (
+    `mysql_tbl_foktew_customer_id` INT,
+    `mysql_tbl_foktew_status` VARCHAR(50),
+    `mysql_tbl_foktew_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_foktew` (`mysql_tbl_foktew_customer_id`, `mysql_tbl_foktew_status`, `mysql_tbl_foktew_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jxlqnx` (
+    `mysql_tbl_jxlqnx_cset_col` INT
+);
+
+INSERT INTO `mysql_tbl_jxlqnx` (`mysql_tbl_jxlqnx_cset_col`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ur0n8k` (
+    `mysql_tbl_ur0n8k_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ur0n8k` (`mysql_tbl_ur0n8k_status`) VALUES ('test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATE_COUNT INT DEFAULT 0;
+    
+    SELECT DATE_FORMAT(NOW(), '%Y-%M-%D');
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATEDIFF(NOW(), CREATED_AT) INTO @mysql_synth_dummy FROM `mysql_tbl_36mwhg`;
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATE_ADD(NOW(), INTERVAL 1 DAY);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATE_SUB(NOW(), INTERVAL 1 WEEK);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT YEAR(NOW());
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    RETURN DATE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_SET_pl5j0s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SET_pl5j0s() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_jxlqnx_CSET_COL INTO RESULT FROM `mysql_tbl_jxlqnx` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CONNECTION_ID();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT CURRENT_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SESSION_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SYSTEM_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CODE_z8xg27----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CODE_z8xg27(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT mysql_tbl_ur0n8k_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_ur0n8k`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'INACTIVE' THEN 0
+        WHEN 'SUSPENDED' THEN -1
+        ELSE 0 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE_3yd94i(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_SUBSCRIPTION_MONTHS INT DEFAULT 0;
+
+    SELECT mysql_tbl_foktew_STATUS, COALESCE(mysql_tbl_foktew_MONTHLY_COST, ((MYSQL_FUNC_PROC_SET_pl5j0s()) - (0) + 0)), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_STATUS, V_MONTHLY_COST, V_SUBSCRIPTION_MONTHS
+    FROM `mysql_tbl_foktew`
+    WHERE mysql_tbl_foktew_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6()) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CODE_z8xg27(64)) - (0) + ((V_MONTHLY_COST * V_SUBSCRIPTION_MONTHS) / 10))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RETENTION_SCORE_3yd94i(1);

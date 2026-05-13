@@ -1,0 +1,348 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f1w39j` (
+    `mysql_tbl_f1w39j_order_id` INT,
+    `mysql_tbl_f1w39j_customer_id` INT,
+    `mysql_tbl_f1w39j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_f1w39j` (`mysql_tbl_f1w39j_order_id`, `mysql_tbl_f1w39j_customer_id`, `mysql_tbl_f1w39j_total_amount`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_m9a329` (
+    `mysql_tbl_m9a329_emp_id` INT,
+    `mysql_tbl_m9a329_department_id` INT,
+    `mysql_tbl_m9a329_salary` INT
+);
+
+INSERT INTO `mysql_tbl_m9a329` (`mysql_tbl_m9a329_emp_id`, `mysql_tbl_m9a329_department_id`, `mysql_tbl_m9a329_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_q28xye` (mysql_tbl_q28xye_item_id INT, mysql_tbl_q28xye_qty INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_aobzvx` (
+    `mysql_tbl_aobzvx_campaign_id` INT,
+    `mysql_tbl_aobzvx_budget` INT
+);
+
+INSERT INTO `mysql_tbl_aobzvx` (`mysql_tbl_aobzvx_campaign_id`, `mysql_tbl_aobzvx_budget`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u7ko1n` (
+    `mysql_tbl_u7ko1n_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_u7ko1n` (`mysql_tbl_u7ko1n_price`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j9jz45` (
+    `mysql_tbl_j9jz45_campaign_id` INT,
+    `mysql_tbl_j9jz45_channel` INT,
+    `mysql_tbl_j9jz45_budget` INT,
+    `mysql_tbl_j9jz45_start_date` DATE,
+    `mysql_tbl_j9jz45_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0bf0vw` (
+    `mysql_tbl_0bf0vw_conversion_id` INT,
+    `mysql_tbl_0bf0vw_campaign_id` INT,
+    `mysql_tbl_0bf0vw_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_j9jz45` (`mysql_tbl_j9jz45_campaign_id`, `mysql_tbl_j9jz45_channel`, `mysql_tbl_j9jz45_budget`, `mysql_tbl_j9jz45_start_date`, `mysql_tbl_j9jz45_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_0bf0vw` (`mysql_tbl_0bf0vw_conversion_id`, `mysql_tbl_0bf0vw_campaign_id`, `mysql_tbl_0bf0vw_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_e8wdl3` WHERE ID IN (SELECT USER_ID FROM `mysql_tbl_6grn3h` WHERE AMOUNT > 100);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_e8wdl3` WHERE EXISTS (SELECT 1 FROM `mysql_tbl_6grn3h` WHERE mysql_tbl_6grn3h.USER_ID = mysql_tbl_e8wdl3.ID);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT (SELECT COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_6grn3h`) AS ORDER_COUNT, (SELECT COUNT(*) FROM `mysql_tbl_e8wdl3`) AS USER_COUNT;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_REPLENISH_fcqqts----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_REPLENISH_fcqqts() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= 100 DO
+        UPDATE `mysql_tbl_q28xye` SET mysql_tbl_q28xye_QTY = mysql_tbl_q28xye_QTY + 10 WHERE mysql_tbl_q28xye_ITEM_ID = V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW SLAVE STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW SLAVE HOSTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW MASTER STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW BINARY LOGS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl()) - (0) + ((MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_REPLENISH_fcqqts()) - (0) + SHOW_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    IF N < 2 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER MUST BE AT LEAST 2';
+    END IF;
+    WHILE V_DIVISOR < N DO
+        IF N MOD V_DIVISOR = 0 THEN
+            SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER IS NOT PRIME';
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE;
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_j9jz45_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_j9jz45`
+    WHERE mysql_tbl_j9jz45_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_0bf0vw_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM `mysql_tbl_0bf0vw`
+    WHERE mysql_tbl_0bf0vw_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN 'LEAP_YEAR';
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN 'LEAP_YEAR';
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_ckhouv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_ckhouv(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_aobzvx_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_aobzvx`
+    WHERE mysql_tbl_aobzvx_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_datj06----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_SIMPLE_ka9six----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SIMPLE_ka9six(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_u7ko1n_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_u7ko1n`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(N INT, DIVISOR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = -V_REVERSED;
+    END IF;
+
+    IF DIVISOR > 0 AND V_REVERSED % DIVISOR = 0 THEN
+        RETURN V_REVERSED;
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_f1w39j_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_f1w39j`
+    WHERE mysql_tbl_f1w39j_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL > 1000 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_ckhouv(-((MYSQL_FUNC_CALCULATE_PRICE_SIMPLE_ka9six(51)) - (0) + 5))) - (0) + 5);
+    ELSEIF V_TOTAL > 500 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL > 200 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(55)) - (0) + ((MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(-80, 7)) - (0) + 3));
+    ELSEIF V_TOTAL > 100 THEN
+        RETURN ((MYSQL_FUNC_IS_PALINDROME_datj06(82)) - (0) + 2);
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(75)) - (0) + 1);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_m9a329`
+    WHERE mysql_tbl_m9a329_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POWER_y2j5yj(BASE INT, EXPONENT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF EXPONENT < 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z()) - (0) + 0);
+    END IF;
+
+    POWER_LOOP: WHILE V_COUNTER < EXPONENT DO
+        SET V_RESULT = MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7(28);
+        SET V_COUNTER = MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-42, -85);
+    END WHILE POWER_LOOP;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(-25)) - (((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-63)) - (0) + 0)) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_POWER_y2j5yj(1, 1);

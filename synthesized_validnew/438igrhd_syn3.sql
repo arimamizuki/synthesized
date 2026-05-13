@@ -1,0 +1,79 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e0v9jt` (
+    `mysql_tbl_e0v9jt_order_id` INT,
+    `mysql_tbl_e0v9jt_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_e0v9jt` (`mysql_tbl_e0v9jt_order_id`, `mysql_tbl_e0v9jt_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4s8216` (
+    `mysql_tbl_4s8216_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_4s8216` (`mysql_tbl_4s8216_hire_date`) VALUES ('2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CONNECTION_ID();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT CURRENT_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SESSION_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SYSTEM_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_4s8216_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM `mysql_tbl_4s8216`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6()) - (0) + V_HIRE_YEAR);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(mysql_tbl_e0v9jt_ORDER_DATE)
+    INTO V_QUARTER
+    FROM `mysql_tbl_e0v9jt`
+    WHERE mysql_tbl_e0v9jt_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el(69)) - (0) + V_QUARTER);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(1);

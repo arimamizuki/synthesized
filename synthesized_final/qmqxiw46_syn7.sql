@@ -1,0 +1,327 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zkj8ai` (
+    `mysql_tbl_zkj8ai_campaign_id` INT,
+    `mysql_tbl_zkj8ai_channel` INT,
+    `mysql_tbl_zkj8ai_budget` INT,
+    `mysql_tbl_zkj8ai_start_date` DATE,
+    `mysql_tbl_zkj8ai_end_date` DATE,
+    `mysql_tbl_zkj8ai_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_snyoo0` (
+    `mysql_tbl_snyoo0_conversion_id` INT,
+    `mysql_tbl_snyoo0_campaign_id` INT,
+    `mysql_tbl_snyoo0_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_zkj8ai` (`mysql_tbl_zkj8ai_campaign_id`, `mysql_tbl_zkj8ai_channel`, `mysql_tbl_zkj8ai_budget`, `mysql_tbl_zkj8ai_start_date`, `mysql_tbl_zkj8ai_end_date`, `mysql_tbl_zkj8ai_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_snyoo0` (`mysql_tbl_snyoo0_conversion_id`, `mysql_tbl_snyoo0_campaign_id`, `mysql_tbl_snyoo0_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lg7d7q` (
+    `mysql_tbl_lg7d7q_customer_id` INT,
+    `mysql_tbl_lg7d7q_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_lg7d7q_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_lg7d7q` (`mysql_tbl_lg7d7q_customer_id`, `mysql_tbl_lg7d7q_monthly_cost`, `mysql_tbl_lg7d7q_status`) VALUES (1, 1.0, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_z95r4y` (
+    `mysql_tbl_z95r4y_customer_id` INT,
+    `mysql_tbl_z95r4y_total_amount` DECIMAL(10,2),
+    `mysql_tbl_z95r4y_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_z95r4y` (`mysql_tbl_z95r4y_customer_id`, `mysql_tbl_z95r4y_total_amount`, `mysql_tbl_z95r4y_status`) VALUES (1, 1.0, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_on667t` (
+    `mysql_tbl_on667t_customer_id` INT,
+    `mysql_tbl_on667t_country` INT
+);
+
+INSERT INTO `mysql_tbl_on667t` (`mysql_tbl_on667t_customer_id`, `mysql_tbl_on667t_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gejx0n` (
+    `mysql_tbl_gejx0n_campaign_id` INT,
+    `mysql_tbl_gejx0n_start_date` DATE,
+    `mysql_tbl_gejx0n_end_date` DATE
+);
+
+INSERT INTO `mysql_tbl_gejx0n` (`mysql_tbl_gejx0n_campaign_id`, `mysql_tbl_gejx0n_start_date`, `mysql_tbl_gejx0n_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cefq4n` (
+    `mysql_tbl_cefq4n_category_id` INT,
+    `mysql_tbl_cefq4n_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_cefq4n` (`mysql_tbl_cefq4n_category_id`, `mysql_tbl_cefq4n_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT mysql_tbl_gejx0n_START_DATE, mysql_tbl_gejx0n_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM `mysql_tbl_gejx0n`
+    WHERE mysql_tbl_gejx0n_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, V_END_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(P_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+    DECLARE V_DIGIT INT;
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    SET V_ORIGINAL = ABS(P_NUM);
+    SET V_TEMP = V_ORIGINAL;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE COUNT_LOOP;
+
+    SET V_TEMP = V_ORIGINAL;
+
+    POWER_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + CAST(POW(V_DIGIT, V_DIGIT_COUNT) AS UNSIGNED);
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE POWER_LOOP;
+
+    IF V_SUM = V_ORIGINAL THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_MAX_PRICE_vcflff----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_MAX_PRICE_vcflff(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MAX(mysql_tbl_cefq4n_PRICE), 0)
+    INTO V_MAX_PRICE
+    FROM `mysql_tbl_cefq4n`
+    WHERE mysql_tbl_cefq4n_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_MAX_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP DATABASE OLD_DATABASE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP DATABASE IF EXISTS TEMP_DB;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SCHEMA IF EXISTS TEST_SCHEMA;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_MAX_PRICE_vcflff(94)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_z95r4y_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_z95r4y`
+    WHERE mysql_tbl_z95r4y_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_z95r4y_STATUS = 'COMPLETED';
+
+    RETURN ((MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7()) - (0) + (FLOOR(V_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = V_SUM + CALCULATE_TREE_DEPTH_SUM(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW ENGINES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW ENGINE INNODB STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW PLUGINS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW PROFILES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(DISTINCT mysql_tbl_on667t_CUSTOMER_ID)
+    INTO V_SUBSCRIBED, V_TOTAL
+    FROM `mysql_tbl_on667t` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_on667t_CUSTOMER_ID = S.CUSTOMER_ID
+    WHERE mysql_tbl_on667t_COUNTRY = COUNTRY_PARAM;
+
+    IF V_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_SUBSCRIBED * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORIGINAL INT DEFAULT 0;
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_ORIGINAL = MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(30);
+    SET V_TEMP = MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(-61, -30);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(61);
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(-96);
+    END IF;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(15)) - (0) + 1);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568()) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(mysql_tbl_lg7d7q_MONTHLY_COST, 0), mysql_tbl_lg7d7q_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM `mysql_tbl_lg7d7q`
+    WHERE mysql_tbl_lg7d7q_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(-64)) - (0) + 0);
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(mysql_tbl_snyoo0_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM `mysql_tbl_snyoo0`
+    WHERE mysql_tbl_snyoo0_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_zkj8ai_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM `mysql_tbl_zkj8ai`
+    WHERE mysql_tbl_zkj8ai_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(31);
+    END IF;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(1);

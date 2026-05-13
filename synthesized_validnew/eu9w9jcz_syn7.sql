@@ -1,0 +1,173 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ba0n8d` (
+    `mysql_tbl_ba0n8d_emp_id` INT,
+    `mysql_tbl_ba0n8d_salary` INT,
+    `mysql_tbl_ba0n8d_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_ba0n8d` (`mysql_tbl_ba0n8d_emp_id`, `mysql_tbl_ba0n8d_salary`, `mysql_tbl_ba0n8d_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_50k9mb` (mysql_tbl_50k9mb_id INT, author_mysql_tbl_50k9mb_id INT, mysql_tbl_50k9mb_status VARCHAR(20), mysql_tbl_50k9mb_published_at DATETIME);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c86nnq` (mysql_tbl_c86nnq_id INT, mysql_tbl_c86nnq_banned INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5eom2v` (
+    `mysql_tbl_5eom2v_product_id` INT,
+    `mysql_tbl_5eom2v_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_5eom2v` (`mysql_tbl_5eom2v_product_id`, `mysql_tbl_5eom2v_supplier_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fy0izi` (
+    `mysql_tbl_fy0izi_product_id` INT,
+    `mysql_tbl_fy0izi_category_id` INT,
+    `mysql_tbl_fy0izi_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_fy0izi` (`mysql_tbl_fy0izi_product_id`, `mysql_tbl_fy0izi_category_id`, `mysql_tbl_fy0izi_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_36y8nq` (mysql_tbl_36y8nq_id INT, mysql_tbl_36y8nq_amount_due DECIMAL(10,2), amount_pamysql_tbl_36y8nq_id DECIMAL(10,2));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(POST_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_AUTHOR_BANNED INT;
+    SELECT mysql_tbl_50k9mb_STATUS, mysql_tbl_c86nnq_BANNED INTO V_STATUS, V_AUTHOR_BANNED
+    FROM `mysql_tbl_50k9mb` P JOIN `mysql_tbl_c86nnq` U ON mysql_tbl_50k9mb_AUTHOR_ID = mysql_tbl_c86nnq_ID WHERE mysql_tbl_50k9mb_ID = POST_ID;
+    IF V_STATUS = 'PUBLISHED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'POST IS ALREADY PUBLISHED';
+    END IF;
+    IF V_AUTHOR_BANNED = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT PUBLISH POST FROM `mysql_tbl_c86nnq`_BANNED AUTHOR';
+    END IF;
+    UPDATE `mysql_tbl_50k9mb` SET mysql_tbl_50k9mb_STATUS = 'PUBLISHED', mysql_tbl_50k9mb_PUBLISHED_AT = NOW() WHERE ID = POST_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN P_A - P_B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(-16, 50)) - (0) + SUPPLIER_ID_PARAM % 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_ba0n8d_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_ba0n8d_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_ba0n8d`
+    WHERE mysql_tbl_ba0n8d_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(92)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q(32)) - (0) + (FLOOR(V_SALARY / V_TENURE_YEARS)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_fy0izi_PRICE), 0), COALESCE(MIN(mysql_tbl_fy0izi_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM `mysql_tbl_fy0izi`
+    WHERE mysql_tbl_fy0izi_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_MAX_PRICE - V_MIN_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_VERIFY_PAYMENT_613ye0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_VERIFY_PAYMENT_613ye0(INVOICE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DUE DECIMAL(10,2);
+    DECLARE V_PAID DECIMAL(10,2);
+    SELECT mysql_tbl_36y8nq_AMOUNT_DUE, mysql_tbl_36y8nq_AMOUNT_PAID INTO V_DUE, V_PAID FROM `mysql_tbl_36y8nq` WHERE mysql_tbl_36y8nq_ID = INVOICE_ID;
+    IF V_PAID < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'PAYMENT AMOUNT CANNOT BE NEGATIVE';
+    END IF;
+    IF V_PAID > V_DUE THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'PAYMENT EXCEEDS AMOUNT DUE';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_186_SELECT_COLLATION_rw5p3e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_186_SELECT_COLLATION_rw5p3e() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT NAME COLLATE UTF8MB4_BIN INTO @mysql_synth_dummy FROM `mysql_tbl_qsefww`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_qsefww` WHERE NAME COLLATE UTF8MB4_GENERAL_CI = 'TEST';
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(-84)) - (0) + ((MYSQL_FUNC_SIGNAL_PROC_VERIFY_PAYMENT_613ye0(-35)) - (0) + SEL_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(63);
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_FUNC_186_SELECT_COLLATION_rw5p3e()) - (0) + (-1));
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(1);

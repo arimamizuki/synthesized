@@ -1,0 +1,123 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6wc535` (
+    `mysql_tbl_6wc535_product_id` INT,
+    `mysql_tbl_6wc535_category_id` INT,
+    `mysql_tbl_6wc535_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pe2enk` (
+    `mysql_tbl_pe2enk_category_id` INT,
+    `mysql_tbl_pe2enk_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_6wc535` (`mysql_tbl_6wc535_product_id`, `mysql_tbl_6wc535_category_id`, `mysql_tbl_6wc535_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_pe2enk` (`mysql_tbl_pe2enk_category_id`, `mysql_tbl_pe2enk_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wk1m1h` (
+    `mysql_tbl_wk1m1h_customer_id` INT,
+    `mysql_tbl_wk1m1h_plan_type` VARCHAR(50),
+    `mysql_tbl_wk1m1h_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_wk1m1h` (`mysql_tbl_wk1m1h_customer_id`, `mysql_tbl_wk1m1h_plan_type`, `mysql_tbl_wk1m1h_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(mysql_tbl_6wc535_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_6wc535`
+    WHERE mysql_tbl_6wc535_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_6wc535`
+    WHERE mysql_tbl_6wc535_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_PROFITABILITY_INDEX = FLOOR(V_AVG_PRICE * V_PRODUCT_COUNT / 100);
+
+    RETURN V_PROFITABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC2_thtmlw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_thtmlw() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_115_CREATE_INDEX_0uyhku----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_115_CREATE_INDEX_0uyhku() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE IDX_COUNT INT DEFAULT 0;
+    
+    CREATE INDEX IDX_NAME ON USERS (NAME);
+    SET IDX_COUNT = IDX_COUNT + 1;
+    
+    CREATE UNIQUE INDEX IDX_EMAIL ON USERS (EMAIL);
+    SET IDX_COUNT = IDX_COUNT + 1;
+    
+    CREATE INDEX IDX_COMPOSITE ON ORDERS (USER_ID, CREATED_AT);
+    SET IDX_COUNT = IDX_COUNT + 1;
+    
+    RETURN IDX_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_wk1m1h_PLAN_TYPE, COALESCE(mysql_tbl_wk1m1h_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM `mysql_tbl_wk1m1h`
+    WHERE mysql_tbl_wk1m1h_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST * 10;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST * 5;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST * 2;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF P_B = 0 THEN
+        RETURN ((MYSQL_FUNC_PROC2_thtmlw()) - (0) + (((MYSQL_FUNC_FUNC_115_CREATE_INDEX_0uyhku()) - (0) + (-1))));
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow(83)) - (0) + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(9)) - (0) + P_A MOD P_B));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(1, 1);

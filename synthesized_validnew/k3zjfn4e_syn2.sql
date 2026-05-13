@@ -1,0 +1,348 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4oyhbo` (
+    `mysql_tbl_4oyhbo_cbit` BIT(1)
+);
+
+INSERT INTO `mysql_tbl_4oyhbo` (`mysql_tbl_4oyhbo_cbit`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_80p6em` (
+    `mysql_tbl_80p6em_emp_id` INT,
+    `mysql_tbl_80p6em_hire_date` DATE,
+    `mysql_tbl_80p6em_salary` INT
+);
+
+INSERT INTO `mysql_tbl_80p6em` (`mysql_tbl_80p6em_emp_id`, `mysql_tbl_80p6em_hire_date`, `mysql_tbl_80p6em_salary`) VALUES (1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2ddolc` (
+    `mysql_tbl_2ddolc_order_id` INT,
+    `mysql_tbl_2ddolc_warehouse_id` INT,
+    `mysql_tbl_2ddolc_order_date` DATE,
+    `mysql_tbl_2ddolc_total_items` DECIMAL(10,2),
+    `mysql_tbl_2ddolc_total_weight` DECIMAL(10,2),
+    `mysql_tbl_2ddolc_shipping_method` INT,
+    `mysql_tbl_2ddolc_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_2ddolc` (`mysql_tbl_2ddolc_order_id`, `mysql_tbl_2ddolc_warehouse_id`, `mysql_tbl_2ddolc_order_date`, `mysql_tbl_2ddolc_total_items`, `mysql_tbl_2ddolc_total_weight`, `mysql_tbl_2ddolc_shipping_method`, `mysql_tbl_2ddolc_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 1.0, 6, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vhvbtu` (
+    `mysql_tbl_vhvbtu_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_vhvbtu` (`mysql_tbl_vhvbtu_campaign_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0d89sd` (
+    mysql_tbl_0d89sd_name VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_0d89sd` (`mysql_tbl_0d89sd_name`) VALUES ('mysql_tbl_50fkse');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4cokig` (
+    `mysql_tbl_4cokig_order_id` INT,
+    `mysql_tbl_4cokig_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_4cokig` (`mysql_tbl_4cokig_order_id`, `mysql_tbl_4cokig_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h2vu0m` (
+    `mysql_tbl_h2vu0m_emp_id` INT,
+    `mysql_tbl_h2vu0m_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_h2vu0m` (`mysql_tbl_h2vu0m_emp_id`, `mysql_tbl_h2vu0m_department_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jrfxp4` (mysql_tbl_jrfxp4_id INT, mysql_tbl_jrfxp4_max_students INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gvxqjg` (mysql_tbl_gvxqjg_id INT, student_mysql_tbl_gvxqjg_id INT, course_mysql_tbl_gvxqjg_id INT);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_80p6em_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_80p6em_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM `mysql_tbl_80p6em`
+    WHERE mysql_tbl_80p6em_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (V_TENURE * 1000) + FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC1_dvat8j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_spylyk`
+    WHERE mysql_tbl_vhvbtu_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC1_dvat8j()) - (0) + V_CONVERSION_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(mysql_tbl_gvxqjg_STUDENT_ID INT, mysql_tbl_gvxqjg_COURSE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_STUDENTS INT;
+    DECLARE V_CURRENT_STUDENTS INT;
+    SELECT mysql_tbl_jrfxp4_MAX_STUDENTS INTO V_MAX_STUDENTS FROM `mysql_tbl_jrfxp4` WHERE mysql_tbl_jrfxp4_ID = mysql_tbl_gvxqjg_COURSE_ID;
+    SELECT COUNT(*) INTO V_CURRENT_STUDENTS FROM `mysql_tbl_gvxqjg` WHERE mysql_tbl_gvxqjg_COURSE_ID = mysql_tbl_gvxqjg_COURSE_ID;
+    IF V_CURRENT_STUDENTS >= V_MAX_STUDENTS THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'COURSE IS FULL, CANNOT ENROLL';
+    END IF;
+    INSERT INTO `mysql_tbl_gvxqjg` (`mysql_tbl_gvxqjg_STUDENT_ID`, `mysql_tbl_gvxqjg_COURSE_ID`) VALUES (mysql_tbl_gvxqjg_STUDENT_ID, mysql_tbl_gvxqjg_COURSE_ID);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(96, -38)) - (0) + (A / B));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF P_N < 0 THEN
+        RETURN -P_N;
+    END IF;
+    RETURN P_N;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_4cokig`
+    WHERE mysql_tbl_4cokig_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM `mysql_tbl_h2vu0m`
+    WHERE MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_TOTAL
+    FROM `mysql_tbl_h2vu0m`
+    WHERE mysql_tbl_h2vu0m_DEPARTMENT_ID = (SELECT mysql_tbl_h2vu0m_DEPARTMENT_ID FROM `mysql_tbl_h2vu0m` WHERE mysql_tbl_h2vu0m_EMP_ID = EMP_ID_PARAM);
+
+    IF V_DEPT_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_DIRECT_REPORTS * 100) / V_DEPT_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW COLUMNS FROM `mysql_tbl_o6sent`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL COLUMNS FROM `mysql_tbl_o6sent`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW INDEX FROM `mysql_tbl_o6sent`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLE STATUS FROM `mysql_tbl_50fkse`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1(-98)) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(START_STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TOWN_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TOWN_COUNT 
+    FROM `mysql_tbl_0d89sd` 
+    WHERE mysql_tbl_0d89sd_NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN ((MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f()) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(-38)) - (0) + TOWN_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(ORDER_ID_PARAM INT, SHIPPING_METHOD_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 10;
+    DECLARE V_WEIGHT_COST INT DEFAULT 0;
+    DECLARE V_METHOD_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_2ddolc_TOTAL_WEIGHT, 0) INTO V_TOTAL_WEIGHT
+    FROM `mysql_tbl_2ddolc`
+    WHERE mysql_tbl_2ddolc_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE SHIPPING_METHOD_PARAM
+        WHEN 'STANDARD' THEN SET V_METHOD_MULTIPLIER = MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(19, 100);
+        WHEN 'EXPRESS' THEN SET V_METHOD_MULTIPLIER = 2;
+        WHEN 'OVERNIGHT' THEN SET V_METHOD_MULTIPLIER = 3;
+        WHEN 'INTERNATIONAL' THEN SET V_METHOD_MULTIPLIER = MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(-35);
+        ELSE SET V_METHOD_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_WEIGHT_COST = MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g(-82);
+    SET V_TOTAL_COST = MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(-28);
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT_ea2fyr() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT mysql_tbl_4oyhbo_CBIT FROM `mysql_tbl_4oyhbo`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO RESULT;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(86)) - (0) + ((MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(23, 8)) - (0) + RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(SET_OF_LETTERS INT, WORD INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_OF_LETTERS_STR VARCHAR(50);
+    DECLARE WORD_STR VARCHAR(50);
+    
+    SET SET_OF_LETTERS_STR = CAST(SET_OF_LETTERS AS CHAR);
+    SET WORD_STR = CAST(WORD AS CHAR);
+    
+    RETURN (SELECT WORD_STR REGEXP SET_OF_LETTERS_STR);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER DATABASE mysql_tbl_50fkse CHARACTER SET UTF8MB4;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER SCHEMA mysql_tbl_50fkse COLLATE UTF8MB4_UNICODE_CI;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER DATABASE mysql_tbl_50fkse READ ONLY = 0;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-22, -100)) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UPD_COUNT INT DEFAULT 0;
+    
+    UPDATE `mysql_tbl_o6sent` SET PRIORITY = 'HIGH' WHERE STATUS = 'ACTIVE' ORDER BY CREATED_AT DESC LIMIT 10;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    UPDATE `mysql_tbl_k2lrfi` SET PROCESSED = 1 WHERE PROCESSED = 0 LIMIT 100;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_PROC_BIT_ea2fyr()) - (0) + ((MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22()) - (0) + UPD_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08();

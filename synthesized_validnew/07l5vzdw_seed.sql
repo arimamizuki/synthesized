@@ -1,0 +1,35 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_cp1mva` (
+    `table_cp1mva_campaign_id` INT,
+    `table_cp1mva_budget` INT,
+    `table_cp1mva_status` VARCHAR(50)
+);
+
+INSERT INTO `table_cp1mva` (`table_cp1mva_campaign_id`, `table_cp1mva_budget`, `table_cp1mva_status`) VALUES (1, 1, 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_UTILIZATION_h1lhqu(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CP1MVA_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_CP1MVA
+    WHERE TABLE_CP1MVA_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM CONVERSIONS
+    WHERE TABLE_CP1MVA_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_SPENT * 100) / V_BUDGET);
+END //
+
+DELIMITER ;

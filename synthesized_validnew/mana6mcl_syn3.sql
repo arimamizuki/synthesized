@@ -1,0 +1,112 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6z0nli` (
+    `mysql_tbl_6z0nli_product_id` INT,
+    `mysql_tbl_6z0nli_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_6z0nli` (`mysql_tbl_6z0nli_product_id`, `mysql_tbl_6z0nli_price`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g89cku` (
+    `mysql_tbl_g89cku_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_g89cku` (`mysql_tbl_g89cku_supplier_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    DESCRIBE mysql_tbl_klfiax;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    EXPLAIN SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_klfiax` WHERE ID = 1;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT FOUND_ROWS();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT LAST_INSERT_ID();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RENAME TABLE OLD_USERS TO mysql_tbl_klfiax_BACKUP;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_PRETTY('{"A":1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_SIZE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_FREE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PATCH('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PRESERVE('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PRIORITY_SCORE_v50z0v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRIORITY_SCORE_v50z0v(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_g89cku`
+    WHERE mysql_tbl_g89cku_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_7ltvfd`
+    WHERE mysql_tbl_g89cku_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf()) - (0) + ((V_RATING * 10) + (V_PRODUCT_COUNT * 3)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_6z0nli_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_6z0nli`
+    WHERE mysql_tbl_6z0nli_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y()) - (0) + (((MYSQL_FUNC_CALCULATE_SUPPLIER_PRIORITY_SCORE_v50z0v(77)) - (0) + (FLOOR(V_PRICE / 100)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(1);

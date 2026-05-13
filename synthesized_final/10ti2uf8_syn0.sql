@@ -1,0 +1,29 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE KEY_COUNT INT DEFAULT 0;
+    
+    SELECT CREATE_ASYMMETRIC_PRIV_KEY('RSA', 2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_ASYMMETRIC_PUB_KEY('RSA', 'PRIVATE_KEY');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DH_PARAMETERS(2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DIGEST('SHA256', 'HELLO');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    RETURN KEY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us();

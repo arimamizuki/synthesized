@@ -1,0 +1,379 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2usrh3` (
+    `mysql_tbl_2usrh3_campaign_id` INT,
+    `mysql_tbl_2usrh3_start_date` DATE,
+    `mysql_tbl_2usrh3_end_date` DATE,
+    `mysql_tbl_2usrh3_budget` INT,
+    `mysql_tbl_2usrh3_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jofo2d` (
+    `mysql_tbl_jofo2d_conversion_id` INT,
+    `mysql_tbl_jofo2d_campaign_id` INT,
+    `mysql_tbl_jofo2d_conversion_date` DATE
+);
+
+INSERT INTO `mysql_tbl_2usrh3` (`mysql_tbl_2usrh3_campaign_id`, `mysql_tbl_2usrh3_start_date`, `mysql_tbl_2usrh3_end_date`, `mysql_tbl_2usrh3_budget`, `mysql_tbl_2usrh3_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_jofo2d` (`mysql_tbl_jofo2d_conversion_id`, `mysql_tbl_jofo2d_campaign_id`, `mysql_tbl_jofo2d_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_m0nrj1` (
+    `mysql_tbl_m0nrj1_campaign_id` INT,
+    `mysql_tbl_m0nrj1_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_m0nrj1` (`mysql_tbl_m0nrj1_campaign_id`, `mysql_tbl_m0nrj1_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qg7j4e` (
+    `mysql_tbl_qg7j4e_category_id` INT,
+    `mysql_tbl_qg7j4e_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_qg7j4e` (`mysql_tbl_qg7j4e_category_id`, `mysql_tbl_qg7j4e_price`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0p243g` (
+    `mysql_tbl_0p243g_supplier_id` INT,
+    `mysql_tbl_0p243g_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_0p243g_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_0p243g` (`mysql_tbl_0p243g_supplier_id`, `mysql_tbl_0p243g_supplier_rating`, `mysql_tbl_0p243g_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xjbpbj` (
+    `mysql_tbl_xjbpbj_campaign_id` INT,
+    `mysql_tbl_xjbpbj_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_xjbpbj` (`mysql_tbl_xjbpbj_campaign_id`, `mysql_tbl_xjbpbj_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6vb8xt` (
+    `mysql_tbl_6vb8xt_product_id` INT,
+    `mysql_tbl_6vb8xt_category_id` INT,
+    `mysql_tbl_6vb8xt_brand_id` INT,
+    `mysql_tbl_6vb8xt_price` DECIMAL(10,2),
+    `mysql_tbl_6vb8xt_cost` DECIMAL(10,2),
+    `mysql_tbl_6vb8xt_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ywx3e2` (
+    `mysql_tbl_ywx3e2_supplier_id` INT,
+    `mysql_tbl_ywx3e2_brand_id` INT,
+    `mysql_tbl_ywx3e2_lead_time_days` DATE,
+    `mysql_tbl_ywx3e2_reliability_score` INT
+);
+
+INSERT INTO `mysql_tbl_6vb8xt` (`mysql_tbl_6vb8xt_product_id`, `mysql_tbl_6vb8xt_category_id`, `mysql_tbl_6vb8xt_brand_id`, `mysql_tbl_6vb8xt_price`, `mysql_tbl_6vb8xt_cost`, `mysql_tbl_6vb8xt_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `mysql_tbl_ywx3e2` (`mysql_tbl_ywx3e2_supplier_id`, `mysql_tbl_ywx3e2_brand_id`, `mysql_tbl_ywx3e2_lead_time_days`, `mysql_tbl_ywx3e2_reliability_score`) VALUES (1, 2, '2024-01-01', 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_im1c20` (
+    `mysql_tbl_im1c20_customer_id` INT,
+    `mysql_tbl_im1c20_order_date` DATE,
+    `mysql_tbl_im1c20_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_im1c20` (`mysql_tbl_im1c20_customer_id`, `mysql_tbl_im1c20_order_date`, `mysql_tbl_im1c20_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP EVENT EVT_CLEANUP;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP EVENT IF EXISTS EVT_BACKUP;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT mysql_tbl_m0nrj1_START_DATE
+    INTO V_START_DATE
+    FROM `mysql_tbl_m0nrj1`
+    WHERE mysql_tbl_m0nrj1_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp()) - (((MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(-65)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * RADIUS * RADIUS * HEIGHT;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOG_COUNT INT DEFAULT 0;
+    
+    CREATE LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_1.LOG' INITIAL_SIZE = 16M UNDO_BUFFER_SIZE = 2M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    ALTER LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_2.LOG' INITIAL_SIZE = 16M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    DROP LOGFILE GROUP LG1 ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    RETURN LOG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENDING DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_im1c20_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_SPENDING, V_ORDER_COUNT
+    FROM `mysql_tbl_im1c20`
+    WHERE mysql_tbl_im1c20_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_TOTAL_SPENDING / V_ORDER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk()) - (0) + (((MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(-71)) - (0) + (P_A * P_B))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 90;
+    DECLARE V_DAILY_DEMAND INT DEFAULT 10;
+    DECLARE V_STOCKOUT_RISK_DAYS INT DEFAULT 0;
+    DECLARE V_SUPPLY_RISK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_6vb8xt_STOCK_QUANTITY, 100)
+    INTO V_STOCK_QUANTITY
+    FROM `mysql_tbl_6vb8xt`
+    WHERE mysql_tbl_6vb8xt_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_ywx3e2_LEAD_TIME_DAYS, 7), COALESCE(mysql_tbl_ywx3e2_RELIABILITY_SCORE, 90)
+    INTO V_LEAD_TIME, V_RELIABILITY_SCORE
+    FROM `mysql_tbl_ywx3e2` S
+    JOIN `mysql_tbl_6vb8xt` P ON mysql_tbl_ywx3e2_BRAND_ID = mysql_tbl_6vb8xt_BRAND_ID
+    WHERE mysql_tbl_6vb8xt_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DAILY_DEMAND = 10;
+    SET V_STOCKOUT_RISK_DAYS = V_STOCK_QUANTITY / V_DAILY_DEMAND;
+
+    IF V_STOCKOUT_RISK_DAYS < V_LEAD_TIME THEN
+        SET V_SUPPLY_RISK = 50 + ((V_LEAD_TIME - V_STOCKOUT_RISK_DAYS) * 5);
+    ELSE
+        SET V_SUPPLY_RISK = 100 - V_RELIABILITY_SCORE;
+    END IF;
+
+    RETURN V_SUPPLY_RISK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_075_TRANSACTION_av71ta----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_075_TRANSACTION_av71ta() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRANS_COUNT INT DEFAULT 0;
+    
+    START TRANSACTION;
+    SET TRANS_COUNT = TRANS_COUNT + 1;
+    
+    COMMIT;
+    SET TRANS_COUNT = TRANS_COUNT + 1;
+    
+    START TRANSACTION;
+    SET TRANS_COUNT = TRANS_COUNT + 1;
+    
+    ROLLBACK;
+    SET TRANS_COUNT = TRANS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx(52)) - (0) + ((MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(31, -21)) - (0) + TRANS_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 1;
+    DECLARE COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    SIMPLE_LOOP: WHILE COUNTER <= N DO
+        SET RESULT = RESULT * COUNTER;
+        SET COUNTER = COUNTER + 1;
+    END WHILE SIMPLE_LOOP;
+
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_xjbpbj_START_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_xjbpbj`
+    WHERE mysql_tbl_xjbpbj_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_qg7j4e_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_qg7j4e`
+    WHERE mysql_tbl_qg7j4e_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(-7)) - (0) + (((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(39)) - (0) + (FLOOR(V_AVG_PRICE)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_0p243g_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_0p243g_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_0p243g`
+    WHERE mysql_tbl_0p243g_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) + (30 - V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT DATEDIFF(mysql_tbl_2usrh3_END_DATE, mysql_tbl_2usrh3_START_DATE)
+    INTO V_DURATION_DAYS
+    FROM `mysql_tbl_2usrh3`
+    WHERE mysql_tbl_2usrh3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_jofo2d`
+    WHERE mysql_tbl_jofo2d_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(5)) - (((MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(23, 64)) - (((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(99)) - (((MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_INDEX_q25j0z(-90)) - (0) + 0)) + 0)) + 0)) + 0);
+    END IF;
+
+    SET V_EFFICIENCY = MYSQL_FUNC_FUNC_075_TRANSACTION_av71ta();
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(1);

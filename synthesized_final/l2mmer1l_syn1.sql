@@ -1,0 +1,54 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CATALOG_NAME('DEF');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLLATION_NAME('UTF8MB4_GENERAL_CI');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_DEFAULT('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_NAME('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_TYPE('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_168_SELECT_WINDOW_r6akre() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT NAME, AMOUNT, ROW_NUMBER() OVER (ORDER BY AMOUNT DESC) AS ROW_NUM INTO @mysql_synth_dummy FROM `mysql_tbl_plx5lk`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT NAME, AMOUNT, RANK() OVER (ORDER BY AMOUNT DESC) AS RANK_NUM INTO @mysql_synth_dummy FROM `mysql_tbl_plx5lk`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT NAME, AMOUNT, SUM(AMOUNT) OVER (PARTITION BY USER_ID) AS USER_TOTAL INTO @mysql_synth_dummy FROM `mysql_tbl_plx5lk`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2()) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_168_SELECT_WINDOW_r6akre();

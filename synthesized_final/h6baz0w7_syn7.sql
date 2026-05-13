@@ -1,0 +1,57 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE WAIT_COUNT INT DEFAULT 0;
+    
+    SELECT WAIT_FOR_EXECUTED_GTID_SET('A:1-5', 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS('A:1-5', 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT MASTER_POS_WAIT('MASTER-BIN.000001', 100, 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT SOURCE_POS_WAIT('SOURCE-BIN.000001', 100, 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    RETURN WAIT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_035_STR_POSITION_46xanc() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE POS_COUNT INT DEFAULT 0;
+    
+    SELECT POSITION('A' IN 'BANANA');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT LOCATE('A', 'BANANA');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT INSTR('BANANA', 'A');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT FIND_IN_SET('B', 'A,B,C,D');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT FIELD('B', 'A', 'B', 'C');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw()) - (0) + POS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_035_STR_POSITION_46xanc();

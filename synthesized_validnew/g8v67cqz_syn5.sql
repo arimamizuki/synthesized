@@ -1,0 +1,188 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_z3ryie` (
+    `mysql_tbl_z3ryie_customer_id` INT,
+    `mysql_tbl_z3ryie_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_z3ryie` (`mysql_tbl_z3ryie_customer_id`, `mysql_tbl_z3ryie_total_amount`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_iahrxb` (
+    `mysql_tbl_iahrxb_customer_id` INT,
+    `mysql_tbl_iahrxb_plan_type` VARCHAR(50),
+    `mysql_tbl_iahrxb_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_iahrxb_data_limit_gb` TEXT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ulje20` (
+    `mysql_tbl_ulje20_log_id` INT,
+    `mysql_tbl_ulje20_customer_id` INT,
+    `mysql_tbl_ulje20_usage_date` DATE,
+    `mysql_tbl_ulje20_data_used_gb` TEXT
+);
+
+INSERT INTO `mysql_tbl_iahrxb` (`mysql_tbl_iahrxb_customer_id`, `mysql_tbl_iahrxb_plan_type`, `mysql_tbl_iahrxb_monthly_cost`, `mysql_tbl_iahrxb_data_limit_gb`) VALUES (1, 'test', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_ulje20` (`mysql_tbl_ulje20_log_id`, `mysql_tbl_ulje20_customer_id`, `mysql_tbl_ulje20_usage_date`, `mysql_tbl_ulje20_data_used_gb`) VALUES (1, 2, '2024-01-01', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_43j3mp` (
+    `mysql_tbl_43j3mp_product_id` INT,
+    `mysql_tbl_43j3mp_category_id` INT,
+    `mysql_tbl_43j3mp_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_i95are` (
+    `mysql_tbl_i95are_category_id` INT,
+    `mysql_tbl_i95are_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_43j3mp` (`mysql_tbl_43j3mp_product_id`, `mysql_tbl_43j3mp_category_id`, `mysql_tbl_43j3mp_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_i95are` (`mysql_tbl_i95are_category_id`, `mysql_tbl_i95are_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_622seo` (
+    `mysql_tbl_622seo_customer_id` INT,
+    `mysql_tbl_622seo_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_622seo` (`mysql_tbl_622seo_customer_id`, `mysql_tbl_622seo_total_amount`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX_xpfc1m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX_xpfc1m(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_622seo_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_622seo`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30()) - (0) + (FLOOR(V_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW SLAVE STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW SLAVE HOSTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW MASTER STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW BINARY LOGS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_43j3mp_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_43j3mp`
+    WHERE mysql_tbl_43j3mp_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DATA_USAGE_PERCENTAGE_3cz7ut----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DATA_USAGE_PERCENTAGE_3cz7ut(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DATA_LIMIT INT DEFAULT 10;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_USAGE_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_iahrxb_DATA_LIMIT_GB, 10)
+    INTO V_DATA_LIMIT
+    FROM `mysql_tbl_iahrxb`
+    WHERE mysql_tbl_iahrxb_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_ulje20_DATA_USED_GB), 0)
+    INTO V_DATA_USED
+    FROM `mysql_tbl_ulje20`
+    WHERE mysql_tbl_ulje20_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_ulje20_USAGE_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_DATA_LIMIT = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(-68)) - (0) + 0);
+    END IF;
+
+    SET V_USAGE_PERCENTAGE = MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX_xpfc1m(83);
+
+    RETURN ((MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z()) - (0) + V_USAGE_PERCENTAGE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_zbp90m(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_z3ryie_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_z3ryie`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DATA_USAGE_PERCENTAGE_3cz7ut(41)) - (0) + (FLOOR(V_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_TOTAL_zbp90m(1);

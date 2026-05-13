@@ -1,0 +1,442 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8ufel1` (
+    `mysql_tbl_8ufel1_customer_id` INT,
+    `mysql_tbl_8ufel1_status` VARCHAR(50),
+    `mysql_tbl_8ufel1_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_8ufel1` (`mysql_tbl_8ufel1_customer_id`, `mysql_tbl_8ufel1_status`, `mysql_tbl_8ufel1_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7pp7ry` (
+    `mysql_tbl_7pp7ry_job_id` INT,
+    `mysql_tbl_7pp7ry_customer_id` INT,
+    `mysql_tbl_7pp7ry_mover_id` INT,
+    `mysql_tbl_7pp7ry_origin_zip` INT,
+    `mysql_tbl_7pp7ry_dest_zip` INT,
+    `mysql_tbl_7pp7ry_distance_miles` INT,
+    `mysql_tbl_7pp7ry_truck_size` INT,
+    `mysql_tbl_7pp7ry_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_i2wvq5` (
+    `mysql_tbl_i2wvq5_zip_code` INT,
+    `mysql_tbl_i2wvq5_zone` INT,
+    `mysql_tbl_i2wvq5_base_rate_per_mile` INT
+);
+
+INSERT INTO `mysql_tbl_7pp7ry` (`mysql_tbl_7pp7ry_job_id`, `mysql_tbl_7pp7ry_customer_id`, `mysql_tbl_7pp7ry_mover_id`, `mysql_tbl_7pp7ry_origin_zip`, `mysql_tbl_7pp7ry_dest_zip`, `mysql_tbl_7pp7ry_distance_miles`, `mysql_tbl_7pp7ry_truck_size`, `mysql_tbl_7pp7ry_base_price`) VALUES (1, 2, 3, 4, 5, 6, 7, 1.0);
+
+INSERT INTO `mysql_tbl_i2wvq5` (`mysql_tbl_i2wvq5_zip_code`, `mysql_tbl_i2wvq5_zone`, `mysql_tbl_i2wvq5_base_rate_per_mile`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_848tnh` (
+    `mysql_tbl_848tnh_emp_id` INT,
+    `mysql_tbl_848tnh_salary` INT,
+    `mysql_tbl_848tnh_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_848tnh` (`mysql_tbl_848tnh_emp_id`, `mysql_tbl_848tnh_salary`, `mysql_tbl_848tnh_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fs5jc0` (
+    `mysql_tbl_fs5jc0_student_id` INT,
+    `mysql_tbl_fs5jc0_name` VARCHAR(50),
+    `mysql_tbl_fs5jc0_exam_score` INT,
+    `mysql_tbl_fs5jc0_assignment_score` INT,
+    `mysql_tbl_fs5jc0_participation_score` INT
+);
+
+INSERT INTO `mysql_tbl_fs5jc0` (`mysql_tbl_fs5jc0_student_id`, `mysql_tbl_fs5jc0_name`, `mysql_tbl_fs5jc0_exam_score`, `mysql_tbl_fs5jc0_assignment_score`, `mysql_tbl_fs5jc0_participation_score`) VALUES (1, 'test', 1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_880n9h` (
+    `mysql_tbl_880n9h_rental_id` INT,
+    `mysql_tbl_880n9h_customer_id` INT,
+    `mysql_tbl_880n9h_bicycle_id` INT,
+    `mysql_tbl_880n9h_rental_date` DATE,
+    `mysql_tbl_880n9h_rental_hours` INT,
+    `mysql_tbl_880n9h_hourly_rate` INT,
+    `mysql_tbl_880n9h_return_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n2245k` (
+    `mysql_tbl_n2245k_bicycle_id` INT,
+    `mysql_tbl_n2245k_bicycle_type` VARCHAR(50),
+    `mysql_tbl_n2245k_condition` INT,
+    `mysql_tbl_n2245k_value` INT
+);
+
+INSERT INTO `mysql_tbl_880n9h` (`mysql_tbl_880n9h_rental_id`, `mysql_tbl_880n9h_customer_id`, `mysql_tbl_880n9h_bicycle_id`, `mysql_tbl_880n9h_rental_date`, `mysql_tbl_880n9h_rental_hours`, `mysql_tbl_880n9h_hourly_rate`, `mysql_tbl_880n9h_return_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_n2245k` (`mysql_tbl_n2245k_bicycle_id`, `mysql_tbl_n2245k_bicycle_type`, `mysql_tbl_n2245k_condition`, `mysql_tbl_n2245k_value`) VALUES (1, 'test', 3, 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dyy355` (
+    `mysql_tbl_dyy355_emp_id` INT,
+    `mysql_tbl_dyy355_department_id` INT,
+    `mysql_tbl_dyy355_salary` INT,
+    `mysql_tbl_dyy355_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_dyy355` (`mysql_tbl_dyy355_emp_id`, `mysql_tbl_dyy355_department_id`, `mysql_tbl_dyy355_salary`, `mysql_tbl_dyy355_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(DISTANCE_MILES_PARAM INT, TRUCK_SIZE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_TRUCK_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 50;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    CASE TRUCK_SIZE_PARAM
+        WHEN 'SMALL' THEN SET V_TRUCK_MULTIPLIER = 1;
+        WHEN 'MEDIUM' THEN SET V_TRUCK_MULTIPLIER = 2;
+        WHEN 'LARGE' THEN SET V_TRUCK_MULTIPLIER = 3;
+        WHEN 'EXTRA_LARGE' THEN SET V_TRUCK_MULTIPLIER = 4;
+        ELSE SET V_TRUCK_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_ESTIMATE = (DISTANCE_MILES_PARAM * V_BASE_RATE * V_TRUCK_MULTIPLIER) + V_FUEL_SURCHARGE;
+
+    IF DISTANCE_MILES_PARAM > 500 THEN
+        SET V_TOTAL_ESTIMATE = V_TOTAL_ESTIMATE - (V_TOTAL_ESTIMATE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(RENTAL_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 10;
+    DECLARE V_BICYCLE_VALUE INT DEFAULT 500;
+    DECLARE V_INSURANCE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_880n9h_RENTAL_HOURS, 1), COALESCE(mysql_tbl_880n9h_HOURLY_RATE, 10)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE
+    FROM `mysql_tbl_880n9h`
+    WHERE mysql_tbl_880n9h_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_n2245k_VALUE, 500) INTO V_BICYCLE_VALUE
+    FROM `mysql_tbl_880n9h` BR
+    JOIN `mysql_tbl_n2245k` B ON mysql_tbl_880n9h_BICYCLE_ID = mysql_tbl_n2245k_BICYCLE_ID
+    WHERE mysql_tbl_880n9h_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE;
+
+    IF V_BICYCLE_VALUE > 1000 THEN
+        SET V_INSURANCE_FEE = V_RENTAL_HOURS * 5;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_INSURANCE_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_084_REVOKE_3ta1op----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_084_REVOKE_3ta1op() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE REVOKE_COUNT INT DEFAULT 0;
+    
+    REVOKE SELECT ON TEST.* INTO @mysql_synth_dummy FROM 'USER1'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE ALL PRIVILEGES ON TEST.`mysql_tbl_vpbgeo` FROM 'USER2'@'%';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE INSERT ON TEST.ORDERS FROM 'USER3'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    RETURN REVOKE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_dyy355_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_dyy355`
+    WHERE mysql_tbl_dyy355_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv(STUDENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EXAM_SCORE INT DEFAULT 0;
+    DECLARE V_ASSIGNMENT_SCORE INT DEFAULT 0;
+    DECLARE V_PARTICIPATION INT DEFAULT 0;
+    DECLARE V_FINAL_GRADE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_fs5jc0_EXAM_SCORE, 0), COALESCE(mysql_tbl_fs5jc0_ASSIGNMENT_SCORE, 0), COALESCE(mysql_tbl_fs5jc0_PARTICIPATION_SCORE, 0)
+    INTO V_EXAM_SCORE, V_ASSIGNMENT_SCORE, V_PARTICIPATION
+    FROM `mysql_tbl_fs5jc0`
+    WHERE mysql_tbl_fs5jc0_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_FINAL_GRADE = (V_EXAM_SCORE * 50 / 100) + (V_ASSIGNMENT_SCORE * 40 / 100) + (V_PARTICIPATION * 10 / 100);
+
+    RETURN CAST(V_FINAL_GRADE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N + 1;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_070_EXPLAIN_7fo08k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_070_EXPLAIN_7fo08k() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EXP_COUNT INT DEFAULT 0;
+    
+    EXPLAIN SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_vpbgeo` WHERE ID = 1;
+    SET EXP_COUNT = EXP_COUNT + 1;
+    
+    EXPLAIN ANALYZE SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_vpbgeo` WHERE ID = 1;
+    SET EXP_COUNT = EXP_COUNT + 1;
+    
+    DESC mysql_tbl_vpbgeo;
+    SET EXP_COUNT = EXP_COUNT + 1;
+    
+    DESCRIBE mysql_tbl_vpbgeo;
+    SET EXP_COUNT = EXP_COUNT + 1;
+    
+    RETURN EXP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN ((MYSQL_FUNC_FUNC_084_REVOKE_3ta1op()) - (0) + 0);
+    END IF;
+
+    SET V_TEMP = MYSQL_FUNC_FUNC_070_EXPLAIN_7fo08k();
+    SET V_DIVISOR = MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(-68, 37);
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(16);
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv(4);
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(-26)) - (((MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(85)) - (0) + 0)) + ((MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(-32)) - (0) + V_FACTOR_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        SET V_RESULT = P_A - P_B;
+    ELSE
+        SET V_RESULT = P_B - P_A;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 18 UNION SELECT 36 UNION SELECT 54 UNION SELECT 72 UNION SELECT 90 UNION SELECT 108 UNION SELECT 126 UNION SELECT 144 UNION SELECT 162 UNION SELECT 180 UNION SELECT 198 UNION SELECT 216 UNION SELECT 234 UNION SELECT 252 UNION SELECT 270 UNION SELECT 288 UNION SELECT 306;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_848tnh_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_848tnh_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_848tnh`
+    WHERE mysql_tbl_848tnh_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN ((MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(25, 96)) - (((MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(-28)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9()) - (0) + (FLOOR(V_SALARY / V_TENURE_YEARS)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (3.14159 * RADIUS * RADIUS * HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_8ufel1_STATUS, COALESCE(mysql_tbl_8ufel1_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM `mysql_tbl_8ufel1`
+    WHERE mysql_tbl_8ufel1_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(-88, 34)) - (((MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(-40)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(15, 76)) - (0) + (V_MONTHLY_COST * 5));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(1);

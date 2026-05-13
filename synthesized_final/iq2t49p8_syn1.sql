@@ -1,0 +1,119 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sv6d8e` (
+    `mysql_tbl_sv6d8e_campaign_id` INT,
+    `mysql_tbl_sv6d8e_start_date` DATE,
+    `mysql_tbl_sv6d8e_end_date` DATE,
+    `mysql_tbl_sv6d8e_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7b783v` (
+    `mysql_tbl_7b783v_conversion_id` INT,
+    `mysql_tbl_7b783v_campaign_id` INT,
+    `mysql_tbl_7b783v_conversion_date` DATE
+);
+
+INSERT INTO `mysql_tbl_sv6d8e` (`mysql_tbl_sv6d8e_campaign_id`, `mysql_tbl_sv6d8e_start_date`, `mysql_tbl_sv6d8e_end_date`, `mysql_tbl_sv6d8e_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_7b783v` (`mysql_tbl_7b783v_conversion_id`, `mysql_tbl_7b783v_campaign_id`, `mysql_tbl_7b783v_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_DAYS_TO_CONVERT DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(DATEDIFF(mysql_tbl_7b783v_CONVERSION_DATE, mysql_tbl_sv6d8e_START_DATE)), 0)
+    INTO V_AVG_DAYS_TO_CONVERT
+    FROM `mysql_tbl_7b783v` C
+    JOIN `mysql_tbl_sv6d8e` CAMP ON mysql_tbl_7b783v_CAMPAIGN_ID = mysql_tbl_sv6d8e_CAMPAIGN_ID
+    WHERE mysql_tbl_7b783v_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = GREATEST(100 - (V_AVG_DAYS_TO_CONVERT * 5), 0);
+
+    RETURN V_EFFICIENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT MD5(PASSWORD) INTO @mysql_synth_dummy FROM `mysql_tbl_yve6ht`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT SHA1(PASSWORD) INTO @mysql_synth_dummy FROM `mysql_tbl_yve6ht`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT SHA2(PASSWORD, 256) INTO @mysql_synth_dummy FROM `mysql_tbl_yve6ht`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(89)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET SESSION TRANSACTION READ ONLY;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN SET_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t(CELSIUS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FAHRENHEIT DECIMAL(5,2) DEFAULT 0.00;
+    SET V_FAHRENHEIT = (CELSIUS * 9 / 5) + 32;
+    RETURN FLOOR(V_FAHRENHEIT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    REPEAT
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7();
+        END IF;
+        SET V_I = MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy();
+    UNTIL V_I > N END REPEAT;
+
+    RETURN ((MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t(-31)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(1);

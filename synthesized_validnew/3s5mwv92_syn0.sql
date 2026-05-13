@@ -1,0 +1,256 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yynztw` (
+    `mysql_tbl_yynztw_supplier_id` INT,
+    `mysql_tbl_yynztw_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_yynztw` (`mysql_tbl_yynztw_supplier_id`, `mysql_tbl_yynztw_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5iktna` (
+    `mysql_tbl_5iktna_supplier_id` INT,
+    `mysql_tbl_5iktna_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_5iktna` (`mysql_tbl_5iktna_supplier_id`, `mysql_tbl_5iktna_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cplk29` (
+    `mysql_tbl_cplk29_customer_id` INT,
+    `mysql_tbl_cplk29_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_cplk29` (`mysql_tbl_cplk29_customer_id`, `mysql_tbl_cplk29_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kjz054` (
+    `mysql_tbl_kjz054_customer_id` INT,
+    `mysql_tbl_kjz054_registration_date` DATE,
+    `mysql_tbl_kjz054_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fbf0ty` (
+    `mysql_tbl_fbf0ty_order_id` INT,
+    `mysql_tbl_fbf0ty_customer_id` INT,
+    `mysql_tbl_fbf0ty_order_date` DATE,
+    `mysql_tbl_fbf0ty_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_kjz054` (`mysql_tbl_kjz054_customer_id`, `mysql_tbl_kjz054_registration_date`, `mysql_tbl_kjz054_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_fbf0ty` (`mysql_tbl_fbf0ty_order_id`, `mysql_tbl_fbf0ty_customer_id`, `mysql_tbl_fbf0ty_order_date`, `mysql_tbl_fbf0ty_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1i5x2z` (
+    `mysql_tbl_1i5x2z_supplier_id` INT,
+    `mysql_tbl_1i5x2z_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_1i5x2z_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_1i5x2z` (`mysql_tbl_1i5x2z_supplier_id`, `mysql_tbl_1i5x2z_supplier_rating`, `mysql_tbl_1i5x2z_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 14 UNION SELECT 28 UNION SELECT 42 UNION SELECT 56 UNION SELECT 70 UNION SELECT 84 UNION SELECT 98 UNION SELECT 112 UNION SELECT 126 UNION SELECT 140 UNION SELECT 154 UNION SELECT 168 UNION SELECT 182 UNION SELECT 196;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_1i5x2z_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_1i5x2z_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_1i5x2z`
+    WHERE mysql_tbl_1i5x2z_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_LEAD_TIME * 10) - (V_RATING * 15);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_datj06----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 3;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_POSITIVE_kz2ysr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_POSITIVE_kz2ysr(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF N > 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CUSTOMER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(DISTINCT mysql_tbl_fbf0ty_CUSTOMER_ID), COALESCE(SUM(mysql_tbl_fbf0ty_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_COUNT, V_TOTAL_REVENUE
+    FROM `mysql_tbl_fbf0ty` O
+    JOIN `mysql_tbl_kjz054` C ON mysql_tbl_fbf0ty_CUSTOMER_ID = mysql_tbl_kjz054_CUSTOMER_ID
+    WHERE mysql_tbl_kjz054_COUNTRY = COUNTRY_PARAM AND O.STATUS = 'COMPLETED';
+
+    IF V_CUSTOMER_COUNT = 0 THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe()) - (((MYSQL_FUNC_IS_PALINDROME_datj06(38)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_CUSTOMER_VALUE = MYSQL_FUNC_IS_POSITIVE_kz2ysr(-18);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(19)) - (0) + (((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3()) - (0) + (FLOOR(V_CUSTOMER_VALUE)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REG_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_cplk29_REGISTRATION_DATE)
+    INTO V_REG_YEAR
+    FROM `mysql_tbl_cplk29`
+    WHERE mysql_tbl_cplk29_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn(28)) - (0) + V_REG_YEAR);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_5iktna_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_5iktna`
+    WHERE mysql_tbl_5iktna_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(-79)) - (0) + (FLOOR(V_RATING * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_153_SELECT_ORDER_gnuond----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_153_SELECT_ORDER_gnuond() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_kgu1tt` ORDER BY NAME ASC;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_5zkjro` ORDER BY CREATED_AT DESC;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_kgu1tt` ORDER BY STATUS ASC, CREATED_AT DESC;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(59)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_SCORE_i52o3f(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_yynztw_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_yynztw`
+    WHERE mysql_tbl_yynztw_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_153_SELECT_ORDER_gnuond()) - (0) + (30 - V_LEAD_TIME));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_SCORE_i52o3f(1);

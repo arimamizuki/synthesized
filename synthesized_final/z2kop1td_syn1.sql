@@ -1,0 +1,269 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pbwp3p` (
+    `mysql_tbl_pbwp3p_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pbwp3p` (`mysql_tbl_pbwp3p_monthly_cost`) VALUES (1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_d3dqie` (
+    `mysql_tbl_d3dqie_order_id` INT,
+    `mysql_tbl_d3dqie_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_d3dqie` (`mysql_tbl_d3dqie_order_id`, `mysql_tbl_d3dqie_order_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1f52ui` (mysql_tbl_1f52ui_id INT, mysql_tbl_1f52ui_value VARCHAR(100));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qllsoq` (
+    `mysql_tbl_qllsoq_emp_id` INT,
+    `mysql_tbl_qllsoq_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_qllsoq` (`mysql_tbl_qllsoq_emp_id`, `mysql_tbl_qllsoq_department_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_97iuwk` (
+    `mysql_tbl_97iuwk_product_id` INT,
+    `mysql_tbl_97iuwk_category_id` INT,
+    `mysql_tbl_97iuwk_price` DECIMAL(10,2),
+    `mysql_tbl_97iuwk_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jhyi9a` (
+    `mysql_tbl_jhyi9a_order_id` INT,
+    `mysql_tbl_jhyi9a_product_id` INT,
+    `mysql_tbl_jhyi9a_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_97iuwk` (`mysql_tbl_97iuwk_product_id`, `mysql_tbl_97iuwk_category_id`, `mysql_tbl_97iuwk_price`, `mysql_tbl_97iuwk_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_jhyi9a` (`mysql_tbl_jhyi9a_order_id`, `mysql_tbl_jhyi9a_product_id`, `mysql_tbl_jhyi9a_quantity`) VALUES (1, 2, 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_UPDATE_SETTING_nhsbwv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_UPDATE_SETTING_nhsbwv(SETTING_NAME INT, NEW_VALUE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EXISTS INT;
+    SELECT COUNT(*) INTO V_EXISTS FROM `mysql_tbl_1f52ui` WHERE mysql_tbl_1f52ui_ID = SETTING_NAME;
+    IF V_EXISTS = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'SETTING DOES NOT EXIST';
+    END IF;
+    UPDATE `mysql_tbl_1f52ui` SET mysql_tbl_1f52ui_VALUE = NEW_VALUE WHERE mysql_tbl_1f52ui_ID = SETTING_NAME;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SELECT ELT(2, 'A', 'B', 'C');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT MAKE_SET(5, 'A', 'B', 'C');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT EXPORT_SET(5, 'Y', 'N', ',', 4);
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT LPAD('HI', 5, '0');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT RPAD('HI', 5, '0');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_UPDATE_SETTING_nhsbwv(-69, -98)) - (0) + SET_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_d3dqie_ORDER_DATE)
+    INTO V_YEAR
+    FROM `mysql_tbl_d3dqie`
+    WHERE mysql_tbl_d3dqie_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t()) - (0) + V_YEAR);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_qllsoq_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_qllsoq`
+    WHERE mysql_tbl_qllsoq_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_DEPT_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_DEMAND_30D INT DEFAULT 0;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_97iuwk_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_97iuwk`
+    WHERE mysql_tbl_97iuwk_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_jhyi9a_QUANTITY), 0)
+    INTO V_DEMAND_30D
+    FROM `mysql_tbl_jhyi9a`
+    WHERE mysql_tbl_jhyi9a_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND mysql_tbl_jhyi9a_ORDER_ID IN (SELECT mysql_tbl_jhyi9a_ORDER_ID FROM `mysql_tbl_8iz75c` WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_DEMAND_30D = 0 THEN
+        RETURN V_STOCK;
+    END IF;
+
+    SET V_RATIO = V_STOCK / V_DEMAND_30D;
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW DATABASES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW DATABASES LIKE 'mysql_tbl_jxf3pa%';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLES FROM `mysql_tbl_jxf3pa`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL TABLES FROM `mysql_tbl_jxf3pa`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6(-64)) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SLANT_HEIGHT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_SLANT_HEIGHT = MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa();
+    SET V_SURFACE_AREA = 3.14159 * RADIUS * (RADIUS + V_SLANT_HEIGHT);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(5)) - (0) + (FLOOR(V_SURFACE_AREA)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_zah8t6` (mysql_tbl_zah8t6_ID INT, mysql_tbl_zah8t6_CREATED_AT DATE, mysql_tbl_zah8t6_REGION VARCHAR(10)) PARTITION BY RANGE (YEAR(mysql_tbl_zah8t6_CREATED_AT)) SUBPARTITION BY HASH(mysql_tbl_zah8t6_ID) SUBPARTITIONS 2 (PARTITION P0 VALUES LESS THAN (2020), PARTITION P1 VALUES LESS THAN (2021));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(31, -82)) - (0) + ((MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql()) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(YEAR_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_IS_LEAP_YEAR INT DEFAULT 0;
+
+    IF (YEAR_PARAM % 4 = 0 AND YEAR_PARAM % 100 != 0) OR (YEAR_PARAM % 400 = 0) THEN
+        SET V_IS_LEAP_YEAR = 1;
+    END IF;
+
+    IF V_IS_LEAP_YEAR = 1 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(98)) - (0) + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem()) - (0) + 366));
+    END IF;
+
+    RETURN 365;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_jcd9pn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_pbwp3p_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_pbwp3p`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(-19)) - (0) + V_COST);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COST_jcd9pn(1);

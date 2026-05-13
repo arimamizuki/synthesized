@@ -1,0 +1,32 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UUID_COUNT INT DEFAULT 0;
+    
+    SELECT UUID();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UUID_SHORT();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT IS_UUID('550E8400-E29B-41D4-A716-446655440000');
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT FROM_UNIXTIME(1609459200);
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UNIX_TIMESTAMP();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    RETURN UUID_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl();

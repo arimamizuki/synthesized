@@ -1,0 +1,309 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3o5fiw` (
+    `mysql_tbl_3o5fiw_order_id` INT,
+    `mysql_tbl_3o5fiw_warehouse_id` INT,
+    `mysql_tbl_3o5fiw_order_date` DATE,
+    `mysql_tbl_3o5fiw_total_items` DECIMAL(10,2),
+    `mysql_tbl_3o5fiw_total_weight` DECIMAL(10,2),
+    `mysql_tbl_3o5fiw_shipping_method` INT,
+    `mysql_tbl_3o5fiw_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_3o5fiw` (`mysql_tbl_3o5fiw_order_id`, `mysql_tbl_3o5fiw_warehouse_id`, `mysql_tbl_3o5fiw_order_date`, `mysql_tbl_3o5fiw_total_items`, `mysql_tbl_3o5fiw_total_weight`, `mysql_tbl_3o5fiw_shipping_method`, `mysql_tbl_3o5fiw_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 1.0, 6, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sq9tsc` (
+    `mysql_tbl_sq9tsc_customer_id` INT,
+    `mysql_tbl_sq9tsc_registration_date` DATE,
+    `mysql_tbl_sq9tsc_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lwsvag` (
+    `mysql_tbl_lwsvag_order_id` INT,
+    `mysql_tbl_lwsvag_customer_id` INT,
+    `mysql_tbl_lwsvag_order_date` DATE,
+    `mysql_tbl_lwsvag_total_amount` DECIMAL(10,2),
+    `mysql_tbl_lwsvag_shipping_country` INT
+);
+
+INSERT INTO `mysql_tbl_sq9tsc` (`mysql_tbl_sq9tsc_customer_id`, `mysql_tbl_sq9tsc_registration_date`, `mysql_tbl_sq9tsc_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_lwsvag` (`mysql_tbl_lwsvag_order_id`, `mysql_tbl_lwsvag_customer_id`, `mysql_tbl_lwsvag_order_date`, `mysql_tbl_lwsvag_total_amount`, `mysql_tbl_lwsvag_shipping_country`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8cjw4z` (
+    `mysql_tbl_8cjw4z_customer_id` INT,
+    `mysql_tbl_8cjw4z_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_8cjw4z` (`mysql_tbl_8cjw4z_customer_id`, `mysql_tbl_8cjw4z_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0gmv32` (
+    `mysql_tbl_0gmv32_emp_id` INT,
+    `mysql_tbl_0gmv32_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_0gmv32` (`mysql_tbl_0gmv32_emp_id`, `mysql_tbl_0gmv32_department_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CROSS_BORDER_ORDERS INT DEFAULT 0;
+    DECLARE V_CROSS_BORDER_RATIO INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT mysql_tbl_sq9tsc_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM `mysql_tbl_sq9tsc`
+    WHERE mysql_tbl_sq9tsc_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_lwsvag`
+    WHERE mysql_tbl_lwsvag_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CROSS_BORDER_ORDERS
+    FROM `mysql_tbl_lwsvag`
+    WHERE mysql_tbl_lwsvag_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND mysql_tbl_lwsvag_SHIPPING_COUNTRY != V_CUSTOMER_COUNTRY;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CROSS_BORDER_RATIO = (V_CROSS_BORDER_ORDERS * 100) / V_TOTAL_ORDERS;
+
+    RETURN V_CROSS_BORDER_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(ORDER_ID_PARAM INT, SHIPPING_METHOD_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 10;
+    DECLARE V_WEIGHT_COST INT DEFAULT 0;
+    DECLARE V_METHOD_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_3o5fiw_TOTAL_WEIGHT, 0) INTO V_TOTAL_WEIGHT
+    FROM `mysql_tbl_3o5fiw`
+    WHERE mysql_tbl_3o5fiw_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE SHIPPING_METHOD_PARAM
+        WHEN 'STANDARD' THEN SET V_METHOD_MULTIPLIER = 1;
+        WHEN 'EXPRESS' THEN SET V_METHOD_MULTIPLIER = 2;
+        WHEN 'OVERNIGHT' THEN SET V_METHOD_MULTIPLIER = 3;
+        WHEN 'INTERNATIONAL' THEN SET V_METHOD_MULTIPLIER = 5;
+        ELSE SET V_METHOD_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_WEIGHT_COST = V_TOTAL_WEIGHT / 10;
+    SET V_TOTAL_COST = (V_BASE_COST + V_WEIGHT_COST) * V_METHOD_MULTIPLIER;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 4 UNION SELECT 9 UNION SELECT 16 UNION SELECT 25;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_lbem1r----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_lbem1r(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_0gmv32`
+    WHERE mysql_tbl_0gmv32_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATE_COUNT INT DEFAULT 0;
+    
+    SELECT DATE_FORMAT(NOW(), '%Y-%M-%D');
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATEDIFF(NOW(), CREATED_AT) INTO @mysql_synth_dummy FROM `mysql_tbl_aspgqx`;
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATE_ADD(NOW(), INTERVAL 1 DAY);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT DATE_SUB(NOW(), INTERVAL 1 WEEK);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT YEAR(NOW());
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_lbem1r(63)) - (0) + ((MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7()) - (0) + DATE_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 12 UNION SELECT 24 UNION SELECT 36 UNION SELECT 48 UNION SELECT 60 UNION SELECT 72 UNION SELECT 84 UNION SELECT 96 UNION SELECT 108 UNION SELECT 120 UNION SELECT 132 UNION SELECT 144;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_DAYS_0teiu7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_DAYS_0teiu7(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_REGISTRATION_DATE DATE;
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_8cjw4z_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM `mysql_tbl_8cjw4z`
+    WHERE mysql_tbl_8cjw4z_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT MIN(ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM `mysql_tbl_m33j3o`
+    WHERE mysql_tbl_8cjw4z_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NOT NULL THEN
+        SET V_DAYS = DATEDIFF(V_FIRST_ORDER_DATE, V_REGISTRATION_DATE);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x()) - (0) + ((MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - (0) + V_DAYS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(INCOME INT, TAX_YEAR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_TAXABLE_INCOME INT DEFAULT 0;
+
+    SET V_TAXABLE_INCOME = MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(23, 8);
+
+    IF INCOME <= 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_011_DATE_FORMAT_9uky7t()) - (0) + 0);
+    END IF;
+
+    IF INCOME <= 10000 THEN
+        SET V_TAX_AMOUNT = MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod(16);
+    ELSEIF INCOME <= 40000 THEN
+        SET V_TAX_AMOUNT = 1000 + ((INCOME - 10000) * 20 / 100);
+    ELSEIF INCOME <= 85000 THEN
+        SET V_TAX_AMOUNT = 1000 + 6000 + ((INCOME - 40000) * 30 / 100);
+    ELSE
+        SET V_TAX_AMOUNT = 1000 + 6000 + 13500 + ((INCOME - 85000) * 35 / 100);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_DAYS_0teiu7(-98)) - (0) + (CAST(V_TAX_AMOUNT AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMPTY_6tev0d() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(14, 88)) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_EMPTY_6tev0d();

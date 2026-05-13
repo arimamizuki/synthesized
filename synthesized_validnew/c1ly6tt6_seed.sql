@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_ddq33z` (
+    `table_ddq33z_emp_id` INT,
+    `table_ddq33z_department_id` INT,
+    `table_ddq33z_salary` INT,
+    `table_ddq33z_hire_date` DATE,
+    `table_ddq33z_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_ddq33z` (`table_ddq33z_emp_id`, `table_ddq33z_department_id`, `table_ddq33z_salary`, `table_ddq33z_hire_date`, `table_ddq33z_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUCCESSION_READINESS_SCORE_ee6s0k(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DDQ33Z_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_DDQ33Z_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_DDQ33Z
+    WHERE TABLE_DDQ33Z_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_DDQ33Z
+    WHERE MANAGER_ID = EMP_ID_PARAM;
+
+    SET V_READINESS_SCORE = (V_PERFORMANCE * 30) + (V_TENURE_YEARS * 8) + (V_DIRECT_REPORTS * 10);
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;

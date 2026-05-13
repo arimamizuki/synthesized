@@ -1,0 +1,319 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_udcc8s` (
+    `mysql_tbl_udcc8s_customer_id` INT,
+    `mysql_tbl_udcc8s_registratimysql_tbl_raqwug_date DATE
+);
+
+INSERT INTO `mysql_tbl_udcc8s` (`mysql_tbl_udcc8s_customer_id`, `mysql_tbl_udcc8s_registratimysql_tbl_raqwug_date) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3vwh7h` (
+    `mysql_tbl_3vwh7h_customer_id` INT,
+    `mysql_tbl_3vwh7h_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_3vwh7h` (`mysql_tbl_3vwh7h_customer_id`, `mysql_tbl_3vwh7h_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xqsnv9` (
+    `mysql_tbl_xqsnv9_customer_id` INT,
+    `mysql_tbl_xqsnv9_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_xqsnv9` (`mysql_tbl_xqsnv9_customer_id`, `mysql_tbl_xqsnv9_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cb3gwm` (
+    `mysql_tbl_cb3gwm_emp_id` INT,
+    `mysql_tbl_cb3gwm_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_cb3gwm` (`mysql_tbl_cb3gwm_emp_id`, `mysql_tbl_cb3gwm_hire_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_euoesj` (
+    `mysql_tbl_euoesj_customer_id` INT,
+    `mysql_tbl_euoesj_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_euoesj` (`mysql_tbl_euoesj_customer_id`, `mysql_tbl_euoesj_monthly_cost`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4syh11` (
+    `mysql_tbl_4syh11_customer_id` INT,
+    `mysql_tbl_4syh11_registratimysql_tbl_raqwug_date DATE,
+    `mysql_tbl_4syh11_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ki7iqp` (
+    `mysql_tbl_ki7iqp_order_id` INT,
+    `mysql_tbl_ki7iqp_customer_id` INT,
+    `mysql_tbl_ki7iqp_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_4syh11` (`mysql_tbl_4syh11_customer_id`, `mysql_tbl_4syh11_registratimysql_tbl_raqwug_date, `mysql_tbl_4syh11_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_ki7iqp` (`mysql_tbl_ki7iqp_order_id`, `mysql_tbl_ki7iqp_customer_id`, `mysql_tbl_ki7iqp_order_date`) VALUES (1, 2, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xtsy8q` (
+    `mysql_tbl_xtsy8q_ctext` VARCHAR(255)
+);
+
+INSERT INTO `mysql_tbl_xtsy8q` (`mysql_tbl_xtsy8q_ctext`) VALUES ('sample_text');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_datj06----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM `mysql_tbl_qmtc5l` INTERSECT SELECT USER_ID FROM `mysql_tbl_h4x1qe`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM `mysql_tbl_qmtc5l` EXCEPT SELECT USER_ID FROM `mysql_tbl_h4x1qe`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TEXT_r5pjjb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `mysql_tbl_xtsy8q`;
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EVENT_COUNT INT DEFAULT 0;
+    
+    ALTER EVENT EVT_CLEANUP DISABLE;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    ALTER EVENT EVT_BACKUP ENABLE;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    ALTER EVENT EVT_CLEANUP RENAME TO EVT_CLEANUP_OLD;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy()) - (0) + ((MYSQL_FUNC_PROC_TEXT_r5pjjb()) - (0) + EVENT_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_087_RENAME_USER_zaqeym----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_087_RENAME_USER_zaqeym() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RENAME_COUNT INT DEFAULT 0;
+    
+    RENAME USER 'OLDNAME'@'LOCALHOST' TO 'NEWNAME'@'LOCALHOST';
+    SET RENAME_COUNT = RENAME_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y()) - (0) + RENAME_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NEW INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_NEW, V_TOTAL
+    FROM `mysql_tbl_4syh11`
+    WHERE mysql_tbl_4syh11_COUNTRY = COUNTRY_PARAM
+      AND mysql_tbl_4syh11_REGISTRATImysql_tbl_raqwug_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN (V_NEW * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UPD_COUNT INT DEFAULT 0;
+    
+    UPDATE `mysql_tbl_qmtc5l` SET PRIORITY = 'HIGH' WHERE STATUS = 'ACTIVE' ORDER BY CREATED_AT DESC LIMIT 10;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    UPDATE `mysql_tbl_h4x1qe` SET PROCESSED = 1 WHERE PROCESSED = 0 LIMIT 100;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    RETURN UPD_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTImysql_tbl_raqwug_COST_VALUE_kga1et(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_euoesj_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_euoesj`
+    WHERE mysql_tbl_euoesj_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08()) - (0) + ((MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52(-61)) - (0) + V_COST));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    ALTER TABLESPACE TS1 ADD DATAFILE 'TS1_2.IBD';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER TABLESPACE TS1 DROP DATAFILE 'TS1_2.IBD';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER TABLESPACE TS1 RENAME TO TS1_NEW;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTImysql_tbl_raqwug_COST_VALUE_kga1et(-94)) - (0) + TS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_INDEX_d0hur2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTImysql_tbl_raqwug_STATUS_INDEX_d0hur2(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT mysql_tbl_3vwh7h_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_3vwh7h`
+    WHERE mysql_tbl_3vwh7h_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN ((MYSQL_FUNC_FUNC_087_RENAME_USER_zaqeym()) - (0) + ((MYSQL_FUNC_IS_PALINDROME_datj06(82)) - (0) + 100));
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'PENDING' THEN RETURN 25;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN ((MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1()) - (0) + 10);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_raqwug mysql_tbl_qmtc5l FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_525edr_UPDATE `mysql_tbl_525edr` UPDATE `mysql_tbl_raqwug` mysql_tbl_qmtc5l FOR EACH ROW INSERT INTO `mysql_tbl_v6w4o5` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN TRIG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_cb3gwm_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM `mysql_tbl_cb3gwm`
+    WHERE mysql_tbl_cb3gwm_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTImysql_tbl_raqwug_COUNT_r0rxm7(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_xqsnv9`
+    WHERE mysql_tbl_xqsnv9_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_xqsnv9_STATUS = 'ACTIVE';
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(97)) - (0) + ((MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2()) - (0) + V_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_udcc8s_REGISTRATImysql_tbl_raqwug_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM `mysql_tbl_udcc8s`
+    WHERE mysql_tbl_udcc8s_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTImysql_tbl_raqwug_STATUS_INDEX_d0hur2(-62)) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTImysql_tbl_raqwug_COUNT_r0rxm7(90)) - (0) + V_AGE_YEARS));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(1);

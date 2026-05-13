@@ -1,0 +1,69 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_810mer` (
+    `mysql_tbl_810mer_emp_id` INT,
+    `mysql_tbl_810mer_department_id` INT,
+    `mysql_tbl_810mer_hire_date` DATE,
+    `mysql_tbl_810mer_salary` INT
+);
+
+INSERT INTO `mysql_tbl_810mer` (`mysql_tbl_810mer_emp_id`, `mysql_tbl_810mer_department_id`, `mysql_tbl_810mer_hire_date`, `mysql_tbl_810mer_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_810mer_SALARY), 0),
+           COALESCE(AVG(TIMESTAMPDIFF(YEAR, mysql_tbl_810mer_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM `mysql_tbl_810mer`
+    WHERE mysql_tbl_810mer_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR((V_AVG_SALARY * V_AVG_TENURE) / GREATEST(V_EMP_COUNT, 1));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_2nnd9t` (mysql_tbl_2nnd9t_ID INT, mysql_tbl_2nnd9t_CREATED_AT DATE, mysql_tbl_2nnd9t_REGION VARCHAR(10)) PARTITION BY RANGE (YEAR(mysql_tbl_2nnd9t_CREATED_AT)) SUBPARTITION BY HASH(mysql_tbl_2nnd9t_ID) SUBPARTITIONS 2 (PARTITION P0 VALUES LESS THAN (2020), PARTITION P1 VALUES LESS THAN (2021));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(-70)) - (0) + TBL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_144_INSERT_SELECT_4vwdu2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INS_COUNT INT DEFAULT 0;
+    
+    INSERT INTO BACKUP_USERS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_ig7crc` WHERE CREATED_AT < '2024-01-01';
+    SET INS_COUNT = INS_COUNT + 1;
+    
+    INSERT INTO `mysql_tbl_ipb8b9` (USER_ID, TOTAL_ORDERS) SELECT USER_ID, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_2yqumf` GROUP BY USER_ID;
+    SET INS_COUNT = INS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql()) - (0) + INS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_144_INSERT_SELECT_4vwdu2();

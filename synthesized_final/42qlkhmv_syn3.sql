@@ -1,0 +1,278 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_oxjfkz` (
+    `mysql_tbl_oxjfkz_customer_id` INT,
+    `mysql_tbl_oxjfkz_country` INT
+);
+
+INSERT INTO `mysql_tbl_oxjfkz` (`mysql_tbl_oxjfkz_customer_id`, `mysql_tbl_oxjfkz_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_q0l503` (
+    `mysql_tbl_q0l503_emp_id` INT,
+    `mysql_tbl_q0l503_department_id` INT,
+    `mysql_tbl_q0l503_salary` INT,
+    `mysql_tbl_q0l503_hire_date` DATE,
+    `mysql_tbl_q0l503_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_q0l503` (`mysql_tbl_q0l503_emp_id`, `mysql_tbl_q0l503_department_id`, `mysql_tbl_q0l503_salary`, `mysql_tbl_q0l503_hire_date`, `mysql_tbl_q0l503_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0i6bsk` (
+    `mysql_tbl_0i6bsk_card_id` INT,
+    `mysql_tbl_0i6bsk_customer_id` INT,
+    `mysql_tbl_0i6bsk_card_type` VARCHAR(50),
+    `mysql_tbl_0i6bsk_credit_limit` INT,
+    `mysql_tbl_0i6bsk_current_balance` INT,
+    `mysql_tbl_0i6bsk_interest_rate` INT,
+    `mysql_tbl_0i6bsk_min_payment_rate` INT
+);
+
+INSERT INTO `mysql_tbl_0i6bsk` (`mysql_tbl_0i6bsk_card_id`, `mysql_tbl_0i6bsk_customer_id`, `mysql_tbl_0i6bsk_card_type`, `mysql_tbl_0i6bsk_credit_limit`, `mysql_tbl_0i6bsk_current_balance`, `mysql_tbl_0i6bsk_interest_rate`, `mysql_tbl_0i6bsk_min_payment_rate`) VALUES (1, 1, 'mysql_tbl_ofqbr4', 1, 1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5edctz` (mysql_tbl_5edctz_id INT, mysql_tbl_5edctz_max_students INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ei6hj9` (mysql_tbl_ei6hj9_id INT, student_mysql_tbl_ei6hj9_id INT, course_mysql_tbl_ei6hj9_id INT);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_q0l503_SALARY, 0), COALESCE(mysql_tbl_q0l503_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_q0l503_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_q0l503`
+    WHERE mysql_tbl_q0l503_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (V_SALARY / 1000) + (V_PERFORMANCE * 10) + (V_TENURE_YEARS * 3);
+
+    RETURN V_COMP_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_185_SELECT_CONVERT_428dut----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_185_SELECT_CONVERT_428dut() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT CONVERT(NAME USING UTF8MB4) INTO @mysql_synth_dummy FROM `mysql_tbl_rbc5su`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT CAST(NAME AS CHAR CHARACTER SET UTF8MB4) INTO @mysql_synth_dummy FROM `mysql_tbl_rbc5su`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(CARD_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CREDIT_LIMIT INT DEFAULT 0;
+    DECLARE V_CURRENT_BALANCE INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+    DECLARE V_MIN_PAYMENT INT DEFAULT 0;
+    DECLARE V_INTEREST_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_0i6bsk_CREDIT_LIMIT, 1000), COALESCE(mysql_tbl_0i6bsk_CURRENT_BALANCE, 0)
+    INTO V_CREDIT_LIMIT, V_CURRENT_BALANCE
+    FROM `mysql_tbl_0i6bsk`
+    WHERE mysql_tbl_0i6bsk_CARD_ID = CARD_ID_PARAM;
+
+    IF V_CREDIT_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_CURRENT_BALANCE * 100) / V_CREDIT_LIMIT;
+
+    IF V_UTILIZATION > 80 THEN
+        SET V_UTILIZATION = V_UTILIZATION + 10;
+    END IF;
+
+    RETURN CAST(V_UTILIZATION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        IF N MOD 2 = 0 THEN
+            SET V_COUNT = MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(-26);
+        END IF;
+        SET N = N - 1;
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_FUNC_185_SELECT_CONVERT_428dut()) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM `mysql_tbl_oxjfkz`
+    WHERE mysql_tbl_oxjfkz_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW DATABASES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW DATABASES LIKE 'mysql_tbl_ofqbr4%';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLES FROM `mysql_tbl_ofqbr4`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL TABLES FROM `mysql_tbl_ofqbr4`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw(57);
+    END IF;
+
+    SET V_RESULT = MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa();
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(12)) - (0) + ((MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(22)) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam(START INT, END_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT;
+
+    MY_LOOP: FOR V_I := START TO END_VAL DO
+        IF V_I MOD 3 = 0 THEN
+            ITERATE MY_LOOP;
+        END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(mysql_tbl_ei6hj9_STUDENT_ID INT, mysql_tbl_ei6hj9_COURSE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_STUDENTS INT;
+    DECLARE V_CURRENT_STUDENTS INT;
+    SELECT mysql_tbl_5edctz_MAX_STUDENTS INTO V_MAX_STUDENTS FROM `mysql_tbl_5edctz` WHERE mysql_tbl_5edctz_ID = mysql_tbl_ei6hj9_COURSE_ID;
+    SELECT COUNT(*) INTO V_CURRENT_STUDENTS FROM `mysql_tbl_ei6hj9` WHERE mysql_tbl_ei6hj9_COURSE_ID = mysql_tbl_ei6hj9_COURSE_ID;
+    IF V_CURRENT_STUDENTS >= V_MAX_STUDENTS THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'COURSE IS FULL, CANNOT ENROLL';
+    END IF;
+    INSERT INTO `mysql_tbl_ei6hj9` (`mysql_tbl_ei6hj9_STUDENT_ID`, `mysql_tbl_ei6hj9_COURSE_ID`) VALUES (mysql_tbl_ei6hj9_STUDENT_ID, mysql_tbl_ei6hj9_COURSE_ID);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_194_ITERATE_7cimib----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_194_ITERATE_7cimib() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ITER_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        IF I < 3 THEN
+            ITERATE LABEL1;
+        END IF;
+        SET ITER_COUNT = ITER_COUNT + 1;
+        IF I >= 5 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(96, -38)) - (0) + ITER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RG_COUNT INT DEFAULT 0;
+    
+    CREATE RESOURCE GROUP RG1 TYPE = USER VCPU = 0-3 THREAD_PRIORITY = 10;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    CREATE RESOURCE GROUP IF NOT EXISTS RG2 TYPE = SYSTEM VCPU = 4-7;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_194_ITERATE_7cimib()) - (0) + RG_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(A1 INT, R INT, N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NTH_TERM INT DEFAULT 0;
+    SET V_NTH_TERM = MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(-41, -36);
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam(78, -39)) - (0) + ((MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71()) - (0) + V_NTH_TERM));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(1, 1, 1);

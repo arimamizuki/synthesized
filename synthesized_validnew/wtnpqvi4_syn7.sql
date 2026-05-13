@@ -1,0 +1,48 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_022_JSON_TYPE_k3ugl4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_022_JSON_TYPE_k3ugl4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_TYPE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_VALID('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_KEYS('{"A": 1, "B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_LENGTH('{"A": 1, "B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_087_RENAME_USER_zaqeym() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RENAME_COUNT INT DEFAULT 0;
+    
+    RENAME USER 'OLDNAME'@'LOCALHOST' TO 'NEWNAME'@'LOCALHOST';
+    SET RENAME_COUNT = RENAME_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_022_JSON_TYPE_k3ugl4()) - (0) + RENAME_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_087_RENAME_USER_zaqeym();

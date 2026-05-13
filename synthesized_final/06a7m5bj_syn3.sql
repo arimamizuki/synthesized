@@ -1,0 +1,379 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j7csw1` (
+    `mysql_tbl_j7csw1_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `mysql_tbl_j7csw1` (`mysql_tbl_j7csw1_cdecimal`) VALUES (42);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3an3ww` (
+    `mysql_tbl_3an3ww_order_id` INT,
+    `mysql_tbl_3an3ww_customer_id` INT,
+    `mysql_tbl_3an3ww_order_date` DATE,
+    `mysql_tbl_3an3ww_total_amount` DECIMAL(10,2),
+    `mysql_tbl_3an3ww_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2zwha5` (
+    `mysql_tbl_2zwha5_refund_id` INT,
+    `mysql_tbl_2zwha5_order_id` INT,
+    `mysql_tbl_2zwha5_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_3an3ww` (`mysql_tbl_3an3ww_order_id`, `mysql_tbl_3an3ww_customer_id`, `mysql_tbl_3an3ww_order_date`, `mysql_tbl_3an3ww_total_amount`, `mysql_tbl_3an3ww_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_2zwha5` (`mysql_tbl_2zwha5_refund_id`, `mysql_tbl_2zwha5_order_id`, `mysql_tbl_2zwha5_refund_amount`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yexcl8` (
+    mysql_tbl_yexcl8_emp_no INT,
+    mysql_tbl_yexcl8_salary INT
+);
+
+INSERT INTO `mysql_tbl_yexcl8` (`mysql_tbl_yexcl8_emp_no`, `mysql_tbl_yexcl8_salary`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_53ct2z` (
+    `mysql_tbl_53ct2z_order_id` INT,
+    `mysql_tbl_53ct2z_customer_id` INT,
+    `mysql_tbl_53ct2z_order_date` DATE,
+    `mysql_tbl_53ct2z_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_03rl8n` (
+    `mysql_tbl_03rl8n_customer_id` INT,
+    `mysql_tbl_03rl8n_country` INT
+);
+
+INSERT INTO `mysql_tbl_53ct2z` (`mysql_tbl_53ct2z_order_id`, `mysql_tbl_53ct2z_customer_id`, `mysql_tbl_53ct2z_order_date`, `mysql_tbl_53ct2z_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `mysql_tbl_03rl8n` (`mysql_tbl_03rl8n_customer_id`, `mysql_tbl_03rl8n_country`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7utvf4` (
+    `mysql_tbl_7utvf4_order_id` INT,
+    `mysql_tbl_7utvf4_customer_id` INT,
+    `mysql_tbl_7utvf4_order_date` DATE,
+    `mysql_tbl_7utvf4_total_amount` DECIMAL(10,2),
+    `mysql_tbl_7utvf4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rk5ucy` (
+    `mysql_tbl_rk5ucy_shipment_id` INT,
+    `mysql_tbl_rk5ucy_order_id` INT,
+    `mysql_tbl_rk5ucy_carrier` INT,
+    `mysql_tbl_rk5ucy_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_7utvf4` (`mysql_tbl_7utvf4_order_id`, `mysql_tbl_7utvf4_customer_id`, `mysql_tbl_7utvf4_order_date`, `mysql_tbl_7utvf4_total_amount`, `mysql_tbl_7utvf4_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_rk5ucy` (`mysql_tbl_rk5ucy_shipment_id`, `mysql_tbl_rk5ucy_order_id`, `mysql_tbl_rk5ucy_carrier`, `mysql_tbl_rk5ucy_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(mysql_tbl_yexcl8_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_yexcl8`
+        WHERE mysql_tbl_yexcl8_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(mysql_tbl_yexcl8_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_yexcl8`
+        WHERE mysql_tbl_yexcl8_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(mysql_tbl_yexcl8_SALARY) - MIN(mysql_tbl_yexcl8_SALARY) INTO SALARY_CALC
+        FROM `mysql_tbl_yexcl8`
+        WHERE mysql_tbl_yexcl8_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN IFNULL(SALARY_CALC, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(RADIUS INT, DISTANCE_FROM_CENTER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TANGENT_LENGTH DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SQUARED_DISTANCE INT DEFAULT 0;
+    DECLARE V_SQUARED_RADIUS INT DEFAULT 0;
+
+    IF DISTANCE_FROM_CENTER <= RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQUARED_DISTANCE = DISTANCE_FROM_CENTER * DISTANCE_FROM_CENTER;
+    SET V_SQUARED_RADIUS = RADIUS * RADIUS;
+
+    SET V_TANGENT_LENGTH = SQRT(V_SQUARED_DISTANCE - V_SQUARED_RADIUS);
+
+    RETURN FLOOR(V_TANGENT_LENGTH);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_017_ENCRYPTION_6kgspp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_017_ENCRYPTION_6kgspp() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ENC_COUNT INT DEFAULT 0;
+    
+    SELECT MD5('PASSWORD');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT SHA1('PASSWORD');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT SHA2('PASSWORD', 256);
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT AES_ENCRYPT('DATA', 'KEY');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT AES_DECRYPT(ENCRYPTED_DATA, 'KEY') INTO @mysql_synth_dummy FROM `mysql_tbl_062508`;
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(-44, -41)) - (0) + ENC_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_rk5ucy_SHIPPING_COST, 0), COALESCE(mysql_tbl_7utvf4_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM `mysql_tbl_7utvf4` O
+    LEFT JOIN `mysql_tbl_rk5ucy` S ON mysql_tbl_7utvf4_ORDER_ID = mysql_tbl_rk5ucy_ORDER_ID
+    WHERE mysql_tbl_7utvf4_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+
+    UGLY_LOOP: WHILE V_TEMP % 2 = 0 DO
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    UGLY_LOOP2: WHILE V_TEMP % 3 = 0 DO
+        SET V_TEMP = V_TEMP / 3;
+    END WHILE;
+
+    UGLY_LOOP3: WHILE V_TEMP % 5 = 0 DO
+        SET V_TEMP = V_TEMP / 5;
+    END WHILE;
+
+    IF V_TEMP = 1 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_130_ALTER_RENAME_wqeukg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_130_ALTER_RENAME_wqeukg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE OLD_TABLE RENAME TO NEW_TABLE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS RENAME INDEX OLD_IDX TO NEW_IDX;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(-51)) - (0) + ((MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(-22)) - (0) + ALTER_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_BASKET_SIZE_t0rav9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_BASKET_SIZE_t0rav9(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_BASKET_SIZE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_53ct2z_TOTAL_AMOUNT), 0)
+    INTO V_AVG_BASKET_SIZE
+    FROM `mysql_tbl_53ct2z` O
+    JOIN `mysql_tbl_03rl8n` C ON mysql_tbl_53ct2z_CUSTOMER_ID = mysql_tbl_03rl8n_CUSTOMER_ID
+    WHERE mysql_tbl_03rl8n_COUNTRY = COUNTRY_PARAM AND O.STATUS = 'COMPLETED';
+
+    RETURN ((MYSQL_FUNC_FUNC_130_ALTER_RENAME_wqeukg()) - (0) + (FLOOR(V_AVG_BASKET_SIZE)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = MYSQL_FUNC_FUNC_017_ENCRYPTION_6kgspp();
+        SET V_I = MYSQL_FUNC_CALCULATE_COUNTRY_BASKET_SIZE_t0rav9(-26);
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(-14);
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy()) - (0) + (FLOOR(V_VOLUME)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(STR INT, TIMES INT) RETURNS VARCHAR(500) DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET TIMES = TIMES - 1;
+    UNTIL TIMES <= 0 END REPEAT;
+
+    RETURN MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(-74);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_3an3ww_TOTAL_AMOUNT, ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(-14, -29)) - (0) + 0))
+    INTO V_ORDER_TOTAL
+    FROM `mysql_tbl_3an3ww`
+    WHERE mysql_tbl_3an3ww_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_2zwha5_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM `mysql_tbl_2zwha5`
+    WHERE mysql_tbl_2zwha5_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(20, 91)) - (0) + 0);
+    END IF;
+
+    SET V_REFUND_RATE = MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(-91, 78);
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(mysql_tbl_j7csw1_CDECIMAL AS SIGNED) INTO RESULT FROM `mysql_tbl_j7csw1` LIMIT 1;
+    RETURN ((MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(98)) - (0) + (COALESCE(RESULT, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_PROC_DECIMAL_zozmya();

@@ -1,0 +1,385 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nztmza` (
+    `mysql_tbl_nztmza_campaign_id` INT,
+    `mysql_tbl_nztmza_start_date` DATE,
+    `mysql_tbl_nztmza_end_date` DATE,
+    `mysql_tbl_nztmza_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6eqcbv` (
+    `mysql_tbl_6eqcbv_conversion_id` INT,
+    `mysql_tbl_6eqcbv_campaign_id` INT,
+    `mysql_tbl_6eqcbv_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_nztmza` (`mysql_tbl_nztmza_campaign_id`, `mysql_tbl_nztmza_start_date`, `mysql_tbl_nztmza_end_date`, `mysql_tbl_nztmza_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_6eqcbv` (`mysql_tbl_6eqcbv_conversion_id`, `mysql_tbl_6eqcbv_campaign_id`, `mysql_tbl_6eqcbv_conversion_value`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_i4ucf4` (
+    `mysql_tbl_i4ucf4_member_id` INT,
+    `mysql_tbl_i4ucf4_name` VARCHAR(50),
+    `mysql_tbl_i4ucf4_membership_type` VARCHAR(50),
+    `mysql_tbl_i4ucf4_join_date` DATE,
+    `mysql_tbl_i4ucf4_monthly_fee` INT,
+    `mysql_tbl_i4ucf4_trainer_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_deus27` (
+    `mysql_tbl_deus27_session_id` INT,
+    `mysql_tbl_deus27_member_id` INT,
+    `mysql_tbl_deus27_trainer_id` INT,
+    `mysql_tbl_deus27_session_date` DATE,
+    `mysql_tbl_deus27_duration_minutes` INT
+);
+
+INSERT INTO `mysql_tbl_i4ucf4` (`mysql_tbl_i4ucf4_member_id`, `mysql_tbl_i4ucf4_name`, `mysql_tbl_i4ucf4_membership_type`, `mysql_tbl_i4ucf4_join_date`, `mysql_tbl_i4ucf4_monthly_fee`, `mysql_tbl_i4ucf4_trainer_id`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `mysql_tbl_deus27` (`mysql_tbl_deus27_session_id`, `mysql_tbl_deus27_member_id`, `mysql_tbl_deus27_trainer_id`, `mysql_tbl_deus27_session_date`, `mysql_tbl_deus27_duration_minutes`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p3pgo4` (
+    `mysql_tbl_p3pgo4_supplier_id` INT,
+    `mysql_tbl_p3pgo4_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_p3pgo4_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_p3pgo4` (`mysql_tbl_p3pgo4_supplier_id`, `mysql_tbl_p3pgo4_supplier_rating`, `mysql_tbl_p3pgo4_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x1fa3d` (mysql_tbl_x1fa3d_id INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gxagdu` (
+    `mysql_tbl_gxagdu_customer_id` INT,
+    `mysql_tbl_gxagdu_status` VARCHAR(50),
+    `mysql_tbl_gxagdu_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_gxagdu` (`mysql_tbl_gxagdu_customer_id`, `mysql_tbl_gxagdu_status`, `mysql_tbl_gxagdu_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ro5utc` (
+    `mysql_tbl_ro5utc_customer_id` INT,
+    `mysql_tbl_ro5utc_country` INT
+);
+
+INSERT INTO `mysql_tbl_ro5utc` (`mysql_tbl_ro5utc_customer_id`, `mysql_tbl_ro5utc_country`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_p3pgo4_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_p3pgo4_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_p3pgo4`
+    WHERE mysql_tbl_p3pgo4_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_fa3duf`
+    WHERE mysql_tbl_p3pgo4_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) + (30 - V_LEAD_TIME) + (V_PRODUCT_COUNT * 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx(MEMBER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_SESSION_COUNT INT DEFAULT 0;
+    DECLARE V_SESSION_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_SPENDING INT DEFAULT 0;
+    DECLARE V_ACTIVE_SESSIONS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_i4ucf4_MONTHLY_FEE, 0) INTO V_MONTHLY_FEE
+    FROM `mysql_tbl_i4ucf4`
+    WHERE mysql_tbl_i4ucf4_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTIVE_SESSIONS
+    FROM `mysql_tbl_deus27`
+    WHERE mysql_tbl_deus27_MEMBER_ID = MEMBER_ID_PARAM
+      AND mysql_tbl_deus27_SESSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_SESSION_COST = V_SESSION_COST * V_ACTIVE_SESSIONS;
+    SET V_TOTAL_SPENDING = V_MONTHLY_FEE + V_SESSION_COST;
+
+    RETURN V_TOTAL_SPENDING;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb(SORTED_ARRAY INT, TARGET INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEFT INT DEFAULT 1;
+    DECLARE V_RIGHT INT DEFAULT 0;
+    DECLARE V_MID INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 0;
+    DECLARE V_ELEMENT INT DEFAULT 0;
+    DECLARE V_COMMA_POS INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT_POS INT DEFAULT 1;
+    DECLARE V_ELEMENT_STR VARCHAR(50) DEFAULT '';
+
+    IF SORTED_ARRAY IS NULL OR LENGTH(SORTED_ARRAY) = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RIGHT = LENGTH(SORTED_ARRAY) - LENGTH(REPLACE(SORTED_ARRAY, ',', '')) + 1;
+
+    WHILE V_LEFT <= V_RIGHT DO
+        SET V_MID = (V_LEFT + V_RIGHT) / 2;
+        SET V_POS = 1;
+        SET V_COMMA_POS = LOCATE(',', SORTED_ARRAY, V_POS);
+
+        WHILE V_POS < V_MID AND V_COMMA_POS > 0 DO
+            SET V_POS = V_COMMA_POS + 1;
+            SET V_COMMA_POS = LOCATE(',', SORTED_ARRAY, V_POS);
+        END WHILE;
+
+        IF V_COMMA_POS = 0 THEN
+            SET V_COMMA_POS = LENGTH(SORTED_ARRAY) + 1;
+        END IF;
+
+        SET V_ELEMENT_STR = SUBSTRING(SORTED_ARRAY, V_POS, V_COMMA_POS - V_POS);
+        SET V_ELEMENT = CAST(V_ELEMENT_STR AS SIGNED);
+
+        IF V_ELEMENT = TARGET THEN
+            RETURN V_MID;
+        ELSEIF V_ELEMENT < TARGET THEN
+            SET V_LEFT = V_MID + 1;
+        ELSE
+            SET V_RIGHT = V_MID - 1;
+        END IF;
+    END WHILE;
+
+    RETURN -1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_DELETE_RECORD_9k9oze----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_DELETE_RECORD_9k9oze(REC_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EXISTS INT;
+    SELECT COUNT(*) INTO V_EXISTS FROM `mysql_tbl_x1fa3d` WHERE mysql_tbl_x1fa3d_ID = REC_ID;
+    IF V_EXISTS = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'RECORD DOES NOT EXIST';
+    END IF;
+    DELETE FROM `mysql_tbl_x1fa3d` WHERE mysql_tbl_x1fa3d_ID = REC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_ARRAY_INSERT('{"A": [1, 3]}', '$.A[1]', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_SEARCH('{"A": "HELLO"}', 'ONE', 'HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_QUOTE('HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_UNQUOTE('"HELLO"');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_DEPTH('{"A": {"B": 1}}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT mysql_tbl_ro5utc_COUNTRY
+    INTO V_COUNTRY
+    FROM `mysql_tbl_ro5utc`
+    WHERE mysql_tbl_ro5utc_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_COUNTRY
+        WHEN 'USA' THEN 1
+        WHEN 'UK' THEN 2
+        WHEN 'CN' THEN 3
+        WHEN 'JP' THEN 4
+        ELSE 0 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_o46qo9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_o46qo9(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_SUBSCRIPTION_MONTHS INT DEFAULT 0;
+
+    SELECT mysql_tbl_gxagdu_STATUS, COALESCE(mysql_tbl_gxagdu_MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, START_DATE, CURDATE())
+    INTO V_STATUS, V_MONTHLY_COST, V_SUBSCRIPTION_MONTHS
+    FROM `mysql_tbl_gxagdu`
+    WHERE mysql_tbl_gxagdu_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_MONTHLY_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_MONTHLY_COST * V_SUBSCRIPTION_MONTHS) / 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE IS_COUNT INT DEFAULT 0;
+    
+    SELECT IS_VISIBLE_DD_OBJECT('TEST', 'USERS');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT PACKAGE_NAME('TEST_PKG');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_NAME('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_TYPE('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    RETURN IS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1()) - (0) + 0);
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx();
+        SET V_I = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_o46qo9(74);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(89)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = MYSQL_FUNC_SIGNAL_PROC_DELETE_RECORD_9k9oze(-89);
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(64)) - (0) + (-1));
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_COST_PER_ACQ INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_nztmza_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_nztmza`
+    WHERE mysql_tbl_nztmza_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM `mysql_tbl_6eqcbv`
+    WHERE mysql_tbl_6eqcbv_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN ((MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb(75, -38)) - (0) + ((MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(46, -96)) - (0) + V_BUDGET));
+    END IF;
+
+    SET V_COST_PER_ACQ = MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx(-96);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_TOTAL_SCORE_jilcu2(-98)) - (0) + V_COST_PER_ACQ);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(-9)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw();

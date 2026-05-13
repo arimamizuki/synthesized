@@ -1,0 +1,337 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_b32z77` (
+    `mysql_tbl_b32z77_product_id` INT,
+    `mysql_tbl_b32z77_category_id` INT,
+    `mysql_tbl_b32z77_price` DECIMAL(10,2),
+    `mysql_tbl_b32z77_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_b32z77` (`mysql_tbl_b32z77_product_id`, `mysql_tbl_b32z77_category_id`, `mysql_tbl_b32z77_price`, `mysql_tbl_b32z77_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_k0i9bu` (
+    `mysql_tbl_k0i9bu_customer_id` INT,
+    `mysql_tbl_k0i9bu_country` INT
+);
+
+INSERT INTO `mysql_tbl_k0i9bu` (`mysql_tbl_k0i9bu_customer_id`, `mysql_tbl_k0i9bu_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_du1wqh` (
+    `mysql_tbl_du1wqh_customer_id` INT,
+    `mysql_tbl_du1wqh_plan_type` VARCHAR(50),
+    `mysql_tbl_du1wqh_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_du1wqh_start_date` DATE,
+    `mysql_tbl_du1wqh_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_du1wqh` (`mysql_tbl_du1wqh_customer_id`, `mysql_tbl_du1wqh_plan_type`, `mysql_tbl_du1wqh_monthly_cost`, `mysql_tbl_du1wqh_start_date`, `mysql_tbl_du1wqh_status`) VALUES (1, 'test', 1.0, '2024-01-01', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e8u1lf` (
+    `mysql_tbl_e8u1lf_product_id` INT,
+    `mysql_tbl_e8u1lf_price` DECIMAL(10,2),
+    `mysql_tbl_e8u1lf_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_e8u1lf` (`mysql_tbl_e8u1lf_product_id`, `mysql_tbl_e8u1lf_price`, `mysql_tbl_e8u1lf_category_id`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1qd00g` (mysql_tbl_1qd00g_id INT, mysql_tbl_1qd00g_stock_quantity INT, mysql_tbl_1qd00g_min_stock_level INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g6l6mh` (
+    `mysql_tbl_g6l6mh_emp_id` INT
+);
+
+INSERT INTO `mysql_tbl_g6l6mh` (`mysql_tbl_g6l6mh_emp_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y948lb` (
+    `mysql_tbl_y948lb_emp_id` INT,
+    `mysql_tbl_y948lb_department_id` INT,
+    `mysql_tbl_y948lb_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_txldoi` (
+    `mysql_tbl_txldoi_department_id` INT,
+    `mysql_tbl_txldoi_name` VARCHAR(50),
+    `mysql_tbl_txldoi_budget` INT
+);
+
+INSERT INTO `mysql_tbl_y948lb` (`mysql_tbl_y948lb_emp_id`, `mysql_tbl_y948lb_department_id`, `mysql_tbl_y948lb_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `mysql_tbl_txldoi` (`mysql_tbl_txldoi_department_id`, `mysql_tbl_txldoi_name`, `mysql_tbl_txldoi_budget`) VALUES (1, 'test', 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_136_CREATE_SELECT_d315mo----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_136_CREATE_SELECT_d315mo() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE ACTIVE_USERS AS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_rfpbug` WHERE STATUS = 'ACTIVE';
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    CREATE TABLE USER_SUMMARY AS SELECT ID, NAME, COUNT(*) AS CNT INTO @mysql_synth_dummy FROM `mysql_tbl_rfpbug` GROUP BY ID, NAME;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_e8u1lf_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_e8u1lf`
+    WHERE mysql_tbl_e8u1lf_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE / 10);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_y948lb_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM `mysql_tbl_y948lb`
+    WHERE mysql_tbl_y948lb_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_txldoi_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_txldoi`
+    WHERE mysql_tbl_txldoi_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx(PRODUCT_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT;
+    DECLARE V_MIN_LEVEL INT;
+    SELECT mysql_tbl_1qd00g_STOCK_QUANTITY, mysql_tbl_1qd00g_MIN_STOCK_LEVEL INTO V_STOCK, V_MIN_LEVEL FROM `mysql_tbl_1qd00g` WHERE mysql_tbl_1qd00g_ID = PRODUCT_ID;
+    IF V_STOCK < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STOCK QUANTITY CANNOT BE NEGATIVE';
+    END IF;
+    IF V_STOCK < V_MIN_LEVEL THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: STOCK BELOW MINIMUM LEVEL';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_151_SELECT_BASIC_be1bjg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_151_SELECT_BASIC_be1bjg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_rfpbug`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ID, NAME, EMAIL INTO @mysql_synth_dummy FROM `mysql_tbl_rfpbug`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DISTINCT STATUS INTO @mysql_synth_dummy FROM `mysql_tbl_rfpbug`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    ALTER TABLESPACE TS1 ADD DATAFILE 'TS1_2.IBD';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER TABLESPACE TS1 DROP DATAFILE 'TS1_2.IBD';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER TABLESPACE TS1 RENAME TO TS1_NEW;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN TS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN (EMP_ID_PARAM * 17) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_f4iv4x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_f4iv4x(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT mysql_tbl_du1wqh_PLAN_TYPE, COALESCE(mysql_tbl_du1wqh_MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, mysql_tbl_du1wqh_START_DATE, CURDATE())
+    INTO V_PLAN_TYPE, V_MONTHLY_COST, V_TENURE_MONTHS
+    FROM `mysql_tbl_du1wqh`
+    WHERE mysql_tbl_du1wqh_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_HEALTH_SCORE = (MYSQL_FUNC_FUNC_151_SELECT_BASIC_be1bjg());
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx(-62);
+        WHEN 'PREMIUM' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(90);
+        WHEN 'BASIC' THEN SET V_HEALTH_SCORE = MYSQL_FUNC_FUNC_101_ALTER_TS_c1yqj1();
+    END CASE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(7)) - (0) + V_HEALTH_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_v6vg3j` WHERE AMOUNT > ALL (SELECT AMOUNT FROM `mysql_tbl_v6vg3j` WHERE STATUS = 'CANCELLED');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_v6vg3j` WHERE AMOUNT > ANY (SELECT AMOUNT FROM `mysql_tbl_v6vg3j` WHERE STATUS = 'COMPLETED');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_v6vg3j` WHERE AMOUNT > SOME (SELECT AMOUNT FROM `mysql_tbl_v6vg3j` WHERE STATUS = 'PENDING');
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(DISTINCT mysql_tbl_k0i9bu_CUSTOMER_ID)
+    INTO V_SUBSCRIBED, V_TOTAL
+    FROM `mysql_tbl_k0i9bu` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_k0i9bu_CUSTOMER_ID = S.CUSTOMER_ID
+    WHERE mysql_tbl_k0i9bu_COUNTRY = COUNTRY_PARAM;
+
+    IF V_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_SUBSCRIBED * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m(P_N INT, P_MIN INT, P_MAX INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < P_MIN THEN
+        SET V_RESULT = P_MIN;
+    ELSEIF P_N > P_MAX THEN
+        SET V_RESULT = MYSQL_FUNC_FUNC_177_SELECT_ALL_ANY_h11use();
+    ELSE
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(-96);
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_FUNC_136_CREATE_SELECT_d315mo()) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_f4iv4x(56)) - (0) + (-1))));
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(31)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_INVENTORY_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_b32z77_PRICE * mysql_tbl_b32z77_STOCK_QUANTITY), 0)
+    INTO V_INVENTORY_VALUE
+    FROM `mysql_tbl_b32z77`
+    WHERE mysql_tbl_b32z77_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m(87, 36, -45)) - (0) + (FLOOR(V_INVENTORY_VALUE / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_028_SLEEP_BENCH_zk05tf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE BENCH_COUNT INT DEFAULT 0;
+    
+    SELECT SLEEP(0.1);
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    SELECT BENCHMARK(1000, MD5('TEST'));
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    SELECT PG_SLEEP(0.1);
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(7)) - (0) + BENCH_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_028_SLEEP_BENCH_zk05tf();

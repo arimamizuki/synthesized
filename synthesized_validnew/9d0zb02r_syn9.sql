@@ -1,0 +1,335 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xyos3d` (
+    `mysql_tbl_xyos3d_budget` INT
+);
+
+INSERT INTO `mysql_tbl_xyos3d` (`mysql_tbl_xyos3d_budget`) VALUES (1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3g18de` (
+    `mysql_tbl_3g18de_product_id` INT,
+    `mysql_tbl_3g18de_category_id` INT,
+    `mysql_tbl_3g18de_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4a6hrg` (
+    `mysql_tbl_4a6hrg_category_id` INT,
+    `mysql_tbl_4a6hrg_name` VARCHAR(50),
+    `mysql_tbl_4a6hrg_parent_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_3g18de` (`mysql_tbl_3g18de_product_id`, `mysql_tbl_3g18de_category_id`, `mysql_tbl_3g18de_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_4a6hrg` (`mysql_tbl_4a6hrg_category_id`, `mysql_tbl_4a6hrg_name`, `mysql_tbl_4a6hrg_parent_category_id`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xx9e4x` (
+    `mysql_tbl_xx9e4x_product_id` INT,
+    `mysql_tbl_xx9e4x_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_xx9e4x` (`mysql_tbl_xx9e4x_product_id`, `mysql_tbl_xx9e4x_stock_quantity`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vdnepr` (
+    `mysql_tbl_vdnepr_order_id` INT,
+    `mysql_tbl_vdnepr_customer_id` INT,
+    `mysql_tbl_vdnepr_order_date` DATE,
+    `mysql_tbl_vdnepr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_vdnepr` (`mysql_tbl_vdnepr_order_id`, `mysql_tbl_vdnepr_customer_id`, `mysql_tbl_vdnepr_order_date`, `mysql_tbl_vdnepr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_os97me` (mysql_tbl_os97me_student_id INT, mysql_tbl_os97me_exam_score INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gcip49` (
+    `mysql_tbl_gcip49_category_id` INT,
+    `mysql_tbl_gcip49_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_gcip49` (`mysql_tbl_gcip49_category_id`, `mysql_tbl_gcip49_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT STATUS, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_jt9v0f` GROUP BY STATUS;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT USER_ID, SUM(AMOUNT) AS TOTAL INTO @mysql_synth_dummy FROM `mysql_tbl_8ojlg0` GROUP BY USER_ID HAVING TOTAL > 1000;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATE(CREATED_AT) AS DATE, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_8ojlg0` GROUP BY DATE WITH ROLLUP;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_gcip49` P ON OI.PRODUCT_ID = P.PRODUCT_ID
+    WHERE mysql_tbl_gcip49_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOCK_COUNT INT DEFAULT 0;
+    
+    SELECT GET_LOCK('MYLOCK', 10);
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_FREE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_USED_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_ALL_LOCKS();
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - (0) + LOCK_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(N INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_PREV BIGINT DEFAULT 0;
+    DECLARE V_CURR BIGINT DEFAULT 1;
+    DECLARE V_NEXT BIGINT;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN RETURN 0;
+    ELSEIF N = 1 THEN RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu(-43);
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(98)) - (0) + (-1));
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6()) - (0) + ((MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub()) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LEN_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_DATA_LENGTH('TEST', 'mysql_tbl_jt9v0f');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_INDEX_LENGTH('TEST', 'mysql_tbl_jt9v0f');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_MAX_DATA_LENGTH('TEST', 'mysql_tbl_jt9v0f');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_TABLE_ROWS('TEST', 'mysql_tbl_jt9v0f');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_UPDATE_TIME('TEST', 'mysql_tbl_jt9v0f');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - (0) + LEN_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVG_ORDER_VALUE_dfap17----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_ORDER_VALUE_dfap17(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_ORDER DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_vdnepr_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER
+    FROM `mysql_tbl_vdnepr`
+    WHERE mysql_tbl_vdnepr_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_AVG_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_REPEAT_UPDATE_6oac91----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_REPEAT_UPDATE_6oac91() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        UPDATE `mysql_tbl_os97me` SET mysql_tbl_os97me_EXAM_SCORE = mysql_tbl_os97me_EXAM_SCORE + 5 WHERE mysql_tbl_os97me_STUDENT_ID = V_COUNT;
+        SET V_COUNT = V_COUNT + 1;
+    UNTIL V_COUNT >= 10 END REPEAT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_xx9e4x_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_xx9e4x`
+    WHERE mysql_tbl_xx9e4x_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = V_COUNT + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOP_PRODUCTS_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONCENTRATION_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM `mysql_tbl_3g18de`
+    WHERE mysql_tbl_3g18de_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_3g18de_PRICE), 0)
+    INTO V_TOP_PRODUCTS_VALUE
+    FROM (
+        SELECT mysql_tbl_3g18de_PRICE FROM `mysql_tbl_3g18de`
+        WHERE mysql_tbl_3g18de_CATEGORY_ID = CATEGORY_ID_PARAM
+        ORDER BY mysql_tbl_3g18de_PRICE DESC
+        LIMIT 3
+    ) TOP_PRODUCTS;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt(-93)) - (((MYSQL_FUNC_CALCULATE_AVG_ORDER_VALUE_dfap17(73)) - (((MYSQL_FUNC_FLOW_CONTROL_PROC_REPEAT_UPDATE_6oac91()) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    SET V_CONCENTRATION_RATIO = (V_TOP_PRODUCTS_VALUE / V_TOTAL_PRODUCTS) * 100;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-9)) - (0) + (FLOOR(V_CONCENTRATION_RATIO)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_VALUE_3qynwt(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_xyos3d_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_xyos3d`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di()) - (0) + ((MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(-79)) - (0) + V_BUDGET));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_BUDGET_VALUE_3qynwt(1);

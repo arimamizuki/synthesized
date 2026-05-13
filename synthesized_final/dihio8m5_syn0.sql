@@ -1,0 +1,426 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2nn310` (
+    `mysql_tbl_2nn310_emp_id` INT,
+    `mysql_tbl_2nn310_department_id` INT,
+    `mysql_tbl_2nn310_salary` INT,
+    `mysql_tbl_2nn310_hire_date` DATE,
+    `mysql_tbl_2nn310_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_2nn310` (`mysql_tbl_2nn310_emp_id`, `mysql_tbl_2nn310_department_id`, `mysql_tbl_2nn310_salary`, `mysql_tbl_2nn310_hire_date`, `mysql_tbl_2nn310_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_b580ix` (
+    `mysql_tbl_b580ix_customer_id` INT,
+    `mysql_tbl_b580ix_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fazejn` (
+    `mysql_tbl_fazejn_order_id` INT,
+    `mysql_tbl_fazejn_customer_id` INT,
+    `mysql_tbl_fazejn_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_b580ix` (`mysql_tbl_b580ix_customer_id`, `mysql_tbl_b580ix_country`) VALUES (1, 1);
+
+INSERT INTO `mysql_tbl_fazejn` (`mysql_tbl_fazejn_order_id`, `mysql_tbl_fazejn_customer_id`, `mysql_tbl_fazejn_total_amount`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5um9hx` (
+    `mysql_tbl_5um9hx_emp_id` INT,
+    `mysql_tbl_5um9hx_manager_id` INT,
+    `mysql_tbl_5um9hx_department_id` INT,
+    `mysql_tbl_5um9hx_salary` INT,
+    `mysql_tbl_5um9hx_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_5um9hx` (`mysql_tbl_5um9hx_emp_id`, `mysql_tbl_5um9hx_manager_id`, `mysql_tbl_5um9hx_department_id`, `mysql_tbl_5um9hx_salary`, `mysql_tbl_5um9hx_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lr3j1l` (
+    `mysql_tbl_lr3j1l_customer_id` INT,
+    `mysql_tbl_lr3j1l_order_date` DATE,
+    `mysql_tbl_lr3j1l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_lr3j1l` (`mysql_tbl_lr3j1l_customer_id`, `mysql_tbl_lr3j1l_order_date`, `mysql_tbl_lr3j1l_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ahg7og` (
+    `mysql_tbl_ahg7og_cbin` INT
+);
+
+INSERT INTO `mysql_tbl_ahg7og` (`mysql_tbl_ahg7og_cbin`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mxl2ad` (
+    `mysql_tbl_mxl2ad_customer_id` INT,
+    `mysql_tbl_mxl2ad_country` INT
+);
+
+INSERT INTO `mysql_tbl_mxl2ad` (`mysql_tbl_mxl2ad_customer_id`, `mysql_tbl_mxl2ad_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nws609` (
+    `mysql_tbl_nws609_payment_id` INT,
+    `mysql_tbl_nws609_order_id` INT,
+    `mysql_tbl_nws609_amount` DECIMAL(10,2),
+    `mysql_tbl_nws609_payment_date` DATE,
+    `mysql_tbl_nws609_payment_method` INT,
+    `mysql_tbl_nws609_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_nws609` (`mysql_tbl_nws609_payment_id`, `mysql_tbl_nws609_order_id`, `mysql_tbl_nws609_amount`, `mysql_tbl_nws609_payment_date`, `mysql_tbl_nws609_payment_method`, `mysql_tbl_nws609_status`) VALUES (1, 2, 1.0, '2024-01-01', 5, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dwjptb` (
+    `mysql_tbl_dwjptb_emp_id` INT,
+    `mysql_tbl_dwjptb_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_dwjptb` (`mysql_tbl_dwjptb_emp_id`, `mysql_tbl_dwjptb_department_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN P_N * 2;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_2nn310_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_2nn310_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_2nn310_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM `mysql_tbl_2nn310`
+    WHERE mysql_tbl_2nn310_EMP_ID = EMP_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(-35));
+
+    RETURN V_STABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10 UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM `mysql_tbl_dwjptb`
+    WHERE mysql_tbl_dwjptb_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT > 50 THEN
+        RETURN 5;
+    ELSEIF V_EMP_COUNT > 20 THEN
+        RETURN 4;
+    ELSEIF V_EMP_COUNT > 10 THEN
+        RETURN 3;
+    ELSEIF V_EMP_COUNT > 5 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_fazejn_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM `mysql_tbl_fazejn` O
+    JOIN `mysql_tbl_b580ix` C ON mysql_tbl_fazejn_CUSTOMER_ID = mysql_tbl_b580ix_CUSTOMER_ID
+    WHERE mysql_tbl_b580ix_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_fazejn_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_fazejn`;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj();
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(68)) - (0) + V_REVENUE_SHARE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP USER 'OLDUSER'@'LOCALHOST';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP USER IF EXISTS 'NONEXISTENT'@'%';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_135_CREATE_LIKE_t7ajy7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_135_CREATE_LIKE_t7ajy7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE COPY_USERS LIKE USERS;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    CREATE TABLE COPY_ORDERS LIKE ORDERS;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(DISTINCT mysql_tbl_lr3j1l_CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM `mysql_tbl_lr3j1l`
+    WHERE mysql_tbl_lr3j1l_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_5um9hx_SALARY, TIMESTAMPDIFF(YEAR, mysql_tbl_5um9hx_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_5um9hx`
+    WHERE mysql_tbl_5um9hx_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = V_SALARY * (1 + V_TENURE_YEARS * 0.02);
+
+    RETURN FLOOR(V_ADJUSTED_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_REFUND_o1fbz5(ORDER_ID_PARAM INT, REFUND_PERCENT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAYMENT_STATUS INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(SUM(mysql_tbl_nws609_AMOUNT), 0) INTO V_TOTAL_PAID
+    FROM `mysql_tbl_nws609`
+    WHERE mysql_tbl_nws609_ORDER_ID = ORDER_ID_PARAM AND mysql_tbl_nws609_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_PAID = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF REFUND_PERCENT < 0 THEN
+        SET REFUND_PERCENT = 0;
+    END IF;
+
+    IF REFUND_PERCENT > 100 THEN
+        SET REFUND_PERCENT = 100;
+    END IF;
+
+    SET V_REFUND_AMOUNT = V_TOTAL_PAID * REFUND_PERCENT / 100;
+
+    RETURN V_REFUND_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_ADD_NUMBERS_rriimw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD_NUMBERS_rriimw(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    SET V_RESULT = MYSQL_FUNC_PROCESS_REFUND_o1fbz5(92, 37);
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT mysql_tbl_mxl2ad_COUNTRY
+    INTO V_COUNTRY
+    FROM `mysql_tbl_mxl2ad`
+    WHERE mysql_tbl_mxl2ad_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_COUNTRY
+        WHEN 'USA' THEN 1
+        WHEN 'UK' THEN 2
+        WHEN 'CN' THEN 3
+        WHEN 'JP' THEN 4
+        ELSE 0 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIN_djqrc4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_ahg7og_CBIN INTO RESULT FROM `mysql_tbl_ahg7og` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SRS_COUNT INT DEFAULT 0;
+    
+    CREATE SPATIAL REFERENCE SYSTEM 4120 NAME 'GREEK' DEFINITION 'GEOGCS["GREEK",DATUM["GREEK",SPHEROID["BESSEL 1841",6377397.155,299.1528128]],PRIMEM["GREENWICH",0],UNIT["DEGREE",0.017453292519943295]]';
+    SET SRS_COUNT = SRS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_PROC_BIN_djqrc4()) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(-89)) - (0) + SRS_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_135_CREATE_LIKE_t7ajy7()) - (((MYSQL_FUNC_ADD_NUMBERS_rriimw(-70, -5)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_LAST_TERM = FIRST_TERM + (NUM_TERMS - 1) * COMMON_DIFF;
+    SET V_SUM = MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(-95);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(88)) - (((MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se()) - (0) + 0)) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - (0) + 0);
+    END IF;
+
+    REPEAT
+        SET V_RESULT = MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3();
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN ((MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(-7, 37, 80)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_139_HASH_PARTITION_7sem37() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_kgk4vc` (mysql_tbl_kgk4vc_ID INT, mysql_tbl_kgk4vc_DATA VARCHAR(50)) PARTITION BY HASH(ID) PARTITIONS 4;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_lpg41b` (mysql_tbl_lpg41b_ID INT, mysql_tbl_lpg41b_NAME VARCHAR(50)) PARTITION BY KEY(ID) PARTITIONS 8;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(-41)) - (0) + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(3)) - (0) + TBL_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_139_HASH_PARTITION_7sem37();

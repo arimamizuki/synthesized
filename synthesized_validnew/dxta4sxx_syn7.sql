@@ -1,0 +1,360 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8g91i4` (
+    `mysql_tbl_8g91i4_campaign_id` INT,
+    `mysql_tbl_8g91i4_start_date` DATE,
+    `mysql_tbl_8g91i4_end_date` DATE
+);
+
+INSERT INTO `mysql_tbl_8g91i4` (`mysql_tbl_8g91i4_campaign_id`, `mysql_tbl_8g91i4_start_date`, `mysql_tbl_8g91i4_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lozvff` (
+    `mysql_tbl_lozvff_order_id` INT,
+    `mysql_tbl_lozvff_customer_id` INT,
+    `mysql_tbl_lozvff_order_status` VARCHAR(50),
+    `mysql_tbl_lozvff_total_amount` DECIMAL(10,2),
+    `mysql_tbl_lozvff_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_lozvff` (`mysql_tbl_lozvff_order_id`, `mysql_tbl_lozvff_customer_id`, `mysql_tbl_lozvff_order_status`, `mysql_tbl_lozvff_total_amount`, `mysql_tbl_lozvff_order_date`) VALUES (1, 2, 'test', 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tbglx3` (
+    `mysql_tbl_tbglx3_campaign_id` INT,
+    `mysql_tbl_tbglx3_start_date` DATE,
+    `mysql_tbl_tbglx3_end_date` DATE,
+    `mysql_tbl_tbglx3_budget` INT,
+    `mysql_tbl_tbglx3_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6uy0q6` (
+    `mysql_tbl_6uy0q6_conversion_id` INT,
+    `mysql_tbl_6uy0q6_campaign_id` INT,
+    `mysql_tbl_6uy0q6_conversion_date` DATE
+);
+
+INSERT INTO `mysql_tbl_tbglx3` (`mysql_tbl_tbglx3_campaign_id`, `mysql_tbl_tbglx3_start_date`, `mysql_tbl_tbglx3_end_date`, `mysql_tbl_tbglx3_budget`, `mysql_tbl_tbglx3_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_6uy0q6` (`mysql_tbl_6uy0q6_conversion_id`, `mysql_tbl_6uy0q6_campaign_id`, `mysql_tbl_6uy0q6_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4mpb1y` (
+    `mysql_tbl_4mpb1y_emp_id` INT,
+    `mysql_tbl_4mpb1y_department_id` INT,
+    `mysql_tbl_4mpb1y_hire_date` DATE,
+    `mysql_tbl_4mpb1y_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rp97ij` (
+    `mysql_tbl_rp97ij_department_id` INT,
+    `mysql_tbl_rp97ij_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_4mpb1y` (`mysql_tbl_4mpb1y_emp_id`, `mysql_tbl_4mpb1y_department_id`, `mysql_tbl_4mpb1y_hire_date`, `mysql_tbl_4mpb1y_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_rp97ij` (`mysql_tbl_rp97ij_department_id`, `mysql_tbl_rp97ij_name`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = V_SUM + V_I;
+        END IF;
+        SET V_I = V_I + 1;
+        IF V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_TEST_FUNC_wf2zzx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_FUNC_wf2zzx(NUMBER_1_VAR INT, NUMBER_2_VAR INT) RETURNS INT DETERMINISTIC
+BEGIN
+  DECLARE I              INT DEFAULT 1;
+  DECLARE MESSAGE_VAR    VARCHAR(400);
+  DECLARE RESULT         INT DEFAULT 0;
+  
+  SET MESSAGE_VAR = CONCAT('COMMON FACTORS OF ', NUMBER_1_VAR, ' AND ',NUMBER_2_VAR,':');
+  WHILE ((I <= NUMBER_1_VAR) AND (I < NUMBER_2_VAR))  DO
+    
+    IF ((NUMBER_1_VAR % I = 0) AND (NUMBER_2_VAR % I = 0)) THEN
+      SET MESSAGE_VAR = CONCAT(MESSAGE_VAR," ", I);
+      SET RESULT = I;
+      END IF;
+    
+    SET I = I + 1;
+  END WHILE;
+  
+  RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_DATA_CONTRATO_exzmo9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_CONTRATO_exzmo9(DATA_INICIO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATA_ATUAL DATE;
+    SET DATA_ATUAL = CURDATE();
+    RETURN YEAR(DATA_ATUAL) - DATA_INICIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (3.14159 * RADIUS * RADIUS * HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_052_VALIDATE_PASSWORD_e8bwqu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_052_VALIDATE_PASSWORD_e8bwqu() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VAL_COUNT INT DEFAULT 0;
+    
+    SELECT VALIDATE_PASSWORD_STRENGTH('PASSWORD123');
+    SET VAL_COUNT = VAL_COUNT + 1;
+    
+    SELECT MASK_INNER('1234567890', 2, 3);
+    SET VAL_COUNT = VAL_COUNT + 1;
+    
+    SELECT MASK_OUTER('1234567890', 2, 3);
+    SET VAL_COUNT = VAL_COUNT + 1;
+    
+    SELECT MASK_PAN('1234567890123456');
+    SET VAL_COUNT = VAL_COUNT + 1;
+    
+    SELECT MASK_SSN('123456789');
+    SET VAL_COUNT = VAL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(15, 76)) - (0) + VAL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(JSON_STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_LEN INT DEFAULT CHAR_LENGTH(JSON_STR);
+    DECLARE V_CHAR CHAR(1);
+    DECLARE V_BRACKET_COUNT INT DEFAULT 0;
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+
+    IF JSON_STR IS NULL OR JSON_STR = '' THEN
+        RETURN 0;
+    END IF;
+
+    PARSE_LOOP: WHILE V_POS <= V_LEN DO
+        SET V_CHAR = SUBSTRING(JSON_STR, V_POS, 1);
+
+        IF V_CHAR = '{' OR V_CHAR = '[' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT + 1;
+            IF V_BRACKET_COUNT > V_MAX_DEPTH THEN
+                SET V_MAX_DEPTH = V_BRACKET_COUNT;
+            END IF;
+        ELSEIF V_CHAR = '}' OR V_CHAR = ']' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT - 1;
+        END IF;
+
+        SET V_POS = V_POS + 1;
+    END WHILE PARSE_LOOP;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT DATEDIFF(mysql_tbl_tbglx3_END_DATE, mysql_tbl_tbglx3_START_DATE)
+    INTO V_DURATION_DAYS
+    FROM `mysql_tbl_tbglx3`
+    WHERE mysql_tbl_tbglx3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_6uy0q6`
+    WHERE mysql_tbl_6uy0q6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY = V_CONVERSION_COUNT / V_DURATION_DAYS;
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o(RADIUS INT, ANGLE_DEGREES INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+    SET V_AREA = 3.14159 * RADIUS * RADIUS * ANGLE_DEGREES / 360;
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PENDING_COUNT INT DEFAULT 0;
+    DECLARE V_PROCESSING_COUNT INT DEFAULT 0;
+    DECLARE V_SHIPPED_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_PENDING INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_PENDING_COUNT
+    FROM `mysql_tbl_lozvff`
+    WHERE mysql_tbl_lozvff_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND mysql_tbl_lozvff_ORDER_STATUS = 'PENDING';
+
+    SELECT COUNT(*) INTO V_PROCESSING_COUNT
+    FROM `mysql_tbl_lozvff`
+    WHERE mysql_tbl_lozvff_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND mysql_tbl_lozvff_ORDER_STATUS = 'PROCESSING';
+
+    SELECT COUNT(*) INTO V_SHIPPED_COUNT
+    FROM `mysql_tbl_lozvff`
+    WHERE mysql_tbl_lozvff_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND mysql_tbl_lozvff_ORDER_STATUS = 'SHIPPED';
+
+    SET V_TOTAL_PENDING = V_PENDING_COUNT + V_PROCESSING_COUNT;
+
+    RETURN V_TOTAL_PENDING;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SUCCESSION_READINESS_j0ct2w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SUCCESSION_READINESS_j0ct2w(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_CRITICAL_ROLES INT DEFAULT 0;
+    DECLARE V_READY_SUCCESSORS INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM `mysql_tbl_4mpb1y`
+    WHERE mysql_tbl_4mpb1y_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT mysql_tbl_4mpb1y_EMP_ID)
+    INTO V_READY_SUCCESSORS
+    FROM `mysql_tbl_4mpb1y` E
+    WHERE mysql_tbl_4mpb1y_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND E.MANAGER_ID IS NOT NULL;
+
+    SET V_READINESS_SCORE = (V_READY_SUCCESSORS * 100) / GREATEST(V_TOTAL_EMPLOYEES, 1);
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP ROLE 'OLDROLE';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP ROLE IF EXISTS 'NONEXISTENTROLE';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SUCCESSION_READINESS_j0ct2w(93)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_syz81u----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_syz81u(INPUT_STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED VARCHAR(100) DEFAULT '';
+    DECLARE V_LEN INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+
+    SET V_LEN = MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(44);
+
+    WHILE V_I <= V_LEN DO
+        SET V_CHAR = MYSQL_FUNC_FUNC_052_VALIDATE_PASSWORD_e8bwqu();
+        SET V_REVERSED = MYSQL_FUNC_DATA_CONTRATO_exzmo9(9);
+        SET V_I = MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(47);
+    END WHILE;
+
+    IF INPUT_STR = V_REVERSED THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(-6)) - (((MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o(-49, 60)) - (0) + 0)) + ((MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g()) - (0) + 1));
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT mysql_tbl_8g91i4_END_DATE
+    INTO V_END_DATE
+    FROM `mysql_tbl_8g91i4`
+    WHERE mysql_tbl_8g91i4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(-65)) - (((MYSQL_FUNC_TEST_FUNC_wf2zzx(-41, -68)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_IS_PALINDROME_syz81u(-46)) - (0) + (GREATEST(DATEDIFF(V_END_DATE, CURDATE()), 0)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(1);

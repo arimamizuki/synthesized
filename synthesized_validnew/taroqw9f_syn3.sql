@@ -1,0 +1,191 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x1citd` (
+    `mysql_tbl_x1citd_employee_id` INT,
+    `mysql_tbl_x1citd_name` VARCHAR(50),
+    `mysql_tbl_x1citd_department_id` INT,
+    `mysql_tbl_x1citd_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rzd2hk` (
+    `mysql_tbl_rzd2hk_department_id` INT,
+    `mysql_tbl_rzd2hk_name` VARCHAR(50),
+    `mysql_tbl_rzd2hk_budget` INT
+);
+
+INSERT INTO `mysql_tbl_x1citd` (`mysql_tbl_x1citd_employee_id`, `mysql_tbl_x1citd_name`, `mysql_tbl_x1citd_department_id`, `mysql_tbl_x1citd_salary`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `mysql_tbl_rzd2hk` (`mysql_tbl_rzd2hk_department_id`, `mysql_tbl_rzd2hk_name`, `mysql_tbl_rzd2hk_budget`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nbe6md` (
+    `mysql_tbl_nbe6md_emp_id` INT,
+    `mysql_tbl_nbe6md_department_id` INT,
+    `mysql_tbl_nbe6md_salary` INT
+);
+
+INSERT INTO `mysql_tbl_nbe6md` (`mysql_tbl_nbe6md_emp_id`, `mysql_tbl_nbe6md_department_id`, `mysql_tbl_nbe6md_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2rvwwm` (
+    `mysql_tbl_2rvwwm_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_2rvwwm` (`mysql_tbl_2rvwwm_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_DEPARTMENT_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENDING_RATIO INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(mysql_tbl_x1citd_SALARY), 0)
+    INTO V_EMPLOYEE_COUNT, V_TOTAL_SALARIES
+    FROM `mysql_tbl_x1citd`
+    WHERE mysql_tbl_x1citd_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_rzd2hk_BUDGET, 0)
+    INTO V_DEPARTMENT_BUDGET
+    FROM `mysql_tbl_rzd2hk`
+    WHERE mysql_tbl_rzd2hk_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_DEPARTMENT_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SPENDING_RATIO = (V_TOTAL_SALARIES * 100) / V_DEPARTMENT_BUDGET;
+
+    RETURN V_SPENDING_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * RADIUS * RADIUS * HEIGHT;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TYPE_COUNT INT DEFAULT 0;
+    
+    SELECT DATA_TYPE('TEST', 'USERS', 'ID');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT DATETIME_PRECISION('TEST', 'USERS', 'CREATED_AT');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_COMMENT('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_NAME('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    SELECT INDEX_TYPE('TEST', 'USERS', 'IDX_NAME');
+    SET TYPE_COUNT = TYPE_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(47)) - (0) + ((MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(23, 64)) - (0) + TYPE_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_NEGATE_BOOLEAN_km7s69----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(FLAG INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF FLAG = 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_2rvwwm`
+    WHERE mysql_tbl_2rvwwm_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_nbe6md_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM `mysql_tbl_nbe6md`
+    WHERE mysql_tbl_nbe6md_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(81)) - (0) + (FLOOR(V_SALARY_SUM)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_NEGATE_VALUE_1ykrf9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_VALUE_1ykrf9(X INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(64)) - (0) + (((MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(18)) - (0) + (-X))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_047_DATA_TYPE_d0jqi0()) - (0) + 0);
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    WHILE V_COUNTER <= N DO
+        SET V_RESULT = MYSQL_FUNC_NEGATE_VALUE_1ykrf9(95);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(1);

@@ -1,0 +1,115 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5303ul` (
+    `mysql_tbl_5303ul_customer_id` INT,
+    `mysql_tbl_5303ul_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_5303ul` (`mysql_tbl_5303ul_customer_id`, `mysql_tbl_5303ul_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tkidnw` (
+    `mysql_tbl_tkidnw_customer_id` INT,
+    `mysql_tbl_tkidnw_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_tkidnw` (`mysql_tbl_tkidnw_customer_id`, `mysql_tbl_tkidnw_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uw8u5v` (
+    `mysql_tbl_uw8u5v_order_id` INT,
+    `mysql_tbl_uw8u5v_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_uw8u5v` (`mysql_tbl_uw8u5v_order_id`, `mysql_tbl_uw8u5v_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, mysql_tbl_5303ul_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_DAYS
+    FROM `mysql_tbl_5303ul`
+    WHERE mysql_tbl_5303ul_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_uw8u5v_ORDER_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_uw8u5v`
+    WHERE mysql_tbl_uw8u5v_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_tkidnw`
+    WHERE mysql_tbl_tkidnw_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_tkidnw_STATUS = 'ACTIVE';
+
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(23)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ACCESS_COUNT INT DEFAULT 0;
+    
+    SELECT CAN_ACCESS_COLUMN('TEST', 'USERS', 'ID');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_DATABASE('TEST');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_TABLE('TEST', 'USERS');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_VIEW('TEST', 'USER_VIEW');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(90)) - (0) + ACCESS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(A1 INT, R INT, N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NTH_TERM INT DEFAULT 0;
+    SET V_NTH_TERM = MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj();
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(63)) - (0) + V_NTH_TERM);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(1, 1, 1);

@@ -1,0 +1,100 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_79a8rm` (
+    `mysql_tbl_79a8rm_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_79a8rm` (`mysql_tbl_79a8rm_customer_id`) VALUES (1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gmza4s` (
+    `mysql_tbl_gmza4s_emp_id` INT,
+    `mysql_tbl_gmza4s_salary` INT
+);
+
+INSERT INTO `mysql_tbl_gmza4s` (`mysql_tbl_gmza4s_emp_id`, `mysql_tbl_gmza4s_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c887bq` (
+    `mysql_tbl_c887bq_product_id` INT,
+    `mysql_tbl_c887bq_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_c887bq` (`mysql_tbl_c887bq_product_id`, `mysql_tbl_c887bq_supplier_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_c887bq_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM `mysql_tbl_c887bq`
+    WHERE mysql_tbl_c887bq_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_c887bq`
+    WHERE mysql_tbl_c887bq_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_gmza4s_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_gmza4s`
+    WHERE mysql_tbl_gmza4s_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UPD_COUNT INT DEFAULT 0;
+    
+    UPDATE `mysql_tbl_nydodi` SET PRIORITY = 'HIGH' WHERE STATUS = 'ACTIVE' ORDER BY CREATED_AT DESC LIMIT 10;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    UPDATE `mysql_tbl_zgzj8m` SET PROCESSED = 1 WHERE PROCESSED = 0 LIMIT 100;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(-14)) - (0) + ((MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(-74)) - (0) + UPD_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_SIMPLE_wyrhdi(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_zgzj8m`
+    WHERE mysql_tbl_79a8rm_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_147_UPDATE_LIMIT_s4fz08()) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_SIMPLE_wyrhdi(1);

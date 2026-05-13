@@ -1,0 +1,261 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pg1w46` (
+    `mysql_tbl_pg1w46_customer_id` INT,
+    `mysql_tbl_pg1w46_order_date` DATE,
+    `mysql_tbl_pg1w46_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pg1w46` (`mysql_tbl_pg1w46_customer_id`, `mysql_tbl_pg1w46_order_date`, `mysql_tbl_pg1w46_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_44lu14` (
+    `mysql_tbl_44lu14_emp_id` INT,
+    `mysql_tbl_44lu14_salary` INT,
+    `mysql_tbl_44lu14_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_44lu14` (`mysql_tbl_44lu14_emp_id`, `mysql_tbl_44lu14_salary`, `mysql_tbl_44lu14_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_icsbq8` (
+    `mysql_tbl_icsbq8_emp_id` INT,
+    `mysql_tbl_icsbq8_department_id` INT,
+    `mysql_tbl_icsbq8_salary` INT,
+    `mysql_tbl_icsbq8_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tist3o` (
+    `mysql_tbl_tist3o_department_id` INT,
+    `mysql_tbl_tist3o_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_icsbq8` (`mysql_tbl_icsbq8_emp_id`, `mysql_tbl_icsbq8_department_id`, `mysql_tbl_icsbq8_salary`, `mysql_tbl_icsbq8_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_tist3o` (`mysql_tbl_tist3o_department_id`, `mysql_tbl_tist3o_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vc548v` (mysql_tbl_vc548v_id INT, mysql_tbl_vc548v_status VARCHAR(20), refund_mysql_tbl_vc548v_status VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_88ziw6` (
+    `mysql_tbl_88ziw6_product_id` INT,
+    `mysql_tbl_88ziw6_price` DECIMAL(10,2),
+    `mysql_tbl_88ziw6_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_88ziw6` (`mysql_tbl_88ziw6_product_id`, `mysql_tbl_88ziw6_price`, `mysql_tbl_88ziw6_category_id`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p9xngj` (
+    `mysql_tbl_p9xngj_campaign_id` INT,
+    `mysql_tbl_p9xngj_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_p9xngj` (`mysql_tbl_p9xngj_campaign_id`, `mysql_tbl_p9xngj_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(START_NUM INT, END_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF START_NUM > END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N / 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_p9xngj_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_p9xngj`
+    WHERE mysql_tbl_p9xngj_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_zdctve----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_zdctve(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_88ziw6` P ON OI.PRODUCT_ID = mysql_tbl_88ziw6_PRODUCT_ID
+    WHERE mysql_tbl_88ziw6_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - (0) + (FLOOR(V_REVENUE)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_44lu14_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_44lu14_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_44lu14`
+    WHERE mysql_tbl_44lu14_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_zdctve(-33)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4(-18)) - (0) + (((MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(84, 95)) - (0) + (FLOOR(V_SALARY / V_TENURE_YEARS)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(ORDER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_REFUND_STATUS VARCHAR(20);
+    SELECT mysql_tbl_vc548v_STATUS, mysql_tbl_vc548v_REFUND_STATUS INTO V_STATUS, V_REFUND_STATUS FROM `mysql_tbl_vc548v` WHERE mysql_tbl_vc548v_ID = ORDER_ID;
+    IF V_STATUS != 'DELIVERED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ONLY DELIVERED mysql_tbl_vc548v CAN BE REFUNDED';
+    END IF;
+    IF V_REFUND_STATUS = 'REFUNDED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ORDER HAS ALREADY BEEN REFUNDED';
+    END IF;
+    UPDATE `mysql_tbl_vc548v` SET mysql_tbl_vc548v_REFUND_STATUS = 'REFUNDED' WHERE mysql_tbl_vc548v_ID = ORDER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_SENIOR_COUNT INT DEFAULT 0;
+    DECLARE V_SENIORITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, mysql_tbl_icsbq8_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM `mysql_tbl_icsbq8`
+    WHERE mysql_tbl_icsbq8_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SENIOR_COUNT
+    FROM `mysql_tbl_icsbq8`
+    WHERE mysql_tbl_icsbq8_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND TIMESTAMPDIFF(YEAR, mysql_tbl_icsbq8_HIRE_DATE, CURDATE()) >= 5;
+
+    SET V_SENIORITY_INDEX = (V_AVG_TENURE * 10) + (V_SENIOR_COUNT * 15);
+
+    RETURN V_SENIORITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_EXTRACT_NUMERIC_FROM_STRING_rtai4d----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EXTRACT_NUMERIC_FROM_STRING_rtai4d(INPUT_STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_INPUT_LEN INT DEFAULT 0;
+
+    SET V_INPUT_LEN = MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(63);
+
+    WHILE V_INDEX <= V_INPUT_LEN DO
+        SET V_CHAR = SUBSTRING(INPUT_STR, V_INDEX, 1);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_RESULT = V_RESULT * 10 + CAST(V_CHAR AS SIGNED);
+        END IF;
+
+        SET V_INDEX = MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(92);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(-71)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_pg1w46`
+    WHERE mysql_tbl_pg1w46_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND mysql_tbl_pg1w46_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    RETURN ((MYSQL_FUNC_EXTRACT_NUMERIC_FROM_STRING_rtai4d(6)) - (0) + V_ORDER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz(1);

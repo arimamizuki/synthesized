@@ -1,0 +1,245 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kqvk3j` (
+    `mysql_tbl_kqvk3j_enrollment_id` INT,
+    `mysql_tbl_kqvk3j_child_id` INT,
+    `mysql_tbl_kqvk3j_program_type` VARCHAR(50),
+    `mysql_tbl_kqvk3j_hours_per_week` INT,
+    `mysql_tbl_kqvk3j_weekly_rate` INT,
+    `mysql_tbl_kqvk3j_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_utv0qv` (
+    `mysql_tbl_utv0qv_child_id` INT,
+    `mysql_tbl_utv0qv_date_of_birth` DATE,
+    `mysql_tbl_utv0qv_parent_id` INT
+);
+
+INSERT INTO `mysql_tbl_kqvk3j` (`mysql_tbl_kqvk3j_enrollment_id`, `mysql_tbl_kqvk3j_child_id`, `mysql_tbl_kqvk3j_program_type`, `mysql_tbl_kqvk3j_hours_per_week`, `mysql_tbl_kqvk3j_weekly_rate`, `mysql_tbl_kqvk3j_start_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_utv0qv` (`mysql_tbl_utv0qv_child_id`, `mysql_tbl_utv0qv_date_of_birth`, `mysql_tbl_utv0qv_parent_id`) VALUES (1, '2024-01-01', 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g6usfz` (
+    `mysql_tbl_g6usfz_cbigint` BIGINT
+);
+
+INSERT INTO `mysql_tbl_g6usfz` (`mysql_tbl_g6usfz_cbigint`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nluzg1` (
+    `mysql_tbl_nluzg1_cbin` INT
+);
+
+INSERT INTO `mysql_tbl_nluzg1` (`mysql_tbl_nluzg1_cbin`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_id2vpd` (
+    `mysql_tbl_id2vpd_customer_id` INT,
+    `mysql_tbl_id2vpd_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_id2vpd` (`mysql_tbl_id2vpd_customer_id`, `mysql_tbl_id2vpd_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, mysql_tbl_id2vpd_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM `mysql_tbl_id2vpd`
+    WHERE mysql_tbl_id2vpd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT mysql_tbl_g6usfz_CBIGINT FROM `mysql_tbl_g6usfz`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = RESULT + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(-49)) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(-14);
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BINARY_STR VARCHAR(100) DEFAULT '';
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+    DECLARE V_POSITION INT DEFAULT 1;
+
+    SET V_TEMP = ABS(N);
+
+    IF V_TEMP = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 2;
+        SET V_BINARY_STR = CONCAT(CAST(V_DIGIT AS CHAR), V_BINARY_STR);
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    RETURN CAST(V_BINARY_STR AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM USERS INTERSECT SELECT USER_ID FROM `mysql_tbl_vnc104`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ID INTO @mysql_synth_dummy FROM USERS EXCEPT SELECT USER_ID FROM `mysql_tbl_vnc104`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_193_HANDLER_lvict9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_193_HANDLER_lvict9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE HANDLER_COUNT INT DEFAULT 0;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET HANDLER_COUNT = HANDLER_COUNT + 1;
+    
+    SELECT 1;
+    SET HANDLER_COUNT = HANDLER_COUNT + 1;
+    
+    RETURN HANDLER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIN_djqrc4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_nluzg1_CBIN INTO RESULT FROM `mysql_tbl_nluzg1` LIMIT 1;
+    RETURN ((MYSQL_FUNC_FUNC_193_HANDLER_lvict9()) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(CHILD_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHILD_AGE INT DEFAULT 0;
+    DECLARE V_PROGRAM_RATE INT DEFAULT 0;
+    DECLARE V_EXTRA_HOURS INT DEFAULT 0;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_utv0qv_DATE_OF_BIRTH, CURDATE())
+    INTO V_CHILD_AGE
+    FROM `mysql_tbl_utv0qv`
+    WHERE mysql_tbl_utv0qv_CHILD_ID = CHILD_ID_PARAM;
+
+    SELECT mysql_tbl_kqvk3j_WEEKLY_RATE
+    INTO V_PROGRAM_RATE
+    FROM `mysql_tbl_kqvk3j`
+    WHERE mysql_tbl_kqvk3j_CHILD_ID = CHILD_ID_PARAM
+    ORDER BY mysql_tbl_kqvk3j_START_DATE DESC LIMIT 1;
+
+    IF V_PROGRAM_RATE IS NULL THEN
+        SET V_PROGRAM_RATE = MYSQL_FUNC_FUNC_178_SELECT_INTERSECT_l7higy();
+    END IF;
+
+    SET V_TOTAL_FEE = MYSQL_FUNC_PROC_BIGINT_elxddt();
+
+    IF V_CHILD_AGE < 2 THEN
+        SET V_AGE_SURCHARGE = MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88);
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy(-75)) - (0) + (((MYSQL_FUNC_PROC_BIN_djqrc4()) - (0) + (CAST(V_TOTAL_FEE AS SIGNED)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(1);

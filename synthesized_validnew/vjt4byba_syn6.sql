@@ -1,0 +1,74 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1856lz` (
+    `mysql_tbl_1856lz_emp_id` INT,
+    `mysql_tbl_1856lz_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_1856lz` (`mysql_tbl_1856lz_emp_id`, `mysql_tbl_1856lz_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sjrkyv` (
+    `mysql_tbl_sjrkyv_customer_id` INT,
+    `mysql_tbl_sjrkyv_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_sjrkyv` (`mysql_tbl_sjrkyv_customer_id`, `mysql_tbl_sjrkyv_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE ORDERS DROP FOREIGN KEY FK_USER_ID;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE USERS DROP CHECK CHK_AGE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE USERS DROP INDEX UQ_EMAIL;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_sjrkyv`
+    WHERE mysql_tbl_sjrkyv_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_sjrkyv_STATUS = 'ACTIVE';
+
+    RETURN ((MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk()) - (0) + CASE WHEN V_COUNT > 0 THEN 1 ELSE 0 END) END;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_1856lz_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM `mysql_tbl_1856lz`
+    WHERE mysql_tbl_1856lz_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(90)) - (0) + V_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf(1);

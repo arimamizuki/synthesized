@@ -1,0 +1,48 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mzzksf` (
+    `mysql_tbl_mzzksf_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_mzzksf` (`mysql_tbl_mzzksf_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    CREATE UNDO TABLESPACE UNDO_TS1 ADD DATAFILE 'UNDO_TS1.IBU';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER UNDO TABLESPACE UNDO_TS1 SET INACTIVE;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    DROP UNDO TABLESPACE UNDO_TS1;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN TS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_COST_kq8dsn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_mzzksf`
+    WHERE mysql_tbl_mzzksf_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn()) - (0) + V_COST);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_COST_kq8dsn(1);

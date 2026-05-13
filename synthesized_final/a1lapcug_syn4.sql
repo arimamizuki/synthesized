@@ -1,0 +1,119 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h34i7d` (
+    `mysql_tbl_h34i7d_supplier_id` INT,
+    `mysql_tbl_h34i7d_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_h34i7d` (`mysql_tbl_h34i7d_supplier_id`, `mysql_tbl_h34i7d_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0b3eco` (
+    `mysql_tbl_0b3eco_ctext` VARCHAR(255)
+);
+
+INSERT INTO `mysql_tbl_0b3eco` (`mysql_tbl_0b3eco_ctext`) VALUES ('sample_text');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0jgr5c` (
+    `mysql_tbl_0jgr5c_emp_id` INT,
+    `mysql_tbl_0jgr5c_department_id` INT,
+    `mysql_tbl_0jgr5c_salary` INT,
+    `mysql_tbl_0jgr5c_hire_date` DATE,
+    `mysql_tbl_0jgr5c_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_0jgr5c` (`mysql_tbl_0jgr5c_emp_id`, `mysql_tbl_0jgr5c_department_id`, `mysql_tbl_0jgr5c_salary`, `mysql_tbl_0jgr5c_hire_date`, `mysql_tbl_0jgr5c_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(PART INT, TOTAL INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF TOTAL = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'TOTAL CANNOT BE ZERO';
+    END IF;
+    IF PART < 0 OR TOTAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUES CANNOT BE NEGATIVE';
+    END IF;
+    RETURN (PART / TOTAL) * 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_i44cdf USERS FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_cj93w5_UPDATE `mysql_tbl_cj93w5` UPDATE `mysql_tbl_i44cdf` USERS FOR EACH ROW INSERT INTO `mysql_tbl_vol9jq` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN TRIG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_0jgr5c_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_0jgr5c_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_0jgr5c_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM `mysql_tbl_0jgr5c`
+    WHERE mysql_tbl_0jgr5c_EMP_ID = EMP_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2());
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(-47, 81)) - (0) + V_STABILITY_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TEXT_r5pjjb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `mysql_tbl_0b3eco`;
+    RETURN ((MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(30)) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX_8lzzo2(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_h34i7d_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_h34i7d`
+    WHERE mysql_tbl_h34i7d_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM `mysql_tbl_pj4grb`
+    WHERE mysql_tbl_h34i7d_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_PROC_TEXT_r5pjjb()) - (0) + ((V_RATING * 10) + (V_PRODUCT_COUNT * 2)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX_8lzzo2(1);

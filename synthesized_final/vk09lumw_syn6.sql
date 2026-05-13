@@ -1,0 +1,114 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ec483e` (
+    `mysql_tbl_ec483e_repair_id` INT,
+    `mysql_tbl_ec483e_customer_id` INT,
+    `mysql_tbl_ec483e_technician_id` INT,
+    `mysql_tbl_ec483e_appliance_type` VARCHAR(50),
+    `mysql_tbl_ec483e_parts_cost` DECIMAL(10,2),
+    `mysql_tbl_ec483e_labor_hours` INT,
+    `mysql_tbl_ec483e_labor_rate` INT,
+    `mysql_tbl_ec483e_service_date` DATE
+);
+
+INSERT INTO `mysql_tbl_ec483e` (`mysql_tbl_ec483e_repair_id`, `mysql_tbl_ec483e_customer_id`, `mysql_tbl_ec483e_technician_id`, `mysql_tbl_ec483e_appliance_type`, `mysql_tbl_ec483e_parts_cost`, `mysql_tbl_ec483e_labor_hours`, `mysql_tbl_ec483e_labor_rate`, `mysql_tbl_ec483e_service_date`) VALUES (1, 2, 3, 'test', 1.0, 6, 7, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(REPAIR_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PARTS_COST INT DEFAULT 0;
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 75;
+    DECLARE V_DIAGNOSTIC_FEE INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_ec483e_PARTS_COST, 0), COALESCE(mysql_tbl_ec483e_LABOR_HOURS, 0), COALESCE(mysql_tbl_ec483e_LABOR_RATE, 75)
+    INTO V_PARTS_COST, V_LABOR_HOURS, V_LABOR_RATE
+    FROM `mysql_tbl_ec483e`
+    WHERE mysql_tbl_ec483e_REPAIR_ID = REPAIR_ID_PARAM;
+
+    SET V_TOTAL_COST = V_PARTS_COST + (V_LABOR_HOURS * V_LABOR_RATE) + V_DIAGNOSTIC_FEE;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_116_DROP_INDEX_1j9hz3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_116_DROP_INDEX_1j9hz3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP INDEX IDX_NAME ON USERS;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP INDEX IDX_EMAIL ON USERS;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - (0) + ((MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(-62)) - (0) + DROP_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CAST_COUNT INT DEFAULT 0;
+    
+    SELECT BINARY 'ABC' = 'ABC';
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CAST('123' AS UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CONVERT('123', UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT BIN(5);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT OCT(8);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_116_DROP_INDEX_1j9hz3()) - (0) + CAST_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q();

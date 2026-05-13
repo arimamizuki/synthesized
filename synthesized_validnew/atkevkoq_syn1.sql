@@ -1,0 +1,29 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_042_NAME_CONST_wmkco8() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE NAME_COUNT INT DEFAULT 0;
+    
+    SELECT NAME_CONST('MYNAME', 123);
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_COLUMN_PRIVILEGES('TEST', 'USERS', 'ID');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_CREATE_OPTIONS('TEST', 'USERS');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_INDEX_SUB_PART_LENGTH('TEST', 'USERS', 'IDX_NAME');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    RETURN NAME_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_042_NAME_CONST_wmkco8();

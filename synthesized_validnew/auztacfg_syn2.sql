@@ -1,0 +1,293 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_10ntgp` (
+    `mysql_tbl_10ntgp_emp_id` INT,
+    `mysql_tbl_10ntgp_manager_id` INT,
+    `mysql_tbl_10ntgp_department_id` INT,
+    `mysql_tbl_10ntgp_salary` INT,
+    `mysql_tbl_10ntgp_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_10ntgp` (`mysql_tbl_10ntgp_emp_id`, `mysql_tbl_10ntgp_manager_id`, `mysql_tbl_10ntgp_department_id`, `mysql_tbl_10ntgp_salary`, `mysql_tbl_10ntgp_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mvrmub` (
+    `mysql_tbl_mvrmub_product_id` INT,
+    `mysql_tbl_mvrmub_category_id` INT,
+    `mysql_tbl_mvrmub_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_mvrmub` (`mysql_tbl_mvrmub_product_id`, `mysql_tbl_mvrmub_category_id`, `mysql_tbl_mvrmub_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_95ix2v` (
+    `mysql_tbl_95ix2v_customer_id` INT,
+    `mysql_tbl_95ix2v_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_95ix2v` (`mysql_tbl_95ix2v_customer_id`, `mysql_tbl_95ix2v_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5cs83c` (mysql_tbl_5cs83c_id INT, mysql_tbl_5cs83c_counter_value INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ieoqx8` (mysql_tbl_ieoqx8_id INT, mysql_tbl_ieoqx8_amount DECIMAL(10,2), mysql_tbl_ieoqx8_payment_method VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e1vz43` (
+    `mysql_tbl_e1vz43_customer_id` INT,
+    `mysql_tbl_e1vz43_order_date` DATE,
+    `mysql_tbl_e1vz43_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_e1vz43` (`mysql_tbl_e1vz43_customer_id`, `mysql_tbl_e1vz43_order_date`, `mysql_tbl_e1vz43_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_w364gm` (
+    `mysql_tbl_w364gm_airline_id` INT,
+    `mysql_tbl_w364gm_name` VARCHAR(50),
+    `mysql_tbl_w364gm_iata_code` INT,
+    `mysql_tbl_w364gm_safety_rating` DECIMAL(3,1),
+    `mysql_tbl_w364gm_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_prtcl6` (
+    `mysql_tbl_prtcl6_flight_id` INT,
+    `mysql_tbl_prtcl6_airline_id` INT,
+    `mysql_tbl_prtcl6_origin` INT,
+    `mysql_tbl_prtcl6_destination` INT,
+    `mysql_tbl_prtcl6_distance_miles` INT
+);
+
+INSERT INTO `mysql_tbl_w364gm` (`mysql_tbl_w364gm_airline_id`, `mysql_tbl_w364gm_name`, `mysql_tbl_w364gm_iata_code`, `mysql_tbl_w364gm_safety_rating`, `mysql_tbl_w364gm_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `mysql_tbl_prtcl6` (`mysql_tbl_prtcl6_flight_id`, `mysql_tbl_prtcl6_airline_id`, `mysql_tbl_prtcl6_origin`, `mysql_tbl_prtcl6_destination`, `mysql_tbl_prtcl6_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_PROCESS_PAYMENT_evavry----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_PROCESS_PAYMENT_evavry(PAYMENT_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AMOUNT DECIMAL(10,2);
+    DECLARE V_METHOD VARCHAR(20);
+    SELECT mysql_tbl_ieoqx8_AMOUNT, mysql_tbl_ieoqx8_PAYMENT_METHOD INTO V_AMOUNT, V_METHOD FROM `mysql_tbl_ieoqx8` WHERE mysql_tbl_ieoqx8_ID = PAYMENT_ID;
+    IF V_AMOUNT <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'PAYMENT mysql_tbl_ieoqx8_AMOUNT MUST BE POSITIVE';
+    END IF;
+    IF V_METHOD NOT IN ('CREDIT', 'DEBIT', 'CASH') THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'INVALID PAYMENT METHOD';
+    END IF;
+    UPDATE `mysql_tbl_ieoqx8` SET mysql_tbl_ieoqx8_PAYMENT_METHOD = 'COMPLETED' WHERE mysql_tbl_ieoqx8_ID = PAYMENT_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_95ix2v`
+    WHERE mysql_tbl_95ix2v_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_95ix2v_STATUS = 'ACTIVE';
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_PROCESS_PAYMENT_evavry(-32)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_LOOP_INSERT_3ggrbz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_LOOP_INSERT_3ggrbz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        INSERT INTO `mysql_tbl_5cs83c` (`mysql_tbl_5cs83c_ID`, `mysql_tbl_5cs83c_COUNTER_VALUE`) VALUES (V_I, V_I * 2);
+        SET V_I = V_I + 1;
+        IF V_I > 100 THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = V_SUM + CALCULATE_TREE_DEPTH_SUM(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_w364gm_SAFETY_RATING, 80), COALESCE(mysql_tbl_w364gm_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM `mysql_tbl_w364gm`
+    WHERE mysql_tbl_w364gm_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN GREATEST(V_ENVIRONMENTAL_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-58, -42);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = FLOOR(SQRT(V_POWER));
+    END IF;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(93, -26));
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENDING DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_e1vz43_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_SPENDING, V_ORDER_COUNT
+    FROM `mysql_tbl_e1vz43`
+    WHERE mysql_tbl_e1vz43_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(71, 10)) - (0) + (FLOOR(V_TOTAL_SPENDING / V_ORDER_COUNT)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP SPATIAL REFERENCE SYSTEM 4120;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SPATIAL REFERENCE SYSTEM IF EXISTS 4120;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(96)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_mvrmub_PRICE), 0), COALESCE(MIN(mysql_tbl_mvrmub_PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM `mysql_tbl_mvrmub`
+    WHERE mysql_tbl_mvrmub_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_VARIANCE = V_MAX_PRICE - V_MIN_PRICE;
+
+    RETURN V_VARIANCE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PERMUTATION_COUNT_wbblpk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(N INT, R INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF R > N OR N < 0 OR R < 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(-85)) - (0) + 0);
+    END IF;
+
+    SET V_COUNTER = MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(90);
+
+    PERM_LOOP: WHILE V_COUNTER < R DO
+        SET V_RESULT = MYSQL_FUNC_FLOW_CONTROL_PROC_LOOP_INSERT_3ggrbz();
+        SET V_COUNTER = MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2();
+    END WHILE PERM_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_10ntgp_SALARY, TIMESTAMPDIFF(YEAR, mysql_tbl_10ntgp_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_10ntgp`
+    WHERE mysql_tbl_10ntgp_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = V_SALARY * (1 + V_TENURE_YEARS * 0.02);
+
+    RETURN ((MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(-73, -11)) - (0) + (FLOOR(V_ADJUSTED_SALARY)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(1);

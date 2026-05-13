@@ -1,0 +1,375 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lxev4m` (
+    `mysql_tbl_lxev4m_customer_id` INT,
+    `mysql_tbl_lxev4m_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_lxev4m` (`mysql_tbl_lxev4m_customer_id`, `mysql_tbl_lxev4m_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7pip1v` (
+    `mysql_tbl_7pip1v_customer_id` INT,
+    `mysql_tbl_7pip1v_registration_date` DATE,
+    `mysql_tbl_7pip1v_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_k9oyts` (
+    `mysql_tbl_k9oyts_order_id` INT,
+    `mysql_tbl_k9oyts_customer_id` INT,
+    `mysql_tbl_k9oyts_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_7pip1v` (`mysql_tbl_7pip1v_customer_id`, `mysql_tbl_7pip1v_registration_date`, `mysql_tbl_7pip1v_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_k9oyts` (`mysql_tbl_k9oyts_order_id`, `mysql_tbl_k9oyts_customer_id`, `mysql_tbl_k9oyts_order_date`) VALUES (1, 2, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bki22h` (
+    `mysql_tbl_bki22h_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_bki22h` (`mysql_tbl_bki22h_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_i883rs` (
+    `mysql_tbl_i883rs_project_id` INT,
+    `mysql_tbl_i883rs_team_lead_id` INT,
+    `mysql_tbl_i883rs_start_date` DATE,
+    `mysql_tbl_i883rs_deadline` INT,
+    `mysql_tbl_i883rs_budget` INT,
+    `mysql_tbl_i883rs_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_d2ea3j` (
+    `mysql_tbl_d2ea3j_task_id` INT,
+    `mysql_tbl_d2ea3j_project_id` INT,
+    `mysql_tbl_d2ea3j_assignee_id` INT,
+    `mysql_tbl_d2ea3j_status` VARCHAR(50),
+    `mysql_tbl_d2ea3j_priority` INT
+);
+
+INSERT INTO `mysql_tbl_i883rs` (`mysql_tbl_i883rs_project_id`, `mysql_tbl_i883rs_team_lead_id`, `mysql_tbl_i883rs_start_date`, `mysql_tbl_i883rs_deadline`, `mysql_tbl_i883rs_budget`, `mysql_tbl_i883rs_status`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_d2ea3j` (`mysql_tbl_d2ea3j_task_id`, `mysql_tbl_d2ea3j_project_id`, `mysql_tbl_d2ea3j_assignee_id`, `mysql_tbl_d2ea3j_status`, `mysql_tbl_d2ea3j_priority`) VALUES (1, 2, 3, 'test', 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2c8ra4` (
+    `mysql_tbl_2c8ra4_customer_id` INT,
+    `mysql_tbl_2c8ra4_registration_date` DATE,
+    `mysql_tbl_2c8ra4_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9a7opq` (
+    `mysql_tbl_9a7opq_order_id` INT,
+    `mysql_tbl_9a7opq_customer_id` INT,
+    `mysql_tbl_9a7opq_order_date` DATE,
+    `mysql_tbl_9a7opq_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_2c8ra4` (`mysql_tbl_2c8ra4_customer_id`, `mysql_tbl_2c8ra4_registration_date`, `mysql_tbl_2c8ra4_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_9a7opq` (`mysql_tbl_9a7opq_order_id`, `mysql_tbl_9a7opq_customer_id`, `mysql_tbl_9a7opq_order_date`, `mysql_tbl_9a7opq_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_20t819` (
+    `mysql_tbl_20t819_order_id` INT,
+    `mysql_tbl_20t819_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_20t819` (`mysql_tbl_20t819_order_id`, `mysql_tbl_20t819_customer_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NEW INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_NEW, V_TOTAL
+    FROM `mysql_tbl_7pip1v`
+    WHERE mysql_tbl_7pip1v_COUNTRY = COUNTRY_PARAM
+      AND mysql_tbl_7pip1v_REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN (V_NEW * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(MONTH_NUM INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE MONTH_NUM
+        WHEN 1 THEN RETURN 'JANUARY';
+        WHEN 2 THEN RETURN 'FEBRUARY';
+        WHEN 3 THEN RETURN 'MARCH';
+        WHEN 4 THEN RETURN 'APRIL';
+        WHEN 5 THEN RETURN 'MAY';
+        WHEN 6 THEN RETURN 'JUNE';
+        WHEN 7 THEN RETURN 'JULY';
+        WHEN 8 THEN RETURN 'AUGUST';
+        WHEN 9 THEN RETURN 'SEPTEMBER';
+        WHEN 10 THEN RETURN 'OCTOBER';
+        WHEN 11 THEN RETURN 'NOVEMBER';
+        WHEN 12 THEN RETURN 'DECEMBER';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM `mysql_tbl_9a7opq`
+        WHERE mysql_tbl_9a7opq_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(mysql_tbl_9a7opq_ORDER_DATE), MONTH(mysql_tbl_9a7opq_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 1.5;
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN FLOOR(V_PATTERN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_POSITIVE_kz2ysr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_POSITIVE_kz2ysr(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF N > 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys(PROJECT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_TASKS INT DEFAULT 0;
+    DECLARE V_COMPLETED_TASKS INT DEFAULT 0;
+    DECLARE V_OVERDUE_TASKS INT DEFAULT 0;
+    DECLARE V_DAYS_TO_DEADLINE INT DEFAULT 0;
+    DECLARE V_COMPLETION_PROBABILITY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_TASKS
+    FROM `mysql_tbl_d2ea3j`
+    WHERE mysql_tbl_d2ea3j_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COUNT(CASE WHEN mysql_tbl_d2ea3j_STATUS = 'COMPLETED' THEN 1 END),
+           COUNT(CASE WHEN mysql_tbl_d2ea3j_STATUS != 'COMPLETED' AND DUE_DATE < CURDATE() THEN 1 END)
+    INTO V_COMPLETED_TASKS, V_OVERDUE_TASKS
+    FROM `mysql_tbl_d2ea3j`
+    WHERE mysql_tbl_d2ea3j_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT DATEDIFF(mysql_tbl_i883rs_DEADLINE, CURDATE())
+    INTO V_DAYS_TO_DEADLINE
+    FROM `mysql_tbl_i883rs`
+    WHERE mysql_tbl_i883rs_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_TOTAL_TASKS > 0 THEN
+        SET V_COMPLETION_PROBABILITY = MYSQL_FUNC_IS_POSITIVE_kz2ysr(-67);
+    END IF;
+
+    IF V_DAYS_TO_DEADLINE < 7 AND V_OVERDUE_TASKS > 0 THEN
+        SET V_COMPLETION_PROBABILITY = MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(-13);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(32)) - (0) + (GREATEST(V_COMPLETION_PROBABILITY, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS_zwwxsx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_zwwxsx(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_bki22h_LEAD_TIME_DAYS, 7)
+    INTO V_DAYS
+    FROM `mysql_tbl_bki22h`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - (0) + V_DAYS);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_20t819_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM `mysql_tbl_20t819`
+    WHERE mysql_tbl_20t819_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(40)) - (0) + (SIDE * 4));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP TRIGGER TRG_BEFORE_INSERT;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP TRIGGER IF EXISTS TRG_AFTER_UPDATE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(-8)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_MATURITY_SCORE_lhjf63----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_MATURITY_SCORE_lhjf63(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), mysql_tbl_lxev4m_REGISTRATION_DATE)
+    INTO V_AGE_DAYS
+    FROM `mysql_tbl_lxev4m`
+    WHERE mysql_tbl_lxev4m_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_ig4rsu`
+    WHERE mysql_tbl_lxev4m_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_AGE_DAYS = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DAYS_zwwxsx(30)) - (0) + (((MYSQL_FUNC_CALCULATE_PROJECT_COMPLETION_PROBABILITY_vcvqys(-50)) - (0) + (FLOOR((V_ORDER_COUNT * 365.0) / V_AGE_DAYS)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_CUSTOMER_MATURITY_SCORE_lhjf63(5);
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_SIMPLE_9xkv52(93)) - (0) + (-1));
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS FOR CURRENT_USER;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(-84)) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9();

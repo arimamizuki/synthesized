@@ -1,0 +1,276 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_m92l9l` (
+    `mysql_tbl_m92l9l_customer_id` INT,
+    `mysql_tbl_m92l9l_plan_type` VARCHAR(50),
+    `mysql_tbl_m92l9l_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_m92l9l_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_78avl3` (
+    `mysql_tbl_78avl3_customer_id` INT,
+    `mysql_tbl_78avl3_tier_level` INT
+);
+
+INSERT INTO `mysql_tbl_m92l9l` (`mysql_tbl_m92l9l_customer_id`, `mysql_tbl_m92l9l_plan_type`, `mysql_tbl_m92l9l_monthly_cost`, `mysql_tbl_m92l9l_start_date`) VALUES (1, 'test', 1.0, '2024-01-01');
+
+INSERT INTO `mysql_tbl_78avl3` (`mysql_tbl_78avl3_customer_id`, `mysql_tbl_78avl3_tier_level`) VALUES (1, 2);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_d7rnl9` (
+    `mysql_tbl_d7rnl9_emp_id` INT,
+    `mysql_tbl_d7rnl9_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_d7rnl9` (`mysql_tbl_d7rnl9_emp_id`, `mysql_tbl_d7rnl9_department_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lnupo4` (
+    `mysql_tbl_lnupo4_product_id` INT,
+    `mysql_tbl_lnupo4_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_lnupo4` (`mysql_tbl_lnupo4_product_id`, `mysql_tbl_lnupo4_category_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_syvynz` (
+    `mysql_tbl_syvynz_customer_id` INT,
+    `mysql_tbl_syvynz_country` INT
+);
+
+INSERT INTO `mysql_tbl_syvynz` (`mysql_tbl_syvynz_customer_id`, `mysql_tbl_syvynz_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_der5r9` (
+    `mysql_tbl_der5r9_employee_id` INT,
+    `mysql_tbl_der5r9_manager_id` INT,
+    `mysql_tbl_der5r9_department_id` INT,
+    `mysql_tbl_der5r9_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_blrtk1` (
+    `mysql_tbl_blrtk1_department_id` INT,
+    `mysql_tbl_blrtk1_name` VARCHAR(50),
+    `mysql_tbl_blrtk1_budget` INT
+);
+
+INSERT INTO `mysql_tbl_der5r9` (`mysql_tbl_der5r9_employee_id`, `mysql_tbl_der5r9_manager_id`, `mysql_tbl_der5r9_department_id`, `mysql_tbl_der5r9_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `mysql_tbl_blrtk1` (`mysql_tbl_blrtk1_department_id`, `mysql_tbl_blrtk1_name`, `mysql_tbl_blrtk1_budget`) VALUES (1, 'test', 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    SET V_MAX = A;
+    IF B > V_MAX THEN SET V_MAX = B; END IF;
+    IF C > V_MAX THEN SET V_MAX = C; END IF;
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_d7rnl9`
+    WHERE mysql_tbl_d7rnl9_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_syvynz`
+    WHERE mysql_tbl_syvynz_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(P_BASE INT, P_EXP INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= P_EXP DO
+        SET V_RESULT = V_RESULT * P_BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(EMPLOYEE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHAIN_LENGTH INT DEFAULT 0;
+    DECLARE V_CURRENT_MANAGER INT DEFAULT 0;
+    DECLARE V_CURRENT_EMPLOYEE INT DEFAULT EMPLOYEE_ID_PARAM;
+    DECLARE V_DONE INT DEFAULT FALSE;
+
+    SELECT mysql_tbl_der5r9_MANAGER_ID INTO V_CURRENT_MANAGER FROM `mysql_tbl_der5r9` WHERE mysql_tbl_der5r9_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+    MY_LOOP: WHILE V_CURRENT_MANAGER IS NOT NULL AND V_CHAIN_LENGTH < 100 DO
+        SET V_CHAIN_LENGTH = V_CHAIN_LENGTH + 1;
+        SET V_CURRENT_EMPLOYEE = V_CURRENT_MANAGER;
+
+        SELECT mysql_tbl_der5r9_MANAGER_ID INTO V_CURRENT_MANAGER
+        FROM `mysql_tbl_der5r9`
+        WHERE mysql_tbl_der5r9_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+        IF V_CHAIN_LENGTH > 10 THEN
+            ITERATE MY_LOOP;
+        END IF;
+    END WHILE MY_LOOP;
+
+    RETURN V_CHAIN_LENGTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C + P_D;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * CAP_HEIGHT * CAP_HEIGHT * (3 * RADIUS - CAP_HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SANITIZE_INPUT_1v2j5i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(INPUT_STRING INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_CHAR_POS INT DEFAULT 1;
+    DECLARE V_CHAR_VAL INT;
+    DECLARE V_INPUT_LEN INT DEFAULT 0;
+    DECLARE V_DANGER_COUNT INT DEFAULT 0;
+    DECLARE V_DANGEROUS_CHARS VARCHAR(10) DEFAULT '''"'';--';
+
+    SET V_INPUT_LEN = MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(-29);
+
+    WHILE V_CHAR_POS <= V_INPUT_LEN DO
+        SET V_CHAR_VAL = ASCII(SUBSTRING(INPUT_STRING, V_CHAR_POS, 1));
+
+        IF V_CHAR_VAL IN (39, 34, 59, 45, 45) THEN
+            SET V_DANGER_COUNT = MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(41);
+        END IF;
+
+        IF V_CHAR_VAL < 32 OR V_CHAR_VAL > 126 THEN
+            SET V_DANGER_COUNT = MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(20, 91);
+        END IF;
+
+        SET V_CHAR_POS = MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(15, -15, 6, 58);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(-70, -65)) - (0) + V_DANGER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_lnupo4`
+    WHERE mysql_tbl_lnupo4_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT * 3;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_SCORE_orjpqz(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_m92l9l_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM `mysql_tbl_m92l9l`
+    WHERE mysql_tbl_m92l9l_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM `mysql_tbl_tbhdy8`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_PLAN_VALUE = MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(-36, 16, -81);
+        WHEN 'PREMIUM' THEN SET V_PLAN_VALUE = MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(71);
+        WHEN 'BASIC' THEN SET V_PLAN_VALUE = 30;
+        ELSE SET V_PLAN_VALUE = 10;
+    END CASE;
+
+    IF V_MONTHLY_COST = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo(14)) - (((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(36)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_ROI_SCORE = (V_CUSTOMER_ORDERS * V_PLAN_VALUE) / V_MONTHLY_COST;
+
+    RETURN V_ROI_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_SCORE_orjpqz(1);

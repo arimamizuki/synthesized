@@ -1,0 +1,218 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ffog4j` (
+    `mysql_tbl_ffog4j_product_id` INT,
+    `mysql_tbl_ffog4j_category_id` INT,
+    `mysql_tbl_ffog4j_price` DECIMAL(10,2),
+    `mysql_tbl_ffog4j_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4npetc` (
+    `mysql_tbl_4npetc_supplier_id` INT,
+    `mysql_tbl_4npetc_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_ffog4j` (`mysql_tbl_ffog4j_product_id`, `mysql_tbl_ffog4j_category_id`, `mysql_tbl_ffog4j_price`, `mysql_tbl_ffog4j_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_4npetc` (`mysql_tbl_4npetc_supplier_id`, `mysql_tbl_4npetc_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7a5j42` (
+    `mysql_tbl_7a5j42_customer_id` INT,
+    `mysql_tbl_7a5j42_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_7a5j42` (`mysql_tbl_7a5j42_customer_id`, `mysql_tbl_7a5j42_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_o46k8t` (
+    `mysql_tbl_o46k8t_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_o46k8t` (`mysql_tbl_o46k8t_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ae1g5g` (
+    `mysql_tbl_ae1g5g_campaign_id` INT,
+    `mysql_tbl_ae1g5g_channel` INT,
+    `mysql_tbl_ae1g5g_budget` INT,
+    `mysql_tbl_ae1g5g_start_date` DATE,
+    `mysql_tbl_ae1g5g_end_date` DATE,
+    `mysql_tbl_ae1g5g_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_osaa1u` (
+    `mysql_tbl_osaa1u_conversion_id` INT,
+    `mysql_tbl_osaa1u_campaign_id` INT,
+    `mysql_tbl_osaa1u_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_ae1g5g` (`mysql_tbl_ae1g5g_campaign_id`, `mysql_tbl_ae1g5g_channel`, `mysql_tbl_ae1g5g_budget`, `mysql_tbl_ae1g5g_start_date`, `mysql_tbl_ae1g5g_end_date`, `mysql_tbl_ae1g5g_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_osaa1u` (`mysql_tbl_osaa1u_conversion_id`, `mysql_tbl_osaa1u_campaign_id`, `mysql_tbl_osaa1u_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM `mysql_tbl_qm8u8u`
+    WHERE mysql_tbl_o46k8t_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR((V_ORDER_COUNT * 20) + (V_TOTAL_SPENT / 50));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DB_COUNT INT DEFAULT 0;
+    
+    CREATE DATABASE NEW_DATABASE;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    CREATE DATABASE IF NOT EXISTS EXISTING_DB CHARACTER SET UTF8MB4;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    CREATE SCHEMA ANOTHER_DB COLLATE UTF8MB4_UNICODE_CI;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(-86, -65)) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(-98)) - (0) + DB_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) DETERMINISTIC
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFECTIVENESS_SCORE_t56ryw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFECTIVENESS_SCORE_t56ryw(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT mysql_tbl_ae1g5g_CHANNEL, COUNT(*), COALESCE(SUM(mysql_tbl_osaa1u_CONVERSION_VALUE), 0)
+    INTO V_CHANNEL, V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM `mysql_tbl_ae1g5g` C
+    LEFT JOIN `mysql_tbl_osaa1u` CV ON mysql_tbl_ae1g5g_CAMPAIGN_ID = mysql_tbl_osaa1u_CAMPAIGN_ID
+    WHERE mysql_tbl_ae1g5g_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_ae1g5g_CAMPAIGN_ID;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_EFFECTIVENESS_SCORE = (V_TOTAL_CONVERSIONS * 10) + (V_TOTAL_REVENUE / 100);
+        WHEN 'ORGANIC' THEN SET V_EFFECTIVENESS_SCORE = (V_TOTAL_CONVERSIONS * 15) + (V_TOTAL_REVENUE / 100);
+        WHEN 'SOCIAL' THEN SET V_EFFECTIVENESS_SCORE = (V_TOTAL_CONVERSIONS * 12) + (V_TOTAL_REVENUE / 100);
+        ELSE SET V_EFFECTIVENESS_SCORE = (V_TOTAL_CONVERSIONS * 8) + (V_TOTAL_REVENUE / 100);
+    END CASE;
+
+    RETURN V_EFFECTIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_QUARTER_zrsa9q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_QUARTER_zrsa9q(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REG_DATE DATE;
+
+    SELECT mysql_tbl_7a5j42_REGISTRATION_DATE
+    INTO V_REG_DATE
+    FROM `mysql_tbl_7a5j42`
+    WHERE mysql_tbl_7a5j42_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFECTIVENESS_SCORE_t56ryw(-24)) - (0) + (QUARTER(V_REG_DATE)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_GET_ABS_x5vvm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABS_x5vvm7(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF N < 0 THEN
+        RETURN -N;
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_SUPPLIER_RATIO_p5k6dh(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_4npetc_SUPPLIER_RATING, 3.0)
+    INTO V_SUPPLIER_RATING
+    FROM `mysql_tbl_4npetc`
+    WHERE mysql_tbl_4npetc_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM `mysql_tbl_ffog4j`
+    WHERE mysql_tbl_4npetc_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_PRODUCTS
+    FROM `mysql_tbl_ffog4j`
+    WHERE mysql_tbl_4npetc_SUPPLIER_ID = SUPPLIER_ID_PARAM AND mysql_tbl_ffog4j_PRICE > 150;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f()) - (((MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_QUARTER_zrsa9q(49)) - (((MYSQL_FUNC_GET_ABS_x5vvm7(62)) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_PRODUCTS * 100) / V_TOTAL_PRODUCTS + FLOOR(V_SUPPLIER_RATING * 10);
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(65)) - (0) + V_PREMIUM_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PREMIUM_SUPPLIER_RATIO_p5k6dh(1);

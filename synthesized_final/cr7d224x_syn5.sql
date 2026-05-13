@@ -1,0 +1,142 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_413ybw` (
+    `mysql_tbl_413ybw_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_413ybw` (`mysql_tbl_413ybw_price`) VALUES (1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nj8esl` (
+    `mysql_tbl_nj8esl_customer_id` INT,
+    `mysql_tbl_nj8esl_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_nj8esl` (`mysql_tbl_nj8esl_customer_id`, `mysql_tbl_nj8esl_monthly_cost`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hteycr` (
+    `mysql_tbl_hteycr_campaign_id` INT,
+    `mysql_tbl_hteycr_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_hteycr` (`mysql_tbl_hteycr_campaign_id`, `mysql_tbl_hteycr_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wx0k5d` (
+    `mysql_tbl_wx0k5d_customer_id` INT,
+    `mysql_tbl_wx0k5d_country` INT,
+    `mysql_tbl_wx0k5d_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_wx0k5d` (`mysql_tbl_wx0k5d_customer_id`, `mysql_tbl_wx0k5d_country`, `mysql_tbl_wx0k5d_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8(ITERATIONS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_INSIDE_CIRCLE INT DEFAULT 0;
+    DECLARE V_X DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_Y DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_COUNTER INT DEFAULT 0;
+    DECLARE V_DISTANCE DECIMAL(10,6) DEFAULT 0.00;
+
+    IF ITERATIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COUNTER = 0;
+
+    PI_LOOP: WHILE V_COUNTER < ITERATIONS DO
+        SET V_X = RAND() * 2 - 1;
+        SET V_Y = RAND() * 2 - 1;
+        SET V_DISTANCE = SQRT(V_X * V_X + V_Y * V_Y);
+
+        IF V_DISTANCE <= 1 THEN
+            SET V_INSIDE_CIRCLE = V_INSIDE_CIRCLE + 1;
+        END IF;
+
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE PI_LOOP;
+
+    RETURN (V_INSIDE_CIRCLE * 4) / ITERATIONS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ACTIVE_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 1;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(*)
+    INTO V_ACTIVE_CUSTOMERS, V_TOTAL_CUSTOMERS
+    FROM `mysql_tbl_wx0k5d` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_wx0k5d_CUSTOMER_ID = S.CUSTOMER_ID AND S.STATUS = 'ACTIVE'
+    WHERE mysql_tbl_wx0k5d_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (V_ACTIVE_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_hteycr_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_hteycr`
+    WHERE mysql_tbl_hteycr_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7(76)) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10 END;
+    END);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_nj8esl_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_nj8esl`
+    WHERE mysql_tbl_nj8esl_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8(-14)) - (0) + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(-64)) - (0) + V_COST));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PRICE_j2d2p7(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_413ybw_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_413ybw`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(92)) - (0) + (FLOOR(V_PRICE)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COST_PRICE_j2d2p7(1);

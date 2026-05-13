@@ -1,0 +1,45 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_fiup7d` (
+    `table_fiup7d_campaign_id` INT,
+    `table_fiup7d_channel` INT,
+    `table_fiup7d_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5xs2gt` (
+    `table_5xs2gt_conversion_id` INT,
+    `table_5xs2gt_campaign_id` INT,
+    `table_5xs2gt_conversion_value` INT
+);
+
+INSERT INTO `table_fiup7d` (`table_fiup7d_campaign_id`, `table_fiup7d_channel`, `table_fiup7d_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_5xs2gt` (`table_5xs2gt_conversion_id`, `table_5xs2gt_campaign_id`, `table_5xs2gt_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_MIX_SCORE_cq9stq(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSION_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MIX_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_FIUP7D_CHANNEL, COALESCE(SUM(TABLE_5XS2GT_CONVERSION_VALUE), 0)
+    INTO V_CHANNEL, V_CONVERSION_VALUE
+    FROM TABLE_FIUP7D C
+    LEFT JOIN TABLE_5XS2GT CV ON TABLE_FIUP7D_CAMPAIGN_ID = TABLE_5XS2GT_CAMPAIGN_ID
+    WHERE TABLE_FIUP7D_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY TABLE_FIUP7D_CAMPAIGN_ID;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_SCORE = V_CONVERSION_VALUE / 50;
+        WHEN 'ORGANIC' THEN SET V_MIX_SCORE = V_CONVERSION_VALUE / 30;
+        WHEN 'SOCIAL' THEN SET V_MIX_SCORE = V_CONVERSION_VALUE / 40;
+        WHEN 'EMAIL' THEN SET V_MIX_SCORE = V_CONVERSION_VALUE / 35;
+        ELSE SET V_MIX_SCORE = V_CONVERSION_VALUE / 60;
+    END CASE;
+
+    RETURN V_MIX_SCORE;
+END //
+
+DELIMITER ;

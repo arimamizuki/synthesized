@@ -1,0 +1,60 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE AUTO_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_AUTO_INCREMENT('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_AVG_ROW_LENGTH('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECK_TIME('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECKSUM('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_DATA_FREE('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    RETURN AUTO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_022_JSON_TYPE_k3ugl4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_TYPE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_VALID('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_KEYS('{"A": 1, "B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_LENGTH('{"A": 1, "B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss()) - (0) + JSON_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_022_JSON_TYPE_k3ugl4();

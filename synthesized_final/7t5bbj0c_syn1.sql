@@ -1,0 +1,63 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kx2huk` (
+    `mysql_tbl_kx2huk_customer_id` INT,
+    `mysql_tbl_kx2huk_plan_type` VARCHAR(50),
+    `mysql_tbl_kx2huk_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_kx2huk_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_kx2huk` (`mysql_tbl_kx2huk_customer_id`, `mysql_tbl_kx2huk_plan_type`, `mysql_tbl_kx2huk_monthly_cost`, `mysql_tbl_kx2huk_status`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DISCOUNT_ELIGIBILITY_synv8e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DISCOUNT_ELIGIBILITY_synv8e(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_ELIGIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT mysql_tbl_kx2huk_PLAN_TYPE, COALESCE(mysql_tbl_kx2huk_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM `mysql_tbl_kx2huk`
+    WHERE mysql_tbl_kx2huk_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_ELIGIBILITY_SCORE = V_MONTHLY_COST / 10;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_ELIGIBILITY_SCORE = V_ELIGIBILITY_SCORE + 20;
+        WHEN 'PREMIUM' THEN SET V_ELIGIBILITY_SCORE = V_ELIGIBILITY_SCORE + 10;
+    END CASE;
+
+    RETURN V_ELIGIBILITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_125_ALTER_PARTITION_f33b8v() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE LOGS ADD PARTITION (PARTITION P2 VALUES LESS THAN (2025));
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE LOGS DROP PARTITION P0;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE LOGS TRUNCATE PARTITION P1;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DISCOUNT_ELIGIBILITY_synv8e(91)) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_125_ALTER_PARTITION_f33b8v();

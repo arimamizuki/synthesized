@@ -1,0 +1,73 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_26ucox` (
+    `mysql_tbl_26ucox_order_id` INT,
+    `mysql_tbl_26ucox_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_26ucox` (`mysql_tbl_26ucox_order_id`, `mysql_tbl_26ucox_customer_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_053_GEN_RANDOM_jmxsbd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_053_GEN_RANDOM_jmxsbd() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE GEN_COUNT INT DEFAULT 0;
+    
+    SELECT GEN_RND_EMAIL();
+    SET GEN_COUNT = GEN_COUNT + 1;
+    
+    SELECT GEN_RND_SSN();
+    SET GEN_COUNT = GEN_COUNT + 1;
+    
+    SELECT GEN_RND_US_PHONE();
+    SET GEN_COUNT = GEN_COUNT + 1;
+    
+    SELECT RANDOM_BYTES(16);
+    SET GEN_COUNT = GEN_COUNT + 1;
+    
+    RETURN GEN_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_068_SHOW_PRIVILEGES_gxhglp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_068_SHOW_PRIVILEGES_gxhglp() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW PRIVILEGES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW ERRORS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW WARNINGS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_ITEM_COUNT_p37jp6(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_z6ejf7`
+    WHERE mysql_tbl_26ucox_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_053_GEN_RANDOM_jmxsbd()) - (0) + ((MYSQL_FUNC_FUNC_068_SHOW_PRIVILEGES_gxhglp()) - (0) + V_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_ITEM_COUNT_p37jp6(1);

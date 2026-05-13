@@ -1,0 +1,61 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jese11` (
+    `mysql_tbl_jese11_product_id` INT,
+    `mysql_tbl_jese11_price` DECIMAL(10,2),
+    `mysql_tbl_jese11_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_jese11` (`mysql_tbl_jese11_product_id`, `mysql_tbl_jese11_price`, `mysql_tbl_jese11_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LEN_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_DATA_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_INDEX_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_MAX_DATA_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_TABLE_ROWS('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_UPDATE_TIME('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    RETURN LEN_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_jese11_PRICE, 0), COALESCE(mysql_tbl_jese11_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM `mysql_tbl_jese11`
+    WHERE mysql_tbl_jese11_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di()) - (0) + 0);
+    END IF;
+
+    RETURN FLOOR(V_PRICE / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(1);

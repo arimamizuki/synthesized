@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_vsnx2g` (
+    `table_vsnx2g_lead_time_days` DATE
+);
+
+INSERT INTO `table_vsnx2g` (`table_vsnx2g_lead_time_days`) VALUES ('2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_zwwxsx(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VSNX2G_LEAD_TIME_DAYS, 7)
+    INTO V_DAYS
+    FROM TABLE_VSNX2G
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_DAYS;
+END //
+
+DELIMITER ;

@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_uxdnht` (
+    `table_uxdnht_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_uxdnht` (`table_uxdnht_monthly_cost`) VALUES (1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FEE_qm6e28(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UXDNHT_MONTHLY_COST, 0)
+    INTO V_FEE
+    FROM TABLE_UXDNHT
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_FEE;
+END //
+
+DELIMITER ;

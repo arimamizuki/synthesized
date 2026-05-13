@@ -1,0 +1,211 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1we1gf` (
+    mysql_tbl_1we1gf_table_schema VARCHAR(64),
+    mysql_tbl_1we1gf_table_name VARCHAR(64)
+);
+
+INSERT INTO `mysql_tbl_1we1gf` (`mysql_tbl_1we1gf_table_schema`, `mysql_tbl_1we1gf_table_name`) VALUES ('test', 'test');
+
+CREATE TABLE IF NOT EXISTS test.`mysql_tbl_t9ndqh` (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.`mysql_tbl_t9ndqh` (col1, col2) VALUES ('foo', 42);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_anl3g1` (
+    `mysql_tbl_anl3g1_emp_id` INT,
+    `mysql_tbl_anl3g1_department_id` INT,
+    `mysql_tbl_anl3g1_salary` INT,
+    `mysql_tbl_anl3g1_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1l6njm` (
+    `mysql_tbl_1l6njm_department_id` INT,
+    `mysql_tbl_1l6njm_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_anl3g1` (`mysql_tbl_anl3g1_emp_id`, `mysql_tbl_anl3g1_department_id`, `mysql_tbl_anl3g1_salary`, `mysql_tbl_anl3g1_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_1l6njm` (`mysql_tbl_1l6njm_department_id`, `mysql_tbl_1l6njm_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qvfnqx` (
+    `mysql_tbl_qvfnqx_customer_id` INT,
+    `mysql_tbl_qvfnqx_country` INT
+);
+
+INSERT INTO `mysql_tbl_qvfnqx` (`mysql_tbl_qvfnqx_customer_id`, `mysql_tbl_qvfnqx_country`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DROPVIEWS_m4b55o(PV_DATABASE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LV_STMT VARCHAR(1024);
+    DECLARE LV_VIEW_NAME VARCHAR(64);
+    DECLARE FETCHED INT DEFAULT 0;
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT 0;
+    
+    DECLARE VIEW_CURSOR CURSOR FOR
+        SELECT mysql_tbl_1we1gf_TABLE_NAME 
+        FROM `mysql_tbl_1we1gf` 
+        WHERE mysql_tbl_1we1gf_TABLE_SCHEMA = IFNULL(CONVERT(PV_DATABASE USING UTF8), DATABASE())
+        ORDER BY mysql_tbl_1we1gf_TABLE_NAME;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+    
+    OPEN VIEW_CURSOR;
+    
+    CURSOR_LOOP: LOOP
+        FETCH VIEW_CURSOR INTO LV_VIEW_NAME;
+        IF DONE = 1 THEN
+            LEAVE CURSOR_LOOP;
+        END IF;
+        
+        SET @SQL := CONCAT('DROP VIEW ', LV_VIEW_NAME);
+        SET VIEW_COUNT = VIEW_COUNT + 1;
+        
+        SET LV_STMT = @SQL;
+    END LOOP CURSOR_LOOP;
+    
+    CLOSE VIEW_CURSOR;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FOOSP_ack96d----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP_ack96d() RETURNS INT DETERMINISTIC
+BEGIN
+    INSERT INTO TEST.`mysql_tbl_t9ndqh`
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_QUALITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(mysql_tbl_anl3g1_SALARY), 0), COALESCE(AVG(TIMESTAMPDIFF(YEAR, mysql_tbl_anl3g1_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_SALARY, V_AVG_TENURE
+    FROM `mysql_tbl_anl3g1`
+    WHERE mysql_tbl_anl3g1_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_QUALITY_INDEX = (V_AVG_SALARY / 100) + (V_AVG_TENURE * 5);
+
+    RETURN V_QUALITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(DISTINCT mysql_tbl_qvfnqx_CUSTOMER_ID)
+    INTO V_SUBSCRIBED, V_TOTAL
+    FROM `mysql_tbl_qvfnqx` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_qvfnqx_CUSTOMER_ID = S.CUSTOMER_ID
+    WHERE mysql_tbl_qvfnqx_COUNTRY = COUNTRY_PARAM;
+
+    IF V_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_SUBSCRIBED * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    REPEAT
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = V_SUM + V_I;
+        END IF;
+        SET V_I = V_I + 1;
+    UNTIL V_I > N END REPEAT;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 8 UNION SELECT 27 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(83);
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN MYSQL_FUNC_DROPVIEWS_m4b55o(24);
+        WHEN 4 THEN RETURN MYSQL_FUNC_FOOSP_ack96d();
+        WHEN 5 THEN RETURN MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(22);
+        WHEN 6 THEN RETURN MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1();
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(-96);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(1);

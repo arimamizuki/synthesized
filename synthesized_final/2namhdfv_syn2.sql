@@ -1,0 +1,187 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7b2oyl` (
+    `mysql_tbl_7b2oyl_customer_id` INT,
+    `mysql_tbl_7b2oyl_registration_date` DATE,
+    `mysql_tbl_7b2oyl_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8pnmpr` (
+    `mysql_tbl_8pnmpr_order_id` INT,
+    `mysql_tbl_8pnmpr_customer_id` INT,
+    `mysql_tbl_8pnmpr_order_date` DATE,
+    `mysql_tbl_8pnmpr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_7b2oyl` (`mysql_tbl_7b2oyl_customer_id`, `mysql_tbl_7b2oyl_registration_date`, `mysql_tbl_7b2oyl_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_8pnmpr` (`mysql_tbl_8pnmpr_order_id`, `mysql_tbl_8pnmpr_customer_id`, `mysql_tbl_8pnmpr_order_date`, `mysql_tbl_8pnmpr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bczhnm` (
+    `mysql_tbl_bczhnm_order_id` INT,
+    `mysql_tbl_bczhnm_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_bczhnm` (`mysql_tbl_bczhnm_order_id`, `mysql_tbl_bczhnm_order_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ah6jm2` (
+    `mysql_tbl_ah6jm2_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_ah6jm2` (`mysql_tbl_ah6jm2_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAYOFWEEK(mysql_tbl_bczhnm_ORDER_DATE)
+    INTO V_DAY
+    FROM `mysql_tbl_bczhnm`
+    WHERE mysql_tbl_bczhnm_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 20 UNION SELECT 40 UNION SELECT 60 UNION SELECT 80 UNION SELECT 100 UNION SELECT 120 UNION SELECT 140 UNION SELECT 160 UNION SELECT 180 UNION SELECT 200 UNION SELECT 220 UNION SELECT 240 UNION SELECT 260 UNION SELECT 280 UNION SELECT 300 UNION SELECT 320 UNION SELECT 340 UNION SELECT 360 UNION SELECT 380 UNION SELECT 400;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv(66)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_ORDERS_z1bx3w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_mysql_tbl_zn9zvj_z1bx3w(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_zn9zvj`
+    WHERE mysql_tbl_ah6jm2_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_128_ORDER_BY_bz52or----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_128_ORDER_BY_bz52or() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ORDER BY CREATED_AT;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ORDER BY NAME, CREATED_AT DESC;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_ARRAY_INSERT('{"A": [1, 3]}', '$.A[1]', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_SEARCH('{"A": "HELLO"}', 'ONE', 'HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_QUOTE('HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_UNQUOTE('"HELLO"');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_DEPTH('{"A": {"B": 1}}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_128_ORDER_BY_bz52or()) - (0) + JSON_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_7b2oyl_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM `mysql_tbl_7b2oyl`
+    WHERE mysql_tbl_7b2oyl_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT MIN(mysql_tbl_8pnmpr_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM `mysql_tbl_8pnmpr`
+    WHERE mysql_tbl_8pnmpr_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_mysql_tbl_zn9zvj_z1bx3w(4)) - (((MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1()) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_FIRST_ORDER_DATE, V_REGISTRATION_DATE);
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa();
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(39);
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(1);

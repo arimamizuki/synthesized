@@ -1,0 +1,102 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_w9xeov` (
+    `mysql_tbl_w9xeov_emp_id` INT,
+    `mysql_tbl_w9xeov_department_id` INT,
+    `mysql_tbl_w9xeov_salary` INT,
+    `mysql_tbl_w9xeov_hire_date` DATE,
+    `mysql_tbl_w9xeov_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_w9xeov` (`mysql_tbl_w9xeov_emp_id`, `mysql_tbl_w9xeov_department_id`, `mysql_tbl_w9xeov_salary`, `mysql_tbl_w9xeov_hire_date`, `mysql_tbl_w9xeov_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(PRINCIPAL INT, RATE INT, YEARS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_YEARLY_INTEREST INT DEFAULT 0;
+
+    IF PRINCIPAL <= 0 OR RATE <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET_LOOP: WHILE V_COUNTER <= YEARS DO
+        SET_LOOP_INNER: WHILE V_COUNTER <= 12 DO
+            SET V_RESULT = V_RESULT + (V_RESULT * RATE / 100 / 12);
+            SET V_COUNTER = V_COUNTER + 1;
+        END WHILE SET_LOOP_INNER;
+        SET V_COUNTER = V_COUNTER - 11;
+    END WHILE SET_LOOP;
+
+    RETURN CAST(V_RESULT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INNOVATImysql_tbl_63seks_INDEX_qo91z7(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_INNOVATImysql_tbl_63seks_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_w9xeov_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_w9xeov_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_w9xeov_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM `mysql_tbl_w9xeov`
+    WHERE mysql_tbl_w9xeov_EMP_ID = EMP_ID_PARAM;
+
+    SET V_INNOVATImysql_tbl_63seks_INDEX = (MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(7, 86, -67));
+
+    RETURN V_INNOVATImysql_tbl_63seks_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_INNOVATImysql_tbl_63seks_INDEX_qo91z7(-4)) - (0) + (A / B));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_083_GRANT_kfvv17() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE GRANT_COUNT INT DEFAULT 0;
+    
+    GRANT SELECT mysql_tbl_63seks TEST.* TO 'USER1'@'LOCALHOST';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    GRANT ALL PRIVILEGES mysql_tbl_63seks TEST.USERS TO 'USER2'@'%';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    GRANT INSERT, UPDATE `mysql_tbl_63seks` TEST.ORDERS TO 'USER3'@'LOCALHOST';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(63, -6)) - (0) + GRANT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_083_GRANT_kfvv17();

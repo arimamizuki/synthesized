@@ -1,0 +1,155 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gj1w2d` (
+    `mysql_tbl_gj1w2d_emp_id` INT,
+    `mysql_tbl_gj1w2d_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_gj1w2d` (`mysql_tbl_gj1w2d_emp_id`, `mysql_tbl_gj1w2d_department_id`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h8gcqs` (
+    `mysql_tbl_h8gcqs_campaign_id` INT,
+    `mysql_tbl_h8gcqs_channel` INT,
+    `mysql_tbl_h8gcqs_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_h8gcqs` (`mysql_tbl_h8gcqs_campaign_id`, `mysql_tbl_h8gcqs_channel`, `mysql_tbl_h8gcqs_status`) VALUES (1, 1, 'mysql_tbl_nvowdc');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bza42q` (mysql_tbl_bza42q_id INT, mysql_tbl_bza42q_stock_quantity INT, mysql_tbl_bza42q_min_stock_level INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_aornr6` (
+    `mysql_tbl_aornr6_emp_id` INT,
+    `mysql_tbl_aornr6_salary` INT,
+    `mysql_tbl_aornr6_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_aornr6` (`mysql_tbl_aornr6_emp_id`, `mysql_tbl_aornr6_salary`, `mysql_tbl_aornr6_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx(PRODUCT_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT;
+    DECLARE V_MIN_LEVEL INT;
+    SELECT mysql_tbl_bza42q_STOCK_QUANTITY, mysql_tbl_bza42q_MIN_STOCK_LEVEL INTO V_STOCK, V_MIN_LEVEL FROM `mysql_tbl_bza42q` WHERE mysql_tbl_bza42q_ID = PRODUCT_ID;
+    IF V_STOCK < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STOCK QUANTITY CANNOT BE NEGATIVE';
+    END IF;
+    IF V_STOCK < V_MIN_LEVEL THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: STOCK BELOW MINIMUM LEVEL';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW COLUMNS FROM `mysql_tbl_7xko7k`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL COLUMNS FROM `mysql_tbl_7xko7k`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW INDEX FROM `mysql_tbl_7xko7k`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLE STATUS FROM `mysql_tbl_nvowdc`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_aornr6_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_aornr6_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE
+    FROM `mysql_tbl_aornr6`
+    WHERE mysql_tbl_aornr6_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR((V_SALARY * V_TENURE) / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(INPUT_STRING INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LENGTH INT DEFAULT 0;
+    SET V_LENGTH = MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(50);
+    RETURN ((MYSQL_FUNC_FUNC_062_SHOW_COLUMNS_rva59f()) - (0) + V_LENGTH);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_h8gcqs_CHANNEL, mysql_tbl_h8gcqs_STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_CHANNEL, V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_h8gcqs` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_h8gcqs_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_h8gcqs_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_h8gcqs_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(66)) - (0) + (((MYSQL_FUNC_SIGNAL_PROC_CHECK_STOCK_xr8cwx(-78)) - (0) + (CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2
+    END))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_gj1w2d_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_gj1w2d`
+    WHERE mysql_tbl_gj1w2d_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM `mysql_tbl_gj1w2d`
+    WHERE mysql_tbl_gj1w2d_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(-35)) - (0) + (V_EMP_COUNT / 10));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(1);

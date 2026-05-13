@@ -1,0 +1,198 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_m0wafv` (
+    `mysql_tbl_m0wafv_supplier_id` INT,
+    `mysql_tbl_m0wafv_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_m0wafv` (`mysql_tbl_m0wafv_supplier_id`, `mysql_tbl_m0wafv_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tb01v0` (mysql_tbl_tb01v0_id INT, user_mysql_tbl_tb01v0_id INT, mysql_tbl_tb01v0_plan VARCHAR(50), mysql_tbl_tb01v0_account_status VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pot42f` (
+    `mysql_tbl_pot42f_restaurant_id` INT,
+    `mysql_tbl_pot42f_cuisine_type` VARCHAR(50),
+    `mysql_tbl_pot42f_average_price` DECIMAL(10,2),
+    `mysql_tbl_pot42f_rating` DECIMAL(3,1),
+    `mysql_tbl_pot42f_delivery_radius_miles` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tfiu4c` (
+    `mysql_tbl_tfiu4c_order_id` INT,
+    `mysql_tbl_tfiu4c_restaurant_id` INT,
+    `mysql_tbl_tfiu4c_customer_id` INT,
+    `mysql_tbl_tfiu4c_order_total` DECIMAL(10,2),
+    `mysql_tbl_tfiu4c_delivery_distance` INT
+);
+
+INSERT INTO `mysql_tbl_pot42f` (`mysql_tbl_pot42f_restaurant_id`, `mysql_tbl_pot42f_cuisine_type`, `mysql_tbl_pot42f_average_price`, `mysql_tbl_pot42f_rating`, `mysql_tbl_pot42f_delivery_radius_miles`) VALUES (1, 'test', 1.0, 1.0, 5);
+
+INSERT INTO `mysql_tbl_tfiu4c` (`mysql_tbl_tfiu4c_order_id`, `mysql_tbl_tfiu4c_restaurant_id`, `mysql_tbl_tfiu4c_customer_id`, `mysql_tbl_tfiu4c_order_total`, `mysql_tbl_tfiu4c_delivery_distance`) VALUES (1, 2, 3, 1.0, 5);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(RESTAURANT_ID_PARAM INT, ORDER_DISTANCE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_RESTAURANT_RATING DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+    DECLARE V_COMPATIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_pot42f_DELIVERY_RADIUS_MILES, 5), COALESCE(mysql_tbl_pot42f_RATING, 3.0), COALESCE(mysql_tbl_pot42f_AVERAGE_PRICE, 20)
+    INTO V_DELIVERY_RADIUS, V_RESTAURANT_RATING, V_AVG_PRICE
+    FROM `mysql_tbl_pot42f`
+    WHERE mysql_tbl_pot42f_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF ORDER_DISTANCE_PARAM > V_DELIVERY_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPATIBILITY_SCORE = (V_RESTAURANT_RATING * 20) - (V_AVG_PRICE / 5) + ((V_DELIVERY_RADIUS - ORDER_DISTANCE_PARAM) * 5);
+
+    RETURN GREATEST(V_COMPATIBILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP DATABASE OLD_DATABASE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP DATABASE IF EXISTS TEMP_DB;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SCHEMA IF EXISTS TEST_SCHEMA;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q(-36)) - (0) + ((MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(-35, 11)) - (0) + DROP_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SRS_COUNT INT DEFAULT 0;
+    
+    CREATE SPATIAL REFERENCE SYSTEM 4120 NAME 'GREEK' DEFINITION 'GEOGCS["GREEK",DATUM["GREEK",SPHEROID["BESSEL 1841",6377397.155,299.1528128]],PRIMEM["GREENWICH",0],UNIT["DEGREE",0.017453292519943295]]';
+    SET SRS_COUNT = SRS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg()) - (0) + SRS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_m0wafv_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_m0wafv`
+    WHERE mysql_tbl_m0wafv_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_UPGRADE_PLAN_xybd5h----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_UPGRADE_PLAN_xybd5h(mysql_tbl_tb01v0_USER_ID INT, NEW_PLAN INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CURRENT_PLAN VARCHAR(50);
+    DECLARE V_ACCOUNT_STATUS VARCHAR(20);
+    SELECT mysql_tbl_tb01v0_PLAN, mysql_tbl_tb01v0_ACCOUNT_STATUS INTO V_CURRENT_PLAN, V_ACCOUNT_STATUS FROM `mysql_tbl_tb01v0` WHERE mysql_tbl_tb01v0_USER_ID = mysql_tbl_tb01v0_USER_ID;
+    IF V_ACCOUNT_STATUS != 'ACTIVE' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ACCOUNT MUST BE ACTIVE TO UPGRADE';
+    END IF;
+    IF NEW_PLAN = 'FREE' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT DOWNGRADE FROM CURRENT mysql_tbl_tb01v0_PLAN';
+    END IF;
+    UPDATE `mysql_tbl_tb01v0` SET mysql_tbl_tb01v0_PLAN = NEW_PLAN WHERE mysql_tbl_tb01v0_USER_ID = mysql_tbl_tb01v0_USER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    REPEAT
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7();
+        END IF;
+        SET V_I = MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(-80);
+    UNTIL V_I > N END REPEAT;
+
+    RETURN ((MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se()) - (0) + ((MYSQL_FUNC_SIGNAL_PROC_UPGRADE_PLAN_xybd5h(8, -70)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(1);

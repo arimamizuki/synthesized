@@ -1,0 +1,21 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this procedure.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2028_fmt8aj()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    PREPARE STMT FROM 'CREATE TABLE TABLE_HHZ8T8 ( TABLE_HHZ8T8_V1 INT )';
+    EXECUTE STMT;
+    RETURN 0;
+    DEALLOCATE PREPARE STMT;
+
+    SET V_RESULT = 28;
+    SELECT V_RESULT //
+END
+
+DELIMITER ;

@@ -1,0 +1,77 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ubenn8` (
+    `mysql_tbl_ubenn8_emp_id` INT,
+    `mysql_tbl_ubenn8_department_id` INT,
+    `mysql_tbl_ubenn8_salary` INT
+);
+
+INSERT INTO `mysql_tbl_ubenn8` (`mysql_tbl_ubenn8_emp_id`, `mysql_tbl_ubenn8_department_id`, `mysql_tbl_ubenn8_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW DATABASES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW DATABASES LIKE 'mysql_tbl_mkji7k%';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLES FROM `mysql_tbl_mkji7k`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL TABLES FROM `mysql_tbl_mkji7k`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DIGEST_COUNT INT DEFAULT 0;
+    
+    SELECT STATEMENT_DIGEST('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT STATEMENT_DIGEST_TEXT('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBTRACT('A:1-5', 'A:3-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBSET('A:3-5', 'A:1-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    RETURN DIGEST_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_ubenn8_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM `mysql_tbl_ubenn8`
+    WHERE mysql_tbl_ubenn8_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa()) - (0) + (((MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj()) - (0) + (FLOOR(V_SALARY_SUM)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(1);

@@ -1,0 +1,77 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6jnf2k` (
+    `mysql_tbl_6jnf2k_emp_id` INT,
+    `mysql_tbl_6jnf2k_department_id` INT,
+    `mysql_tbl_6jnf2k_salary` INT
+);
+
+INSERT INTO `mysql_tbl_6jnf2k` (`mysql_tbl_6jnf2k_emp_id`, `mysql_tbl_6jnf2k_department_id`, `mysql_tbl_6jnf2k_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_181_SELECT_SPATIAL_cohd2c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_181_SELECT_SPATIAL_cohd2c() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT ST_ASTEXT(LOCATION) INTO @mysql_synth_dummy FROM `mysql_tbl_96dxxd`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ST_DISTANCE(POINT1, POINT2) INTO @mysql_synth_dummy FROM `mysql_tbl_igxq48`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ST_CONTAINS(AREA, POINT) INTO @mysql_synth_dummy FROM `mysql_tbl_keiwqp`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CATALOG_NAME('DEF');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLLATION_NAME('UTF8MB4_GENERAL_CI');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_DEFAULT('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_NAME('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_TYPE('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_181_SELECT_SPATIAL_cohd2c()) - (0) + INFO_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_6jnf2k_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM `mysql_tbl_6jnf2k`
+    WHERE mysql_tbl_6jnf2k_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2()) - (0) + (FLOOR(V_SALARY_SUM)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(1);

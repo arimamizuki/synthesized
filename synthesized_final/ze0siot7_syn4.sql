@@ -1,0 +1,51 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_097_SET_RG_xia0t0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_097_SET_RG_xia0t0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RG_COUNT INT DEFAULT 0;
+    
+    SET RESOURCE GROUP RG1 FOR 123;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    SET RESOURCE GROUP RG2;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    RETURN RG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    DESCRIBE mysql_tbl_jk86rr;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    EXPLAIN SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_jk86rr` WHERE ID = 1;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT FOUND_ROWS();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    SELECT LAST_INSERT_ID();
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RENAME TABLE OLD_USERS TO mysql_tbl_jk86rr_BACKUP;
+    SET RESULT_COUNT = RESULT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_097_SET_RG_xia0t0()) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_006_DESCRIBE_EXPLAIN_2v3x8y();

@@ -1,0 +1,469 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4xi1rx` (
+    `mysql_tbl_4xi1rx_supplier_id` INT,
+    `mysql_tbl_4xi1rx_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_4xi1rx` (`mysql_tbl_4xi1rx_supplier_id`, `mysql_tbl_4xi1rx_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bztv30` (
+    mysql_tbl_bztv30_id INT,
+    mysql_tbl_bztv30_preco INT
+);
+
+INSERT INTO `mysql_tbl_bztv30` (`mysql_tbl_bztv30_id`, `mysql_tbl_bztv30_preco`) VALUES (3, 150);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2fy32n` (
+    `mysql_tbl_2fy32n_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_2fy32n` (`mysql_tbl_2fy32n_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wbvv7o` (
+    `mysql_tbl_wbvv7o_order_id` INT,
+    `mysql_tbl_wbvv7o_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_wbvv7o` (`mysql_tbl_wbvv7o_order_id`, `mysql_tbl_wbvv7o_order_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jkcqal` (
+    `mysql_tbl_jkcqal_order_id` INT,
+    `mysql_tbl_jkcqal_customer_id` INT,
+    `mysql_tbl_jkcqal_order_date` DATE,
+    `mysql_tbl_jkcqal_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uq3bn6` (
+    `mysql_tbl_uq3bn6_customer_id` INT,
+    `mysql_tbl_uq3bn6_registration_date` DATE,
+    `mysql_tbl_uq3bn6_country` INT
+);
+
+INSERT INTO `mysql_tbl_jkcqal` (`mysql_tbl_jkcqal_order_id`, `mysql_tbl_jkcqal_customer_id`, `mysql_tbl_jkcqal_order_date`, `mysql_tbl_jkcqal_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `mysql_tbl_uq3bn6` (`mysql_tbl_uq3bn6_customer_id`, `mysql_tbl_uq3bn6_registration_date`, `mysql_tbl_uq3bn6_country`) VALUES (1, '2024-01-01', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x3ewac` (
+    `mysql_tbl_x3ewac_supplier_id` INT,
+    `mysql_tbl_x3ewac_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_x3ewac_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_x3ewac` (`mysql_tbl_x3ewac_supplier_id`, `mysql_tbl_x3ewac_supplier_rating`, `mysql_tbl_x3ewac_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a2lhrc` (
+    `mysql_tbl_a2lhrc_order_id` INT,
+    `mysql_tbl_a2lhrc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_a2lhrc` (`mysql_tbl_a2lhrc_order_id`, `mysql_tbl_a2lhrc_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8nb949` (mysql_tbl_8nb949_id INT, author_mysql_tbl_8nb949_id INT, mysql_tbl_8nb949_status VARCHAR(20), mysql_tbl_8nb949_published_at DATETIME);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j1buv1` (mysql_tbl_j1buv1_id INT, mysql_tbl_j1buv1_banned INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xq34ck` (
+    `mysql_tbl_xq34ck_order_id` INT,
+    `mysql_tbl_xq34ck_customer_id` INT,
+    `mysql_tbl_xq34ck_order_date` DATE,
+    `mysql_tbl_xq34ck_shipping_address` INT,
+    `mysql_tbl_xq34ck_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3b5v3a` (
+    `mysql_tbl_3b5v3a_shipment_id` INT,
+    `mysql_tbl_3b5v3a_order_id` INT,
+    `mysql_tbl_3b5v3a_carrier` INT,
+    `mysql_tbl_3b5v3a_shipping_cost` DECIMAL(10,2),
+    `mysql_tbl_3b5v3a_delivery_date` DATE
+);
+
+INSERT INTO `mysql_tbl_xq34ck` (`mysql_tbl_xq34ck_order_id`, `mysql_tbl_xq34ck_customer_id`, `mysql_tbl_xq34ck_order_date`, `mysql_tbl_xq34ck_shipping_address`, `mysql_tbl_xq34ck_shipping_method`) VALUES (1, 1, '2024-01-01', 1, 1);
+
+INSERT INTO `mysql_tbl_3b5v3a` (`mysql_tbl_3b5v3a_shipment_id`, `mysql_tbl_3b5v3a_order_id`, `mysql_tbl_3b5v3a_carrier`, `mysql_tbl_3b5v3a_shipping_cost`, `mysql_tbl_3b5v3a_delivery_date`) VALUES (1, 2, 3, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0koku4` (
+    `mysql_tbl_0koku4_campaign_id` INT,
+    `mysql_tbl_0koku4_budget` INT
+);
+
+INSERT INTO `mysql_tbl_0koku4` (`mysql_tbl_0koku4_campaign_id`, `mysql_tbl_0koku4_budget`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3ltj49` (
+    `mysql_tbl_3ltj49_campaign_id` INT,
+    `mysql_tbl_3ltj49_status` VARCHAR(50),
+    `mysql_tbl_3ltj49_channel` INT
+);
+
+INSERT INTO `mysql_tbl_3ltj49` (`mysql_tbl_3ltj49_campaign_id`, `mysql_tbl_3ltj49_status`, `mysql_tbl_3ltj49_channel`) VALUES (1, 'test', 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT_POSITION INT DEFAULT 1;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    IF V_TEMP = 0 THEN
+        RETURN 0;
+    END IF;
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 2;
+        SET V_RESULT = V_RESULT + (V_DIGIT * V_DIGIT_POSITION);
+        SET V_TEMP = V_TEMP DIV 2;
+        SET V_DIGIT_POSITION = V_DIGIT_POSITION * 10;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY_5nzpug----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY_5nzpug(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_3ltj49_STATUS, mysql_tbl_3ltj49_CHANNEL, COUNT(CV.CONVERSION_ID)
+    INTO V_STATUS, V_CHANNEL, V_CONVERSION_COUNT
+    FROM `mysql_tbl_3ltj49` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_3ltj49_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_3ltj49_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_3ltj49_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (3.14159 * RADIUS * RADIUS * HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(mysql_tbl_wbvv7o_ORDER_DATE)
+    INTO V_QUARTER
+    FROM `mysql_tbl_wbvv7o`
+    WHERE mysql_tbl_wbvv7o_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_EFFICIENCY_5nzpug(-53)) - (0) + ((MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(-7, 37)) - (0) + V_QUARTER));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_a2lhrc_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM `mysql_tbl_a2lhrc`
+    WHERE mysql_tbl_a2lhrc_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_ORDER_TOTAL * 0.3);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios(49);
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_hwbbuh`
+    WHERE mysql_tbl_2fy32n_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-48)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE mysql_tbl_hwbbuh DROP FOREIGN KEY FK_USER_ID;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_a9d3vu DROP CHECK CHK_AGE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_a9d3vu DROP INDEX UQ_EMAIL;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'GROUND';
+    DECLARE V_DISTANCE_MILES INT DEFAULT 0;
+    DECLARE V_CARRIER VARCHAR(50) DEFAULT '';
+    DECLARE V_CARBON_FOOTPRINT INT DEFAULT 0;
+
+    SELECT mysql_tbl_xq34ck_SHIPPING_METHOD
+    INTO V_SHIPPING_METHOD
+    FROM `mysql_tbl_xq34ck`
+    WHERE mysql_tbl_xq34ck_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_3b5v3a_CARRIER, 'STANDARD'), COALESCE(mysql_tbl_3b5v3a_SHIPPING_COST, 10)
+    INTO V_CARRIER, V_DISTANCE_MILES
+    FROM `mysql_tbl_3b5v3a`
+    WHERE mysql_tbl_3b5v3a_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'AIR' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 2;
+        WHEN 'EXPRESS' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 150 / 100;
+        WHEN 'GROUND' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 50 / 100;
+        ELSE SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 30 / 100;
+    END CASE;
+
+    RETURN V_CARBON_FOOTPRINT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(POST_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_AUTHOR_BANNED INT;
+    SELECT mysql_tbl_8nb949_STATUS, mysql_tbl_j1buv1_BANNED INTO V_STATUS, V_AUTHOR_BANNED
+    FROM `mysql_tbl_8nb949` P JOIN `mysql_tbl_j1buv1` U ON mysql_tbl_8nb949_AUTHOR_ID = mysql_tbl_j1buv1_ID WHERE mysql_tbl_8nb949_ID = POST_ID;
+    IF V_STATUS = 'PUBLISHED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'POST IS ALREADY PUBLISHED';
+    END IF;
+    IF V_AUTHOR_BANNED = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT PUBLISH POST FROM `mysql_tbl_j1buv1`_BANNED AUTHOR';
+    END IF;
+    UPDATE `mysql_tbl_8nb949` SET mysql_tbl_8nb949_STATUS = 'PUBLISHED', mysql_tbl_8nb949_PUBLISHED_AT = NOW() WHERE ID = POST_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_0koku4_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_0koku4`
+    WHERE mysql_tbl_0koku4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_kalutx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_kalutx(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_x3ewac_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_x3ewac_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_x3ewac`
+    WHERE mysql_tbl_x3ewac_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_RELIABILITY_SCORE = (MYSQL_FUNC_SIGNAL_PROC_PUBLISH_POST_yuimup(-36));
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct(71)) - (0) + ((MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(-50)) - (0) + V_RELIABILITY_SCORE));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_COST_BY_COUNTRY_21ub84----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_COST_BY_COUNTRY_21ub84(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MARKETING_SPEND INT DEFAULT 0;
+    DECLARE V_NEW_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_ACQUISITION_COST INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(CAMPAIGN_BUDGET), 0)
+    INTO V_MARKETING_SPEND
+    FROM `mysql_tbl_7f1k3b`
+    WHERE YEAR(START_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_NEW_CUSTOMERS
+    FROM `mysql_tbl_uq3bn6`
+    WHERE mysql_tbl_uq3bn6_COUNTRY = COUNTRY_PARAM
+    AND YEAR(mysql_tbl_uq3bn6_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    IF V_NEW_CUSTOMERS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_kalutx(23)) - (0) + 0);
+    END IF;
+
+    SET V_ACQUISITION_COST = V_MARKETING_SPEND / V_NEW_CUSTOMERS;
+
+    RETURN ((MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk()) - (0) + V_ACQUISITION_COST);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(VAR_REMEDIO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_PRECO INT DEFAULT 0;
+    
+    SELECT mysql_tbl_bztv30_PRECO INTO RESULT_PRECO
+    FROM `mysql_tbl_bztv30`
+    WHERE mysql_tbl_bztv30.mysql_tbl_bztv30_ID = VAR_REMEDIO;
+    
+    RETURN RESULT_PRECO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_IS_POSITIVE INT DEFAULT 0;
+    DECLARE V_IS_EVEN INT DEFAULT 0;
+    DECLARE V_IS_PERFECT_SQUARE INT DEFAULT 0;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+    DECLARE V_CLASS_SCORE INT DEFAULT 0;
+
+    IF N > 0 THEN
+        SET V_IS_POSITIVE = MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_COST_BY_COUNTRY_21ub84(-62);
+    END IF;
+
+    IF N % 2 = 0 THEN
+        SET V_IS_EVEN = MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(9);
+    END IF;
+
+    SET V_SQRT_N = MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(-92);
+    IF V_SQRT_N * V_SQRT_N = ABS(N) THEN
+        SET V_IS_PERFECT_SQUARE = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x(-10);
+    END IF;
+
+    SET V_CLASS_SCORE = MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(61);
+
+    RETURN V_CLASS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_4xi1rx_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_4xi1rx`
+    WHERE mysql_tbl_4xi1rx_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc(87)) - (0) + (FLOOR(V_RATING * 10)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_182_SELECT_BITWISE_pphmcd() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT FLAGS & 1 INTO @mysql_synth_dummy FROM `mysql_tbl_a9d3vu`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT FLAGS | 2 INTO @mysql_synth_dummy FROM `mysql_tbl_a9d3vu`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT FLAGS ^ 4 INTO @mysql_synth_dummy FROM `mysql_tbl_a9d3vu`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1(49)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_182_SELECT_BITWISE_pphmcd();

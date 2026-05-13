@@ -1,0 +1,153 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cp4gl1` (
+    `mysql_tbl_cp4gl1_customer_id` INT,
+    `mysql_tbl_cp4gl1_order_date` DATE,
+    `mysql_tbl_cp4gl1_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_cp4gl1` (`mysql_tbl_cp4gl1_customer_id`, `mysql_tbl_cp4gl1_order_date`, `mysql_tbl_cp4gl1_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_19cly6` (
+    `mysql_tbl_19cly6_employee_id` INT,
+    `mysql_tbl_19cly6_name` VARCHAR(50),
+    `mysql_tbl_19cly6_department_id` INT,
+    `mysql_tbl_19cly6_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8hzs21` (
+    `mysql_tbl_8hzs21_department_id` INT,
+    `mysql_tbl_8hzs21_name` VARCHAR(50),
+    `mysql_tbl_8hzs21_budget` INT
+);
+
+INSERT INTO `mysql_tbl_19cly6` (`mysql_tbl_19cly6_employee_id`, `mysql_tbl_19cly6_name`, `mysql_tbl_19cly6_department_id`, `mysql_tbl_19cly6_salary`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `mysql_tbl_8hzs21` (`mysql_tbl_8hzs21_department_id`, `mysql_tbl_8hzs21_name`, `mysql_tbl_8hzs21_budget`) VALUES (1, 'test', 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENDING DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_cp4gl1_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_SPENDING, V_ORDER_COUNT
+    FROM `mysql_tbl_cp4gl1`
+    WHERE mysql_tbl_cp4gl1_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_TOTAL_SPENDING / V_ORDER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_084_REVOKE_3ta1op----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_084_REVOKE_3ta1op() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE REVOKE_COUNT INT DEFAULT 0;
+    
+    REVOKE SELECT ON TEST.* INTO @mysql_synth_dummy FROM 'USER1'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE ALL PRIVILEGES ON TEST.USERS FROM 'USER2'@'%';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE INSERT ON TEST.ORDERS FROM 'USER3'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    RETURN REVOKE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_DEPARTMENT_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENDING_RATIO INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(mysql_tbl_19cly6_SALARY), 0)
+    INTO V_EMPLOYEE_COUNT, V_TOTAL_SALARIES
+    FROM `mysql_tbl_19cly6`
+    WHERE mysql_tbl_19cly6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_8hzs21_BUDGET, 0)
+    INTO V_DEPARTMENT_BUDGET
+    FROM `mysql_tbl_8hzs21`
+    WHERE mysql_tbl_8hzs21_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_DEPARTMENT_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SPENDING_RATIO = (V_TOTAL_SALARIES * 100) / V_DEPARTMENT_BUDGET;
+
+    RETURN V_SPENDING_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 3;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(-96)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3()) - (0) + 0);
+    END IF;
+
+    REPEAT
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(96);
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN ((MYSQL_FUNC_FUNC_084_REVOKE_3ta1op()) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(1);

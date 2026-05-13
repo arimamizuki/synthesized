@@ -1,0 +1,114 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pkxogq` (
+    `mysql_tbl_pkxogq_customer_id` INT,
+    `mysql_tbl_pkxogq_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pkxogq` (`mysql_tbl_pkxogq_customer_id`, `mysql_tbl_pkxogq_total_amount`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pcpnir` (
+    `mysql_tbl_pcpnir_campaign_id` INT,
+    `mysql_tbl_pcpnir_status` VARCHAR(50),
+    `mysql_tbl_pcpnir_budget` INT,
+    `mysql_tbl_pcpnir_channel` INT
+);
+
+INSERT INTO `mysql_tbl_pcpnir` (`mysql_tbl_pcpnir_campaign_id`, `mysql_tbl_pcpnir_status`, `mysql_tbl_pcpnir_budget`, `mysql_tbl_pcpnir_channel`) VALUES (1, 'test', 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ADD COLUMN PHONE VARCHAR(20);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN AGE INT AFTER NAME;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN FIRST_NAME VARCHAR(50) FIRST;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_VALUE_o28c5w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_VALUE_o28c5w(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CONVERSION_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_pcpnir_STATUS, COALESCE(mysql_tbl_pcpnir_BUDGET, 0), mysql_tbl_pcpnir_CHANNEL,
+           COALESCE(SUM(CV.CONVERSION_VALUE), 0)
+    INTO V_STATUS, V_BUDGET, V_CHANNEL, V_CONVERSION_VALUE
+    FROM `mysql_tbl_pcpnir` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_pcpnir_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_pcpnir_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_pcpnir_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' OR V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb()) - (0) + (FLOOR((V_CONVERSION_VALUE * 100) / V_BUDGET)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 25 UNION SELECT 50 UNION SELECT 75 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX_xpfc1m(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_pkxogq_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_pkxogq`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_VALUE_o28c5w(-29)) - (0) + (((MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m()) - (0) + (FLOOR(V_TOTAL)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_VALUE_INDEX_xpfc1m(1);

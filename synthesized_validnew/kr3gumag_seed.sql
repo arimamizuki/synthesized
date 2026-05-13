@@ -1,0 +1,54 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_qtds0j` (
+    `table_qtds0j_customer_id` INT,
+    `table_qtds0j_plan_type` VARCHAR(50),
+    `table_qtds0j_monthly_cost` DECIMAL(10,2),
+    `table_qtds0j_start_date` DATE,
+    `table_qtds0j_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_h3uepu` (
+    `table_h3uepu_customer_id` INT,
+    `table_h3uepu_tier_level` INT
+);
+
+INSERT INTO `table_qtds0j` (`table_qtds0j_customer_id`, `table_qtds0j_plan_type`, `table_qtds0j_monthly_cost`, `table_qtds0j_start_date`, `table_qtds0j_status`) VALUES (1, 'test', 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_h3uepu` (`table_h3uepu_customer_id`, `table_h3uepu_tier_level`) VALUES (1, 2);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_454ppp(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_QTDS0J_PLAN_TYPE, COALESCE(TABLE_QTDS0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_QTDS0J
+    WHERE TABLE_QTDS0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_H3UEPU_TIER_LEVEL
+    INTO V_TIER
+    FROM TABLE_H3UEPU
+    WHERE TABLE_H3UEPU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_ENGAGEMENT_SCORE = V_MONTHLY_COST;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 50;
+        WHEN 'PREMIUM' THEN SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 25;
+    END CASE;
+
+    CASE V_TIER
+        WHEN 'PLATINUM' THEN SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 40;
+        WHEN 'GOLD' THEN SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 20;
+    END CASE;
+
+    RETURN V_ENGAGEMENT_SCORE;
+END //
+
+DELIMITER ;

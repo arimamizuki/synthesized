@@ -1,0 +1,29 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_031_DATE_MAKE_2p04w3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATE_COUNT INT DEFAULT 0;
+    
+    SELECT MAKEDATE(2024, 100);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT MAKETIME(12, 30, 45);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT MICROSECOND(NOW(6));
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT PERIOD_ADD(202401, 1);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    SELECT PERIOD_DIFF(202402, 202401);
+    SET DATE_COUNT = DATE_COUNT + 1;
+    
+    RETURN DATE_COUNT;
+END //
+
+DELIMITER ;

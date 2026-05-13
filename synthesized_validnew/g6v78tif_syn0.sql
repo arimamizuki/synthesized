@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_084_REVOKE_3ta1op() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE REVOKE_COUNT INT DEFAULT 0;
+    
+    REVOKE SELECT ON TEST.* INTO @mysql_synth_dummy FROM 'USER1'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE ALL PRIVILEGES ON TEST.USERS FROM 'USER2'@'%';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE INSERT ON TEST.ORDERS FROM 'USER3'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    RETURN REVOKE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_084_REVOKE_3ta1op();

@@ -1,0 +1,21 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this procedure.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2010_ms65vp()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    PREPARE STMT FROM 'CREATE TABLE TABLE_VNFUH6 ( TABLE_VNFUH6_V1 INT , TABLE_VNFUH6_V2 INT )';
+    EXECUTE STMT;
+    RETURN 0;
+    DEALLOCATE PREPARE STMT;
+
+    SET V_RESULT = 10;
+    SELECT V_RESULT //
+END
+
+DELIMITER ;

@@ -1,0 +1,21 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this procedure.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2002_ykxua1()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    PREPARE STMT FROM 'CREATE VIEW V6 AS SELECT V2 + 1 FROM V5 WHERE V1 < 100';
+    EXECUTE STMT;
+    RETURN 0;
+    DEALLOCATE PREPARE STMT;
+
+    SET V_RESULT = 15;
+    SELECT V_RESULT //
+END
+
+DELIMITER ;

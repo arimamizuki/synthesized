@@ -1,0 +1,599 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_khm2nb` (
+    `mysql_tbl_khm2nb_emp_id` INT,
+    `mysql_tbl_khm2nb_department_id` INT,
+    `mysql_tbl_khm2nb_salary` INT,
+    `mysql_tbl_khm2nb_hire_date` DATE,
+    `mysql_tbl_khm2nb_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_khm2nb` (`mysql_tbl_khm2nb_emp_id`, `mysql_tbl_khm2nb_department_id`, `mysql_tbl_khm2nb_salary`, `mysql_tbl_khm2nb_hire_date`, `mysql_tbl_khm2nb_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6biiim` (
+    `mysql_tbl_6biiim_screening_id` INT,
+    `mysql_tbl_6biiim_movie_id` INT,
+    `mysql_tbl_6biiim_theater_id` INT,
+    `mysql_tbl_6biiim_show_time` DATE,
+    `mysql_tbl_6biiim_available_seats` INT,
+    `mysql_tbl_6biiim_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qna81g` (
+    `mysql_tbl_qna81g_booking_id` INT,
+    `mysql_tbl_qna81g_screening_id` INT,
+    `mysql_tbl_qna81g_customer_id` INT,
+    `mysql_tbl_qna81g_seats_booked` INT,
+    `mysql_tbl_qna81g_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_6biiim` (`mysql_tbl_6biiim_screening_id`, `mysql_tbl_6biiim_movie_id`, `mysql_tbl_6biiim_theater_id`, `mysql_tbl_6biiim_show_time`, `mysql_tbl_6biiim_available_seats`, `mysql_tbl_6biiim_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `mysql_tbl_qna81g` (`mysql_tbl_qna81g_booking_id`, `mysql_tbl_qna81g_screening_id`, `mysql_tbl_qna81g_customer_id`, `mysql_tbl_qna81g_seats_booked`, `mysql_tbl_qna81g_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_269qg4` (
+    `mysql_tbl_269qg4_customer_id` INT,
+    `mysql_tbl_269qg4_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_269qg4` (`mysql_tbl_269qg4_customer_id`, `mysql_tbl_269qg4_monthly_cost`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_iaty4x` (
+    `mysql_tbl_iaty4x_order_id` INT,
+    `mysql_tbl_iaty4x_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_iaty4x` (`mysql_tbl_iaty4x_order_id`, `mysql_tbl_iaty4x_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_grj6x0` (
+    `mysql_tbl_grj6x0_warranty_id` INT,
+    `mysql_tbl_grj6x0_product_id` INT,
+    `mysql_tbl_grj6x0_purchase_date` DATE,
+    `mysql_tbl_grj6x0_warranty_months` INT,
+    `mysql_tbl_grj6x0_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_grj6x0` (`mysql_tbl_grj6x0_warranty_id`, `mysql_tbl_grj6x0_product_id`, `mysql_tbl_grj6x0_purchase_date`, `mysql_tbl_grj6x0_warranty_months`, `mysql_tbl_grj6x0_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f9bxgh` (
+    `mysql_tbl_f9bxgh_customer_id` INT,
+    `mysql_tbl_f9bxgh_order_date` DATE,
+    `mysql_tbl_f9bxgh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_f9bxgh` (`mysql_tbl_f9bxgh_customer_id`, `mysql_tbl_f9bxgh_order_date`, `mysql_tbl_f9bxgh_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t6yb3f` (
+    `mysql_tbl_t6yb3f_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_t6yb3f` (`mysql_tbl_t6yb3f_supplier_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_az1nvb` (
+    `mysql_tbl_az1nvb_emp_id` INT,
+    `mysql_tbl_az1nvb_manager_id` INT,
+    `mysql_tbl_az1nvb_department_id` INT,
+    `mysql_tbl_az1nvb_salary` INT,
+    `mysql_tbl_az1nvb_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_az1nvb` (`mysql_tbl_az1nvb_emp_id`, `mysql_tbl_az1nvb_manager_id`, `mysql_tbl_az1nvb_department_id`, `mysql_tbl_az1nvb_salary`, `mysql_tbl_az1nvb_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5prj60` (
+    `mysql_tbl_5prj60_emp_id` INT,
+    `mysql_tbl_5prj60_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_5prj60` (`mysql_tbl_5prj60_emp_id`, `mysql_tbl_5prj60_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(STR1 INT, STR2 INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEN1 INT DEFAULT 0;
+    DECLARE V_LEN2 INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SET V_LEN1 = CHAR_LENGTH(STR1);
+    SET V_LEN2 = CHAR_LENGTH(STR2);
+
+    IF V_LEN1 = 0 OR V_LEN2 = 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_LEN1 DO
+        SET V_J = 1;
+        INNER_LOOP: WHILE V_J <= V_LEN2 DO
+            IF SUBSTRING(STR1, V_I, 1) = SUBSTRING(STR2, V_J, 1) THEN
+                SET V_COUNT = V_COUNT + 1;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW CREATE TABLE IF NOT EXISTS `mysql_tbl_j7wq1o`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE DATABASE TEST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE VIEW USER_VIEW;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE TRIGGER TRG_USERS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_5prj60_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM `mysql_tbl_5prj60`
+    WHERE mysql_tbl_5prj60_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_HIRE_YEAR - 2000;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_iaty4x`
+    WHERE mysql_tbl_iaty4x_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_iaty4x`;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(-4)) - (0) + ((V_ORDER_COUNT * 100) / V_TOTAL_ORDERS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LTV DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_f9bxgh_TOTAL_AMOUNT), 0)
+    INTO V_LTV
+    FROM `mysql_tbl_f9bxgh`
+    WHERE mysql_tbl_f9bxgh_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_LTV);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM `mysql_tbl_az1nvb`
+    WHERE mysql_tbl_az1nvb_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_176_SELECT_EXISTS_8ds7e5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_176_SELECT_EXISTS_8ds7e5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT EXISTS (SELECT 1 INTO @mysql_synth_dummy FROM `mysql_tbl_j7wq1o` WHERE ID = 1);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT NOT EXISTS (SELECT 1 INTO @mysql_synth_dummy FROM `mysql_tbl_64u5gu` WHERE AMOUNT < 0);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT mysql_tbl_grj6x0_PURCHASE_DATE, mysql_tbl_grj6x0_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM `mysql_tbl_grj6x0`
+    WHERE mysql_tbl_grj6x0_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DEL_COUNT INT DEFAULT 0;
+    
+    DELETE FROM `mysql_tbl_j7wq1o` WHERE ID = 1;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_64u5gu` WHERE STATUS = 'CANCELLED' AND CREATED_AT < '2024-01-01';
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_ongyyk` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    RETURN DEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC2_65e0ab----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_65e0ab() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_DIVERSITY_INDEX_tpi3sm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_DIVERSITY_INDEX_tpi3sm(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_COUNT INT DEFAULT 0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT CATEGORY_ID), COUNT(*)
+    INTO V_CATEGORY_COUNT, V_PRODUCT_COUNT
+    FROM `mysql_tbl_gigtgi`
+    WHERE mysql_tbl_t6yb3f_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    IF V_PRODUCT_COUNT = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC2_65e0ab()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk()) - (0) + ((V_CATEGORY_COUNT * 100) / V_PRODUCT_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_LOOPS_fhyha1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_LOOPS_fhyha1(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT;
+
+    WHILE V_I <= N DO
+        SET V_J = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(-20);
+        WHILE V_J <= N DO
+            SET V_RESULT = MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(39);
+            SET V_J = MYSQL_FUNC_FUNC_176_SELECT_EXISTS_8ds7e5();
+        END WHILE;
+        SET V_I = MYSQL_FUNC_CALCULATE_SUPPLIER_DIVERSITY_INDEX_tpi3sm(89);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(-78)) - (0) + ((MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(55)) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_072_SIGNAL_0fkpkh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_072_SIGNAL_0fkpkh() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SIG_COUNT INT DEFAULT 0;
+    
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CUSTOM ERROR';
+    SET SIG_COUNT = SIG_COUNT + 1;
+    
+    RETURN SIG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE AC_COUNT INT DEFAULT 0;
+    
+    ANALYZE TABLE mysql_tbl_j7wq1o;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    CHECK TABLE mysql_tbl_j7wq1o;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    CHECKSUM TABLE mysql_tbl_j7wq1o;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    OPTIMIZE TABLE mysql_tbl_j7wq1o;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    REPAIR TABLE mysql_tbl_j7wq1o;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    RETURN AC_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CAST_COUNT INT DEFAULT 0;
+    
+    SELECT BINARY 'ABC' = 'ABC';
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CAST('123' AS UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CONVERT('123', UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT BIN(5);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT OCT(8);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    RETURN CAST_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_PRETTY('{"A":1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_SIZE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_FREE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PATCH('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PRESERVE('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SUM_OF_DIGITS_2fzxll----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu();
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf();
+        SET V_SUM = V_SUM + V_DIGIT;
+        SET V_TEMP = MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q();
+    END WHILE SUM_LOOP;
+
+    RETURN ((MYSQL_FUNC_FUNC_072_SIGNAL_0fkpkh()) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(START_NUM INT, END_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF START_NUM > END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_269qg4_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_269qg4`
+    WHERE mysql_tbl_269qg4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(-8, 58)) - (0) + V_COST);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_6biiim_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM `mysql_tbl_6biiim`
+    WHERE mysql_tbl_6biiim_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_qna81g_SEATS_BOOKED), 0) INTO V_BOOKED_SEATS
+    FROM `mysql_tbl_qna81g`
+    WHERE mysql_tbl_qna81g_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(95)) - (0) + 0);
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_LOOPS_fhyha1(-23);
+
+    RETURN ((MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(31)) - (0) + (CAST(V_OCCUPANCY_PERCENT AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_khm2nb_SALARY, 0), COALESCE(mysql_tbl_khm2nb_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_khm2nb_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_khm2nb`
+    WHERE mysql_tbl_khm2nb_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_khm2nb_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM `mysql_tbl_khm2nb`;
+
+    SET V_RISK_INDEX = ((V_MARKET_AVG_SALARY - V_SALARY) / 100) + (V_TENURE_YEARS * 2) - (V_PERFORMANCE * 10);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(81)) - (0) + V_RISK_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(-47, -54);
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(60);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(1);

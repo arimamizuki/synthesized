@@ -1,0 +1,167 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a8ynvo` (
+    `mysql_tbl_a8ynvo_customer_id` INT,
+    `mysql_tbl_a8ynvo_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kro64x` (
+    `mysql_tbl_kro64x_order_id` INT,
+    `mysql_tbl_kro64x_customer_id` INT,
+    `mysql_tbl_kro64x_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_a8ynvo` (`mysql_tbl_a8ynvo_customer_id`, `mysql_tbl_a8ynvo_country`) VALUES (1, 1);
+
+INSERT INTO `mysql_tbl_kro64x` (`mysql_tbl_kro64x_order_id`, `mysql_tbl_kro64x_customer_id`, `mysql_tbl_kro64x_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g1eax3` (
+    `mysql_tbl_g1eax3_product_id` INT,
+    `mysql_tbl_g1eax3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_g1eax3` (`mysql_tbl_g1eax3_product_id`, `mysql_tbl_g1eax3_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    
+    CREATE VIEW ACTIVE_USERS AS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_w4qpyb` WHERE STATUS = 'ACTIVE';
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    CREATE OR REPLACE VIEW USER_SUMMARY AS SELECT ID, NAME, EMAIL INTO @mysql_synth_dummy FROM `mysql_tbl_w4qpyb`;
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    CREATE UNDO TABLESPACE UNDO_TS1 ADD DATAFILE 'UNDO_TS1.IBU';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER UNDO TABLESPACE UNDO_TS1 SET INACTIVE;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    DROP UNDO TABLESPACE UNDO_TS1;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN TS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > 1000 THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_117_RENAME_TABLE_xx4npz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_117_RENAME_TABLE_xx4npz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RENAME_COUNT INT DEFAULT 0;
+    
+    RENAME TABLE OLD_USERS TO NEW_USERS;
+    SET RENAME_COUNT = RENAME_COUNT + 1;
+    
+    RENAME TABLE mysql_tbl_w4qpyb TO mysql_tbl_w4qpyb_BACKUP, ORDERS TO ORDERS_BACKUP;
+    SET RENAME_COUNT = RENAME_COUNT + 1;
+    
+    RETURN RENAME_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_g1eax3_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_g1eax3`
+    WHERE mysql_tbl_g1eax3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_kro64x_TOTAL_AMOUNT), ((MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(37, -2, 21)) - (0) + 0))
+    INTO V_COUNTRY_REVENUE
+    FROM `mysql_tbl_kro64x` O
+    JOIN `mysql_tbl_a8ynvo` C ON mysql_tbl_kro64x_CUSTOMER_ID = mysql_tbl_a8ynvo_CUSTOMER_ID
+    WHERE mysql_tbl_a8ynvo_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_kro64x_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_kro64x`;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856()) - (((MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn()) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_MARKET_SHARE = MYSQL_FUNC_FUNC_117_RENAME_TABLE_xx4npz();
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(7)) - (0) + V_MARKET_SHARE);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(1);

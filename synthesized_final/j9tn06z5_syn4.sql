@@ -1,0 +1,226 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r0b51b` (
+    `mysql_tbl_r0b51b_customer_id` INT,
+    `mysql_tbl_r0b51b_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fwnby0` (
+    `mysql_tbl_fwnby0_order_id` INT,
+    `mysql_tbl_fwnby0_customer_id` INT,
+    `mysql_tbl_fwnby0_order_date` DATE,
+    `mysql_tbl_fwnby0_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_r0b51b` (`mysql_tbl_r0b51b_customer_id`, `mysql_tbl_r0b51b_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_fwnby0` (`mysql_tbl_fwnby0_order_id`, `mysql_tbl_fwnby0_customer_id`, `mysql_tbl_fwnby0_order_date`, `mysql_tbl_fwnby0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tvkltd` (
+    `mysql_tbl_tvkltd_customer_id` INT,
+    `mysql_tbl_tvkltd_plan_type` VARCHAR(50),
+    `mysql_tbl_tvkltd_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_tvkltd` (`mysql_tbl_tvkltd_customer_id`, `mysql_tbl_tvkltd_plan_type`, `mysql_tbl_tvkltd_status`) VALUES (1, 'test', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6r06zw` (
+    `mysql_tbl_6r06zw_campaign_id` INT,
+    `mysql_tbl_6r06zw_channel` INT,
+    `mysql_tbl_6r06zw_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_6r06zw` (`mysql_tbl_6r06zw_campaign_id`, `mysql_tbl_6r06zw_channel`, `mysql_tbl_6r06zw_status`) VALUES (1, 1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2q765u` (mysql_tbl_2q765u_id INT, mysql_tbl_2q765u_balance DECIMAL(10,2));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_tvkltd_PLAN_TYPE, mysql_tbl_tvkltd_STATUS
+    INTO V_PLAN_TYPE, V_STATUS
+    FROM `mysql_tbl_tvkltd`
+    WHERE mysql_tbl_tvkltd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_ro6l5w`
+    WHERE mysql_tbl_tvkltd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_ORDER_COUNT * 10
+        WHEN 'PREMIUM' THEN V_ORDER_COUNT * 5
+        WHEN 'BASIC' THEN V_ORDER_COUNT * 2
+        ELSE V_ORDER_COUNT END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_MODULO_t8sg35----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MODULO_t8sg35(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A % B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(ACC_ID INT, AMOUNT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    DECLARE V_DAILY_LIMIT DECIMAL(10,2) DEFAULT 5000.00;
+    SELECT mysql_tbl_2q765u_BALANCE INTO V_BALANCE FROM `mysql_tbl_2q765u` WHERE mysql_tbl_2q765u_ID = ACC_ID;
+    IF AMOUNT > V_DAILY_LIMIT THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'AMOUNT EXCEEDS DAILY WITHDRAWAL LIMIT';
+    END IF;
+    IF AMOUNT > V_BALANCE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'INSUFFICIENT mysql_tbl_2q765u_BALANCE';
+    END IF;
+    UPDATE `mysql_tbl_2q765u` SET mysql_tbl_2q765u_BALANCE = mysql_tbl_2q765u_BALANCE - AMOUNT WHERE mysql_tbl_2q765u_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN P_A - P_B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_6r06zw_CHANNEL, mysql_tbl_6r06zw_STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_CHANNEL, V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_6r06zw` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_6r06zw_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_6r06zw_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_6r06zw_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(-34, 61)) - (((MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(96, -87)) - (0) + (((MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(-4)) - (0) + (CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2
+    END))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), mysql_tbl_r0b51b_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM `mysql_tbl_r0b51b`
+    WHERE mysql_tbl_r0b51b_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_fwnby0`
+    WHERE mysql_tbl_fwnby0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s(-58)) - (((MYSQL_FUNC_MODULO_t8sg35(83, 64)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_CONVERSION_RATE = MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(-35);
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(1);

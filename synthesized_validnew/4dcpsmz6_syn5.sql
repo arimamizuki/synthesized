@@ -1,0 +1,89 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_64frm8` (
+    `mysql_tbl_64frm8_supplier_id` INT,
+    `mysql_tbl_64frm8_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_64frm8` (`mysql_tbl_64frm8_supplier_id`, `mysql_tbl_64frm8_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_znw2jg` (
+    `mysql_tbl_znw2jg_supplier_id` INT,
+    `mysql_tbl_znw2jg_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_znw2jg_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_znw2jg` (`mysql_tbl_znw2jg_supplier_id`, `mysql_tbl_znw2jg_supplier_rating`, `mysql_tbl_znw2jg_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(START_DATE_PARAM INT, END_DATE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUSINESS_DAYS INT DEFAULT 0;
+    DECLARE V_CURRENT_DATE DATE DEFAULT NULL;
+    DECLARE V_DAY_OF_WEEK INT DEFAULT 0;
+
+    IF START_DATE_PARAM IS NULL OR END_DATE_PARAM IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF START_DATE_PARAM > END_DATE_PARAM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_DATE = START_DATE_PARAM;
+
+    BUSINESS_DAYS_LOOP: WHILE V_CURRENT_DATE <= END_DATE_PARAM DO
+        SET V_DAY_OF_WEEK = DAYOFWEEK(V_CURRENT_DATE);
+
+        IF V_DAY_OF_WEEK NOT IN (1, 7) THEN
+            SET V_BUSINESS_DAYS = V_BUSINESS_DAYS + 1;
+        END IF;
+
+        SET V_CURRENT_DATE = DATE_ADD(V_CURRENT_DATE, INTERVAL 1 DAY);
+    END WHILE BUSINESS_DAYS_LOOP;
+
+    RETURN V_BUSINESS_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_OVERALL_RATING_im905u----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_OVERALL_RATING_im905u(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_znw2jg_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_znw2jg_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_znw2jg`
+    WHERE mysql_tbl_znw2jg_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(-53, -85)) - (0) + (FLOOR((V_RATING * 20) - (V_LEAD_TIME * 5))));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_64frm8_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_64frm8`
+    WHERE mysql_tbl_64frm8_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_OVERALL_RATING_im905u(-98)) - (0) + (FLOOR(V_RATING * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(1);

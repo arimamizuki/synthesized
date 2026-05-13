@@ -1,0 +1,193 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_eha2m7` (
+    `mysql_tbl_eha2m7_customer_id` INT,
+    `mysql_tbl_eha2m7_country` INT
+);
+
+INSERT INTO `mysql_tbl_eha2m7` (`mysql_tbl_eha2m7_customer_id`, `mysql_tbl_eha2m7_country`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jxkimt` (
+    `mysql_tbl_jxkimt_account_id` INT,
+    `mysql_tbl_jxkimt_customer_id` INT,
+    `mysql_tbl_jxkimt_account_type` INT,
+    `mysql_tbl_jxkimt_balance` INT,
+    `mysql_tbl_jxkimt_interest_rate` INT,
+    `mysql_tbl_jxkimt_opened_date` DATE
+);
+
+INSERT INTO `mysql_tbl_jxkimt` (`mysql_tbl_jxkimt_account_id`, `mysql_tbl_jxkimt_customer_id`, `mysql_tbl_jxkimt_account_type`, `mysql_tbl_jxkimt_balance`, `mysql_tbl_jxkimt_interest_rate`, `mysql_tbl_jxkimt_opened_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ydh29n` (
+    mysql_tbl_ydh29n_id INT PRIMARY KEY AUTO_INCREMENT,
+    mysql_tbl_ydh29n_make VARCHAR(20),
+    mysql_tbl_ydh29n_milage INT
+);
+
+INSERT INTO `mysql_tbl_ydh29n` (`mysql_tbl_ydh29n_make`, `mysql_tbl_ydh29n_milage`) VALUES ('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1165cd` (
+    `mysql_tbl_1165cd_emp_id` INT
+);
+
+INSERT INTO `mysql_tbl_1165cd` (`mysql_tbl_1165cd_emp_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kaqyiv` (mysql_tbl_kaqyiv_id INT, mysql_tbl_kaqyiv_tag_name VARCHAR(50));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_w1tor4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_w1tor4() RETURNS INT DETERMINISTIC
+BEGIN
+    UPDATE `mysql_tbl_kaqyiv`
+    SET mysql_tbl_kaqyiv_TAG_NAME = CASE
+        WHEN mysql_tbl_kaqyiv_TAG_NAME = 'OLD' THEN 'ARCHIVED'
+        WHEN mysql_tbl_kaqyiv_TAG_NAME = 'NEW' THEN 'ACTIVE'
+        WHEN mysql_tbl_kaqyiv_TAG_NAME = 'TEMP' THEN 'PENDING'
+        ELSE mysql_tbl_kaqyiv_TAG_NAME
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE USER_COUNT INT DEFAULT 0;
+    
+    CREATE USER 'NEWUSER'@'LOCALHOST' IDENTIFIED BY 'PASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    CREATE USER IF NOT EXISTS 'EXISTINGUSER'@'%' IDENTIFIED BY 'PASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    ALTER USER 'NEWUSER'@'LOCALHOST' IDENTIFIED BY 'NEWPASSWORD';
+    SET USER_COUNT = USER_COUNT + 1;
+    
+    RETURN USER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(YEAR_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF YEAR_VAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'YEAR CANNOT BE NEGATIVE';
+    END IF;
+    IF (YEAR_VAL MOD 4 = 0 AND YEAR_VAL MOD 100 != 0) OR (YEAR_VAL MOD 400 = 0) THEN
+        RETURN ((MYSQL_FUNC_FUNC_085_CREATE_USER_gh3k9x()) - (0) + 1);
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(52)) - (0) + (((MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_w1tor4()) - (0) + ((EMP_ID_PARAM * 7) % 100))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM `mysql_tbl_ydh29n` 
+    WHERE mysql_tbl_ydh29n_MAKE LIKE MK AND mysql_tbl_ydh29n_MILAGE < ML 
+    ORDER BY mysql_tbl_ydh29n_MILAGE;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(-47)) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(ACCOUNT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_DAYS_HELD INT DEFAULT 0;
+    DECLARE V_INTEREST_EARNED INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_jxkimt_BALANCE, 0), COALESCE(mysql_tbl_jxkimt_INTEREST_RATE, 0.00)
+    INTO V_BALANCE, V_INTEREST_RATE
+    FROM `mysql_tbl_jxkimt`
+    WHERE mysql_tbl_jxkimt_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), mysql_tbl_jxkimt_OPENED_DATE)
+    INTO V_DAYS_HELD
+    FROM `mysql_tbl_jxkimt`
+    WHERE mysql_tbl_jxkimt_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_INTEREST_EARNED = (V_BALANCE * V_INTEREST_RATE * V_DAYS_HELD) / 36500;
+
+    RETURN ((MYSQL_FUNC_MAKE_MILAGE_wuwz1m(18, -16)) - (0) + (FLOOR(V_INTEREST_EARNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_DIVISIBLE_BY_zu7w22----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DIVISIBLE_BY_zu7w22(DIVIDEND INT, DIVISOR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF DIVISOR = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISOR CANNOT BE ZERO';
+    END IF;
+    IF DIVIDEND MOD DIVISOR != 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'DIVIDEND NOT DIVISIBLE BY DIVISOR';
+    END IF;
+    RETURN DIVIDEND / DIVISOR;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(DISTINCT mysql_tbl_eha2m7_CUSTOMER_ID)
+    INTO V_SUBSCRIBED, V_TOTAL
+    FROM `mysql_tbl_eha2m7` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_eha2m7_CUSTOMER_ID = S.CUSTOMER_ID
+    WHERE mysql_tbl_eha2m7_COUNTRY = COUNTRY_PARAM;
+
+    IF V_TOTAL = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(-57)) - (((MYSQL_FUNC_SIGNAL_FUNC_DIVISIBLE_BY_zu7w22(-30, 15)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN (V_SUBSCRIBED * 100) / V_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_RATE_90xoec(1);

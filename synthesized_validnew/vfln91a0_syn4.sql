@@ -1,0 +1,105 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2x1ooo` (
+    `mysql_tbl_2x1ooo_emp_id` INT,
+    `mysql_tbl_2x1ooo_department_id` INT,
+    `mysql_tbl_2x1ooo_salary` INT
+);
+
+INSERT INTO `mysql_tbl_2x1ooo` (`mysql_tbl_2x1ooo_emp_id`, `mysql_tbl_2x1ooo_department_id`, `mysql_tbl_2x1ooo_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_l40odp` (
+    `mysql_tbl_l40odp_budget` INT
+);
+
+INSERT INTO `mysql_tbl_l40odp` (`mysql_tbl_l40odp_budget`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_l40odp_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_l40odp`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF STR IS NULL OR STR = '' THEN
+        SIGNAL SQLSTATE '22004' SET MESSAGE_TEXT = 'CANNOT PARSE NULL OR EMPTY STRING';
+    END IF;
+    IF NOT STR REGEXP '^[+-]?[0-9]+$' THEN
+        SIGNAL SQLSTATE '22018' SET MESSAGE_TEXT = 'STRING IS NOT A VALID INTEGER';
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3(44)) - (0) + (CAST(STR AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_PERCENTILE_cudxz6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_PERCENTILE_cudxz6(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COUNT INT DEFAULT 1;
+
+    SELECT COALESCE(mysql_tbl_2x1ooo_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_2x1ooo`
+    WHERE mysql_tbl_2x1ooo_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_BELOW_COUNT, V_TOTAL_COUNT
+    FROM `mysql_tbl_2x1ooo`
+    WHERE mysql_tbl_2x1ooo_SALARY < V_SALARY;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(48)) - (0) + ((V_BELOW_COUNT * 100) / V_TOTAL_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_018_COMPRESSION_lm0qtx() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE COMP_COUNT INT DEFAULT 0;
+    
+    SELECT COMPRESS('LONG TEXT');
+    SET COMP_COUNT = COMP_COUNT + 1;
+    
+    SELECT UNCOMPRESSED_LENGTH(COMPRESSED_DATA) INTO @mysql_synth_dummy FROM `mysql_tbl_na31el`;
+    SET COMP_COUNT = COMP_COUNT + 1;
+    
+    SELECT FORMAT(1234567.89, 2);
+    SET COMP_COUNT = COMP_COUNT + 1;
+    
+    SELECT FORMAT_BYTES(1024);
+    SET COMP_COUNT = COMP_COUNT + 1;
+    
+    SELECT FORMAT_PICO_TIME(1000000000000);
+    SET COMP_COUNT = COMP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SALARY_PERCENTILE_cudxz6(-43)) - (0) + COMP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_018_COMPRESSION_lm0qtx();

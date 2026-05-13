@@ -1,0 +1,47 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wv01o4` (
+    `mysql_tbl_wv01o4_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_wv01o4` (`mysql_tbl_wv01o4_customer_id`) VALUES (1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5z8h28` (mysql_tbl_5z8h28_id INT, mysql_tbl_5z8h28_expiry_date DATE, mysql_tbl_5z8h28_renewal_status VARCHAR(20));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CHECK_LICENSE_qa4ljl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CHECK_LICENSE_qa4ljl(LICENSE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EXPIRY DATE;
+    SELECT mysql_tbl_5z8h28_EXPIRY_DATE INTO V_EXPIRY FROM `mysql_tbl_5z8h28` WHERE mysql_tbl_5z8h28_ID = LICENSE_ID;
+    IF V_EXPIRY < CURDATE() THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LICENSE HAS EXPIRED';
+    END IF;
+    IF V_EXPIRY < DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: LICENSE EXPIRING SOON';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_mysql_tbl_630vsj_z1bx3w(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_630vsj`
+    WHERE mysql_tbl_wv01o4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_CHECK_LICENSE_qa4ljl(-46)) - (0) + V_ORDER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_ORDERS_z1bx3w(1);

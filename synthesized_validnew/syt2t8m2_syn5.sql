@@ -1,0 +1,20 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h2jl14` (mysql_tbl_h2jl14_num INT);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_INSERT_a733jx(MAX_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= MAX_VAL DO
+        INSERT INTO `mysql_tbl_h2jl14` (`mysql_tbl_h2jl14_NUM`) VALUES (V_I);
+        SET V_I = V_I + 1;
+    END WHILE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_INSERT_a733jx(1);

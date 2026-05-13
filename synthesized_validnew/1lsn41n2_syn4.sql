@@ -1,0 +1,239 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vvo6km` (mysql_tbl_vvo6km_id INT, mysql_tbl_vvo6km_counter_value INT);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_l69qqq` (
+    `mysql_tbl_l69qqq_customer_id` INT,
+    `mysql_tbl_l69qqq_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_l69qqq` (`mysql_tbl_l69qqq_customer_id`, `mysql_tbl_l69qqq_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6xr36l` (
+    `mysql_tbl_6xr36l_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_6xr36l` (`mysql_tbl_6xr36l_monthly_cost`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bbwe6c` (
+    mysql_tbl_bbwe6c_emp_no INT PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dly242` (
+    mysql_tbl_dly242_emp_no INT,
+    mysql_tbl_dly242_salary INT,
+    FOREIGN KEY (mysql_tbl_dly242_emp_no) REFERENCES table_2gq48u(mysql_tbl_dly242_emp_no)
+);
+
+INSERT INTO `mysql_tbl_bbwe6c` (`mysql_tbl_bbwe6c_emp_no`) VALUES (10001);
+
+INSERT INTO `mysql_tbl_dly242` (`mysql_tbl_dly242_emp_no`, `mysql_tbl_dly242_salary`) VALUES (10001, 60117);
+
+INSERT INTO `mysql_tbl_dly242` (`mysql_tbl_dly242_emp_no`, `mysql_tbl_dly242_salary`) VALUES (10001, 62102);
+
+INSERT INTO `mysql_tbl_dly242` (`mysql_tbl_dly242_emp_no`, `mysql_tbl_dly242_salary`) VALUES (10001, 66074);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e4k6rj` (
+    `mysql_tbl_e4k6rj_customer_id` INT,
+    `mysql_tbl_e4k6rj_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_e4k6rj` (`mysql_tbl_e4k6rj_customer_id`, `mysql_tbl_e4k6rj_registration_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bdwjv8` (
+    `mysql_tbl_bdwjv8_campaign_id` INT,
+    `mysql_tbl_bdwjv8_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_bdwjv8` (`mysql_tbl_bdwjv8_campaign_id`, `mysql_tbl_bdwjv8_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_aie318` (mysql_tbl_aie318_id INT, mysql_tbl_aie318_status VARCHAR(20), mysql_tbl_aie318_assigned_to INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ti0tsg` (mysql_tbl_ti0tsg_id INT, mysql_tbl_ti0tsg_active INT);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(TASK_ID INT, USER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TASK_STATUS VARCHAR(20);
+    DECLARE V_USER_ACTIVE INT;
+    SELECT mysql_tbl_aie318_STATUS INTO V_TASK_STATUS FROM `mysql_tbl_aie318` WHERE mysql_tbl_aie318_ID = TASK_ID;
+    SELECT mysql_tbl_ti0tsg_ACTIVE INTO V_USER_ACTIVE FROM `mysql_tbl_ti0tsg` WHERE mysql_tbl_ti0tsg_ID = USER_ID;
+    IF V_TASK_STATUS = 'COMPLETED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN COMPLETED TASK';
+    END IF;
+    IF V_USER_ACTIVE = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN TASK TO INACTIVE USER';
+    END IF;
+    UPDATE `mysql_tbl_aie318` SET mysql_tbl_aie318_ASSIGNED_TO = USER_ID WHERE mysql_tbl_ti0tsg_ID = TASK_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC2_nz67cs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(80, 81)) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_bdwjv8_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_bdwjv8`
+    WHERE mysql_tbl_bdwjv8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC2_nz67cs()) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10 END;
+    END);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, mysql_tbl_e4k6rj_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM `mysql_tbl_e4k6rj`
+    WHERE mysql_tbl_e4k6rj_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(-83)) - (0) + V_AGE_MONTHS);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_187_SELECT_BINARY_xi7ukr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_187_SELECT_BINARY_xi7ukr() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT BINARY 'ABC' = 'ABC';
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT CAST('ABC' AS BINARY) = CAST('ABC' AS BINARY);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(-64)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf(P_EMP_NO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY INT;
+    
+    SELECT AVG(mysql_tbl_dly242_SALARY) INTO V_AVG_SALARY
+    FROM `mysql_tbl_bbwe6c` E
+    JOIN `mysql_tbl_dly242` S ON mysql_tbl_bbwe6c_EMP_NO = mysql_tbl_dly242_EMP_NO
+    WHERE mysql_tbl_bbwe6c_EMP_NO = P_EMP_NO;
+    
+    RETURN ((MYSQL_FUNC_FUNC_187_SELECT_BINARY_xi7ukr()) - (0) + V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MONTHLY_VALUE_fmnihq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_VALUE_fmnihq(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_6xr36l_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_6xr36l`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_F_EMP_AVG_SALARY_tkitaf(23)) - (0) + V_COST);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_DAYS_SINCE_REGISTRATION_rtz1fz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_DAYS_SINCE_REGISTRATION_rtz1fz(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), mysql_tbl_l69qqq_REGISTRATION_DATE)
+    INTO V_DAYS
+    FROM `mysql_tbl_l69qqq`
+    WHERE mysql_tbl_l69qqq_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_MONTHLY_VALUE_fmnihq(-87)) - (0) + ((MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - (0) + V_DAYS));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_LOOP_INSERT_3ggrbz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        INSERT INTO `mysql_tbl_vvo6km` (`mysql_tbl_vvo6km_ID`, `mysql_tbl_vvo6km_COUNTER_VALUE`) VALUES (V_I, V_I * 2);
+        SET V_I = MYSQL_FUNC_CALCULATE_CUSTOMER_DAYS_SINCE_REGISTRATION_rtz1fz(-40);
+        IF V_I > 100 THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_PROC_LOOP_INSERT_3ggrbz();

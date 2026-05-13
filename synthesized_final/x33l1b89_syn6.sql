@@ -1,0 +1,291 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tzw56m` (
+    `mysql_tbl_tzw56m_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_tzw56m` (`mysql_tbl_tzw56m_supplier_rating`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1kl98z` (
+    `mysql_tbl_1kl98z_emp_id` INT,
+    `mysql_tbl_1kl98z_manager_id` INT,
+    `mysql_tbl_1kl98z_department_id` INT,
+    `mysql_tbl_1kl98z_salary` INT
+);
+
+INSERT INTO `mysql_tbl_1kl98z` (`mysql_tbl_1kl98z_emp_id`, `mysql_tbl_1kl98z_manager_id`, `mysql_tbl_1kl98z_department_id`, `mysql_tbl_1kl98z_salary`) VALUES (1, NULL, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_d7e8sa` (mysql_tbl_d7e8sa_id INT, mysql_tbl_d7e8sa_log_level INT, mysql_tbl_d7e8sa_message VARCHAR(200));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0244t0` (
+    `mysql_tbl_0244t0_order_id` INT,
+    `mysql_tbl_0244t0_customer_id` INT,
+    `mysql_tbl_0244t0_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_0244t0` (`mysql_tbl_0244t0_order_id`, `mysql_tbl_0244t0_customer_id`, `mysql_tbl_0244t0_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT NULL AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT mysql_tbl_1kl98z_MANAGER_ID INTO V_CURRENT_EMP FROM `mysql_tbl_1kl98z` WHERE mysql_tbl_1kl98z_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = V_DEPTH + 1;
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORIGINAL INT DEFAULT 0;
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_ORIGINAL = N;
+    SET V_TEMP = ABS(N);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = -V_REVERSED;
+    END IF;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_TIER_ha8vj5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_TIER_ha8vj5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_0244t0_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM `mysql_tbl_0244t0`
+    WHERE mysql_tbl_0244t0_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_TOTAL_SPENT > 10000 THEN
+        RETURN 5;
+    ELSEIF V_TOTAL_SPENT > 5000 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL_SPENT > 1000 THEN
+        RETURN 3;
+    ELSEIF V_TOTAL_SPENT > 500 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_162_SELECT_NULL_bi8ptn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_162_SELECT_NULL_bi8ptn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_lebwd2` WHERE EMAIL IS NULL;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_lebwd2` WHERE PHONE IS NOT NULL;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_m493ak` WHERE DELETED_AT <=> NULL;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_TIER_ha8vj5(-23)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me(ARR_LEN INT, IDX INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF IDX < 0 OR IDX >= ARR_LEN THEN
+        SIGNAL SQLSTATE '22002' SET MESSAGE_TEXT = 'ARRAY INDEX OUT OF BOUNDS';
+    END IF;
+    RETURN ((MYSQL_FUNC_FUNC_162_SELECT_NULL_bi8ptn()) - (0) + (((MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(-64)) - (0) + (IDX * 10))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_059_SHOW_VARS_322yrg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_059_SHOW_VARS_322yrg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW VARIABLES LIKE 'MAX_CONNECTIONS';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GLOBAL VARIABLES LIKE 'VERSION';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW SESSION VARIABLES LIKE 'SQL_MODE';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW STATUS LIKE 'THREADS_CONNECTED';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GLOBAL STATUS LIKE 'UPTIME';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_ARRAY_INDEX_3e44me(31, 100)) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_025_JSmysql_tbl_shk7ph_UTILITY_g6netf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSmysql_tbl_shk7ph_COUNT INT DEFAULT 0;
+    
+    SELECT JSmysql_tbl_shk7ph_PRETTY('{"A":1}');
+    SET JSmysql_tbl_shk7ph_COUNT = JSmysql_tbl_shk7ph_COUNT + 1;
+    
+    SELECT JSmysql_tbl_shk7ph_STORAGE_SIZE('{"A": 1}');
+    SET JSmysql_tbl_shk7ph_COUNT = JSmysql_tbl_shk7ph_COUNT + 1;
+    
+    SELECT JSmysql_tbl_shk7ph_STORAGE_FREE('{"A": 1}');
+    SET JSmysql_tbl_shk7ph_COUNT = JSmysql_tbl_shk7ph_COUNT + 1;
+    
+    SELECT JSmysql_tbl_shk7ph_MERGE_PATCH('{"A": 1}', '{"B": 2}');
+    SET JSmysql_tbl_shk7ph_COUNT = JSmysql_tbl_shk7ph_COUNT + 1;
+    
+    SELECT JSmysql_tbl_shk7ph_MERGE_PRESERVE('{"A": 1}', '{"B": 2}');
+    SET JSmysql_tbl_shk7ph_COUNT = JSmysql_tbl_shk7ph_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_059_SHOW_VARS_322yrg()) - (0) + ((MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(-70)) - (0) + JSmysql_tbl_shk7ph_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_tzw56m_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_tzw56m`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_025_JSmysql_tbl_shk7ph_UTILITY_g6netf()) - (0) + (FLOOR(V_RATING * 10)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_034_YEARWEEK_r9l81l----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_034_YEARWEEK_r9l81l() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE YW_COUNT INT DEFAULT 0;
+    
+    SELECT YEARWEEK(NOW());
+    SET YW_COUNT = YW_COUNT + 1;
+    
+    SELECT EXTRACT(YEAR INTO @mysql_synth_dummy FROM NOW());
+    SET YW_COUNT = YW_COUNT + 1;
+    
+    SELECT EXTRACT(MONTH INTO @mysql_synth_dummy FROM NOW());
+    SET YW_COUNT = YW_COUNT + 1;
+    
+    SELECT EXTRACT(DAY INTO @mysql_synth_dummy FROM NOW());
+    SET YW_COUNT = YW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5(88)) - (0) + YW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm() RETURNS INT DETERMINISTIC
+BEGIN
+    UPDATE `mysql_tbl_d7e8sa`
+    SET mysql_tbl_d7e8sa_MESSAGE = CASE mysql_tbl_d7e8sa_LOG_LEVEL
+        WHEN 1 THEN CONCAT('ERROR: ', mysql_tbl_d7e8sa_MESSAGE)
+        WHEN 2 THEN CONCAT('WARNING: ', mysql_tbl_d7e8sa_MESSAGE)
+        WHEN 3 THEN CONCAT('INFO: ', mysql_tbl_d7e8sa_MESSAGE)
+        ELSE mysql_tbl_d7e8sa_MESSAGE END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_shk7ph mysql_tbl_lebwd2 FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_mafqwm_UPDATE `mysql_tbl_mafqwm` UPDATE `mysql_tbl_shk7ph` mysql_tbl_lebwd2 FOR EACH ROW INSERT INTO `mysql_tbl_1823sp` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_LEVEL_0oifhm()) - (0) + TRIG_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_EVEN_CHECK_42t8o7(VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF VAL MOD 2 != 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE EVEN';
+    END IF;
+    RETURN ((MYSQL_FUNC_FUNC_034_YEARWEEK_r9l81l()) - (0) + ((MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2()) - (0) + VAL));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SIGNAL_FUNC_EVEN_CHECK_42t8o7(1);

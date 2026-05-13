@@ -1,0 +1,28 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gkxn1s` (
+    `mysql_tbl_gkxn1s_product_id` INT,
+    `mysql_tbl_gkxn1s_category_id` INT,
+    `mysql_tbl_gkxn1s_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_gkxn1s` (`mysql_tbl_gkxn1s_product_id`, `mysql_tbl_gkxn1s_category_id`, `mysql_tbl_gkxn1s_stock_quantity`) VALUES (1, 1, 1);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_gkxn1s_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM `mysql_tbl_gkxn1s`
+    WHERE mysql_tbl_gkxn1s_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN LEAST(V_TOTAL_STOCK, 1000);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(1);

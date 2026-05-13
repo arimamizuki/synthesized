@@ -1,0 +1,99 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h5s3k1` (
+    `mysql_tbl_h5s3k1_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_h5s3k1` (`mysql_tbl_h5s3k1_stock_quantity`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1p4e3z` (
+    `mysql_tbl_1p4e3z_product_id` INT,
+    `mysql_tbl_1p4e3z_category_id` INT,
+    `mysql_tbl_1p4e3z_price` DECIMAL(10,2),
+    `mysql_tbl_1p4e3z_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_1p4e3z` (`mysql_tbl_1p4e3z_product_id`, `mysql_tbl_1p4e3z_category_id`, `mysql_tbl_1p4e3z_price`, `mysql_tbl_1p4e3z_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_146_UPDATE_JOIN_mhwlns----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_146_UPDATE_JOIN_mhwlns() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UPD_COUNT INT DEFAULT 0;
+    
+    UPDATE `mysql_tbl_z085v8` U JOIN `mysql_tbl_uzn8v2` O ON U.ID = O.USER_ID SET U.TOTAL_SPENT = U.TOTAL_SPENT + O.AMOUNT;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    UPDATE `mysql_tbl_z085v8` U, (SELECT USER_ID, SUM(AMOUNT) AS TOTAL FROM `mysql_tbl_uzn8v2` GROUP BY USER_ID) T SET U.TOTAL_SPENT = T.TOTAL WHERE U.ID = T.USER_ID;
+    SET UPD_COUNT = UPD_COUNT + 1;
+    
+    RETURN UPD_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_ESTIMATE_4jnhyp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_ESTIMATE_4jnhyp(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_1p4e3z` P ON OI.PRODUCT_ID = mysql_tbl_1p4e3z_PRODUCT_ID
+    WHERE mysql_tbl_1p4e3z_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_REVENUE / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_LEVEL_w32w98----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_LEVEL_w32w98(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_h5s3k1_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_h5s3k1`
+    WHERE PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_ESTIMATE_4jnhyp(48)) - (0) + ((MYSQL_FUNC_FUNC_146_UPDATE_JOIN_mhwlns()) - (0) + V_STOCK));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DIGEST_COUNT INT DEFAULT 0;
+    
+    SELECT STATEMENT_DIGEST('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT STATEMENT_DIGEST_TEXT('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBTRACT('A:1-5', 'A:3-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBSET('A:3-5', 'A:1-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_LEVEL_w32w98(88)) - (0) + DIGEST_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj();

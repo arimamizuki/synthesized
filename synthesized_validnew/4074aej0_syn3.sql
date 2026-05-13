@@ -1,0 +1,29 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW CREATE TABLE USERS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE DATABASE TEST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE VIEW USER_VIEW;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE TRIGGER TRG_USERS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch();

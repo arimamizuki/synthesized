@@ -1,0 +1,271 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nlsl0b` (
+    `mysql_tbl_nlsl0b_customer_id` INT,
+    `mysql_tbl_nlsl0b_country` INT
+);
+
+INSERT INTO `mysql_tbl_nlsl0b` (`mysql_tbl_nlsl0b_customer_id`, `mysql_tbl_nlsl0b_country`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6rufh6` (
+    `mysql_tbl_6rufh6_customer_id` INT,
+    `mysql_tbl_6rufh6_registration_date` DATE,
+    `mysql_tbl_6rufh6_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_flvsb3` (
+    `mysql_tbl_flvsb3_order_id` INT,
+    `mysql_tbl_flvsb3_customer_id` INT,
+    `mysql_tbl_flvsb3_order_date` DATE,
+    `mysql_tbl_flvsb3_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_6rufh6` (`mysql_tbl_6rufh6_customer_id`, `mysql_tbl_6rufh6_registration_date`, `mysql_tbl_6rufh6_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_flvsb3` (`mysql_tbl_flvsb3_order_id`, `mysql_tbl_flvsb3_customer_id`, `mysql_tbl_flvsb3_order_date`, `mysql_tbl_flvsb3_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y2juhz` (
+    `mysql_tbl_y2juhz_campaign_id` INT,
+    `mysql_tbl_y2juhz_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_y2juhz` (`mysql_tbl_y2juhz_campaign_id`, `mysql_tbl_y2juhz_status`) VALUES (1, 'mysql_tbl_hyypfs');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cnjeqg` (
+    `mysql_tbl_cnjeqg_product_id` INT,
+    `mysql_tbl_cnjeqg_category_id` INT,
+    `mysql_tbl_cnjeqg_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_cnjeqg` (`mysql_tbl_cnjeqg_product_id`, `mysql_tbl_cnjeqg_category_id`, `mysql_tbl_cnjeqg_price`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW DATABASES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW DATABASES LIKE 'mysql_tbl_hyypfs%';
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW TABLES FROM `mysql_tbl_hyypfs`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL TABLES FROM `mysql_tbl_hyypfs`;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW FULL PROCESSLIST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW GRANTS FOR CURRENT_USER;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_061_SHOW_DB_TABLES_spn0fa()) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_f0c9oi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_f0c9oi(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_LIFETIME_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_flvsb3_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_flvsb3`
+    WHERE mysql_tbl_flvsb3_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    SELECT DATEDIFF(CURDATE(), mysql_tbl_6rufh6_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM `mysql_tbl_6rufh6`
+    WHERE mysql_tbl_6rufh6_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_DAYS > 365 THEN
+        SET V_LIFETIME_VALUE = (V_TOTAL_REVENUE * 365.0) / V_CUSTOMER_AGE_DAYS * 3;
+    ELSE
+        SET V_LIFETIME_VALUE = V_TOTAL_REVENUE;
+    END IF;
+
+    RETURN FLOOR(V_LIFETIME_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = V_SUM + V_I;
+        END IF;
+        SET V_I = V_I + 1;
+        IF V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_y2juhz_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_y2juhz`
+    WHERE mysql_tbl_y2juhz_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MIN_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MIN(mysql_tbl_cnjeqg_PRICE), 0)
+    INTO V_MIN_PRICE
+    FROM `mysql_tbl_cnjeqg`
+    WHERE mysql_tbl_cnjeqg_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_MIN_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE mysql_tbl_hrmoq1 DROP FOREIGN KEY FK_USER_ID;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE USERS DROP CHECK CHK_AGE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    ALTER TABLE USERS DROP INDEX UQ_EMAIL;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(-87)) - (0) + ((MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8(-76)) - (0) + DROP_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(-80);
+        SET V_POWER = MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_f0c9oi(-27);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_FUNC_123_DROP_CONSTRAINT_nasavk()) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM `mysql_tbl_hrmoq1` O
+    JOIN `mysql_tbl_nlsl0b` C ON O.CUSTOMER_ID = mysql_tbl_nlsl0b_CUSTOMER_ID
+    WHERE mysql_tbl_nlsl0b_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_hrmoq1`;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_060_SHOW_PROCESS_gsmbf9()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(62, 32)) - (((MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(52)) - (0) + 0)) + ((V_COUNTRY_ORDERS * 100) / V_TOTAL_ORDERS));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(1);

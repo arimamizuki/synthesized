@@ -1,0 +1,52 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3eyajk` (
+    `mysql_tbl_3eyajk_emp_id` INT,
+    `mysql_tbl_3eyajk_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_3eyajk` (`mysql_tbl_3eyajk_emp_id`, `mysql_tbl_3eyajk_department_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE KEY_COUNT INT DEFAULT 0;
+    
+    SELECT CREATE_ASYMMETRIC_PRIV_KEY('RSA', 2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_ASYMMETRIC_PUB_KEY('RSA', 'PRIVATE_KEY');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DH_PARAMETERS(2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DIGEST('SHA256', 'HELLO');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    RETURN KEY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_lbem1r(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_3eyajk`
+    WHERE mysql_tbl_3eyajk_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us()) - (0) + (FLOOR(V_AVG_SALARY / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_lbem1r(1);

@@ -1,0 +1,45 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gfup7w` (
+    `mysql_tbl_gfup7w_emp_id` INT,
+    `mysql_tbl_gfup7w_department_id` INT,
+    `mysql_tbl_gfup7w_salary` INT
+);
+
+INSERT INTO `mysql_tbl_gfup7w` (`mysql_tbl_gfup7w_emp_id`, `mysql_tbl_gfup7w_department_id`, `mysql_tbl_gfup7w_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_092_CREATE_SERVER_fn0vj3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_092_CREATE_SERVER_fn0vj3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SERVER_COUNT INT DEFAULT 0;
+    
+    CREATE SERVER REMOTE_SERVER FOREIGN DATA WRAPPER MYSQL OPTIONS (HOST 'REMOTE.HOST', DATABASE 'TEST', USER 'REMOTE_USER', PASSWORD 'PASSWORD', PORT 3306);
+    SET SERVER_COUNT = SERVER_COUNT + 1;
+    
+    RETURN SERVER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_gfup7w_SALARY), 0), COALESCE(MIN(mysql_tbl_gfup7w_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM `mysql_tbl_gfup7w`
+    WHERE mysql_tbl_gfup7w_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_092_CREATE_SERVER_fn0vj3()) - (0) + (V_MAX_SALARY - V_MIN_SALARY));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(1);

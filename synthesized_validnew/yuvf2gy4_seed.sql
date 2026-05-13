@@ -1,0 +1,44 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_hzfq1h` (
+    `table_hzfq1h_emp_id` INT,
+    `table_hzfq1h_department_id` INT,
+    `table_hzfq1h_hire_date` DATE,
+    `table_hzfq1h_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_f2685x` (
+    `table_f2685x_department_id` INT,
+    `table_f2685x_name` VARCHAR(50)
+);
+
+INSERT INTO `table_hzfq1h` (`table_hzfq1h_emp_id`, `table_hzfq1h_department_id`, `table_hzfq1h_hire_date`, `table_hzfq1h_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_f2685x` (`table_f2685x_department_id`, `table_f2685x_name`) VALUES (1, 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SUCCESSION_READINESS_j0ct2w(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_CRITICAL_ROLES INT DEFAULT 0;
+    DECLARE V_READY_SUCCESSORS INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_HZFQ1H
+    WHERE TABLE_HZFQ1H_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_HZFQ1H_EMP_ID)
+    INTO V_READY_SUCCESSORS
+    FROM TABLE_HZFQ1H E
+    WHERE TABLE_HZFQ1H_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND E.MANAGER_ID IS NOT NULL;
+
+    SET V_READINESS_SCORE = (V_READY_SUCCESSORS * 100) / GREATEST(V_TOTAL_EMPLOYEES, 1);
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;

@@ -1,0 +1,345 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0zch0x` (
+    `mysql_tbl_0zch0x_emp_id` INT,
+    `mysql_tbl_0zch0x_name` VARCHAR(50),
+    `mysql_tbl_0zch0x_salary` INT,
+    `mysql_tbl_0zch0x_hire_date` DATE,
+    `mysql_tbl_0zch0x_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fhc9bw` (
+    `mysql_tbl_fhc9bw_dept_id` INT,
+    `mysql_tbl_fhc9bw_name` VARCHAR(50),
+    `mysql_tbl_fhc9bw_location` INT
+);
+
+INSERT INTO `mysql_tbl_0zch0x` (`mysql_tbl_0zch0x_emp_id`, `mysql_tbl_0zch0x_name`, `mysql_tbl_0zch0x_salary`, `mysql_tbl_0zch0x_hire_date`, `mysql_tbl_0zch0x_department_id`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_fhc9bw` (`mysql_tbl_fhc9bw_dept_id`, `mysql_tbl_fhc9bw_name`, `mysql_tbl_fhc9bw_location`) VALUES (1, 'test', 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3l4hu4` (mysql_tbl_3l4hu4_id INT, mysql_tbl_3l4hu4_name VARCHAR(100), mysql_tbl_3l4hu4_email VARCHAR(100));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cdoqx1` (
+    `mysql_tbl_cdoqx1_claim_id` INT,
+    `mysql_tbl_cdoqx1_policy_id` INT,
+    `mysql_tbl_cdoqx1_claim_date` DATE,
+    `mysql_tbl_cdoqx1_claim_amount` DECIMAL(10,2),
+    `mysql_tbl_cdoqx1_status` VARCHAR(50),
+    `mysql_tbl_cdoqx1_processing_days` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_0kgur3` (
+    `mysql_tbl_0kgur3_policy_id` INT,
+    `mysql_tbl_0kgur3_customer_id` INT,
+    `mysql_tbl_0kgur3_policy_type` VARCHAR(50),
+    `mysql_tbl_0kgur3_premium_annual` INT
+);
+
+INSERT INTO `mysql_tbl_cdoqx1` (`mysql_tbl_cdoqx1_claim_id`, `mysql_tbl_cdoqx1_policy_id`, `mysql_tbl_cdoqx1_claim_date`, `mysql_tbl_cdoqx1_claim_amount`, `mysql_tbl_cdoqx1_status`, `mysql_tbl_cdoqx1_processing_days`) VALUES (1, 2, '2024-01-01', 1.0, 'test', 6);
+
+INSERT INTO `mysql_tbl_0kgur3` (`mysql_tbl_0kgur3_policy_id`, `mysql_tbl_0kgur3_customer_id`, `mysql_tbl_0kgur3_policy_type`, `mysql_tbl_0kgur3_premium_annual`) VALUES (1, 2, 'test', 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4cyaej` (
+    `mysql_tbl_4cyaej_category_id` INT,
+    `mysql_tbl_4cyaej_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_4cyaej` (`mysql_tbl_4cyaej_category_id`, `mysql_tbl_4cyaej_stock_quantity`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_egu886` (
+    `mysql_tbl_egu886_customer_id` INT,
+    `mysql_tbl_egu886_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_egu886` (`mysql_tbl_egu886_customer_id`, `mysql_tbl_egu886_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_elgqxk` (
+    `mysql_tbl_elgqxk_customer_id` INT,
+    `mysql_tbl_elgqxk_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_elgqxk` (`mysql_tbl_elgqxk_customer_id`, `mysql_tbl_elgqxk_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_o6kydp` (
+    `mysql_tbl_o6kydp_country` INT
+);
+
+INSERT INTO `mysql_tbl_o6kydp` (`mysql_tbl_o6kydp_country`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(mysql_tbl_elgqxk_START_DATE)
+    INTO V_START_MONTH
+    FROM `mysql_tbl_elgqxk`
+    WHERE mysql_tbl_elgqxk_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_START_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_o6kydp`
+    WHERE mysql_tbl_o6kydp_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(-67)) - (0) + (((MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - (0) + (A / B))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP DATABASE OLD_DATABASE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP DATABASE IF EXISTS TEMP_DB;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SCHEMA IF EXISTS TEST_SCHEMA;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_4cyaej_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_4cyaej`
+    WHERE mysql_tbl_4cyaej_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_egu886_START_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_egu886`
+    WHERE mysql_tbl_egu886_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_155_SELECT_JOIN_alva1e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_155_SELECT_JOIN_alva1e() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS U JOIN ORDERS O ON U.ID = O.USER_ID;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS U LEFT JOIN ORDERS O ON U.ID = O.USER_ID;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS U RIGHT JOIN ORDERS O ON U.ID = O.USER_ID;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SRS_COUNT INT DEFAULT 0;
+    
+    CREATE SPATIAL REFERENCE SYSTEM 4120 NAME 'GREEK' DEFINITION 'GEOGCS["GREEK",DATUM["GREEK",SPHEROID["BESSEL 1841",6377397.155,299.1528128]],PRIMEM["GREENWICH",0],UNIT["DEGREE",0.017453292519943295]]';
+    SET SRS_COUNT = SRS_COUNT + 1;
+    
+    RETURN SRS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(X INT, Y INT, A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DISTANCE DECIMAL(10,4) DEFAULT 0.00;
+    SET V_DISTANCE = MYSQL_FUNC_FUNC_105_CREATE_SRS_0k13se();
+    RETURN ((MYSQL_FUNC_FUNC_155_SELECT_JOIN_alva1e()) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(-63)) - (0) + (FLOOR(V_DISTANCE)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(POLICY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_AVG_PROCESSING_DAYS DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_APPROVED_CLAIMS INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_cdoqx1_PROCESSING_DAYS), 0)
+    INTO V_TOTAL_CLAIMS, V_AVG_PROCESSING_DAYS
+    FROM `mysql_tbl_cdoqx1`
+    WHERE mysql_tbl_cdoqx1_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPROVED_CLAIMS
+    FROM `mysql_tbl_cdoqx1`
+    WHERE mysql_tbl_cdoqx1_POLICY_ID = POLICY_ID_PARAM AND mysql_tbl_cdoqx1_STATUS = 'APPROVED';
+
+    IF V_TOTAL_CLAIMS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(16, 13, 1, 50, 69)) - (0) + 100);
+    END IF;
+
+    SET V_EFFICIENCY_SCORE = MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(74);
+
+    RETURN ((MYSQL_FUNC_FUNC_133_DROP_DB_6tmmr7()) - (0) + (GREATEST(V_EFFICIENCY_SCORE, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ALGORITHM = INPLACE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ALGORITHM = COPY;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS LOCK = NONE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(-86, -65)) - (0) + ((MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(-77)) - (0) + ALTER_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_INSERT_USER_ixieiy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_INSERT_USER_ixieiy(USER_NAME INT, mysql_tbl_3l4hu4_EMAIL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF USER_NAME IS NULL OR USER_NAME = '' THEN
+        SIGNAL SQLSTATE '23000' SET MESSAGE_TEXT = 'USERNAME IS REQUIRED';
+    END IF;
+    IF mysql_tbl_3l4hu4_EMAIL IS NULL OR mysql_tbl_3l4hu4_EMAIL = '' THEN
+        SIGNAL SQLSTATE '23000' SET MESSAGE_TEXT = 'mysql_tbl_3l4hu4_EMAIL IS REQUIRED';
+    END IF;
+    INSERT INTO `mysql_tbl_3l4hu4` (`mysql_tbl_3l4hu4_NAME`, `mysql_tbl_3l4hu4_EMAIL`) VALUES (USER_NAME, mysql_tbl_3l4hu4_EMAIL);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN SIDE * 4;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP SPATIAL REFERENCE SYSTEM 4120;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP SPATIAL REFERENCE SYSTEM IF EXISTS 4120;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(89)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(DEPT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_0zch0x_SALARY), 0), COALESCE(MAX(mysql_tbl_0zch0x_SALARY), 0), COALESCE(MIN(mysql_tbl_0zch0x_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM `mysql_tbl_0zch0x`
+    WHERE mysql_tbl_0zch0x_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_MIN_SALARY > 0 THEN
+        SET V_VARIANCE = MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42();
+    END IF;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_INSERT_USER_ixieiy(-24, 63)) - (0) + (((MYSQL_FUNC_FUNC_106_DROP_SRS_7briw2()) - (0) + (FLOOR(V_VARIANCE)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(1);

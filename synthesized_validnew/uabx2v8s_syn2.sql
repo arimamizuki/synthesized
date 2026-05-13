@@ -1,0 +1,171 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j5io90` (
+    `mysql_tbl_j5io90_emp_id` INT,
+    `mysql_tbl_j5io90_department_id` INT,
+    `mysql_tbl_j5io90_salary` INT,
+    `mysql_tbl_j5io90_hire_date` DATE,
+    `mysql_tbl_j5io90_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_j5io90` (`mysql_tbl_j5io90_emp_id`, `mysql_tbl_j5io90_department_id`, `mysql_tbl_j5io90_salary`, `mysql_tbl_j5io90_hire_date`, `mysql_tbl_j5io90_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_iygy93` (
+    `mysql_tbl_iygy93_customer_id` INT,
+    `mysql_tbl_iygy93_country` INT,
+    `mysql_tbl_iygy93_registration_date` DATE
+);
+
+INSERT INTO `mysql_tbl_iygy93` (`mysql_tbl_iygy93_customer_id`, `mysql_tbl_iygy93_country`, `mysql_tbl_iygy93_registration_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r6e5wn` (mysql_tbl_r6e5wn_id INT, mysql_tbl_r6e5wn_balance DECIMAL(10,2), mysql_tbl_r6e5wn_status VARCHAR(20));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_GET_MIN_cm5woy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MIN_cm5woy(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF A < B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ACTIVE_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 1;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID), COUNT(*)
+    INTO V_ACTIVE_CUSTOMERS, V_TOTAL_CUSTOMERS
+    FROM `mysql_tbl_iygy93` C
+    LEFT JOIN SUBSCRIPTIONS S ON mysql_tbl_iygy93_CUSTOMER_ID = S.CUSTOMER_ID AND S.STATUS = 'ACTIVE'
+    WHERE mysql_tbl_iygy93_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (V_ACTIVE_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CLOSE_ACCOUNT_8iwg9j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CLOSE_ACCOUNT_8iwg9j(ACC_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    SELECT mysql_tbl_r6e5wn_BALANCE INTO V_BALANCE FROM `mysql_tbl_r6e5wn` WHERE mysql_tbl_r6e5wn_ID = ACC_ID;
+    IF V_BALANCE != 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ACCOUNT mysql_tbl_r6e5wn_BALANCE MUST BE ZERO BEFORE CLOSING';
+    END IF;
+    UPDATE `mysql_tbl_r6e5wn` SET mysql_tbl_r6e5wn_STATUS = 'CLOSED' WHERE mysql_tbl_r6e5wn_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_j5io90_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_j5io90_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_j5io90_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM `mysql_tbl_j5io90`
+    WHERE mysql_tbl_j5io90_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ENGAGEMENT_SCORE = (MYSQL_FUNC_GET_MIN_cm5woy(-14, -29));
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_RETENTION_INDEX_89qyo7(76)) - (0) + ((MYSQL_FUNC_SIGNAL_PROC_CLOSE_ACCOUNT_8iwg9j(-44)) - (0) + V_ENGAGEMENT_SCORE));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = V_TEMP >> 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_COUNT_BITS_SET_sk78sm(24)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_017_ENCRYPTION_6kgspp() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ENC_COUNT INT DEFAULT 0;
+    
+    SELECT MD5('PASSWORD');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT SHA1('PASSWORD');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT SHA2('PASSWORD', 256);
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT AES_ENCRYPT('DATA', 'KEY');
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    SELECT AES_DECRYPT(ENCRYPTED_DATA, 'KEY') INTO @mysql_synth_dummy FROM `mysql_tbl_nnhtdz`;
+    SET ENC_COUNT = ENC_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(55)) - (0) + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg()) - (0) + ENC_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_017_ENCRYPTION_6kgspp();

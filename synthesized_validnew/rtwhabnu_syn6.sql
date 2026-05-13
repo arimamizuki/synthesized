@@ -1,0 +1,325 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_azi9i1` (
+    `mysql_tbl_azi9i1_emp_id` INT,
+    `mysql_tbl_azi9i1_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_azi9i1` (`mysql_tbl_azi9i1_emp_id`, `mysql_tbl_azi9i1_department_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_66d2hy` (
+    `mysql_tbl_66d2hy_product_id` INT,
+    `mysql_tbl_66d2hy_category_id` INT,
+    `mysql_tbl_66d2hy_price` DECIMAL(10,2),
+    `mysql_tbl_66d2hy_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7ptdv9` (
+    `mysql_tbl_7ptdv9_category_id` INT,
+    `mysql_tbl_7ptdv9_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_66d2hy` (`mysql_tbl_66d2hy_product_id`, `mysql_tbl_66d2hy_category_id`, `mysql_tbl_66d2hy_price`, `mysql_tbl_66d2hy_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_7ptdv9` (`mysql_tbl_7ptdv9_category_id`, `mysql_tbl_7ptdv9_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tn0fdj` (
+    `mysql_tbl_tn0fdj_emp_id` INT,
+    `mysql_tbl_tn0fdj_department_id` INT,
+    `mysql_tbl_tn0fdj_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xwioym` (
+    `mysql_tbl_xwioym_department_id` INT,
+    `mysql_tbl_xwioym_name` VARCHAR(50),
+    `mysql_tbl_xwioym_budget` INT
+);
+
+INSERT INTO `mysql_tbl_tn0fdj` (`mysql_tbl_tn0fdj_emp_id`, `mysql_tbl_tn0fdj_department_id`, `mysql_tbl_tn0fdj_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `mysql_tbl_xwioym` (`mysql_tbl_xwioym_department_id`, `mysql_tbl_xwioym_name`, `mysql_tbl_xwioym_budget`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5kgztm` (
+    `mysql_tbl_5kgztm_emp_id` INT,
+    `mysql_tbl_5kgztm_department_id` INT,
+    `mysql_tbl_5kgztm_salary` INT,
+    `mysql_tbl_5kgztm_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kz43c1` (
+    `mysql_tbl_kz43c1_department_id` INT,
+    `mysql_tbl_kz43c1_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_5kgztm` (`mysql_tbl_5kgztm_emp_id`, `mysql_tbl_5kgztm_department_id`, `mysql_tbl_5kgztm_salary`, `mysql_tbl_5kgztm_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_kz43c1` (`mysql_tbl_kz43c1_department_id`, `mysql_tbl_kz43c1_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7thnpi` (
+    `mysql_tbl_7thnpi_ctime` INT
+);
+
+INSERT INTO `mysql_tbl_7thnpi` (`mysql_tbl_7thnpi_ctime`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_TOTAL INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM `mysql_tbl_azi9i1`
+    WHERE MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_TOTAL
+    FROM `mysql_tbl_azi9i1`
+    WHERE mysql_tbl_azi9i1_DEPARTMENT_ID = (SELECT mysql_tbl_azi9i1_DEPARTMENT_ID FROM `mysql_tbl_azi9i1` WHERE mysql_tbl_azi9i1_EMP_ID = EMP_ID_PARAM);
+
+    IF V_DEPT_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_DIRECT_REPORTS * 100) / V_DEPT_TOTAL;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CATALOG_NAME('DEF');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLLATION_NAME('UTF8MB4_GENERAL_CI');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_DEFAULT('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_NAME('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT COLUMN_TYPE('TEST', 'USERS', 'ID');
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(YEAR_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF YEAR_VAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'YEAR CANNOT BE NEGATIVE';
+    END IF;
+    IF (YEAR_VAL MOD 4 = 0 AND YEAR_VAL MOD 100 != 0) OR (YEAR_VAL MOD 400 = 0) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_TIME_wu095y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIME_wu095y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT;
+    SELECT `mysql_tbl_7thnpi_CTIME` INTO RESULT FROM `mysql_tbl_7thnpi`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = ROUND(P_A / P_B);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE PWD_COUNT INT DEFAULT 0;
+    
+    SET PASSWORD FOR 'USER1'@'LOCALHOST' = 'NEWPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    SET PASSWORD = 'MYPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(-21, -81)) - (0) + ((MYSQL_FUNC_BUG9056_PROC1_uaqsvs(52, -78)) - (0) + PWD_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_tn0fdj_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM `mysql_tbl_tn0fdj`
+    WHERE mysql_tbl_tn0fdj_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_xwioym_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_xwioym`
+    WHERE mysql_tbl_xwioym_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5()) - (0) + 0);
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(-43)) - (0) + (((MYSQL_FUNC_PROC_TIME_wu095y()) - (0) + (FLOOR(V_UTILIZATION)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM `mysql_tbl_5kgztm`
+    WHERE mysql_tbl_5kgztm_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(mysql_tbl_5kgztm_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM `mysql_tbl_5kgztm`
+    WHERE mysql_tbl_5kgztm_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_SEASONALITY_INDEX_jj8kis----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_SEASONALITY_INDEX_jj8kis(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_SEASONAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ANNUAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SEASONALITY_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(OI.QUANTITY), 0)
+    INTO V_SEASONAL_AVG
+    FROM ORDER_ITEMS OI
+    JOIN ORDERS O ON OI.ORDER_ID = O.ORDER_ID
+    JOIN `mysql_tbl_66d2hy` P ON OI.PRODUCT_ID = mysql_tbl_66d2hy_PRODUCT_ID
+    WHERE mysql_tbl_66d2hy_CATEGORY_ID = CATEGORY_ID_PARAM
+    AND MONTH(O.ORDER_DATE) = V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(QUANTITY), 0)
+    INTO V_ANNUAL_AVG
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_66d2hy` P ON OI.PRODUCT_ID = mysql_tbl_66d2hy_PRODUCT_ID
+    WHERE mysql_tbl_66d2hy_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_ANNUAL_AVG = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-48)) - (0) + 100);
+    END IF;
+
+    SET V_SEASONALITY_INDEX = (V_SEASONAL_AVG * 100) / V_ANNUAL_AVG;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(39)) - (0) + V_SEASONALITY_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 1;
+    DECLARE COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SUBORDINATE_RATIO_16r5h1(-72)) - (((MYSQL_FUNC_FUNC_046_CATALOG_INFO_fumbv2()) - (0) + 0)) + 0);
+    END IF;
+
+    SIMPLE_LOOP: WHILE COUNTER <= N DO
+        SET RESULT = RESULT * COUNTER;
+        SET COUNTER = COUNTER + 1;
+    END WHILE SIMPLE_LOOP;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_SEASONALITY_INDEX_jj8kis(-83)) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(1);

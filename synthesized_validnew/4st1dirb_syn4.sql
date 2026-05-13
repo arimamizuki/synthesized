@@ -1,0 +1,127 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fs4p8o` (
+    `mysql_tbl_fs4p8o_product_id` INT,
+    `mysql_tbl_fs4p8o_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_fs4p8o` (`mysql_tbl_fs4p8o_product_id`, `mysql_tbl_fs4p8o_price`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_obe4rl` (
+    `mysql_tbl_obe4rl_campaign_id` INT,
+    `mysql_tbl_obe4rl_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_obe4rl` (`mysql_tbl_obe4rl_campaign_id`, `mysql_tbl_obe4rl_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c89s97` (
+    `mysql_tbl_c89s97_emp_id` INT,
+    `mysql_tbl_c89s97_department_id` INT,
+    `mysql_tbl_c89s97_salary` INT,
+    `mysql_tbl_c89s97_hire_date` DATE,
+    `mysql_tbl_c89s97_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_c89s97` (`mysql_tbl_c89s97_emp_id`, `mysql_tbl_c89s97_department_id`, `mysql_tbl_c89s97_salary`, `mysql_tbl_c89s97_hire_date`, `mysql_tbl_c89s97_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(INNER_RADIUS INT, OUTER_RADIUS INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF INNER_RADIUS >= OUTER_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AREA = 3.14159 * (OUTER_RADIUS * OUTER_RADIUS - INNER_RADIUS * INNER_RADIUS);
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN 0;
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_c89s97_SALARY, 0), COALESCE(mysql_tbl_c89s97_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_c89s97_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_c89s97`
+    WHERE mysql_tbl_c89s97_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_c89s97_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM `mysql_tbl_c89s97`;
+
+    SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(0, 100));
+
+    RETURN ((MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(-43, 9, 94)) - (0) + V_RISK_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_obe4rl_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_obe4rl`
+    WHERE mysql_tbl_obe4rl_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(60)) - (0) + CASE WHEN V_STATUS = 'ACTIVE' THEN 1 ELSE 0 END) END;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_fs4p8o_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_fs4p8o`
+    WHERE mysql_tbl_fs4p8o_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - (0) + (FLOOR(V_PRICE)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(1);

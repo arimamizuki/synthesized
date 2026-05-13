@@ -1,0 +1,366 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qwkyd3` (
+    `mysql_tbl_qwkyd3_product_id` INT,
+    `mysql_tbl_qwkyd3_price` DECIMAL(10,2),
+    `mysql_tbl_qwkyd3_stock_quantity` INT,
+    `mysql_tbl_qwkyd3_reorder_level` INT
+);
+
+INSERT INTO `mysql_tbl_qwkyd3` (`mysql_tbl_qwkyd3_product_id`, `mysql_tbl_qwkyd3_price`, `mysql_tbl_qwkyd3_stock_quantity`, `mysql_tbl_qwkyd3_reorder_level`) VALUES (1, 1.0, 3, 4);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g6gej9` (
+    `mysql_tbl_g6gej9_emp_id` INT,
+    `mysql_tbl_g6gej9_department_id` INT,
+    `mysql_tbl_g6gej9_hire_date` DATE,
+    `mysql_tbl_g6gej9_salary` INT
+);
+
+INSERT INTO `mysql_tbl_g6gej9` (`mysql_tbl_g6gej9_emp_id`, `mysql_tbl_g6gej9_department_id`, `mysql_tbl_g6gej9_hire_date`, `mysql_tbl_g6gej9_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wuq7cu` (
+    `mysql_tbl_wuq7cu_budget` INT
+);
+
+INSERT INTO `mysql_tbl_wuq7cu` (`mysql_tbl_wuq7cu_budget`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dx8z24` (
+    `mysql_tbl_dx8z24_rental_id` INT,
+    `mysql_tbl_dx8z24_equipment_id` INT,
+    `mysql_tbl_dx8z24_customer_id` INT,
+    `mysql_tbl_dx8z24_rental_date` DATE,
+    `mysql_tbl_dx8z24_return_date` DATE,
+    `mysql_tbl_dx8z24_daily_rate` INT,
+    `mysql_tbl_dx8z24_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_r3vmt4` (
+    `mysql_tbl_r3vmt4_equipment_id` INT,
+    `mysql_tbl_r3vmt4_name` VARCHAR(50),
+    `mysql_tbl_r3vmt4_category` INT,
+    `mysql_tbl_r3vmt4_replacement_value` INT,
+    `mysql_tbl_r3vmt4_is_insured` INT
+);
+
+INSERT INTO `mysql_tbl_dx8z24` (`mysql_tbl_dx8z24_rental_id`, `mysql_tbl_dx8z24_equipment_id`, `mysql_tbl_dx8z24_customer_id`, `mysql_tbl_dx8z24_rental_date`, `mysql_tbl_dx8z24_return_date`, `mysql_tbl_dx8z24_daily_rate`, `mysql_tbl_dx8z24_deposit_amount`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6, 1.0);
+
+INSERT INTO `mysql_tbl_r3vmt4` (`mysql_tbl_r3vmt4_equipment_id`, `mysql_tbl_r3vmt4_name`, `mysql_tbl_r3vmt4_category`, `mysql_tbl_r3vmt4_replacement_value`, `mysql_tbl_r3vmt4_is_insured`) VALUES (1, 'test', 3, 4, 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_bmc6qk` (
+    `mysql_tbl_bmc6qk_supplier_id` INT,
+    `mysql_tbl_bmc6qk_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_bmc6qk` (`mysql_tbl_bmc6qk_supplier_id`, `mysql_tbl_bmc6qk_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ns4d30` (
+    `mysql_tbl_ns4d30_order_id` INT,
+    `mysql_tbl_ns4d30_customer_id` INT,
+    `mysql_tbl_ns4d30_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_ns4d30` (`mysql_tbl_ns4d30_order_id`, `mysql_tbl_ns4d30_customer_id`, `mysql_tbl_ns4d30_order_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vrv06t` (
+    `mysql_tbl_vrv06t_product_id` INT,
+    `mysql_tbl_vrv06t_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_vrv06t` (`mysql_tbl_vrv06t_product_id`, `mysql_tbl_vrv06t_supplier_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+    DECLARE V_YEARS_OF_SERVICE INT DEFAULT 0;
+
+    SELECT mysql_tbl_g6gej9_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM `mysql_tbl_g6gej9`
+    WHERE mysql_tbl_g6gej9_EMP_ID = EMP_ID_PARAM;
+
+    SET V_YEARS_OF_SERVICE = TIMESTAMPDIFF(YEAR, V_HIRE_DATE, CURDATE());
+
+    RETURN V_YEARS_OF_SERVICE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_wuq7cu_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_wuq7cu`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(RENTAL_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RENTAL_DATE DATE;
+    DECLARE V_RETURN_DATE DATE;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+    DECLARE V_DEPOSIT INT DEFAULT 0;
+    DECLARE V_RENTAL_DAYS INT DEFAULT 0;
+    DECLARE V_REPLACEMENT_VALUE INT DEFAULT 0;
+    DECLARE V_INSURANCE_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_dx8z24_RENTAL_DATE, mysql_tbl_dx8z24_RETURN_DATE, mysql_tbl_dx8z24_DAILY_RATE, mysql_tbl_dx8z24_DEPOSIT_AMOUNT, mysql_tbl_r3vmt4_REPLACEMENT_VALUE
+    INTO V_RENTAL_DATE, V_RETURN_DATE, V_DAILY_RATE, V_DEPOSIT, V_REPLACEMENT_VALUE
+    FROM `mysql_tbl_dx8z24` R
+    JOIN `mysql_tbl_r3vmt4` E ON mysql_tbl_dx8z24_EQUIPMENT_ID = mysql_tbl_r3vmt4_EQUIPMENT_ID
+    WHERE mysql_tbl_dx8z24_RENTAL_ID = RENTAL_ID_PARAM;
+
+    IF V_RETURN_DATE IS NULL THEN
+        SET V_RETURN_DATE = CURDATE();
+    END IF;
+
+    SET V_RENTAL_DAYS = DATEDIFF(V_RETURN_DATE, V_RENTAL_DATE);
+    IF V_RENTAL_DAYS <= 0 THEN
+        SET V_RENTAL_DAYS = 1;
+    END IF;
+
+    SET V_INSURANCE_COST = (V_REPLACEMENT_VALUE * V_RENTAL_DAYS) / 1000;
+
+    IF V_DEPOSIT < V_INSURANCE_COST THEN
+        SET V_INSURANCE_COST = V_INSURANCE_COST + 50;
+    END IF;
+
+    RETURN CAST(V_INSURANCE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_bmc6qk_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_bmc6qk`
+    WHERE mysql_tbl_bmc6qk_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_PRETTY('{"A":1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_SIZE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_STORAGE_FREE('{"A": 1}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PATCH('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_MERGE_PRESERVE('{"A": 1}', '{"B": 2}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    READ_LOOP: LOOP
+        SET V_RESULT = V_RESULT + 1;
+        IF V_RESULT >= N THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_137_CREATE_PARTITION_2vstnf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_137_CREATE_PARTITION_2vstnf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_x99fvs` (mysql_tbl_x99fvs_ID INT, mysql_tbl_x99fvs_CREATED_AT DATE) PARTITION BY RANGE (YEAR(mysql_tbl_x99fvs_CREATED_AT)) (PARTITION P0 VALUES LESS THAN (2020), PARTITION P1 VALUES LESS THAN (2021), PARTITION P2 VALUES LESS THAN MAXVALUE);
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT_kjhdc5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT_kjhdc5(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_vrv06t_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM `mysql_tbl_vrv06t`
+    WHERE mysql_tbl_vrv06t_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT CATEGORY_ID)
+    INTO @V_CATEGORY_COUNT
+    FROM `mysql_tbl_vrv06t`
+    WHERE mysql_tbl_vrv06t_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN @V_CATEGORY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_ns4d30_ORDER_DATE)
+    INTO V_YEAR
+    FROM `mysql_tbl_ns4d30`
+    WHERE mysql_tbl_ns4d30_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_057_LOCK_TABLES_3otf3c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_057_LOCK_TABLES_3otf3c() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOCK_COUNT INT DEFAULT 0;
+    
+    LOCK TABLES USERS READ;
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    UNLOCK TABLES;
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    LOCK TABLES USERS WRITE;
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    UNLOCK TABLES;
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    RETURN LOCK_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_121_ALTER_MODIFY_w9uvbb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_121_ALTER_MODIFY_w9uvbb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS MODIFY COLUMN NAME VARCHAR(100);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS MODIFY COLUMN AGE INT NOT NULL DEFAULT 0;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS CHANGE COLUMN NAME FULL_NAME VARCHAR(150);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(INCOME INT, TAX_YEAR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_TAXABLE_INCOME INT DEFAULT 0;
+
+    SET V_TAXABLE_INCOME = MYSQL_FUNC_FUNC_025_JSON_UTILITY_g6netf();
+
+    IF INCOME <= 0 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(36)) - (((MYSQL_FUNC_FUNC_121_ALTER_MODIFY_w9uvbb()) - (((MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(29)) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    IF INCOME <= 10000 THEN
+        SET V_TAX_AMOUNT = MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(12);
+    ELSEIF INCOME <= 40000 THEN
+        SET V_TAX_AMOUNT = MYSQL_FUNC_CALCULATE_SUPPLIER_CATEGORY_COUNT_kjhdc5(28);
+    ELSEIF INCOME <= 85000 THEN
+        SET V_TAX_AMOUNT = MYSQL_FUNC_FUNC_057_LOCK_TABLES_3otf3c();
+    ELSE
+        SET V_TAX_AMOUNT = MYSQL_FUNC_FUNC_137_CREATE_PARTITION_2vstnf();
+    END IF;
+
+    RETURN CAST(V_TAX_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_LEVEL INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_qwkyd3_PRICE, 0), COALESCE(mysql_tbl_qwkyd3_STOCK_QUANTITY, 0), COALESCE(mysql_tbl_qwkyd3_REORDER_LEVEL, 0)
+    INTO V_PRICE, V_STOCK, V_REORDER_LEVEL
+    FROM `mysql_tbl_qwkyd3`
+    WHERE mysql_tbl_qwkyd3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx(-97);
+
+    IF V_STOCK < V_REORDER_LEVEL THEN
+        SET V_INVENTORY_VALUE = MYSQL_FUNC_CALCULATE_BUDGET_ipmkd3(27);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(64)) - (0) + ((MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(14, 88)) - (0) + V_INVENTORY_VALUE));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5(1);

@@ -1,0 +1,481 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sma0k3` (
+    `mysql_tbl_sma0k3_rental_id` INT,
+    `mysql_tbl_sma0k3_equipment_id` INT,
+    `mysql_tbl_sma0k3_customer_id` INT,
+    `mysql_tbl_sma0k3_rental_date` DATE,
+    `mysql_tbl_sma0k3_return_date` DATE,
+    `mysql_tbl_sma0k3_daily_rate` INT,
+    `mysql_tbl_sma0k3_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yh2n1o` (
+    `mysql_tbl_yh2n1o_equipment_id` INT,
+    `mysql_tbl_yh2n1o_name` VARCHAR(50),
+    `mysql_tbl_yh2n1o_category` INT,
+    `mysql_tbl_yh2n1o_replacement_value` INT,
+    `mysql_tbl_yh2n1o_is_insured` INT
+);
+
+INSERT INTO `mysql_tbl_sma0k3` (`mysql_tbl_sma0k3_rental_id`, `mysql_tbl_sma0k3_equipment_id`, `mysql_tbl_sma0k3_customer_id`, `mysql_tbl_sma0k3_rental_date`, `mysql_tbl_sma0k3_return_date`, `mysql_tbl_sma0k3_daily_rate`, `mysql_tbl_sma0k3_deposit_amount`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6, 1.0);
+
+INSERT INTO `mysql_tbl_yh2n1o` (`mysql_tbl_yh2n1o_equipment_id`, `mysql_tbl_yh2n1o_name`, `mysql_tbl_yh2n1o_category`, `mysql_tbl_yh2n1o_replacement_value`, `mysql_tbl_yh2n1o_is_insured`) VALUES (1, 'test', 3, 4, 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rcsv70` (
+    `mysql_tbl_rcsv70_order_id` INT,
+    `mysql_tbl_rcsv70_order_date` DATE,
+    `mysql_tbl_rcsv70_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_rcsv70` (`mysql_tbl_rcsv70_order_id`, `mysql_tbl_rcsv70_order_date`, `mysql_tbl_rcsv70_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f4reru` (
+    `mysql_tbl_f4reru_customer_id` INT,
+    `mysql_tbl_f4reru_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_f4reru` (`mysql_tbl_f4reru_customer_id`, `mysql_tbl_f4reru_monthly_cost`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1l7d7i` (
+    `mysql_tbl_1l7d7i_customer_id` INT,
+    `mysql_tbl_1l7d7i_order_date` DATE,
+    `mysql_tbl_1l7d7i_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_1l7d7i` (`mysql_tbl_1l7d7i_customer_id`, `mysql_tbl_1l7d7i_order_date`, `mysql_tbl_1l7d7i_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g884hn` (
+    `mysql_tbl_g884hn_emp_id` INT,
+    `mysql_tbl_g884hn_department_id` INT,
+    `mysql_tbl_g884hn_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_g884hn` (`mysql_tbl_g884hn_emp_id`, `mysql_tbl_g884hn_department_id`, `mysql_tbl_g884hn_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cvkrmc` (
+    `mysql_tbl_cvkrmc_airline_id` INT,
+    `mysql_tbl_cvkrmc_name` VARCHAR(50),
+    `mysql_tbl_cvkrmc_iata_code` INT,
+    `mysql_tbl_cvkrmc_safety_rating` DECIMAL(3,1),
+    `mysql_tbl_cvkrmc_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j64j10` (
+    `mysql_tbl_j64j10_flight_id` INT,
+    `mysql_tbl_j64j10_airline_id` INT,
+    `mysql_tbl_j64j10_origin` INT,
+    `mysql_tbl_j64j10_destination` INT,
+    `mysql_tbl_j64j10_distance_miles` INT
+);
+
+INSERT INTO `mysql_tbl_cvkrmc` (`mysql_tbl_cvkrmc_airline_id`, `mysql_tbl_cvkrmc_name`, `mysql_tbl_cvkrmc_iata_code`, `mysql_tbl_cvkrmc_safety_rating`, `mysql_tbl_cvkrmc_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `mysql_tbl_j64j10` (`mysql_tbl_j64j10_flight_id`, `mysql_tbl_j64j10_airline_id`, `mysql_tbl_j64j10_origin`, `mysql_tbl_j64j10_destination`, `mysql_tbl_j64j10_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pb5b12` (
+    `mysql_tbl_pb5b12_pet_id` INT,
+    `mysql_tbl_pb5b12_pet_name` VARCHAR(50),
+    `mysql_tbl_pb5b12_species` INT,
+    `mysql_tbl_pb5b12_breed` INT,
+    `mysql_tbl_pb5b12_age_years` INT,
+    `mysql_tbl_pb5b12_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jkavva` (
+    `mysql_tbl_jkavva_visit_id` INT,
+    `mysql_tbl_jkavva_pet_id` INT,
+    `mysql_tbl_jkavva_vet_id` INT,
+    `mysql_tbl_jkavva_visit_date` DATE,
+    `mysql_tbl_jkavva_diagnosis` INT,
+    `mysql_tbl_jkavva_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pb5b12` (`mysql_tbl_pb5b12_pet_id`, `mysql_tbl_pb5b12_pet_name`, `mysql_tbl_pb5b12_species`, `mysql_tbl_pb5b12_breed`, `mysql_tbl_pb5b12_age_years`, `mysql_tbl_pb5b12_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `mysql_tbl_jkavva` (`mysql_tbl_jkavva_visit_id`, `mysql_tbl_jkavva_pet_id`, `mysql_tbl_jkavva_vet_id`, `mysql_tbl_jkavva_visit_date`, `mysql_tbl_jkavva_diagnosis`, `mysql_tbl_jkavva_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gz5f0j` (
+    `mysql_tbl_gz5f0j_campaign_id` INT,
+    `mysql_tbl_gz5f0j_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_gz5f0j` (`mysql_tbl_gz5f0j_campaign_id`, `mysql_tbl_gz5f0j_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE_fujytf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE_fujytf(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_gz5f0j_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_gz5f0j`
+    WHERE mysql_tbl_gz5f0j_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LTV DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_1l7d7i_TOTAL_AMOUNT), 0)
+    INTO V_LTV
+    FROM `mysql_tbl_1l7d7i`
+    WHERE mysql_tbl_1l7d7i_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_VALUE_fujytf(77)) - (0) + (FLOOR(V_LTV)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT MONTH(mysql_tbl_rcsv70_ORDER_DATE), YEAR(mysql_tbl_rcsv70_ORDER_DATE)
+    INTO V_MONTH, V_YEAR
+    FROM `mysql_tbl_rcsv70`
+    WHERE mysql_tbl_rcsv70_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(-6)) - (0) + ((V_YEAR * 12) + V_MONTH));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SELECT ELT(2, 'A', 'B', 'C');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT MAKE_SET(5, 'A', 'B', 'C');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT EXPORT_SET(5, 'Y', 'N', ',', 4);
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT LPAD('HI', 5, '0');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SELECT RPAD('HI', 5, '0');
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(-57)) - (0) + SET_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_pb5b12_AGE_YEARS, 1), COALESCE(mysql_tbl_pb5b12_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM `mysql_tbl_pb5b12`
+    WHERE mysql_tbl_pb5b12_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_jkavva_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM `mysql_tbl_jkavva`
+    WHERE mysql_tbl_jkavva_PET_ID = PET_ID_PARAM
+    ORDER BY mysql_tbl_jkavva_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_cvkrmc_SAFETY_RATING, 80), COALESCE(mysql_tbl_cvkrmc_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM `mysql_tbl_cvkrmc`
+    WHERE mysql_tbl_cvkrmc_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN GREATEST(V_ENVIRONMENTAL_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - (0) + ((MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-51)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    
+    CREATE VIEW ACTIVE_USERS AS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_qwr8w1` WHERE STATUS = 'ACTIVE';
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    CREATE OR REPLACE VIEW USER_SUMMARY AS SELECT ID, NAME, EMAIL INTO @mysql_synth_dummy FROM `mysql_tbl_qwr8w1`;
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(51)) - (0) + ((MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - (0) + VIEW_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_f4reru_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM `mysql_tbl_f4reru`
+    WHERE mysql_tbl_f4reru_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTHLY_COST;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_ADD2NUMS_l7c47k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD2NUMS_l7c47k(NUM1 INT, NUM2 INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN NUM1 + NUM2;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE IS_COUNT INT DEFAULT 0;
+    
+    SELECT IS_VISIBLE_DD_OBJECT('TEST', 'mysql_tbl_qwr8w1');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT PACKAGE_NAME('TEST_PKG');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_NAME('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_TYPE('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    RETURN IS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, mysql_tbl_g884hn_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM `mysql_tbl_g884hn`
+    WHERE mysql_tbl_g884hn_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_ADD2NUMS_l7c47k(20, -11)) - (0) + (((MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx()) - (0) + (FLOOR(V_AVG_TENURE * 10)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_4kk1yy` (mysql_tbl_4kk1yy_ID INT, mysql_tbl_4kk1yy_REGION VARCHAR(10)) PARTITION BY LIST COLUMNS(mysql_tbl_4kk1yy_REGION) (PARTITION P_NORTH VALUES IN ('NORTH', 'N'), PARTITION P_SOUTH VALUES IN ('SOUTH', 'S'), PARTITION P_OTHER VALUES IN (DEFAULT));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(98)) - (0) + TBL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(RENTAL_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RENTAL_DATE DATE;
+    DECLARE V_RETURN_DATE DATE;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+    DECLARE V_DEPOSIT INT DEFAULT 0;
+    DECLARE V_RENTAL_DAYS INT DEFAULT 0;
+    DECLARE V_REPLACEMENT_VALUE INT DEFAULT 0;
+    DECLARE V_INSURANCE_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_sma0k3_RENTAL_DATE, mysql_tbl_sma0k3_RETURN_DATE, mysql_tbl_sma0k3_DAILY_RATE, mysql_tbl_sma0k3_DEPOSIT_AMOUNT, mysql_tbl_yh2n1o_REPLACEMENT_VALUE
+    INTO V_RENTAL_DATE, V_RETURN_DATE, V_DAILY_RATE, V_DEPOSIT, V_REPLACEMENT_VALUE
+    FROM `mysql_tbl_sma0k3` R
+    JOIN `mysql_tbl_yh2n1o` E ON mysql_tbl_sma0k3_EQUIPMENT_ID = mysql_tbl_yh2n1o_EQUIPMENT_ID
+    WHERE mysql_tbl_sma0k3_RENTAL_ID = RENTAL_ID_PARAM;
+
+    IF V_RETURN_DATE IS NULL THEN
+        SET V_RETURN_DATE = CURDATE();
+    END IF;
+
+    SET V_RENTAL_DAYS = DATEDIFF(V_RETURN_DATE, V_RENTAL_DATE);
+    IF V_RENTAL_DAYS <= 0 THEN
+        SET V_RENTAL_DAYS = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt(-58);
+    END IF;
+
+    SET V_INSURANCE_COST = (V_REPLACEMENT_VALUE * V_RENTAL_DAYS) / 1000;
+
+    IF V_DEPOSIT < V_INSURANCE_COST THEN
+        SET V_INSURANCE_COST = MYSQL_FUNC_FUNC_138_LIST_PARTITION_u34zc0();
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856()) - (0) + (CAST(V_INSURANCE_COST AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    CREATE UNDO TABLESPACE UNDO_TS1 ADD DATAFILE 'UNDO_TS1.IBU';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER UNDO TABLESPACE UNDO_TS1 SET INACTIVE;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    DROP UNDO TABLESPACE UNDO_TS1;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_036_SET_ELEM_xl710t()) - (0) + ((MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(-68)) - (0) + TS_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn();

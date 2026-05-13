@@ -1,0 +1,238 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xg6xey` (
+    `mysql_tbl_xg6xey_emp_id` INT,
+    `mysql_tbl_xg6xey_department_id` INT,
+    `mysql_tbl_xg6xey_salary` INT,
+    `mysql_tbl_xg6xey_hire_date` DATE,
+    `mysql_tbl_xg6xey_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_xg6xey` (`mysql_tbl_xg6xey_emp_id`, `mysql_tbl_xg6xey_department_id`, `mysql_tbl_xg6xey_salary`, `mysql_tbl_xg6xey_hire_date`, `mysql_tbl_xg6xey_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_898fld` (
+    `mysql_tbl_898fld_campaign_id` INT,
+    `mysql_tbl_898fld_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_898fld` (`mysql_tbl_898fld_campaign_id`, `mysql_tbl_898fld_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8xzz0d` (
+    `mysql_tbl_8xzz0d_order_id` INT,
+    `mysql_tbl_8xzz0d_customer_id` INT,
+    `mysql_tbl_8xzz0d_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_8xzz0d` (`mysql_tbl_8xzz0d_order_id`, `mysql_tbl_8xzz0d_customer_id`, `mysql_tbl_8xzz0d_total_amount`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ywcbh4` (
+    `mysql_tbl_ywcbh4_product_id` INT,
+    `mysql_tbl_ywcbh4_category_id` INT,
+    `mysql_tbl_ywcbh4_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_inuse6` (
+    `mysql_tbl_inuse6_category_id` INT,
+    `mysql_tbl_inuse6_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ywcbh4` (`mysql_tbl_ywcbh4_product_id`, `mysql_tbl_ywcbh4_category_id`, `mysql_tbl_ywcbh4_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_inuse6` (`mysql_tbl_inuse6_category_id`, `mysql_tbl_inuse6_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ml5ud5` (
+    `mysql_tbl_ml5ud5_product_id` INT,
+    `mysql_tbl_ml5ud5_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_ml5ud5` (`mysql_tbl_ml5ud5_product_id`, `mysql_tbl_ml5ud5_category_id`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_ml5ud5`
+    WHERE mysql_tbl_ml5ud5_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_898fld_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_898fld`
+    WHERE mysql_tbl_898fld_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(-10)) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10 END;
+    END);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = POW(A, 3) + POW(B, 3);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = FLOOR(SQRT(V_POWER));
+    END IF;
+
+    SET V_RESULT = (A * B) + V_SQRT_VAL + (A % B);
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_6lhg45----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATImysql_tbl_4rnxzw_RATIO_6lhg45(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOP_PRODUCT_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONCENTRATION INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_ywcbh4_PRICE * COALESCE(SUM(OI.QUANTITY), 0)), 0)
+    INTO V_TOP_PRODUCT_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_ywcbh4` P mysql_tbl_4rnxzw OI.PRODUCT_ID = mysql_tbl_ywcbh4_PRODUCT_ID
+    WHERE mysql_tbl_ywcbh4_CATEGORY_ID = CATEGORY_ID_PARAM
+    GROUP BY mysql_tbl_ywcbh4_PRODUCT_ID;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_ywcbh4` P mysql_tbl_4rnxzw OI.PRODUCT_ID = mysql_tbl_ywcbh4_PRODUCT_ID
+    WHERE mysql_tbl_ywcbh4_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONCENTRATION = (V_TOP_PRODUCT_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_CONCENTRATION;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS AUTO_INCREMENT = 1000;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS CHARACTER SET UTF8MB4 COLLATE UTF8MB4_UNICODE_CI;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS COMMENT = 'USER INFORMATION TABLE';
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_8xzz0d_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM `mysql_tbl_8xzz0d`
+    WHERE mysql_tbl_8xzz0d_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_8xzz0d_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_8xzz0d`;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(30, 84)) - (0) + (((MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATImysql_tbl_4rnxzw_RATIO_6lhg45(-77)) - (0) + (FLOOR((V_CUSTOMER_REVENUE * 100) / V_TOTAL_REVENUE)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_4rnxzw USERS FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_wtzilr_UPDATE `mysql_tbl_wtzilr` UPDATE `mysql_tbl_4rnxzw` USERS FOR EACH ROW INSERT INTO `mysql_tbl_75b6f2` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN TRIG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_xg6xey_PERFORMANCE_RATING, 0), COALESCE(mysql_tbl_xg6xey_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_xg6xey_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_xg6xey`
+    WHERE mysql_tbl_xg6xey_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN ((MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2()) - (0) + 0);
+    END IF;
+
+    SET V_PERF_RATIO = MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(79);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(-49)) - (0) + (FLOOR(V_PERF_RATIO / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(1);

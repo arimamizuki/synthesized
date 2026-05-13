@@ -1,0 +1,192 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ge7t4r` (
+    `mysql_tbl_ge7t4r_emp_id` INT,
+    `mysql_tbl_ge7t4r_department_id` INT,
+    `mysql_tbl_ge7t4r_salary` INT,
+    `mysql_tbl_ge7t4r_hire_date` DATE,
+    `mysql_tbl_ge7t4r_performance_score` INT
+);
+
+INSERT INTO `mysql_tbl_ge7t4r` (`mysql_tbl_ge7t4r_emp_id`, `mysql_tbl_ge7t4r_department_id`, `mysql_tbl_ge7t4r_salary`, `mysql_tbl_ge7t4r_hire_date`, `mysql_tbl_ge7t4r_performance_score`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uup04k` (
+    `mysql_tbl_uup04k_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_uup04k` (`mysql_tbl_uup04k_campaign_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_54jhcf` (
+    `mysql_tbl_54jhcf_cbigint` BIGINT
+);
+
+INSERT INTO `mysql_tbl_54jhcf` (`mysql_tbl_54jhcf_cbigint`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qog0js` (
+    `mysql_tbl_qog0js_emp_id` INT,
+    `mysql_tbl_qog0js_department_id` INT,
+    `mysql_tbl_qog0js_salary` INT
+);
+
+INSERT INTO `mysql_tbl_qog0js` (`mysql_tbl_qog0js_emp_id`, `mysql_tbl_qog0js_department_id`, `mysql_tbl_qog0js_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam(START INT, END_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT;
+
+    MY_LOOP: FOR V_I := START TO END_VAL DO
+        IF V_I MOD 3 = 0 THEN
+            ITERATE MY_LOOP;
+        END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPANY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_qog0js_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_qog0js`
+    WHERE mysql_tbl_qog0js_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_qog0js_SALARY), 1)
+    INTO V_COMPANY_AVG
+    FROM `mysql_tbl_qog0js`;
+
+    RETURN FLOOR((V_AVG_SALARY * 100) / V_COMPANY_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT mysql_tbl_54jhcf_CBIGINT FROM `mysql_tbl_54jhcf`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = RESULT + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_CONTINUE_rm5bam(-75, -74)) - (0) + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(-86)) - (0) + RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(DEPARTMENT_ID_PARAM INT, EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_EMP_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_ge7t4r_SALARY, 0) INTO V_EMP_SALARY
+    FROM `mysql_tbl_ge7t4r`
+    WHERE mysql_tbl_ge7t4r_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BELOW_COUNT
+    FROM `mysql_tbl_ge7t4r`
+    WHERE mysql_tbl_ge7t4r_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND mysql_tbl_ge7t4r_SALARY < V_EMP_SALARY;
+
+    SELECT COUNT(*) INTO V_ABOVE_COUNT
+    FROM `mysql_tbl_ge7t4r`
+    WHERE mysql_tbl_ge7t4r_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND mysql_tbl_ge7t4r_SALARY > V_EMP_SALARY;
+
+    SET V_RANK = MYSQL_FUNC_PROC_BIGINT_elxddt();
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS_UNTIL_DATE_k8ta36----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_UNTIL_DATE_k8ta36(TARGET_DATE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TODAY DATE DEFAULT CURDATE();
+    DECLARE V_DAYS_DIFF INT DEFAULT 0;
+
+    SET V_DAYS_DIFF = DATEDIFF(TARGET_DATE, V_TODAY);
+
+    RETURN V_DAYS_DIFF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_sb1aeu`
+    WHERE mysql_tbl_uup04k_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_CONVERSION_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC2_thtmlw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_thtmlw() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_wqxr60(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(96, 95);
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DAYS_UNTIL_DATE_k8ta36(-31)) - (0) + (-1));
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_3a9a6g(-82)) - (0) + ((MYSQL_FUNC_PROC2_thtmlw()) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_HANDLER_FUNC_SUM_wqxr60(1, 1);

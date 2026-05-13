@@ -1,0 +1,193 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ag2i5l` (
+    `mysql_tbl_ag2i5l_campaign_id` INT,
+    `mysql_tbl_ag2i5l_status` VARCHAR(50),
+    `mysql_tbl_ag2i5l_budget` INT,
+    `mysql_tbl_ag2i5l_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_ag2i5l` (`mysql_tbl_ag2i5l_campaign_id`, `mysql_tbl_ag2i5l_status`, `mysql_tbl_ag2i5l_budget`, `mysql_tbl_ag2i5l_start_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_26ojor` (
+    `mysql_tbl_26ojor_transaction_id` INT,
+    `mysql_tbl_26ojor_account_id` INT,
+    `mysql_tbl_26ojor_amount` DECIMAL(10,2),
+    `mysql_tbl_26ojor_transaction_date` DATE,
+    `mysql_tbl_26ojor_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_26ojor` (`mysql_tbl_26ojor_transaction_id`, `mysql_tbl_26ojor_account_id`, `mysql_tbl_26ojor_amount`, `mysql_tbl_26ojor_transaction_date`, `mysql_tbl_26ojor_transaction_type`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE INFO_COUNT INT DEFAULT 0;
+    
+    SELECT CONNECTION_ID();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT CURRENT_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SESSION_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT SYSTEM_USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    SELECT USER();
+    SET INFO_COUNT = INFO_COUNT + 1;
+    
+    RETURN INFO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_ag2i5l_STATUS, COALESCE(mysql_tbl_ag2i5l_BUDGET, 0), DATEDIFF(CURDATE(), mysql_tbl_ag2i5l_START_DATE)
+    INTO V_STATUS, V_BUDGET, V_DAYS
+    FROM `mysql_tbl_ag2i5l`
+    WHERE mysql_tbl_ag2i5l_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_019_USER_INFO_twpdq6()) - (0) + (V_BUDGET / V_DAYS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(ACCOUNT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_26ojor_AMOUNT), 0) INTO V_TOTAL_CREDITS
+    FROM `mysql_tbl_26ojor`
+    WHERE mysql_tbl_26ojor_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND mysql_tbl_26ojor_TRANSACTION_TYPE = 'CREDIT';
+
+    SELECT COALESCE(SUM(mysql_tbl_26ojor_AMOUNT), 0) INTO V_TOTAL_DEBITS
+    FROM `mysql_tbl_26ojor`
+    WHERE mysql_tbl_26ojor_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND mysql_tbl_26ojor_TRANSACTION_TYPE = 'DEBIT';
+
+    SET V_BALANCE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN V_BALANCE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UUID_COUNT INT DEFAULT 0;
+    
+    SELECT UUID();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UUID_SHORT();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT IS_UUID('550E8400-E29B-41D4-A716-446655440000');
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT FROM_UNIXTIME(1609459200);
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UNIX_TIMESTAMP();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    RETURN UUID_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(-63)) - (0) + (-1));
+    END IF;
+
+    SET V_RESULT = ROUND(P_A / P_B);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl()) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_118_TRUNCATE_6hxg0d----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_118_TRUNCATE_6hxg0d() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRUNC_COUNT INT DEFAULT 0;
+    
+    TRUNCATE TABLE TEMP_DATA;
+    SET TRUNC_COUNT = TRUNC_COUNT + 1;
+    
+    TRUNCATE TEMP_LOGS;
+    SET TRUNC_COUNT = TRUNC_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(-98, 27)) - (0) + TRUNC_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(-4)) - (0) + (-1));
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_118_TRUNCATE_6hxg0d()) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(1, 1);

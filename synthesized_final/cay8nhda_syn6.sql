@@ -1,0 +1,148 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_w989tl` (
+    `mysql_tbl_w989tl_customer_id` INT,
+    `mysql_tbl_w989tl_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_w989tl_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_w989tl` (`mysql_tbl_w989tl_customer_id`, `mysql_tbl_w989tl_monthly_cost`, `mysql_tbl_w989tl_status`) VALUES (1, 1.0, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zawysz` (
+    `mysql_tbl_zawysz_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_zawysz` (`mysql_tbl_zawysz_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lxlmqi` (
+    `mysql_tbl_lxlmqi_emp_id` INT,
+    `mysql_tbl_lxlmqi_department_id` INT,
+    `mysql_tbl_lxlmqi_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2mwg4x` (
+    `mysql_tbl_2mwg4x_emp_id` INT,
+    `mysql_tbl_2mwg4x_bonus_amount` DECIMAL(10,2),
+    `mysql_tbl_2mwg4x_bonus_date` DATE
+);
+
+INSERT INTO `mysql_tbl_lxlmqi` (`mysql_tbl_lxlmqi_emp_id`, `mysql_tbl_lxlmqi_department_id`, `mysql_tbl_lxlmqi_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `mysql_tbl_2mwg4x` (`mysql_tbl_2mwg4x_emp_id`, `mysql_tbl_2mwg4x_bonus_amount`, `mysql_tbl_2mwg4x_bonus_date`) VALUES (1, 1.0, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9u52go` (
+    `mysql_tbl_9u52go_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_9u52go` (`mysql_tbl_9u52go_monthly_cost`) VALUES (1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM `mysql_tbl_km57wg`
+    WHERE mysql_tbl_zawysz_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR((V_ORDER_COUNT * 20) + (V_TOTAL_SPENT / 50));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_ANNUAL_COMPENSATION INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_lxlmqi_SALARY, 0) INTO V_BASE_SALARY
+    FROM `mysql_tbl_lxlmqi`
+    WHERE mysql_tbl_lxlmqi_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_2mwg4x_BONUS_AMOUNT), 0) INTO V_TOTAL_BONUS
+    FROM `mysql_tbl_2mwg4x`
+    WHERE mysql_tbl_2mwg4x_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ANNUAL_COMPENSATION = (V_BASE_SALARY * 12) + V_TOTAL_BONUS;
+
+    RETURN V_ANNUAL_COMPENSATION;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_FEE_qm6e28----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FEE_qm6e28(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_9u52go_MONTHLY_COST, 0)
+    INTO V_FEE
+    FROM `mysql_tbl_9u52go`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_FEE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 15 UNION SELECT 30 UNION SELECT 45 UNION SELECT 60 UNION SELECT 75 UNION SELECT 90 UNION SELECT 105 UNION SELECT 120 UNION SELECT 135 UNION SELECT 150 UNION SELECT 165 UNION SELECT 180 UNION SELECT 195 UNION SELECT 210 UNION SELECT 225;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(-79)) - (0) + ((MYSQL_FUNC_CALCULATE_FEE_qm6e28(87)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(mysql_tbl_w989tl_MONTHLY_COST, 0), mysql_tbl_w989tl_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM `mysql_tbl_w989tl`
+    WHERE mysql_tbl_w989tl_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(-98)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0()) - (0) + (V_MONTHLY_COST * 12));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(1);

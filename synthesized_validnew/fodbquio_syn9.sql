@@ -1,0 +1,323 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gc7251` (
+    `mysql_tbl_gc7251_campaign_id` INT,
+    `mysql_tbl_gc7251_channel` INT,
+    `mysql_tbl_gc7251_budget` INT,
+    `mysql_tbl_gc7251_start_date` DATE,
+    `mysql_tbl_gc7251_end_date` DATE,
+    `mysql_tbl_gc7251_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ylbt24` (
+    `mysql_tbl_ylbt24_conversimysql_tbl_9kumgt_id INT,
+    `mysql_tbl_ylbt24_campaign_id` INT,
+    `mysql_tbl_ylbt24_conversimysql_tbl_9kumgt_value INT
+);
+
+INSERT INTO `mysql_tbl_gc7251` (`mysql_tbl_gc7251_campaign_id`, `mysql_tbl_gc7251_channel`, `mysql_tbl_gc7251_budget`, `mysql_tbl_gc7251_start_date`, `mysql_tbl_gc7251_end_date`, `mysql_tbl_gc7251_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_ylbt24` (`mysql_tbl_ylbt24_conversimysql_tbl_9kumgt_id, `mysql_tbl_ylbt24_campaign_id`, `mysql_tbl_ylbt24_conversimysql_tbl_9kumgt_value) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rx90yw` (
+    `mysql_tbl_rx90yw_customer_id` INT,
+    `mysql_tbl_rx90yw_registratimysql_tbl_9kumgt_date DATE,
+    `mysql_tbl_rx90yw_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9wdv8n` (
+    `mysql_tbl_9wdv8n_order_id` INT,
+    `mysql_tbl_9wdv8n_customer_id` INT,
+    `mysql_tbl_9wdv8n_order_date` DATE,
+    `mysql_tbl_9wdv8n_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_rx90yw` (`mysql_tbl_rx90yw_customer_id`, `mysql_tbl_rx90yw_registratimysql_tbl_9kumgt_date, `mysql_tbl_rx90yw_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_9wdv8n` (`mysql_tbl_9wdv8n_order_id`, `mysql_tbl_9wdv8n_customer_id`, `mysql_tbl_9wdv8n_order_date`, `mysql_tbl_9wdv8n_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uzt9jq` (
+    `mysql_tbl_uzt9jq_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `mysql_tbl_uzt9jq` (`mysql_tbl_uzt9jq_cdecimal`) VALUES (42);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ksskvx` (
+    `mysql_tbl_ksskvx_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_ksskvx` (`mysql_tbl_ksskvx_customer_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_7tef50----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_7tef50(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM `mysql_tbl_r49cks`
+    WHERE mysql_tbl_ksskvx_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_TOTAL_SPENT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(mysql_tbl_uzt9jq_CDECIMAL AS SIGNED) INTO RESULT FROM `mysql_tbl_uzt9jq` LIMIT 1;
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_7tef50(87)) - (0) + (COALESCE(RESULT, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_122_ALTER_CONSTRAINT_pbtps8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_122_ALTER_CONSTRAINT_pbtps8() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE mysql_tbl_r49cks ADD CONSTRAINT FK_USER_ID FOREIGN KEY (USER_ID) REFERENCES USERS(ID);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD CONSTRAINT CHK_AGE CHECK (AGE >= 0);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD CONSTRAINT UQ_EMAIL UNIQUE (EMAIL);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_PROC_DECIMAL_zozmya()) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_027_FULLTEXT_NATURAL_shrixa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_027_FULLTEXT_NATURAL_shrixa() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE FT_COUNT INT DEFAULT 0;
+    
+    SELECT MATCH(TITLE, CONTENT) AGAINST('MYSQL' IN NATURAL LANGUAGE MODE) INTO @mysql_synth_dummy FROM `mysql_tbl_gtvp1o`;
+    SET FT_COUNT = FT_COUNT + 1;
+    
+    SELECT MATCH(TITLE, CONTENT) AGAINST('+MYSQL -ORACLE' IN BOOLEAN MODE) INTO @mysql_synth_dummy FROM `mysql_tbl_gtvp1o`;
+    SET FT_COUNT = FT_COUNT + 1;
+    
+    SELECT MATCH(TITLE, CONTENT) AGAINST('MYSQL ORACLE' WITH QUERY EXPANSION) INTO @mysql_synth_dummy FROM `mysql_tbl_gtvp1o`;
+    SET FT_COUNT = FT_COUNT + 1;
+    
+    RETURN FT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SHARE_OF_WALLET_0mg352----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHARE_OF_WALLET_0mg352(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_CATEGORY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SHARE_OF_WALLET INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_9wdv8n_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_SPEND
+    FROM `mysql_tbl_9wdv8n`
+    WHERE mysql_tbl_9wdv8n_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    SELECT COALESCE(SUM(mysql_tbl_9wdv8n_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_CATEGORY_SPEND
+    FROM `mysql_tbl_9wdv8n` O
+    JOIN `mysql_tbl_rx90yw` C mysql_tbl_9kumgt mysql_tbl_9wdv8n_CUSTOMER_ID = mysql_tbl_rx90yw_CUSTOMER_ID
+    WHERE mysql_tbl_rx90yw_COUNTRY = (SELECT mysql_tbl_rx90yw_COUNTRY FROM `mysql_tbl_rx90yw` WHERE mysql_tbl_rx90yw_CUSTOMER_ID = CUSTOMER_ID_PARAM);
+
+    IF V_TOTAL_CATEGORY_SPEND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHARE_OF_WALLET = (V_CUSTOMER_SPEND * 100) / V_TOTAL_CATEGORY_SPEND;
+
+    RETURN V_SHARE_OF_WALLET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTImysql_tbl_9kumgt_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(mysql_tbl_ylbt24_CONVERSImysql_tbl_9kumgt_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM `mysql_tbl_ylbt24`
+    WHERE mysql_tbl_ylbt24_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_gc7251_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM `mysql_tbl_gc7251`
+    WHERE mysql_tbl_gc7251_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = MYSQL_FUNC_FUNC_122_ALTER_CONSTRAINT_pbtps8();
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SHARE_OF_WALLET_0mg352(-66)) - (0) + ((MYSQL_FUNC_FUNC_027_FULLTEXT_NATURAL_shrixa()) - (0) + V_ROI));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE XA_COUNT INT DEFAULT 0;
+    
+    XA START 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA END 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA PREPARE 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA COMMIT 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    RETURN XA_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BINARY_STR VARCHAR(100) DEFAULT '';
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+    DECLARE V_POSITION INT DEFAULT 1;
+
+    SET V_TEMP = ABS(N);
+
+    IF V_TEMP = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 2;
+        SET V_BINARY_STR = CONCAT(CAST(V_DIGIT AS CHAR), V_BINARY_STR);
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    RETURN CAST(V_BINARY_STR AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_GET_MAX_077bna----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MAX_077bna(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    IF A > B THEN
+        RETURN ((MYSQL_FUNC_DECIMAL_TO_BINARY_a0hbdy(-70)) - (0) + A);
+    END IF;
+    RETURN ((MYSQL_FUNC_FUNC_076_XA_TRANS_idyh5n()) - (0) + B);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE PWD_COUNT INT DEFAULT 0;
+    
+    SET PASSWORD FOR 'USER1'@'LOCALHOST' = 'NEWPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    SET PASSWORD = 'MYPASSWORD';
+    SET PWD_COUNT = PWD_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTImysql_tbl_9kumgt_SCORE_btpt6x(-51)) - (0) + ((MYSQL_FUNC_GET_MAX_077bna(93, 43)) - (0) + PWD_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_083_GRANT_kfvv17----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_083_GRANT_kfvv17() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE GRANT_COUNT INT DEFAULT 0;
+    
+    GRANT SELECT mysql_tbl_9kumgt TEST.* TO 'USER1'@'LOCALHOST';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    GRANT ALL PRIVILEGES mysql_tbl_9kumgt TEST.USERS TO 'USER2'@'%';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    GRANT INSERT, UPDATE `mysql_tbl_9kumgt` TEST.`mysql_tbl_r49cks` TO 'USER3'@'LOCALHOST';
+    SET GRANT_COUNT = GRANT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_088_SET_PASSWORD_mkdjm5()) - (0) + GRANT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_DATA_CONTRATO_exzmo9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_CONTRATO_exzmo9(DATA_INICIO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DATA_ATUAL DATE;
+    SET DATA_ATUAL = CURDATE();
+    RETURN YEAR(DATA_ATUAL) - DATA_INICIO;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN ((MYSQL_FUNC_FUNC_083_GRANT_kfvv17()) - (0) + 0);
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = MYSQL_FUNC_DATA_CONTRATO_exzmo9(-26);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(1, 1);

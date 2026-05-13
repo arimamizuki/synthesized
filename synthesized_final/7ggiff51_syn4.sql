@@ -1,0 +1,209 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vp3u2f` (
+    `mysql_tbl_vp3u2f_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_vp3u2f` (`mysql_tbl_vp3u2f_customer_id`) VALUES (1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uuzule` (
+    `mysql_tbl_uuzule_product_id` INT,
+    `mysql_tbl_uuzule_price` DECIMAL(10,2),
+    `mysql_tbl_uuzule_stock_quantity` INT,
+    `mysql_tbl_uuzule_category_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_aeytht` (
+    `mysql_tbl_aeytht_order_id` INT,
+    `mysql_tbl_aeytht_product_id` INT,
+    `mysql_tbl_aeytht_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_uuzule` (`mysql_tbl_uuzule_product_id`, `mysql_tbl_uuzule_price`, `mysql_tbl_uuzule_stock_quantity`, `mysql_tbl_uuzule_category_id`) VALUES (1, 1.0, 3, 4);
+
+INSERT INTO `mysql_tbl_aeytht` (`mysql_tbl_aeytht_order_id`, `mysql_tbl_aeytht_product_id`, `mysql_tbl_aeytht_quantity`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a33e56` (
+    `mysql_tbl_a33e56_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_a33e56` (`mysql_tbl_a33e56_total_amount`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ykhdfo` (
+    `mysql_tbl_ykhdfo_customer_id` INT,
+    `mysql_tbl_ykhdfo_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_ykhdfo` (`mysql_tbl_ykhdfo_customer_id`, `mysql_tbl_ykhdfo_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SANITIZE_INPUT_1v2j5i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(INPUT_STRING INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_CHAR_POS INT DEFAULT 1;
+    DECLARE V_CHAR_VAL INT;
+    DECLARE V_INPUT_LEN INT DEFAULT 0;
+    DECLARE V_DANGER_COUNT INT DEFAULT 0;
+    DECLARE V_DANGEROUS_CHARS VARCHAR(10) DEFAULT '''"'';--';
+
+    SET V_INPUT_LEN = CHAR_LENGTH(INPUT_STRING);
+
+    WHILE V_CHAR_POS <= V_INPUT_LEN DO
+        SET V_CHAR_VAL = ASCII(SUBSTRING(INPUT_STRING, V_CHAR_POS, 1));
+
+        IF V_CHAR_VAL IN (39, 34, 59, 45, 45) THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        IF V_CHAR_VAL < 32 OR V_CHAR_VAL > 126 THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        SET V_CHAR_POS = V_CHAR_POS + 1;
+    END WHILE;
+
+    RETURN V_DANGER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_ykhdfo_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM `mysql_tbl_ykhdfo`
+    WHERE mysql_tbl_ykhdfo_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_REMOVE('{"A": 1, "B": 2}', '$.A');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_SET('{"A": 1}', '$.B', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_INSERT('{"A": 1}', '$.B', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_REPLACE('{"A": 1}', '$.A', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_ARRAY_APPEND('{"A": [1]}', '$.A', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(18)) - (0) + JSON_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE AUTO_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_AUTO_INCREMENT('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_AVG_ROW_LENGTH('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECK_TIME('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECKSUM('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_DATA_FREE('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    RETURN AUTO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_VALUE_4l91pr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VALUE_4l91pr(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AMOUNT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_a33e56_TOTAL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM `mysql_tbl_a33e56`
+    WHERE ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss()) - (0) + (FLOOR(V_AMOUNT)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(PRODUCT_ID_PARAM INT, REQUESTED_QTY INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVAILABLE_STOCK INT DEFAULT 0;
+    DECLARE V_RESERVED_QTY INT DEFAULT 0;
+    DECLARE V_CAN_RESERVE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_uuzule_STOCK_QUANTITY, 0) INTO V_AVAILABLE_STOCK
+    FROM `mysql_tbl_uuzule`
+    WHERE mysql_tbl_uuzule_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_aeytht_QUANTITY), 0) INTO V_RESERVED_QTY
+    FROM `mysql_tbl_aeytht`
+    WHERE mysql_tbl_aeytht_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVAILABLE_STOCK = MYSQL_FUNC_CALCULATE_VALUE_4l91pr(-64);
+
+    IF V_AVAILABLE_STOCK >= REQUESTED_QTY THEN
+        SET V_CAN_RESERVE = MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(71);
+    ELSE
+        SET V_CAN_RESERVE = 0;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg()) - (0) + V_CAN_RESERVE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUB_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_SUB_COUNT
+    FROM `mysql_tbl_vp3u2f`
+    WHERE mysql_tbl_vp3u2f_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(40, -61)) - (0) + (LEAST(V_SUB_COUNT, 10)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(1);

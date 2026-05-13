@@ -1,0 +1,96 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1cdckj` (
+    `mysql_tbl_1cdckj_product_id` INT,
+    `mysql_tbl_1cdckj_category_id` INT,
+    `mysql_tbl_1cdckj_price` DECIMAL(10,2),
+    `mysql_tbl_1cdckj_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_1cdckj` (`mysql_tbl_1cdckj_product_id`, `mysql_tbl_1cdckj_category_id`, `mysql_tbl_1cdckj_price`, `mysql_tbl_1cdckj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_URGENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_1cdckj_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_1cdckj`
+    WHERE mysql_tbl_1cdckj_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM `mysql_tbl_9iral9`
+    WHERE mysql_tbl_1cdckj_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM `mysql_tbl_ekp2l2` WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_AVG_DAILY_SALES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_URGENCY_SCORE = V_STOCK / V_AVG_DAILY_SALES;
+
+    RETURN V_URGENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP USER 'OLDUSER'@'LOCALHOST';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP USER IF EXISTS 'NONEXISTENT'@'%';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EVENT_COUNT INT DEFAULT 0;
+    
+    ALTER EVENT EVT_CLEANUP DISABLE;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    ALTER EVENT EVT_BACKUP ENABLE;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    ALTER EVENT EVT_CLEANUP RENAME TO EVT_CLEANUP_OLD;
+    SET EVENT_COUNT = EVENT_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc(-99)) - (0) + ((MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3()) - (0) + EVENT_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_FUNC_110_ALTER_EVENT_yk5d8y()) - (0) + (P_A * P_B));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(1, 1);

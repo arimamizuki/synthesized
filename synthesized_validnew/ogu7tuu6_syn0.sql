@@ -1,0 +1,147 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2kjb9l` (
+    `mysql_tbl_2kjb9l_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_2kjb9l` (`mysql_tbl_2kjb9l_supplier_rating`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_m47a4m` (
+    `mysql_tbl_m47a4m_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_m47a4m` (`mysql_tbl_m47a4m_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_u2kqga` (
+    `mysql_tbl_u2kqga_emp_id` INT,
+    `mysql_tbl_u2kqga_salary` INT
+);
+
+INSERT INTO `mysql_tbl_u2kqga` (`mysql_tbl_u2kqga_emp_id`, `mysql_tbl_u2kqga_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a60kc5` (
+    `mysql_tbl_a60kc5_campaign_id` INT,
+    `mysql_tbl_a60kc5_status` VARCHAR(50),
+    `mysql_tbl_a60kc5_budget` INT
+);
+
+INSERT INTO `mysql_tbl_a60kc5` (`mysql_tbl_a60kc5_campaign_id`, `mysql_tbl_a60kc5_status`, `mysql_tbl_a60kc5_budget`) VALUES (1, 'test', 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN P_A + P_B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_2kjb9l_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_2kjb9l`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LEAD_TIME_INDEX_viw2lg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEAD_TIME_INDEX_viw2lg(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_m47a4m_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_m47a4m`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - V_LEAD_TIME;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_u2kqga_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_u2kqga`
+    WHERE mysql_tbl_u2kqga_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_yhott1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_yhott1(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSION_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_a60kc5_STATUS, COALESCE(mysql_tbl_a60kc5_BUDGET, 0), COALESCE(SUM(CV.CONVERSION_VALUE), 0)
+    INTO V_STATUS, V_BUDGET, V_CONVERSION_VALUE
+    FROM `mysql_tbl_a60kc5` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_a60kc5_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_a60kc5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_a60kc5_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' OR V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CONVERSION_VALUE * 100) / V_BUDGET);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_LCM_ss65f4(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT;
+    DECLARE V_TEMP_B INT;
+
+    SET V_TEMP_A = MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_rh1ym5(29);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(6, 81)) - (0) + 0);
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = MYSQL_FUNC_CALCULATE_LEAD_TIME_INDEX_viw2lg(30);
+        SET V_TEMP_B = V_TEMP_A MOD V_TEMP_B;
+        SET V_TEMP_A = MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(-25);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_yhott1(-49)) - (0) + ((ABS(A) / V_GCD) * ABS(B)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FIND_LCM_ss65f4(1, 1);

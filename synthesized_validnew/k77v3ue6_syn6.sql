@@ -1,0 +1,142 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_en19xv` (
+    `mysql_tbl_en19xv_emp_id` INT,
+    `mysql_tbl_en19xv_department_id` INT,
+    `mysql_tbl_en19xv_salary` INT
+);
+
+INSERT INTO `mysql_tbl_en19xv` (`mysql_tbl_en19xv_emp_id`, `mysql_tbl_en19xv_department_id`, `mysql_tbl_en19xv_salary`) VALUES (1, 1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1o9tb4` (
+    `mysql_tbl_1o9tb4_customer_id` INT,
+    `mysql_tbl_1o9tb4_order_date` DATE,
+    `mysql_tbl_1o9tb4_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_1o9tb4` (`mysql_tbl_1o9tb4_customer_id`, `mysql_tbl_1o9tb4_order_date`, `mysql_tbl_1o9tb4_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1c3wle` (
+    mysql_tbl_1c3wle_emp_no INT,
+    mysql_tbl_1c3wle_first_name VARCHAR(50),
+    mysql_tbl_1c3wle_last_name VARCHAR(50),
+    mysql_tbl_1c3wle_birth_date DATE,
+    mysql_tbl_1c3wle_hire_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pwf56u` (mysql_tbl_pwf56u_id INT, mysql_tbl_pwf56u_price DECIMAL(10,2), mysql_tbl_pwf56u_category VARCHAR(50));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_ma9xa8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_ma9xa8() RETURNS INT DETERMINISTIC
+BEGIN
+    UPDATE `mysql_tbl_pwf56u`
+    SET mysql_tbl_pwf56u_PRICE = CASE mysql_tbl_pwf56u_CATEGORY
+        WHEN 'ELECTRONICS' THEN mysql_tbl_pwf56u_PRICE * 0.9
+        WHEN 'BOOKS' THEN mysql_tbl_pwf56u_PRICE * 0.8
+        WHEN 'FOOD' THEN mysql_tbl_pwf56u_PRICE * 0.95
+        ELSE mysql_tbl_pwf56u_PRICE END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(LENGTH INT, WIDTH INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN LENGTH * WIDTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 1;
+
+    SELECT COUNT(*), TIMESTAMPDIFF(MONTH, MIN(mysql_tbl_1o9tb4_ORDER_DATE), CURDATE())
+    INTO V_ORDER_COUNT, V_CUSTOMER_AGE_MONTHS
+    FROM `mysql_tbl_1o9tb4` O
+    WHERE mysql_tbl_1o9tb4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS <= 0 THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(48)) - (((MYSQL_FUNC_FLOW_CONTROL_PROC_CASE_UPDATE_ma9xa8()) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(-51, 67)) - (0) + ((V_ORDER_COUNT * 100) / V_CUSTOMER_AGE_MONTHS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE PLUGIN_COUNT INT DEFAULT 0;
+    
+    INSTALL PLUGIN EXAMPLE SONAME 'HA_EXAMPLE.SO';
+    SET PLUGIN_COUNT = PLUGIN_COUNT + 1;
+    
+    INSTALL COMPONENT 'FILE://COMPONENT_VALIDATE_PASSWORD';
+    SET PLUGIN_COUNT = PLUGIN_COUNT + 1;
+    
+    RETURN PLUGIN_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SELECT_EMPLOYESS_u93us2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SELECT_EMPLOYESS_u93us2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ROW_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO ROW_COUNT 
+    FROM `mysql_tbl_1c3wle` 
+    LIMIT 1000;
+    
+    RETURN ((MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb()) - (0) + ROW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_pf1hmm(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())), 0),
+           COALESCE(AVG(mysql_tbl_en19xv_SALARY), 0)
+    INTO V_AVG_TENURE, V_AVG_SALARY
+    FROM `mysql_tbl_en19xv`
+    WHERE mysql_tbl_en19xv_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt(59)) - (0) + (((MYSQL_FUNC_SELECT_EMPLOYESS_u93us2()) - (0) + (FLOOR((V_AVG_TENURE * 1000) + (V_AVG_SALARY / 1000))))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_pf1hmm(1);

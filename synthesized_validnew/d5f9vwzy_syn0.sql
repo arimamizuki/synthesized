@@ -1,0 +1,186 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_iomz19` (
+    `mysql_tbl_iomz19_emp_id` INT,
+    `mysql_tbl_iomz19_department_id` INT,
+    `mysql_tbl_iomz19_salary` INT,
+    `mysql_tbl_iomz19_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_iomz19` (`mysql_tbl_iomz19_emp_id`, `mysql_tbl_iomz19_department_id`, `mysql_tbl_iomz19_salary`, `mysql_tbl_iomz19_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ga0o2b` (
+    `mysql_tbl_ga0o2b_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_ga0o2b` (`mysql_tbl_ga0o2b_monthly_cost`) VALUES (1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rw8par` (
+    `mysql_tbl_rw8par_school_id` INT,
+    `mysql_tbl_rw8par_name` VARCHAR(50),
+    `mysql_tbl_rw8par_district` INT,
+    `mysql_tbl_rw8par_school_type` VARCHAR(50),
+    `mysql_tbl_rw8par_enrollment_count` INT,
+    `mysql_tbl_rw8par_budget_per_student` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j1i8fl` (
+    `mysql_tbl_j1i8fl_student_id` INT,
+    `mysql_tbl_j1i8fl_school_id` INT,
+    `mysql_tbl_j1i8fl_grade_level` INT,
+    `mysql_tbl_j1i8fl_attendance_rate` INT
+);
+
+INSERT INTO `mysql_tbl_rw8par` (`mysql_tbl_rw8par_school_id`, `mysql_tbl_rw8par_name`, `mysql_tbl_rw8par_district`, `mysql_tbl_rw8par_school_type`, `mysql_tbl_rw8par_enrollment_count`, `mysql_tbl_rw8par_budget_per_student`) VALUES (1, 'test', 1, 'test', 1, 1);
+
+INSERT INTO `mysql_tbl_j1i8fl` (`mysql_tbl_j1i8fl_student_id`, `mysql_tbl_j1i8fl_school_id`, `mysql_tbl_j1i8fl_grade_level`, `mysql_tbl_j1i8fl_attendance_rate`) VALUES (1, 2, 3, 4);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qmg8md` (
+    `mysql_tbl_qmg8md_customer_id` INT,
+    `mysql_tbl_qmg8md_registration_date` DATE,
+    `mysql_tbl_qmg8md_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tnjst9` (
+    `mysql_tbl_tnjst9_order_id` INT,
+    `mysql_tbl_tnjst9_customer_id` INT,
+    `mysql_tbl_tnjst9_order_date` DATE,
+    `mysql_tbl_tnjst9_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_qmg8md` (`mysql_tbl_qmg8md_customer_id`, `mysql_tbl_qmg8md_registration_date`, `mysql_tbl_qmg8md_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_tnjst9` (`mysql_tbl_tnjst9_order_id`, `mysql_tbl_tnjst9_customer_id`, `mysql_tbl_tnjst9_order_date`, `mysql_tbl_tnjst9_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CUSTOMER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(DISTINCT mysql_tbl_tnjst9_CUSTOMER_ID), COALESCE(SUM(mysql_tbl_tnjst9_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_COUNT, V_TOTAL_REVENUE
+    FROM `mysql_tbl_tnjst9` O
+    JOIN `mysql_tbl_qmg8md` C ON mysql_tbl_tnjst9_CUSTOMER_ID = mysql_tbl_qmg8md_CUSTOMER_ID
+    WHERE mysql_tbl_qmg8md_COUNTRY = COUNTRY_PARAM AND O.STATUS = 'COMPLETED';
+
+    IF V_CUSTOMER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CUSTOMER_VALUE = V_TOTAL_REVENUE / V_CUSTOMER_COUNT;
+
+    RETURN FLOOR(V_CUSTOMER_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COST_jcd9pn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_jcd9pn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_ga0o2b_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_ga0o2b`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_VALUE_db3bdn(28)) - (0) + V_COST);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(SCHOOL_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ENROLLMENT_COUNT INT DEFAULT 0;
+    DECLARE V_BUDGET_PER_STUDENT INT DEFAULT 0;
+    DECLARE V_AVG_ATTENDANCE DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_GRADE_LEVEL_COUNT INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_rw8par_ENROLLMENT_COUNT, 0), COALESCE(mysql_tbl_rw8par_BUDGET_PER_STUDENT, 0)
+    INTO V_ENROLLMENT_COUNT, V_BUDGET_PER_STUDENT
+    FROM `mysql_tbl_rw8par`
+    WHERE mysql_tbl_rw8par_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_j1i8fl_ATTENDANCE_RATE), 0)
+    INTO V_AVG_ATTENDANCE
+    FROM `mysql_tbl_j1i8fl`
+    WHERE mysql_tbl_j1i8fl_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COUNT(DISTINCT mysql_tbl_j1i8fl_GRADE_LEVEL)
+    INTO V_GRADE_LEVEL_COUNT
+    FROM `mysql_tbl_j1i8fl`
+    WHERE mysql_tbl_j1i8fl_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (V_AVG_ATTENDANCE * 2) + (V_GRADE_LEVEL_COUNT * 15) + (V_BUDGET_PER_STUDENT / 100);
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - (0) + V_EFFECTIVENESS_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_iomz19_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_iomz19`
+    WHERE mysql_tbl_iomz19_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COST_jcd9pn(60)) - (0) + (((MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(40)) - (0) + (FLOOR(V_AVG_SALARY)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(1);

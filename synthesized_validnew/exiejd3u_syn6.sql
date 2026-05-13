@@ -1,0 +1,144 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4y4wjg` (
+    `mysql_tbl_4y4wjg_emp_id` INT,
+    `mysql_tbl_4y4wjg_hire_date` DATE,
+    `mysql_tbl_4y4wjg_salary` INT
+);
+
+INSERT INTO `mysql_tbl_4y4wjg` (`mysql_tbl_4y4wjg_emp_id`, `mysql_tbl_4y4wjg_hire_date`, `mysql_tbl_4y4wjg_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1u2w9o` (
+    `mysql_tbl_1u2w9o_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_1u2w9o` (`mysql_tbl_1u2w9o_hire_date`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s8mkkq` (
+    `mysql_tbl_s8mkkq_emp_id` INT,
+    `mysql_tbl_s8mkkq_salary` INT
+);
+
+INSERT INTO `mysql_tbl_s8mkkq` (`mysql_tbl_s8mkkq_emp_id`, `mysql_tbl_s8mkkq_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h4xvky` (
+    `mysql_tbl_h4xvky_customer_id` INT,
+    `mysql_tbl_h4xvky_plan_type` VARCHAR(50),
+    `mysql_tbl_h4xvky_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_h4xvky_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_h4xvky` (`mysql_tbl_h4xvky_customer_id`, `mysql_tbl_h4xvky_plan_type`, `mysql_tbl_h4xvky_monthly_cost`, `mysql_tbl_h4xvky_start_date`) VALUES (1, 'test', 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DB_COUNT INT DEFAULT 0;
+    
+    CREATE DATABASE NEW_DATABASE;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    CREATE DATABASE IF NOT EXISTS EXISTING_DB CHARACTER SET UTF8MB4;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    CREATE SCHEMA ANOTHER_DB COLLATE UTF8MB4_UNICODE_CI;
+    SET DB_COUNT = DB_COUNT + 1;
+    
+    RETURN DB_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TENURE_YEARS DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TIMESTAMPDIFF(YEAR, mysql_tbl_h4xvky_START_DATE, CURDATE()), 0)
+    INTO V_TENURE_YEARS
+    FROM `mysql_tbl_h4xvky`
+    WHERE mysql_tbl_h4xvky_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN FLOOR(V_TENURE_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(TAXABLE INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    DECLARE V_TAX DECIMAL(10,2);
+
+    CASE
+        WHEN TAXABLE <= 10000 THEN SET V_TAX = TAXABLE * 0.10;
+        WHEN TAXABLE <= 50000 THEN SET V_TAX = 1000 + (TAXABLE - 10000) * 0.20;
+        WHEN TAXABLE <= 100000 THEN SET V_TAX = 9000 + (TAXABLE - 50000) * 0.30;
+        ELSE SET V_TAX = 24000 + (TAXABLE - 100000) * 0.40;
+    END CASE;
+
+    RETURN V_TAX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_s8mkkq_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_s8mkkq`
+    WHERE mysql_tbl_s8mkkq_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(55)) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns(-48)) - (0) + (FLOOR(V_SALARY / 1000)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(mysql_tbl_1u2w9o_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM `mysql_tbl_1u2w9o`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_131_CREATE_DB_gy837f()) - (0) + ((MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(-58)) - (0) + V_HIRE_YEAR));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_4y4wjg_HIRE_DATE, CURDATE()), COALESCE(mysql_tbl_4y4wjg_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM `mysql_tbl_4y4wjg`
+    WHERE mysql_tbl_4y4wjg_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_wzr0el(69)) - (0) + ((V_TENURE * 1000) + FLOOR(V_SALARY / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(1);

@@ -1,0 +1,42 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_139_HASH_PARTITION_7sem37----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_139_HASH_PARTITION_7sem37() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_3l6wpi` (mysql_tbl_3l6wpi_ID INT, mysql_tbl_3l6wpi_DATA VARCHAR(50)) PARTITION BY HASH(ID) PARTITIONS 4;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_0maskw` (mysql_tbl_0maskw_ID INT, mysql_tbl_0maskw_NAME VARCHAR(50)) PARTITION BY KEY(ID) PARTITIONS 8;
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    
+    CREATE VIEW ACTIVE_USERS AS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_77bm1o` WHERE STATUS = 'ACTIVE';
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    CREATE OR REPLACE VIEW USER_SUMMARY AS SELECT ID, NAME, EMAIL INTO @mysql_synth_dummy FROM `mysql_tbl_77bm1o`;
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_139_HASH_PARTITION_7sem37()) - (0) + VIEW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856();

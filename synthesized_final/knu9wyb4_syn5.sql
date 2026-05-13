@@ -1,0 +1,72 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cm4n1n` (
+    `mysql_tbl_cm4n1n_cenum` ENUM('value1', 'value2', 'value3')
+);
+
+INSERT INTO `mysql_tbl_cm4n1n` (`mysql_tbl_cm4n1n_cenum`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_035_STR_POSITION_46xanc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_035_STR_POSITION_46xanc() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE POS_COUNT INT DEFAULT 0;
+    
+    SELECT POSITION('A' IN 'BANANA');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT LOCATE('A', 'BANANA');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT INSTR('BANANA', 'A');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT FIND_IN_SET('B', 'A,B,C,D');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    SELECT FIELD('B', 'A', 'B', 'C');
+    SET POS_COUNT = POS_COUNT + 1;
+    
+    RETURN POS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT STATUS, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_zicopl` GROUP BY STATUS;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT USER_ID, SUM(AMOUNT) AS TOTAL INTO @mysql_synth_dummy FROM `mysql_tbl_1zf83i` GROUP BY USER_ID HAVING TOTAL > 1000;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATE(CREATED_AT) AS DATE, COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_1zf83i` GROUP BY DATE WITH ROLLUP;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_035_STR_POSITION_46xanc()) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_ENUM_yio23w() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `mysql_tbl_cm4n1n`;
+    
+    RETURN ((MYSQL_FUNC_FUNC_156_SELECT_GROUP_a5uog6()) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_PROC_ENUM_yio23w();

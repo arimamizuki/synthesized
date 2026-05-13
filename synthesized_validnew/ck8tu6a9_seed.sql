@@ -1,0 +1,30 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_mfp4mh` (
+    `table_mfp4mh_customer_id` INT,
+    `table_mfp4mh_order_date` DATE,
+    `table_mfp4mh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_mfp4mh` (`table_mfp4mh_customer_id`, `table_mfp4mh_order_date`, `table_mfp4mh_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_PURCHASE_POWER_8ycioe(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENDING DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_MFP4MH_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_SPENDING, V_ORDER_COUNT
+    FROM TABLE_MFP4MH
+    WHERE TABLE_MFP4MH_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_TOTAL_SPENDING / V_ORDER_COUNT);
+END //
+
+DELIMITER ;

@@ -1,0 +1,32 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_85fjxk` (
+    `table_85fjxk_emp_id` INT,
+    `table_85fjxk_department_id` INT,
+    `table_85fjxk_salary` INT
+);
+
+INSERT INTO `table_85fjxk` (`table_85fjxk_emp_id`, `table_85fjxk_department_id`, `table_85fjxk_salary`) VALUES (1, 1, 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_PERCENTILE_cudxz6(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COUNT INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_85FJXK_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_85FJXK
+    WHERE TABLE_85FJXK_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_BELOW_COUNT, V_TOTAL_COUNT
+    FROM TABLE_85FJXK
+    WHERE TABLE_85FJXK_SALARY < V_SALARY;
+
+    RETURN (V_BELOW_COUNT * 100) / V_TOTAL_COUNT;
+END //
+
+DELIMITER ;

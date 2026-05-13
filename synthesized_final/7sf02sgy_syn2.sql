@@ -1,0 +1,55 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wppird` (
+    `mysql_tbl_wppird_customer_id` INT,
+    `mysql_tbl_wppird_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_wppird` (`mysql_tbl_wppird_customer_id`, `mysql_tbl_wppird_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_012_DATE_EXTRACT_q5mm31----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_012_DATE_EXTRACT_q5mm31() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EXTRACT_COUNT INT DEFAULT 0;
+    
+    SELECT MONTH(NOW());
+    SET EXTRACT_COUNT = EXTRACT_COUNT + 1;
+    
+    SELECT DAY(NOW());
+    SET EXTRACT_COUNT = EXTRACT_COUNT + 1;
+    
+    SELECT HOUR(NOW());
+    SET EXTRACT_COUNT = EXTRACT_COUNT + 1;
+    
+    SELECT MINUTE(NOW());
+    SET EXTRACT_COUNT = EXTRACT_COUNT + 1;
+    
+    SELECT SECOND(NOW());
+    SET EXTRACT_COUNT = EXTRACT_COUNT + 1;
+    
+    RETURN EXTRACT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_wppird_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM `mysql_tbl_wppird`
+    WHERE mysql_tbl_wppird_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_012_DATE_EXTRACT_q5mm31()) - (0) + (V_MONTHLY_COST * 12));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(1);

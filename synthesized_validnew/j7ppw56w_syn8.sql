@@ -1,0 +1,83 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1f1vgn` (
+    `mysql_tbl_1f1vgn_supplier_id` INT,
+    `mysql_tbl_1f1vgn_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_1f1vgn_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_1f1vgn` (`mysql_tbl_1f1vgn_supplier_id`, `mysql_tbl_1f1vgn_supplier_rating`, `mysql_tbl_1f1vgn_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE IS_COUNT INT DEFAULT 0;
+    
+    SELECT IS_VISIBLE_DD_OBJECT('TEST', 'USERS');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT PACKAGE_NAME('TEST_PKG');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_NAME('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    SELECT ROUTINE_TYPE('TEST', 'MY_PROC');
+    SET IS_COUNT = IS_COUNT + 1;
+    
+    RETURN IS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE_77d4c2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE_77d4c2(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_1f1vgn_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_1f1vgn_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_1f1vgn`
+    WHERE mysql_tbl_1f1vgn_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_048_IS_PACKAGE_3j5nmx()) - (0) + ((V_RATING * 10) + (30 - V_LEAD_TIME)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_COMPOSITE_SCORE_77d4c2(-16)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try();

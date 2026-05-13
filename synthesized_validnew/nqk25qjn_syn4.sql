@@ -1,0 +1,65 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_b12566` (
+    `mysql_tbl_b12566_emp_id` INT,
+    `mysql_tbl_b12566_salary` INT
+);
+
+INSERT INTO `mysql_tbl_b12566` (`mysql_tbl_b12566_emp_id`, `mysql_tbl_b12566_salary`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC1_abekbp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_abekbp() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_ARRAY_INSERT('{"A": [1, 3]}', '$.A[1]', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_SEARCH('{"A": "HELLO"}', 'ONE', 'HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_QUOTE('HELLO');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_UNQUOTE('"HELLO"');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_DEPTH('{"A": {"B": 1}}');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC1_abekbp()) - (0) + JSON_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_b12566_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_b12566`
+    WHERE mysql_tbl_b12566_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_024_JSON_ARRAY_wlhjl1()) - (0) + (FLOOR(V_SALARY / 10000)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(1);

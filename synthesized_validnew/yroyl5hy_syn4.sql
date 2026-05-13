@@ -1,0 +1,129 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x1a3na` (
+    `mysql_tbl_x1a3na_customer_id` INT,
+    `mysql_tbl_x1a3na_plan_type` VARCHAR(50),
+    `mysql_tbl_x1a3na_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_x1a3na` (`mysql_tbl_x1a3na_customer_id`, `mysql_tbl_x1a3na_plan_type`, `mysql_tbl_x1a3na_status`) VALUES (1, 'test', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8yp691` (
+    `mysql_tbl_8yp691_product_id` INT,
+    `mysql_tbl_8yp691_supplier_id` INT,
+    `mysql_tbl_8yp691_price` DECIMAL(10,2),
+    `mysql_tbl_8yp691_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_65bg0c` (
+    `mysql_tbl_65bg0c_supplier_id` INT,
+    `mysql_tbl_65bg0c_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_8yp691` (`mysql_tbl_8yp691_product_id`, `mysql_tbl_8yp691_supplier_id`, `mysql_tbl_8yp691_price`, `mysql_tbl_8yp691_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_65bg0c` (`mysql_tbl_65bg0c_supplier_id`, `mysql_tbl_65bg0c_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_STOCK INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_65bg0c_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_65bg0c`
+    WHERE mysql_tbl_65bg0c_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_8yp691_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_STOCK
+    FROM `mysql_tbl_8yp691`
+    WHERE mysql_tbl_8yp691_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_QUALITY_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 3) + (V_AVG_STOCK / 100);
+
+    RETURN V_QUALITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOG_COUNT INT DEFAULT 0;
+    
+    CREATE LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_1.LOG' INITIAL_SIZE = 16M UNDO_BUFFER_SIZE = 2M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    ALTER LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_2.LOG' INITIAL_SIZE = 16M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    DROP LOGFILE GROUP LG1 ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(92)) - (0) + LOG_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_x1a3na_PLAN_TYPE, mysql_tbl_x1a3na_STATUS
+    INTO V_PLAN_TYPE, V_STATUS
+    FROM `mysql_tbl_x1a3na`
+    WHERE mysql_tbl_x1a3na_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_fyzbuu`
+    WHERE mysql_tbl_x1a3na_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_ORDER_COUNT * 10
+        WHEN 'PREMIUM' THEN V_ORDER_COUNT * 5
+        WHEN 'BASIC' THEN V_ORDER_COUNT * 2
+        ELSE V_ORDER_COUNT END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(START_VAL INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE START_VAL > 0 DO
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ENGAGEMENT_SCORE_exag1s(-68);
+        SET START_VAL = START_VAL - 1;
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk()) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(1);

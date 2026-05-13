@@ -1,0 +1,222 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_id9sfd` (
+    `mysql_tbl_id9sfd_customer_id` INT,
+    `mysql_tbl_id9sfd_status` VARCHAR(50),
+    `mysql_tbl_id9sfd_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_id9sfd` (`mysql_tbl_id9sfd_customer_id`, `mysql_tbl_id9sfd_status`, `mysql_tbl_id9sfd_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6geqhz` (mysql_tbl_6geqhz_id INT, mysql_tbl_6geqhz_balance DECIMAL(10,2));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zetu83` (
+    `mysql_tbl_zetu83_emp_id` INT,
+    `mysql_tbl_zetu83_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_zetu83` (`mysql_tbl_zetu83_emp_id`, `mysql_tbl_zetu83_hire_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8u2e15` (
+    `mysql_tbl_8u2e15_emp_id` INT,
+    `mysql_tbl_8u2e15_department_id` INT,
+    `mysql_tbl_8u2e15_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_8u2e15` (`mysql_tbl_8u2e15_emp_id`, `mysql_tbl_8u2e15_department_id`, `mysql_tbl_8u2e15_hire_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c7kzab` (
+    `mysql_tbl_c7kzab_supplier_id` INT,
+    `mysql_tbl_c7kzab_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_c7kzab` (`mysql_tbl_c7kzab_supplier_id`, `mysql_tbl_c7kzab_lead_time_days`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qtyuax` (
+    `mysql_tbl_qtyuax_category_id` INT,
+    `mysql_tbl_qtyuax_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_qtyuax` (`mysql_tbl_qtyuax_category_id`, `mysql_tbl_qtyuax_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, mysql_tbl_8u2e15_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM `mysql_tbl_8u2e15`
+    WHERE mysql_tbl_8u2e15_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_TENURE * 10);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(mysql_tbl_zetu83_HIRE_DATE)
+    INTO V_WEEK
+    FROM `mysql_tbl_zetu83`
+    WHERE mysql_tbl_zetu83_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM ORDER_ITEMS OI
+    JOIN `mysql_tbl_qtyuax` P ON OI.PRODUCT_ID = P.PRODUCT_ID
+    WHERE mysql_tbl_qtyuax_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_c7kzab_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_c7kzab`
+    WHERE mysql_tbl_c7kzab_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN GREATEST(0, 30 - V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(SIZE INT, START_VALUE INT, INCREMENT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF SIZE <= 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(-5)) - (0) + 0);
+    END IF;
+
+    SET V_CURRENT_VALUE = START_VALUE;
+
+    SUM_LOOP: WHILE V_COUNTER < SIZE DO
+        SET V_SUM = MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz(5);
+        SET V_CURRENT_VALUE = MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(-5);
+        SET V_COUNTER = MYSQL_FUNC_CALCULATE_CATEGORY_VALUE_INDEX_hfiubu(97);
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_174_SELECT_NATURAL_gt25kz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_174_SELECT_NATURAL_gt25kz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS NATURAL JOIN `mysql_tbl_hvtfsg`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS NATURAL LEFT JOIN `mysql_tbl_hvtfsg`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_qboss1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_qboss1(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_id9sfd_STATUS, COALESCE(mysql_tbl_id9sfd_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM `mysql_tbl_id9sfd`
+    WHERE mysql_tbl_id9sfd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 10;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(ACC_ID INT, AMOUNT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    DECLARE V_DAILY_LIMIT DECIMAL(10,2) DEFAULT 5000.00;
+    SELECT mysql_tbl_6geqhz_BALANCE INTO V_BALANCE FROM `mysql_tbl_6geqhz` WHERE mysql_tbl_6geqhz_ID = ACC_ID;
+    IF AMOUNT > V_DAILY_LIMIT THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'AMOUNT EXCEEDS DAILY WITHDRAWAL LIMIT';
+    END IF;
+    IF AMOUNT > V_BALANCE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'INSUFFICIENT mysql_tbl_6geqhz_BALANCE';
+    END IF;
+    UPDATE `mysql_tbl_6geqhz` SET mysql_tbl_6geqhz_BALANCE = mysql_tbl_6geqhz_BALANCE - AMOUNT WHERE mysql_tbl_6geqhz_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_qboss1(-97);
+        SET V_SUM = MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(-34, 61);
+        SET V_TEMP = MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(91, -76, -15);
+    END WHILE SUM_LOOP;
+
+    RETURN ((MYSQL_FUNC_FUNC_174_SELECT_NATURAL_gt25kz()) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(1);

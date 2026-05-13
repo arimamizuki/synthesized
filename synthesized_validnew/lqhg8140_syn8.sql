@@ -1,0 +1,137 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gzg2rg` (
+    `mysql_tbl_gzg2rg_campaign_id` INT,
+    `mysql_tbl_gzg2rg_status` VARCHAR(50),
+    `mysql_tbl_gzg2rg_budget` INT,
+    `mysql_tbl_gzg2rg_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_gzg2rg` (`mysql_tbl_gzg2rg_campaign_id`, `mysql_tbl_gzg2rg_status`, `mysql_tbl_gzg2rg_budget`, `mysql_tbl_gzg2rg_start_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t1t1zl` (
+    `mysql_tbl_t1t1zl_emp_id` INT,
+    `mysql_tbl_t1t1zl_department_id` INT,
+    `mysql_tbl_t1t1zl_salary` INT
+);
+
+INSERT INTO `mysql_tbl_t1t1zl` (`mysql_tbl_t1t1zl_emp_id`, `mysql_tbl_t1t1zl_department_id`, `mysql_tbl_t1t1zl_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_10yyga` (
+    `mysql_tbl_10yyga_emp_id` INT,
+    `mysql_tbl_10yyga_department_id` INT,
+    `mysql_tbl_10yyga_salary` INT
+);
+
+INSERT INTO `mysql_tbl_10yyga` (`mysql_tbl_10yyga_emp_id`, `mysql_tbl_10yyga_department_id`, `mysql_tbl_10yyga_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_t1t1zl`
+    WHERE mysql_tbl_t1t1zl_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DISTANCE INT DEFAULT 0;
+    SET V_DISTANCE = ABS(X1 - X2) + ABS(Y1 - Y2);
+    RETURN V_DISTANCE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP EVENT EVT_CLEANUP;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP EVENT IF EXISTS EVT_BACKUP;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_pf1hmm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_pf1hmm(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, HIRE_DATE, CURDATE())), 0),
+           COALESCE(AVG(mysql_tbl_10yyga_SALARY), 0)
+    INTO V_AVG_TENURE, V_AVG_SALARY
+    FROM `mysql_tbl_10yyga`
+    WHERE mysql_tbl_10yyga_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_111_DROP_EVENT_sq5uzp()) - (0) + (((MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(49, 100, 36, -11)) - (0) + (FLOOR((V_AVG_TENURE * 1000) + (V_AVG_SALARY / 1000))))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_197_WHILE_5a093q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_197_WHILE_5a093q() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE WHILE_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    WHILE I < 3 DO
+        SET I = I + 1;
+        SET WHILE_COUNT = WHILE_COUNT + 1;
+    END WHILE;
+    
+    RETURN WHILE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_gzg2rg_STATUS, COALESCE(mysql_tbl_gzg2rg_BUDGET, 0), DATEDIFF(CURDATE(), mysql_tbl_gzg2rg_START_DATE)
+    INTO V_STATUS, V_BUDGET, V_DAYS
+    FROM `mysql_tbl_gzg2rg`
+    WHERE mysql_tbl_gzg2rg_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_DAYS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-63)) - (((MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_pf1hmm(24)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FUNC_197_WHILE_5a093q()) - (0) + (V_BUDGET / V_DAYS));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(1);

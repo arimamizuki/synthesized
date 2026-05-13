@@ -1,0 +1,75 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kkuf56` (
+    `mysql_tbl_kkuf56_category_id` INT,
+    `mysql_tbl_kkuf56_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_kkuf56` (`mysql_tbl_kkuf56_category_id`, `mysql_tbl_kkuf56_price`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_467okj` (
+    `mysql_tbl_467okj_customer_id` INT,
+    `mysql_tbl_467okj_country` INT
+);
+
+INSERT INTO `mysql_tbl_467okj` (`mysql_tbl_467okj_customer_id`, `mysql_tbl_467okj_country`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID)
+    INTO V_SUBSCRIBED
+    FROM SUBSCRIPTIONS S
+    JOIN `mysql_tbl_467okj` C ON S.CUSTOMER_ID = mysql_tbl_467okj_CUSTOMER_ID
+    WHERE mysql_tbl_467okj_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_SUBSCRIBED;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER DATABASE TEST CHARACTER SET UTF8MB4;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER SCHEMA TEST COLLATE UTF8MB4_UNICODE_CI;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER DATABASE TEST READ ONLY = 0;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9(-68)) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_kkuf56_PRICE), 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_kkuf56`
+    WHERE mysql_tbl_kkuf56_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_132_ALTER_DB_l6fi22()) - (0) + (FLOOR(V_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(1);

@@ -1,0 +1,93 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qaw894` (
+    `mysql_tbl_qaw894_customer_id` INT,
+    `mysql_tbl_qaw894_registration_date` DATE,
+    `mysql_tbl_qaw894_country` INT
+);
+
+INSERT INTO `mysql_tbl_qaw894` (`mysql_tbl_qaw894_customer_id`, `mysql_tbl_qaw894_registration_date`, `mysql_tbl_qaw894_country`) VALUES (1, '2024-01-01', 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS test.`mysql_tbl_2p56u7` (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.`mysql_tbl_2p56u7` (col1, col2) VALUES ('foo', 42);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FOOSP_ack96d----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP_ack96d() RETURNS INT DETERMINISTIC
+BEGIN
+    INSERT INTO TEST.`mysql_tbl_2p56u7`
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10 UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_FOOSP_ack96d()) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_heujnb(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_SINCE_ORDER INT DEFAULT 0;
+
+    SELECT MAX(ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM `mysql_tbl_5l0yub`
+    WHERE mysql_tbl_qaw894_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        SELECT TIMESTAMPDIFF(DAY, mysql_tbl_qaw894_REGISTRATION_DATE, CURDATE())
+        INTO V_DAYS_SINCE_ORDER
+        FROM `mysql_tbl_qaw894`
+        WHERE mysql_tbl_qaw894_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+    ELSE
+        SELECT TIMESTAMPDIFF(DAY, V_LAST_ORDER_DATE, CURDATE())
+        INTO V_DAYS_SINCE_ORDER
+        FROM `mysql_tbl_sza2u8`;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj()) - (0) + V_DAYS_SINCE_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_heujnb(1);

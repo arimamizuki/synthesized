@@ -1,0 +1,452 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hca6oz` (
+    `mysql_tbl_hca6oz_customer_id` INT,
+    `mysql_tbl_hca6oz_plan_type` VARCHAR(50),
+    `mysql_tbl_hca6oz_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_hca6oz_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_axf3xw` (
+    `mysql_tbl_axf3xw_customer_id` INT,
+    `mysql_tbl_axf3xw_tier_level` INT
+);
+
+INSERT INTO `mysql_tbl_hca6oz` (`mysql_tbl_hca6oz_customer_id`, `mysql_tbl_hca6oz_plan_type`, `mysql_tbl_hca6oz_monthly_cost`, `mysql_tbl_hca6oz_start_date`) VALUES (1, 'test', 1.0, '2024-01-01');
+
+INSERT INTO `mysql_tbl_axf3xw` (`mysql_tbl_axf3xw_customer_id`, `mysql_tbl_axf3xw_tier_level`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5wziip` (
+    `mysql_tbl_5wziip_customer_id` INT,
+    `mysql_tbl_5wziip_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_5wziip` (`mysql_tbl_5wziip_customer_id`, `mysql_tbl_5wziip_monthly_cost`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_meg834` (
+    `mysql_tbl_meg834_order_id` INT,
+    `mysql_tbl_meg834_customer_id` INT,
+    `mysql_tbl_meg834_order_date` DATE,
+    `mysql_tbl_meg834_total_amount` DECIMAL(10,2),
+    `mysql_tbl_meg834_discount_percent` INT,
+    `mysql_tbl_meg834_shipping_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7xn6wz` (
+    `mysql_tbl_7xn6wz_order_id` INT,
+    `mysql_tbl_7xn6wz_product_id` INT,
+    `mysql_tbl_7xn6wz_quantity` INT,
+    `mysql_tbl_7xn6wz_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_meg834` (`mysql_tbl_meg834_order_id`, `mysql_tbl_meg834_customer_id`, `mysql_tbl_meg834_order_date`, `mysql_tbl_meg834_total_amount`, `mysql_tbl_meg834_discount_percent`, `mysql_tbl_meg834_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 5, 1.0);
+
+INSERT INTO `mysql_tbl_7xn6wz` (`mysql_tbl_7xn6wz_order_id`, `mysql_tbl_7xn6wz_product_id`, `mysql_tbl_7xn6wz_quantity`, `mysql_tbl_7xn6wz_unit_price`) VALUES (1, 2, 3, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_edoz70` (
+    `mysql_tbl_edoz70_customer_id` INT,
+    `mysql_tbl_edoz70_country` INT
+);
+
+INSERT INTO `mysql_tbl_edoz70` (`mysql_tbl_edoz70_customer_id`, `mysql_tbl_edoz70_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7nr859` (
+    `mysql_tbl_7nr859_customer_id` INT,
+    `mysql_tbl_7nr859_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_7nr859_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7nr859` (`mysql_tbl_7nr859_customer_id`, `mysql_tbl_7nr859_monthly_cost`, `mysql_tbl_7nr859_status`) VALUES (1, 1.0, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_nfkryy` (
+    `mysql_tbl_nfkryy_salary` INT
+);
+
+INSERT INTO `mysql_tbl_nfkryy` (`mysql_tbl_nfkryy_salary`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6fb4qv` (
+    `mysql_tbl_6fb4qv_policy_id` INT,
+    `mysql_tbl_6fb4qv_customer_id` INT,
+    `mysql_tbl_6fb4qv_pet_id` INT,
+    `mysql_tbl_6fb4qv_pet_type` VARCHAR(50),
+    `mysql_tbl_6fb4qv_breed` INT,
+    `mysql_tbl_6fb4qv_age_years` INT,
+    `mysql_tbl_6fb4qv_premium_annual` INT,
+    `mysql_tbl_6fb4qv_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3ow5ap` (
+    `mysql_tbl_3ow5ap_breed_id` INT,
+    `mysql_tbl_3ow5ap_breed_name` VARCHAR(50),
+    `mysql_tbl_3ow5ap_size_category` INT,
+    `mysql_tbl_3ow5ap_avg_lifespan` INT
+);
+
+INSERT INTO `mysql_tbl_6fb4qv` (`mysql_tbl_6fb4qv_policy_id`, `mysql_tbl_6fb4qv_customer_id`, `mysql_tbl_6fb4qv_pet_id`, `mysql_tbl_6fb4qv_pet_type`, `mysql_tbl_6fb4qv_breed`, `mysql_tbl_6fb4qv_age_years`, `mysql_tbl_6fb4qv_premium_annual`, `mysql_tbl_6fb4qv_coverage_limit`) VALUES (1, 1, 1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `mysql_tbl_3ow5ap` (`mysql_tbl_3ow5ap_breed_id`, `mysql_tbl_3ow5ap_breed_name`, `mysql_tbl_3ow5ap_size_category`, `mysql_tbl_3ow5ap_avg_lifespan`) VALUES (1, 'test', 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(mysql_tbl_7nr859_MONTHLY_COST, 0), mysql_tbl_7nr859_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM `mysql_tbl_7nr859`
+    WHERE mysql_tbl_7nr859_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    CREATE UNDO TABLESPACE UNDO_TS1 ADD DATAFILE 'UNDO_TS1.IBU';
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    ALTER UNDO TABLESPACE UNDO_TS1 SET INACTIVE;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    DROP UNDO TABLESPACE UNDO_TS1;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN TS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_VALUE_SIMPLE_8p6ysg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_SIMPLE_8p6ysg(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_nfkryy_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_nfkryy`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= V_SQRT_N DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+            IF V_DIVISOR != N / V_DIVISOR THEN
+                SET V_SUM = V_SUM + (N / V_DIVISOR);
+            END IF;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_149_DELETE_JOIN_3mjzm6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_149_DELETE_JOIN_3mjzm6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DEL_COUNT INT DEFAULT 0;
+    
+    DELETE U FROM USERS U LEFT JOIN `mysql_tbl_a5ldql` O ON U.ID = O.USER_ID WHERE O.ID IS NULL;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE O FROM `mysql_tbl_a5ldql` O JOIN USERS U ON O.USER_ID = U.ID WHERE U.STATUS = 'INACTIVE';
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    RETURN DEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj(PET_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_BASE_PREMIUM INT DEFAULT 300;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_6fb4qv_AGE_YEARS, 1) INTO V_PET_AGE
+    FROM `mysql_tbl_6fb4qv`
+    WHERE mysql_tbl_6fb4qv_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(mysql_tbl_3ow5ap_SIZE_CATEGORY, 1) INTO V_SIZE_MULTIPLIER
+    FROM `mysql_tbl_6fb4qv` IP
+    JOIN `mysql_tbl_3ow5ap` B ON mysql_tbl_6fb4qv_BREED = mysql_tbl_3ow5ap_BREED_NAME
+    WHERE mysql_tbl_6fb4qv_PET_ID = PET_ID_PARAM;
+
+    SET V_FINAL_PREMIUM = V_BASE_PREMIUM * V_SIZE_MULTIPLIER;
+
+    IF V_PET_AGE > 8 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + (V_FINAL_PREMIUM * 25 / 100);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN ((MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(44)) - (((MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj(-72)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_SUM = MYSQL_FUNC_FUNC_149_DELETE_JOIN_3mjzm6();
+
+    IF N > 1 THEN
+        SET V_SUM = V_SUM + CALCULATE_TREE_DEPTH_SUM(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_SCORE_orjpqz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_SCORE_orjpqz(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_hca6oz_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM `mysql_tbl_hca6oz`
+    WHERE mysql_tbl_hca6oz_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM `mysql_tbl_a5ldql`
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_PLAN_VALUE = 200;
+        WHEN 'PREMIUM' THEN SET V_PLAN_VALUE = MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(77, 0, -73);
+        WHEN 'BASIC' THEN SET V_PLAN_VALUE = 30;
+        ELSE SET V_PLAN_VALUE = MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(39, 60);
+    END CASE;
+
+    IF V_MONTHLY_COST = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SALARY_VALUE_SIMPLE_8p6ysg(-4)) - (((MYSQL_FUNC_FUNC_103_CREATE_UNDO_TS_nvn2sn()) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_ROI_SCORE = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(53);
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6()) - (0) + V_ROI_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_5wziip_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_5wziip`
+    WHERE mysql_tbl_5wziip_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COST;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_NET_PROFIT INT DEFAULT 0;
+    DECLARE V_MARGIN_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_7xn6wz_QUANTITY * mysql_tbl_7xn6wz_UNIT_PRICE), 0), COALESCE(mysql_tbl_meg834_DISCOUNT_PERCENT, 0), COALESCE(mysql_tbl_meg834_SHIPPING_COST, 0)
+    INTO V_SUBTOTAL, V_DISCOUNT_PERCENT, V_SHIPPING_COST
+    FROM `mysql_tbl_7xn6wz` OI
+    JOIN `mysql_tbl_meg834` O ON mysql_tbl_7xn6wz_ORDER_ID = mysql_tbl_meg834_ORDER_ID
+    WHERE mysql_tbl_meg834_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT_PERCENT = COALESCE(
+        (SELECT mysql_tbl_meg834_DISCOUNT_PERCENT FROM `mysql_tbl_meg834` WHERE mysql_tbl_meg834_ORDER_ID = ORDER_ID_PARAM), 0
+    );
+
+    SET V_TOTAL_COST = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT_PERCENT / 100) + V_SHIPPING_COST;
+
+    SELECT COALESCE(mysql_tbl_meg834_TOTAL_AMOUNT, 0) - V_TOTAL_COST
+    INTO V_NET_PROFIT
+    FROM `mysql_tbl_meg834`
+    WHERE mysql_tbl_meg834_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARGIN_PERCENT = (V_NET_PROFIT * 100) / V_TOTAL_COST;
+
+    RETURN V_MARGIN_PERCENT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM `mysql_tbl_a5ldql` O
+    JOIN `mysql_tbl_edoz70` C ON O.CUSTOMER_ID = mysql_tbl_edoz70_CUSTOMER_ID
+    WHERE mysql_tbl_edoz70_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_a5ldql`;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_COUNTRY_ORDERS * 100) / V_TOTAL_ORDERS;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ROI_SCORE_orjpqz(74);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(92);
+    END IF;
+
+    SET V_RESULT = MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5(-78);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(-90)) - (0) + V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(1, 1);

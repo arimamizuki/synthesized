@@ -1,0 +1,383 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lyfhqw` (
+    `mysql_tbl_lyfhqw_emp_id` INT,
+    `mysql_tbl_lyfhqw_salary` INT
+);
+
+INSERT INTO `mysql_tbl_lyfhqw` (`mysql_tbl_lyfhqw_emp_id`, `mysql_tbl_lyfhqw_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_57k36f` (
+    `mysql_tbl_57k36f_product_id` INT,
+    `mysql_tbl_57k36f_category_id` INT,
+    `mysql_tbl_57k36f_price` DECIMAL(10,2),
+    `mysql_tbl_57k36f_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lkno8s` (
+    `mysql_tbl_lkno8s_order_id` INT,
+    `mysql_tbl_lkno8s_product_id` INT,
+    `mysql_tbl_lkno8s_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_57k36f` (`mysql_tbl_57k36f_product_id`, `mysql_tbl_57k36f_category_id`, `mysql_tbl_57k36f_price`, `mysql_tbl_57k36f_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_lkno8s` (`mysql_tbl_lkno8s_order_id`, `mysql_tbl_lkno8s_product_id`, `mysql_tbl_lkno8s_quantity`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_quqqwv` (
+    `mysql_tbl_quqqwv_table_id` INT,
+    `mysql_tbl_quqqwv_capacity` INT,
+    `mysql_tbl_quqqwv_is_occupied` INT,
+    `mysql_tbl_quqqwv_section` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j46375` (
+    `mysql_tbl_j46375_res_id` INT,
+    `mysql_tbl_j46375_table_id` INT,
+    `mysql_tbl_j46375_guest_count` INT,
+    `mysql_tbl_j46375_reservation_date` DATE,
+    `mysql_tbl_j46375_reservation_time` DATE,
+    `mysql_tbl_j46375_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_quqqwv` (`mysql_tbl_quqqwv_table_id`, `mysql_tbl_quqqwv_capacity`, `mysql_tbl_quqqwv_is_occupied`, `mysql_tbl_quqqwv_section`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `mysql_tbl_j46375` (`mysql_tbl_j46375_res_id`, `mysql_tbl_j46375_table_id`, `mysql_tbl_j46375_guest_count`, `mysql_tbl_j46375_reservation_date`, `mysql_tbl_j46375_reservation_time`, `mysql_tbl_j46375_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_oi025v` (
+    `mysql_tbl_oi025v_emp_id` INT,
+    `mysql_tbl_oi025v_department_id` INT,
+    `mysql_tbl_oi025v_salary` INT
+);
+
+INSERT INTO `mysql_tbl_oi025v` (`mysql_tbl_oi025v_emp_id`, `mysql_tbl_oi025v_department_id`, `mysql_tbl_oi025v_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2qgpt3` (mysql_tbl_2qgpt3_id INT, mysql_tbl_2qgpt3_status VARCHAR(20), refund_mysql_tbl_2qgpt3_status VARCHAR(20));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_oi025v_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_oi025v`
+    WHERE mysql_tbl_oi025v_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(TABLE_ID_PARAM INT, GUEST_COUNT_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_IS_OCCUPIED INT DEFAULT 0;
+    DECLARE V_SECTION_CAPACITY INT DEFAULT 0;
+    DECLARE V_RESERVED_COUNT INT DEFAULT 0;
+    DECLARE V_CAN_ACCOMMODATE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_quqqwv_CAPACITY, 0), COALESCE(mysql_tbl_quqqwv_IS_OCCUPIED, 0)
+    INTO V_CAPACITY, V_IS_OCCUPIED
+    FROM `mysql_tbl_quqqwv`
+    WHERE mysql_tbl_quqqwv_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVED_COUNT
+    FROM `mysql_tbl_j46375`
+    WHERE mysql_tbl_j46375_TABLE_ID = TABLE_ID_PARAM
+      AND mysql_tbl_j46375_STATUS IN ('CONFIRMED', 'PENDING');
+
+    SET V_SECTION_CAPACITY = V_CAPACITY - V_RESERVED_COUNT;
+
+    IF V_IS_OCCUPIED = 1 THEN
+        SET V_CAN_ACCOMMODATE = 0;
+    ELSEIF V_SECTION_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 1;
+    ELSEIF V_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 2;
+    ELSE
+        SET V_CAN_ACCOMMODATE = 0;
+    END IF;
+
+    RETURN V_CAN_ACCOMMODATE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT MD5(PASSWORD) INTO @mysql_synth_dummy FROM `mysql_tbl_eo2q8s`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT SHA1(PASSWORD) INTO @mysql_synth_dummy FROM `mysql_tbl_eo2q8s`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT SHA2(PASSWORD, 256) INTO @mysql_synth_dummy FROM `mysql_tbl_eo2q8s`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - (0) + SEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(ORDER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_REFUND_STATUS VARCHAR(20);
+    SELECT mysql_tbl_2qgpt3_STATUS, mysql_tbl_2qgpt3_REFUND_STATUS INTO V_STATUS, V_REFUND_STATUS FROM `mysql_tbl_2qgpt3` WHERE mysql_tbl_2qgpt3_ID = ORDER_ID;
+    IF V_STATUS != 'DELIVERED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ONLY DELIVERED mysql_tbl_2qgpt3 CAN BE REFUNDED';
+    END IF;
+    IF V_REFUND_STATUS = 'REFUNDED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ORDER HAS ALREADY BEEN REFUNDED';
+    END IF;
+    UPDATE `mysql_tbl_2qgpt3` SET mysql_tbl_2qgpt3_REFUND_STATUS = 'REFUNDED' WHERE mysql_tbl_2qgpt3_ID = ORDER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DIGEST_COUNT INT DEFAULT 0;
+    
+    SELECT STATEMENT_DIGEST('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT STATEMENT_DIGEST_TEXT('SELECT 1');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBTRACT('A:1-5', 'A:3-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    SELECT GTID_SUBSET('A:3-5', 'A:1-5');
+    SET DIGEST_COUNT = DIGEST_COUNT + 1;
+    
+    RETURN DIGEST_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_058_SET_VARS_gzt0os----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_058_SET_VARS_gzt0os() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SET GLOBAL MAX_CONNECTIONS = 200;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET SESSION SQL_MODE = 'STRICT_TRANS_TABLES';
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET @VAR1 = 100;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET AUTOCOMMIT = 0;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET PROFILING = 1;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN SET_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_157_SELECT_AGG_o0m0q0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_157_SELECT_AGG_o0m0q0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_eo2q8s`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT SUM(AMOUNT) INTO @mysql_synth_dummy FROM `mysql_tbl_4z9hdd`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT AVG(AMOUNT), MAX(AMOUNT), MIN(AMOUNT) INTO @mysql_synth_dummy FROM `mysql_tbl_4z9hdd`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_DEMAND_30D INT DEFAULT 0;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_57k36f_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_57k36f`
+    WHERE mysql_tbl_57k36f_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_lkno8s_QUANTITY), 0)
+    INTO V_DEMAND_30D
+    FROM `mysql_tbl_lkno8s`
+    WHERE mysql_tbl_lkno8s_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND mysql_tbl_lkno8s_ORDER_ID IN (SELECT mysql_tbl_lkno8s_ORDER_ID FROM `mysql_tbl_4z9hdd` WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_DEMAND_30D = 0 THEN
+        RETURN V_STOCK;
+    END IF;
+
+    SET V_RATIO = V_STOCK / V_DEMAND_30D;
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(STR1 INT, STR2 INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEN1 INT DEFAULT 0;
+    DECLARE V_LEN2 INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SET V_LEN1 = MYSQL_FUNC_CALCULATE_DEMAND_SUPPLY_RATIO_mfs7r6(-46);
+    SET V_LEN2 = MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(68, 33);
+
+    IF V_LEN1 = 0 OR V_LEN2 = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx(-12)) - (((MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(92)) - (0) + 0)) + 0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_LEN1 DO
+        SET V_J = MYSQL_FUNC_FUNC_183_SELECT_ENCRYPT_ssojm7();
+        INNER_LOOP: WHILE V_J <= V_LEN2 DO
+            IF SUBSTRING(STR1, V_I, 1) = SUBSTRING(STR2, V_J, 1) THEN
+                SET V_COUNT = MYSQL_FUNC_FUNC_040_STMT_DIGEST_6qp1kj();
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN ((MYSQL_FUNC_FUNC_058_SET_VARS_gzt0os()) - (0) + ((MYSQL_FUNC_FUNC_157_SELECT_AGG_o0m0q0()) - (0) + V_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DEL_COUNT INT DEFAULT 0;
+    
+    DELETE FROM `mysql_tbl_eo2q8s` WHERE ID = 1;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_4z9hdd` WHERE STATUS = 'CANCELLED' AND CREATED_AT < '2024-01-01';
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_04196x` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    RETURN DEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_lyfhqw_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_lyfhqw`
+    WHERE mysql_tbl_lyfhqw_EMP_ID = EMP_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk()) - (0) + (FLOOR(V_SALARY / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_015_CHAR_ENCODING_p9nkju() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CHAR_COUNT INT DEFAULT 0;
+    
+    SELECT HEX(255);
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT ASCII('A');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT CHAR(65);
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT CHARSET('TEST');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT COLLATION('TEST');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(-47, -54)) - (0) + ((MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(54)) - (0) + CHAR_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_015_CHAR_ENCODING_p9nkju();

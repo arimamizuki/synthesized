@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_049_SCHEMA_INFO_g2cdaq() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SCHEMA_COUNT INT DEFAULT 0;
+    
+    SELECT SCHEMA_NAME('TEST');
+    SET SCHEMA_COUNT = SCHEMA_COUNT + 1;
+    
+    SELECT TABLE_NAME('TEST', 'USERS');
+    SET SCHEMA_COUNT = SCHEMA_COUNT + 1;
+    
+    SELECT TABLE_TYPE('TEST', 'USERS');
+    SET SCHEMA_COUNT = SCHEMA_COUNT + 1;
+    
+    SELECT TRIGGER_NAME('TEST', 'TRG_USERS');
+    SET SCHEMA_COUNT = SCHEMA_COUNT + 1;
+    
+    RETURN SCHEMA_COUNT;
+END //
+
+DELIMITER ;

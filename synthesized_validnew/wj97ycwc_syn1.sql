@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_usbhbf` (mysql_tbl_usbhbf_id INT, mysql_tbl_usbhbf_amount_due DECIMAL(10,2), amount_pamysql_tbl_usbhbf_id DECIMAL(10,2));
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_VERIFY_PAYMENT_613ye0(INVOICE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DUE DECIMAL(10,2);
+    DECLARE V_PAID DECIMAL(10,2);
+    SELECT mysql_tbl_usbhbf_AMOUNT_DUE, mysql_tbl_usbhbf_AMOUNT_PAID INTO V_DUE, V_PAID FROM `mysql_tbl_usbhbf` WHERE mysql_tbl_usbhbf_ID = INVOICE_ID;
+    IF V_PAID < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'PAYMENT AMOUNT CANNOT BE NEGATIVE';
+    END IF;
+    IF V_PAID > V_DUE THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'PAYMENT EXCEEDS AMOUNT DUE';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SIGNAL_PROC_VERIFY_PAYMENT_613ye0(1);

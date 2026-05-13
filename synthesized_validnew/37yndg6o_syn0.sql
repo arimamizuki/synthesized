@@ -1,0 +1,254 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4g2plq` (
+    `mysql_tbl_4g2plq_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_4g2plq` (`mysql_tbl_4g2plq_campaign_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1pgq2u` (
+    `mysql_tbl_1pgq2u_product_id` INT,
+    `mysql_tbl_1pgq2u_category_id` INT,
+    `mysql_tbl_1pgq2u_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_80rxyl` (
+    `mysql_tbl_80rxyl_category_id` INT,
+    `mysql_tbl_80rxyl_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_1pgq2u` (`mysql_tbl_1pgq2u_product_id`, `mysql_tbl_1pgq2u_category_id`, `mysql_tbl_1pgq2u_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_80rxyl` (`mysql_tbl_80rxyl_category_id`, `mysql_tbl_80rxyl_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wfemcm` (
+    `mysql_tbl_wfemcm_product_id` INT,
+    `mysql_tbl_wfemcm_price` DECIMAL(10,2),
+    `mysql_tbl_wfemcm_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_wfemcm` (`mysql_tbl_wfemcm_product_id`, `mysql_tbl_wfemcm_price`, `mysql_tbl_wfemcm_category_id`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fagf7w` (
+    `mysql_tbl_fagf7w_customer_id` INT,
+    `mysql_tbl_fagf7w_registration_date` DATE,
+    `mysql_tbl_fagf7w_country` INT
+);
+
+INSERT INTO `mysql_tbl_fagf7w` (`mysql_tbl_fagf7w_customer_id`, `mysql_tbl_fagf7w_registration_date`, `mysql_tbl_fagf7w_country`) VALUES (1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_71yote` (
+    `mysql_tbl_71yote_product_id` INT,
+    `mysql_tbl_71yote_category_id` INT,
+    `mysql_tbl_71yote_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_71yote` (`mysql_tbl_71yote_product_id`, `mysql_tbl_71yote_category_id`, `mysql_tbl_71yote_price`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_wfemcm_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_wfemcm`
+    WHERE mysql_tbl_wfemcm_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE / 10);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(mysql_tbl_71yote_PRICE), 0), COALESCE(MIN(mysql_tbl_71yote_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM `mysql_tbl_71yote`
+    WHERE mysql_tbl_71yote_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_MAX_PRICE - V_MIN_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, mysql_tbl_fagf7w_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM `mysql_tbl_fagf7w`
+    WHERE mysql_tbl_fagf7w_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_k7934a`
+    WHERE mysql_tbl_fagf7w_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_AGE_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_1pgq2u_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_1pgq2u`
+    WHERE mysql_tbl_1pgq2u_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_1pgq2u_PRICE), 0)
+    INTO V_OVERALL_AVG
+    FROM `mysql_tbl_1pgq2u`;
+
+    IF V_OVERALL_AVG = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(31)) - (0) + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk(15)) - (0) + 100));
+    END IF;
+
+    SET V_RATIO = (V_CATEGORY_AVG / V_OVERALL_AVG) * 100;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(33)) - (0) + (FLOOR(V_RATIO)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_SUM_2dpbxb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_SUM_2dpbxb(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CONVERSION_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO V_CONVERSION_VALUE
+    FROM `mysql_tbl_jfdbtn`
+    WHERE mysql_tbl_4g2plq_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN FLOOR(V_CONVERSION_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP ROLE 'OLDROLE';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP ROLE IF EXISTS 'NONEXISTENTROLE';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF A <= 0 OR B <= 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_SUM_2dpbxb(83)) - (((MYSQL_FUNC_FUNC_090_DROP_ROLE_0yax9g()) - (0) + 0)) + 0);
+    END IF;
+
+    REPEAT
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    UNTIL B = 0 END REPEAT;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(99)) - (0) + A);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_191_CALL_PROC_fgmhs4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_191_CALL_PROC_fgmhs4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CALL_COUNT INT DEFAULT 0;
+    
+    CALL SP_GET_USER(1);
+    SET CALL_COUNT = CALL_COUNT + 1;
+    
+    CALL SP_PROCESS_DATA();
+    SET CALL_COUNT = CALL_COUNT + 1;
+    
+    RETURN CALL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE PLUGIN_COUNT INT DEFAULT 0;
+    
+    INSTALL PLUGIN EXAMPLE SONAME 'HA_EXAMPLE.SO';
+    SET PLUGIN_COUNT = PLUGIN_COUNT + 1;
+    
+    INSTALL COMPONENT 'FILE://COMPONENT_VALIDATE_PASSWORD';
+    SET PLUGIN_COUNT = PLUGIN_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_191_CALL_PROC_fgmhs4()) - (0) + PLUGIN_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_096_DROP_RG_r1bujq() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP RESOURCE GROUP RG1;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP RESOURCE GROUP IF EXISTS RG2;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(13, -95)) - (0) + ((MYSQL_FUNC_FUNC_098_INSTALL_PLUGIN_27fadb()) - (0) + DROP_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_096_DROP_RG_r1bujq();

@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_sx4qca` (
+    `table_sx4qca_product_id` INT,
+    `table_sx4qca_category_id` INT,
+    `table_sx4qca_price` DECIMAL(10,2),
+    `table_sx4qca_stock_quantity` INT
+);
+
+INSERT INTO `table_sx4qca` (`table_sx4qca_product_id`, `table_sx4qca_category_id`, `table_sx4qca_price`, `table_sx4qca_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_TURNOVER_INDEX_exz3yr(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_30D_SALES DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_SX4QCA_STOCK_QUANTITY, 1)
+    INTO V_STOCK
+    FROM TABLE_SX4QCA
+    WHERE TABLE_SX4QCA_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(QUANTITY), 0)
+    INTO V_30D_SALES
+    FROM ORDER_ITEMS
+    WHERE TABLE_SX4QCA_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM ORDERS WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_30D_SALES / V_STOCK);
+END //
+
+DELIMITER ;

@@ -1,0 +1,37 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_8cxw4p` (
+    `table_8cxw4p_product_id` INT,
+    `table_8cxw4p_category_id` INT,
+    `table_8cxw4p_price` DECIMAL(10,2),
+    `table_8cxw4p_stock_quantity` INT
+);
+
+INSERT INTO `table_8cxw4p` (`table_8cxw4p_product_id`, `table_8cxw4p_category_id`, `table_8cxw4p_price`, `table_8cxw4p_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VELOCITY_INDEX_sqokyj(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_7D_SALES DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_8CXW4P_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_8CXW4P
+    WHERE TABLE_8CXW4P_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(QUANTITY), 0)
+    INTO V_7D_SALES
+    FROM ORDER_ITEMS
+    WHERE TABLE_8CXW4P_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM ORDERS WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY));
+
+    IF V_STOCK = 0 THEN
+        RETURN 999;
+    END IF;
+
+    RETURN FLOOR((V_7D_SALES / V_STOCK) * 100);
+END //
+
+DELIMITER ;

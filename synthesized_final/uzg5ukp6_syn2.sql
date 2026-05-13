@@ -1,0 +1,89 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_75df8z` (
+    `mysql_tbl_75df8z_order_id` INT,
+    `mysql_tbl_75df8z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_75df8z` (`mysql_tbl_75df8z_order_id`, `mysql_tbl_75df8z_total_amount`) VALUES (1, 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wnv3d3` (
+    `mysql_tbl_wnv3d3_policy_id` INT,
+    `mysql_tbl_wnv3d3_customer_id` INT,
+    `mysql_tbl_wnv3d3_policy_type` VARCHAR(50),
+    `mysql_tbl_wnv3d3_premium_annual` INT,
+    `mysql_tbl_wnv3d3_coverage_amount` DECIMAL(10,2),
+    `mysql_tbl_wnv3d3_claim_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f391c9` (
+    `mysql_tbl_f391c9_claim_id` INT,
+    `mysql_tbl_f391c9_policy_id` INT,
+    `mysql_tbl_f391c9_claim_date` DATE,
+    `mysql_tbl_f391c9_claim_amount` DECIMAL(10,2),
+    `mysql_tbl_f391c9_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_wnv3d3` (`mysql_tbl_wnv3d3_policy_id`, `mysql_tbl_wnv3d3_customer_id`, `mysql_tbl_wnv3d3_policy_type`, `mysql_tbl_wnv3d3_premium_annual`, `mysql_tbl_wnv3d3_coverage_amount`, `mysql_tbl_wnv3d3_claim_count`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `mysql_tbl_f391c9` (`mysql_tbl_f391c9_claim_id`, `mysql_tbl_f391c9_policy_id`, `mysql_tbl_f391c9_claim_date`, `mysql_tbl_f391c9_claim_amount`, `mysql_tbl_f391c9_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_INSURANCE_RISK_SCORE_kuk7lq----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_RISK_SCORE_kuk7lq(POLICY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_CLAIM_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS_AMOUNT INT DEFAULT 0;
+    DECLARE V_CLAIMS_TO_PREMIUM_RATIO DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_wnv3d3_PREMIUM_ANNUAL, 0), COALESCE(mysql_tbl_wnv3d3_COVERAGE_AMOUNT, 0), COUNT(*)
+    INTO V_PREMIUM_ANNUAL, V_COVERAGE_AMOUNT, V_CLAIM_COUNT
+    FROM `mysql_tbl_wnv3d3` P
+    LEFT JOIN `mysql_tbl_f391c9` C ON mysql_tbl_wnv3d3_POLICY_ID = mysql_tbl_f391c9_POLICY_ID AND mysql_tbl_f391c9_STATUS = 'APPROVED'
+    WHERE mysql_tbl_wnv3d3_POLICY_ID = POLICY_ID_PARAM
+    GROUP BY mysql_tbl_wnv3d3_POLICY_ID;
+
+    SELECT COALESCE(SUM(mysql_tbl_f391c9_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS_AMOUNT
+    FROM `mysql_tbl_f391c9`
+    WHERE mysql_tbl_f391c9_POLICY_ID = POLICY_ID_PARAM AND mysql_tbl_f391c9_STATUS = 'APPROVED';
+
+    IF V_PREMIUM_ANNUAL > 0 THEN
+        SET V_CLAIMS_TO_PREMIUM_RATIO = (V_TOTAL_CLAIMS_AMOUNT * 1.0) / V_PREMIUM_ANNUAL;
+    END IF;
+
+    SET V_RISK_SCORE = (V_CLAIM_COUNT * 20) + (V_CLAIMS_TO_PREMIUM_RATIO * 50);
+
+    IF V_COVERAGE_AMOUNT > 1000000 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 15;
+    END IF;
+
+    RETURN LEAST(V_RISK_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_75df8z_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM `mysql_tbl_75df8z`
+    WHERE mysql_tbl_75df8z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_INSURANCE_RISK_SCORE_kuk7lq(99)) - (0) + (FLOOR(V_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(1);

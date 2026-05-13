@@ -1,0 +1,163 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_poepcq` (
+    `mysql_tbl_poepcq_emp_id` INT,
+    `mysql_tbl_poepcq_department_id` INT,
+    `mysql_tbl_poepcq_salary` INT,
+    `mysql_tbl_poepcq_hire_date` DATE,
+    `mysql_tbl_poepcq_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_poepcq` (`mysql_tbl_poepcq_emp_id`, `mysql_tbl_poepcq_department_id`, `mysql_tbl_poepcq_salary`, `mysql_tbl_poepcq_hire_date`, `mysql_tbl_poepcq_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2aigsp` (
+    `mysql_tbl_2aigsp_supplier_id` INT,
+    `mysql_tbl_2aigsp_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_2aigsp` (`mysql_tbl_2aigsp_supplier_id`, `mysql_tbl_2aigsp_lead_time_days`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4p3sbg` (
+    `mysql_tbl_4p3sbg_customer_id` INT,
+    `mysql_tbl_4p3sbg_registration_date` DATE,
+    `mysql_tbl_4p3sbg_city` INT,
+    `mysql_tbl_4p3sbg_total_purchases` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_4p3sbg` (`mysql_tbl_4p3sbg_customer_id`, `mysql_tbl_4p3sbg_registration_date`, `mysql_tbl_4p3sbg_city`, `mysql_tbl_4p3sbg_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_VALUE_5vfkdt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_VALUE_5vfkdt(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_2aigsp_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_2aigsp`
+    WHERE mysql_tbl_2aigsp_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - V_LEAD_TIME;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_099_UNINSTALL_PLUGIN_qx7s9b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_099_UNINSTALL_PLUGIN_qx7s9b() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UNINSTALL_COUNT INT DEFAULT 0;
+    
+    UNINSTALL PLUGIN EXAMPLE;
+    SET UNINSTALL_COUNT = UNINSTALL_COUNT + 1;
+    
+    UNINSTALL COMPONENT 'FILE://COMPONENT_VALIDATE_PASSWORD';
+    SET UNINSTALL_COUNT = UNINSTALL_COUNT + 1;
+    
+    RETURN UNINSTALL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_PURCHASES INT DEFAULT 0;
+    DECLARE V_REGISTRATION_YEAR INT;
+    DECLARE V_CURRENT_YEAR INT DEFAULT YEAR(CURDATE());
+    DECLARE V_LOYALTY_YEARS INT;
+    DECLARE V_TIER_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_4p3sbg_TOTAL_PURCHASES, 0), YEAR(mysql_tbl_4p3sbg_REGISTRATION_DATE)
+    INTO V_TOTAL_PURCHASES, V_REGISTRATION_YEAR
+    FROM `mysql_tbl_4p3sbg`
+    WHERE mysql_tbl_4p3sbg_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_PURCHASES <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOYALTY_YEARS = V_CURRENT_YEAR - V_REGISTRATION_YEAR;
+
+    SET V_TIER_SCORE = V_TOTAL_PURCHASES / 1000 + V_LOYALTY_YEARS * 5;
+
+    CASE
+        WHEN V_TIER_SCORE >= 100 THEN RETURN 4;
+        WHEN V_TIER_SCORE >= 50 THEN RETURN 3;
+        WHEN V_TIER_SCORE >= 20 THEN RETURN 2;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_175_SELECT_CROSS_pwm4m5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_175_SELECT_CROSS_pwm4m5() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS CROSS JOIN `mysql_tbl_ued3tr`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS JOIN `mysql_tbl_ued3tr`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(53)) - (0) + ((MYSQL_FUNC_FUNC_099_UNINSTALL_PLUGIN_qx7s9b()) - (0) + SEL_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_129_CONVERT_sqsbo1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_129_CONVERT_sqsbo1() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS CONVERT TO CHARACTER SET UTF8MB4 COLLATE UTF8MB4_UNICODE_CI;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS DEFAULT CHARACTER SET UTF8MB4;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_poepcq_SALARY, 0), COALESCE(mysql_tbl_poepcq_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_poepcq_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_poepcq`
+    WHERE mysql_tbl_poepcq_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_poepcq_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM `mysql_tbl_poepcq`;
+
+    SET V_RISK_INDEX = (MYSQL_FUNC_FUNC_175_SELECT_CROSS_pwm4m5());
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_VALUE_5vfkdt(48)) - (0) + ((MYSQL_FUNC_FUNC_129_CONVERT_sqsbo1()) - (0) + V_RISK_INDEX));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(1);

@@ -1,0 +1,230 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j1rbzh` (
+    `mysql_tbl_j1rbzh_supplier_id` INT,
+    `mysql_tbl_j1rbzh_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_j1rbzh` (`mysql_tbl_j1rbzh_supplier_id`, `mysql_tbl_j1rbzh_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_uovmr3` (
+    `mysql_tbl_uovmr3_product_id` INT,
+    `mysql_tbl_uovmr3_category_id` INT,
+    `mysql_tbl_uovmr3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_uovmr3` (`mysql_tbl_uovmr3_product_id`, `mysql_tbl_uovmr3_category_id`, `mysql_tbl_uovmr3_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_worcrm` (
+    `mysql_tbl_worcrm_campaign_id` INT,
+    `mysql_tbl_worcrm_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_worcrm` (`mysql_tbl_worcrm_campaign_id`, `mysql_tbl_worcrm_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8w4cne` (
+    `mysql_tbl_8w4cne_budget` INT
+);
+
+INSERT INTO `mysql_tbl_8w4cne` (`mysql_tbl_8w4cne_budget`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_erfel9` (
+    `mysql_tbl_erfel9_product_id` INT,
+    `mysql_tbl_erfel9_category_id` INT,
+    `mysql_tbl_erfel9_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_erfel9` (`mysql_tbl_erfel9_product_id`, `mysql_tbl_erfel9_category_id`, `mysql_tbl_erfel9_stock_quantity`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dujrar` (
+    `mysql_tbl_dujrar_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_dujrar` (`mysql_tbl_dujrar_category_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a0kmq0` (
+    `mysql_tbl_a0kmq0_product_id` INT,
+    `mysql_tbl_a0kmq0_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_a0kmq0` (`mysql_tbl_a0kmq0_product_id`, `mysql_tbl_a0kmq0_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN P_A + P_B;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_j1rbzh_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_j1rbzh`
+    WHERE mysql_tbl_j1rbzh_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_SHARE_5yg16j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_SHARE_5yg16j(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_CATEGORY_REVENUE
+    FROM `mysql_tbl_sp7is6` OI
+    JOIN `mysql_tbl_uovmr3` P ON OI.PRODUCT_ID = mysql_tbl_uovmr3_PRODUCT_ID
+    WHERE mysql_tbl_uovmr3_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(QUANTITY * UNIT_PRICE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_sp7is6`;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CATEGORY_REVENUE * 100) / V_TOTAL_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SPEND_lvh120----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPEND_lvh120(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_8w4cne_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_8w4cne`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_erfel9_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM `mysql_tbl_erfel9`
+    WHERE mysql_tbl_erfel9_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN LEAST(V_TOTAL_STOCK, 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_dujrar`
+    WHERE mysql_tbl_dujrar_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_a0kmq0_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_a0kmq0`
+    WHERE mysql_tbl_a0kmq0_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_worcrm_STATUS, COUNT(*)
+    INTO V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_worcrm` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_worcrm_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_worcrm_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_worcrm_CAMPAIGN_ID;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN ((MYSQL_FUNC_CALCULATE_SPEND_lvh120(9)) - (0) + (((MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(-85)) - (0) + (((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(-16)) - (0) + (((MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(-9)) - (0) + (100 + V_CONVERSION_COUNT))))))));
+        WHEN 'PAUSED' THEN RETURN 50 + V_CONVERSION_COUNT;
+        WHEN 'COMPLETED' THEN RETURN 75 + V_CONVERSION_COUNT;
+        ELSE RETURN 10 + V_CONVERSION_COUNT;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_syz81u(INPUT_STR INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_REVERSED VARCHAR(100) DEFAULT '';
+    DECLARE V_LEN INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+
+    SET V_LEN = CHAR_LENGTH(INPUT_STR);
+
+    WHILE V_I <= V_LEN DO
+        SET V_CHAR = MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(6, 81);
+        SET V_REVERSED = MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_SHARE_5yg16j(49);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF INPUT_STR = V_REVERSED THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih(14)) - (0) + 1);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(61)) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_IS_PALINDROME_syz81u(1);

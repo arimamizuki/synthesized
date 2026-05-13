@@ -1,0 +1,48 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_1gqip4` (
+    `mysql_tbl_1gqip4_budget` INT
+);
+
+INSERT INTO `mysql_tbl_1gqip4` (`mysql_tbl_1gqip4_budget`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_028_SLEEP_BENCH_zk05tf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_028_SLEEP_BENCH_zk05tf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE BENCH_COUNT INT DEFAULT 0;
+    
+    SELECT SLEEP(0.1);
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    SELECT BENCHMARK(1000, MD5('TEST'));
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    SELECT PG_SLEEP(0.1);
+    SET BENCH_COUNT = BENCH_COUNT + 1;
+    
+    RETURN BENCH_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPEND_lvh120(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_1gqip4_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_1gqip4`
+    WHERE CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_028_SLEEP_BENCH_zk05tf()) - (0) + V_BUDGET);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SPEND_lvh120(1);

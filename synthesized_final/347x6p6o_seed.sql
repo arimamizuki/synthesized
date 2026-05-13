@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_vap16q` (
+    `table_vap16q_customer_id` INT,
+    `table_vap16q_country` INT
+);
+
+INSERT INTO `table_vap16q` (`table_vap16q_customer_id`, `table_vap16q_country`) VALUES (1, 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_iprlwb(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM ORDERS O
+    JOIN TABLE_VAP16Q C ON O.CUSTOMER_ID = TABLE_VAP16Q_CUSTOMER_ID
+    WHERE TABLE_VAP16Q_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;

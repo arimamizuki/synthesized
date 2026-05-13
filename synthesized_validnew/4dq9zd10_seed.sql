@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_y6gyrc` (
+    `table_y6gyrc_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_y6gyrc` (`table_y6gyrc_monthly_cost`) VALUES (1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_jcd9pn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y6GYRC_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_Y6GYRC
+    WHERE CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COST;
+END //
+
+DELIMITER ;

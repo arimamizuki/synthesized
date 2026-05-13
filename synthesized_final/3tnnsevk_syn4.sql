@@ -1,0 +1,219 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xlu3w0` (
+    `mysql_tbl_xlu3w0_emp_id` INT,
+    `mysql_tbl_xlu3w0_department_id` INT,
+    `mysql_tbl_xlu3w0_salary` INT,
+    `mysql_tbl_xlu3w0_hire_date` DATE,
+    `mysql_tbl_xlu3w0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_xlu3w0` (`mysql_tbl_xlu3w0_emp_id`, `mysql_tbl_xlu3w0_department_id`, `mysql_tbl_xlu3w0_salary`, `mysql_tbl_xlu3w0_hire_date`, `mysql_tbl_xlu3w0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_23syv9` (
+    `mysql_tbl_23syv9_record_id` INT,
+    `mysql_tbl_23syv9_city_id` INT,
+    `mysql_tbl_23syv9_date` mysql_tbl_23syv9_date,
+    `mysql_tbl_23syv9_temperature` INT,
+    `mysql_tbl_23syv9_humidity` INT,
+    `mysql_tbl_23syv9_air_quality_index` INT
+);
+
+INSERT INTO `mysql_tbl_23syv9` (`mysql_tbl_23syv9_record_id`, `mysql_tbl_23syv9_city_id`, `mysql_tbl_23syv9_date`, `mysql_tbl_23syv9_temperature`, `mysql_tbl_23syv9_humidity`, `mysql_tbl_23syv9_air_quality_index`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sb3ra9` (
+    `mysql_tbl_sb3ra9_emp_id` INT,
+    `mysql_tbl_sb3ra9_department_id` INT,
+    `mysql_tbl_sb3ra9_salary` INT
+);
+
+INSERT INTO `mysql_tbl_sb3ra9` (`mysql_tbl_sb3ra9_emp_id`, `mysql_tbl_sb3ra9_department_id`, `mysql_tbl_sb3ra9_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qt6x13` (
+    `mysql_tbl_qt6x13_customer_id` INT,
+    `mysql_tbl_qt6x13_order_date` DATE,
+    `mysql_tbl_qt6x13_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_qt6x13` (`mysql_tbl_qt6x13_customer_id`, `mysql_tbl_qt6x13_order_date`, `mysql_tbl_qt6x13_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cchyk5` (
+    `mysql_tbl_cchyk5_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_cchyk5` (`mysql_tbl_cchyk5_campaign_id`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_077_XA_RECOVER_d1btf0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_077_XA_RECOVER_d1btf0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE XA_COUNT INT DEFAULT 0;
+    
+    XA RECOVER;
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    XA ROLLBACK 'XID1';
+    SET XA_COUNT = XA_COUNT + 1;
+    
+    RETURN XA_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_TOTAL_tewbkr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_TOTAL_tewbkr(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_g2dc51`
+    WHERE mysql_tbl_cchyk5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_CONVERSION_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p(CITY_ID_PARAM INT, TARGET_DATE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMPERATURE INT DEFAULT 20;
+    DECLARE V_HUMIDITY INT DEFAULT 50;
+    DECLARE V_AIR_QUALITY INT DEFAULT 50;
+    DECLARE V_COMFORT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_23syv9_TEMPERATURE, 20), COALESCE(mysql_tbl_23syv9_HUMIDITY, 50), COALESCE(mysql_tbl_23syv9_AIR_QUALITY_INDEX, 50)
+    INTO V_TEMPERATURE, V_HUMIDITY, V_AIR_QUALITY
+    FROM `mysql_tbl_23syv9`
+    WHERE mysql_tbl_23syv9_CITY_ID = CITY_ID_PARAM AND mysql_tbl_23syv9_DATE = TARGET_DATE;
+
+    SET V_COMFORT_SCORE = MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_TOTAL_tewbkr(-88);
+
+    IF V_TEMPERATURE < 10 OR V_TEMPERATURE > 35 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 30;
+    ELSEIF V_TEMPERATURE < 15 OR V_TEMPERATURE > 30 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 15;
+    END IF;
+
+    IF V_HUMIDITY < 30 OR V_HUMIDITY > 70 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 20;
+    END IF;
+
+    IF V_AIR_QUALITY > 100 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 40;
+    ELSEIF V_AIR_QUALITY > 50 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 15;
+    END IF;
+
+    RETURN GREATEST(V_COMFORT_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LTV DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_qt6x13_TOTAL_AMOUNT), 0)
+    INTO V_LTV
+    FROM `mysql_tbl_qt6x13`
+    WHERE mysql_tbl_qt6x13_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_LTV);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_sb3ra9_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_sb3ra9`
+    WHERE mysql_tbl_sb3ra9_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_sb3ra9_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM `mysql_tbl_sb3ra9`
+    WHERE mysql_tbl_sb3ra9_DEPARTMENT_ID = (SELECT mysql_tbl_sb3ra9_DEPARTMENT_ID FROM `mysql_tbl_sb3ra9` WHERE mysql_tbl_sb3ra9_EMP_ID = EMP_ID_PARAM);
+
+    SET V_RATIO = MYSQL_FUNC_CALCULATE_CUSTOMER_LTV_SIMPLE_7ijv4j(-6);
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_xlu3w0_SALARY, 0), COALESCE(mysql_tbl_xlu3w0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_xlu3w0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM `mysql_tbl_xlu3w0`
+    WHERE mysql_tbl_xlu3w0_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_xlu3w0_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM `mysql_tbl_xlu3w0`;
+
+    SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p(12, -86));
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(-91)) - (0) + V_RISK_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 18 UNION SELECT 36 UNION SELECT 54 UNION SELECT 72 UNION SELECT 90 UNION SELECT 108 UNION SELECT 126 UNION SELECT 144 UNION SELECT 162 UNION SELECT 180 UNION SELECT 198 UNION SELECT 216 UNION SELECT 234 UNION SELECT 252 UNION SELECT 270 UNION SELECT 288 UNION SELECT 306;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_FUNC_077_XA_RECOVER_d1btf0()) - (0) + ((MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(92)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9();

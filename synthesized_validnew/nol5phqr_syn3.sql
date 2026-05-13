@@ -1,0 +1,64 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_i142aj` WHERE ID IN (SELECT USER_ID FROM `mysql_tbl_w254pe` WHERE AMOUNT > 100);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_i142aj` WHERE EXISTS (SELECT 1 FROM `mysql_tbl_w254pe` WHERE mysql_tbl_w254pe.USER_ID = mysql_tbl_i142aj.ID);
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT (SELECT COUNT(*) INTO @mysql_synth_dummy FROM `mysql_tbl_w254pe`) AS ORDER_COUNT, (SELECT COUNT(*) FROM `mysql_tbl_i142aj`) AS USER_COUNT;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC2_nz67cs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_FUNC_159_SELECT_SUBQUERY_rzn0rl()) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOCK_COUNT INT DEFAULT 0;
+    
+    SELECT GET_LOCK('MYLOCK', 10);
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_FREE_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT IS_USED_LOCK('MYLOCK');
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    SELECT RELEASE_ALL_LOCKS();
+    SET LOCK_COUNT = LOCK_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC2_nz67cs()) - (0) + LOCK_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_029_LOCK_FUNCS_uylpub();

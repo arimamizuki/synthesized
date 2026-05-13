@@ -1,0 +1,46 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_07f0zw` (
+    `mysql_tbl_07f0zw_csmallint` SMALLINT
+);
+
+INSERT INTO `mysql_tbl_07f0zw` (`mysql_tbl_07f0zw_csmallint`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW SLAVE STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW SLAVE HOSTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW MASTER STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW BINARY LOGS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SMALLINT_2839ti() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_07f0zw_CSMALLINT INTO RESULT FROM `mysql_tbl_07f0zw` LIMIT 1;
+    RETURN ((MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z()) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_PROC_SMALLINT_2839ti();

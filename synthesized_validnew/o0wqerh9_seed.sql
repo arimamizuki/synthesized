@@ -1,0 +1,20 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_171_SELECT_INTO_t92ei2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT * INTO @mysql_synth_dummy FROM USERS INTO OUTFILE '/TMP/USERS.CSV' FIELDS TERMINATED BY ',';
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT ID, NAME INTO @USER_ID, @USER_NAME FROM USERS WHERE ID = 1;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;

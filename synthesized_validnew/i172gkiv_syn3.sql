@@ -1,0 +1,145 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_of91jw` (
+    `mysql_tbl_of91jw_customer_id` INT,
+    `mysql_tbl_of91jw_registration_date` DATE,
+    `mysql_tbl_of91jw_country` INT
+);
+
+INSERT INTO `mysql_tbl_of91jw` (`mysql_tbl_of91jw_customer_id`, `mysql_tbl_of91jw_registration_date`, `mysql_tbl_of91jw_country`) VALUES (1, '2024-01-01', 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6rd4ej` (
+    `mysql_tbl_6rd4ej_emp_id` INT,
+    `mysql_tbl_6rd4ej_department_id` INT,
+    `mysql_tbl_6rd4ej_salary` INT,
+    `mysql_tbl_6rd4ej_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_6rd4ej` (`mysql_tbl_6rd4ej_emp_id`, `mysql_tbl_6rd4ej_department_id`, `mysql_tbl_6rd4ej_salary`, `mysql_tbl_6rd4ej_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_msvf5h` (
+    `mysql_tbl_msvf5h_campaign_id` INT,
+    `mysql_tbl_msvf5h_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_msvf5h` (`mysql_tbl_msvf5h_campaign_id`, `mysql_tbl_msvf5h_status`) VALUES (1, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(mysql_tbl_6rd4ej_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM `mysql_tbl_6rd4ej`
+    WHERE mysql_tbl_6rd4ej_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(-6, 95));
+
+    RETURN V_HEADCOUNT_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_015_CHAR_ENCODING_p9nkju----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_015_CHAR_ENCODING_p9nkju() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CHAR_COUNT INT DEFAULT 0;
+    
+    SELECT HEX(255);
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT ASCII('A');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT CHAR(65);
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT CHARSET('TEST');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    SELECT COLLATION('TEST');
+    SET CHAR_COUNT = CHAR_COUNT + 1;
+    
+    RETURN CHAR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_msvf5h_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_msvf5h`
+    WHERE mysql_tbl_msvf5h_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_015_CHAR_ENCODING_p9nkju()) - (0) + CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2 END;
+    END);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, mysql_tbl_of91jw_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM `mysql_tbl_of91jw`
+    WHERE mysql_tbl_of91jw_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_9c30g7`
+    WHERE mysql_tbl_of91jw_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_AGE_MONTHS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - (0) + ((V_ORDER_COUNT * 100) / V_AGE_MONTHS));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk(1);

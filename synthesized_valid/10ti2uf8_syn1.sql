@@ -1,0 +1,80 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_e9at3s` (
+    `mysql_tbl_e9at3s_campaign_id` INT,
+    `mysql_tbl_e9at3s_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_e9at3s` (`mysql_tbl_e9at3s_campaign_id`, `mysql_tbl_e9at3s_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT mysql_tbl_e9at3s_START_DATE
+    INTO V_START_DATE
+    FROM `mysql_tbl_e9at3s`
+    WHERE mysql_tbl_e9at3s_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE KEY_COUNT INT DEFAULT 0;
+    
+    SELECT CREATE_ASYMMETRIC_PRIV_KEY('RSA', 2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_ASYMMETRIC_PUB_KEY('RSA', 'PRIVATE_KEY');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DH_PARAMETERS(2048);
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    SELECT CREATE_DIGEST('SHA256', 'HELLO');
+    SET KEY_COUNT = KEY_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(5)) - (0) + ((MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(-74)) - (0) + KEY_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_051_CREATE_ASYM_KEYS_67i9us();

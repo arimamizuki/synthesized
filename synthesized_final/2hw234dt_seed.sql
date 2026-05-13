@@ -1,0 +1,56 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_a4uw03` (
+    `table_a4uw03_customer_id` INT,
+    `table_a4uw03_plan_type` VARCHAR(50),
+    `table_a4uw03_monthly_cost` DECIMAL(10,2),
+    `table_a4uw03_start_date` DATE,
+    `table_a4uw03_renewal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0t1ok` (
+    `table_l0t1ok_customer_id` INT,
+    `table_l0t1ok_tier_level` INT
+);
+
+INSERT INTO `table_a4uw03` (`table_a4uw03_customer_id`, `table_a4uw03_plan_type`, `table_a4uw03_monthly_cost`, `table_a4uw03_start_date`, `table_a4uw03_renewal_date`) VALUES (1, 'test', 1.0, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_l0t1ok` (`table_l0t1ok_customer_id`, `table_l0t1ok_tier_level`) VALUES (1, 2);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_SCORE_kygd0i(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_CUSTOMER_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_A4UW03_PLAN_TYPE, COALESCE(TABLE_A4UW03_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_A4UW03
+    WHERE TABLE_A4UW03_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_L0T1OK_TIER_LEVEL
+    INTO V_CUSTOMER_TIER
+    FROM TABLE_L0T1OK
+    WHERE TABLE_L0T1OK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_VALUE_SCORE = V_MONTHLY_COST;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 100;
+        WHEN 'PREMIUM' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 50;
+        WHEN 'BASIC' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 10;
+    END CASE;
+
+    CASE V_CUSTOMER_TIER
+        WHEN 'PLATINUM' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 80;
+        WHEN 'GOLD' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 40;
+        WHEN 'SILVER' THEN SET V_VALUE_SCORE = V_VALUE_SCORE + 20;
+    END CASE;
+
+    RETURN V_VALUE_SCORE;
+END //
+
+DELIMITER ;

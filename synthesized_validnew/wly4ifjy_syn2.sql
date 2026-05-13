@@ -1,0 +1,304 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j8o4z8` (
+    `mysql_tbl_j8o4z8_product_id` INT,
+    `mysql_tbl_j8o4z8_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_j8o4z8` (`mysql_tbl_j8o4z8_product_id`, `mysql_tbl_j8o4z8_stock_quantity`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_jxxgwy` (
+    mysql_tbl_jxxgwy_inventory_id INT PRIMARY KEY,
+    mysql_tbl_jxxgwy_film_id INT,
+    mysql_tbl_jxxgwy_store_id INT
+);
+
+INSERT INTO `mysql_tbl_jxxgwy` (`mysql_tbl_jxxgwy_inventory_id`, `mysql_tbl_jxxgwy_film_id`, `mysql_tbl_jxxgwy_store_id`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8j97y5` (
+    `mysql_tbl_8j97y5_department_id` INT,
+    `mysql_tbl_8j97y5_salary` INT
+);
+
+INSERT INTO `mysql_tbl_8j97y5` (`mysql_tbl_8j97y5_department_id`, `mysql_tbl_8j97y5_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_a7nk3j` (
+    `mysql_tbl_a7nk3j_campaign_id` INT,
+    `mysql_tbl_a7nk3j_channel` INT,
+    `mysql_tbl_a7nk3j_target_audience` INT,
+    `mysql_tbl_a7nk3j_budget` INT,
+    `mysql_tbl_a7nk3j_start_date` DATE,
+    `mysql_tbl_a7nk3j_end_date` DATE,
+    `mysql_tbl_a7nk3j_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_a7nk3j` (`mysql_tbl_a7nk3j_campaign_id`, `mysql_tbl_a7nk3j_channel`, `mysql_tbl_a7nk3j_target_audience`, `mysql_tbl_a7nk3j_budget`, `mysql_tbl_a7nk3j_start_date`, `mysql_tbl_a7nk3j_end_date`, `mysql_tbl_a7nk3j_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lwfk93` (
+    `mysql_tbl_lwfk93_cset_col` INT
+);
+
+INSERT INTO `mysql_tbl_lwfk93` (`mysql_tbl_lwfk93_cset_col`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xxwnko` (mysql_tbl_xxwnko_id INT, mysql_tbl_xxwnko_balance DECIMAL(10,2));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mvkp9b` (
+    `mysql_tbl_mvkp9b_salary` INT
+);
+
+INSERT INTO `mysql_tbl_mvkp9b` (`mysql_tbl_mvkp9b_salary`) VALUES (1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_IN_STOCK_eky5dj(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE P_FILM_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    FROM `mysql_tbl_jxxgwy`
+    WHERE mysql_tbl_jxxgwy_FILM_ID = P_FILM_ID
+    AND mysql_tbl_jxxgwy_STORE_ID = P_STORE_ID
+    AND mysql_tbl_jxxgwy_INVENTORY_ID > 0
+    INTO P_FILM_COUNT;
+
+    RETURN P_FILM_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_FILM_IN_STOCK_eky5dj(-19, -15)) - (0) + A);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_SET_pl5j0s----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SET_pl5j0s() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_lwfk93_CSET_COL INTO RESULT FROM `mysql_tbl_lwfk93` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PAY_hh4qzb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAY_hh4qzb(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_mvkp9b_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_mvkp9b`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC1_dvat8j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_PAY_hh4qzb(-86)) - (0) + (((MYSQL_FUNC_FUNC1_dvat8j()) - (0) + (P_A * P_B))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_8j97y5_SALARY), 0)
+    INTO V_AVG
+    FROM `mysql_tbl_8j97y5`
+    WHERE mysql_tbl_8j97y5_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(-49, -69)) - (0) + (((MYSQL_FUNC_PROC_SET_pl5j0s()) - (0) + (FLOOR(V_AVG)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW SLAVE STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW SLAVE HOSTS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW MASTER STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW BINARY LOGS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(ACC_ID INT, AMOUNT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    DECLARE V_DAILY_LIMIT DECIMAL(10,2) DEFAULT 5000.00;
+    SELECT mysql_tbl_xxwnko_BALANCE INTO V_BALANCE FROM `mysql_tbl_xxwnko` WHERE mysql_tbl_xxwnko_ID = ACC_ID;
+    IF AMOUNT > V_DAILY_LIMIT THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'AMOUNT EXCEEDS DAILY WITHDRAWAL LIMIT';
+    END IF;
+    IF AMOUNT > V_BALANCE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'INSUFFICIENT mysql_tbl_xxwnko_BALANCE';
+    END IF;
+    UPDATE `mysql_tbl_xxwnko` SET mysql_tbl_xxwnko_BALANCE = mysql_tbl_xxwnko_BALANCE - AMOUNT WHERE mysql_tbl_xxwnko_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ACCESS_COUNT INT DEFAULT 0;
+    
+    SELECT CAN_ACCESS_COLUMN('TEST', 'USERS', 'ID');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_DATABASE('TEST');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_TABLE('TEST', 'USERS');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_VIEW('TEST', 'USER_VIEW');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(-29, -56)) - (0) + ((MYSQL_FUNC_FUNC_066_SHOW_SLAVE_0ki04z()) - (0) + ACCESS_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT mysql_tbl_a7nk3j_START_DATE, mysql_tbl_a7nk3j_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM `mysql_tbl_a7nk3j`
+    WHERE mysql_tbl_a7nk3j_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_DAYS = DATEDIFF(V_END_DATE, V_START_DATE);
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN ((MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj()) - (0) + 0);
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(79);
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(93);
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_j8o4z8_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_j8o4z8`
+    WHERE mysql_tbl_j8o4z8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88);
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - (0) + V_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(1);

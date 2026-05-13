@@ -1,0 +1,88 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p9cecd` (
+    `mysql_tbl_p9cecd_campaign_id` INT,
+    `mysql_tbl_p9cecd_status` VARCHAR(50),
+    `mysql_tbl_p9cecd_start_date` DATE,
+    `mysql_tbl_p9cecd_end_date` DATE
+);
+
+INSERT INTO `mysql_tbl_p9cecd` (`mysql_tbl_p9cecd_campaign_id`, `mysql_tbl_p9cecd_status`, `mysql_tbl_p9cecd_start_date`, `mysql_tbl_p9cecd_end_date`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zm00um` (mysql_tbl_zm00um_id INT, mysql_tbl_zm00um_status VARCHAR(20), refund_mysql_tbl_zm00um_status VARCHAR(20));
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_042_NAME_CONST_wmkco8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_042_NAME_CONST_wmkco8() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE NAME_COUNT INT DEFAULT 0;
+    
+    SELECT NAME_CONST('MYNAME', 123);
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_COLUMN_PRIVILEGES('TEST', 'USERS', 'ID');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_CREATE_OPTIONS('TEST', 'USERS');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    SELECT GET_DD_INDEX_SUB_PART_LENGTH('TEST', 'USERS', 'IDX_NAME');
+    SET NAME_COUNT = NAME_COUNT + 1;
+    
+    RETURN NAME_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(ORDER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_REFUND_STATUS VARCHAR(20);
+    SELECT mysql_tbl_zm00um_STATUS, mysql_tbl_zm00um_REFUND_STATUS INTO V_STATUS, V_REFUND_STATUS FROM `mysql_tbl_zm00um` WHERE mysql_tbl_zm00um_ID = ORDER_ID;
+    IF V_STATUS != 'DELIVERED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ONLY DELIVERED mysql_tbl_zm00um CAN BE REFUNDED';
+    END IF;
+    IF V_REFUND_STATUS = 'REFUNDED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ORDER HAS ALREADY BEEN REFUNDED';
+    END IF;
+    UPDATE `mysql_tbl_zm00um` SET mysql_tbl_zm00um_REFUND_STATUS = 'REFUNDED' WHERE mysql_tbl_zm00um_ID = ORDER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_TIME_EFFICIENCY_czmfof(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_p9cecd_STATUS, mysql_tbl_p9cecd_START_DATE, mysql_tbl_p9cecd_END_DATE
+    INTO V_STATUS, V_START_DATE, V_END_DATE
+    FROM `mysql_tbl_p9cecd`
+    WHERE mysql_tbl_p9cecd_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM `mysql_tbl_1bu9ao`
+    WHERE mysql_tbl_p9cecd_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_FUNC_042_NAME_CONST_wmkco8()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(38)) - (0) + (FLOOR((V_CONVERSION_COUNT * 100) / GREATEST(DATEDIFF(CURDATE(), V_START_DATE), 1))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_TIME_EFFICIENCY_czmfof(1);

@@ -1,0 +1,435 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ossn16` (
+    `mysql_tbl_ossn16_order_id` INT,
+    `mysql_tbl_ossn16_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_ossn16` (`mysql_tbl_ossn16_order_id`, `mysql_tbl_ossn16_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_qjaj0m` (
+    `mysql_tbl_qjaj0m_product_id` INT,
+    `mysql_tbl_qjaj0m_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_qjaj0m` (`mysql_tbl_qjaj0m_product_id`, `mysql_tbl_qjaj0m_category_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_2n01xu` (
+    `mysql_tbl_2n01xu_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_2n01xu` (`mysql_tbl_2n01xu_category_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yqr4vd` (
+    `mysql_tbl_yqr4vd_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_yqr4vd` (`mysql_tbl_yqr4vd_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5yq8wa` (
+    `mysql_tbl_5yq8wa_product_id` INT,
+    `mysql_tbl_5yq8wa_category_id` INT,
+    `mysql_tbl_5yq8wa_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_5yq8wa` (`mysql_tbl_5yq8wa_product_id`, `mysql_tbl_5yq8wa_category_id`, `mysql_tbl_5yq8wa_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6e6jnf` (
+    `mysql_tbl_6e6jnf_opportunity_id` INT,
+    `mysql_tbl_6e6jnf_customer_id` INT,
+    `mysql_tbl_6e6jnf_sales_rep_id` INT,
+    `mysql_tbl_6e6jnf_stage` INT,
+    `mysql_tbl_6e6jnf_probability_percent` INT,
+    `mysql_tbl_6e6jnf_deal_value` INT,
+    `mysql_tbl_6e6jnf_close_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yghbvr` (
+    `mysql_tbl_yghbvr_rep_id` INT,
+    `mysql_tbl_yghbvr_name` VARCHAR(50),
+    `mysql_tbl_yghbvr_quota` INT,
+    `mysql_tbl_yghbvr_territory` INT
+);
+
+INSERT INTO `mysql_tbl_6e6jnf` (`mysql_tbl_6e6jnf_opportunity_id`, `mysql_tbl_6e6jnf_customer_id`, `mysql_tbl_6e6jnf_sales_rep_id`, `mysql_tbl_6e6jnf_stage`, `mysql_tbl_6e6jnf_probability_percent`, `mysql_tbl_6e6jnf_deal_value`, `mysql_tbl_6e6jnf_close_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_yghbvr` (`mysql_tbl_yghbvr_rep_id`, `mysql_tbl_yghbvr_name`, `mysql_tbl_yghbvr_quota`, `mysql_tbl_yghbvr_territory`) VALUES (1, '2024-01-01', 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xyynwt` (
+    `mysql_tbl_xyynwt_emp_id` INT,
+    `mysql_tbl_xyynwt_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_xyynwt` (`mysql_tbl_xyynwt_emp_id`, `mysql_tbl_xyynwt_hire_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n3t5lx` (
+    `mysql_tbl_n3t5lx_order_id` INT,
+    `mysql_tbl_n3t5lx_customer_id` INT,
+    `mysql_tbl_n3t5lx_order_date` DATE,
+    `mysql_tbl_n3t5lx_total_amount` DECIMAL(10,2),
+    `mysql_tbl_n3t5lx_discount_percent` INT,
+    `mysql_tbl_n3t5lx_shipping_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ewxj6q` (
+    `mysql_tbl_ewxj6q_order_id` INT,
+    `mysql_tbl_ewxj6q_product_id` INT,
+    `mysql_tbl_ewxj6q_quantity` INT,
+    `mysql_tbl_ewxj6q_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_n3t5lx` (`mysql_tbl_n3t5lx_order_id`, `mysql_tbl_n3t5lx_customer_id`, `mysql_tbl_n3t5lx_order_date`, `mysql_tbl_n3t5lx_total_amount`, `mysql_tbl_n3t5lx_discount_percent`, `mysql_tbl_n3t5lx_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 5, 1.0);
+
+INSERT INTO `mysql_tbl_ewxj6q` (`mysql_tbl_ewxj6q_order_id`, `mysql_tbl_ewxj6q_product_id`, `mysql_tbl_ewxj6q_quantity`, `mysql_tbl_ewxj6q_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_16_VALUES_31answ----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_16_VALUES_31answ() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 16 UNION SELECT 32 UNION SELECT 48 UNION SELECT 64 UNION SELECT 80 UNION SELECT 96 UNION SELECT 112 UNION SELECT 128 UNION SELECT 144 UNION SELECT 160 UNION SELECT 176 UNION SELECT 192 UNION SELECT 208 UNION SELECT 224 UNION SELECT 240 UNION SELECT 256;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_2n01xu`
+    WHERE mysql_tbl_2n01xu_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_COST_kq8dsn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_COST_kq8dsn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(MONTHLY_COST, 0)
+    INTO V_COST
+    FROM `mysql_tbl_yqr4vd`
+    WHERE mysql_tbl_yqr4vd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COST;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_COST_kq8dsn(69)) - (0) + CATEGORY_ID_PARAM % 50);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_AMOUNT_TIER_skjf3e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_AMOUNT_TIER_skjf3e(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AMOUNT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_ossn16_TOTAL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM `mysql_tbl_ossn16`
+    WHERE mysql_tbl_ossn16_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT > 1000 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - (0) + 5);
+    ELSEIF V_AMOUNT > 500 THEN
+        RETURN 4;
+    ELSEIF V_AMOUNT > 200 THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_16_VALUES_31answ()) - (0) + 3);
+    ELSEIF V_AMOUNT > 100 THEN
+        RETURN ((MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(83)) - (0) + 2);
+    ELSE
+        RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(-16)) - (0) + 1);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_NET_PROFIT INT DEFAULT 0;
+    DECLARE V_MARGIN_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_ewxj6q_QUANTITY * mysql_tbl_ewxj6q_UNIT_PRICE), 0), COALESCE(mysql_tbl_n3t5lx_DISCOUNT_PERCENT, 0), COALESCE(mysql_tbl_n3t5lx_SHIPPING_COST, 0)
+    INTO V_SUBTOTAL, V_DISCOUNT_PERCENT, V_SHIPPING_COST
+    FROM `mysql_tbl_ewxj6q` OI
+    JOIN `mysql_tbl_n3t5lx` O ON mysql_tbl_ewxj6q_ORDER_ID = mysql_tbl_n3t5lx_ORDER_ID
+    WHERE mysql_tbl_n3t5lx_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT_PERCENT = COALESCE(
+        (SELECT mysql_tbl_n3t5lx_DISCOUNT_PERCENT FROM `mysql_tbl_n3t5lx` WHERE mysql_tbl_n3t5lx_ORDER_ID = ORDER_ID_PARAM), 0
+    );
+
+    SET V_TOTAL_COST = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT_PERCENT / 100) + V_SHIPPING_COST;
+
+    SELECT COALESCE(mysql_tbl_n3t5lx_TOTAL_AMOUNT, 0) - V_TOTAL_COST
+    INTO V_NET_PROFIT
+    FROM `mysql_tbl_n3t5lx`
+    WHERE mysql_tbl_n3t5lx_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARGIN_PERCENT = (V_NET_PROFIT * 100) / V_TOTAL_COST;
+
+    RETURN V_MARGIN_PERCENT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FIB_0 INT DEFAULT 0;
+    DECLARE V_FIB_1 INT DEFAULT 1;
+    DECLARE V_FIB_N INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N = 0 THEN RETURN 0; END IF;
+    IF N = 1 THEN RETURN 1; END IF;
+
+    SET V_COUNTER = 2;
+
+    FIB_LOOP: WHILE V_COUNTER <= N DO
+        SET V_TEMP = V_FIB_1;
+        SET V_FIB_1 = V_FIB_0 + V_FIB_1;
+        SET V_FIB_0 = V_TEMP;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FIB_LOOP;
+
+    RETURN V_FIB_1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(mysql_tbl_xyynwt_HIRE_DATE)
+    INTO V_MONTH
+    FROM `mysql_tbl_xyynwt`
+    WHERE mysql_tbl_xyynwt_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_OPPORTUNITY_WEIGHT_1kf26c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OPPORTUNITY_WEIGHT_1kf26c(OPPORTUNITY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PROBABILITY INT DEFAULT 0;
+    DECLARE V_DEAL_VALUE INT DEFAULT 0;
+    DECLARE V_DAYS_TO_CLOSE INT DEFAULT 0;
+    DECLARE V_WEIGHT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_6e6jnf_PROBABILITY_PERCENT, 0), COALESCE(mysql_tbl_6e6jnf_DEAL_VALUE, 0), DATEDIFF(mysql_tbl_6e6jnf_CLOSE_DATE, CURDATE())
+    INTO V_PROBABILITY, V_DEAL_VALUE, V_DAYS_TO_CLOSE
+    FROM `mysql_tbl_6e6jnf`
+    WHERE mysql_tbl_6e6jnf_OPPORTUNITY_ID = OPPORTUNITY_ID_PARAM;
+
+    SET V_WEIGHT_SCORE = MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(-21);
+
+    IF V_DAYS_TO_CLOSE < 0 THEN
+        SET V_WEIGHT_SCORE = V_WEIGHT_SCORE - 50;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(37)) - (0) + (((MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5(75)) - (0) + (CAST(V_WEIGHT_SCORE AS SIGNED)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_5yq8wa_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_5yq8wa`
+    WHERE mysql_tbl_5yq8wa_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h()) - (0) + (((MYSQL_FUNC_CALCULATE_OPPORTUNITY_WEIGHT_1kf26c(-56)) - (0) + (FLOOR(V_AVG_PRICE)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ADD COLUMN PHONE VARCHAR(20);
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN AGE INT AFTER NAME;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ADD COLUMN FIRST_NAME VARCHAR(50) FIRST;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(79)) - (0) + ALTER_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DISCOUNT_CHECK_iefhl1(ORIGINAL_PRICE INT, DISCOUNT_PERCENT INT) RETURNS DECIMAL(10,2) DETERMINISTIC
+BEGIN
+    IF ORIGINAL_PRICE < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'ORIGINAL PRICE CANNOT BE NEGATIVE';
+    END IF;
+    IF DISCOUNT_PERCENT < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'DISCOUNT CANNOT BE NEGATIVE';
+    END IF;
+    IF DISCOUNT_PERCENT > 100 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'DISCOUNT CANNOT EXCEED 100 PERCENT';
+    END IF;
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_AMOUNT_TIER_skjf3e(-34)) - (0) + (((MYSQL_FUNC_FUNC_119_ALTER_ADD_COL_wjx3rb()) - (0) + (ORIGINAL_PRICE * (1 - DISCOUNT_PERCENT / 100)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_SIGNAL_FUNC_DISCOUNT_CHECK_iefhl1(1, 1);

@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_w81arz` (
+    `table_w81arz_customer_id` INT,
+    `table_w81arz_country` INT
+);
+
+INSERT INTO `table_w81arz` (`table_w81arz_customer_id`, `table_w81arz_country`) VALUES (1, 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMERS_vsbrj6(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_W81ARZ
+    WHERE TABLE_W81ARZ_COUNTRY = COUNTRY_PARAM
+      AND REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;

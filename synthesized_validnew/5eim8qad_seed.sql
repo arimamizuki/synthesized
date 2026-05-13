@@ -1,0 +1,52 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_sh1ogy` (
+    `table_sh1ogy_product_id` INT,
+    `table_sh1ogy_category_id` INT,
+    `table_sh1ogy_price` DECIMAL(10,2),
+    `table_sh1ogy_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrv6cm` (
+    `table_wrv6cm_supplier_id` INT,
+    `table_wrv6cm_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_sh1ogy` (`table_sh1ogy_product_id`, `table_sh1ogy_category_id`, `table_sh1ogy_price`, `table_sh1ogy_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_wrv6cm` (`table_wrv6cm_supplier_id`, `table_wrv6cm_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_SUPPLIER_RATIO_p5k6dh(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WRV6CM_SUPPLIER_RATING, 3.0)
+    INTO V_SUPPLIER_RATING
+    FROM TABLE_WRV6CM
+    WHERE TABLE_WRV6CM_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_SH1OGY
+    WHERE TABLE_WRV6CM_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_PRODUCTS
+    FROM TABLE_SH1OGY
+    WHERE TABLE_WRV6CM_SUPPLIER_ID = SUPPLIER_ID_PARAM AND TABLE_SH1OGY_PRICE > 150;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_PRODUCTS * 100) / V_TOTAL_PRODUCTS + FLOOR(V_SUPPLIER_RATING * 10);
+
+    RETURN V_PREMIUM_RATIO;
+END //
+
+DELIMITER ;

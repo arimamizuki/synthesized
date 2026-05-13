@@ -1,0 +1,54 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_mfjr4x` (
+    `table_mfjr4x_product_id` INT,
+    `table_mfjr4x_category_id` INT,
+    `table_mfjr4x_price` DECIMAL(10,2),
+    `table_mfjr4x_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_kkcbbw` (
+    `table_kkcbbw_category_id` INT,
+    `table_kkcbbw_name` VARCHAR(50)
+);
+
+INSERT INTO `table_mfjr4x` (`table_mfjr4x_product_id`, `table_mfjr4x_category_id`, `table_mfjr4x_price`, `table_mfjr4x_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_kkcbbw` (`table_kkcbbw_category_id`, `table_kkcbbw_name`) VALUES (1, 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_SEASONALITY_INDEX_jj8kis(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_SEASONAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ANNUAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SEASONALITY_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(OI.QUANTITY), 0)
+    INTO V_SEASONAL_AVG
+    FROM ORDER_ITEMS OI
+    JOIN ORDERS O ON OI.ORDER_ID = O.ORDER_ID
+    JOIN TABLE_MFJR4X P ON OI.PRODUCT_ID = TABLE_MFJR4X_PRODUCT_ID
+    WHERE TABLE_MFJR4X_CATEGORY_ID = CATEGORY_ID_PARAM
+    AND MONTH(O.ORDER_DATE) = V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(QUANTITY), 0)
+    INTO V_ANNUAL_AVG
+    FROM ORDER_ITEMS OI
+    JOIN TABLE_MFJR4X P ON OI.PRODUCT_ID = TABLE_MFJR4X_PRODUCT_ID
+    WHERE TABLE_MFJR4X_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_ANNUAL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_SEASONALITY_INDEX = (V_SEASONAL_AVG * 100) / V_ANNUAL_AVG;
+
+    RETURN V_SEASONALITY_INDEX;
+END //
+
+DELIMITER ;

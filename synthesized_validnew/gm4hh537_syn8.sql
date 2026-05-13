@@ -1,0 +1,284 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tr5j10` (
+    `mysql_tbl_tr5j10_campaign_id` INT,
+    `mysql_tbl_tr5j10_status` VARCHAR(50),
+    `mysql_tbl_tr5j10_budget` INT
+);
+
+INSERT INTO `mysql_tbl_tr5j10` (`mysql_tbl_tr5j10_campaign_id`, `mysql_tbl_tr5j10_status`, `mysql_tbl_tr5j10_budget`) VALUES (1, 'test', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j56vvl` (
+    `mysql_tbl_j56vvl_category_id` INT,
+    `mysql_tbl_j56vvl_price` DECIMAL(10,2),
+    `mysql_tbl_j56vvl_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_j56vvl` (`mysql_tbl_j56vvl_category_id`, `mysql_tbl_j56vvl_price`, `mysql_tbl_j56vvl_stock_quantity`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_th9kik` (
+    `mysql_tbl_th9kik_department_id` INT,
+    `mysql_tbl_th9kik_salary` INT
+);
+
+INSERT INTO `mysql_tbl_th9kik` (`mysql_tbl_th9kik_department_id`, `mysql_tbl_th9kik_salary`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j5kw4g` (
+    `mysql_tbl_j5kw4g_campaign_id` INT,
+    `mysql_tbl_j5kw4g_channel` INT,
+    `mysql_tbl_j5kw4g_budget` INT
+);
+
+INSERT INTO `mysql_tbl_j5kw4g` (`mysql_tbl_j5kw4g_campaign_id`, `mysql_tbl_j5kw4g_channel`, `mysql_tbl_j5kw4g_budget`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ebkq9j` (
+    `mysql_tbl_ebkq9j_emp_id` INT,
+    `mysql_tbl_ebkq9j_manager_id` INT
+);
+
+INSERT INTO `mysql_tbl_ebkq9j` (`mysql_tbl_ebkq9j_emp_id`, `mysql_tbl_ebkq9j_manager_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_czwzz1` (
+    `mysql_tbl_czwzz1_product_id` INT,
+    `mysql_tbl_czwzz1_category_id` INT,
+    `mysql_tbl_czwzz1_price` DECIMAL(10,2),
+    `mysql_tbl_czwzz1_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_czwzz1` (`mysql_tbl_czwzz1_product_id`, `mysql_tbl_czwzz1_category_id`, `mysql_tbl_czwzz1_price`, `mysql_tbl_czwzz1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_WHILE_wirvjs----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_WHILE_wirvjs() RETURNS INT DETERMINISTIC
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE JSON_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_REMOVE('{"A": 1, "B": 2}', '$.A');
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_SET('{"A": 1}', '$.B', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_INSERT('{"A": 1}', '$.B', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_REPLACE('{"A": 1}', '$.A', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    SELECT JSON_ARRAY_APPEND('{"A": [1]}', '$.A', 2);
+    SET JSON_COUNT = JSON_COUNT + 1;
+    
+    RETURN JSON_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW CREATE TABLE USERS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE DATABASE TEST;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE VIEW USER_VIEW;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW CREATE TRIGGER TRG_USERS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_023_JSON_MODIFY_je0cfg()) - (0) + SHOW_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STOCK_TURNOVER_INDEX_exz3yr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_TURNOVER_INDEX_exz3yr(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_30D_SALES DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_czwzz1_STOCK_QUANTITY, 1)
+    INTO V_STOCK
+    FROM `mysql_tbl_czwzz1`
+    WHERE mysql_tbl_czwzz1_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(QUANTITY), 0)
+    INTO V_30D_SALES
+    FROM `mysql_tbl_i7yskr`
+    WHERE mysql_tbl_czwzz1_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM `mysql_tbl_7dj4lx` WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_30D_SALES / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_HIERARCHY_LEVEL_4b41hh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIERARCHY_LEVEL_4b41hh(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEVEL INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT EMP_ID_PARAM;
+
+    WHILE V_CURRENT_ID IS NOT NULL DO
+        SET V_LEVEL = V_LEVEL + 1;
+        SELECT mysql_tbl_ebkq9j_MANAGER_ID INTO V_CURRENT_ID FROM `mysql_tbl_ebkq9j` WHERE mysql_tbl_ebkq9j_EMP_ID = V_CURRENT_ID;
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_STOCK_TURNOVER_INDEX_exz3yr(19)) - (0) + V_LEVEL);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_th9kik_SALARY), 0)
+    INTO V_AVG
+    FROM `mysql_tbl_th9kik`
+    WHERE mysql_tbl_th9kik_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_q37jyn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_q37jyn(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SALES_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_j56vvl_PRICE * mysql_tbl_j56vvl_STOCK_QUANTITY), 0)
+    INTO V_STOCK_VALUE
+    FROM `mysql_tbl_j56vvl`
+    WHERE mysql_tbl_j56vvl_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(OI.QUANTITY * OI.UNIT_PRICE), 0)
+    INTO V_SALES_VALUE
+    FROM `mysql_tbl_i7yskr` OI
+    JOIN `mysql_tbl_j56vvl` P ON OI.PRODUCT_ID = P.PRODUCT_ID
+    WHERE mysql_tbl_j56vvl_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_STOCK_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_SALES_VALUE * 12) / V_STOCK_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_j5kw4g_CHANNEL, COALESCE(mysql_tbl_j5kw4g_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM `mysql_tbl_j5kw4g`
+    WHERE mysql_tbl_j5kw4g_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM `mysql_tbl_711t1u`
+    WHERE mysql_tbl_j5kw4g_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN RETURN FLOOR((V_REVENUE * 2) / V_BUDGET);
+        WHEN 'ORGANIC' THEN RETURN FLOOR(V_REVENUE / V_BUDGET * 3);
+        WHEN 'SOCIAL' THEN RETURN FLOOR((V_REVENUE * 150) / V_BUDGET);
+        ELSE RETURN FLOOR(V_REVENUE / V_BUDGET);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AD_SPEND_EFFICIENCY_avwcx0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AD_SPEND_EFFICIENCY_avwcx0(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+
+    SELECT mysql_tbl_tr5j10_STATUS, COALESCE(mysql_tbl_tr5j10_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM `mysql_tbl_tr5j10`
+    WHERE mysql_tbl_tr5j10_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM `mysql_tbl_711t1u`
+    WHERE mysql_tbl_tr5j10_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_BUDGET = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_q37jyn(29)) - (((MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(78)) - (((MYSQL_FUNC_CALCULATE_CHANNEL_EFFICIENCY_RATIO_7wtzlm(98)) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIERARCHY_LEVEL_4b41hh(-40)) - (0) + ((V_CONVERSIONS * 100) / V_BUDGET));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_WHILE_wirvjs()) - (((MYSQL_FUNC_CALCULATE_AD_SPEND_EFFICIENCY_avwcx0(-33)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = MYSQL_FUNC_FUNC_063_SHOW_CREATE_ys1jch();
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(1, 1, 1);

@@ -1,0 +1,320 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_cr6xe4` (
+    `mysql_tbl_cr6xe4_product_id` INT,
+    `mysql_tbl_cr6xe4_category_id` INT,
+    `mysql_tbl_cr6xe4_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_me8vwd` (
+    `mysql_tbl_me8vwd_category_id` INT,
+    `mysql_tbl_me8vwd_name` VARCHAR(50),
+    `mysql_tbl_me8vwd_parent_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_cr6xe4` (`mysql_tbl_cr6xe4_product_id`, `mysql_tbl_cr6xe4_category_id`, `mysql_tbl_cr6xe4_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_me8vwd` (`mysql_tbl_me8vwd_category_id`, `mysql_tbl_me8vwd_name`, `mysql_tbl_me8vwd_parent_category_id`) VALUES (1, 'test', 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s6fvqp` (
+    `mysql_tbl_s6fvqp_customer_id` INT,
+    `mysql_tbl_s6fvqp_country` INT
+);
+
+INSERT INTO `mysql_tbl_s6fvqp` (`mysql_tbl_s6fvqp_customer_id`, `mysql_tbl_s6fvqp_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zbar8i` (mysql_tbl_zbar8i_id INT, mysql_tbl_zbar8i_weight_kg DECIMAL(5,2), mysql_tbl_zbar8i_zone VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7yy34x` (
+    `mysql_tbl_7yy34x_campaign_id` INT
+);
+
+INSERT INTO `mysql_tbl_7yy34x` (`mysql_tbl_7yy34x_campaign_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ekg8ls` (
+    `mysql_tbl_ekg8ls_campaign_id` INT,
+    `mysql_tbl_ekg8ls_start_date` DATE,
+    `mysql_tbl_ekg8ls_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ekg8ls` (`mysql_tbl_ekg8ls_campaign_id`, `mysql_tbl_ekg8ls_start_date`, `mysql_tbl_ekg8ls_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rqh5bx` (
+    `mysql_tbl_rqh5bx_product_id` INT,
+    `mysql_tbl_rqh5bx_category_id` INT,
+    `mysql_tbl_rqh5bx_price` DECIMAL(10,2),
+    `mysql_tbl_rqh5bx_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_rqh5bx` (`mysql_tbl_rqh5bx_product_id`, `mysql_tbl_rqh5bx_category_id`, `mysql_tbl_rqh5bx_price`, `mysql_tbl_rqh5bx_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT mysql_tbl_ekg8ls_START_DATE, mysql_tbl_ekg8ls_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM `mysql_tbl_ekg8ls`
+    WHERE mysql_tbl_ekg8ls_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF A <= 0 OR B <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    UNTIL B = 0 END REPEAT;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_URGENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_rqh5bx_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_rqh5bx`
+    WHERE mysql_tbl_rqh5bx_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM `mysql_tbl_udtoo3`
+    WHERE mysql_tbl_rqh5bx_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM `mysql_tbl_7hpod7` WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_AVG_DAILY_SALES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_URGENCY_SCORE = V_STOCK / V_AVG_DAILY_SALES;
+
+    RETURN V_URGENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE AC_COUNT INT DEFAULT 0;
+    
+    ANALYZE TABLE mysql_tbl_h4co24;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    CHECK TABLE mysql_tbl_h4co24;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    CHECKSUM TABLE mysql_tbl_h4co24;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    OPTIMIZE TABLE mysql_tbl_h4co24;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    REPAIR TABLE mysql_tbl_h4co24;
+    SET AC_COUNT = AC_COUNT + 1;
+    
+    RETURN AC_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    SET V_MAX = MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88);
+    IF B > V_MAX THEN SET V_MAX = MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc(-99); END IF;
+    IF C > V_MAX THEN SET V_MAX = MYSQL_FUNC_FUNC_054_ANALYZE_CHECK_i7flnu(); END IF;
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(13, -95)) - (0) + V_MAX);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT_5jgduu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT_5jgduu(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_przpfh`
+    WHERE mysql_tbl_7yy34x_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP TRIGGER TRG_BEFORE_INSERT;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP TRIGGER IF EXISTS TRG_AFTER_UPDATE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CALC_SHIPPING_n6ttnj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CALC_SHIPPING_n6ttnj(ORDER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_WEIGHT DECIMAL(5,2);
+    DECLARE V_ZONE VARCHAR(20);
+    SELECT mysql_tbl_zbar8i_WEIGHT_KG, mysql_tbl_zbar8i_ZONE INTO V_WEIGHT, V_ZONE FROM `mysql_tbl_zbar8i` WHERE mysql_tbl_zbar8i_ID = ORDER_ID;
+    IF V_WEIGHT <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'WEIGHT MUST BE POSITIVE';
+    END IF;
+    IF V_ZONE NOT IN ('LOCAL', 'REGIONAL', 'NATIONAL', 'INTERNATIONAL') THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'INVALID mysql_tbl_zbar8i mysql_tbl_zbar8i_ZONE';
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOP_PRODUCTS_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONCENTRATION_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM `mysql_tbl_cr6xe4`
+    WHERE mysql_tbl_cr6xe4_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_cr6xe4_PRICE), 0)
+    INTO V_TOP_PRODUCTS_VALUE
+    FROM (
+        SELECT mysql_tbl_cr6xe4_PRICE FROM `mysql_tbl_cr6xe4`
+        WHERE mysql_tbl_cr6xe4_CATEGORY_ID = CATEGORY_ID_PARAM
+        ORDER BY mysql_tbl_cr6xe4_PRICE DESC
+        LIMIT 3
+    ) TOP_PRODUCTS;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN ((MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(-36, 16, -81)) - (((MYSQL_FUNC_SIGNAL_PROC_CALC_SHIPPING_n6ttnj(65)) - (((MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_COUNT_5jgduu(-45)) - (((MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(58)) - (0) + 0)) + 0)) + 0)) + 0);
+    END IF;
+
+    SET V_CONCENTRATION_RATIO = MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn();
+
+    RETURN FLOOR(V_CONCENTRATION_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBSCRIBED INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT S.CUSTOMER_ID)
+    INTO V_SUBSCRIBED
+    FROM SUBSCRIPTIONS S
+    JOIN `mysql_tbl_s6fvqp` C ON S.CUSTOMER_ID = mysql_tbl_s6fvqp_CUSTOMER_ID
+    WHERE mysql_tbl_s6fvqp_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_SUBSCRIBED;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    
+    CREATE VIEW ACTIVE_USERS AS SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_h4co24` WHERE STATUS = 'ACTIVE';
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    CREATE OR REPLACE VIEW USER_SUMMARY AS SELECT ID, NAME, EMAIL INTO @mysql_synth_dummy FROM `mysql_tbl_h4co24`;
+    SET VIEW_COUNT = VIEW_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(-30)) - (0) + ((MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_INDEX_pr8gj9(69)) - (0) + VIEW_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_112_CREATE_VIEW_wvm856();

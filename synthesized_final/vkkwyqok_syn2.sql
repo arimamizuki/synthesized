@@ -1,0 +1,259 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lzq9lf` (
+    `mysql_tbl_lzq9lf_customer_id` INT,
+    `mysql_tbl_lzq9lf_country` INT
+);
+
+INSERT INTO `mysql_tbl_lzq9lf` (`mysql_tbl_lzq9lf_customer_id`, `mysql_tbl_lzq9lf_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9e2322` (
+    `mysql_tbl_9e2322_supplier_id` INT,
+    `mysql_tbl_9e2322_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_9e2322` (`mysql_tbl_9e2322_supplier_id`, `mysql_tbl_9e2322_supplier_rating`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n442ou` (
+    `mysql_tbl_n442ou_category_id` INT,
+    `mysql_tbl_n442ou_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_n442ou` (`mysql_tbl_n442ou_category_id`, `mysql_tbl_n442ou_price`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_srdo8p` (
+    `mysql_tbl_srdo8p_campaign_id` INT,
+    `mysql_tbl_srdo8p_start_date` DATE,
+    `mysql_tbl_srdo8p_end_date` DATE
+);
+
+INSERT INTO `mysql_tbl_srdo8p` (`mysql_tbl_srdo8p_campaign_id`, `mysql_tbl_srdo8p_start_date`, `mysql_tbl_srdo8p_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_842dyl` (
+    `mysql_tbl_842dyl_vec` INT
+);
+
+INSERT INTO `mysql_tbl_842dyl` (`mysql_tbl_842dyl_vec`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5he9bv` (
+    `mysql_tbl_5he9bv_emp_id` INT,
+    `mysql_tbl_5he9bv_salary` INT,
+    `mysql_tbl_5he9bv_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_5he9bv` (`mysql_tbl_5he9bv_emp_id`, `mysql_tbl_5he9bv_salary`, `mysql_tbl_5he9bv_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT mysql_tbl_srdo8p_START_DATE, mysql_tbl_srdo8p_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM `mysql_tbl_srdo8p`
+    WHERE mysql_tbl_srdo8p_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(V_END_DATE, V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_n442ou_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_n442ou`
+    WHERE mysql_tbl_n442ou_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_007_VARIABLE_OPS_tdf78n----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_007_VARIABLE_OPS_tdf78n() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE VAR_COUNT INT DEFAULT 0;
+    DECLARE VAR1 INT;
+    DECLARE VAR2 VARCHAR(100);
+    
+    SET @VAR1 = 100;
+    SET VAR_COUNT = VAR_COUNT + 1;
+    
+    SELECT @VAR1 INTO VAR1;
+    SET VAR_COUNT = VAR_COUNT + 1;
+    
+    SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS FULL_NAME INTO @mysql_synth_dummy FROM `mysql_tbl_kbo8pl`;
+    SET VAR_COUNT = VAR_COUNT + 1;
+    
+    SELECT UPPER(NAME) INTO @mysql_synth_dummy FROM `mysql_tbl_wjr13v`;
+    SET VAR_COUNT = VAR_COUNT + 1;
+    
+    SELECT LOWER(EMAIL) INTO @mysql_synth_dummy FROM `mysql_tbl_wjr13v`;
+    SET VAR_COUNT = VAR_COUNT + 1;
+    
+    RETURN VAR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE mysql_tbl_wjr13v AUTO_INCREMENT = 1000;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_wjr13v CHARACTER SET UTF8MB4 COLLATE UTF8MB4_UNICODE_CI;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_wjr13v COMMENT = 'USER INFORMATION TABLE';
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE mysql_tbl_wjr13v ALGORITHM = INPLACE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_wjr13v ALGORITHM = COPY;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE mysql_tbl_wjr13v LOCK = NONE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_9e2322_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM `mysql_tbl_9e2322`
+    WHERE mysql_tbl_9e2322_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42()) - (0) + (FLOOR(V_RATING * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(5)) - (((MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(-61)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_S = MYSQL_FUNC_FUNC_124_ALTER_OPTIONS_vd1i01();
+    SET V_AREA = MYSQL_FUNC_FUNC_007_VARIABLE_OPS_tdf78n();
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(73)) - (0) + (FLOOR(V_AREA)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_5he9bv_SALARY, 0), TIMESTAMPDIFF(YEAR, mysql_tbl_5he9bv_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE
+    FROM `mysql_tbl_5he9bv`
+    WHERE mysql_tbl_5he9bv_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR((V_SALARY * V_TENURE) / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT mysql_tbl_842dyl_VEC INTO RESULT FROM `mysql_tbl_842dyl` LIMIT 1;
+    RETURN ((MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(50)) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_lzq9lf`
+    WHERE mysql_tbl_lzq9lf_COUNTRY = COUNTRY_PARAM;
+
+    RETURN ((MYSQL_FUNC_PROC_VECTOR_nlaylc()) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE VAL
+        WHEN 1 THEN RETURN 'ONE';
+        WHEN 2 THEN RETURN 'TWO';
+        WHEN 3 THEN RETURN MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(-43, 9, 94);
+        ELSE RETURN MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(29);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(1);

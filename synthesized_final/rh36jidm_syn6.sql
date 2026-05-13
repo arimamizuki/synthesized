@@ -1,0 +1,71 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_pxl592` (
+    `mysql_tbl_pxl592_product_id` INT,
+    `mysql_tbl_pxl592_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_pxl592` (`mysql_tbl_pxl592_product_id`, `mysql_tbl_pxl592_price`) VALUES (1, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SHOW_COUNT INT DEFAULT 0;
+    
+    SHOW ENGINES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW ENGINE INNODB STATUS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW PLUGINS;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    SHOW PROFILES;
+    SET SHOW_COUNT = SHOW_COUNT + 1;
+    
+    RETURN SHOW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_pxl592_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_pxl592`
+    WHERE mysql_tbl_pxl592_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_FUNC_065_SHOW_ENGINE_zmg568()) - (0) + (FLOOR(V_PRICE)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2027_0b7rmo()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+    RETURN 0;
+
+    SELECT 27 INTO V_RESULT FROM (SELECT 1) T;
+
+    SELECT MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(-9) //
+END
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+CALL MYSQL_FUNC_FUNC_2027_0b7rmo();

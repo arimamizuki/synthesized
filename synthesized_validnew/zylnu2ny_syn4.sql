@@ -1,0 +1,246 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mja318` (
+    `mysql_tbl_mja318_customer_id` INT,
+    `mysql_tbl_mja318_registration_date` DATE,
+    `mysql_tbl_mja318_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_itkw88` (
+    `mysql_tbl_itkw88_order_id` INT,
+    `mysql_tbl_itkw88_customer_id` INT,
+    `mysql_tbl_itkw88_order_date` DATE,
+    `mysql_tbl_itkw88_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_mja318` (`mysql_tbl_mja318_customer_id`, `mysql_tbl_mja318_registration_date`, `mysql_tbl_mja318_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_itkw88` (`mysql_tbl_itkw88_order_id`, `mysql_tbl_itkw88_customer_id`, `mysql_tbl_itkw88_order_date`, `mysql_tbl_itkw88_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c96fuw` (
+    `mysql_tbl_c96fuw_cdouble` INT
+);
+
+INSERT INTO `mysql_tbl_c96fuw` (`mysql_tbl_c96fuw_cdouble`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g1r1tk` (
+    `mysql_tbl_g1r1tk_sale_id` INT,
+    `mysql_tbl_g1r1tk_product_id` INT,
+    `mysql_tbl_g1r1tk_quantity` INT,
+    `mysql_tbl_g1r1tk_sale_date` DATE,
+    `mysql_tbl_g1r1tk_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_g1r1tk` (`mysql_tbl_g1r1tk_sale_id`, `mysql_tbl_g1r1tk_product_id`, `mysql_tbl_g1r1tk_quantity`, `mysql_tbl_g1r1tk_sale_date`, `mysql_tbl_g1r1tk_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_6o7t01` (
+    `mysql_tbl_6o7t01_emp_id` INT,
+    `mysql_tbl_6o7t01_department_id` INT,
+    `mysql_tbl_6o7t01_salary` INT
+);
+
+INSERT INTO `mysql_tbl_6o7t01` (`mysql_tbl_6o7t01_emp_id`, `mysql_tbl_6o7t01_department_id`, `mysql_tbl_6o7t01_salary`) VALUES (1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_084_REVOKE_3ta1op----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_084_REVOKE_3ta1op() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE REVOKE_COUNT INT DEFAULT 0;
+    
+    REVOKE SELECT ON TEST.* INTO @mysql_synth_dummy FROM 'USER1'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE ALL PRIVILEGES ON TEST.USERS FROM 'USER2'@'%';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    REVOKE INSERT ON TEST.ORDERS FROM 'USER3'@'LOCALHOST';
+    SET REVOKE_COUNT = REVOKE_COUNT + 1;
+    
+    RETURN REVOKE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MAX(mysql_tbl_6o7t01_SALARY), 0)
+    INTO V_MAX_SALARY
+    FROM `mysql_tbl_6o7t01`
+    WHERE mysql_tbl_6o7t01_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_MAX_SALARY / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(START_DATE_PARAM INT, END_DATE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUSINESS_DAYS INT DEFAULT 0;
+    DECLARE V_CURRENT_DATE DATE DEFAULT NULL;
+    DECLARE V_DAY_OF_WEEK INT DEFAULT 0;
+
+    IF START_DATE_PARAM IS NULL OR END_DATE_PARAM IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF START_DATE_PARAM > END_DATE_PARAM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_DATE = START_DATE_PARAM;
+
+    BUSINESS_DAYS_LOOP: WHILE V_CURRENT_DATE <= END_DATE_PARAM DO
+        SET V_DAY_OF_WEEK = DAYOFWEEK(V_CURRENT_DATE);
+
+        IF V_DAY_OF_WEEK NOT IN (1, 7) THEN
+            SET V_BUSINESS_DAYS = V_BUSINESS_DAYS + 1;
+        END IF;
+
+        SET V_CURRENT_DATE = DATE_ADD(V_CURRENT_DATE, INTERVAL 1 DAY);
+    END WHILE BUSINESS_DAYS_LOOP;
+
+    RETURN V_BUSINESS_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_g1r1tk_QUANTITY * mysql_tbl_g1r1tk_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM `mysql_tbl_g1r1tk`
+    WHERE YEAR(mysql_tbl_g1r1tk_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(-15, 74)) - (((MYSQL_FUNC_FUNC_084_REVOKE_3ta1op()) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(53)) - (0) + V_TOTAL_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(mysql_tbl_c96fuw_CDOUBLE) INTO RESULT FROM `mysql_tbl_c96fuw`;
+    RETURN ((MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(99)) - (0) + RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_089_CREATE_ROLE_x81vma----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_089_CREATE_ROLE_x81vma() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ROLE_COUNT INT DEFAULT 0;
+    
+    CREATE ROLE 'ADMIN';
+    SET ROLE_COUNT = ROLE_COUNT + 1;
+    
+    CREATE ROLE IF NOT EXISTS 'READONLY';
+    SET ROLE_COUNT = ROLE_COUNT + 1;
+    
+    GRANT SELECT ON TEST.* TO 'READONLY';
+    SET ROLE_COUNT = ROLE_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - (0) + ((MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - (0) + ROLE_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REVENUE_PER_DAY_ksn8st(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DAYS_ACTIVE INT DEFAULT 0;
+    DECLARE V_REVENUE_PER_DAY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_itkw88_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM `mysql_tbl_itkw88`
+    WHERE mysql_tbl_itkw88_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    SELECT DATEDIFF(CURDATE(), MIN(mysql_tbl_itkw88_ORDER_DATE))
+    INTO V_DAYS_ACTIVE
+    FROM `mysql_tbl_itkw88`
+    WHERE mysql_tbl_itkw88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_DAYS_ACTIVE = 0 THEN
+        RETURN ((MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(29, 20)) - (0) + 0);
+    END IF;
+
+    SET V_REVENUE_PER_DAY = MYSQL_FUNC_FUNC_089_CREATE_ROLE_x81vma();
+
+    RETURN FLOOR(V_REVENUE_PER_DAY);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_REVENUE_PER_DAY_ksn8st(1);

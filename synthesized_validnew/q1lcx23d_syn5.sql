@@ -1,0 +1,487 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p1ia2l` (
+    mysql_tbl_p1ia2l_item_id INT,
+    mysql_tbl_p1ia2l_quantity INT
+);
+
+INSERT INTO `mysql_tbl_p1ia2l` (`mysql_tbl_p1ia2l_item_id`, `mysql_tbl_p1ia2l_quantity`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_39a6hg` (
+    `mysql_tbl_39a6hg_cbigint` BIGINT
+);
+
+INSERT INTO `mysql_tbl_39a6hg` (`mysql_tbl_39a6hg_cbigint`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sdp3vq` (mysql_tbl_sdp3vq_id INT, mysql_tbl_sdp3vq_status VARCHAR(20), mysql_tbl_sdp3vq_end_date DATE);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3pt1qx` (
+    mysql_tbl_3pt1qx_produto_id INT,
+    mysql_tbl_3pt1qx_Quantidade_produto INT
+);
+
+INSERT INTO `mysql_tbl_3pt1qx` (`mysql_tbl_3pt1qx_produto_id`, `mysql_tbl_3pt1qx_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO `mysql_tbl_3pt1qx` (`mysql_tbl_3pt1qx_produto_id`, `mysql_tbl_3pt1qx_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO `mysql_tbl_3pt1qx` (`mysql_tbl_3pt1qx_produto_id`, `mysql_tbl_3pt1qx_Quantidade_produto`) VALUES (3, 0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x5ula0` (
+    `mysql_tbl_x5ula0_supplier_id` INT,
+    `mysql_tbl_x5ula0_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_x5ula0` (`mysql_tbl_x5ula0_supplier_id`, `mysql_tbl_x5ula0_lead_time_days`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5r7hdp` (
+    `mysql_tbl_5r7hdp_campaign_id` INT,
+    `mysql_tbl_5r7hdp_budget` INT
+);
+
+INSERT INTO `mysql_tbl_5r7hdp` (`mysql_tbl_5r7hdp_campaign_id`, `mysql_tbl_5r7hdp_budget`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ipm95g` (
+    `mysql_tbl_ipm95g_product_id` INT,
+    `mysql_tbl_ipm95g_category_id` INT,
+    `mysql_tbl_ipm95g_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ecxtw2` (
+    `mysql_tbl_ecxtw2_category_id` INT,
+    `mysql_tbl_ecxtw2_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_ipm95g` (`mysql_tbl_ipm95g_product_id`, `mysql_tbl_ipm95g_category_id`, `mysql_tbl_ipm95g_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_ecxtw2` (`mysql_tbl_ecxtw2_category_id`, `mysql_tbl_ecxtw2_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vskbqz` (
+    `mysql_tbl_vskbqz_restaurant_id` INT,
+    `mysql_tbl_vskbqz_cuisine_type` VARCHAR(50),
+    `mysql_tbl_vskbqz_average_price` DECIMAL(10,2),
+    `mysql_tbl_vskbqz_rating` DECIMAL(3,1),
+    `mysql_tbl_vskbqz_delivery_radius_miles` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wc8fyx` (
+    `mysql_tbl_wc8fyx_order_id` INT,
+    `mysql_tbl_wc8fyx_restaurant_id` INT,
+    `mysql_tbl_wc8fyx_customer_id` INT,
+    `mysql_tbl_wc8fyx_order_total` DECIMAL(10,2),
+    `mysql_tbl_wc8fyx_delivery_distance` INT
+);
+
+INSERT INTO `mysql_tbl_vskbqz` (`mysql_tbl_vskbqz_restaurant_id`, `mysql_tbl_vskbqz_cuisine_type`, `mysql_tbl_vskbqz_average_price`, `mysql_tbl_vskbqz_rating`, `mysql_tbl_vskbqz_delivery_radius_miles`) VALUES (1, 'test', 1.0, 1.0, 5);
+
+INSERT INTO `mysql_tbl_wc8fyx` (`mysql_tbl_wc8fyx_order_id`, `mysql_tbl_wc8fyx_restaurant_id`, `mysql_tbl_wc8fyx_customer_id`, `mysql_tbl_wc8fyx_order_total`, `mysql_tbl_wc8fyx_delivery_distance`) VALUES (1, 2, 3, 1.0, 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_af35rr` (
+    `mysql_tbl_af35rr_customer_id` INT,
+    `mysql_tbl_af35rr_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zyao2q` (
+    `mysql_tbl_zyao2q_order_id` INT,
+    `mysql_tbl_zyao2q_customer_id` INT,
+    `mysql_tbl_zyao2q_order_date` DATE,
+    `mysql_tbl_zyao2q_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_af35rr` (`mysql_tbl_af35rr_customer_id`, `mysql_tbl_af35rr_country`) VALUES (1, 1);
+
+INSERT INTO `mysql_tbl_zyao2q` (`mysql_tbl_zyao2q_order_id`, `mysql_tbl_zyao2q_customer_id`, `mysql_tbl_zyao2q_order_date`, `mysql_tbl_zyao2q_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_WARNING_kajfge----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_WARNING_kajfge() RETURNS INT DETERMINISTIC
+BEGIN
+    SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'THIS IS A WARNING MESSAGE';
+    RETURN 44;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(RESTAURANT_ID_PARAM INT, ORDER_DISTANCE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_RESTAURANT_RATING DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+    DECLARE V_COMPATIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_vskbqz_DELIVERY_RADIUS_MILES, 5), COALESCE(mysql_tbl_vskbqz_RATING, 3.0), COALESCE(mysql_tbl_vskbqz_AVERAGE_PRICE, 20)
+    INTO V_DELIVERY_RADIUS, V_RESTAURANT_RATING, V_AVG_PRICE
+    FROM `mysql_tbl_vskbqz`
+    WHERE mysql_tbl_vskbqz_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF ORDER_DISTANCE_PARAM > V_DELIVERY_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPATIBILITY_SCORE = (V_RESTAURANT_RATING * 20) - (V_AVG_PRICE / 5) + ((V_DELIVERY_RADIUS - ORDER_DISTANCE_PARAM) * 5);
+
+    RETURN GREATEST(V_COMPATIBILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_ipm95g_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_ipm95g`
+    WHERE mysql_tbl_ipm95g_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_CALC_BMI_xy7l2p----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_CALC_BMI_xy7l2p(WEIGHT_KG INT, HEIGHT_M INT) RETURNS DECIMAL(5,2) DETERMINISTIC
+BEGIN
+    IF WEIGHT_KG <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'WEIGHT MUST BE POSITIVE';
+    END IF;
+    IF HEIGHT_M <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'HEIGHT MUST BE POSITIVE';
+    END IF;
+    IF WEIGHT_KG > 500 OR HEIGHT_M > 3 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: VALUES OUTSIDE NORMAL RANGE';
+    END IF;
+    RETURN WEIGHT_KG / (HEIGHT_M * HEIGHT_M);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_SEGMENT_INDEX_mqb90h----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SEGMENT_INDEX_mqb90h(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SEGMENT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(mysql_tbl_zyao2q_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDERS, V_TOTAL_SPENT
+    FROM `mysql_tbl_zyao2q`
+    WHERE mysql_tbl_zyao2q_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 1;
+    END IF;
+
+    SET V_AVG_ORDER_VALUE = V_TOTAL_SPENT / V_TOTAL_ORDERS;
+
+    IF V_AVG_ORDER_VALUE > 500 THEN
+        SET V_SEGMENT_INDEX = 5;
+    ELSEIF V_AVG_ORDER_VALUE > 200 THEN
+        SET V_SEGMENT_INDEX = 4;
+    ELSEIF V_AVG_ORDER_VALUE > 100 THEN
+        SET V_SEGMENT_INDEX = 3;
+    ELSEIF V_AVG_ORDER_VALUE > 50 THEN
+        SET V_SEGMENT_INDEX = 2;
+    ELSE
+        SET V_SEGMENT_INDEX = 1;
+    END IF;
+
+    RETURN V_SEGMENT_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_5r7hdp_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_5r7hdp`
+    WHERE mysql_tbl_5r7hdp_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(CARD_NUMBER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    IF CARD_NUMBER IS NULL THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - (0) + 0);
+    END IF;
+
+    WHILE V_INDEX <= CHAR_LENGTH(CARD_NUMBER) DO
+        SET V_CHAR = MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(-3, -64);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_DIGIT_COUNT = MYSQL_FUNC_CALCULATE_CUSTOMER_SEGMENT_INDEX_mqb90h(-52);
+        END IF;
+
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE;
+
+    IF V_DIGIT_COUNT >= 13 AND V_DIGIT_COUNT <= 19 THEN
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(73);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(-3)) - (0) + ((MYSQL_FUNC_SIGNAL_FUNC_CALC_BMI_xy7l2p(-91, 20)) - (0) + V_RESULT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_ITEM_TOTAL_x6544h----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ITEM_TOTAL_x6544h(ITEM_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TOTAL_AMOUNT_VAR INT;
+    
+    SELECT mysql_tbl_p1ia2l_QUANTITY * ITEM_ID_PARAM INTO TOTAL_AMOUNT_VAR
+    FROM `mysql_tbl_p1ia2l`
+    WHERE mysql_tbl_p1ia2l_ITEM_ID = ITEM_ID_PARAM;
+    
+    RETURN ((MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(39)) - (0) + ((MYSQL_FUNC_SIGNAL_WARNING_kajfge()) - (0) + TOTAL_AMOUNT_VAR));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT mysql_tbl_39a6hg_CBIGINT FROM `mysql_tbl_39a6hg`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = RESULT + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LOG_COUNT INT DEFAULT 0;
+    
+    CREATE LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_1.LOG' INITIAL_SIZE = 16M UNDO_BUFFER_SIZE = 2M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    ALTER LOGFILE GROUP LG1 ADD UNDOFILE 'UNDO_2.LOG' INITIAL_SIZE = 16M ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    DROP LOGFILE GROUP LG1 ENGINE = NDB;
+    SET LOG_COUNT = LOG_COUNT + 1;
+    
+    RETURN LOG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_CANCEL_SUBSCRIPTION_nzatxb----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_CANCEL_SUBSCRIPTION_nzatxb(SUB_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_END_DATE DATE;
+    SELECT mysql_tbl_sdp3vq_STATUS, mysql_tbl_sdp3vq_END_DATE INTO V_STATUS, V_END_DATE FROM `mysql_tbl_sdp3vq` WHERE mysql_tbl_sdp3vq_ID = SUB_ID;
+    IF V_STATUS = 'CANCELLED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'SUBSCRIPTION IS ALREADY CANCELLED';
+    END IF;
+    IF V_END_DATE < CURDATE() THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT CANCEL EXPIRED SUBSCRIPTION';
+    END IF;
+    UPDATE `mysql_tbl_sdp3vq` SET mysql_tbl_sdp3vq_STATUS = 'CANCELLED' WHERE mysql_tbl_sdp3vq_ID = SUB_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT JSON_OBJECT('ID', ID, 'NAME', NAME) INTO @mysql_synth_dummy FROM `mysql_tbl_3g0d7q`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT JSON_ARRAY(ID, NAME, EMAIL) INTO @mysql_synth_dummy FROM `mysql_tbl_3g0d7q`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT JSON_EXTRACT(DATA, '$.KEY') INTO @mysql_synth_dummy FROM `mysql_tbl_3d0esj`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_050_ASYM_ENCRYPT_s56wg4----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_050_ASYM_ENCRYPT_s56wg4() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ASYM_COUNT INT DEFAULT 0;
+    
+    SELECT ASYMMETRIC_DECRYPT('RSA', 'ENCRYPTED_DATA', 'PRIVATE_KEY');
+    SET ASYM_COUNT = ASYM_COUNT + 1;
+    
+    SELECT ASYMMETRIC_DERIVE('PUB_KEY', 'PRIV_KEY');
+    SET ASYM_COUNT = ASYM_COUNT + 1;
+    
+    SELECT ASYMMETRIC_ENCRYPT('RSA', 'DATA', 'PUBLIC_KEY');
+    SET ASYM_COUNT = ASYM_COUNT + 1;
+    
+    SELECT ASYMMETRIC_SIGN('RSA', 'DATA', 'PRIVATE_KEY', 'SHA256');
+    SET ASYM_COUNT = ASYM_COUNT + 1;
+    
+    SELECT ASYMMETRIC_VERIFY('RSA', 'DATA', 'SIGNATURE', 'PUBLIC_KEY', 'SHA256');
+    SET ASYM_COUNT = ASYM_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_179_SELECT_JSON_oz2j7i()) - (0) + ASYM_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM `mysql_tbl_3pt1qx` WHERE mysql_tbl_3pt1qx_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE `mysql_tbl_3pt1qx` SET mysql_tbl_3pt1qx_QUANTIDADE_PRODUTO = mysql_tbl_3pt1qx_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE mysql_tbl_3pt1qx_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO `mysql_tbl_3pt1qx` (`mysql_tbl_3pt1qx_PRODUTO_ID`, `mysql_tbl_3pt1qx_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN ROWS_AFFECTED;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_x5ula0_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_x5ula0`
+    WHERE mysql_tbl_x5ula0_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN GREATEST(0, 30 - V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FACTOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN ((MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(-93, 27)) - (0) + 0);
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN ((MYSQL_FUNC_ITEM_TOTAL_x6544h(-6)) - (0) + 2);
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_FACTOR = MYSQL_FUNC_PROC_BIGINT_elxddt();
+
+    WHILE V_FACTOR <= V_SQRT_N DO
+        IF N % V_FACTOR = 0 THEN
+            RETURN ((MYSQL_FUNC_FUNC_104_CREATE_LOGFILE_bqtelk()) - (0) + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_jfifpz(-39)) - (0) + V_FACTOR));
+        END IF;
+        SET V_FACTOR = MYSQL_FUNC_SIGNAL_PROC_CANCEL_SUBSCRIPTION_nzatxb(2);
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_FUNC_050_ASYM_ENCRYPT_s56wg4()) - (0) + N);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(1);

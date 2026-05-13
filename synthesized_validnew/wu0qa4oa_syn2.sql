@@ -1,0 +1,111 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rmvbzr` (
+    `mysql_tbl_rmvbzr_order_id` INT,
+    `mysql_tbl_rmvbzr_customer_id` INT,
+    `mysql_tbl_rmvbzr_order_date` DATE,
+    `mysql_tbl_rmvbzr_total_amount` DECIMAL(10,2),
+    `mysql_tbl_rmvbzr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rxfnqy` (
+    `mysql_tbl_rxfnqy_order_id` INT,
+    `mysql_tbl_rxfnqy_product_id` INT,
+    `mysql_tbl_rxfnqy_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_rmvbzr` (`mysql_tbl_rmvbzr_order_id`, `mysql_tbl_rmvbzr_customer_id`, `mysql_tbl_rmvbzr_order_date`, `mysql_tbl_rmvbzr_total_amount`, `mysql_tbl_rmvbzr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_rxfnqy` (`mysql_tbl_rxfnqy_order_id`, `mysql_tbl_rxfnqy_product_id`, `mysql_tbl_rxfnqy_quantity`) VALUES (1, 2, 3);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zxduw4` (
+    `mysql_tbl_zxduw4_emp_id` INT,
+    `mysql_tbl_zxduw4_manager_id` INT,
+    `mysql_tbl_zxduw4_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_zxduw4` (`mysql_tbl_zxduw4_emp_id`, `mysql_tbl_zxduw4_manager_id`, `mysql_tbl_zxduw4_department_id`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_17f623` (
+    `mysql_tbl_17f623_order_id` INT,
+    `mysql_tbl_17f623_customer_id` INT,
+    `mysql_tbl_17f623_order_date` DATE,
+    `mysql_tbl_17f623_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lngq58` (
+    `mysql_tbl_lngq58_customer_id` INT,
+    `mysql_tbl_lngq58_tier_level` INT
+);
+
+INSERT INTO `mysql_tbl_17f623` (`mysql_tbl_17f623_order_id`, `mysql_tbl_17f623_customer_id`, `mysql_tbl_17f623_order_date`, `mysql_tbl_17f623_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `mysql_tbl_lngq58` (`mysql_tbl_lngq58_customer_id`, `mysql_tbl_lngq58_tier_level`) VALUES (1, 2);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_zxduw4_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_zxduw4`
+    WHERE mysql_tbl_zxduw4_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_DEPT_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+
+    SELECT mysql_tbl_lngq58_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM `mysql_tbl_17f623` O
+    JOIN `mysql_tbl_lngq58` C ON mysql_tbl_17f623_CUSTOMER_ID = mysql_tbl_lngq58_CUSTOMER_ID
+    WHERE mysql_tbl_17f623_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN SET V_DISCOUNT_PERCENTAGE = 20;
+        WHEN 'GOLD' THEN SET V_DISCOUNT_PERCENTAGE = 15;
+        WHEN 'SILVER' THEN SET V_DISCOUNT_PERCENTAGE = 10;
+        ELSE SET V_DISCOUNT_PERCENTAGE = 0;
+    END CASE;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHT_pp0q2g(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_WEIGHT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_rxfnqy_QUANTITY), 0), COUNT(DISTINCT mysql_tbl_rxfnqy_PRODUCT_ID)
+    INTO V_TOTAL_ITEMS, V_UNIQUE_PRODUCTS
+    FROM `mysql_tbl_rxfnqy`
+    WHERE mysql_tbl_rxfnqy_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_WEIGHT_SCORE = MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(12);
+
+    RETURN ((MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl(0)) - (0) + V_WEIGHT_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_ORDER_WEIGHT_pp0q2g(1);

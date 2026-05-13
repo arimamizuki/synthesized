@@ -1,0 +1,35 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_jiql0g` (
+    `table_jiql0g_customer_id` INT,
+    `table_jiql0g_registration_date` DATE,
+    `table_jiql0g_country` INT
+);
+
+INSERT INTO `table_jiql0g` (`table_jiql0g_customer_id`, `table_jiql0g_registration_date`, `table_jiql0g_country`) VALUES (1, '2024-01-01', 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_INDEX_80oqzk(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_JIQL0G_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_JIQL0G
+    WHERE TABLE_JIQL0G_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM ORDERS
+    WHERE TABLE_JIQL0G_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_AGE_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_AGE_MONTHS;
+END //
+
+DELIMITER ;

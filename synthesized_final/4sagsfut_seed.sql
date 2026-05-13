@@ -1,0 +1,34 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_8g5gu1` (
+    `table_8g5gu1_supplier_id` INT,
+    `table_8g5gu1_lead_time_days` DATE
+);
+
+INSERT INTO `table_8g5gu1` (`table_8g5gu1_supplier_id`, `table_8g5gu1_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEAD_TIME_BUCKET_sn29k4(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8G5GU1_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM TABLE_8G5GU1
+    WHERE TABLE_8G5GU1_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    IF V_LEAD_TIME <= 3 THEN
+        RETURN 5;
+    ELSEIF V_LEAD_TIME <= 7 THEN
+        RETURN 4;
+    ELSEIF V_LEAD_TIME <= 14 THEN
+        RETURN 3;
+    ELSEIF V_LEAD_TIME <= 30 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;

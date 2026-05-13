@@ -1,0 +1,213 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8iilm4` (
+    `mysql_tbl_8iilm4_campaign_id` INT,
+    `mysql_tbl_8iilm4_start_date` DATE
+);
+
+INSERT INTO `mysql_tbl_8iilm4` (`mysql_tbl_8iilm4_campaign_id`, `mysql_tbl_8iilm4_start_date`) VALUES (1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_prhgd1` (
+    `mysql_tbl_prhgd1_cblob` BLOB
+);
+
+INSERT INTO `mysql_tbl_prhgd1` (`mysql_tbl_prhgd1_cblob`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_fm8oks` (
+    `mysql_tbl_fm8oks_campaign_id` INT,
+    `mysql_tbl_fm8oks_channel` INT,
+    `mysql_tbl_fm8oks_budget` INT,
+    `mysql_tbl_fm8oks_start_date` DATE,
+    `mysql_tbl_fm8oks_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_x9n7lk` (
+    `mysql_tbl_x9n7lk_conversion_id` INT,
+    `mysql_tbl_x9n7lk_campaign_id` INT,
+    `mysql_tbl_x9n7lk_conversion_value` INT
+);
+
+INSERT INTO `mysql_tbl_fm8oks` (`mysql_tbl_fm8oks_campaign_id`, `mysql_tbl_fm8oks_channel`, `mysql_tbl_fm8oks_budget`, `mysql_tbl_fm8oks_start_date`, `mysql_tbl_fm8oks_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `mysql_tbl_x9n7lk` (`mysql_tbl_x9n7lk_conversion_id`, `mysql_tbl_x9n7lk_campaign_id`, `mysql_tbl_x9n7lk_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_fm8oks_BUDGET, 0)
+    INTO V_BUDGET
+    FROM `mysql_tbl_fm8oks`
+    WHERE mysql_tbl_fm8oks_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_x9n7lk_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM `mysql_tbl_x9n7lk`
+    WHERE mysql_tbl_x9n7lk_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_utnr8j` (mysql_tbl_utnr8j_ID INT, mysql_tbl_utnr8j_CREATED_AT DATE, mysql_tbl_utnr8j_REGION VARCHAR(10)) PARTITION BY RANGE (YEAR(mysql_tbl_utnr8j_CREATED_AT)) SUBPARTITION BY HASH(mysql_tbl_utnr8j_ID) SUBPARTITIONS 2 (PARTITION P0 VALUES LESS THAN (2020), PARTITION P1 VALUES LESS THAN (2021));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    SET V_SUM = MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh();
+    RETURN ((MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql()) - (0) + ((MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_BLOB_0dgedf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BLOB_0dgedf() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `mysql_tbl_prhgd1`;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT mysql_tbl_8iilm4_START_DATE
+    INTO V_START_DATE
+    FROM `mysql_tbl_8iilm4`
+    WHERE mysql_tbl_8iilm4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(53)) - (((MYSQL_FUNC_PROC_BLOB_0dgedf()) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(37, 83)) - (0) + (DATEDIFF(CURDATE(), V_START_DATE)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_016_NETWORK_ADDR_ifx7lj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE NET_COUNT INT DEFAULT 0;
+    
+    SELECT INET_ATON('192.168.1.1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT INET_NTOA(3232235777);
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT IS_IPV4('192.168.1.1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT IS_IPV6('::1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT INET6_ATON('::1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(10)) - (0) + NET_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_016_NETWORK_ADDR_ifx7lj();

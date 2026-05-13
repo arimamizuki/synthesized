@@ -1,0 +1,20 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_169_SELECT_CTE_yikf1n() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    WITH ACTIVE_USERS AS (SELECT * FROM USERS WHERE STATUS = 'ACTIVE') SELECT * INTO @mysql_synth_dummy FROM ACTIVE_USERS;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    WITH RECURSIVE NUMBERS AS (SELECT 1 AS N UNION ALL SELECT N + 1 FROM NUMBERS WHERE N < 10) SELECT * INTO @mysql_synth_dummy FROM NUMBERS;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;

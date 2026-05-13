@@ -1,0 +1,45 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_rk2ynz` (
+    `table_rk2ynz_customer_id` INT,
+    `table_rk2ynz_plan_type` VARCHAR(50),
+    `table_rk2ynz_start_date` DATE,
+    `table_rk2ynz_monthly_cost` DECIMAL(10,2),
+    `table_rk2ynz_data_limit_gb` TEXT,
+    `table_rk2ynz_data_used_gb` TEXT
+);
+
+INSERT INTO `table_rk2ynz` (`table_rk2ynz_customer_id`, `table_rk2ynz_plan_type`, `table_rk2ynz_start_date`, `table_rk2ynz_monthly_cost`, `table_rk2ynz_data_limit_gb`, `table_rk2ynz_data_used_gb`) VALUES (1, 'test', '2024-01-01', 1.0, 'test', 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DATA_USAGE_EFFICIENCY_du4p71(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_DATA_LIMIT INT DEFAULT 0;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_USAGE_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_RK2YNZ_PLAN_TYPE, COALESCE(TABLE_RK2YNZ_DATA_LIMIT_GB, 10), COALESCE(TABLE_RK2YNZ_DATA_USED_GB, 0)
+    INTO V_PLAN_TYPE, V_DATA_LIMIT, V_DATA_USED
+    FROM TABLE_RK2YNZ
+    WHERE TABLE_RK2YNZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_DATA_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_USAGE_PERCENTAGE = (V_DATA_USED * 100) / V_DATA_LIMIT;
+
+    SET V_EFFICIENCY_SCORE = CASE
+        WHEN V_PLAN_TYPE = 'ENTERPRISE' THEN 100 - LEAST(V_USAGE_PERCENTAGE, 100)
+        WHEN V_PLAN_TYPE = 'PREMIUM' THEN 90 - LEAST(V_USAGE_PERCENTAGE, 90)
+        WHEN V_PLAN_TYPE = 'STANDARD' THEN 80 - LEAST(V_USAGE_PERCENTAGE, 80)
+        ELSE 70 - LEAST(V_USAGE_PERCENTAGE, 70)
+    END;
+
+    RETURN GREATEST(V_EFFICIENCY_SCORE, 0);
+END //
+
+DELIMITER ;

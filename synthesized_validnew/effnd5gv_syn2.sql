@@ -1,0 +1,122 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hjzwze` (
+    `mysql_tbl_hjzwze_order_id` INT,
+    `mysql_tbl_hjzwze_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_hjzwze` (`mysql_tbl_hjzwze_order_id`, `mysql_tbl_hjzwze_customer_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_yqjx6p` (
+    `mysql_tbl_yqjx6p_emp_id` INT,
+    `mysql_tbl_yqjx6p_salary` INT
+);
+
+INSERT INTO `mysql_tbl_yqjx6p` (`mysql_tbl_yqjx6p_emp_id`, `mysql_tbl_yqjx6p_salary`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE AUTO_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_AUTO_INCREMENT('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_AVG_ROW_LENGTH('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECK_TIME('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_CHECKSUM('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    SELECT INTERNAL_DATA_FREE('TEST', 'USERS');
+    SET AUTO_COUNT = AUTO_COUNT + 1;
+    
+    RETURN AUTO_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SET_COUNT INT DEFAULT 0;
+    
+    SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET SESSION TRANSACTION READ ONLY;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    SET SET_COUNT = SET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_043_INTERNAL_AUTO_INC_kvkhss()) - (0) + SET_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_yqjx6p_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_yqjx6p`
+    WHERE mysql_tbl_yqjx6p_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM `mysql_tbl_hjzwze`
+    WHERE mysql_tbl_hjzwze_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_hjzwze`;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(41)) - (((MYSQL_FUNC_FUNC_078_SET_TRANS_zudeuy()) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_TOTAL_ORDERS;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMPTY_6tev0d() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(-20)) - (0) + 0);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_EMPTY_6tev0d();

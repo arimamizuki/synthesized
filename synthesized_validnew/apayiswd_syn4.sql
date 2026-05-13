@@ -1,0 +1,260 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_se6emv` (
+    `mysql_tbl_se6emv_product_id` INT,
+    `mysql_tbl_se6emv_price` DECIMAL(10,2),
+    `mysql_tbl_se6emv_stock_quantity` INT,
+    `mysql_tbl_se6emv_category_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gnhcgx` (
+    `mysql_tbl_gnhcgx_order_id` INT,
+    `mysql_tbl_gnhcgx_product_id` INT,
+    `mysql_tbl_gnhcgx_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_se6emv` (`mysql_tbl_se6emv_product_id`, `mysql_tbl_se6emv_price`, `mysql_tbl_se6emv_stock_quantity`, `mysql_tbl_se6emv_category_id`) VALUES (1, 1.0, 3, 4);
+
+INSERT INTO `mysql_tbl_gnhcgx` (`mysql_tbl_gnhcgx_order_id`, `mysql_tbl_gnhcgx_product_id`, `mysql_tbl_gnhcgx_quantity`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_liyddj` (
+    `mysql_tbl_liyddj_emp_id` INT,
+    `mysql_tbl_liyddj_manager_id` INT,
+    `mysql_tbl_liyddj_department_id` INT,
+    `mysql_tbl_liyddj_salary` INT,
+    `mysql_tbl_liyddj_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_liyddj` (`mysql_tbl_liyddj_emp_id`, `mysql_tbl_liyddj_manager_id`, `mysql_tbl_liyddj_department_id`, `mysql_tbl_liyddj_salary`, `mysql_tbl_liyddj_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_81ag6i` (
+    `mysql_tbl_81ag6i_customer_id` INT,
+    `mysql_tbl_81ag6i_plan_type` VARCHAR(50),
+    `mysql_tbl_81ag6i_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_81ag6i` (`mysql_tbl_81ag6i_customer_id`, `mysql_tbl_81ag6i_plan_type`, `mysql_tbl_81ag6i_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rje6xp` (mysql_tbl_rje6xp_id INT, mysql_tbl_rje6xp_status VARCHAR(20), mysql_tbl_rje6xp_assigned_to INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ep7fxq` (mysql_tbl_ep7fxq_id INT, mysql_tbl_ep7fxq_active INT);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(P_N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT mysql_tbl_liyddj_SALARY, TIMESTAMPDIFF(YEAR, mysql_tbl_liyddj_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM `mysql_tbl_liyddj`
+    WHERE mysql_tbl_liyddj_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = V_SALARY * (1 + V_TENURE_YEARS * 0.02);
+
+    RETURN FLOOR(V_ADJUSTED_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_082_EXEC_IMMEDIATE_tfm4xt----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_082_EXEC_IMMEDIATE_tfm4xt() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE EXEC_COUNT INT DEFAULT 0;
+    
+    EXECUTE IMMEDIATE 'SELECT 1';
+    SET EXEC_COUNT = EXEC_COUNT + 1;
+    
+    RETURN EXEC_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_166_SELECT_DATE_qrlu32----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_166_SELECT_DATE_qrlu32() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE SEL_COUNT INT DEFAULT 0;
+    
+    SELECT DATE(CREATED_AT), YEAR(CREATED_AT), MONTH(CREATED_AT) INTO @mysql_synth_dummy FROM `mysql_tbl_ij7ez4`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATEDIFF(NOW(), CREATED_AT) AS DAYS_SINCE INTO @mysql_synth_dummy FROM `mysql_tbl_ij7ez4`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    SELECT DATE_FORMAT(CREATED_AT, '%Y-%M-%D') AS FORMATTED_DATE INTO @mysql_synth_dummy FROM `mysql_tbl_ij7ez4`;
+    SET SEL_COUNT = SEL_COUNT + 1;
+    
+    RETURN SEL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(TASK_ID INT, USER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TASK_STATUS VARCHAR(20);
+    DECLARE V_USER_ACTIVE INT;
+    SELECT mysql_tbl_rje6xp_STATUS INTO V_TASK_STATUS FROM `mysql_tbl_rje6xp` WHERE mysql_tbl_rje6xp_ID = TASK_ID;
+    SELECT mysql_tbl_ep7fxq_ACTIVE INTO V_USER_ACTIVE FROM `mysql_tbl_ep7fxq` WHERE mysql_tbl_ep7fxq_ID = USER_ID;
+    IF V_TASK_STATUS = 'COMPLETED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN COMPLETED TASK';
+    END IF;
+    IF V_USER_ACTIVE = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN TASK TO INACTIVE USER';
+    END IF;
+    UPDATE `mysql_tbl_rje6xp` SET mysql_tbl_rje6xp_ASSIGNED_TO = USER_ID WHERE mysql_tbl_ep7fxq_ID = TASK_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = MYSQL_FUNC_FUNC_166_SELECT_DATE_qrlu32();
+        SET V_I = MYSQL_FUNC_FUNC_082_EXEC_IMMEDIATE_tfm4xt();
+    END WHILE;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(80, 81)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_81ag6i_PLAN_TYPE, COALESCE(mysql_tbl_81ag6i_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM `mysql_tbl_81ag6i`
+    WHERE mysql_tbl_81ag6i_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST * 10;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST * 5;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST * 2;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE UUID_COUNT INT DEFAULT 0;
+    
+    SELECT UUID();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UUID_SHORT();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT IS_UUID('550E8400-E29B-41D4-A716-446655440000');
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT FROM_UNIXTIME(1609459200);
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    SELECT UNIX_TIMESTAMP();
+    SET UUID_COUNT = UUID_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(9)) - (0) + ((MYSQL_FUNC_SUM_1_TO_N_qv6wf6(24)) - (0) + UUID_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(PRODUCT_ID_PARAM INT, REQUESTED_QTY INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVAILABLE_STOCK INT DEFAULT 0;
+    DECLARE V_RESERVED_QTY INT DEFAULT 0;
+    DECLARE V_CAN_RESERVE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_se6emv_STOCK_QUANTITY, 0) INTO V_AVAILABLE_STOCK
+    FROM `mysql_tbl_se6emv`
+    WHERE mysql_tbl_se6emv_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_gnhcgx_QUANTITY), 0) INTO V_RESERVED_QTY
+    FROM `mysql_tbl_gnhcgx`
+    WHERE mysql_tbl_gnhcgx_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVAILABLE_STOCK = MYSQL_FUNC_FUNC_020_UUID_TIME_f65prl();
+
+    IF V_AVAILABLE_STOCK >= REQUESTED_QTY THEN
+        SET V_CAN_RESERVE = 1;
+    ELSE
+        SET V_CAN_RESERVE = MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(-100);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(-95)) - (0) + V_CAN_RESERVE);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_100_CREATE_TS_2jy8z7() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TS_COUNT INT DEFAULT 0;
+    
+    CREATE TABLESPACE TS1 ADD DATAFILE 'TS1.IBD' ENGINE=INNODB;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    CREATE TABLESPACE IF NOT EXISTS TS2 ADD DATAFILE 'TS2.IBD' FILE_BLOCK_SIZE = 8192 ENGINE=INNODB;
+    SET TS_COUNT = TS_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(78, 13)) - (0) + TS_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_100_CREATE_TS_2jy8z7();

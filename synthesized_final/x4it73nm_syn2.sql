@@ -1,0 +1,39 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_38emcf` (
+    `mysql_tbl_38emcf_cvarchar` VARCHAR(255)
+);
+
+INSERT INTO `mysql_tbl_38emcf` (`mysql_tbl_38emcf_cvarchar`) VALUES ('test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TBL_COUNT INT DEFAULT 0;
+    
+    CREATE TABLE IF NOT EXISTS `mysql_tbl_3ykbbl` (mysql_tbl_3ykbbl_ID INT, mysql_tbl_3ykbbl_CREATED_AT DATE, mysql_tbl_3ykbbl_REGION VARCHAR(10)) PARTITION BY RANGE (YEAR(mysql_tbl_3ykbbl_CREATED_AT)) SUBPARTITION BY HASH(mysql_tbl_3ykbbl_ID) SUBPARTITIONS 2 (PARTITION P0 VALUES LESS THAN (2020), PARTITION P1 VALUES LESS THAN (2021));
+    SET TBL_COUNT = TBL_COUNT + 1;
+    
+    RETURN TBL_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VARCHAR_88hohl() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `mysql_tbl_38emcf`;
+    
+    RETURN ((MYSQL_FUNC_FUNC_140_SUBPARTITION_jo9kql()) - (0) + RESULT_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_PROC_VARCHAR_88hohl();

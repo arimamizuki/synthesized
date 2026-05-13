@@ -1,0 +1,99 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dcrf3x` (
+    `mysql_tbl_dcrf3x_supplier_id` INT,
+    `mysql_tbl_dcrf3x_lead_time_days` DATE,
+    `mysql_tbl_dcrf3x_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `mysql_tbl_dcrf3x` (`mysql_tbl_dcrf3x_supplier_id`, `mysql_tbl_dcrf3x_lead_time_days`, `mysql_tbl_dcrf3x_supplier_rating`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX_nu69k0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX_nu69k0(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(mysql_tbl_dcrf3x_LEAD_TIME_DAYS, 7), COALESCE(mysql_tbl_dcrf3x_SUPPLIER_RATING, 3.0)
+    INTO V_LEAD_TIME, V_RATING
+    FROM `mysql_tbl_dcrf3x`
+    WHERE mysql_tbl_dcrf3x_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_RATING * 10) - (V_LEAD_TIME * 2);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_016_NETWORK_ADDR_ifx7lj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_016_NETWORK_ADDR_ifx7lj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE NET_COUNT INT DEFAULT 0;
+    
+    SELECT INET_ATON('192.168.1.1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT INET_NTOA(3232235777);
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT IS_IPV4('192.168.1.1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT IS_IPV6('::1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    SELECT INET6_ATON('::1');
+    SET NET_COUNT = NET_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_PERFORMANCE_INDEX_nu69k0(-13)) - (0) + NET_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DEL_COUNT INT DEFAULT 0;
+    
+    DELETE FROM `mysql_tbl_47vb3w` WHERE ID = 1;
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_ulzgru` WHERE STATUS = 'CANCELLED' AND CREATED_AT < '2024-01-01';
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_1btn61` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET DEL_COUNT = DEL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_016_NETWORK_ADDR_ifx7lj()) - (0) + DEL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_069_KILL_QUERY_h0czzs() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE KILL_COUNT INT DEFAULT 0;
+    
+    KILL QUERY 123;
+    SET KILL_COUNT = KILL_COUNT + 1;
+    
+    KILL CONNECTION 123;
+    SET KILL_COUNT = KILL_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_FUNC_148_DELETE_BASIC_ug7gfk()) - (0) + KILL_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_069_KILL_QUERY_h0czzs();

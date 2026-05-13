@@ -1,0 +1,125 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_h78gru` (
+    `mysql_tbl_h78gru_product_id` INT,
+    `mysql_tbl_h78gru_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_h78gru` (`mysql_tbl_h78gru_product_id`, `mysql_tbl_h78gru_stock_quantity`) VALUES (1, 1);
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4td89u` (
+    `mysql_tbl_4td89u_customer_id` INT,
+    `mysql_tbl_4td89u_status` VARCHAR(50),
+    `mysql_tbl_4td89u_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_4td89u_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_4td89u` (`mysql_tbl_4td89u_customer_id`, `mysql_tbl_4td89u_status`, `mysql_tbl_4td89u_monthly_cost`, `mysql_tbl_4td89u_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_hkk4ir` (
+    `mysql_tbl_hkk4ir_product_id` INT,
+    `mysql_tbl_hkk4ir_category_id` INT,
+    `mysql_tbl_hkk4ir_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_hkk4ir` (`mysql_tbl_hkk4ir_product_id`, `mysql_tbl_hkk4ir_category_id`, `mysql_tbl_hkk4ir_price`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_hkk4ir_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_hkk4ir`
+    WHERE mysql_tbl_hkk4ir_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_hkk4ir_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_hkk4ir`
+    WHERE mysql_tbl_hkk4ir_CATEGORY_ID = (SELECT mysql_tbl_hkk4ir_CATEGORY_ID FROM `mysql_tbl_hkk4ir` WHERE mysql_tbl_hkk4ir_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_RATIO = (V_PRICE * 100) / V_CATEGORY_AVG;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT mysql_tbl_4td89u_STATUS, COALESCE(mysql_tbl_4td89u_MONTHLY_COST, 0), mysql_tbl_4td89u_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM `mysql_tbl_4td89u`
+    WHERE mysql_tbl_4td89u_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(62)) - (0) + 0);
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(-28)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_h78gru_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM `mysql_tbl_h78gru`
+    WHERE mysql_tbl_h78gru_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - (0) + (LEAST(V_STOCK, 100)));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(1);

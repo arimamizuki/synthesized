@@ -1,0 +1,111 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8f85f3` (
+    `mysql_tbl_8f85f3_customer_id` INT,
+    `mysql_tbl_8f85f3_monthly_cost` DECIMAL(10,2),
+    `mysql_tbl_8f85f3_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_8f85f3` (`mysql_tbl_8f85f3_customer_id`, `mysql_tbl_8f85f3_monthly_cost`, `mysql_tbl_8f85f3_status`) VALUES (1, 1.0, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_rdpq5z` (mysql_tbl_rdpq5z_id INT, mysql_tbl_rdpq5z_balance DECIMAL(10,2));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_o5xa7x` (
+    `mysql_tbl_o5xa7x_customer_id` INT,
+    `mysql_tbl_o5xa7x_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_o5xa7x` (`mysql_tbl_o5xa7x_customer_id`, `mysql_tbl_o5xa7x_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_elyq0y` (
+    `mysql_tbl_elyq0y_customer_id` INT,
+    `mysql_tbl_elyq0y_country` INT
+);
+
+INSERT INTO `mysql_tbl_elyq0y` (`mysql_tbl_elyq0y_customer_id`, `mysql_tbl_elyq0y_country`) VALUES (1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(ACC_ID INT, AMOUNT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BALANCE DECIMAL(10,2);
+    DECLARE V_DAILY_LIMIT DECIMAL(10,2) DEFAULT 5000.00;
+    SELECT mysql_tbl_rdpq5z_BALANCE INTO V_BALANCE FROM `mysql_tbl_rdpq5z` WHERE mysql_tbl_rdpq5z_ID = ACC_ID;
+    IF AMOUNT > V_DAILY_LIMIT THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'AMOUNT EXCEEDS DAILY WITHDRAWAL LIMIT';
+    END IF;
+    IF AMOUNT > V_BALANCE THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'INSUFFICIENT mysql_tbl_rdpq5z_BALANCE';
+    END IF;
+    UPDATE `mysql_tbl_rdpq5z` SET mysql_tbl_rdpq5z_BALANCE = mysql_tbl_rdpq5z_BALANCE - AMOUNT WHERE mysql_tbl_rdpq5z_ID = ACC_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT mysql_tbl_o5xa7x_STATUS
+    INTO V_STATUS
+    FROM `mysql_tbl_o5xa7x`
+    WHERE mysql_tbl_o5xa7x_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'PENDING' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0 END;
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_COUNT_v4zajd----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_COUNT_v4zajd(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM SUBSCRIPTIONS S
+    JOIN `mysql_tbl_elyq0y` C ON S.CUSTOMER_ID = mysql_tbl_elyq0y_CUSTOMER_ID
+    WHERE mysql_tbl_elyq0y_COUNTRY = COUNTRY_PARAM AND S.STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(mysql_tbl_8f85f3_MONTHLY_COST, 0), mysql_tbl_8f85f3_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM `mysql_tbl_8f85f3`
+    WHERE mysql_tbl_8f85f3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_PROC_WITHDRAW_9j58ot(-34, 61)) - (((MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(49)) - (0) + 0)) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_COUNT_v4zajd(-17)) - (0) + (V_MONTHLY_COST * 5));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(1);

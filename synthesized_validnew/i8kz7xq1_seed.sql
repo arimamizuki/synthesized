@@ -1,0 +1,60 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_bkxoij` (
+    `table_bkxoij_order_id` INT,
+    `table_bkxoij_customer_id` INT,
+    `table_bkxoij_order_date` DATE,
+    `table_bkxoij_total_amount` DECIMAL(10,2),
+    `table_bkxoij_discount_percent` INT,
+    `table_bkxoij_shipping_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_08756o` (
+    `table_08756o_order_id` INT,
+    `table_08756o_product_id` INT,
+    `table_08756o_quantity` INT,
+    `table_08756o_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_bkxoij` (`table_bkxoij_order_id`, `table_bkxoij_customer_id`, `table_bkxoij_order_date`, `table_bkxoij_total_amount`, `table_bkxoij_discount_percent`, `table_bkxoij_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 5, 1.0);
+
+INSERT INTO `table_08756o` (`table_08756o_order_id`, `table_08756o_product_id`, `table_08756o_quantity`, `table_08756o_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFIT_MARGIN_3amtn5(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_NET_PROFIT INT DEFAULT 0;
+    DECLARE V_MARGIN_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_08756O_QUANTITY * TABLE_08756O_UNIT_PRICE), 0), COALESCE(TABLE_BKXOIJ_DISCOUNT_PERCENT, 0), COALESCE(TABLE_BKXOIJ_SHIPPING_COST, 0)
+    INTO V_SUBTOTAL, V_DISCOUNT_PERCENT, V_SHIPPING_COST
+    FROM TABLE_08756O OI
+    JOIN TABLE_BKXOIJ O ON TABLE_08756O_ORDER_ID = TABLE_BKXOIJ_ORDER_ID
+    WHERE TABLE_BKXOIJ_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT_PERCENT = COALESCE(
+        (SELECT TABLE_BKXOIJ_DISCOUNT_PERCENT FROM TABLE_BKXOIJ WHERE TABLE_BKXOIJ_ORDER_ID = ORDER_ID_PARAM), 0
+    );
+
+    SET V_TOTAL_COST = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT_PERCENT / 100) + V_SHIPPING_COST;
+
+    SELECT COALESCE(TABLE_BKXOIJ_TOTAL_AMOUNT, 0) - V_TOTAL_COST
+    INTO V_NET_PROFIT
+    FROM TABLE_BKXOIJ
+    WHERE TABLE_BKXOIJ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARGIN_PERCENT = (V_NET_PROFIT * 100) / V_TOTAL_COST;
+
+    RETURN V_MARGIN_PERCENT;
+END //
+
+DELIMITER ;

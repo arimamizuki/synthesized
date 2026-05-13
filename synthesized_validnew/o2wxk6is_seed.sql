@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_0dkbo9` (
+    `table_0dkbo9_supplier_id` INT
+);
+
+INSERT INTO `table_0dkbo9` (`table_0dkbo9_supplier_id`) VALUES (1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_INDEX_rfnfsh(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM PRODUCTS
+    WHERE TABLE_0DKBO9_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_COUNT * 2;
+END //
+
+DELIMITER ;

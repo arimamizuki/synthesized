@@ -1,0 +1,313 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_blr2ho` (
+    `mysql_tbl_blr2ho_customer_id` INT,
+    `mysql_tbl_blr2ho_country` INT
+);
+
+INSERT INTO `mysql_tbl_blr2ho` (`mysql_tbl_blr2ho_customer_id`, `mysql_tbl_blr2ho_country`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7gnpko` (
+    `mysql_tbl_7gnpko_inventory_id` INT,
+    `mysql_tbl_7gnpko_product_id` INT,
+    `mysql_tbl_7gnpko_warehouse_id` INT,
+    `mysql_tbl_7gnpko_quantity` INT,
+    `mysql_tbl_7gnpko_min_stock_level` INT
+);
+
+INSERT INTO `mysql_tbl_7gnpko` (`mysql_tbl_7gnpko_inventory_id`, `mysql_tbl_7gnpko_product_id`, `mysql_tbl_7gnpko_warehouse_id`, `mysql_tbl_7gnpko_quantity`, `mysql_tbl_7gnpko_min_stock_level`) VALUES (1, 1, 1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_p545bu` (
+    `mysql_tbl_p545bu_product_id` INT,
+    `mysql_tbl_p545bu_category_id` INT,
+    `mysql_tbl_p545bu_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_p545bu` (`mysql_tbl_p545bu_product_id`, `mysql_tbl_p545bu_category_id`, `mysql_tbl_p545bu_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_te8ao2` (mysql_tbl_te8ao2_id INT, mysql_tbl_te8ao2_metric_value INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gpe4l3` (
+    `mysql_tbl_gpe4l3_product_id` INT,
+    `mysql_tbl_gpe4l3_category_id` INT,
+    `mysql_tbl_gpe4l3_price` DECIMAL(10,2),
+    `mysql_tbl_gpe4l3_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5vzv97` (
+    `mysql_tbl_5vzv97_order_id` INT,
+    `mysql_tbl_5vzv97_product_id` INT,
+    `mysql_tbl_5vzv97_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_gpe4l3` (`mysql_tbl_gpe4l3_product_id`, `mysql_tbl_gpe4l3_category_id`, `mysql_tbl_gpe4l3_price`, `mysql_tbl_gpe4l3_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_5vzv97` (`mysql_tbl_5vzv97_order_id`, `mysql_tbl_5vzv97_product_id`, `mysql_tbl_5vzv97_quantity`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_63cmdt` (mysql_tbl_63cmdt_id INT, mysql_tbl_63cmdt_max_students INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_s6o1p0` (mysql_tbl_s6o1p0_id INT, student_mysql_tbl_s6o1p0_id INT, course_mysql_tbl_s6o1p0_id INT);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE WAIT_COUNT INT DEFAULT 0;
+    
+    SELECT WAIT_FOR_EXECUTED_GTID_SET('A:1-5', 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS('A:1-5', 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT MASTER_POS_WAIT('MASTER-BIN.000001', 100, 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    SELECT SOURCE_POS_WAIT('SOURCE-BIN.000001', 100, 10);
+    SET WAIT_COUNT = WAIT_COUNT + 1;
+    
+    RETURN WAIT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(MAX_ITER INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE V_I < MAX_ITER AND V_RESULT < 1000 DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(mysql_tbl_s6o1p0_STUDENT_ID INT, mysql_tbl_s6o1p0_COURSE_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_MAX_STUDENTS INT;
+    DECLARE V_CURRENT_STUDENTS INT;
+    SELECT mysql_tbl_63cmdt_MAX_STUDENTS INTO V_MAX_STUDENTS FROM `mysql_tbl_63cmdt` WHERE mysql_tbl_63cmdt_ID = mysql_tbl_s6o1p0_COURSE_ID;
+    SELECT COUNT(*) INTO V_CURRENT_STUDENTS FROM `mysql_tbl_s6o1p0` WHERE mysql_tbl_s6o1p0_COURSE_ID = mysql_tbl_s6o1p0_COURSE_ID;
+    IF V_CURRENT_STUDENTS >= V_MAX_STUDENTS THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'COURSE IS FULL, CANNOT ENROLL';
+    END IF;
+    INSERT INTO `mysql_tbl_s6o1p0` (`mysql_tbl_s6o1p0_STUDENT_ID`, `mysql_tbl_s6o1p0_COURSE_ID`) VALUES (mysql_tbl_s6o1p0_STUDENT_ID, mysql_tbl_s6o1p0_COURSE_ID);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM `mysql_tbl_zestyi` O
+    JOIN `mysql_tbl_blr2ho` C ON O.CUSTOMER_ID = mysql_tbl_blr2ho_CUSTOMER_ID
+    WHERE mysql_tbl_blr2ho_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM `mysql_tbl_zestyi`;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN ((MYSQL_FUNC_SIGNAL_PROC_ENROLL_COURSE_rny3b0(5, -35)) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(44)) - (0) + ((V_COUNTRY_ORDERS * 100) / V_TOTAL_ORDERS));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ALTER_COUNT INT DEFAULT 0;
+    
+    ALTER TABLE USERS ALGORITHM = INPLACE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS ALGORITHM = COPY;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    ALTER TABLE USERS LOCK = NONE;
+    SET ALTER_COUNT = ALTER_COUNT + 1;
+    
+    RETURN ALTER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_MIN_LEVEL INT DEFAULT 0;
+    DECLARE V_NEEDS_REORDER INT DEFAULT 0;
+    DECLARE V_WAREHOUSE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_7gnpko_QUANTITY), 0), COUNT(DISTINCT mysql_tbl_7gnpko_WAREHOUSE_ID)
+    INTO V_TOTAL_STOCK, V_WAREHOUSE_COUNT
+    FROM `mysql_tbl_7gnpko`
+    WHERE mysql_tbl_7gnpko_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_WAREHOUSE_COUNT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    SET V_MIN_LEVEL = V_WAREHOUSE_COUNT * 100;
+
+    IF V_TOTAL_STOCK < V_MIN_LEVEL THEN
+        SET V_NEEDS_REORDER = 1;
+    ELSE
+        SET V_NEEDS_REORDER = 0;
+    END IF;
+
+    RETURN V_NEEDS_REORDER;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_p545bu_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM `mysql_tbl_p545bu`
+    WHERE mysql_tbl_p545bu_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_CALCULATE_4omc6b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_CALCULATE_4omc6b() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= 100 DO
+        UPDATE `mysql_tbl_te8ao2` SET mysql_tbl_te8ao2_METRIC_VALUE = mysql_tbl_te8ao2_METRIC_VALUE * 2 WHERE mysql_tbl_te8ao2_ID = V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_gpe4l3_STOCK_QUANTITY, 0)
+    INTO V_CURRENT_STOCK
+    FROM `mysql_tbl_gpe4l3`
+    WHERE mysql_tbl_gpe4l3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_5vzv97_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM `mysql_tbl_5vzv97`
+    WHERE mysql_tbl_5vzv97_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE ACCESS_COUNT INT DEFAULT 0;
+    
+    SELECT CAN_ACCESS_COLUMN('TEST', 'USERS', 'ID');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_DATABASE('TEST');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_TABLE('TEST', 'USERS');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    SELECT CAN_ACCESS_VIEW('TEST', 'USER_VIEW');
+    SET ACCESS_COUNT = ACCESS_COUNT + 1;
+    
+    RETURN ACCESS_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(A INT, B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_LCM INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+    DECLARE V_REMAINDER INT DEFAULT 0;
+
+    SET V_TEMP_A = MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(79);
+    SET V_TEMP_B = MYSQL_FUNC_FUNC_041_GTID_WAIT_iercmw();
+
+    GCD_LOOP: WHILE V_TEMP_B != 0 DO
+        SET V_REMAINDER = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_RATIO_uhlf51(-63);
+        SET V_TEMP_B = MYSQL_FUNC_FUNC_126_ALTER_ALGORITHM_5suo42();
+    END WHILE GCD_LOOP;
+
+    SET V_GCD = MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(-100);
+
+    IF V_GCD = 0 THEN
+        RETURN ((MYSQL_FUNC_FLOW_CONTROL_PROC_WHILE_CALCULATE_4omc6b()) - (((MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-53)) - (0) + 0)) + 0);
+    END IF;
+
+    SET V_LCM = MYSQL_FUNC_FUNC_045_CAN_ACCESS_jaa3kj();
+
+    RETURN V_LCM;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(1, 1);

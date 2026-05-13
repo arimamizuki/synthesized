@@ -1,0 +1,254 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_zmzatv` (
+    `mysql_tbl_zmzatv_order_id` INT,
+    `mysql_tbl_zmzatv_customer_id` INT,
+    `mysql_tbl_zmzatv_order_date` DATE,
+    `mysql_tbl_zmzatv_total_amount` DECIMAL(10,2),
+    `mysql_tbl_zmzatv_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y7938y` (
+    `mysql_tbl_y7938y_customer_id` INT,
+    `mysql_tbl_y7938y_customer_segment` INT
+);
+
+INSERT INTO `mysql_tbl_zmzatv` (`mysql_tbl_zmzatv_order_id`, `mysql_tbl_zmzatv_customer_id`, `mysql_tbl_zmzatv_order_date`, `mysql_tbl_zmzatv_total_amount`, `mysql_tbl_zmzatv_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `mysql_tbl_y7938y` (`mysql_tbl_y7938y_customer_id`, `mysql_tbl_y7938y_customer_segment`) VALUES (1, 2);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_n26twy` (
+    `mysql_tbl_n26twy_product_id` INT,
+    `mysql_tbl_n26twy_price` DECIMAL(10,2),
+    `mysql_tbl_n26twy_stock_quantity` INT
+);
+
+INSERT INTO `mysql_tbl_n26twy` (`mysql_tbl_n26twy_product_id`, `mysql_tbl_n26twy_price`, `mysql_tbl_n26twy_stock_quantity`) VALUES (1, 1.0, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8ja8j2` (
+    `mysql_tbl_8ja8j2_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_8ja8j2` (`mysql_tbl_8ja8j2_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_z1wcbg` (
+    `mysql_tbl_z1wcbg_product_id` INT,
+    `mysql_tbl_z1wcbg_category_id` INT,
+    `mysql_tbl_z1wcbg_price` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_z1wcbg` (`mysql_tbl_z1wcbg_product_id`, `mysql_tbl_z1wcbg_category_id`, `mysql_tbl_z1wcbg_price`) VALUES (1, 2, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wksmc3` (
+    `mysql_tbl_wksmc3_record_id` INT,
+    `mysql_tbl_wksmc3_city_id` INT,
+    `mysql_tbl_wksmc3_date` mysql_tbl_wksmc3_date,
+    `mysql_tbl_wksmc3_temperature` INT,
+    `mysql_tbl_wksmc3_humidity` INT,
+    `mysql_tbl_wksmc3_air_quality_index` INT
+);
+
+INSERT INTO `mysql_tbl_wksmc3` (`mysql_tbl_wksmc3_record_id`, `mysql_tbl_wksmc3_city_id`, `mysql_tbl_wksmc3_date`, `mysql_tbl_wksmc3_temperature`, `mysql_tbl_wksmc3_humidity`, `mysql_tbl_wksmc3_air_quality_index`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_TENURE_DAYS INT DEFAULT 0;
+    DECLARE V_PREDICTED_LIFETIME_VALUE INT DEFAULT 0;
+    DECLARE V_SEGMENT_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_CUSTOMER_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+
+    SELECT COALESCE(SUM(mysql_tbl_zmzatv_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_ORDER_COUNT
+    FROM `mysql_tbl_zmzatv`
+    WHERE mysql_tbl_zmzatv_CUSTOMER_ID = CUSTOMER_ID_PARAM AND mysql_tbl_zmzatv_STATUS = 'COMPLETED';
+
+    SELECT mysql_tbl_y7938y_CUSTOMER_SEGMENT
+    INTO V_CUSTOMER_SEGMENT
+    FROM `mysql_tbl_y7938y`
+    WHERE mysql_tbl_y7938y_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), MIN(mysql_tbl_zmzatv_ORDER_DATE))
+    INTO V_CUSTOMER_TENURE_DAYS
+    FROM `mysql_tbl_zmzatv`
+    WHERE mysql_tbl_zmzatv_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = V_TOTAL_REVENUE / V_ORDER_COUNT;
+    END IF;
+
+    SET V_SEGMENT_MULTIPLIER = CASE V_CUSTOMER_SEGMENT
+        WHEN 'PREMIUM' THEN 4
+        WHEN 'VIP' THEN 5
+        WHEN 'REGULAR' THEN 2
+        ELSE 1
+    END;
+
+    IF V_CUSTOMER_TENURE_DAYS > 0 THEN
+        SET V_PREDICTED_LIFETIME_VALUE = (V_TOTAL_REVENUE * V_SEGMENT_MULTIPLIER * 365) / V_CUSTOMER_TENURE_DAYS;
+    ELSE
+        SET V_PREDICTED_LIFETIME_VALUE = V_AVG_ORDER_VALUE * 12 * V_SEGMENT_MULTIPLIER;
+    END IF;
+
+    RETURN V_PREDICTED_LIFETIME_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM `mysql_tbl_0k844v`
+    WHERE mysql_tbl_8ja8j2_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR((V_ORDER_COUNT * 20) + (V_TOTAL_SPENT / 50));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p(CITY_ID_PARAM INT, TARGET_DATE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TEMPERATURE INT DEFAULT 20;
+    DECLARE V_HUMIDITY INT DEFAULT 50;
+    DECLARE V_AIR_QUALITY INT DEFAULT 50;
+    DECLARE V_COMFORT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_wksmc3_TEMPERATURE, 20), COALESCE(mysql_tbl_wksmc3_HUMIDITY, 50), COALESCE(mysql_tbl_wksmc3_AIR_QUALITY_INDEX, 50)
+    INTO V_TEMPERATURE, V_HUMIDITY, V_AIR_QUALITY
+    FROM `mysql_tbl_wksmc3`
+    WHERE mysql_tbl_wksmc3_CITY_ID = CITY_ID_PARAM AND mysql_tbl_wksmc3_DATE = TARGET_DATE;
+
+    SET V_COMFORT_SCORE = 100;
+
+    IF V_TEMPERATURE < 10 OR V_TEMPERATURE > 35 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 30;
+    ELSEIF V_TEMPERATURE < 15 OR V_TEMPERATURE > 30 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 15;
+    END IF;
+
+    IF V_HUMIDITY < 30 OR V_HUMIDITY > 70 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 20;
+    END IF;
+
+    IF V_AIR_QUALITY > 100 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 40;
+    ELSEIF V_AIR_QUALITY > 50 THEN
+        SET V_COMFORT_SCORE = V_COMFORT_SCORE - 15;
+    END IF;
+
+    RETURN GREATEST(V_COMFORT_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_TOTAL DECIMAL(10,2) DEFAULT 1.00;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_z1wcbg_CATEGORY_ID, COALESCE(mysql_tbl_z1wcbg_PRICE, 0)
+    INTO V_CATEGORY_ID, V_PRICE
+    FROM `mysql_tbl_z1wcbg`
+    WHERE mysql_tbl_z1wcbg_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_z1wcbg_PRICE), 1)
+    INTO V_CATEGORY_TOTAL
+    FROM `mysql_tbl_z1wcbg`
+    WHERE mysql_tbl_z1wcbg_CATEGORY_ID = V_CATEGORY_ID;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(62, 32)) - (0) + (FLOOR((V_PRICE * 100) / V_CATEGORY_TOTAL)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_n26twy_PRICE, 0), COALESCE(mysql_tbl_n26twy_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM `mysql_tbl_n26twy`
+    WHERE mysql_tbl_n26twy_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK = 0 THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_QUALITY_SCORE_56mc9a(-1)) - (((MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(76)) - (((MYSQL_FUNC_CALCULATE_COMFORT_INDEX_m1zf6p(12, -86)) - (0) + 0)) + 0)) + 0);
+    END IF;
+
+    RETURN FLOOR(V_PRICE / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE LEN_COUNT INT DEFAULT 0;
+    
+    SELECT INTERNAL_DATA_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_INDEX_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_MAX_DATA_LENGTH('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_TABLE_ROWS('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    SELECT INTERNAL_UPDATE_TIME('TEST', 'USERS');
+    SET LEN_COUNT = LEN_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca(64)) - (0) + ((MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(30)) - (0) + LEN_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_FUNC_044_INTERNAL_DATA_LEN_is19di();

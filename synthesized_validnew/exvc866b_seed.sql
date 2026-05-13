@@ -1,0 +1,35 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_9ctjlw` (
+    `table_9ctjlw_campaign_id` INT,
+    `table_9ctjlw_status` VARCHAR(50),
+    `table_9ctjlw_budget` INT
+);
+
+INSERT INTO `table_9ctjlw` (`table_9ctjlw_campaign_id`, `table_9ctjlw_status`, `table_9ctjlw_budget`) VALUES (1, 'test', 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_COST_PER_ACQUISITION_t7xhyr(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9CTJLW_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_9CTJLW
+    WHERE TABLE_9CTJLW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM CONVERSIONS
+    WHERE TABLE_9CTJLW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_CONVERSIONS;
+END //
+
+DELIMITER ;

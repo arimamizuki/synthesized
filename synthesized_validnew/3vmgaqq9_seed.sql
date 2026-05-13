@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_eyhdj3` (
+    `table_eyhdj3_emp_id` INT,
+    `table_eyhdj3_manager_id` INT
+);
+
+INSERT INTO `table_eyhdj3` (`table_eyhdj3_emp_id`, `table_eyhdj3_manager_id`) VALUES (1, 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIERARCHY_LEVEL_4b41hh(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEVEL INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT EMP_ID_PARAM;
+
+    WHILE V_CURRENT_ID IS NOT NULL DO
+        SET V_LEVEL = V_LEVEL + 1;
+        SELECT TABLE_EYHDJ3_MANAGER_ID INTO V_CURRENT_ID FROM TABLE_EYHDJ3 WHERE TABLE_EYHDJ3_EMP_ID = V_CURRENT_ID;
+    END WHILE;
+
+    RETURN V_LEVEL;
+END //
+
+DELIMITER ;

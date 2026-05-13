@@ -1,0 +1,21 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this procedure.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2005_jvkzk5()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    PREPARE STMT FROM 'CREATE TABLE TABLE_RWIKVB ( TABLE_RWIKVB_V1 INT , TABLE_RWIKVB_V2 INT )';
+    EXECUTE STMT;
+    RETURN 0;
+    DEALLOCATE PREPARE STMT;
+
+    SET V_RESULT = 2;
+    SELECT V_RESULT //
+END
+
+DELIMITER ;

@@ -1,0 +1,23 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_hvwfk5` (
+    `table_hvwfk5_lead_time_days` DATE
+);
+
+INSERT INTO `table_hvwfk5` (`table_hvwfk5_lead_time_days`) VALUES ('2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_WINDOW_jgm5bq(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HVWFK5_LEAD_TIME_DAYS, 7)
+    INTO V_DAYS
+    FROM TABLE_HVWFK5
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_DAYS;
+END //
+
+DELIMITER ;

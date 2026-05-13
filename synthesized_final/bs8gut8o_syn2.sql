@@ -1,0 +1,372 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_mj77ja` (
+    `mysql_tbl_mj77ja_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_mj77ja` (`mysql_tbl_mj77ja_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wc8gv5` (
+    `mysql_tbl_wc8gv5_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_wc8gv5` (`mysql_tbl_wc8gv5_supplier_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_d629t0` (
+    `mysql_tbl_d629t0_transaction_id` INT,
+    `mysql_tbl_d629t0_account_id` INT,
+    `mysql_tbl_d629t0_amount` DECIMAL(10,2),
+    `mysql_tbl_d629t0_transaction_date` DATE,
+    `mysql_tbl_d629t0_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_d629t0` (`mysql_tbl_d629t0_transaction_id`, `mysql_tbl_d629t0_account_id`, `mysql_tbl_d629t0_amount`, `mysql_tbl_d629t0_transaction_date`, `mysql_tbl_d629t0_transaction_type`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_wx1sjg` (
+    `mysql_tbl_wx1sjg_customer_id` INT
+);
+
+INSERT INTO `mysql_tbl_wx1sjg` (`mysql_tbl_wx1sjg_customer_id`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_unbekb` (
+    `mysql_tbl_unbekb_invoice_id` INT,
+    `mysql_tbl_unbekb_customer_id` INT,
+    `mysql_tbl_unbekb_amount` DECIMAL(10,2),
+    `mysql_tbl_unbekb_due_date` DATE,
+    `mysql_tbl_unbekb_paid_date` INT,
+    `mysql_tbl_unbekb_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_unbekb` (`mysql_tbl_unbekb_invoice_id`, `mysql_tbl_unbekb_customer_id`, `mysql_tbl_unbekb_amount`, `mysql_tbl_unbekb_due_date`, `mysql_tbl_unbekb_paid_date`, `mysql_tbl_unbekb_status`) VALUES (1, 2, 1.0, '2024-01-01', 5, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_itp3ve` (mysql_tbl_itp3ve_id INT, mysql_tbl_itp3ve_status VARCHAR(20), refund_mysql_tbl_itp3ve_status VARCHAR(20));
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4ahcyk` (
+    `mysql_tbl_4ahcyk_product_id` INT,
+    `mysql_tbl_4ahcyk_category_id` INT,
+    `mysql_tbl_4ahcyk_price` DECIMAL(10,2),
+    `mysql_tbl_4ahcyk_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_lq3zim` (
+    `mysql_tbl_lq3zim_category_id` INT,
+    `mysql_tbl_lq3zim_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_4ahcyk` (`mysql_tbl_4ahcyk_product_id`, `mysql_tbl_4ahcyk_category_id`, `mysql_tbl_4ahcyk_price`, `mysql_tbl_4ahcyk_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `mysql_tbl_lq3zim` (`mysql_tbl_lq3zim_category_id`, `mysql_tbl_lq3zim_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xma2iu` (
+    `mysql_tbl_xma2iu_order_id` INT,
+    `mysql_tbl_xma2iu_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_xma2iu` (`mysql_tbl_xma2iu_order_id`, `mysql_tbl_xma2iu_total_amount`) VALUES (1, 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kqzin8` (
+    `mysql_tbl_kqzin8_order_id` INT,
+    `mysql_tbl_kqzin8_customer_id` INT,
+    `mysql_tbl_kqzin8_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_kqzin8` (`mysql_tbl_kqzin8_order_id`, `mysql_tbl_kqzin8_customer_id`, `mysql_tbl_kqzin8_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC1_dvat8j----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT DETERMINISTIC
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_AVG_3eihia----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_AVG_3eihia(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_kqzin8_TOTAL_AMOUNT), 0)
+    INTO V_AVG_VALUE
+    FROM `mysql_tbl_kqzin8`
+    WHERE mysql_tbl_kqzin8_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_AVG_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STOCK_VALUE_INDEX_3lvo5c----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_VALUE_INDEX_3lvo5c(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_4ahcyk_PRICE, 0), COALESCE(mysql_tbl_4ahcyk_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM `mysql_tbl_4ahcyk`
+    WHERE mysql_tbl_4ahcyk_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_STOCK_VALUE = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_AVG_3eihia(-72);
+
+    RETURN FLOOR(V_STOCK_VALUE / 100);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_qaqmay`
+    WHERE mysql_tbl_mj77ja_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_STOCK_VALUE_INDEX_3lvo5c(-21)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_COUNT_jf9s9y----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_COUNT_jf9s9y(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_db78wc`
+    WHERE mysql_tbl_wc8gv5_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios(ORDER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_xma2iu_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM `mysql_tbl_xma2iu`
+    WHERE mysql_tbl_xma2iu_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_ORDER_TOTAL * 0.3);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_ORDER_PROFIT_INDEX_jp2ios(74)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(ACCOUNT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(mysql_tbl_d629t0_AMOUNT), 0) INTO V_TOTAL_CREDITS
+    FROM `mysql_tbl_d629t0`
+    WHERE mysql_tbl_d629t0_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND mysql_tbl_d629t0_TRANSACTION_TYPE = 'CREDIT';
+
+    SELECT COALESCE(SUM(mysql_tbl_d629t0_AMOUNT), 0) INTO V_TOTAL_DEBITS
+    FROM `mysql_tbl_d629t0`
+    WHERE mysql_tbl_d629t0_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND mysql_tbl_d629t0_TRANSACTION_TYPE = 'DEBIT';
+
+    SET V_BALANCE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30()) - (0) + V_BALANCE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(ORDER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20);
+    DECLARE V_REFUND_STATUS VARCHAR(20);
+    SELECT mysql_tbl_itp3ve_STATUS, mysql_tbl_itp3ve_REFUND_STATUS INTO V_STATUS, V_REFUND_STATUS FROM `mysql_tbl_itp3ve` WHERE mysql_tbl_itp3ve_ID = ORDER_ID;
+    IF V_STATUS != 'DELIVERED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ONLY DELIVERED mysql_tbl_itp3ve CAN BE REFUNDED';
+    END IF;
+    IF V_REFUND_STATUS = 'REFUNDED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ORDER HAS ALREADY BEEN REFUNDED';
+    END IF;
+    UPDATE `mysql_tbl_itp3ve` SET mysql_tbl_itp3ve_REFUND_STATUS = 'REFUNDED' WHERE mysql_tbl_itp3ve_ID = ORDER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_wx1sjg`
+    WHERE mysql_tbl_wx1sjg_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_REFUND_ORDER_r5pb7b(16)) - (0) + V_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LATE_FEE_7q45m6----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_FEE_7q45m6(INVOICE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_PAID_DATE DATE;
+    DECLARE V_DAYS_LATE INT DEFAULT 0;
+    DECLARE V_LATE_FEE INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 10;
+
+    SELECT COALESCE(mysql_tbl_unbekb_AMOUNT, 0), mysql_tbl_unbekb_DUE_DATE, mysql_tbl_unbekb_PAID_DATE
+    INTO V_AMOUNT, V_DUE_DATE, V_PAID_DATE
+    FROM `mysql_tbl_unbekb`
+    WHERE mysql_tbl_unbekb_INVOICE_ID = INVOICE_ID_PARAM;
+
+    IF V_DUE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF V_PAID_DATE IS NULL THEN
+        SET V_PAID_DATE = CURDATE();
+    END IF;
+
+    SET V_DAYS_LATE = DATEDIFF(V_PAID_DATE, V_DUE_DATE);
+
+    IF V_DAYS_LATE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_LATE <= 30 THEN
+        SET V_LATE_FEE = V_AMOUNT * 5 / 100;
+    ELSEIF V_DAYS_LATE <= 60 THEN
+        SET V_LATE_FEE = V_AMOUNT * 10 / 100;
+    ELSE
+        SET V_LATE_FEE = V_AMOUNT * 20 / 100;
+    END IF;
+
+    RETURN CAST(V_LATE_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CAST_COUNT INT DEFAULT 0;
+    
+    SELECT BINARY 'ABC' = 'ABC';
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CAST('123' AS UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT CONVERT('123', UNSIGNED);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT BIN(5);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    SELECT OCT(8);
+    SET CAST_COUNT = CAST_COUNT + 1;
+    
+    RETURN CAST_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(P_A INT, P_B INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN ((MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_COUNT_jf9s9y(-70)) - (0) + (((MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(88)) - (0) + (((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(81)) - (0) + (((MYSQL_FUNC_FUNC_014_TYPE_CAST_tohq8q()) - (0) + (-1))))))));
+    END IF;
+
+    SET V_I = MYSQL_FUNC_CALCULATE_LATE_FEE_7q45m6(4);
+    WHILE V_I <= P_B DO
+        SET V_RESULT = MYSQL_FUNC_FUNC1_dvat8j();
+        SET V_I = MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_5q4k2x(-75);
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(1, 1);

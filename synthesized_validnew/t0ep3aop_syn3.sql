@@ -1,0 +1,234 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_eve02t` (
+    `mysql_tbl_eve02t_dept_id` INT,
+    `mysql_tbl_eve02t_name` VARCHAR(50),
+    `mysql_tbl_eve02t_budget` INT,
+    `mysql_tbl_eve02t_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ny28zs` (
+    `mysql_tbl_ny28zs_emp_id` INT,
+    `mysql_tbl_ny28zs_dept_id` INT,
+    `mysql_tbl_ny28zs_salary` INT
+);
+
+INSERT INTO `mysql_tbl_eve02t` (`mysql_tbl_eve02t_dept_id`, `mysql_tbl_eve02t_name`, `mysql_tbl_eve02t_budget`, `mysql_tbl_eve02t_headcount`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `mysql_tbl_ny28zs` (`mysql_tbl_ny28zs_emp_id`, `mysql_tbl_ny28zs_dept_id`, `mysql_tbl_ny28zs_salary`) VALUES (1, 2, 3);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3c86n2` (
+    `mysql_tbl_3c86n2_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_3c86n2` (`mysql_tbl_3c86n2_lead_time_days`) VALUES ('2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_vzf4vs` (
+    `mysql_tbl_vzf4vs_product_id` INT,
+    `mysql_tbl_vzf4vs_category_id` INT,
+    `mysql_tbl_vzf4vs_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9kvrjw` (
+    `mysql_tbl_9kvrjw_category_id` INT,
+    `mysql_tbl_9kvrjw_name` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_vzf4vs` (`mysql_tbl_vzf4vs_product_id`, `mysql_tbl_vzf4vs_category_id`, `mysql_tbl_vzf4vs_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `mysql_tbl_9kvrjw` (`mysql_tbl_9kvrjw_category_id`, `mysql_tbl_9kvrjw_name`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7zf49l` (mysql_tbl_7zf49l_id INT, mysql_tbl_7zf49l_status VARCHAR(20), mysql_tbl_7zf49l_assigned_to INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_dqmi7m` (mysql_tbl_dqmi7m_id INT, mysql_tbl_dqmi7m_active INT);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7a1jq6` (
+    `mysql_tbl_7a1jq6_supplier_id` INT,
+    `mysql_tbl_7a1jq6_supplier_rating` DECIMAL(3,1),
+    `mysql_tbl_7a1jq6_lead_time_days` DATE
+);
+
+INSERT INTO `mysql_tbl_7a1jq6` (`mysql_tbl_7a1jq6_supplier_id`, `mysql_tbl_7a1jq6_supplier_rating`, `mysql_tbl_7a1jq6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(TASK_ID INT, USER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TASK_STATUS VARCHAR(20);
+    DECLARE V_USER_ACTIVE INT;
+    SELECT mysql_tbl_7zf49l_STATUS INTO V_TASK_STATUS FROM `mysql_tbl_7zf49l` WHERE mysql_tbl_7zf49l_ID = TASK_ID;
+    SELECT mysql_tbl_dqmi7m_ACTIVE INTO V_USER_ACTIVE FROM `mysql_tbl_dqmi7m` WHERE mysql_tbl_dqmi7m_ID = USER_ID;
+    IF V_TASK_STATUS = 'COMPLETED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN COMPLETED TASK';
+    END IF;
+    IF V_USER_ACTIVE = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANNOT ASSIGN TASK TO INACTIVE USER';
+    END IF;
+    UPDATE `mysql_tbl_7zf49l` SET mysql_tbl_7zf49l_ASSIGNED_TO = USER_ID WHERE mysql_tbl_dqmi7m_ID = TASK_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RG_COUNT INT DEFAULT 0;
+    
+    CREATE RESOURCE GROUP RG1 TYPE = USER VCPU = 0-3 THREAD_PRIORITY = 10;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    CREATE RESOURCE GROUP IF NOT EXISTS RG2 TYPE = SYSTEM VCPU = 4-7;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_SIGNAL_PROC_ASSIGN_TASK_ja3nzp(-11, 7)) - (0) + RG_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(DEPT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_BUDGET INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PER_EMPLOYEE_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_eve02t_BUDGET, 0)
+    INTO V_DEPT_BUDGET
+    FROM `mysql_tbl_eve02t`
+    WHERE mysql_tbl_eve02t_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM `mysql_tbl_ny28zs`
+    WHERE mysql_tbl_ny28zs_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_EMPLOYEE_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PER_EMPLOYEE_BUDGET = V_DEPT_BUDGET / V_EMPLOYEE_COUNT;
+
+    RETURN ((MYSQL_FUNC_FUNC_094_CREATE_RG_xx1d71()) - (0) + V_PER_EMPLOYEE_BUDGET);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_7a1jq6_SUPPLIER_RATING, 3.0), COALESCE(mysql_tbl_7a1jq6_LEAD_TIME_DAYS, 7)
+    INTO V_RATING, V_LEAD_TIME
+    FROM `mysql_tbl_7a1jq6`
+    WHERE mysql_tbl_7a1jq6_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (V_LEAD_TIME * 10) - (V_RATING * 15);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_097_SET_RG_xia0t0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_097_SET_RG_xia0t0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RG_COUNT INT DEFAULT 0;
+    
+    SET RESOURCE GROUP RG1 FOR 123;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    SET RESOURCE GROUP RG2;
+    SET RG_COUNT = RG_COUNT + 1;
+    
+    RETURN RG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_vzf4vs_PRICE, 0)
+    INTO V_PRICE
+    FROM `mysql_tbl_vzf4vs`
+    WHERE mysql_tbl_vzf4vs_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(mysql_tbl_vzf4vs_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM `mysql_tbl_vzf4vs`
+    WHERE mysql_tbl_vzf4vs_CATEGORY_ID = (SELECT mysql_tbl_vzf4vs_CATEGORY_ID FROM `mysql_tbl_vzf4vs` WHERE mysql_tbl_vzf4vs_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_36hofw(88);
+
+    RETURN ((MYSQL_FUNC_FUNC_097_SET_RG_xia0t0()) - (0) + (FLOOR(V_COMPETITIVENESS)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_3c86n2_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM `mysql_tbl_3c86n2`
+    WHERE SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(-70)) - (0) + V_LEAD_TIME);
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_20_VALUES_zb2u3k() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 5 UNION SELECT 10 UNION SELECT 15 UNION SELECT 20 UNION SELECT 25
+        UNION SELECT 30 UNION SELECT 35 UNION SELECT 40 UNION SELECT 45 UNION SELECT 50
+        UNION SELECT 55 UNION SELECT 60 UNION SELECT 65 UNION SELECT 70 UNION SELECT 75
+        UNION SELECT 80 UNION SELECT 85 UNION SELECT 90 UNION SELECT 95 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(-88)) - (0) + ((MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_noz5ga(-21)) - (0) + V_COUNT));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CURSOR_FUNC_COUNT_20_VALUES_zb2u3k();

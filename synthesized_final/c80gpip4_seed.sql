@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this procedure.
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE PROCEDURE MYSQL_FUNC_FUNC_2004_swxfc4()
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_VAL INT DEFAULT 44;
+
+    PREPARE STMT FROM 'INSERT INTO V6 VALUES (44)';
+    EXECUTE STMT;
+    DEALLOCATE PREPARE STMT;
+
+    REPEAT
+        SET V_RESULT = V_RESULT + V_VAL;
+    RETURN 0;
+        SET V_VAL = V_VAL / 2;
+    UNTIL V_VAL < 5 END REPEAT;
+
+    SELECT V_RESULT //
+END
+
+DELIMITER ;

@@ -1,0 +1,536 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7o2iqk` (
+    `mysql_tbl_7o2iqk_campaign_id` INT,
+    `mysql_tbl_7o2iqk_channel` INT,
+    `mysql_tbl_7o2iqk_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7o2iqk` (`mysql_tbl_7o2iqk_campaign_id`, `mysql_tbl_7o2iqk_channel`, `mysql_tbl_7o2iqk_status`) VALUES (1, 1, 'test');
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_y9u3b2` (
+    `mysql_tbl_y9u3b2_customer_id` INT,
+    `mysql_tbl_y9u3b2_status` VARCHAR(50),
+    `mysql_tbl_y9u3b2_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_y9u3b2` (`mysql_tbl_y9u3b2_customer_id`, `mysql_tbl_y9u3b2_status`, `mysql_tbl_y9u3b2_monthly_cost`) VALUES (1, 'test', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_entygr` (
+    `mysql_tbl_entygr_warranty_id` INT,
+    `mysql_tbl_entygr_product_id` INT,
+    `mysql_tbl_entygr_purchase_date` DATE,
+    `mysql_tbl_entygr_warranty_months` INT,
+    `mysql_tbl_entygr_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_entygr` (`mysql_tbl_entygr_warranty_id`, `mysql_tbl_entygr_product_id`, `mysql_tbl_entygr_purchase_date`, `mysql_tbl_entygr_warranty_months`, `mysql_tbl_entygr_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_4qcxmz` (
+    `mysql_tbl_4qcxmz_emp_id` INT,
+    `mysql_tbl_4qcxmz_department_id` INT,
+    `mysql_tbl_4qcxmz_salary` INT,
+    `mysql_tbl_4qcxmz_hire_date` DATE
+);
+
+INSERT INTO `mysql_tbl_4qcxmz` (`mysql_tbl_4qcxmz_emp_id`, `mysql_tbl_4qcxmz_department_id`, `mysql_tbl_4qcxmz_salary`, `mysql_tbl_4qcxmz_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.`mysql_tbl_yx0k9t` (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.`mysql_tbl_svkx36` (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.`mysql_tbl_yx0k9t` (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.`mysql_tbl_svkx36` (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ts1twd` (
+    `mysql_tbl_ts1twd_customer_id` INT,
+    `mysql_tbl_ts1twd_order_id` INT,
+    `mysql_tbl_ts1twd_order_date` DATE
+);
+
+INSERT INTO `mysql_tbl_ts1twd` (`mysql_tbl_ts1twd_customer_id`, `mysql_tbl_ts1twd_order_id`, `mysql_tbl_ts1twd_order_date`) VALUES (1, 1, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_g1qk2r` (
+    `mysql_tbl_g1qk2r_cdouble` INT
+);
+
+INSERT INTO `mysql_tbl_g1qk2r` (`mysql_tbl_g1qk2r_cdouble`) VALUES (1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_41kdxv` (
+    `mysql_tbl_41kdxv_supplier_id` INT,
+    `mysql_tbl_41kdxv_name` VARCHAR(50),
+    `mysql_tbl_41kdxv_reliability_score` INT,
+    `mysql_tbl_41kdxv_lead_time_days` DATE,
+    `mysql_tbl_41kdxv_country` INT
+);
+
+INSERT INTO `mysql_tbl_41kdxv` (`mysql_tbl_41kdxv_supplier_id`, `mysql_tbl_41kdxv_name`, `mysql_tbl_41kdxv_reliability_score`, `mysql_tbl_41kdxv_lead_time_days`, `mysql_tbl_41kdxv_country`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_3dyqep` (
+    `mysql_tbl_3dyqep_campaign_id` INT,
+    `mysql_tbl_3dyqep_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_3dyqep` (`mysql_tbl_3dyqep_campaign_id`, `mysql_tbl_3dyqep_status`) VALUES (1, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_f3st9s` (
+    `mysql_tbl_f3st9s_emp_id` INT,
+    `mysql_tbl_f3st9s_department_id` INT,
+    `mysql_tbl_f3st9s_salary` INT
+);
+
+INSERT INTO `mysql_tbl_f3st9s` (`mysql_tbl_f3st9s_emp_id`, `mysql_tbl_f3st9s_department_id`, `mysql_tbl_f3st9s_salary`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_c838ux` (
+    `mysql_tbl_c838ux_employee_id` INT,
+    `mysql_tbl_c838ux_department_id` INT,
+    `mysql_tbl_c838ux_salary` INT,
+    `mysql_tbl_c838ux_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_5gd4j7` (
+    `mysql_tbl_5gd4j7_employee_id` INT,
+    `mysql_tbl_5gd4j7_effective_date` DATE,
+    `mysql_tbl_5gd4j7_salary_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `mysql_tbl_c838ux` (`mysql_tbl_c838ux_employee_id`, `mysql_tbl_c838ux_department_id`, `mysql_tbl_c838ux_salary`, `mysql_tbl_c838ux_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `mysql_tbl_5gd4j7` (`mysql_tbl_5gd4j7_employee_id`, `mysql_tbl_5gd4j7_effective_date`, `mysql_tbl_5gd4j7_salary_amount`) VALUES (1, '2024-01-01', 1.0);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7p7gwe` (
+    `mysql_tbl_7p7gwe_project_id` INT,
+    `mysql_tbl_7p7gwe_client_id` INT,
+    `mysql_tbl_7p7gwe_project_manager_id` INT,
+    `mysql_tbl_7p7gwe_budget` INT,
+    `mysql_tbl_7p7gwe_spent_amount` DECIMAL(10,2),
+    `mysql_tbl_7p7gwe_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7p7gwe` (`mysql_tbl_7p7gwe_project_id`, `mysql_tbl_7p7gwe_client_id`, `mysql_tbl_7p7gwe_project_manager_id`, `mysql_tbl_7p7gwe_budget`, `mysql_tbl_7p7gwe_spent_amount`, `mysql_tbl_7p7gwe_status`) VALUES (1, 2, 3, 4, 1.0, 'test');
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP USER 'OLDUSER'@'LOCALHOST';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP USER IF EXISTS 'NONEXISTENT'@'%';
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN DROP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_FIRST_ORDER_DATE DATE;
+
+    SELECT MIN(mysql_tbl_ts1twd_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM `mysql_tbl_ts1twd`
+    WHERE mysql_tbl_ts1twd_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MONTH(V_FIRST_ORDER_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT mysql_tbl_y9u3b2_STATUS, COALESCE(mysql_tbl_y9u3b2_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM `mysql_tbl_y9u3b2`
+    WHERE mysql_tbl_y9u3b2_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_FUNC_086_DROP_USER_dnl9z3()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(20)) - (0) + (V_MONTHLY_COST * 12));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    IF N < 2 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER MUST BE AT LEAST 2';
+    END IF;
+    WHILE V_DIVISOR < N DO
+        IF N MOD V_DIVISOR = 0 THEN
+            SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER IS NOT PRIME';
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE;
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_yx0k9t`
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_yx0k9t`.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_yx0k9t`.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_yx0k9t`.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.`mysql_tbl_svkx36` C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 15 UNION SELECT 30 UNION SELECT 45 UNION SELECT 60 UNION SELECT 75 UNION SELECT 90 UNION SELECT 105 UNION SELECT 120 UNION SELECT 135 UNION SELECT 150 UNION SELECT 165 UNION SELECT 180 UNION SELECT 195 UNION SELECT 210 UNION SELECT 225;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - (0) + V_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(mysql_tbl_4qcxmz_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM `mysql_tbl_4qcxmz`
+    WHERE mysql_tbl_4qcxmz_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_SIGNAL_FUNC_PRIME_CHECK_b6klr7(-99)) - (0) + (((MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0()) - (0) + (FLOOR(V_AVG_SALARY)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE DROP_COUNT INT DEFAULT 0;
+    
+    DROP TRIGGER TRG_BEFORE_INSERT;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    DROP TRIGGER IF EXISTS TRG_AFTER_UPDATE;
+    SET DROP_COUNT = DROP_COUNT + 1;
+    
+    RETURN ((MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(85)) - (0) + DROP_COUNT);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(PROJECT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+    DECLARE V_VARIANCE_PCT INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_7p7gwe_BUDGET, 0), COALESCE(mysql_tbl_7p7gwe_SPENT_AMOUNT, 0)
+    INTO V_BUDGET, V_SPENT
+    FROM `mysql_tbl_7p7gwe`
+    WHERE mysql_tbl_7p7gwe_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = V_BUDGET - V_SPENT;
+    SET V_VARIANCE_PCT = (V_VARIANCE * 100) / V_BUDGET;
+
+    RETURN V_VARIANCE_PCT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(DEPARTMENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(mysql_tbl_f3st9s_SALARY), 0)
+    INTO V_TOTAL_SALARY
+    FROM `mysql_tbl_f3st9s`
+    WHERE mysql_tbl_f3st9s_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(8)) - (0) + (FLOOR(V_TOTAL_SALARY / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_m4et3m----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_m4et3m(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 0;
+    DECLARE V_LEAD_TIME_DAYS INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_41kdxv_RELIABILITY_SCORE, 80), COALESCE(mysql_tbl_41kdxv_LEAD_TIME_DAYS, 7)
+    INTO V_RELIABILITY_SCORE, V_LEAD_TIME_DAYS
+    FROM `mysql_tbl_41kdxv`
+    WHERE mysql_tbl_41kdxv_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_RISK_SCORE = 100 - V_RELIABILITY_SCORE;
+
+    IF V_LEAD_TIME_DAYS > 30 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 20;
+    ELSEIF V_LEAD_TIME_DAYS > 14 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 10;
+    END IF;
+
+    RETURN V_RISK_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(EMPLOYEE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_5gd4j7_SALARY_AMOUNT, 0)
+    INTO V_INITIAL_SALARY
+    FROM `mysql_tbl_5gd4j7`
+    WHERE mysql_tbl_5gd4j7_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY mysql_tbl_5gd4j7_EFFECTIVE_DATE ASC LIMIT 1;
+
+    SELECT COALESCE(mysql_tbl_5gd4j7_SALARY_AMOUNT, 0)
+    INTO V_CURRENT_SALARY
+    FROM `mysql_tbl_5gd4j7`
+    WHERE mysql_tbl_5gd4j7_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY mysql_tbl_5gd4j7_EFFECTIVE_DATE DESC LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, mysql_tbl_c838ux_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM `mysql_tbl_c838ux`
+    WHERE mysql_tbl_c838ux_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / (V_INITIAL_SALARY * V_YEARS_EMPLOYED);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(START_DATE_PARAM INT, END_DATE_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_BUSINESS_DAYS INT DEFAULT 0;
+    DECLARE V_CURRENT_DATE DATE DEFAULT NULL;
+    DECLARE V_DAY_OF_WEEK INT DEFAULT 0;
+
+    IF START_DATE_PARAM IS NULL OR END_DATE_PARAM IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF START_DATE_PARAM > END_DATE_PARAM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_DATE = START_DATE_PARAM;
+
+    BUSINESS_DAYS_LOOP: WHILE V_CURRENT_DATE <= END_DATE_PARAM DO
+        SET V_DAY_OF_WEEK = DAYOFWEEK(V_CURRENT_DATE);
+
+        IF V_DAY_OF_WEEK NOT IN (1, 7) THEN
+            SET V_BUSINESS_DAYS = V_BUSINESS_DAYS + 1;
+        END IF;
+
+        SET V_CURRENT_DATE = DATE_ADD(V_CURRENT_DATE, INTERVAL 1 DAY);
+    END WHILE BUSINESS_DAYS_LOOP;
+
+    RETURN V_BUSINESS_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(mysql_tbl_g1qk2r_CDOUBLE) INTO RESULT FROM `mysql_tbl_g1qk2r`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_3dyqep_STATUS, COUNT(*)
+    INTO V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_3dyqep` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_3dyqep_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_3dyqep_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_3dyqep_CAMPAIGN_ID;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100 + V_CONVERSION_COUNT;
+        WHEN 'PAUSED' THEN RETURN 50 + V_CONVERSION_COUNT;
+        WHEN 'COMPLETED' THEN RETURN 75 + V_CONVERSION_COUNT;
+        ELSE RETURN 10 + V_CONVERSION_COUNT;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT mysql_tbl_entygr_PURCHASE_DATE, mysql_tbl_entygr_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM `mysql_tbl_entygr`
+    WHERE mysql_tbl_entygr_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN ((MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - (0) + (-1));
+    END IF;
+
+    SET V_EXPIRY_DATE = MYSQL_FUNC_CALCULATE_SUPPLIER_RISK_SCORE_m4et3m(-6);
+    SET V_DAYS_REMAINING = MYSQL_FUNC_CALCULATE_BUSINESS_DAYS_oa14he(-53, -85);
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVITY_SCORE_k38jih(-26);
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(-91)) - (0) + ((MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(-32)) - (0) + V_STATUS));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(CAMPAIGN_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+
+    SELECT mysql_tbl_7o2iqk_CHANNEL, mysql_tbl_7o2iqk_STATUS, COUNT(CV.CONVERSION_ID)
+    INTO V_CHANNEL, V_STATUS, V_CONVERSION_COUNT
+    FROM `mysql_tbl_7o2iqk` C
+    LEFT JOIN CONVERSIONS CV ON mysql_tbl_7o2iqk_CAMPAIGN_ID = CV.CAMPAIGN_ID
+    WHERE mysql_tbl_7o2iqk_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    GROUP BY mysql_tbl_7o2iqk_CAMPAIGN_ID;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN ((MYSQL_FUNC_FUNC_108_DROP_TRIGGER_urmusn()) - (0) + 0);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz(-100)) - (0) + (((MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(45)) - (0) + (CASE V_CHANNEL
+        WHEN 'PAID' THEN V_CONVERSION_COUNT * 3
+        WHEN 'ORGANIC' THEN V_CONVERSION_COUNT * 5
+        WHEN 'SOCIAL' THEN V_CONVERSION_COUNT * 4
+        ELSE V_CONVERSION_COUNT * 2
+    END))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_INDEX_1sngjv(1);

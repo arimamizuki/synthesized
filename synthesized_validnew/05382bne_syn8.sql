@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ex1d83` (
+    mysql_tbl_ex1d83_id INT,
+    mysql_tbl_ex1d83_preco INT
+);
+
+INSERT INTO `mysql_tbl_ex1d83` (`mysql_tbl_ex1d83_id`, `mysql_tbl_ex1d83_preco`) VALUES (3, 150);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(VAR_REMEDIO INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE RESULT_PRECO INT DEFAULT 0;
+    
+    SELECT mysql_tbl_ex1d83_PRECO INTO RESULT_PRECO
+    FROM `mysql_tbl_ex1d83`
+    WHERE mysql_tbl_ex1d83.mysql_tbl_ex1d83_ID = VAR_REMEDIO;
+    
+    RETURN RESULT_PRECO;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(1);

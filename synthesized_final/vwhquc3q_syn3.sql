@@ -1,0 +1,214 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_j7aemy` (
+    `mysql_tbl_j7aemy_student_id` INT,
+    `mysql_tbl_j7aemy_first_name` VARCHAR(50),
+    `mysql_tbl_j7aemy_last_name` VARCHAR(50),
+    `mysql_tbl_j7aemy_grade_level` INT,
+    `mysql_tbl_j7aemy_enrollment_date` DATE,
+    `mysql_tbl_j7aemy_tuitimysql_tbl_aunqp1_balance INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_l5e2i7` (
+    `mysql_tbl_l5e2i7_payment_id` INT,
+    `mysql_tbl_l5e2i7_student_id` INT,
+    `mysql_tbl_l5e2i7_amount` DECIMAL(10,2),
+    `mysql_tbl_l5e2i7_payment_date` DATE,
+    `mysql_tbl_l5e2i7_payment_method` INT
+);
+
+INSERT INTO `mysql_tbl_j7aemy` (`mysql_tbl_j7aemy_student_id`, `mysql_tbl_j7aemy_first_name`, `mysql_tbl_j7aemy_last_name`, `mysql_tbl_j7aemy_grade_level`, `mysql_tbl_j7aemy_enrollment_date`, `mysql_tbl_j7aemy_tuitimysql_tbl_aunqp1_balance) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_l5e2i7` (`mysql_tbl_l5e2i7_payment_id`, `mysql_tbl_l5e2i7_student_id`, `mysql_tbl_l5e2i7_amount`, `mysql_tbl_l5e2i7_payment_date`, `mysql_tbl_l5e2i7_payment_method`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_gmrmob` (
+    `mysql_tbl_gmrmob_listing_id` INT,
+    `mysql_tbl_gmrmob_agent_id` INT,
+    `mysql_tbl_gmrmob_property_type` VARCHAR(50),
+    `mysql_tbl_gmrmob_list_price` DECIMAL(10,2),
+    `mysql_tbl_gmrmob_days_mysql_tbl_aunqp1_market INT,
+    `mysql_tbl_gmrmob_showings_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_9uu7qt` (
+    `mysql_tbl_9uu7qt_agent_id` INT,
+    `mysql_tbl_9uu7qt_name` VARCHAR(50),
+    `mysql_tbl_9uu7qt_commissimysql_tbl_aunqp1_rate INT
+);
+
+INSERT INTO `mysql_tbl_gmrmob` (`mysql_tbl_gmrmob_listing_id`, `mysql_tbl_gmrmob_agent_id`, `mysql_tbl_gmrmob_property_type`, `mysql_tbl_gmrmob_list_price`, `mysql_tbl_gmrmob_days_mysql_tbl_aunqp1_market, `mysql_tbl_gmrmob_showings_count`) VALUES (1, 2, 'test', 1.0, 5, 6);
+
+INSERT INTO `mysql_tbl_9uu7qt` (`mysql_tbl_9uu7qt_agent_id`, `mysql_tbl_9uu7qt_name`, `mysql_tbl_9uu7qt_commissimysql_tbl_aunqp1_rate) VALUES (1, 'test', 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE TRIG_COUNT INT DEFAULT 0;
+    
+    CREATE TRIGGER TRG_BEFORE_INSERT BEFORE INSERT mysql_tbl_aunqp1 USERS FOR EACH ROW SET NEW.CREATED_AT = NOW();
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    CREATE TRIGGER TRG_mysql_tbl_m2bg09_UPDATE `mysql_tbl_m2bg09` UPDATE `mysql_tbl_aunqp1` USERS FOR EACH ROW INSERT INTO `mysql_tbl_uj0aoz` (ACTION, USER_ID) VALUES ('UPDATE', OLD.ID);
+    SET TRIG_COUNT = TRIG_COUNT + 1;
+    
+    RETURN TRIG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LISTING_SUCCESS_SCORE_qi4ejn----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_SUCCESS_SCORE_qi4ejn(LISTING_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LIST_PRICE INT DEFAULT 0;
+    DECLARE V_DAYS_mysql_tbl_aunqp1_MARKET INT DEFAULT 0;
+    DECLARE V_SHOWINGS_COUNT INT DEFAULT 0;
+    DECLARE V_SUCCESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_gmrmob_LIST_PRICE, 0), COALESCE(mysql_tbl_gmrmob_DAYS_mysql_tbl_aunqp1_MARKET, 0), COALESCE(mysql_tbl_gmrmob_SHOWINGS_COUNT, 0)
+    INTO V_LIST_PRICE, V_DAYS_mysql_tbl_aunqp1_MARKET, V_SHOWINGS_COUNT
+    FROM `mysql_tbl_gmrmob`
+    WHERE mysql_tbl_gmrmob_LISTING_ID = LISTING_ID_PARAM;
+
+    SET V_SUCCESS_SCORE = (V_SHOWINGS_COUNT * 10) - (V_DAYS_mysql_tbl_aunqp1_MARKET * 2);
+
+    IF V_LIST_PRICE > 500000 THEN
+        SET V_SUCCESS_SCORE = V_SUCCESS_SCORE + 20;
+    END IF;
+
+    IF V_DAYS_mysql_tbl_aunqp1_MARKET > 90 THEN
+        SET V_SUCCESS_SCORE = V_SUCCESS_SCORE - 30;
+    END IF;
+
+    RETURN CAST(V_SUCCESS_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(VAL INT) RETURNS VARCHAR(20) DETERMINISTIC
+BEGIN
+    CASE VAL
+        WHEN 1 THEN RETURN 'ONE';
+        WHEN 2 THEN RETURN 'TWO';
+        WHEN 3 THEN RETURN 'THREE';
+        ELSE RETURN 'OTHER';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf(MIN_PRICE INT, MAX_PRICE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE QUERY_COUNT INT DEFAULT 0;
+    
+    SELECT U.NAME, O.AMOUNT INTO @mysql_synth_dummy FROM USERS U JOIN `mysql_tbl_499a5r` O mysql_tbl_aunqp1 U.ID = O.USER_ID;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_cvom2q` WHERE PRICE BETWEEN MIN_PRICE AND MAX_PRICE;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_499a5r` WHERE STATUS IN ('PENDING', 'PROCESSING');
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT CATEGORY, AVG(PRICE) INTO @mysql_synth_dummy FROM `mysql_tbl_cvom2q` GROUP BY CATEGORY;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_r4v8sb` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET QUERY_COUNT = QUERY_COUNT + ROW_COUNT();
+    
+    RETURN QUERY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUITImysql_tbl_aunqp1_mysql_tbl_m2bg09_PAYMENT_prl7ac(STUDENT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TUITImysql_tbl_aunqp1_BALANCE INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_j7aemy_TUITImysql_tbl_aunqp1_BALANCE, 0)
+    INTO V_TUITImysql_tbl_aunqp1_BALANCE
+    FROM `mysql_tbl_j7aemy`
+    WHERE mysql_tbl_j7aemy_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(mysql_tbl_l5e2i7_AMOUNT), 0) INTO V_TOTAL_PAYMENTS
+    FROM `mysql_tbl_l5e2i7`
+    WHERE mysql_tbl_l5e2i7_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_REMAINING_BALANCE = MYSQL_FUNC_CALCULATE_LISTING_SUCCESS_SCORE_qi4ejn(50);
+
+    IF V_REMAINING_BALANCE < 0 THEN
+        SET V_REMAINING_BALANCE = MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf(94, -47);
+    END IF;
+
+    RETURN ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(62)) - (0) + (CAST(V_REMAINING_BALANCE AS SIGNED)));
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = MYSQL_FUNC_FUNC_107_CREATE_TRIGGER_cav0b2();
+    RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - (0) + (((MYSQL_FUNC_CALCULATE_TUITImysql_tbl_aunqp1_mysql_tbl_m2bg09_PAYMENT_prl7ac(-16)) - (0) + (FLOOR(V_VOLUME)))));
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(1, 1);

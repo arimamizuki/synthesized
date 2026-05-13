@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_tq94v3` (
+    `mysql_tbl_tq94v3_salary` INT
+);
+
+INSERT INTO `mysql_tbl_tq94v3` (`mysql_tbl_tq94v3_salary`) VALUES (1);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAY_hh4qzb(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(mysql_tbl_tq94v3_SALARY, 0)
+    INTO V_SALARY
+    FROM `mysql_tbl_tq94v3`
+    WHERE EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_PAY_hh4qzb(1);

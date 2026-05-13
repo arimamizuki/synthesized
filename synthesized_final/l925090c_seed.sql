@@ -1,0 +1,36 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_3xwjns` (
+    `table_3xwjns_product_id` INT,
+    `table_3xwjns_category_id` INT,
+    `table_3xwjns_price` DECIMAL(10,2),
+    `table_3xwjns_stock_quantity` INT
+);
+
+INSERT INTO `table_3xwjns` (`table_3xwjns_product_id`, `table_3xwjns_category_id`, `table_3xwjns_price`, `table_3xwjns_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TURNOVER_RATE_9ty9iy(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SALES_90D DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3XWJNS_STOCK_QUANTITY, 1)
+    INTO V_STOCK
+    FROM TABLE_3XWJNS
+    WHERE TABLE_3XWJNS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(QUANTITY), 0) / 3
+    INTO V_SALES_90D
+    FROM ORDER_ITEMS
+    WHERE TABLE_3XWJNS_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM ORDERS WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY));
+
+    SET V_TURNOVER_RATE = V_SALES_90D / V_STOCK;
+
+    RETURN FLOOR(V_TURNOVER_RATE);
+END //
+
+DELIMITER ;

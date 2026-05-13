@@ -1,0 +1,48 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_q3n9td` (
+    `table_q3n9td_customer_id` INT,
+    `table_q3n9td_registration_date` DATE,
+    `table_q3n9td_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_xbjl4c` (
+    `table_xbjl4c_order_id` INT,
+    `table_xbjl4c_customer_id` INT,
+    `table_xbjl4c_order_date` DATE,
+    `table_xbjl4c_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_q3n9td` (`table_q3n9td_customer_id`, `table_q3n9td_registration_date`, `table_q3n9td_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_xbjl4c` (`table_xbjl4c_order_id`, `table_xbjl4c_customer_id`, `table_xbjl4c_order_date`, `table_xbjl4c_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHARE_OF_WALLET_0mg352(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CUSTOMER_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_CATEGORY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SHARE_OF_WALLET INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_XBJL4C_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_SPEND
+    FROM TABLE_XBJL4C
+    WHERE TABLE_XBJL4C_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    SELECT COALESCE(SUM(TABLE_XBJL4C_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_CATEGORY_SPEND
+    FROM TABLE_XBJL4C O
+    JOIN TABLE_Q3N9TD C ON TABLE_XBJL4C_CUSTOMER_ID = TABLE_Q3N9TD_CUSTOMER_ID
+    WHERE TABLE_Q3N9TD_COUNTRY = (SELECT TABLE_Q3N9TD_COUNTRY FROM TABLE_Q3N9TD WHERE TABLE_Q3N9TD_CUSTOMER_ID = CUSTOMER_ID_PARAM);
+
+    IF V_TOTAL_CATEGORY_SPEND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHARE_OF_WALLET = (V_CUSTOMER_SPEND * 100) / V_TOTAL_CATEGORY_SPEND;
+
+    RETURN V_SHARE_OF_WALLET;
+END //
+
+DELIMITER ;

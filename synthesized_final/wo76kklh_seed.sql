@@ -1,0 +1,35 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_7q4fjt` (
+    `table_7q4fjt_order_id` INT,
+    `table_7q4fjt_customer_id` INT,
+    `table_7q4fjt_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7q4fjt` (`table_7q4fjt_order_id`, `table_7q4fjt_customer_id`, `table_7q4fjt_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_TIER_ha8vj5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_SPENT DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_7Q4FJT_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_7Q4FJT
+    WHERE TABLE_7Q4FJT_CUSTOMER_ID = CUSTOMER_ID_PARAM AND STATUS = 'COMPLETED';
+
+    IF V_TOTAL_SPENT > 10000 THEN
+        RETURN 5;
+    ELSEIF V_TOTAL_SPENT > 5000 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL_SPENT > 1000 THEN
+        RETURN 3;
+    ELSEIF V_TOTAL_SPENT > 500 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;

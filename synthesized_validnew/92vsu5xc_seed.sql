@@ -1,0 +1,50 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_70k6j0` (
+    `table_70k6j0_dept_id` INT,
+    `table_70k6j0_name` VARCHAR(50),
+    `table_70k6j0_budget` INT,
+    `table_70k6j0_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_acq3bc` (
+    `table_acq3bc_emp_id` INT,
+    `table_acq3bc_dept_id` INT,
+    `table_acq3bc_salary` INT
+);
+
+INSERT INTO `table_70k6j0` (`table_70k6j0_dept_id`, `table_70k6j0_name`, `table_70k6j0_budget`, `table_70k6j0_headcount`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_acq3bc` (`table_acq3bc_emp_id`, `table_acq3bc_dept_id`, `table_acq3bc_salary`) VALUES (1, 2, 3);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PROFIT_PER_EMPLOYEE_rg3vls(DEPT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_BUDGET INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_PROFIT_PER_EMPLOYEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_70K6J0_BUDGET, 0), COUNT(*)
+    INTO V_DEPT_BUDGET, V_EMPLOYEE_COUNT
+    FROM TABLE_70K6J0 D
+    LEFT JOIN TABLE_ACQ3BC E ON TABLE_70K6J0_DEPT_ID = TABLE_ACQ3BC_DEPT_ID
+    WHERE TABLE_70K6J0_DEPT_ID = DEPT_ID_PARAM
+    GROUP BY TABLE_70K6J0_DEPT_ID;
+
+    SELECT COALESCE(SUM(TABLE_ACQ3BC_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_ACQ3BC
+    WHERE TABLE_ACQ3BC_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_EMPLOYEE_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_PER_EMPLOYEE = (V_DEPT_BUDGET - V_TOTAL_SALARIES) / V_EMPLOYEE_COUNT;
+
+    RETURN V_PROFIT_PER_EMPLOYEE;
+END //
+
+DELIMITER ;

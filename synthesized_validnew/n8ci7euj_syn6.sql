@@ -1,0 +1,291 @@
+/* -----Seed Dependency----- */
+-- No table dependencies required for this function.
+
+/* -----Table Dependencies----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_xq2b39` (
+    `mysql_tbl_xq2b39_member_id` INT,
+    `mysql_tbl_xq2b39_tier_level` INT,
+    `mysql_tbl_xq2b39_total_miles` DECIMAL(10,2),
+    `mysql_tbl_xq2b39_miles_expired` INT,
+    `mysql_tbl_xq2b39_last_activity_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_sazaej` (
+    `mysql_tbl_sazaej_redemption_id` INT,
+    `mysql_tbl_sazaej_member_id` INT,
+    `mysql_tbl_sazaej_flight_id` INT,
+    `mysql_tbl_sazaej_miles_used` INT,
+    `mysql_tbl_sazaej_booking_date` DATE
+);
+
+INSERT INTO `mysql_tbl_xq2b39` (`mysql_tbl_xq2b39_member_id`, `mysql_tbl_xq2b39_tier_level`, `mysql_tbl_xq2b39_total_miles`, `mysql_tbl_xq2b39_miles_expired`, `mysql_tbl_xq2b39_last_activity_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+INSERT INTO `mysql_tbl_sazaej` (`mysql_tbl_sazaej_redemption_id`, `mysql_tbl_sazaej_member_id`, `mysql_tbl_sazaej_flight_id`, `mysql_tbl_sazaej_miles_used`, `mysql_tbl_sazaej_booking_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_7d1vyg` (
+    `mysql_tbl_7d1vyg_res_id` INT,
+    `mysql_tbl_7d1vyg_room_id` INT,
+    `mysql_tbl_7d1vyg_guest_id` INT,
+    `mysql_tbl_7d1vyg_check_in_date` DATE,
+    `mysql_tbl_7d1vyg_check_out_date` DATE,
+    `mysql_tbl_7d1vyg_total_price` DECIMAL(10,2),
+    `mysql_tbl_7d1vyg_status` VARCHAR(50)
+);
+
+INSERT INTO `mysql_tbl_7d1vyg` (`mysql_tbl_7d1vyg_res_id`, `mysql_tbl_7d1vyg_room_id`, `mysql_tbl_7d1vyg_guest_id`, `mysql_tbl_7d1vyg_check_in_date`, `mysql_tbl_7d1vyg_check_out_date`, `mysql_tbl_7d1vyg_total_price`, `mysql_tbl_7d1vyg_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_ral3bu` (
+    `mysql_tbl_ral3bu_product_id` INT,
+    `mysql_tbl_ral3bu_category_id` INT
+);
+
+INSERT INTO `mysql_tbl_ral3bu` (`mysql_tbl_ral3bu_product_id`, `mysql_tbl_ral3bu_category_id`) VALUES (1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_8wl2rs` (
+    `mysql_tbl_8wl2rs_emp_id` INT,
+    `mysql_tbl_8wl2rs_manager_id` INT,
+    `mysql_tbl_8wl2rs_department_id` INT
+);
+
+INSERT INTO `mysql_tbl_8wl2rs` (`mysql_tbl_8wl2rs_emp_id`, `mysql_tbl_8wl2rs_manager_id`, `mysql_tbl_8wl2rs_department_id`) VALUES (1, 1, 1);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_kukb4q` (
+    `mysql_tbl_kukb4q_lease_id` INT,
+    `mysql_tbl_kukb4q_tenant_id` INT,
+    `mysql_tbl_kukb4q_space_sqft` INT,
+    `mysql_tbl_kukb4q_monthly_rate` INT,
+    `mysql_tbl_kukb4q_start_date` DATE,
+    `mysql_tbl_kukb4q_lease_term_months` INT
+);
+
+CREATE TABLE IF NOT EXISTS `mysql_tbl_izo2s5` (
+    `mysql_tbl_izo2s5_tenant_id` INT,
+    `mysql_tbl_izo2s5_company_name` VARCHAR(50),
+    `mysql_tbl_izo2s5_industry` INT
+);
+
+INSERT INTO `mysql_tbl_kukb4q` (`mysql_tbl_kukb4q_lease_id`, `mysql_tbl_kukb4q_tenant_id`, `mysql_tbl_kukb4q_space_sqft`, `mysql_tbl_kukb4q_monthly_rate`, `mysql_tbl_kukb4q_start_date`, `mysql_tbl_kukb4q_lease_term_months`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `mysql_tbl_izo2s5` (`mysql_tbl_izo2s5_tenant_id`, `mysql_tbl_izo2s5_company_name`, `mysql_tbl_izo2s5_industry`) VALUES (1, 'test', 3);
+
+/* -----Procedure Dependencies----- */
+/* -----Procedure MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(LEASE_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SPACE_SQFT INT DEFAULT 0;
+    DECLARE V_MONTHLY_RATE INT DEFAULT 50;
+    DECLARE V_LEASE_TERM INT DEFAULT 12;
+    DECLARE V_TOTAL_LEASE_COST INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_kukb4q_SPACE_SQFT, 100), COALESCE(mysql_tbl_kukb4q_MONTHLY_RATE, 50), COALESCE(mysql_tbl_kukb4q_LEASE_TERM_MONTHS, 12)
+    INTO V_SPACE_SQFT, V_MONTHLY_RATE, V_LEASE_TERM
+    FROM `mysql_tbl_kukb4q`
+    WHERE mysql_tbl_kukb4q_LEASE_ID = LEASE_ID_PARAM;
+
+    SET V_TOTAL_LEASE_COST = V_SPACE_SQFT * V_MONTHLY_RATE * V_LEASE_TERM;
+
+    IF V_SPACE_SQFT > 5000 THEN
+        SET V_TOTAL_LEASE_COST = V_TOTAL_LEASE_COST - (V_TOTAL_LEASE_COST * 5 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_LEASE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(N INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    SET V_SUM = N * (N + 1) / 2;
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600() RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(-90)) - (0) + ((MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(8)) - (0) + V_SUM));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(CATEGORY_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM `mysql_tbl_ral3bu`
+    WHERE mysql_tbl_ral3bu_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT * 3;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(EMP_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT mysql_tbl_8wl2rs_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM `mysql_tbl_8wl2rs`
+    WHERE mysql_tbl_8wl2rs_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_DEPT_ID;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf(MIN_PRICE INT, MAX_PRICE INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE QUERY_COUNT INT DEFAULT 0;
+    
+    SELECT U.NAME, O.AMOUNT INTO @mysql_synth_dummy FROM USERS U JOIN `mysql_tbl_u4teo5` O ON U.ID = O.USER_ID;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_gpc1lm` WHERE PRICE BETWEEN MIN_PRICE AND MAX_PRICE;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT * INTO @mysql_synth_dummy FROM `mysql_tbl_u4teo5` WHERE STATUS IN ('PENDING', 'PROCESSING');
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    SELECT CATEGORY, AVG(PRICE) INTO @mysql_synth_dummy FROM `mysql_tbl_gpc1lm` GROUP BY CATEGORY;
+    SET QUERY_COUNT = QUERY_COUNT + 1;
+    
+    DELETE FROM `mysql_tbl_xqswh7` WHERE CREATED_AT < DATE_SUB(NOW(), INTERVAL 30 DAY);
+    SET QUERY_COUNT = QUERY_COUNT + ROW_COUNT();
+    
+    RETURN QUERY_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(MEMBER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_TOTAL_MILES INT DEFAULT 0;
+    DECLARE V_MILES_EXPIRED INT DEFAULT 0;
+    DECLARE V_CURRENT_TIER INT DEFAULT 1;
+    DECLARE V_UPGRADE_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(mysql_tbl_xq2b39_TOTAL_MILES, 0), COALESCE(mysql_tbl_xq2b39_MILES_EXPIRED, 0), mysql_tbl_xq2b39_TIER_LEVEL
+    INTO V_TOTAL_MILES, V_MILES_EXPIRED, V_CURRENT_TIER
+    FROM `mysql_tbl_xq2b39`
+    WHERE mysql_tbl_xq2b39_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SET V_UPGRADE_POINTS = V_TOTAL_MILES - V_MILES_EXPIRED;
+
+    CASE V_CURRENT_TIER
+        WHEN 1 THEN
+            IF V_UPGRADE_POINTS >= 50000 THEN SET V_UPGRADE_POINTS = MYSQL_FUNC_FUNC_004_JOIN_QUERIES_tyjwmf(94, -47);
+            END IF;
+        WHEN 2 THEN
+            IF V_UPGRADE_POINTS >= 100000 THEN SET V_UPGRADE_POINTS = V_UPGRADE_POINTS + 2000;
+            END IF;
+        ELSE SET V_UPGRADE_POINTS = V_UPGRADE_POINTS;
+    END CASE;
+
+    RETURN ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(-52)) - (0) + (((MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(16)) - (0) + (CAST(V_UPGRADE_POINTS AS SIGNED)))));
+END //
+
+DELIMITER ;
+
+/* -----Procedure MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(RES_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+
+    SELECT mysql_tbl_7d1vyg_CHECK_IN_DATE, mysql_tbl_7d1vyg_CHECK_OUT_DATE
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM `mysql_tbl_7d1vyg`
+    WHERE mysql_tbl_7d1vyg_RES_ID = RES_ID_PARAM;
+
+    IF V_CHECK_IN IS NULL OR V_CHECK_OUT IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS < 0 THEN
+        SET V_NIGHTS = 0;
+    END IF;
+
+    RETURN V_NIGHTS;
+END //
+
+DELIMITER ;
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POWER_y2j5yj(BASE INT, EXPONENT INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF EXPONENT < 0 THEN
+        RETURN ((MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600()) - (0) + 0);
+    END IF;
+
+    POWER_LOOP: WHILE V_COUNTER < EXPONENT DO
+        SET V_RESULT = MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(23);
+        SET V_COUNTER = MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(45);
+    END WHILE POWER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_POWER_y2j5yj(1, 1);

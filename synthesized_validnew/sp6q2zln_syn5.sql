@@ -1,0 +1,26 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `mysql_tbl_t8tvdi` (
+    `mysql_tbl_t8tvdi_supplier_id` INT
+);
+
+INSERT INTO `mysql_tbl_t8tvdi` (`mysql_tbl_t8tvdi_supplier_id`) VALUES (1);
+
+/* -----Synthesized Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_DIVERSITY_i171wi(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_CATEGORY_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT CATEGORY_ID)
+    INTO V_CATEGORY_COUNT
+    FROM `mysql_tbl_mzaf2d`
+    WHERE mysql_tbl_t8tvdi_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN V_CATEGORY_COUNT * 10;
+END //
+
+DELIMITER ;
+
+/* -----Call Statement----- */
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_PRODUCT_DIVERSITY_i171wi(1);

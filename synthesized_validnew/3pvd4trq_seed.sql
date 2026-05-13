@@ -1,0 +1,38 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_diynpm` (
+    `table_diynpm_customer_id` INT,
+    `table_diynpm_plan_type` VARCHAR(50),
+    `table_diynpm_monthly_cost` DECIMAL(10,2),
+    `table_diynpm_start_date` DATE,
+    `table_diynpm_status` VARCHAR(50)
+);
+
+INSERT INTO `table_diynpm` (`table_diynpm_customer_id`, `table_diynpm_plan_type`, `table_diynpm_monthly_cost`, `table_diynpm_start_date`, `table_diynpm_status`) VALUES (1, 'test', 1.0, '2024-01-01', 'test');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_HEALTH_SCORE_f4iv4x(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_DIYNPM_PLAN_TYPE, COALESCE(TABLE_DIYNPM_MONTHLY_COST, 0), TIMESTAMPDIFF(MONTH, TABLE_DIYNPM_START_DATE, CURDATE())
+    INTO V_PLAN_TYPE, V_MONTHLY_COST, V_TENURE_MONTHS
+    FROM TABLE_DIYNPM
+    WHERE TABLE_DIYNPM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_HEALTH_SCORE = (V_TENURE_MONTHS * 5) + (V_MONTHLY_COST / 5);
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_HEALTH_SCORE = V_HEALTH_SCORE + 50;
+        WHEN 'PREMIUM' THEN SET V_HEALTH_SCORE = V_HEALTH_SCORE + 30;
+        WHEN 'BASIC' THEN SET V_HEALTH_SCORE = V_HEALTH_SCORE + 10;
+    END CASE;
+
+    RETURN V_HEALTH_SCORE;
+END //
+
+DELIMITER ;

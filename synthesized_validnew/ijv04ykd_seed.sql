@@ -1,0 +1,54 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_a4lmx3` (
+    `table_a4lmx3_customer_id` INT,
+    `table_a4lmx3_plan_type` VARCHAR(50),
+    `table_a4lmx3_monthly_cost` DECIMAL(10,2),
+    `table_a4lmx3_start_date` DATE,
+    `table_a4lmx3_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_eoy2l9` (
+    `table_eoy2l9_customer_id` INT,
+    `table_eoy2l9_tier_level` INT
+);
+
+INSERT INTO `table_a4lmx3` (`table_a4lmx3_customer_id`, `table_a4lmx3_plan_type`, `table_a4lmx3_monthly_cost`, `table_a4lmx3_start_date`, `table_a4lmx3_status`) VALUES (1, 'test', 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_eoy2l9` (`table_eoy2l9_customer_id`, `table_eoy2l9_tier_level`) VALUES (1, 2);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_SOPHISTICATION_zrp6p5(CUSTOMER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_SOPHISTICATION INT DEFAULT 0;
+
+    SELECT TABLE_A4LMX3_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_A4LMX3
+    WHERE TABLE_A4LMX3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_EOY2L9_TIER_LEVEL
+    INTO V_TIER
+    FROM TABLE_EOY2L9
+    WHERE TABLE_EOY2L9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_SOPHISTICATION = 100;
+        WHEN 'PREMIUM' THEN SET V_SOPHISTICATION = 60;
+        WHEN 'BASIC' THEN SET V_SOPHISTICATION = 30;
+        ELSE SET V_SOPHISTICATION = 10;
+    END CASE;
+
+    CASE V_TIER
+        WHEN 'PLATINUM' THEN SET V_SOPHISTICATION = V_SOPHISTICATION + 40;
+        WHEN 'GOLD' THEN SET V_SOPHISTICATION = V_SOPHISTICATION + 25;
+        WHEN 'SILVER' THEN SET V_SOPHISTICATION = V_SOPHISTICATION + 10;
+    END CASE;
+
+    RETURN V_SOPHISTICATION;
+END //
+
+DELIMITER ;

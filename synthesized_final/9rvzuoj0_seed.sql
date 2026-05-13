@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_r1m4cs` (
+    `table_r1m4cs_supplier_id` INT,
+    `table_r1m4cs_lead_time_days` DATE
+);
+
+INSERT INTO `table_r1m4cs` (`table_r1m4cs_supplier_id`, `table_r1m4cs_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_SCORE_32c45k(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R1M4CS_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM TABLE_R1M4CS
+    WHERE TABLE_R1M4CS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN GREATEST(100 - (V_LEAD_TIME * 7), 0);
+END //
+
+DELIMITER ;

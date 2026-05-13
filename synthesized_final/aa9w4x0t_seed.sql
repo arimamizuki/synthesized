@@ -1,0 +1,25 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_qvbso8` (
+    `table_qvbso8_customer_id` INT,
+    `table_qvbso8_country` INT
+);
+
+INSERT INTO `table_qvbso8` (`table_qvbso8_customer_id`, `table_qvbso8_country`) VALUES (1, 1);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SUBSCRIPTION_COUNT_v4zajd(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM SUBSCRIPTIONS S
+    JOIN TABLE_QVBSO8 C ON S.CUSTOMER_ID = TABLE_QVBSO8_CUSTOMER_ID
+    WHERE TABLE_QVBSO8_COUNTRY = COUNTRY_PARAM AND S.STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;

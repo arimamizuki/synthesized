@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_85igwe` (
+    `table_85igwe_supplier_id` INT,
+    `table_85igwe_lead_time_days` DATE
+);
+
+INSERT INTO `table_85igwe` (`table_85igwe_supplier_id`, `table_85igwe_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEAD_TIME_SCORE_vydyk2(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_85IGWE_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM TABLE_85IGWE
+    WHERE TABLE_85IGWE_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN GREATEST(100 - (V_LEAD_TIME * 5), 0);
+END //
+
+DELIMITER ;

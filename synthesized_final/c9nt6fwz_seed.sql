@@ -1,0 +1,27 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_6xgl4y` (
+    `table_6xgl4y_customer_id` INT,
+    `table_6xgl4y_country` INT,
+    `table_6xgl4y_registration_date` DATE
+);
+
+INSERT INTO `table_6xgl4y` (`table_6xgl4y_customer_id`, `table_6xgl4y_country`, `table_6xgl4y_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_GROWTH_eypdyu(COUNTRY_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_RECENT_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_RECENT_CUSTOMERS, V_TOTAL_CUSTOMERS
+    FROM TABLE_6XGL4Y
+    WHERE TABLE_6XGL4Y_COUNTRY = COUNTRY_PARAM
+      AND TABLE_6XGL4Y_REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN (V_RECENT_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;

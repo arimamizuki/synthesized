@@ -1,0 +1,24 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_1ly1fy` (
+    `table_1ly1fy_supplier_id` INT,
+    `table_1ly1fy_lead_time_days` DATE
+);
+
+INSERT INTO `table_1ly1fy` (`table_1ly1fy_supplier_id`, `table_1ly1fy_lead_time_days`) VALUES (1, '2024-01-01');
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_LEAD_TIME_VALUE_5vfkdt(SUPPLIER_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_LEAD_TIME INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1LY1FY_LEAD_TIME_DAYS, 7)
+    INTO V_LEAD_TIME
+    FROM TABLE_1LY1FY
+    WHERE TABLE_1LY1FY_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN 30 - V_LEAD_TIME;
+END //
+
+DELIMITER ;

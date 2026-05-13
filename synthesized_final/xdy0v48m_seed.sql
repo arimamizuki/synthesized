@@ -1,0 +1,40 @@
+/* -----Seed Dependency----- */
+CREATE TABLE IF NOT EXISTS `table_rceses` (
+    `table_rceses_product_id` INT,
+    `table_rceses_category_id` INT,
+    `table_rceses_price` DECIMAL(10,2),
+    `table_rceses_stock_quantity` INT
+);
+
+INSERT INTO `table_rceses` (`table_rceses_product_id`, `table_rceses_category_id`, `table_rceses_price`, `table_rceses_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Seed Procedure----- */
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_URGENCY_SCORE_fnaeqc(PRODUCT_ID_PARAM INT) RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_URGENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RCESES_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_RCESES
+    WHERE TABLE_RCESES_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM ORDER_ITEMS
+    WHERE TABLE_RCESES_PRODUCT_ID = PRODUCT_ID_PARAM
+    AND ORDER_ID IN (SELECT ORDER_ID FROM ORDERS WHERE ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY));
+
+    IF V_AVG_DAILY_SALES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_URGENCY_SCORE = V_STOCK / V_AVG_DAILY_SALES;
+
+    RETURN V_URGENCY_SCORE;
+END //
+
+DELIMITER ;
