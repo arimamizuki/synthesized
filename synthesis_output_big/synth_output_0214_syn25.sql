@@ -1,0 +1,167 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1996 (v1997 JSON, v1998 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1953 (v1954 JSON);
+CREATE TABLE IF NOT EXISTS v2076 (v2077 CHAR(5) CHARACTER SET UCS2);
+CREATE TABLE IF NOT EXISTS v1976 (v1977 INT);
+CREATE TABLE IF NOT EXISTS v1831 (v1832 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS x11 (x INT);
+CREATE TABLE IF NOT EXISTS x13 (x INT);
+CREATE TABLE IF NOT EXISTS x18 (x INT);
+CREATE TABLE IF NOT EXISTS x19 (x INT);
+CREATE TABLE IF NOT EXISTS x10 (x INT);
+CREATE TABLE IF NOT EXISTS x20 (x INT);
+INSERT INTO v1996 VALUES (JSON_OBJECT('key', 'value'), 'green');
+INSERT INTO v1953 VALUES (JSON_OBJECT('key', 'value'));
+INSERT INTO v1976 VALUES (1), (2), (3);
+INSERT INTO v1831 VALUES ('USA'), ('Canada'), ('Mexico');
+INSERT INTO x11 VALUES (1), (2), (3);
+INSERT INTO x13 VALUES (1), (2), (3);
+INSERT INTO x18 VALUES (1), (2);
+INSERT INTO x19 VALUES (1), (2);
+INSERT INTO x10 VALUES (1);
+INSERT INTO x20 VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CONVERT_BASE_zap1ar----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CONVERT_BASE_zap1ar(NUM INT, BASE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT_POSITION INT DEFAULT 1;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    IF BASE < 2 OR BASE > 9 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_TEMP = ABS(NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD BASE;
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(-38, -31)) - -751 + (v_result + (v_digit * v_digit_position));
+        SET V_TEMP = V_TEMP DIV BASE;
+        SET V_DIGIT_POSITION = V_DIGIT_POSITION * 10;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+CREATE TABLE IF NOT EXISTS `table_if4wjn` (
+    `table_if4wjn_appointment_id` INT,
+    `table_if4wjn_customer_id` INT,
+    `table_if4wjn_therapist_id` INT,
+    `table_if4wjn_service_type` VARCHAR(50),
+    `table_if4wjn_duration_minutes` INT,
+    `table_if4wjn_appointment_date` DATE,
+    `table_if4wjn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6nekv6` (
+    `table_6nekv6_service_id` INT,
+    `table_6nekv6_name` VARCHAR(50),
+    `table_6nekv6_base_price` DECIMAL(10,2),
+    `table_6nekv6_duration_default` INT
+);
+
+INSERT INTO `table_if4wjn` (`table_if4wjn_appointment_id`, `table_if4wjn_customer_id`, `table_if4wjn_therapist_id`, `table_if4wjn_service_type`, `table_if4wjn_duration_minutes`, `table_if4wjn_appointment_date`, `table_if4wjn_price`) VALUES (1, 2, 3, 'test', 5, '2024-01-01', 1.0);
+
+INSERT INTO `table_6nekv6` (`table_6nekv6_service_id`, `table_6nekv6_name`, `table_6nekv6_base_price`, `table_6nekv6_duration_default`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(SERVICE_TYPE_PARAM INT, ADD_ONS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 80;
+    DECLARE V_ADDON_COST INT DEFAULT 30;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'MASSAGE' THEN SET V_BASE_PRICE = 100;
+        WHEN 'FACIAL' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BODY_WRAP' THEN SET V_BASE_PRICE = 120;
+        WHEN 'REFLEXOLOGY' THEN SET V_BASE_PRICE = 60;
+        ELSE SET V_BASE_PRICE = 80;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE + (ADD_ONS_PARAM * V_ADDON_COST);
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0214(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_json_result JSON;
+    DECLARE v_val INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1977 FROM v1976;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+        SET result = -1;
+    END;
+
+    -- Statement 1: UPDATE with JSON_CONTAINS and spatial functions
+    SET @sql1 = 'UPDATE v1996 AS x0 SET x0.v1997 = JSON_CONTAINS(MULTILINESTRING(LINESTRING(POINT(''MULTIPOINT(2 9, 1 0)'', 2), ST_GEOMFROMTEXT(''LINESTRING(5 9,-1 10,-2 -6,2 9,2 0,3 6,-3 3,9 -2,-3 -10,-7 -4,1 4)'')), LINESTRING(ST_LINESTRINGFROMTEXT(@wkt_ls, 0), COMPRESS(''x''))), ''false'') WHERE v1998 = ''green''';
+    SET @wkt_ls = 'LINESTRING(0 0, 1 1)';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: UPDATE with JSON_CONTAINS and spatial function
+    SET @sql2 = 'UPDATE v1953 AS x1 SET x1.v1954 = JSON_CONTAINS(ST_LINEFROMTEXT(@wkt_ls, 0), ''false'') WHERE v1954 = ''p1''';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: CREATE TABLE with recursive CTE (simplified)
+    SET @sql3 = 'CREATE TABLE IF NOT EXISTS v2076_new (v2077 CHAR(5) CHARACTER SET UCS2)';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: Complex recursive CTE with EXISTS (simplified to cursor)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        IF v_val > 0 THEN
+            SET v_counter = v_counter + v_val;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: Window function with CTE (simplified to SELECT INTO)
+    SET @sql5 = 'SELECT MAX(v1832) OVER (ORDER BY v1832 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) INTO @max_val FROM v1831 WHERE v1832 <> ''USA'' LIMIT 1';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + (MYSQL_FUNC_CONVERT_BASE_zap1ar(-6, -59)) - 784 + (ifnull(@max_val, 0));
+
+    -- Final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0214(1, 1, @out_result);
+
+SELECT @out_result;

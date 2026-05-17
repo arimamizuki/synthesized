@@ -1,0 +1,301 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v19080 (
+    v19080_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19081 INT,
+    v19083 CHAR(10),
+    v19085 INT
+);
+CREATE TABLE IF NOT EXISTS v19147 (
+    v19147_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19148 INT,
+    v19149 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v19151 (
+    v19151_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19152 DECIMAL(10,8),
+    v19153 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v19161 (
+    v19161_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19162 VARCHAR(100),
+    v19163 VARCHAR(50),
+    v19164 INT
+);
+CREATE TABLE IF NOT EXISTS v19165 (
+    v19165_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19166 INT,
+    v19167 DECIMAL(10,4),
+    v19168 INT,
+    v19169 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v19197 (
+    v19197_id INT AUTO_INCREMENT PRIMARY KEY,
+    v19198 INT,
+    v19199 INT,
+    v19200 VARCHAR(50)
+);
+INSERT INTO v19080 (v19081, v19083, v19085) VALUES
+(1, 'a', 1),
+(2, 'b', 2),
+(1, 'c', 3),
+(3, 'd', 1);
+INSERT INTO v19147 (v19148, v19149) VALUES
+(1, 'test1'),
+(2, 'test2'),
+(3, 'test3');
+INSERT INTO v19151 (v19152, v19153) VALUES
+(14.00000000, 'alpha'),
+(5.00000000, 'beta'),
+(14.00000000, 'gamma');
+INSERT INTO v19161 (v19162, v19163, v19164) VALUES
+('information_schema', 'John', 1),
+('information_schema', 'Jane', 2),
+('mysql', 'James', 3),
+('information_schema', 'Bob', 4);
+INSERT INTO v19165 (v19166, v19167, v19168, v19169) VALUES
+(1, 123.4567, 96, 'data1'),
+(2, 789.0123, 97, 'data2'),
+(3, 456.7890, 98, 'data3'),
+(4, 111.2222, 99, 'data4'),
+(5, 333.4444, 95, 'data5');
+INSERT INTO v19197 (v19198, v19199, v19200) VALUES
+(98, 5, 'item1'),
+(14, 10, 'item2'),
+(98, 3, 'item3'),
+(20, 8, 'item4');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv----- */
+CREATE TABLE IF NOT EXISTS `table_oke29e` (
+    `table_oke29e_product_id` INT,
+    `table_oke29e_category_id` INT,
+    `table_oke29e_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_oke29e` (`table_oke29e_product_id`, `table_oke29e_category_id`, `table_oke29e_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_TOTAL DECIMAL(10,2) DEFAULT 1.00;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_OKE29E_CATEGORY_ID, COALESCE(TABLE_OKE29E_PRICE, 0)
+    INTO V_CATEGORY_ID, V_PRICE
+    FROM TABLE_OKE29E
+    WHERE TABLE_OKE29E_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OKE29E_PRICE), 1)
+    INTO V_CATEGORY_TOTAL
+    FROM TABLE_OKE29E
+    WHERE TABLE_OKE29E_CATEGORY_ID = V_CATEGORY_ID;
+
+    RETURN (MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(47)) - -624 + (floor((v_price * 100) / v_category_total));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(JSON_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_LEN INT DEFAULT CHAR_LENGTH(JSON_STR);
+    DECLARE V_CHAR CHAR(1);
+    DECLARE V_BRACKET_COUNT INT DEFAULT 0;
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+
+    IF JSON_STR IS NULL OR JSON_STR = '' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + (0);
+    END IF;
+
+    PARSE_LOOP: WHILE V_POS <= V_LEN DO
+        SET V_CHAR = SUBSTRING(JSON_STR, V_POS, 1);
+
+        IF V_CHAR = '{' OR V_CHAR = '[' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT + 1;
+            IF V_BRACKET_COUNT > V_MAX_DEPTH THEN
+                SET V_MAX_DEPTH = V_BRACKET_COUNT;
+            END IF;
+        ELSEIF V_CHAR = '}' OR V_CHAR = ']' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT - 1;
+        END IF;
+
+        SET V_POS = V_POS + 1;
+    END WHILE PARSE_LOOP;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0704(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_rand1 VARCHAR(64);
+    DECLARE v_rand2 VARCHAR(64);
+    DECLARE v_concat_val VARCHAR(128);
+    DECLARE v_loop_done INT DEFAULT FALSE;
+    DECLARE v_cur_val INT;
+    DECLARE v_cur_round DECIMAL(10,4);
+    DECLARE v_cur_col INT;
+    DECLARE v_cur_count INT DEFAULT 0;
+    
+    -- Cursor for the recursive CTE result
+    DECLARE cur_rec CURSOR FOR 
+        WITH RECURSIVE x13 AS (
+            SELECT 1 AS id, CONCAT(SHA2(RAND(), 0), SHA2(RAND(), 0)) AS hash_val
+            UNION ALL 
+            SELECT x11.v19166 + 1, CONCAT(SHA2(RAND(), 0), SHA2(RAND(), 0))
+            FROM v19165 AS x11 
+            WHERE x11.v19166 < 10000
+        )
+        SELECT x11.v19168, ROUND(x11.v19167, x11.v19168) AS rounded_val, x11.v19168
+        FROM v19165 AS x11
+        WHERE x11.v19168 > 95
+        ORDER BY RAND();
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+    
+    -- Initialize result
+    SET result = 0;
+    
+    -- Statement 1: UPDATE with LEFT JOIN
+    SET @sql1 = 'UPDATE v19197 AS x1 LEFT JOIN v19147 AS x6 ON x1.v19199 = x1.v19198 SET x1.v19198 = x1.v19199 + x1.v19198 + 10 WHERE v19198 = 98';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    
+    -- Statement 2: UPDATE with LEFT JOIN and decimal value
+    SET @sql2 = 'UPDATE v19151 AS x2 LEFT JOIN v19080 AS x7 ON x2.v19152 = 1 SET x2.v19152 = 1.012345679 WHERE v19152 = 14';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    
+    -- Statement 3: UPDATE with condition on same table
+    SET @sql3 = 'UPDATE v19080 AS x1 SET v19083 = ''e'' WHERE x1.v19085 = x1.v19081 AND x1.v19081 = 1';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    
+    -- Statement 4: UPDATE with ORDER BY and LIMIT
+    SET @sql4 = 'UPDATE v19161 AS x1 SET x1.v19163 = ''James'' WHERE v19162 LIKE ''information_schema'' ORDER BY v19162 DESC, v19163 LIMIT 90';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    
+    -- Statement 5: Process recursive CTE result using cursor and loops
+    OPEN cur_rec;
+    
+    read_loop: LOOP
+        FETCH cur_rec INTO v_cur_val, v_cur_round, v_cur_col;
+        
+        IF v_loop_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        SET v_cur_count = v_cur_count + 1;
+        
+        -- Use IF/ELSEIF for conditional logic
+        IF v_cur_val > 97 THEN
+            SET v_temp = v_temp + 100;
+        ELSEIF (MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(-100)) - -340 + (v_cur_val = 97) THEN
+            SET v_temp = v_temp + 50;
+        ELSE
+            SET v_temp = v_temp + 10;
+        END IF;
+        
+        -- Use CASE/WHEN for additional logic
+        CASE 
+            WHEN v_cur_round > 100 THEN
+                SET v_temp = v_temp + 5;
+            WHEN v_cur_round > 50 THEN
+                SET v_temp = v_temp + 3;
+            ELSE
+                SET v_temp = v_temp + 1;
+        END CASE;
+    END LOOP;
+    
+    CLOSE cur_rec;
+    
+    -- Use WHILE loop for additional processing
+    WHILE v_cur_count > 0 DO
+        SET v_counter = v_counter + 1;
+        SET v_cur_count = v_cur_count - 1;
+    END WHILE;
+    
+    -- Set final output result
+    SET result = v_counter + v_temp;
+    
+    -- Use SIGNAL for validation if needed
+    IF result < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Negative result not allowed';
+    END IF;
+    
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0704(1, 1, @out_result);
+
+SELECT @out_result;

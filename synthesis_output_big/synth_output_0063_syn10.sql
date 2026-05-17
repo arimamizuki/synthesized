@@ -1,0 +1,184 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v367 (v368 DOUBLE, v369 DOUBLE);
+CREATE TABLE IF NOT EXISTS v370 (v371 CHAR(10));
+CREATE TABLE IF NOT EXISTS v317 (v318 INT, v319 INT, v320 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v295 (v296 INT, v297 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v326 (v327 VARCHAR(100), v328 INT);
+CREATE TABLE IF NOT EXISTS v331 (v332 INT, v333 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v291 (v292 INT, v293 VARCHAR(50));
+INSERT INTO v367 VALUES (1.5, 2.5), (3.0, 4.0), (5.5, 6.5);
+INSERT INTO v370 VALUES ('hello'), ('world'), ('test');
+INSERT INTO v317 VALUES (1, 5, 'data1'), (2, 3, 'data2'), (3, 6, 'data3');
+INSERT INTO v295 VALUES (1, 'value1'), (2, 'value2'), (3, 'value3');
+INSERT INTO v326 VALUES ('abcde', 10), ('fghij', 20), ('klmno', 30);
+INSERT INTO v331 VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO v291 VALUES (5, 'test1'), (-5, 'test2'), (10, 'test3');
+
+/* -----Called: MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_POSITIVE INT DEFAULT 0;
+    DECLARE V_IS_EVEN INT DEFAULT 0;
+    DECLARE V_IS_PERFECT_SQUARE INT DEFAULT 0;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+    DECLARE V_CLASS_SCORE INT DEFAULT 0;
+
+    IF N > 0 THEN
+        SET V_IS_POSITIVE = 1;
+    END IF;
+
+    IF N % 2 = 0 THEN
+        SET V_IS_EVEN = 1;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(ABS(N)));
+    IF V_SQRT_N * V_SQRT_N = ABS(N) THEN
+        SET V_IS_PERFECT_SQUARE = 1;
+    END IF;
+
+    SET V_CLASS_SCORE = (V_IS_POSITIVE * 4) + (V_IS_EVEN * 2) + V_IS_PERFECT_SQUARE;
+
+    RETURN V_CLASS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r----- */
+CREATE TABLE IF NOT EXISTS `table_hg090m` (
+    `table_hg090m_order_id` INT,
+    `table_hg090m_customer_id` INT,
+    `table_hg090m_order_date` DATE,
+    `table_hg090m_total_amount` DECIMAL(10,2),
+    `table_hg090m_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_3azbru` (
+    `table_3azbru_order_id` INT,
+    `table_3azbru_product_id` INT,
+    `table_3azbru_quantity` INT,
+    `table_3azbru_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hg090m` (`table_hg090m_order_id`, `table_hg090m_customer_id`, `table_hg090m_order_date`, `table_hg090m_total_amount`, `table_hg090m_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_3azbru` (`table_3azbru_order_id`, `table_3azbru_product_id`, `table_3azbru_quantity`, `table_3azbru_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_DISCOUNT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_3AZBRU_QUANTITY * TABLE_3AZBRU_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_AMOUNT, V_ITEM_COUNT
+    FROM TABLE_3AZBRU
+    WHERE TABLE_3AZBRU_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT_SCORE = (V_TOTAL_AMOUNT / 100) + (V_ITEM_COUNT * 5);
+
+    RETURN V_DISCOUNT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0063(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val DOUBLE;
+    DECLARE v_char_val CHAR(10);
+    DECLARE v_sql_text TEXT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geom_result INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+
+    -- Cursor for processing v367 data
+    DECLARE cur1 CURSOR FOR SELECT v368 FROM v367 WHERE v368 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: CREATE TABLE v367 (already created above)
+    -- Statement 2: CREATE TABLE v370 (already created above)
+
+    -- Statement 3: UPDATE with JOIN (adapted as dynamic SQL)
+    SET @sql_update = 'UPDATE v326 AS x2 INNER JOIN v331 AS x7 ON x2.v328 = x7.v332 SET v327 = LEFT(v327, 1)';
+    PREPARE stmt1 FROM @sql_update;
+    EXECUTE stmt1;
+    SET v_update_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 4: CREATE VIEW (simplified as SELECT INTO logic)
+    SET @sql_view = 'SELECT COUNT(*) INTO @view_count FROM v317 AS x5 JOIN v295 AS x4 ON x5.v318 = x5.v318 WHERE x5.v319 <= 6';
+    PREPARE stmt2 FROM @sql_view;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+
+    -- Check geometry function result
+    IF ST_EQUALS(ST_GEOMFROMTEXT('GEOMETRYCOLLECTION()'), ST_GEOMFROMTEXT('POINT(0 0)')) THEN
+        SET v_geom_result = 1;
+    ELSE
+        SET v_geom_result = 0;
+    END IF;
+    SET v_counter = v_counter + v_geom_result;
+
+    -- Statement 5: UPDATE with NATURAL JOIN (adapted with error handling)
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+            SET v_counter = v_counter - 1;
+        END;
+
+        SET @sql_update2 = 'UPDATE v291 AS x1 NATURAL LEFT JOIN v331 AS x3 SET v293 = RTRIM(\'hellotrudy\') WHERE x1.v292 = -x1.v292';
+        PREPARE stmt3 FROM @sql_update2;
+        EXECUTE stmt3;
+        SET v_update_count = ROW_COUNT();
+        DEALLOCATE PREPARE stmt3;
+        SET v_counter = v_counter + v_update_count;
+    END;
+
+    -- Use cursor to iterate through v367 values
+    OPEN cur1;
+    read_loop: LOOP
+        FETCH cur1 INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Conditional logic using CASE
+        CASE
+            WHEN (MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r(60)) - -158 + (v_val > p2) THEN
+                SET v_counter = v_counter + 1;
+            WHEN v_val BETWEEN p1 AND p2 THEN
+                SET v_counter = v_counter + 2;
+            ELSE
+                SET v_counter = v_counter + 0;
+        END CASE;
+
+        -- WHILE loop for additional processing
+        WHILE v_val > 0 DO
+            SET v_val = v_val - 0.5;
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    END LOOP;
+    CLOSE cur1;
+
+    -- Final result based on accumulated counter
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0063(1, 1, @out_result);
+
+SELECT @out_result;

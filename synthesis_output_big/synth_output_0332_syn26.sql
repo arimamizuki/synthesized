@@ -1,0 +1,145 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v4104 (v4105 TEXT, v4106 INT);
+CREATE TABLE IF NOT EXISTS v4244 (v4105 TEXT, v4106 INT);
+CREATE TABLE IF NOT EXISTS v4059 (v4062 TEXT);
+CREATE TABLE IF NOT EXISTS v3797 (v3669 TEXT);
+CREATE TABLE IF NOT EXISTS v3864 (v3669 TEXT);
+CREATE TABLE IF NOT EXISTS v3884 (v3885 INT);
+CREATE TABLE IF NOT EXISTS v4078 (v4082 TEXT);
+CREATE TABLE IF NOT EXISTS v3717 (v3718 TEXT);
+CREATE TABLE IF NOT EXISTS v4312 (x1 TEXT);
+INSERT INTO v4104 VALUES ('[1]', 1), ('[2]', 2);
+INSERT INTO v4244 VALUES ('[1]', 1), ('[3]', 3);
+INSERT INTO v4059 VALUES ('test'), ('data');
+INSERT INTO v3797 VALUES ('col_datetime'), ('other');
+INSERT INTO v3864 VALUES ('col_datetime'), ('test');
+INSERT INTO v3884 VALUES (100), (200);
+INSERT INTO v4078 VALUES ('hello'), ('world');
+INSERT INTO v3717 VALUES ('mysql'), ('db');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (V_SHIPPING_COST * 100) / V_ORDER_VALUE;
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0332(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_text TEXT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT x2.v3885 FROM v3884 AS x2;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Statement 1: UPDATE with JOIN
+    SET @sql1 = 'UPDATE v4104 AS x1, v4244 AS x5 SET x1.v4105 = ? WHERE x1.v4105 = CONNECTION_ID()';
+    SET @conn_id = CONNECTION_ID();
+    PREPARE stmt1 FROM @sql1;
+    SET @val1 = '[1]';
+    EXECUTE stmt1 USING @val1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: INSERT with VALUES
+    SET @sql2 = 'INSERT INTO v4059 (v4062) VALUES (?), (?)';
+    PREPARE stmt2 FROM @sql2;
+    SET @val2a = 968;
+    SET @val2b = 'u';
+    EXECUTE stmt2 USING @val2a, @val2b;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE with LEFT JOIN and condition
+    SET @sql3 = 'UPDATE v3797 AS x0 LEFT OUTER JOIN v3864 AS x1 ON x0.v3669 = x0.v3669 SET x0.v3669 = ? WHERE (x0.v3669 >= ?)';
+    PREPARE stmt3 FROM @sql3;
+    SET @val3a = 'col_datetime';
+    SET @val3b = 'j';
+    EXECUTE stmt3 USING @val3a, @val3b;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: SELECT using CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF (MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (done) THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: CREATE TABLE AS SELECT
+    SET @sql5 = 'CREATE TABLE IF NOT EXISTS v4312 AS SELECT CONCAT(x8.v4082, x9.v3718) AS x1 FROM v4078 AS x8, v3717 AS x9';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Procedural logic: IF/ELSEIF/ELSE
+    IF v_counter > 1000 THEN
+        SET result = 1;
+    ELSEIF v_counter > 100 THEN
+        SET result = 2;
+    ELSE
+        SET result = 3;
+    END IF;
+
+    -- WHILE loop example
+    WHILE v_counter < 500 DO
+        SET v_counter = v_counter + 10;
+    END WHILE;
+
+    -- CASE statement
+    CASE 
+        WHEN v_counter > 1000 THEN SET result = 1;
+        WHEN v_counter > 500 THEN SET result = 2;
+        ELSE SET result = 3;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0332(1, 1, @out_result);
+
+SELECT @out_result;

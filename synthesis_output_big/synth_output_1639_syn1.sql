@@ -1,0 +1,264 @@
+/* -----Dependencies----- */
+CREATE TEMPORARY TABLE v185516 (v185517 BIGINT DEFAULT -1.87e-2);
+CREATE TABLE IF NOT EXISTS v185138 (
+    v185140 VARCHAR(10),
+    v185141 INT,
+    v185142 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v184236 (
+    v184237 JSON
+);
+CREATE TABLE IF NOT EXISTS v184757 (
+    v184758 CHAR(1),
+    v184759 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v185369 (
+    v185371 VARCHAR(100)
+);
+INSERT INTO v185138 VALUES ('t2', 1, 'utf8mb3_encoding'), ('t2', 2, 'utf8mb3_encoding'), ('t1', 3, 'other');
+INSERT INTO v184236 VALUES ('{"key": "value"}'), ('{"num": 123}');
+INSERT INTO v184757 VALUES ('t', ST_GeomFromText('MULTILINESTRING((0 0, 1 1), (2 2, 3 3))'));
+INSERT INTO v185369 VALUES ('さしすせそかきくけこあいうえおtest'), ('あいうえお');
+INSERT INTO v185516 VALUES (100), (200);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+CREATE TABLE IF NOT EXISTS `table_v5hjvn` (
+    `table_v5hjvn_order_id` INT,
+    `table_v5hjvn_customer_id` INT,
+    `table_v5hjvn_order_date` DATE,
+    `table_v5hjvn_shipping_date` DATE,
+    `table_v5hjvn_delivery_date` DATE,
+    `table_v5hjvn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_57ma1s` (
+    `table_57ma1s_order_id` INT,
+    `table_57ma1s_product_id` INT,
+    `table_57ma1s_quantity` INT,
+    `table_57ma1s_discount_percent` INT
+);
+
+INSERT INTO `table_v5hjvn` (`table_v5hjvn_order_id`, `table_v5hjvn_customer_id`, `table_v5hjvn_order_date`, `table_v5hjvn_shipping_date`, `table_v5hjvn_delivery_date`, `table_v5hjvn_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_57ma1s` (`table_57ma1s_order_id`, `table_57ma1s_product_id`, `table_57ma1s_quantity`, `table_57ma1s_discount_percent`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DELIVERY_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DELIVERY_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_57MA1S_QUANTITY * TABLE_57MA1S_DISCOUNT_PERCENT), 0)
+    INTO V_DISCOUNT_PERCENT
+    FROM TABLE_57MA1S
+    WHERE TABLE_57MA1S_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT DATEDIFF(COALESCE(TABLE_V5HJVN_DELIVERY_DATE, CURDATE()), TABLE_V5HJVN_SHIPPING_DATE)
+    INTO V_ACTUAL_DELIVERY_DAYS
+    FROM TABLE_V5HJVN
+    WHERE TABLE_V5HJVN_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DELAY_DAYS = V_ACTUAL_DELIVERY_DAYS - V_EXPECTED_DELIVERY_DAYS;
+
+    IF V_DELAY_DAYS <= 0 THEN
+        SET V_DELAY_SCORE = 100;
+    ELSE
+        SET V_DELAY_SCORE = 100 - (V_DELAY_DAYS * 10);
+    END IF;
+
+    RETURN GREATEST(V_DELAY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - 913 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+CREATE TABLE IF NOT EXISTS `table_74xcmp` (
+    `table_74xcmp_airline_id` INT,
+    `table_74xcmp_name` VARCHAR(50),
+    `table_74xcmp_iata_code` INT,
+    `table_74xcmp_safety_rating` DECIMAL(3,1),
+    `table_74xcmp_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r5kuxo` (
+    `table_r5kuxo_flight_id` INT,
+    `table_r5kuxo_airline_id` INT,
+    `table_r5kuxo_origin` INT,
+    `table_r5kuxo_destination` INT,
+    `table_r5kuxo_distance_miles` INT
+);
+
+INSERT INTO `table_74xcmp` (`table_74xcmp_airline_id`, `table_74xcmp_name`, `table_74xcmp_iata_code`, `table_74xcmp_safety_rating`, `table_74xcmp_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `table_r5kuxo` (`table_r5kuxo_flight_id`, `table_r5kuxo_airline_id`, `table_r5kuxo_origin`, `table_r5kuxo_destination`, `table_r5kuxo_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_74XCMP_SAFETY_RATING, 80), COALESCE(TABLE_74XCMP_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM TABLE_74XCMP
+    WHERE TABLE_74XCMP_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN GREATEST(V_ENVIRONMENTAL_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1639(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_sum_val DECIMAL(40,0) DEFAULT 0;
+    DECLARE v_json_val JSON;
+    DECLARE v_geo_result INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_rec_id INT;
+    DECLARE v_rec_val VARCHAR(50);
+    
+    -- Cursor for recursive CTE results
+    DECLARE cur_rec CURSOR FOR
+        WITH RECURSIVE x12 AS (
+            SELECT 1 AS v185141, 'utf8mb3_encoding' AS v185142, 't2' AS v185140
+            UNION ALL
+            SELECT v185141 + 1, 'utf8mb3_encoding', 't2'
+            FROM x12
+            WHERE v185141 < 50
+        )
+        SELECT v185141, v185142 FROM x12 LIMIT 10;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: CTE with window functions - use cursor to iterate
+    SET v_counter = 0;
+    OPEN cur_rec;
+    read_loop: LOOP
+        FETCH cur_rec INTO v_rec_id, v_rec_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Simulate LEAD and SUM logic from original query
+        SET v_counter = v_counter + v_rec_id;
+        
+        -- Check condition from original WHERE clause
+        IF v_rec_val = 'utf8mb3_encoding' THEN
+            SET v_sum_val = v_sum_val + v_rec_id;
+        END IF;
+    END LOOP;
+    CLOSE cur_rec;
+
+    -- Statement 2: JSON and window function - use EXECUTE IMMEDIATE
+    SET @sql2 = 'SELECT NTH_VALUE(JSON_MERGE_PATCH(1.755913e+308, ''{ }''), 246) OVER (), ROW_NUMBER() OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND INTERVAL ''2'' DAY FOLLOWING) FROM v184236 AS x0 LIMIT 1';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+
+    -- Statement 3: CREATE TEMPORARY TABLE already handled in setup
+    -- Use the temporary table in a meaningful way
+    INSERT INTO v185516 VALUES (p1), (p2);
+    
+    -- Statement 4: UPDATE with spatial functions
+    SET @sql4 = 'UPDATE v184757 AS x1 SET v184758 = ''f'' WHERE ST_TOUCHES(ST_MULTILINESTRINGFROMTEXT(@my_uuid, 0), ST_UNION(ST_GEOMFROMTEXT(''GEOMETRYCOLLECTION(LINESTRING(3 0, 3 3), LINESTRING(0 1, 4 1))''), ST_GEOMFROMTEXT(''GEOMETRYCOLLECTION()'')))';
+    SET @my_uuid = 'MULTILINESTRING((0 0, 1 1), (2 2, 3 3))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    SET v_update_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt4;
+
+    -- Statement 5: UPDATE with Japanese characters
+    SET @sql5 = 'UPDATE v185369 AS x0 SET x0.v185371 = ''f'' WHERE v185371 LIKE ''さしすせそかきくけこあいうえお%''';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    SET v_update_count = v_update_count + ROW_COUNT();
+    DEALLOCATE PREPARE stmt5;
+
+    -- Procedural logic with CASE and WHILE
+    CASE 
+        WHEN v_counter > 0 THEN
+            SET v_counter = v_counter + v_update_count;
+            WHILE v_counter < 100 DO
+                SET v_counter = v_counter + 10;
+            END WHILE;
+        ELSE
+            SET v_counter = p1 + p2;
+    END CASE;
+
+    -- REPEAT loop for additional processing
+    REPEAT
+        SET v_counter = v_counter - 1;
+    UNTIL (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(26)) - 650 + (v_counter <= 0) END REPEAT;
+
+    -- Set output parameter
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1639(1, 1, @out_result);
+
+SELECT @out_result;

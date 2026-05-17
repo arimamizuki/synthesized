@@ -1,0 +1,291 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v187104 (x1 INT, v186701 VARCHAR(50), v186700 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v186679 (x1 INT, v186700 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v187581 (v187582 INT DEFAULT 1, x2 VARCHAR(10), x3 VARCHAR(10), x4 VARCHAR(10), x5 VARCHAR(10), x6 VARCHAR(10), x7 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v186790 (x1 INT, x2 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v187447 (v187448 DECIMAL(10,2));
+CREATE TABLE IF NOT EXISTS v186765 (v186766 INT);
+INSERT INTO v187104 VALUES (1, 'test1', '5cm'), (2, 'test2', '10cm'), (3, 'test3', '5cm');
+INSERT INTO v186679 VALUES (1, '5cm'), (2, '10cm'), (3, '5cm');
+INSERT INTO v186790 VALUES (1, '111'), (2, '222'), (3, '111');
+INSERT INTO v187447 VALUES (0.5), (0.8), (0.7), (0.9);
+INSERT INTO v186765 VALUES (3), (1), (4), (7);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+CREATE TABLE IF NOT EXISTS `table_tbv1s6` (
+    `table_tbv1s6_order_id` INT,
+    `table_tbv1s6_customer_id` INT,
+    `table_tbv1s6_order_date` DATE,
+    `table_tbv1s6_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ceys2r` (
+    `table_ceys2r_customer_id` INT,
+    `table_ceys2r_country` INT
+);
+
+INSERT INTO `table_tbv1s6` (`table_tbv1s6_order_id`, `table_tbv1s6_customer_id`, `table_tbv1s6_order_date`, `table_tbv1s6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_ceys2r` (`table_ceys2r_customer_id`, `table_ceys2r_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM
+    GROUP BY TABLE_CEYS2R_CUSTOMER_ID
+    HAVING COUNT(TABLE_TBV1S6_ORDER_ID) > 1;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REPEAT_RATE = (V_REPEAT_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_l9qon7(-97)) - 397 + (v_repeat_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_l9qon7----- */
+CREATE TABLE IF NOT EXISTS `table_ca7h5b` (
+    `table_ca7h5b_campaign_id` INT,
+    `table_ca7h5b_status` VARCHAR(50),
+    `table_ca7h5b_budget` INT,
+    `table_ca7h5b_start_date` DATE
+);
+
+INSERT INTO `table_ca7h5b` (`table_ca7h5b_campaign_id`, `table_ca7h5b_status`, `table_ca7h5b_budget`, `table_ca7h5b_start_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_l9qon7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_l9qon7(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_CA7H5B_STATUS, COALESCE(TABLE_CA7H5B_BUDGET, 0), DATEDIFF(CURDATE(), TABLE_CA7H5B_START_DATE)
+    INTO V_STATUS, V_BUDGET, V_AGE_DAYS
+    FROM TABLE_CA7H5B
+    WHERE TABLE_CA7H5B_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_AGE_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_AGE_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt----- */
+CREATE TABLE IF NOT EXISTS `table_81hwap` (
+    `table_81hwap_product_id` INT,
+    `table_81hwap_category_id` INT,
+    `table_81hwap_stock_quantity` INT
+);
+
+INSERT INTO `table_81hwap` (`table_81hwap_product_id`, `table_81hwap_category_id`, `table_81hwap_stock_quantity`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_81HWAP_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM TABLE_81HWAP
+    WHERE TABLE_81HWAP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6()) - 505 + (least(v_total_stock, 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+CREATE TABLE IF NOT EXISTS `table_isab02` (
+    `table_isab02_order_id` INT,
+    `table_isab02_order_date` DATE
+);
+
+INSERT INTO `table_isab02` (`table_isab02_order_id`, `table_isab02_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_ISAB02_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_ISAB02
+    WHERE TABLE_ISAB02_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1645(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_json_result JSON;
+    DECLARE v_nth_value DECIMAL(10,2);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_x1 INT;
+    DECLARE v_x2 VARCHAR(10);
+    DECLARE v_sum_val DECIMAL(10,2);
+    DECLARE v_sum_len INT;
+    
+    -- Cursor for SELECT with window functions
+    DECLARE cur1 CURSOR FOR 
+        SELECT x7.x1, x7.x2, SUM(x7.x2) as sum_val, SUM(DISTINCT LENGTH(x7.x1)) as sum_len
+        FROM v186790 AS x7 
+        WHERE x7.x2 < '111' 
+        GROUP BY x7.x1, x7.x2 
+        LIMIT 42;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET v_counter = -(MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(30)) - -72 + (1);
+    END;
+
+    -- Statement 1: UPDATE with RIGHT OUTER JOIN
+    SET @sql1 = 'UPDATE v187104 AS x0 RIGHT OUTER JOIN v186679 AS x5 ON x0.x1 = x5.x1 SET x0.v186701 = ? WHERE x0.v186700 = ?';
+    PREPARE stmt1 FROM @sql1;
+    SET @val1 = 'test13';
+    SET @val2 = '5cm';
+    EXECUTE stmt1 USING @val1, @val2;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: CREATE TABLE with CTE (simplified to INSERT)
+    SET @sql2 = 'INSERT INTO v187581 (v187582, x2, x3, x4, x5, x6, x7) VALUES (1, SUBSTRING(?1, DAY(FROM_UNIXTIME(-1))), LEFT(?1, DAY(FROM_UNIXTIME(-1))), RIGHT(?1, DAY(FROM_UNIXTIME(-1))), REPEAT(?1, DAY(FROM_UNIXTIME(-1))), RPAD(?2, DAY(FROM_UNIXTIME(-1)), ?3), LPAD(?2, DAY(FROM_UNIXTIME(-1)), ?3))';
+    PREPARE stmt2 FROM @sql2;
+    SET @str1 = '1';
+    SET @str2 = 'hi';
+    SET @str3 = '?';
+    EXECUTE stmt2 USING @str1, @str2, @str3;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: SELECT with CTE and JSON_OBJECTAGG (simplified)
+    SET @sql3 = 'SELECT JSON_OBJECTAGG(x2, x1) INTO @json_result FROM v186790 WHERE x2 < ?1 GROUP BY x2 LIMIT 1';
+    PREPARE stmt3 FROM @sql3;
+    SET @val3 = '111';
+    EXECUTE stmt3 USING @val3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_json_result = @json_result;
+    SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(64)) - -568 + (if(v_json_result is not null, 1, 0));
+
+    -- Statement 4: SELECT with NTH_VALUE window function
+    SET @sql4 = 'SELECT NTH_VALUE(v187448, -3) OVER () INTO @nth_val FROM v187447 WHERE v187448 >= ?1 ORDER BY 1 LIMIT 1';
+    PREPARE stmt4 FROM @sql4;
+    SET @val4 = 0.7;
+    EXECUTE stmt4 USING @val4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_nth_value = @nth_val;
+    
+    -- Loop through cursor for Statement 3 additional processing
+    OPEN cur1;
+    read_loop: LOOP
+        FETCH cur1 INTO v_x1, v_x2, v_sum_val, v_sum_len;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Conditional logic with IF/ELSE
+        IF v_sum_len > 5 THEN
+            SET v_counter = v_counter + 10;
+        ELSE
+            SET v_counter = v_counter + 1;
+        END IF;
+    END LOOP;
+    CLOSE cur1;
+
+    -- Statement 5: INSERT with multiple values
+    SET @sql5 = 'INSERT INTO v186765 (v186766) VALUES (?1), (?2), (?3), (?4)';
+    PREPARE stmt5 FROM @sql5;
+    SET @val5 = (MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(-41)) - 22 + (3);
+    SET @val6 = 1;
+    SET @val7 = 4;
+    SET @val8 = 7;
+    EXECUTE stmt5 USING @val5, @val6, @val7, @val8;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Final result using CASE
+    SET result = CASE 
+        WHEN v_counter > 100 THEN v_counter * 2
+        WHEN v_counter > 50 THEN v_counter + 50
+        ELSE v_counter
+    END;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1645(1, 1, @out_result);
+
+SELECT @out_result;

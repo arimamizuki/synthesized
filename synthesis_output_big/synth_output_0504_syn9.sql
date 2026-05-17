@@ -1,0 +1,253 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v9026 (v9027 INT, v9028 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v8906 (v8952 INT, v8920 VARCHAR(20), v8958 DATE, v8945 DECIMAL(10,2), v8927 INT, v8960 INT);
+CREATE TABLE IF NOT EXISTS v8890 (v8891 VARCHAR(10), v8892 INT);
+CREATE TABLE IF NOT EXISTS v8892 (v8893 GEOMETRY, v8894 INT);
+CREATE TABLE IF NOT EXISTS v9043 (v9044 INT, v9045 INT, v9046 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v9002 (v9003 INT, v9004 VARCHAR(20));
+CREATE TABLE IF NOT EXISTS v9081 (v9082 DATETIME, v9083 INT);
+CREATE TABLE IF NOT EXISTS v9073 (v9074 INT, v9075 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v9017 (v9018 INT, v9019 VARCHAR(10));
+INSERT INTO v9026 VALUES (1, 'test'), (2, 'demo');
+INSERT INTO v8906 VALUES (1, 'abc', '2023-01-01', 100.50, 10, 20);
+INSERT INTO v8890 VALUES ('abc', 100), ('xyz', 200);
+INSERT INTO v8892 VALUES (ST_GEOMFROMTEXT('POINT(10 20)'), 1);
+INSERT INTO v9043 VALUES (1, 2, 'sample');
+INSERT INTO v9002 VALUES (3, 'data');
+INSERT INTO v9081 VALUES ('2023-01-01 00:00:00', 5);
+INSERT INTO v9073 VALUES (1, 'test');
+INSERT INTO v9017 VALUES (10, 'join_data');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21----- */
+CREATE TABLE IF NOT EXISTS `table_iw4rqu` (
+    `table_iw4rqu_order_id` INT,
+    `table_iw4rqu_order_date` DATE
+);
+
+INSERT INTO `table_iw4rqu` (`table_iw4rqu_order_id`, `table_iw4rqu_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_IW4RQU_ORDER_DATE)
+    INTO V_QUARTER
+    FROM TABLE_IW4RQU
+    WHERE TABLE_IW4RQU_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SQUARE_4pyj0b(87)) - -668 + (v_quarter);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SQUARE_4pyj0b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SQUARE_4pyj0b(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN N * N;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 <> (MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(-31)) - -620 + (0) THEN
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(-78)) - 25 + (1);
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+CREATE TABLE IF NOT EXISTS `table_cse3r2` (
+    `table_cse3r2_order_id` INT,
+    `table_cse3r2_customer_id` INT,
+    `table_cse3r2_order_date` DATE,
+    `table_cse3r2_total_amount` DECIMAL(10,2),
+    `table_cse3r2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_pvtnbo` (
+    `table_pvtnbo_shipment_id` INT,
+    `table_pvtnbo_order_id` INT,
+    `table_pvtnbo_carrier` INT,
+    `table_pvtnbo_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cse3r2` (`table_cse3r2_order_id`, `table_cse3r2_customer_id`, `table_cse3r2_order_date`, `table_cse3r2_total_amount`, `table_cse3r2_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_pvtnbo` (`table_pvtnbo_shipment_id`, `table_pvtnbo_order_id`, `table_pvtnbo_carrier`, `table_pvtnbo_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(CARRIER_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_EFFICIENCY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_PVTNBO_SHIPPING_COST), 0)
+    INTO V_AVG_SHIPPING_COST
+    FROM TABLE_PVTNBO
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_CSE3R2_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_PVTNBO S
+    JOIN TABLE_CSE3R2 O ON TABLE_PVTNBO_ORDER_ID = TABLE_CSE3R2_ORDER_ID
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    IF V_AVG_ORDER_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_EFFICIENCY = (V_AVG_SHIPPING_COST / V_AVG_ORDER_VALUE) * 100;
+
+    RETURN FLOOR(V_COST_EFFICIENCY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 8 UNION SELECT 27 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0504(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_date DATETIME;
+    DECLARE cur CURSOR FOR SELECT v9082 FROM v9081 WHERE v9082 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -(MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(-78)) - 25 + (1);
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    -- Statement 1: DROP TABLE v9026
+    SET @sql1 = 'DROP TABLE IF EXISTS v9026';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: CREATE INDEX v9076 ON v8906(v8952, v8920, v8958, v8945)
+    SET @sql2 = 'CREATE INDEX v9076 ON v8906(v8952, v8920, v8958, v8945)';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE v8890 AS x0, v8906 AS x1 JOIN v9017 AS x2 ON x1.v8960 = x1.v8927 SET x0.v8891 = NULL WHERE x0.v8891 = 'abc'
+    IF p1 > 0 THEN
+        SET @sql3 = 'UPDATE v8890 AS x0, v8906 AS x1 JOIN v9017 AS x2 ON x1.v8960 = x1.v8927 SET x0.v8891 = NULL WHERE x0.v8891 = ?';
+        SET @param3 = 'abc';
+        PREPARE stmt3 FROM @sql3;
+        EXECUTE stmt3 USING @param3;
+        DEALLOCATE PREPARE stmt3;
+        SET v_counter = v_counter + 1;
+    ELSE
+        SET v_counter = v_counter + 10;
+    END IF;
+
+    -- Statement 4: UPDATE v8892 AS x0, v9043 AS x1 JOIN v9002 AS x2 ON x1.v9044 = x1.v9045 SET v8893 = ST_GEOMFROMTEXT('POINT(167 82)') WHERE v8893 LIKE 'wl3836'
+    WHILE v_counter < 100 DO
+        SET @sql4 = 'UPDATE v8892 AS x0, v9043 AS x1 JOIN v9002 AS x2 ON x1.v9044 = x1.v9045 SET x0.v8893 = ST_GEOMFROMTEXT(?) WHERE x0.v8893 IS NOT NULL';
+        SET @param4 = 'POINT(167 82)';
+        PREPARE stmt4 FROM @sql4;
+        EXECUTE stmt4 USING @param4;
+        DEALLOCATE PREPARE stmt4;
+        SET v_counter = v_counter + 50;
+    END WHILE;
+
+    -- Statement 5: UPDATE v9081 AS x0 LEFT JOIN v9073 AS x4 ON 1 SET v9082 = '2017-06-06 00:00:00' WHERE v9082 = 'zzzz'
+    CASE
+        WHEN p2 = 0 THEN
+            SET @sql5 = 'UPDATE v9081 AS x0 LEFT JOIN v9073 AS x4 ON 1 SET x0.v9082 = ? WHERE x0.v9082 = ?';
+            SET @param5a = '2017-06-06 00:00:00';
+            SET @param5b = 'zzzz';
+            PREPARE stmt5 FROM @sql5;
+            EXECUTE stmt5 USING @param5a, @param5b;
+            DEALLOCATE PREPARE stmt5;
+            SET v_counter = v_counter + 1;
+        ELSE
+            SET v_counter = v_counter + 5;
+    END CASE;
+
+    -- Cursor loop to demonstrate additional procedural structure
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_date;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    COMMIT;
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0504(1, 1, @out_result);
+
+SELECT @out_result;

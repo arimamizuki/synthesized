@@ -1,0 +1,221 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v82337 (v82338 VARCHAR(64));
+CREATE TABLE IF NOT EXISTS v81630 (x8 VARCHAR(64));
+CREATE TABLE IF NOT EXISTS v82184 (v82185 JSON);
+CREATE TABLE IF NOT EXISTS v82831 (v82832 VARCHAR(64), x2 DECIMAL(20,0), x3 DECIMAL(20,10));
+CREATE TABLE IF NOT EXISTS v82838 (v82839 INT, v82840 INT, v82841 CHAR(200), x4 TIME, x5 TIME, x6 TIME, x7 TIME);
+CREATE TABLE IF NOT EXISTS x11 (id INT);
+INSERT INTO v82337 VALUES ('test'), ('data'), ('example');
+INSERT INTO v81630 VALUES ('00:00:02'), ('00:00:05'), ('00:00:10');
+INSERT INTO v82184 VALUES ('{"key": "value"}'), ('[1,2,3]'), ('"string"');
+INSERT INTO v82831 VALUES ('sample', 0, 0);
+INSERT INTO v82838 VALUES (1, 2, 'test', '00:00:01', '10:10:10', '10:10:10.123456', '00:01:01.1');
+INSERT INTO x11 VALUES (0), (1), (2);
+
+/* -----Called: MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4(FAHRENHEIT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CELSIUS DECIMAL(5,2) DEFAULT 0.00;
+    SET V_CELSIUS = (FAHRENHEIT - 32) * 5 / 9;
+    RETURN FLOOR(V_CELSIUS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = (MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(-42)) - -323 + (v_honor_points + 15);
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+CREATE TABLE IF NOT EXISTS `table_g2p8j5` (
+    `table_g2p8j5_order_id` INT,
+    `table_g2p8j5_customer_id` INT,
+    `table_g2p8j5_order_date` DATE,
+    `table_g2p8j5_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zzb55x` (
+    `table_zzb55x_customer_id` INT,
+    `table_zzb55x_country` INT
+);
+
+INSERT INTO `table_g2p8j5` (`table_g2p8j5_order_id`, `table_g2p8j5_customer_id`, `table_g2p8j5_order_date`, `table_g2p8j5_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_zzb55x` (`table_zzb55x_customer_id`, `table_zzb55x_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_G2P8J5_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_G2P8J5 O
+    JOIN TABLE_ZZB55X C ON TABLE_G2P8J5_CUSTOMER_ID = TABLE_ZZB55X_CUSTOMER_ID
+    WHERE TABLE_ZZB55X_COUNTRY = COUNTRY_PARAM;
+
+    RETURN FLOOR(V_AVG_ORDER_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1243(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(64);
+    DECLARE v_cte_val VARCHAR(64);
+    DECLARE v_json_result JSON;
+    DECLARE v_ceil_val DECIMAL(20,0);
+    DECLARE v_floor_val DECIMAL(20,10);
+    DECLARE v_time1 TIME;
+    DECLARE v_time2 TIME;
+    DECLARE v_time3 TIME;
+    DECLARE v_time4 TIME;
+    DECLARE v_cur CURSOR FOR SELECT x8 FROM v81630 WHERE x8 >= '00:00:01';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: CREATE INDEX (already executed in setup)
+    -- We'll verify the index exists
+    BEGIN
+        DECLARE idx_exists INT DEFAULT 0;
+        SELECT COUNT(*) INTO idx_exists FROM information_schema.statistics 
+        WHERE table_name = 'v82337' AND index_name = 'v82587';
+        IF idx_exists > 0 THEN
+            SET v_counter = v_counter + 10;
+        END IF;
+    END;
+
+    -- Statement 2: Recursive CTE with RIGHT function
+    BEGIN
+        DECLARE cte_counter INT DEFAULT 0;
+        DECLARE cte_done INT DEFAULT FALSE;
+        DECLARE cte_cursor CURSOR FOR 
+            WITH RECURSIVE x10 AS (
+                SELECT 0 AS val
+                UNION ALL
+                SELECT RIGHT('hello', -18446744073709551616) + 1 
+                FROM x11 
+                WHERE RIGHT('hello', -18446744073709551616) + 1 < 30
+            )
+            SELECT RIGHT('hello', -18446744073709551616) AS cte_val FROM v81630 AS x8 
+            WHERE x8.x8 >= '00:00:01';
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET cte_done = TRUE;
+        OPEN cte_cursor;
+        read_loop: LOOP
+            FETCH cte_cursor INTO v_cte_val;
+            IF cte_done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cte_cursor;
+    END;
+
+    -- Statement 3: CREATE TABLE AS SELECT with CEIL and FLOOR
+    BEGIN
+        SELECT CEIL(CAST(-9223372036854775808 AS DECIMAL(19, 0))) INTO v_ceil_val;
+        SELECT FLOOR(9.999999999999999999999) INTO v_floor_val;
+        SET v_counter = v_counter + (MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4(-65)) - -383 + (v_ceil_val) + v_floor_val;
+    END;
+
+    -- Statement 4: CREATE TABLE AS SELECT with TIME functions
+    BEGIN
+        SELECT TIME(101.12345), TIME('10:10:10.'), TIME('10:10:10.123456'), TIME(CONCAT('00:01:01', '.1'))
+        INTO v_time1, v_time2, v_time3, v_time4;
+        IF v_time1 IS NOT NULL THEN
+            SET v_counter = v_counter + 1;
+        END IF;
+        CASE 
+            WHEN v_time2 IS NOT NULL THEN SET v_counter = v_counter + 2;
+            WHEN v_time3 IS NOT NULL THEN SET v_counter = v_counter + 3;
+            ELSE SET v_counter = v_counter + 4;
+        END CASE;
+    END;
+
+    -- Statement 5: UPDATE with JSON_CONTAINS
+    BEGIN
+        DECLARE update_count INT DEFAULT 0;
+        SET @sql = 'UPDATE v82184 SET v82185 = JSON_CONTAINS(JSON_ARRAY(CAST(? AS TIME)), ?) WHERE @@innodb_purge_stop_now LIKE ?';
+        PREPARE stmt FROM @sql;
+        SET @time_val = '12:32:69';
+        SET @false_val = 'false';
+        SET @like_pattern = 'c%';
+        EXECUTE stmt USING @time_val, @false_val, @like_pattern;
+        DEALLOCATE PREPARE stmt;
+        SET update_count = ROW_COUNT();
+        SET v_counter = v_counter + update_count;
+    END;
+
+    -- Loop to add more complexity
+    WHILE v_counter < 100 DO
+        SET v_counter = v_counter + 1;
+        IF v_counter > 50 THEN
+            SET v_counter = v_counter + p1;
+        END IF;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1243(1, 1, @out_result);
+
+SELECT @out_result;

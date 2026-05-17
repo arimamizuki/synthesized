@@ -1,0 +1,265 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v64131 (
+    v64132 VARCHAR(100),
+    v64133 INT
+);
+CREATE TABLE IF NOT EXISTS v64474 (
+    v64132 VARCHAR(100),
+    v64133 INT
+);
+CREATE TABLE IF NOT EXISTS v64448 (
+    v64449 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v64716 (
+    v64717 VARCHAR(100),
+    v64718 INT
+);
+CREATE TABLE IF NOT EXISTS v64935 (
+    v64717 VARCHAR(100),
+    v64718 INT
+);
+CREATE TABLE IF NOT EXISTS v65121 (
+    v65122 INT PRIMARY KEY,
+    v65123 INT,
+    v65124 INT,
+    v65125 INT,
+    v65126 INT,
+    v65127 INT,
+    v65128 INT,
+    v65129 INT,
+    v65130 INT,
+    v65131 INT,
+    v65132 INT,
+    v65133 INT,
+    v65134 INT,
+    v65135 INT,
+    v65136 INT,
+    v65137 INT,
+    v65138 INT,
+    v65139 INT,
+    INDEX(v65134)
+);
+CREATE TABLE IF NOT EXISTS v65223 (
+    v65224 INT UNSIGNED,
+    v65225 INT,
+    UNIQUE (v65224, v65225)
+);
+INSERT INTO v64131 VALUES ('71000', 1), ('v2c', 2), (NULL, 3);
+INSERT INTO v64474 VALUES ('71000', 4), ('test', 5);
+INSERT INTO v64448 VALUES ('10'), ('2'), ('patnom'), ('Al');
+INSERT INTO v64716 VALUES ('tr14', 0), ('other', 1);
+INSERT INTO v64935 VALUES ('tr14', 0), ('test', 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+CREATE TABLE IF NOT EXISTS `table_42vfje` (
+    `table_42vfje_customer_id` INT,
+    `table_42vfje_country` INT,
+    `table_42vfje_registration_date` DATE
+);
+
+INSERT INTO `table_42vfje` (`table_42vfje_customer_id`, `table_42vfje_country`, `table_42vfje_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_42VFJE
+    WHERE TABLE_42VFJE_COUNTRY = COUNTRY_PARAM AND YEAR(TABLE_42VFJE_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1141(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(100);
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE v_last_id INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v64449 FROM v64448;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE with dynamic SQL (adaptation)
+    SET @sql1 = 'UPDATE v64131 AS x0, v64474 AS x3 SET x0.v64132 = ? WHERE x0.v64132 = ? OR x0.v64132 IS NULL';
+    SET @val1 = 'v2c';
+    SET @cond1 = '71000';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1 USING @val1, @cond1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: CREATE TABLE with INSERT (adapted to use EXECUTE IMMEDIATE for the AS SELECT)
+    SET @sql2 = 'INSERT INTO v65121 (v65122, v65123, v65124, v65125, v65126, v65127, v65128, v65129, v65130, v65131, v65132, v65133, v65134, v65135, v65136, v65137, v65138, v65139) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    SET @val2 = CAST('2014-01-01' AS DECIMAL(25,5));
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2 USING @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2, @val2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(-52)) - 167 + (1);
+
+    -- Statement 3: CTE with SELECT (adapted with CURSOR)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF (MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - -569 + (v_done) THEN
+            LEAVE read_loop;
+        END IF;
+        -- Simulate the CASE expression from the original query
+        SET v_sum = v_sum + CASE 
+            WHEN v_val = '1' THEN 1 
+            WHEN v_val = '10' THEN 10 
+            ELSE 0 
+        END;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: UPDATE with JOIN and LAST_INSERT_ID (conditional logic)
+    IF p1 > 0 THEN
+        SET @sql4 = 'UPDATE v64716 AS x1 JOIN v64935 AS x8 ON 1=1 SET x1.v64718 = LAST_INSERT_ID(?) WHERE x1.v64717 = ?';
+        SET @id_val = p2;
+        SET @cond_val = 'tr14';
+        PREPARE stmt4 FROM @sql4;
+        EXECUTE stmt4 USING @id_val, @cond_val;
+        DEALLOCATE PREPARE stmt4;
+        SET v_last_id = (MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + (last_insert_id());
+        SET v_counter = v_counter + v_last_id;
+    ELSE
+        -- Alternative logic using WHILE loop
+        WHILE p2 > 0 DO
+            SET v_counter = v_counter + 1;
+            SET p2 = p2 - 1;
+        END WHILE;
+    END IF;
+
+    -- Statement 5: CREATE TABLE with complex SELECT (adapted with error handling)
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            SET v_counter = v_counter - 1;
+        END;
+        SET @sql5 = 'INSERT INTO v65223 (v65224, v65225) VALUES (?, ?)';
+        SET @val5a = SUBTIME(120120519090607, 'ee_16407_5');
+        SET @val5b = CRC32(ST_ASTEXT(POINT(1, 1)));
+        PREPARE stmt5 FROM @sql5;
+        EXECUTE stmt5 USING @val5a, @val5b;
+        DEALLOCATE PREPARE stmt5;
+        SET v_counter = v_counter + 1;
+    END;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1141(1, 1, @out_result);
+
+SELECT @out_result;

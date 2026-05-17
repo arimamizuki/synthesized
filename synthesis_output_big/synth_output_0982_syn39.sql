@@ -1,0 +1,251 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v40655 (
+    v40656 INT,
+    v40657 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v40603 (
+    v40604 VARCHAR(100),
+    v40605 INT
+);
+CREATE TABLE IF NOT EXISTS v40606 (
+    v40607 INT,
+    v40608 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v40738 (
+    v40739 DATETIME,
+    v40741 INT
+);
+CREATE TABLE IF NOT EXISTS x14 (
+    v40604 VARCHAR(100),
+    v40605 INT
+);
+CREATE TABLE IF NOT EXISTS x15 (
+    v40604 VARCHAR(100),
+    v40605 INT
+);
+INSERT INTO v40655 (v40656, v40657) VALUES (10, 'Test'), (20, 'Design'), (30, 'Design');
+INSERT INTO v40603 (v40604, v40605) VALUES ('ag', 100), ('ef', 200), ('ğŸ[INV]£', 300), ('abc', 400);
+INSERT INTO v40606 (v40607, v40608) VALUES (1, 'active'), (2, 'inactive'), (3, 'active');
+INSERT INTO v40738 (v40739, v40741) VALUES ('2015-01-01 04:40:10.00001', 100), ('2016-05-10 10:30:00', 200);
+INSERT INTO x14 (v40604, v40605) VALUES ('ag', 50), ('abc', 60);
+INSERT INTO x15 (v40604, v40605) VALUES ('ef', 70), ('abc', 80);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+CREATE TABLE IF NOT EXISTS `table_iqr0ap` (
+    `table_iqr0ap_campaign_id` INT,
+    `table_iqr0ap_budget` INT,
+    `table_iqr0ap_start_date` DATE,
+    `table_iqr0ap_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hnzja2` (
+    `table_hnzja2_conversion_id` INT,
+    `table_hnzja2_campaign_id` INT,
+    `table_hnzja2_conversion_value` INT
+);
+
+INSERT INTO `table_iqr0ap` (`table_iqr0ap_campaign_id`, `table_iqr0ap_budget`, `table_iqr0ap_start_date`, `table_iqr0ap_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_hnzja2` (`table_hnzja2_conversion_id`, `table_hnzja2_campaign_id`, `table_hnzja2_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IQR0AP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_IQR0AP
+    WHERE TABLE_IQR0AP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_HNZJA2_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_HNZJA2
+    WHERE TABLE_HNZJA2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_TOTAL_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        IF N MOD 2 = 0 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(14)) - 285 + ((MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(-42, -7)) - 378 + (v_count)) + 1;
+        END IF;
+        SET N = N - 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * RADIUS * RADIUS * HEIGHT;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+CREATE TABLE IF NOT EXISTS `table_o9epgx` (
+    `table_o9epgx_campaign_id` INT,
+    `table_o9epgx_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o9epgx` (`table_o9epgx_campaign_id`, `table_o9epgx_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_O9EPGX_STATUS
+    INTO V_STATUS
+    FROM TABLE_O9EPGX
+    WHERE TABLE_O9EPGX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 10;
+        WHEN 'PAUSED' THEN RETURN 5;
+        WHEN 'COMPLETED' THEN RETURN 8;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0982(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_sum_overall DECIMAL(20,2);
+    DECLARE v_sum_order DECIMAL(20,2);
+    DECLARE v_ins_val VARCHAR(100);
+    DECLARE v_coalesce_val INT;
+    DECLARE v_v40605 INT;
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected INT DEFAULT 0;
+    DECLARE v_match_result INT DEFAULT 0;
+
+    -- Cursor for SELECT with CTE
+    DECLARE cur CURSOR FOR 
+        WITH x13 AS (
+            SELECT * FROM x14 
+            UNION 
+            SELECT * FROM x15 
+            ORDER BY MATCH(v40604) AGAINST('+abc' IN BOOLEAN MODE)
+        )
+        SELECT x7.v40605, COALESCE(x7.v40605, x7.v40604) AS x4
+        FROM v40603 AS x7 
+        WHERE x7.v40604 IN ('ag', 'ef', 'ğŸ[INV]£');
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+
+    -- Statement 1: Window function SELECT
+    SELECT 
+        SUM(x0.v40657 + x0.v40657 + 0.0) OVER (),
+        SUM(x0.v40656) OVER (ORDER BY x0.v40656, x0.v40657 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+    INTO v_sum_overall, v_sum_order
+    FROM v40655 AS x0
+    WINDOW x1 AS (PARTITION BY x0.v40656 ORDER BY -x0.v40657)
+    LIMIT 1;
+
+    -- Statement 2: INSERT with conditional check
+    IF p1 > 0 THEN
+        SET @sql_ins = 'INSERT INTO v40655 (v40657) VALUES (?)';
+        SET @val = 'Design';
+        PREPARE stmt_ins FROM @sql_ins;
+        EXECUTE stmt_ins USING @val;
+        DEALLOCATE PREPARE stmt_ins;
+        SET v_affected = ROW_COUNT();
+    END IF;
+
+    -- Statement 3: CTE SELECT using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_v40605, v_coalesce_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(12)) - -766 + (v_counter) + v_v40605;
+        -- Example conditional logic
+        IF v_coalesce_val IS NOT NULL THEN
+            SET v_counter = v_counter + 1;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: CREATE INDEX with dynamic SQL and error handling
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLWARNING, SQLEXCEPTION 
+        BEGIN
+            -- Index might already exist, continue
+        END;
+        SET @sql_idx = 'CREATE INDEX v40884 ON v40606 ((v40607 + v40607), (v40607 = 1))';
+        PREPARE stmt_idx FROM @sql_idx;
+        EXECUTE stmt_idx;
+        DEALLOCATE PREPARE stmt_idx;
+    END;
+
+    -- Statement 5: UPDATE with natural join and WHILE loop condition
+    SET @sql_upd = 'UPDATE v40738 AS x1 NATURAL JOIN v40606 AS x2 SET v40741 = ? WHERE v40739 = ?';
+    SET @new_val = (MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(70)) - 137 + (500);
+    SET @date_val = '2015-01-01 04:40:10.00001';
+    PREPARE stmt_upd FROM @sql_upd;
+    EXECUTE stmt_upd USING @new_val, @date_val;
+    DEALLOCATE PREPARE stmt_upd;
+
+    -- Use REPEAT loop for additional processing
+    REPEAT
+        SET v_counter = v_counter + 1;
+        SET v_done = v_done + 1;
+    UNTIL v_done > 3 END REPEAT;
+
+    -- CASE statement for final result
+    CASE 
+        WHEN v_counter > 100 THEN SET result = v_counter;
+        WHEN v_counter > 50 THEN SET result = v_counter * 2;
+        ELSE SET result = v_counter + p2;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0982(1, 1, @out_result);
+
+SELECT @out_result;

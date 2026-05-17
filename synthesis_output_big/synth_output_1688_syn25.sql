@@ -1,0 +1,183 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v206139 (v206140 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v205896 (v205897 INT, data VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v206398 (x1 INT, name VARCHAR(20));
+CREATE TABLE IF NOT EXISTS x11 (x8_id INT, x1 INT, value INT);
+CREATE TABLE IF NOT EXISTS v206191 (id INT, view馃惉 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v206885 (v206886 INT, v206887 ENUM('a', 'b'), INDEX(v206886)) COLLATE=utf8mb4_da_0900_as_cs;
+INSERT INTO v206139 (v206140) VALUES ('v'), ('w'), ('x');
+INSERT INTO v205896 VALUES (10, 'test'), (20, 'example'), (30, 'sample');
+INSERT INTO v206398 VALUES (1, 'alpha'), (0, 'beta'), (1, 'gamma');
+INSERT INTO x11 VALUES (1, 1, 100), (2, 0, 200), (3, 1, 300);
+INSERT INTO v206191 VALUES (1, 'A'), (2, 'B'), (3, 'C');
+INSERT INTO v206885 VALUES (1, 'a'), (2, 'b'), (3, 'a');
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT (MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4()) - -410 + (1) UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 6 UNION SELECT 12 UNION SELECT 18 UNION SELECT 24 UNION SELECT 30 UNION SELECT 36;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1688(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE v_regexp_result INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_x1 INT;
+    DECLARE v_name VARCHAR(20);
+    DECLARE v_insert_val VARCHAR(10);
+    DECLARE v_enum_val ENUM('a','b');
+    
+    -- Cursor for processing CTE result
+    DECLARE cur CURSOR FOR 
+        WITH RECURSIVE x9 AS (
+            SELECT SUM(x8.x1) AS x10 FROM x11 GROUP BY x8.x1
+        )
+        SELECT x8.x1, x8.x1, REGEXP_LIKE('a', 'a') AS x4, x8.x1 
+        FROM v206398 AS x8 
+        WHERE ((x8.x1 AND x8.x1) OR x8.x1) <> (x8.x1 AND x8.x1 OR x8.x1);
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+        SET result = -1;
+    END;
+
+    -- Process Statement 1: INSERT with dynamic SQL
+    SET @sql_insert = 'INSERT INTO v206139 (v206140) VALUES (?)';
+    PREPARE stmt_insert FROM @sql_insert;
+    SET @val = CONCAT('v', p1);
+    EXECUTE stmt_insert USING @val;
+    DEALLOCATE PREPARE stmt_insert;
+    SET v_counter = v_counter + 1;
+
+    -- Process Statement 2: CREATE INDEX using dynamic SQL
+    SET @sql_index1 = 'CREATE INDEX v206457 ON v205896(v205897 DESC)';
+    PREPARE stmt_index1 FROM @sql_index1;
+    EXECUTE stmt_index1;
+    DEALLOCATE PREPARE stmt_index1;
+    SET v_counter = v_counter + 1;
+
+    -- Process Statement 3: CTE with cursor processing
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_x1, v_x1, v_regexp_result, v_x1;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_sum = v_sum + v_x1;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Process Statement 4: CREATE INDEX with dynamic SQL and CASE logic
+    SET @sql_index2 = 'CREATE INDEX v206795 ON v206191(view馃惉, view馃惉, view馃惉)';
+    PREPARE stmt_index2 FROM @sql_index2;
+    EXECUTE stmt_index2;
+    DEALLOCATE PREPARE stmt_index2;
+    
+    CASE 
+        WHEN v_sum > 0 THEN
+            SET v_counter = v_counter + 10;
+        WHEN (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600()) - 356 + (v_sum = 0) THEN
+            SET v_counter = v_counter + 5;
+        ELSE
+            SET v_counter = v_counter + 1;
+    END CASE;
+
+    -- Process Statement 5: CREATE TABLE with dynamic SQL and WHILE loop
+    SET @sql_table = 'CREATE TABLE IF NOT EXISTS v206885 (v206886 INT, v206887 ENUM(''a'', ''b''), INDEX(v206886)) COLLATE=utf8mb4_da_0900_as_cs';
+    PREPARE stmt_table FROM @sql_table;
+    EXECUTE stmt_table;
+    DEALLOCATE PREPARE stmt_table;
+
+    -- Use WHILE loop to insert additional data
+    SET @counter = 0;
+    WHILE @counter < p2 DO
+        SET @sql_insert2 = 'INSERT INTO v206885 VALUES (?, ?)';
+        PREPARE stmt_insert2 FROM @sql_insert2;
+        SET @val1 = p1 + @counter;
+        IF @counter % 2 = 0 THEN
+            SET @val2 = 'a';
+        ELSE
+            SET @val2 = 'b';
+        END IF;
+        EXECUTE stmt_insert2 USING @val1, @val2;
+        DEALLOCATE PREPARE stmt_insert2;
+        SET @counter = @counter + 1;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- Final result calculation
+    SET result = v_counter + v_sum;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1688(1, 1, @out_result);
+
+SELECT @out_result;
