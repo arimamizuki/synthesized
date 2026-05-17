@@ -1,0 +1,188 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v208780 (v208781 INT, v208782 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v208335 (v208336 INT AUTO_INCREMENT PRIMARY KEY, v208337 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v209991 (v208353 INT, v209029 VARCHAR(100), v209031 VARCHAR(100), x1 INT);
+CREATE TABLE IF NOT EXISTS v208668 (v208353 INT, v208354 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v208656 (v208657 INT AUTO_INCREMENT PRIMARY KEY, v208658 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v208374 (v208135 INT, x1 VARCHAR(100));
+INSERT INTO v208780 VALUES (1, 'test'), (2, 'data'), (3, 'sample');
+INSERT INTO v208335 (v208337) VALUES ('c_'), ('d_'), ('e_');
+INSERT INTO v209991 VALUES (1, 'old1', 'match1', 5), (2, 'old2', 'match2', 10), (3, 'old3', 'nomatch', 15);
+INSERT INTO v208668 VALUES (1, 'info1'), (2, 'info2'), (3, 'info3');
+INSERT INTO v208656 (v208658) VALUES ('log'), ('error'), ('warn'), ('info');
+INSERT INTO v208374 VALUES (100, 'value1'), (200, 'value2'), (300, 'value3');
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_LOOPS_fhyha1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_LOOPS_fhyha1(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT;
+
+    WHILE V_I <= N DO
+        SET V_J = 1;
+        WHILE V_J <= N DO
+            SET V_RESULT = (MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(-76)) - 142 + (v_result + 1);
+            SET V_J = V_J + 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+CREATE TABLE IF NOT EXISTS `table_1do798` (
+    `table_1do798_device_id` INT,
+    `table_1do798_location` INT,
+    `table_1do798_device_type` VARCHAR(50),
+    `table_1do798_last_maintenance_date` DATE,
+    `table_1do798_operating_hours` DECIMAL(3,1),
+    `table_1do798_failure_probability` INT
+);
+
+INSERT INTO `table_1do798` (`table_1do798_device_id`, `table_1do798_location`, `table_1do798_device_type`, `table_1do798_last_maintenance_date`, `table_1do798_operating_hours`, `table_1do798_failure_probability`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 6);
+
+/* -----Called: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(DEVICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_OPERATING_HOURS INT DEFAULT 0;
+    DECLARE V_FAILURE_PROB DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DAYS_SINCE_MAINTENANCE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1DO798_OPERATING_HOURS, 0), COALESCE(TABLE_1DO798_FAILURE_PROBABILITY, 0.00)
+    INTO V_OPERATING_HOURS, V_FAILURE_PROB
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_1DO798_LAST_MAINTENANCE_DATE)
+    INTO V_DAYS_SINCE_MAINTENANCE
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SET V_RISK_SCORE = (V_OPERATING_HOURS / 100) + (V_FAILURE_PROB * 100) + (V_DAYS_SINCE_MAINTENANCE / 10);
+
+    IF V_RISK_SCORE > 80 THEN
+        RETURN 1;
+    ELSEIF V_RISK_SCORE > 50 THEN
+        RETURN 7;
+    ELSEIF V_RISK_SCORE > 30 THEN
+        RETURN 30;
+    ELSE
+        RETURN 90;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1699(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_str VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v208135 FROM v208374 WHERE v208135 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+        ROLLBACK;
+    END;
+
+    -- Start transaction for atomicity
+    START TRANSACTION;
+
+    -- Statement 1: CREATE INDEX (simulated via dynamic SQL)
+    SET @sql_idx = 'CREATE INDEX idx_v209989 ON v208780((v208781 + 1), (v208781 + 2), (v208781 + 3))';
+    PREPARE stmt_idx FROM @sql_idx;
+    EXECUTE stmt_idx;
+    DEALLOCATE PREPARE stmt_idx;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: INSERT INTO v208335
+    SET @sql_ins = 'INSERT INTO v208335 (v208337) VALUES (?)';
+    PREPARE stmt_ins FROM @sql_ins;
+    SET @ins_val = CONCAT('c_', p1);
+    EXECUTE stmt_ins USING @ins_val;
+    DEALLOCATE PREPARE stmt_ins;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with LEFT JOIN
+    SET @sql_upd1 = 'UPDATE v209991 AS x1 LEFT JOIN v208668 AS x2 ON (x1.v208353 <= x1.x1) SET x1.v209029 = ? WHERE x1.v209031 = x1.v209029';
+    PREPARE stmt_upd1 FROM @sql_upd1;
+    SET @upd_val = CONCAT('Updating the row', p2);
+    EXECUTE stmt_upd1 USING @upd_val;
+    DEALLOCATE PREPARE stmt_upd1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: CREATE TABLE AS SELECT (with COALESCE and AES_DECRYPT simulation)
+    SET @sql_ctas = 'CREATE TABLE IF NOT EXISTS v210017 AS SELECT COALESCE(?, ?) AS col1, COALESCE(?, ?) AS col2, COALESCE(v208135, x1) AS col3 FROM v208374 WHERE v208135 > ?';
+    PREPARE stmt_ctas FROM @sql_ctas;
+    SET @a = 'default1';
+    SET @b = 'default2';
+    SET @c = 'default3';
+    SET @d = 'default4';
+    SET @threshold = p1;
+    EXECUTE stmt_ctas USING @a, @b, @c, @d, @threshold;
+    DEALLOCATE PREPARE stmt_ctas;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: UPDATE with IN clause
+    SET @sql_upd2 = 'UPDATE v208656 AS x1 SET v208658 = ? WHERE v208658 IN (?, ?, ?, ?)';
+    PREPARE stmt_upd2 FROM @sql_upd2;
+    SET @new_val = CONCAT('log_', p2);
+    SET @val1 = 0.2;
+    SET @val2 = 0.4;
+    SET @val3 = 0.6;
+    SET @val4 = 0.8;
+    EXECUTE stmt_upd2 USING @new_val, @val1, @val2, @val3, @val4;
+    DEALLOCATE PREPARE stmt_upd2;
+    SET v_counter = v_counter + 1;
+
+    -- Use procedural structures: IF, LOOP, CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- CASE statement for conditional logic
+        CASE
+            WHEN v_temp > 200 THEN
+                SET v_counter = v_counter + 10;
+            WHEN v_temp > 100 THEN
+                SET v_counter = v_counter + 5;
+            ELSE
+                SET v_counter = v_counter + 1;
+        END CASE;
+
+        -- WHILE loop for additional processing
+        WHILE v_temp > 0 DO
+            SET v_counter = v_counter + 1;
+            SET v_temp = v_temp - 50;
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+
+    COMMIT;
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1699(1, 1, @out_result);
+
+SELECT @out_result;

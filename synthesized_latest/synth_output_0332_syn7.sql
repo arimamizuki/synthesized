@@ -1,0 +1,176 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v4104 (v4105 TEXT, v4106 INT);
+CREATE TABLE IF NOT EXISTS v4244 (v4105 TEXT, v4106 INT);
+CREATE TABLE IF NOT EXISTS v4059 (v4062 TEXT);
+CREATE TABLE IF NOT EXISTS v3797 (v3669 TEXT);
+CREATE TABLE IF NOT EXISTS v3864 (v3669 TEXT);
+CREATE TABLE IF NOT EXISTS v3884 (v3885 INT);
+CREATE TABLE IF NOT EXISTS v4078 (v4082 TEXT);
+CREATE TABLE IF NOT EXISTS v3717 (v3718 TEXT);
+CREATE TABLE IF NOT EXISTS v4312 (x1 TEXT);
+INSERT INTO v4104 VALUES ('[1]', 1), ('[2]', 2);
+INSERT INTO v4244 VALUES ('[1]', 1), ('[3]', 3);
+INSERT INTO v4059 VALUES ('test'), ('data');
+INSERT INTO v3797 VALUES ('col_datetime'), ('other');
+INSERT INTO v3864 VALUES ('col_datetime'), ('test');
+INSERT INTO v3884 VALUES (100), (200);
+INSERT INTO v4078 VALUES ('hello'), ('world');
+INSERT INTO v3717 VALUES ('mysql'), ('db');
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - 398 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(73)) - -810 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+CREATE TABLE IF NOT EXISTS `table_djtr88` (
+    `table_djtr88_campaign_id` INT,
+    `table_djtr88_budget` INT
+);
+
+INSERT INTO `table_djtr88` (`table_djtr88_campaign_id`, `table_djtr88_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DJTR88_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_DJTR88
+    WHERE TABLE_DJTR88_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0332(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_text TEXT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT x2.v3885 FROM v3884 AS x2;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Statement 1: UPDATE with JOIN
+    SET @sql1 = 'UPDATE v4104 AS x1, v4244 AS x5 SET x1.v4105 = ? WHERE x1.v4105 = CONNECTION_ID()';
+    SET @conn_id = CONNECTION_ID();
+    PREPARE stmt1 FROM @sql1;
+    SET @val1 = '[1]';
+    EXECUTE stmt1 USING @val1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: INSERT with VALUES
+    SET @sql2 = 'INSERT INTO v4059 (v4062) VALUES (?), (?)';
+    PREPARE stmt2 FROM @sql2;
+    SET @val2a = 968;
+    SET @val2b = 'u';
+    EXECUTE stmt2 USING @val2a, @val2b;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE with LEFT JOIN and condition
+    SET @sql3 = 'UPDATE v3797 AS x0 LEFT OUTER JOIN v3864 AS x1 ON x0.v3669 = x0.v3669 SET x0.v3669 = ? WHERE (x0.v3669 >= ?)';
+    PREPARE stmt3 FROM @sql3;
+    SET @val3a = 'col_datetime';
+    SET @val3b = 'j';
+    EXECUTE stmt3 USING @val3a, @val3b;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: SELECT using CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: CREATE TABLE AS SELECT
+    SET @sql5 = 'CREATE TABLE IF NOT EXISTS v4312 AS SELECT CONCAT(x8.v4082, x9.v3718) AS x1 FROM v4078 AS x8, v3717 AS x9';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Procedural logic: IF/ELSEIF/ELSE
+    IF v_counter > 1000 THEN
+        SET result = 1;
+    ELSEIF v_counter > 100 THEN
+        SET result = 2;
+    ELSE
+        SET result = (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (3);
+    END IF;
+
+    -- WHILE loop example
+    WHILE v_counter < 500 DO
+        SET v_counter = v_counter + 10;
+    END WHILE;
+
+    -- CASE statement
+    CASE 
+        WHEN v_counter > 1000 THEN SET result = 1;
+        WHEN v_counter > 500 THEN SET result = 2;
+        ELSE SET result = 3;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0332(1, 1, @out_result);
+
+SELECT @out_result;

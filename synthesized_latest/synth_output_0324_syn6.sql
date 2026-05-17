@@ -1,0 +1,136 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v3898 (v3902 INT, v3900 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v3840 (v3902 INT, v3900 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v3858 (v3859 INT);
+CREATE TABLE IF NOT EXISTS v3772 (v3773 INT);
+CREATE TABLE IF NOT EXISTS v3592 (v3594 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v3757 (v3758 VARCHAR(10));
+INSERT INTO v3898 VALUES (1, 'rose'), (2, 'tulip'), (3, 'daisy');
+INSERT INTO v3840 VALUES (1, 'rose'), (2, 'lily'), (3, 'daisy');
+INSERT INTO v3858 VALUES (10), (20);
+INSERT INTO v3772 VALUES (1), (2), (5);
+INSERT INTO v3592 VALUES ('A'), ('B'), ('C'), ('D');
+INSERT INTO v3757 VALUES ('x'), ('y'), ('z');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+CREATE TABLE IF NOT EXISTS `table_153cac` (
+    `table_153cac_order_id` INT,
+    `table_153cac_customer_id` INT,
+    `table_153cac_order_date` DATE,
+    `table_153cac_total_amount` DECIMAL(10,2),
+    `table_153cac_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4wgu3o` (
+    `table_4wgu3o_order_id` INT,
+    `table_4wgu3o_product_id` INT,
+    `table_4wgu3o_quantity` INT
+);
+
+INSERT INTO `table_153cac` (`table_153cac_order_id`, `table_153cac_customer_id`, `table_153cac_order_date`, `table_153cac_total_amount`, `table_153cac_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4wgu3o` (`table_4wgu3o_order_id`, `table_4wgu3o_product_id`, `table_4wgu3o_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_COMPLEXITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_4WGU3O_PRODUCT_ID), COALESCE(SUM(TABLE_4WGU3O_QUANTITY), 0)
+    INTO V_ITEM_COUNT, V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_4WGU3O
+    WHERE TABLE_4WGU3O_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COMPLEXITY_SCORE = (V_ITEM_COUNT * 2) + (V_UNIQUE_PRODUCTS * 3) + (V_TOTAL_QUANTITY / 5);
+
+    RETURN V_COMPLEXITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0324(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_cursor CURSOR FOR SELECT v3859 FROM v3858 WHERE v3859 > 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    
+    -- Use WHILE loop with conditional logic
+    WHILE p1 > 0 DO
+        -- Statement 1: UPDATE with JOIN
+        SET @sql1 = 'UPDATE v3898 AS x2 JOIN v3840 AS x6 ON x2.v3902 = x6.v3902 SET x2.v3900 = 8 WHERE x2.v3900 LIKE ?';
+        SET @pattern = 'r%';
+        PREPARE stmt1 FROM @sql1;
+        EXECUTE stmt1 USING @pattern;
+        DEALLOCATE PREPARE stmt1;
+        
+        -- Statement 2: INSERT into v3858
+        SET @sql2 = 'INSERT INTO v3858 (v3859) VALUES (?), (?)';
+        SET @val1 = p1;
+        SET @val2 = p2;
+        PREPARE stmt2 FROM @sql2;
+        EXECUTE stmt2 USING @val1, @val2;
+        DEALLOCATE PREPARE stmt2;
+        
+        SET p1 = p1 - 1;
+    END WHILE;
+    
+    -- Use REPEAT loop with cursor
+    OPEN v_cursor;
+    REPEAT
+        FETCH v_cursor INTO v_val;
+        IF NOT v_done THEN
+            -- Statement 3: INSERT into v3772
+            SET @sql3 = 'INSERT INTO v3772 (v3773) VALUES (?), (?), (?)';
+            SET @a = v_val;
+            SET @b = v_val + 1;
+            SET @c = v_val + 2;
+            PREPARE stmt3 FROM @sql3;
+            EXECUTE stmt3 USING @a, @b, @c;
+            DEALLOCATE PREPARE stmt3;
+            
+            SET v_count = (MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(-50)) - 241 + (v_count) + 1;
+        END IF;
+    UNTIL v_done END REPEAT;
+    CLOSE v_cursor;
+    
+    -- Use CASE statement for conditional logic
+    CASE 
+        WHEN p2 > 0 THEN
+            -- Statement 4: INSERT into v3592
+            SET @sql4 = 'INSERT INTO v3592 (v3594) VALUES (?), (?), (?), (?)';
+            SET @v1 = 'X';
+            SET @v2 = 'Y';
+            SET @v3 = 'Z';
+            SET @v4 = 'W';
+            PREPARE stmt4 FROM @sql4;
+            EXECUTE stmt4 USING @v1, @v2, @v3, @v4;
+            DEALLOCATE PREPARE stmt4;
+        ELSE
+            -- Statement 5: UPDATE v3757
+            SET @sql5 = 'UPDATE v3757 AS x0 SET v3758 = (v3758 + 1) % 2 WHERE v3758 = ? AND v3758 > 1 AND v3758 >= 1';
+            SET @cond = 'x';
+            PREPARE stmt5 FROM @sql5;
+            EXECUTE stmt5 USING @cond;
+            DEALLOCATE PREPARE stmt5;
+    END CASE;
+    
+    SET result = v_count;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0324(1, 1, @out_result);
+
+SELECT @out_result;
