@@ -1,0 +1,1 @@
+CREATE TABLE v9505 (v9506 INT, INDEX((CONCAT('')))) COLLATE=utf8_swedish_ci

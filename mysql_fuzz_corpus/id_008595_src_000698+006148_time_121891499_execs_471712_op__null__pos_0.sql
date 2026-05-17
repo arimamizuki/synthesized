@@ -1,0 +1,1 @@
+WITH RECURSIVE x7 AS (SELECT 0 AS x13 UNION ALL SELECT X(1, 1) * 1 + 70000 FROM x14 WHERE x6.Name_exp_1 < 50 UNION ALL SELECT 2 * x6.Name_exp_1 + 1 FROM x10 WHERE x6.Name_exp_1 < x6.Name_exp_1) SELECT x6.Name_exp_1, x6.Name_exp_1, TO_SECONDS(NULL) AS x4, x6.Name_exp_1 FROM v216243 AS x6 WHERE x6.Name_exp_1 > 8 OR ((x6.Name_exp_1 BETWEEN 9 AND 13) AND x6.Name_exp_1 = 90)

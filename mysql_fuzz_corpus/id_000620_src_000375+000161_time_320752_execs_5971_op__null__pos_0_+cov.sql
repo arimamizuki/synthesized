@@ -1,0 +1,1 @@
+UPDATE v692 AS x0 SET x0.v695 = REPEAT('a', 256) WHERE (x0.v694 IS NULL) >> ('') LIMIT 0

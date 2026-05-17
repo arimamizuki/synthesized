@@ -1,0 +1,1 @@
+UPDATE v46209 AS x1 RIGHT JOIN v46209 AS x6 ON x1.x1 = x1.x2 SET x1.x1 = 'test16' WHERE x2 = 'old' LIMIT 2

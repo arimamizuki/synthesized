@@ -1,0 +1,1 @@
+UPDATE v6152 AS x1 SET x1.v6153 = LEFT(v6153, LOCATE('\\\\"\\r', SUBSTRING(v6153, LOCATE('\\nyear=\\\\"', v6154) + 7)) - 1) WHERE v6154 = CONNECTION_ID()

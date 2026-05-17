@@ -1,0 +1,1 @@
+UPDATE v4625 AS x1 JOIN v5005 AS x4 ON x1.v4627 = x1.v4627 AND x1.v4627 = x1.v4626 SET v4627 = 'aaaxxx' WHERE 2005 - 09 - 5 IN (13, 'Current_tls_crlpath', 39, '01-02-03 12:34:56')

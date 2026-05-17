@@ -1,0 +1,1 @@
+INSERT INTO v3858 (v3859) VALUES (0), ('')

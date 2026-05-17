@@ -1,0 +1,1 @@
+UPDATE v40547 AS x1 SET x1.v40549 = 'test_drop' WHERE v40548 < 0.2 LIMIT 12

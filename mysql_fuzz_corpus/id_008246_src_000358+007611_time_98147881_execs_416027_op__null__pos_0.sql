@@ -1,0 +1,1 @@
+CREATE INDEX v189312 ON v189050((jkl + 2))

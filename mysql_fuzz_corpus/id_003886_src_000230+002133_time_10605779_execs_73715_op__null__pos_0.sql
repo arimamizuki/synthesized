@@ -1,0 +1,1 @@
+UPDATE v22839 AS x0 RIGHT JOIN v22666 AS x3 ON x0.v22782 = 1 SET x4 = '2019-05-02' WHERE x4 ->> '$.name' = 'james'

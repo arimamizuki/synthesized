@@ -1,0 +1,1 @@
+UPDATE v5313 AS x0 SET x1 = ROW(1, x1) WHERE x1 = 'hij'

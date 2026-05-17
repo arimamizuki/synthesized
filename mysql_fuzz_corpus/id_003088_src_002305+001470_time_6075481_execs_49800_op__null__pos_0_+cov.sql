@@ -1,0 +1,1 @@
+SELECT x3.x1 FROM v14193 AS x3 WHERE JSON_EXTRACT(x3.x1, '$.err_symbol') = 'x' AND x3.x1 = 6 AND x3.x1 = 128

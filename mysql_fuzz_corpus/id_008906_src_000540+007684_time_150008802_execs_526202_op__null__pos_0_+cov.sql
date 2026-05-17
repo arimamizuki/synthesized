@@ -1,0 +1,1 @@
+UPDATE v245471 AS x1 LEFT JOIN v244464 AS x5 ON x1.x1 = 'validate_password.length' SET x1.x1 = 'x'

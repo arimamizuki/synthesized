@@ -1,0 +1,1 @@
+SELECT x3.v236403 FROM v236410 AS x3 WHERE x3.v236403 IN ('t1', 't2', 't3', 't4')

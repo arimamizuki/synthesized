@@ -1,0 +1,1 @@
+UPDATE v87231 AS x0 STRAIGHT_JOIN v87923 AS x5 ON x0.x5 = x0.x5 SET v86973 = 'Table_open_cache_misses' WHERE x0.v86974 IN (@dec_two, @dt_five, @dbl_five)

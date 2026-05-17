@@ -1,0 +1,1 @@
+UPDATE v6911 AS x0 JOIN v6880 AS x1 USING (v6881) SET v6846 = '{"Password_locking": {"failed_login_attempts": "2", "password_lock_time_days": 2}}' WHERE x0.v6842 = 0

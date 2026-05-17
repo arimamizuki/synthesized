@@ -1,0 +1,1 @@
+UPDATE v2352 AS x1 JOIN v2309 AS x6 ON (x1.v2353 = x1.v2353 AND x1.v2353 = x1.v2354 AND x1.v2354 = 3) SET v2354 = 'somethingelse' WHERE x1.v2353 = 'foo'

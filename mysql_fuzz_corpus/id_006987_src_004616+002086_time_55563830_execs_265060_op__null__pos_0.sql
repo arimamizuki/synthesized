@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v115340 AS x2 WHERE x2.x1 = x2.x1 AND (x2.x1 = 1 OR x2.x1 = 2) AND x2.x1 >= 1 AND x2.x1 <= 3

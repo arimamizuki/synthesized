@@ -1,0 +1,1 @@
+CREATE INDEX v352 ON v317((X(v318)))

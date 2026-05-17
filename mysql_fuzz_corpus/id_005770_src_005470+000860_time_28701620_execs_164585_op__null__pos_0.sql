@@ -1,0 +1,1 @@
+UPDATE v66120 AS x1 SET x1.x2 = REPEAT('i', 18 * 1024 * 4) WHERE x1.x2 = @s

@@ -1,0 +1,1 @@
+CREATE TABLE v82442 (v82443 ENUM('aaaa', '0') CHARACTER SET gb2312) COLLATE=utf8mb4_general_ci

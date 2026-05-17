@@ -1,0 +1,1 @@
+CREATE TABLE v38449 (v38450 INT NOT NULL AUTO_INCREMENT PRIMARY KEY, v38451 DATETIME) AS SELECT @@hostname, @@debug, @@max_prepared_stmt_count, @@ssl_cipher

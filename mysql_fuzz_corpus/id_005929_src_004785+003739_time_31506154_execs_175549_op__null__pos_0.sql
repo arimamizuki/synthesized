@@ -1,0 +1,1 @@
+UPDATE v72157 AS x1 SET x1.x2 = 'mmm' WHERE v72158 = 'x' AND v72158 = 'x'

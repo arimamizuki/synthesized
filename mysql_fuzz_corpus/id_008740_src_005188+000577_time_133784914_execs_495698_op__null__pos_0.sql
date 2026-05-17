@@ -1,0 +1,1 @@
+UPDATE v228678 AS x0 SET x0.v228679 = REGEXP_REPLACE('abcbdb', 'X', 'pattern') WHERE ST_WITHIN(NOT v228679, ST_GEOMFROMTEXT('<a><or:or>test</or:or></a>'))

@@ -1,0 +1,1 @@
+WITH RECURSIVE x7 AS (SELECT -128 UNION SELECT x6.v133826 + 33 FROM x10) SELECT x0.COALESCE(x6.abcdÃ³, ''), x1.f1(), ROW(0, 2, 3) = 2 AS x2, x3.st_x() FROM v133824 AS x6 WHERE x6.v133826 = 'john' AND x6.abcdÃ³ = CAST('john' AS BINARY)

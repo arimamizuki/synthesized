@@ -1,0 +1,1 @@
+SELECT x5.v4468, x5.ghi FROM v4467 AS x5

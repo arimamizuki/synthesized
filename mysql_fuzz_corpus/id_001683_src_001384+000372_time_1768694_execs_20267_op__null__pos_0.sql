@@ -1,0 +1,1 @@
+UPDATE v4354 AS x1 JOIN v4354 AS x2 ON x1.v4356 = x1.v4356 SET v4355 = ST_GEOMFROMTEXT('polygon((1 1.2, 1 0, 2 0, 1 1.2))') WHERE v4356 = 'Open'

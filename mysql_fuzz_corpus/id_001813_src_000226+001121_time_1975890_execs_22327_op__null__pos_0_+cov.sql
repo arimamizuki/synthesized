@@ -1,0 +1,1 @@
+UPDATE v4674 AS x1, v4925 AS x5 SET v4676 = v4676 + 400000 WHERE LEFT(v4675, 1) = '{' AND JSON_EXTRACT(v4676, '$.err_symbol') = 'x'

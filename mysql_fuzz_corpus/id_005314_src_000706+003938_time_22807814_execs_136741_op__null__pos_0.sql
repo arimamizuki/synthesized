@@ -1,0 +1,1 @@
+INSERT INTO v52698 (v52699) VALUES ('Stalin')

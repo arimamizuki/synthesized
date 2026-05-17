@@ -1,0 +1,1 @@
+UPDATE v2869 AS x0 LEFT JOIN v2850 AS x1 ON x0.v2870 = x0.v2871 SET v2872 = '{"Password_locking": {"failed_login_attempts": "2", "password_lock_time_days": 2}}' WHERE v2871 BETWEEN SUBTIME('0000-00-00', '00:00:00') AND v2870 AND v2872 = STR_TO_DATE(DATE_FORMAT(TIME('00:00:00.000000'), CONCAT_WS('-', '%s', '%k')), CONCAT_WS(':', '%i', '%i')) AND x0.v2872 = 'T2' AND x0.v2871 = 4

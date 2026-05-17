@@ -1,0 +1,1 @@
+CREATE TABLE v143114 (v143115 ENUM('foo', 'bar') DEFAULT 'foo') COLLATE=utf8mb4_ja_0900_as_cs

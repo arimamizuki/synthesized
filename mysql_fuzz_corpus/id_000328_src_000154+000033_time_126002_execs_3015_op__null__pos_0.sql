@@ -1,0 +1,1 @@
+UPDATE v381 AS x0 LEFT JOIN v326 AS x1 ON x0.x1 = x0.x1 SET x1 = 'aa'

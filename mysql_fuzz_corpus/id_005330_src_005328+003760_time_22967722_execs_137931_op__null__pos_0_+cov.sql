@@ -1,0 +1,1 @@
+CREATE TABLE v53744 (v53745 VARCHAR(1) DEFAULT NULL) AS SELECT SUBSTRING_INDEX('the king of the the hill', 'the', 2)

@@ -1,0 +1,1 @@
+UPDATE v317 AS x0 JOIN v314 AS x1 ON x0.v319 = x0.v319 SET v318 = 1 * v318 WHERE v319 LIKE CONCAT('set ', 'names %')

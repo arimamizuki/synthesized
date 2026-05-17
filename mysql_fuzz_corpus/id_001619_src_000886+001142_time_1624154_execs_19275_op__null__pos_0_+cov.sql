@@ -1,0 +1,1 @@
+UPDATE v3757 AS x0 SET v3758 = (v3758 + 1) % 2 WHERE v3758 = 'x' AND v3758 > 1 AND v3758 >= 1

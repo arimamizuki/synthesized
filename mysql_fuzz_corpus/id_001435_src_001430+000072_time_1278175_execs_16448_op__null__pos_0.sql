@@ -1,0 +1,1 @@
+UPDATE v2997 AS x1 RIGHT OUTER JOIN v3194 AS x4 ON x1.x1 = x1.x1 SET x1 = 'B' WHERE NOT ((x1.x1 IS NULL) AND ((x1.x1) <> (1)))

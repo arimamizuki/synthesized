@@ -1,0 +1,1 @@
+UPDATE v7437 AS x1 SET v7439 = v7439 + 100 WHERE v7439 LIKE '%Opening %tables' AND v7439 LIKE '%<secret>%' LIMIT 90

@@ -1,0 +1,1 @@
+UPDATE v71799 AS x0 SET v71800 = 'yellow' WHERE INSERT(1133, '銉哹', 'hi', 6) LIKE 'a%'

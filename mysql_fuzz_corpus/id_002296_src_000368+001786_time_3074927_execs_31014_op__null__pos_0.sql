@@ -1,0 +1,1 @@
+UPDATE v7478 AS x0, v7552 AS x4 SET v7479 = 'Bang!' WHERE v7479 = 'testf_bug11763507'

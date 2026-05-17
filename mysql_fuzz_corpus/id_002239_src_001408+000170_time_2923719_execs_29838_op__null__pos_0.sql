@@ -1,0 +1,1 @@
+UPDATE v6911 AS x1 JOIN v7024 AS x5 ON x1.v6881 = x1.v6844 SET x1.v6882 = 'Updating the row' WHERE v6842 = 2 AND v6846 >= 3

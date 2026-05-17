@@ -1,0 +1,1 @@
+INSERT INTO v15432 (v15433) VALUES ('bomb')

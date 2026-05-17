@@ -1,0 +1,1 @@
+CREATE VIEW v124198 AS SELECT REGEXP_SUBSTR('a', 'b', 'c', 'd', 'e', 'f') FROM v123680 AS x2

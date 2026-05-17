@@ -1,0 +1,1 @@
+UPDATE v118704 AS x1 SET v118705 = CONCAT(v118705, 'x') WHERE v118705 = @full_mode AND v118705 = @topic2_id AND v118705 IN (18, 6, 84, 4, 0, 2, 8, 3, 7, 9, 1)

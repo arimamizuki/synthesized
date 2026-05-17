@@ -1,0 +1,1 @@
+UPDATE v40745 AS x1 SET v40746 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE x1.v40747 = TO_BASE64('a')

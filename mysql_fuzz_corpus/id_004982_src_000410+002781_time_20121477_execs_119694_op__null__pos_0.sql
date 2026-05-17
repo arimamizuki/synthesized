@@ -1,0 +1,1 @@
+CREATE INDEX v43044 ON v42189((COUNT(*) + 1), (COUNT(*) + 2), (GET_LOCK('blocker', 100) + 3), (GET_LOCK('blocker', 100) + 4), (GET_LOCK('blocker', 100) + 5))

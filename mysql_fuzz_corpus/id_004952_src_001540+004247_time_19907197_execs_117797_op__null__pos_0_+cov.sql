@@ -1,0 +1,1 @@
+UPDATE v42002 AS x1 SET x1.v42003 = (YEAR(v42003) - YEAR(v42003)) WHERE x1.v42003 = 'dup_history'

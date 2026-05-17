@@ -1,0 +1,1 @@
+UPDATE v27930 AS x1 LEFT JOIN v28686 AS x5 ON x1.v27931 IS NULL SET x1.v27931 = @Open_table_definitions WHERE CAST(v27932 ->> '$.id' AS CHAR(10)) = '"n"'

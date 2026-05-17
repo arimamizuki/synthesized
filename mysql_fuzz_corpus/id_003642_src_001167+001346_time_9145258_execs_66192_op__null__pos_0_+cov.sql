@@ -1,0 +1,1 @@
+UPDATE v20138 AS x0 SET v20139 = 'nam' WHERE (v20139 AND v20139 OR v20141) <> (v20139 AND (NOT (NOT ('%%green%%' = '23' AND v20140 = 1))))

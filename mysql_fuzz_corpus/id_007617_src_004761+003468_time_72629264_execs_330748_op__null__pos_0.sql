@@ -1,0 +1,1 @@
+UPDATE v146308 AS x0 SET x0.v146310 = 'test20' WHERE NOT v146312 IN ('root', 'mysql.sys', 'auto_increment_increment', 'innodb_redo_log_capacity')

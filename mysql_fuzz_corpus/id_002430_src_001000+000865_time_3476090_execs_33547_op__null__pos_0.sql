@@ -1,0 +1,1 @@
+UPDATE v8273 AS x0, v8298 AS x1 JOIN v8017 AS x2 ON x1.v8299 = x1.v8299 SET v8274 = 'Hello, view world' WHERE v8274 = @u AND v8274 = @h

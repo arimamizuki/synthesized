@@ -1,0 +1,1 @@
+SELECT x2.Name_exp_1 FROM v98995 AS x2 WHERE x2.Name_exp_1 = 0.6

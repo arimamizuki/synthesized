@@ -1,0 +1,1 @@
+UPDATE v367 AS x1, v405 AS x6 SET v368 = v368 * 2 WHERE v369 = @topic3_id

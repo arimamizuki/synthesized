@@ -1,0 +1,1 @@
+UPDATE v137615 AS x1 SET x1.v137617 = 'test18' WHERE v137617 = 'foo'

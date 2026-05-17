@@ -1,0 +1,1 @@
+UPDATE v7914 AS x1 SET x4 = '2002' WHERE NOT 'ab' LIKE 'a%'

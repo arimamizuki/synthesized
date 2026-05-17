@@ -1,0 +1,1 @@
+INSERT INTO v2997 (x1) VALUES ('mineral')

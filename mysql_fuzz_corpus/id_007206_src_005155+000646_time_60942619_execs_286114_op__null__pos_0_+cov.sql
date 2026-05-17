@@ -1,0 +1,1 @@
+CREATE TABLE v126032 (v126033 INT, v126034 VARCHAR(30), PRIMARY KEY (v126033)) AS SELECT /*+ SET_VAR(x4 = 'index_merge_sort_union=off') */ 'The\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ZEnd'

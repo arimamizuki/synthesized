@@ -1,0 +1,1 @@
+UPDATE v15079 AS x1 LEFT JOIN v15209 AS x5 ON x1.v15080 = x1.v15081 SET x1.v15080 = 'mmm' WHERE v15080 = 'schema_auto_increment_columns' AND FOUND_ROWS()

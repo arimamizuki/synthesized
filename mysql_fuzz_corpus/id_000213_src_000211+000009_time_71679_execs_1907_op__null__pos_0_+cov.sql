@@ -1,0 +1,1 @@
+UPDATE v39 AS x1 INNER JOIN v170 AS x7 ON (x1.v41 = x1.v40) SET v41 = 'b' WHERE x1.v40 = v41

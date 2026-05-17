@@ -1,0 +1,1 @@
+UPDATE v16814 AS x2 LEFT JOIN v16696 AS x6 ON x2.x2 = 1 SET x2.x2 = 1200 WHERE NOT JSON_SEARCH(@c, 'one', '/a/b[number(true())]', NULL, 123.45) IS NULL

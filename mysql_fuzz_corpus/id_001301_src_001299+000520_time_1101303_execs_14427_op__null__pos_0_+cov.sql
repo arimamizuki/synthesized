@@ -1,0 +1,1 @@
+UPDATE v2739 AS x1 NATURAL JOIN v2482 AS x6 SET x1.x2 = @opened_tables + 1 WHERE x2 = 31

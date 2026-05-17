@@ -1,0 +1,1 @@
+CREATE TABLE v69053 (v69054 INT CONSTRAINT x2 CHECK (v69054 < 5)) AS SELECT @@CORE_FILE, @@log_error_services, @@max_user_connections, @@key_buffer_size

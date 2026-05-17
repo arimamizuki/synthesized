@@ -1,0 +1,1 @@
+UPDATE v1075 AS x1 SET x1.v1077 = RAND() * 10

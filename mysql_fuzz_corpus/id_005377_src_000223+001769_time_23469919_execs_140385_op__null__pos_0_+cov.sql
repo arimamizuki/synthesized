@@ -1,0 +1,1 @@
+UPDATE v53251 AS x0 SET x0.x1 = '1999' WHERE x0.x1 = '04' AND MBRCONTAINS(ST_CONVEXHULL(ST_GEOMFROMTEXT('multipolygon(((0 0, 3 0, 3 3, 0 3, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1)))')), x1)

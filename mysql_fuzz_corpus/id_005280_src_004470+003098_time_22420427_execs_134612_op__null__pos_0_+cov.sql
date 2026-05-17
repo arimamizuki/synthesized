@@ -1,0 +1,1 @@
+CREATE VIEW v52208 AS SELECT NAME_CONST('var', 'value') COLLATE latin1_general_cs FROM v51959 AS x2

@@ -1,0 +1,1 @@
+CREATE INDEX v493 ON v312((-v313))

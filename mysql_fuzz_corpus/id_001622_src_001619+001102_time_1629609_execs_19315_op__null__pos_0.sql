@@ -1,0 +1,1 @@
+UPDATE v3677 AS x1 SET v3695 = (v3689 + 1) % 2 WHERE v3684 LIKE 'r%'

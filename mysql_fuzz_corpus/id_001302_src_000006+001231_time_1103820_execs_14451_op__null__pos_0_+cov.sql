@@ -1,0 +1,1 @@
+INSERT INTO v2509 (x1, v2305) VALUES (6, 6.5), (29, 'Chippewa') ON DUPLICATE KEY UPDATE x5.x4 = x6 + 10

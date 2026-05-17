@@ -1,0 +1,1 @@
+CREATE INDEX v944 ON v730((v741 + 1), v738)

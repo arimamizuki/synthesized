@@ -1,0 +1,1 @@
+INSERT INTO v95780 (v95783) VALUES (99), (NULL), (1), (2), (1)

@@ -1,0 +1,1 @@
+UPDATE v25572 AS x1 SET v25574 = ST_GEOMFROMTEXT('POINT(176 94)') WHERE (v25573 = 'unlocked_user2' AND v25574 = 'localhost') AND v25575 = 'Brand#23'

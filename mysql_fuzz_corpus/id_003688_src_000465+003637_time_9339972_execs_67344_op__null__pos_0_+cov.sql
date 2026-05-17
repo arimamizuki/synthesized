@@ -1,0 +1,1 @@
+UPDATE v20117 AS x1 SET v20118 = 'test_func1' WHERE v20118 LIKE '%v7n%' LIMIT 5

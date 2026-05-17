@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v39394 AS x2

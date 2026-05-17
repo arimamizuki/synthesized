@@ -1,0 +1,1 @@
+UPDATE v14133 AS x1 LEFT JOIN v14381 AS x2 ON x1.v14038 = ' ' AND x1.x3 = '5' SET x1.x3 = 'aaaxxx' WHERE x3 < -2.2

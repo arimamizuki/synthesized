@@ -1,0 +1,1 @@
+SELECT x5.x5, x5.v7421 FROM v7418 AS x5

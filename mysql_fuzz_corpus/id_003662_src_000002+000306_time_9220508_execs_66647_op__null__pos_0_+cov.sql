@@ -1,0 +1,1 @@
+WITH x7 AS (SELECT * FROM x10 LIMIT 3) SELECT x6.v20141, x6.v20140, @l := LOWER(x6.v20141) AS x3, x6.v20139 FROM v20138 AS x6 WHERE NOT x6.v20140 IN ('innodb_monitor_enable', 'innodb_monitor_disable', 'innodb_monitor_reset', 'innodb_monitor_reset_all', 'rbr_exec_mode')

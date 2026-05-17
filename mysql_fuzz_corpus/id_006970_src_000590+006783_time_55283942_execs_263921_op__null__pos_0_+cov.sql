@@ -1,0 +1,1 @@
+UPDATE v115348 AS x1 SET K = (@c := @c + 1) WHERE v115351 IN (4, 84, 5.5, 52)

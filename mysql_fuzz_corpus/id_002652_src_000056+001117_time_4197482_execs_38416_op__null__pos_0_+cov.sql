@@ -1,0 +1,1 @@
+CREATE INDEX v10028 ON v9989(((x2 + x2) / NULLIF(1, 0)))

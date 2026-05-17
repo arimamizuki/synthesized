@@ -1,0 +1,1 @@
+SELECT x0.HEX(x4.v150101), x1.f_def(), BUG11554() AS x2, x3.func_plusone(1) FROM v150098 AS x4 ORDER BY DATE_FORMAT(x6.HEX(ST_MPOINTFROMTEXT(@wkt_mpt, 0)), '%W (%a), %e %M (%b) %Y')

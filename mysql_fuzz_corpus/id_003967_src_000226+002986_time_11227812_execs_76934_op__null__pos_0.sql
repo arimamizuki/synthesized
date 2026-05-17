@@ -1,0 +1,1 @@
+UPDATE v24066 AS x1 LEFT JOIN v24066 AS x4 ON x1.x1 = x1.x1 SET x1 = 25 WHERE x11.x1.x1 = 'localhost' AND x1 BETWEEN 'K' AND 'Q'

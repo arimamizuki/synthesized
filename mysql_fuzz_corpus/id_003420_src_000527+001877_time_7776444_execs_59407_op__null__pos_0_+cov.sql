@@ -1,0 +1,1 @@
+UPDATE v17822 AS x0 SET x0.x3 = 'aaaaaa' WHERE x1 = 'red'

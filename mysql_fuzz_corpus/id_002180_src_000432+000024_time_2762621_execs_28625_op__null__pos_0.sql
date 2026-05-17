@@ -1,0 +1,1 @@
+UPDATE v6293 AS x0 SET v6294 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE v6294 = '2005-01-01 10:00'

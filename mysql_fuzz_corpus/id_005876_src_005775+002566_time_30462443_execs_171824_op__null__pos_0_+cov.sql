@@ -1,0 +1,1 @@
+CREATE TABLE v71066 (v71067 ENUM('Cost', 'sliding', 'open') CHARACTER SET latin1 DEFAULT 'Ã¼') AS SELECT /*+ NO_SEMIJOIN() */ 10.0

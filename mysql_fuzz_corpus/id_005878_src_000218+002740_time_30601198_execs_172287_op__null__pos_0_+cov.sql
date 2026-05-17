@@ -1,0 +1,1 @@
+UPDATE v71041 AS x0 SET v71042 = '\\\\Z\\\\Z\\\\Z\\\\Z' WHERE v71042 LIKE 'sql_notes'

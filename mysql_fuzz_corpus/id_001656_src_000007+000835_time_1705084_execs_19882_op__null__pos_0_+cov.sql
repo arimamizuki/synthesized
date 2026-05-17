@@ -1,0 +1,1 @@
+INSERT INTO v4059 (v4062) VALUES (968), ('u')

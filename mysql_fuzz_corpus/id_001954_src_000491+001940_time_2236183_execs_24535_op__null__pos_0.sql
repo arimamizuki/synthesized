@@ -1,0 +1,1 @@
+UPDATE v5313 AS x1 SET x1.x1 = ROW(1, x1) WHERE x1 = '1' AND x1.x1 = 'x'

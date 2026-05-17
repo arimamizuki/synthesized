@@ -1,0 +1,1 @@
+SELECT x2.v1897 FROM v1894 AS x2 WHERE x2.v1897 = 'foo'

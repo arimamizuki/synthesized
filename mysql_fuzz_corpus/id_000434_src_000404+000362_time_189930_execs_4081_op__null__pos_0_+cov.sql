@@ -1,0 +1,1 @@
+CREATE TABLE v546 (v547 INT) COMMENT='tab馃惉'

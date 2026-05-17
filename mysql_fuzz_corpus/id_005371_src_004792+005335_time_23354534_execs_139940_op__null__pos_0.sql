@@ -1,0 +1,1 @@
+SELECT x2.v54043 FROM v54042 AS x2 WHERE x2.v54043 < 'lp' AND x2.v54043 = 'test'

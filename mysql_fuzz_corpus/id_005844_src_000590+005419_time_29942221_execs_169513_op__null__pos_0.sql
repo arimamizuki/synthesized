@@ -1,0 +1,1 @@
+UPDATE v70002 AS x0, v70131 AS x5 SET x0.v70003 = 'test14' WHERE v70003 IN (13, 36, '1000-01-02', 'transaction_alloc_block_size')

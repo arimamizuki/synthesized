@@ -1,0 +1,1 @@
+WITH x12 AS (SELECT 36 AS x13 FROM x14) SELECT x7.x1, x7.x1, GET_LOCK('test', 0) = 1 AS x4, x7.x1 FROM v91741 AS x7 WHERE x7.x1 = x7.x1

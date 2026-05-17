@@ -1,0 +1,1 @@
+UPDATE v169941 AS x1 SET v169942 = '2002-02-02' WHERE NOT x1.v169942 IN ('root', 'mysql.sys', 'mysql.session', 'mysql.infoschema')

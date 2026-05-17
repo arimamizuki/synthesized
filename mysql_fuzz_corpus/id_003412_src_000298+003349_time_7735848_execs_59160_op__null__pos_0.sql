@@ -1,0 +1,1 @@
+SELECT x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6), x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6), SUM(x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6)) OVER x7 AS x4, x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6) FROM v17556 AS x8 WHERE EXISTS(SELECT 1 FROM x10 WHERE x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6) + ABS(x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6)) = x8.INSERT(1133, '饾寙銉喢[INV]a', 5, 6))

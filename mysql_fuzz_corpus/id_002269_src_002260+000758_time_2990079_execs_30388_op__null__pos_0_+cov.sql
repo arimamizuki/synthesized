@@ -1,0 +1,1 @@
+SELECT * FROM v7032 AS x2, v6911 AS x3

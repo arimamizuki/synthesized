@@ -1,0 +1,1 @@
+UPDATE v616 AS x0 LEFT JOIN v621 AS x1 ON x0.v613 = x0.v613 SET x0.v612 = 'aaaaaaaaaaaaaaaa' WHERE (x0.x1, (x0.x2, x0.v612)) = (x0.v613, (2, 1))

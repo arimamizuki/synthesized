@@ -1,0 +1,1 @@
+UPDATE v250501 AS x1 SET x1.v250490 = 71000 WHERE v250490 = 'silly_trigger'

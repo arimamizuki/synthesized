@@ -1,0 +1,1 @@
+UPDATE v102 AS x1 JOIN v233 AS x5 ON x1.v103 = x1.v103 AND x1.v103 = x1.v103 SET x1.v103 = RAND() * 10 WHERE v103 = '' AND v103 = 'nonexisting'

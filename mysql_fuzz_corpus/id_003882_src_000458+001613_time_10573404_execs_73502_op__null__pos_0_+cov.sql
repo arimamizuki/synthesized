@@ -1,0 +1,1 @@
+UPDATE v22666 AS x0 SET v22667 = CONCAT(v22667, ', Updated2') WHERE x0.v22667 = 'green' LIMIT 20

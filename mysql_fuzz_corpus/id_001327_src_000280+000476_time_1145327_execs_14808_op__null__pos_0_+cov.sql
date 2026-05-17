@@ -1,0 +1,1 @@
+UPDATE v2852 AS x0 SET x0.v2854 = 'bbbbbb' WHERE ABS(v2854 = 256) = 'Blue Lake'

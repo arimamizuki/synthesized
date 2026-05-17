@@ -1,0 +1,1 @@
+INSERT INTO v9388 (v9389) VALUES ('Ü')

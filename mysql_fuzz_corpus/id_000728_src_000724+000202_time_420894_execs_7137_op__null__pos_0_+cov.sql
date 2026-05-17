@@ -1,0 +1,1 @@
+UPDATE v1078 AS x1 SET v1080 = CONVERT_TZ(v1079, 'UTC', 'Europe/Moscow') WHERE v1079 = 1 AND v1079 = 1

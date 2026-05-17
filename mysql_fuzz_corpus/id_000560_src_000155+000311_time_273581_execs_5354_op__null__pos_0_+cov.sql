@@ -1,0 +1,1 @@
+UPDATE v637 AS x1 SET x1 = CONCAT(x1, ', Updated')

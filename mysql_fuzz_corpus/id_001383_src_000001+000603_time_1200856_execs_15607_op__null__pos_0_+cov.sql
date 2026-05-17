@@ -1,0 +1,1 @@
+CREATE TABLE v3006 (v3007 ENUM('Y', 'N') DEFAULT 'N' COLLATE utf8mb4_unicode_ci)

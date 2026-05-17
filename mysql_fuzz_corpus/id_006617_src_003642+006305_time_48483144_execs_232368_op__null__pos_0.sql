@@ -1,0 +1,1 @@
+UPDATE v98699 AS x1 SET v98700 = 'v8l v7n v5n v3l' WHERE (((v98700 = '1 Bedroom' OR v98700 = 'Studio/Bach') AND (v98700 <= 500)) OR ((v98700 = '2 Bedroom') AND (v98700 <= 550)) OR ((v98700 = 'Shared/Roomate') AND (v98700 <= 300)) OR ((v98700 = 'Room and Board') AND (v98700 <= 500))) <> (v98700 > v98700)

@@ -1,0 +1,1 @@
+SELECT x7.v8193, x7.v8194, REPLACE('a', CAST('' AS BINARY), NULL) AS x3, x7.v8193 FROM v8192 AS x7 WHERE x7.v8193 LIKE 'log_queries_not_using_indexes'

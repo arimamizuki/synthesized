@@ -1,0 +1,1 @@
+UPDATE v264 AS x2, v34 AS x6 SET v265 = 'mysql ab' WHERE x2.v265 = 'unlocked_user' AND x2.v265 = AVG(x2.v265)

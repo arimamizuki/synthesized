@@ -1,0 +1,1 @@
+UPDATE v219449 AS x1 JOIN v219449 AS x5 ON x1.v219451 = x1.v219450 SET x1.v219451 = INET6_ATON('<div><div><span>1</span><span>2</span></div></div>')

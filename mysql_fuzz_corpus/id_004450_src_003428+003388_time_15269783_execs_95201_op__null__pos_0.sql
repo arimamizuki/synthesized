@@ -1,0 +1,1 @@
+UPDATE v31890 AS x0 SET x0.v31891 = CONCAT('B', TRIM(TRAILING '.*' FROM 'sql.*.*')) WHERE v31891 = 'public'

@@ -1,0 +1,1 @@
+UPDATE v121161 AS x0 SET x0.v121162 = POINT('/a/b[position()]', 'POINT(178 6)') WHERE v121162 = ''

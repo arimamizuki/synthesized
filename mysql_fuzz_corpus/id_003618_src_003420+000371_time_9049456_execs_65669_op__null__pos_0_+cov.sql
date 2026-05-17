@@ -1,0 +1,1 @@
+UPDATE v19877 AS x1 SET v19878 = 'events_test' WHERE v19878 LIKE 'g%'

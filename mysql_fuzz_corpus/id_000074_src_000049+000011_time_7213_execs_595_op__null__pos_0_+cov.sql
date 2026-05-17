@@ -1,0 +1,1 @@
+UPDATE v1 AS x1 JOIN v39 AS x2 ON x1.v4 = x1.v3 SET v2 = (NOW() - INTERVAL '5' DAY)

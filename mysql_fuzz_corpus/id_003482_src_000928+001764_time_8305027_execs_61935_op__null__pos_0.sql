@@ -1,0 +1,1 @@
+UPDATE v18174 AS x1 SET x1.v17782 = (1 / 0)

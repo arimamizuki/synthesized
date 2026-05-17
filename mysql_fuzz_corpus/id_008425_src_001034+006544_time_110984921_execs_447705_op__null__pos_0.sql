@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT 1 FROM x11, x12 AS x20, x13 AS x21 JOIN x14 USING (x15) LIMIT 100000000) SELECT x8.v205936, x8.v205936, SUM(x8.v205936) OVER () + 1 AS x4, x8.v205936 FROM v205935 AS x8 WHERE x8.v205936 = @con1_thread_id AND x8.v205936 LIKE '%Opening %tables' OR x8.v205936 LIKE '%Locking system tables' OR x8.v205936 LIKE '%System lock'

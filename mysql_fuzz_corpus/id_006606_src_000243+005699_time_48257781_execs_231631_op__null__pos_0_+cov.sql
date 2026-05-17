@@ -1,0 +1,1 @@
+UPDATE v98942 AS x0 SET v98943 = 'private' WHERE v98943 LIKE 'net_%'

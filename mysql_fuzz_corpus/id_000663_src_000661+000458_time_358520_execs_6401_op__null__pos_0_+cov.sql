@@ -1,0 +1,1 @@
+CREATE INDEX v988 ON v713((x3.v714 - v715))

@@ -1,0 +1,1 @@
+SELECT x3.x1, x3.x1 FROM v4682 AS x3 ORDER BY MIN(x3.x1)

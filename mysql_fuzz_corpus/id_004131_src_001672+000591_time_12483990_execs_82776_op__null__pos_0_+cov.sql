@@ -1,0 +1,1 @@
+UPDATE v26349 AS x1 SET x1.v26332 = AES_ENCRYPT('a', 'b') WHERE v26332 = 'John'

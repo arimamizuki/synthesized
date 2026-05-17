@@ -1,0 +1,1 @@
+UPDATE v599 AS x1 SET x1.v601 = ADDTIME(v600, '<A_B>A</A_B>') WHERE v600 > 6.6e0

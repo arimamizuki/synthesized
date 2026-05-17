@@ -1,0 +1,1 @@
+CREATE INDEX v20804 ON v20117((CAST(v20118 ->> '$.name' AS CHAR(24))))

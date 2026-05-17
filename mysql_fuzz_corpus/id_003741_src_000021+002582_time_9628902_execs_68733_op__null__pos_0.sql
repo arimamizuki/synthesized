@@ -1,0 +1,1 @@
+INSERT INTO v20568 (v20569) VALUES (1), (2), (1), (2)

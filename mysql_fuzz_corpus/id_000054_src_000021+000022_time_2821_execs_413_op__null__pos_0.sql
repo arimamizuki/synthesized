@@ -1,0 +1,1 @@
+INSERT INTO v1 (v4) VALUES (52), (14.58)

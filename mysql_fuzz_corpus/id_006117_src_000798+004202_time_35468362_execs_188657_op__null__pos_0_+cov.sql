@@ -1,0 +1,1 @@
+SELECT * FROM v79418 AS x0 WHERE INET6_ATON('2c0f:fff0::') | x0.v79419 = INET6_ATON('2c0f:fff0::')

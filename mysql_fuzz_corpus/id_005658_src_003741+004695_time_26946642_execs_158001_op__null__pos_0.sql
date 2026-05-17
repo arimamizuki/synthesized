@@ -1,0 +1,1 @@
+INSERT INTO v63863 (v63864) VALUES ('bar'), (2), (NULL), ('1997-01-02')

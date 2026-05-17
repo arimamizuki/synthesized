@@ -1,0 +1,1 @@
+UPDATE v146194 AS x0 SET v146195 = 'this is A test' WHERE ('1', v146195) IN (('2001-01-01 10:10:10.9995', 'SOC_USER'), (-1, 'x'))

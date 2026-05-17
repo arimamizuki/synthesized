@@ -1,0 +1,1 @@
+INSERT INTO v73265 (v73266) VALUES ('uybhj'), ('082042')

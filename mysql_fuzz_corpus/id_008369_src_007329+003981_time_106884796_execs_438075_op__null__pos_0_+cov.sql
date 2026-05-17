@@ -1,0 +1,1 @@
+CREATE TABLE v200912 (v200913 INT, v200914 CHAR(6)) AS SELECT @@ssl_cert, @@max_prepared_stmt_count, @@max_digest_length, @@sort_buffer_size

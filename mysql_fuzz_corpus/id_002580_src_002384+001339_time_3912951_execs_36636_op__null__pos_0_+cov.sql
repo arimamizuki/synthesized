@@ -1,0 +1,1 @@
+SELECT x8.v9231, x8.v9231, LOCATE('/', @@basedir) <> 0 AS x4, x8.v9231 FROM v9383 AS x8

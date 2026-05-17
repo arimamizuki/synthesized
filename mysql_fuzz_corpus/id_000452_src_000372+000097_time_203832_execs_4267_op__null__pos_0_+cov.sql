@@ -1,0 +1,1 @@
+UPDATE v295 AS x0 SET v296 = v296 * 10 WHERE (x0.v296, x0.v296) = (x0.v296, x0.v296 + 1) LIMIT 1

@@ -1,0 +1,1 @@
+UPDATE v19423 AS x1 SET x1.v19424 = ST_GEOMFROMTEXT('/a/b[boolean(@d) or boolean(@e)]')

@@ -1,0 +1,1 @@
+UPDATE v25584 AS x0 SET x1 = CONCAT('1e-', x1) WHERE x1 = '1999' AND X(x1)

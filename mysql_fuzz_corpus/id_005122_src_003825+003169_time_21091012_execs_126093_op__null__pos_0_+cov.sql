@@ -1,0 +1,1 @@
+SELECT x6.x1, x6.x2, COALESCE(x6.x1, x6.x1) AS x4, x6.x2 FROM v46397 AS x6 WHERE x6.x2 = 'Sort_scan' ORDER BY 1, 2 LIMIT 38

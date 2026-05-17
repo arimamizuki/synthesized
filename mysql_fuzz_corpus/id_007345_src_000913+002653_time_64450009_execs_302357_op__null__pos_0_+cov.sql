@@ -1,0 +1,1 @@
+UPDATE v133824 AS x1 SET x1.v133827 = CHAR_LENGTH(SHA2('size', 384)) / 2 * 8 WHERE NOT abcdÃ³ LIKE 'x'

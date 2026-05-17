@@ -1,0 +1,1 @@
+CREATE VIEW v88375 AS SELECT *, CONCAT(':', LTRIM(' left'), ':', RTRIM(' right '), ':') FROM v87524 AS x3 NATURAL JOIN v88121 AS x4

@@ -1,0 +1,1 @@
+CREATE VIEW v68916 AS SELECT EXTRACTVALUE('<a>Jack</a>', '/a[contains(../a,"j")]') FROM v68667 AS x1

@@ -1,0 +1,1 @@
+CREATE TABLE v141952 (v141953 DATETIME(1) NOT NULL DEFAULT CURRENT_TIMESTAMP(1) ON UPDATE CURRENT_TIMESTAMP(1), v141954 DATETIME(2) NOT NULL DEFAULT '0000-00-00 00:00:00.000000') AS SELECT /*+ NO_ICP(x4) JOIN_SUFFIX(x5) */ 'The\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ZEnd' FROM x3 AS x6

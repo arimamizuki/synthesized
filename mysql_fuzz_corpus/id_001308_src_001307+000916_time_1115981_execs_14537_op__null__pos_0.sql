@@ -1,0 +1,1 @@
+UPDATE v2303 AS x0 SET v2305 = 'b' WHERE v2305 = 'blue'

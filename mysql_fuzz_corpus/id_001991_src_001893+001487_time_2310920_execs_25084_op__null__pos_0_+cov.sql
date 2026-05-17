@@ -1,0 +1,1 @@
+UPDATE v5363 AS x1, v5712 AS x8 SET v5364 = ST_GEOMFROMTEXT('/a/@b[substring(.,2,1)="1"]') WHERE x1.v5364 = x1.v5364

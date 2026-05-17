@@ -1,0 +1,1 @@
+UPDATE v117143 AS x1 LEFT JOIN v117359 AS x2 ON x1.v117144 = x1.v117144 SET v117144 = 'somethingelse' WHERE x1.v117144 = 'green'

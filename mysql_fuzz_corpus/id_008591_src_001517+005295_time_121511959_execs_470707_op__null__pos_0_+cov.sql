@@ -1,0 +1,1 @@
+CREATE TABLE v216300 (v216301 CHAR(5) NOT NULL) AS SELECT EXTRACTVALUE(@xml, '12345678-123456-78-1234-567812345678'), EXTRACTVALUE('<a><b><processing-instruction>test</processing-instruction></b></a>', '1:2:3:'), SEC_TO_TIME('root'), SEC_TO_TIME('POINT(163 108)'), IS_FREE_LOCK(REPEAT('a', 65)), INET6_NTOA(INET6_ATON('<a><descendant>test</descendant></a>')), ST_ASTEXT(x2)

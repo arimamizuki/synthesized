@@ -1,0 +1,1 @@
+UPDATE v6039 AS x1 SET v6040 = 'ddd' WHERE (v6041 AND 1) = 0

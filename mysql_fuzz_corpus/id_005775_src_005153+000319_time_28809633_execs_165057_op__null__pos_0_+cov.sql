@@ -1,0 +1,1 @@
+CREATE TABLE v68272 (v68273 VARCHAR(300), INDEX(v68273)) AS SELECT /*+ JOIN_ORDER(x3, x4, x5) JOIN_SUFFIX(x6, x7) */ 'The\\\\\\\\\\\\\\\\ZEnd'

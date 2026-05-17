@@ -1,0 +1,1 @@
+CREATE INDEX v345 ON v317((v318 + v318))

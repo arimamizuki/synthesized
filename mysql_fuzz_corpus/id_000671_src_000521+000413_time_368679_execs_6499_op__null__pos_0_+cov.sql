@@ -1,0 +1,1 @@
+UPDATE v809 AS x1 NATURAL JOIN v875 AS x2 SET v810 = @old_description WHERE (x1.v810, ((1.000000, 1.000000), (1.000000, 1.000000))) = (0, NULL, 3)

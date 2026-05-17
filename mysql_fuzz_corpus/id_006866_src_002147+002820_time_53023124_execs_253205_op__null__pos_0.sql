@@ -1,0 +1,1 @@
+CREATE VIEW v110502 AS SELECT x10.x & x10.x, x10.x & x10.x, x10.x & x10.x, x10.x & x10.x FROM v110303 AS x10

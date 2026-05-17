@@ -1,0 +1,1 @@
+CREATE INDEX v859 ON v812((CAST(v813 ->> '$.x' AS CHAR(100))))

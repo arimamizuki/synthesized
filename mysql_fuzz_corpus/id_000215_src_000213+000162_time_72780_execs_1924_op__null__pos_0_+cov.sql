@@ -1,0 +1,1 @@
+UPDATE v79 AS x1 JOIN v74 AS x2 ON x1.v80 = x1.v80 SET v80 = 'localhost1' WHERE v80 = 'A'

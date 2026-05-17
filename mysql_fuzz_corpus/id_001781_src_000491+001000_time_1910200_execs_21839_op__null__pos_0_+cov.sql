@@ -1,0 +1,1 @@
+UPDATE v4382 AS x0 STRAIGHT_JOIN v4824 AS x4 SET x0.v4383 = ROW('A' COLLATE latin1_general_ci, 'b', 'c') WHERE (v4384 > 4) AND (v4383 = 3 OR v4383 > 6)

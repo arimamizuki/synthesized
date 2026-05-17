@@ -1,0 +1,1 @@
+WITH RECURSIVE x11 AS (WITH x16 AS (SELECT x8.x1 FROM x18) SELECT * FROM x13), x12 AS (SELECT LEAD(x8.x1, 0, x8.x1) OVER () AS x14 FROM x15) SELECT x8.x1, x8.x1, x8.x1 COLLATE koi8r_general_ci AS x3, x8.x1 FROM v15755 AS x8 WHERE x8.x1 LIKE 'pfs_example%'

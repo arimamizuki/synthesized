@@ -1,0 +1,1 @@
+UPDATE v33583 AS x0 LEFT JOIN v34075 AS x6 ON x0.x1 = 'dep2' AND x0.x1 = 'John' SET x0.x1 = x1 % 3 WHERE x1 = '2019-04-25'

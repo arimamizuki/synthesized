@@ -1,0 +1,1 @@
+UPDATE v19990 AS x1 SET v19991 = 'new_dest' WHERE UUID() + x1.v19991 = x1.v19991

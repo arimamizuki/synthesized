@@ -1,0 +1,1 @@
+CREATE TABLE v66406 (v66407 JSON, v66408 VARCHAR(255)) AS SELECT @@INSERT_ID, @@debug, @@sql_quote_show_create, @@internal_tmp_mem_storage_engine

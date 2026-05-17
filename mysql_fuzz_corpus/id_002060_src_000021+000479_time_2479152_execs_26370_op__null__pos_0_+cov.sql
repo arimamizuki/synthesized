@@ -1,0 +1,1 @@
+INSERT INTO v6080 (v6081) VALUES ('benltgiontlibvm'), ('w'), ('X'), (DATE_FORMAT('2001-01-01', '%W'))

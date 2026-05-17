@@ -1,0 +1,1 @@
+CREATE TABLE v175470 (v175471 ENUM('ÊÃÕ', 'n', 'Yes', 'aaa', 'ÿáúëêà', 'aaaa', '¤¤')) CHARACTER SET=utf8mb4 COLLATE=utf8mb4_hr_0900_ai_ci

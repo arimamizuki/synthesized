@@ -1,0 +1,1 @@
+UPDATE v70740 AS x0 SET x0.v70550 = 'knut' WHERE v70551 LIKE 't%'

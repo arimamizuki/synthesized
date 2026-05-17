@@ -1,0 +1,1 @@
+UPDATE v205825 AS x0 SET v205826 = ST_GEOMFROMTEXT('POINT(147 57)') WHERE v205826 IN ('2.2', 'disconnect_on_expired_password', 1.11)

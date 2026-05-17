@@ -1,0 +1,1 @@
+UPDATE v210203 AS x1 NATURAL JOIN v210118 AS x4 SET v210205 = 'couldbemuchworse_street' WHERE CAST(v210204 AS UNSIGNED) > @time_set_failed AND v210205 < '150'

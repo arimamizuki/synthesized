@@ -1,0 +1,1 @@
+UPDATE v171594 AS x0 SET v171595 = 10 WHERE 'red,green' = v171595

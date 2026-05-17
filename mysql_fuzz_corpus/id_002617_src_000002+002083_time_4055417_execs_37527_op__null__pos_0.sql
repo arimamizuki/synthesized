@@ -1,0 +1,1 @@
+WITH RECURSIVE x7 AS (SELECT 1 FROM x9 LIMIT 2) SELECT x6.RTRIM('goodyear  '), x6.RTRIM('goodyear  '), GET_LOCK('test', 0) AS x3, x6.RTRIM('goodyear  ') FROM v9673 AS x6 WHERE EXISTS(SELECT * FROM x8 AS x10)

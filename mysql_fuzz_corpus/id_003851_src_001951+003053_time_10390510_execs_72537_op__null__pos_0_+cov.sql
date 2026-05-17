@@ -1,0 +1,1 @@
+CREATE TABLE v22438 (v22439 ENUM('foo', 'bar') DEFAULT 'foo' NOT NULL) COLLATE=utf8mb4_vi_0900_as_cs

@@ -1,0 +1,1 @@
+SELECT x3.v178107 FROM v178519 AS x3 WHERE x3.v178103 = 2 OR x3.v178105 = 3 OR x3.v178104 = LEAST(STR_TO_DATE(DATE_FORMAT(x3.v178105, CONCAT_WS(':', '%h', '%m')), CONCAT_WS('-', '%y', '%H', '%V', '%k', '%k')), '0000-00-00') OR x3.v178106 = 'test/t2'

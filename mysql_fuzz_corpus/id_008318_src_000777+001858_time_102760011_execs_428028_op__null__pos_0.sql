@@ -1,0 +1,1 @@
+UPDATE v193324 AS x1 LEFT JOIN v194228 AS x7 ON x1.v193327 = x1.v193326 SET v193325 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE v193325 = x1.v193327

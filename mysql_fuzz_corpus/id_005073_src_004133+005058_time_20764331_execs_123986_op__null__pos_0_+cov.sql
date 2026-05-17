@@ -1,0 +1,1 @@
+UPDATE v45255 AS x1 LEFT JOIN v45288 AS x4 ON JSON_UNQUOTE(JSON_EXTRACT(x1.v45256, '$**.semijoin_strategy')) COLLATE ucs2_esperanto_ci = x1.v45257 SET v45257 = 'mysql ab' WHERE x1.v45258 <> 'k' AND REGEXP_LIKE(v45257, 'SET_USER_ID.*deprecated')

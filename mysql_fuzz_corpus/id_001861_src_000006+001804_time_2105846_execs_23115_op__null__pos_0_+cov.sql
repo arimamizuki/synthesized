@@ -1,0 +1,1 @@
+INSERT INTO v5212 (v5214) VALUES ('016030'), ('q')

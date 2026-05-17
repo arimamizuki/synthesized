@@ -1,0 +1,1 @@
+CREATE TABLE v2440 (v2441 ENUM('Ã¤', 'Ã¶', 'Ã¼') CHARACTER SET latin1 DEFAULT 'Ã¼')

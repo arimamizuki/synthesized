@@ -1,0 +1,1 @@
+UPDATE v146004 AS x1 NATURAL JOIN v145883 AS x6 SET v145775 = '{"Password_locking": {"password_lock_time_days": 2}}' WHERE x1.v145777 = 'abc'

@@ -1,0 +1,1 @@
+UPDATE v291 AS x1 NATURAL LEFT JOIN v331 AS x3 ON x1.v292 = -x1.v292 SET RTRIM(123) = 'hellotrudy'

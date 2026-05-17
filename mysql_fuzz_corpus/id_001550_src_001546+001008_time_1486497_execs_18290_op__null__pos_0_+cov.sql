@@ -1,0 +1,1 @@
+UPDATE v3757 AS x1 JOIN v3560 AS x4 ON (1) SET v3758 = 'bbb' WHERE @a > 1

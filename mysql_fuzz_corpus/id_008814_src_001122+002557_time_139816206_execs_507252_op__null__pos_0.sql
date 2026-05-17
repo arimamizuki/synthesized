@@ -1,0 +1,1 @@
+SELECT x2.x2 FROM v235880 AS x2 WHERE x2.x2 = 'mysqltest1'

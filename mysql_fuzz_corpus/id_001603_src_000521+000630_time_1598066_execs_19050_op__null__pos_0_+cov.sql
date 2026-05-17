@@ -1,0 +1,1 @@
+UPDATE v3849 AS x1 LEFT OUTER JOIN v3810 AS x2 ON x1.v3850 = x1.v3850 SET x1.v3850 = 'aaaaaaaaaaaaaaaa' WHERE v3851 = 9

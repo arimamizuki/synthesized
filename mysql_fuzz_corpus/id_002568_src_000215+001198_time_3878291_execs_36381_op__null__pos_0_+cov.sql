@@ -1,0 +1,1 @@
+UPDATE v9050 AS x1 JOIN v8890 AS x2 ON ((@g)) SET x1 = 'hellotrudy' WHERE x1 = '2009-04-03 00:00:00'

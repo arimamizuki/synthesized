@@ -1,0 +1,1 @@
+UPDATE v168842 AS x1 LEFT OUTER JOIN v167827 AS x4 ON x1.v168844 = x1.v168844 SET v168844 = 'events_conn1_test2' WHERE 1995 - 0.5 - 01 IN ('1000-01-01', 26, 'Handler_read_next', 52)

@@ -1,0 +1,1 @@
+UPDATE v2306 AS x1 LEFT OUTER JOIN v2285 AS x2 ON x1.v2308 = x1.v2307 SET x1.v2307 = 'test8' WHERE v2307 = 'must_change' AND v2308 = 'localhost'

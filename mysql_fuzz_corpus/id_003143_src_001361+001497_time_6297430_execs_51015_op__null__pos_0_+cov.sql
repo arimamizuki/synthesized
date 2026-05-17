@@ -1,0 +1,1 @@
+UPDATE v13946 AS x1 LEFT JOIN v14687 AS x5 ON x1.v13947 = x1.v13948 SET x1.v13948 = 'memory/temptable/physical_ram' WHERE 'cH' = v13948 AND v13948 <> 'ch'

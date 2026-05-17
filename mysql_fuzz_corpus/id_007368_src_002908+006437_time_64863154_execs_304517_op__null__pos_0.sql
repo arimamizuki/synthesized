@@ -1,0 +1,1 @@
+SELECT x2.v134252 FROM v134251 AS x2 WHERE x2.v134252 = 'patnom' AND x2.v134252 = 'patauteur' AND x2.v134252 = 0

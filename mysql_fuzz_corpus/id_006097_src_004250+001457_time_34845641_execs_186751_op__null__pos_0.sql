@@ -1,0 +1,1 @@
+UPDATE v78506 AS x0 SET v78507 = 9999 WHERE x0.v78507 = 'schema_auto_increment_columns' OR v78507 = 'schema_object_overview' OR v78507 = 'schema_redundant_indexes' OR v78507 = 'schema_unused_indexes' OR v78507 = 'x$schema_flattened_keys'

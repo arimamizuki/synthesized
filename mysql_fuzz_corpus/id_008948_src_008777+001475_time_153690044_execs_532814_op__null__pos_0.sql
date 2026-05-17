@@ -1,0 +1,1 @@
+UPDATE v248054 AS x2 RIGHT OUTER JOIN v248485 AS x5 ON x2.v248055 = x2.v248056 SET v248056 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE v248056 = 'б' AND v248055 = 1 AND x2.v248056 = 1 AND v248055 = 1 AND x2.v248056 = 1 AND v248055 = 1

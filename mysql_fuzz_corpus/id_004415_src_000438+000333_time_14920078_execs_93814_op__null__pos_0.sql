@@ -1,0 +1,1 @@
+UPDATE v31129 AS x1 SET v31130 = ROW('A' COLLATE latin1_bin, 'b', 'c') WHERE v31130 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

@@ -1,0 +1,1 @@
+CREATE INDEX v62 ON v32((x1 * 1))

@@ -1,0 +1,1 @@
+UPDATE v15478 AS x1 NATURAL JOIN v15695 AS x6 JOIN v15338 AS x7 ON x6.x1 = x6.x1 SET v15479 = 'c' WHERE v15479 IN (@str_one, @str_two, @str_five)

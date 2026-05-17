@@ -1,0 +1,1 @@
+UPDATE v31909 AS x0 SET v31872 = 'this test once revealed a bug' WHERE v31872 = CAST('20:21:22' AS TIME) LIMIT 90

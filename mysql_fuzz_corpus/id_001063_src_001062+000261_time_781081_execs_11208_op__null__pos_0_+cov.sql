@@ -1,0 +1,1 @@
+UPDATE v1899 AS x1 INNER JOIN v1850 AS x6 ON x1.v1900 >= x1.v1900 SET x1.v1900 = 'M' WHERE v1900 = 'KÃ¤li KÃ¤li 2+4'

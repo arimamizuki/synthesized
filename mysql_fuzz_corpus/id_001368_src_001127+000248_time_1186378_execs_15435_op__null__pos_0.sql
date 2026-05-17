@@ -1,0 +1,1 @@
+UPDATE v2873 AS x0 SET v2874 = @check WHERE v2874 < 13 OR v2874 < 14

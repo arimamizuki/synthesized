@@ -1,0 +1,1 @@
+UPDATE v65486 AS x1 SET v65487 = x1.v65487 + 512 WHERE v65487 = 'mysqltest' AND v65487 = 't1'

@@ -1,0 +1,1 @@
+CREATE INDEX v442 ON v360((v364 > 1))

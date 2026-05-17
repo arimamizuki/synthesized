@@ -1,0 +1,1 @@
+UPDATE v11324 AS x1 SET x1.v11325 = CONCAT('@', TRIM(LEADING '.' FROM CONCAT('.', v11325))) WHERE v11325 IN (@dt_one, @dt_two, @dt_five)

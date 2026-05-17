@@ -1,0 +1,1 @@
+UPDATE v195609 AS x1 SET v195612 = STR_TO_DATE('32.10.2004 15.30', '%D.%D.%Y %H.%h') WHERE v195613 = 'unlocked_user2' AND v195612 = 'def_interval'

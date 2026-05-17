@@ -1,0 +1,1 @@
+CREATE TABLE v48300 (v48301 VARCHAR(30), v48302 INT, v48303 INT) AS SELECT /*+ QB_NAME(x4) JOIN_FIXED_ORDER(@subq1) */ 'The\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ZEnd'

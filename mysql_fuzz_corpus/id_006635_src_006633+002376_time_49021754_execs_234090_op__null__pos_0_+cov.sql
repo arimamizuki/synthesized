@@ -1,0 +1,1 @@
+SELECT x8.x1, x8.x1, YEARWEEK('x', 'POINT(130 69)') AS x4, x8.x1 FROM v99508 AS x8 WHERE x8.x1 IN (2, 5, 6)

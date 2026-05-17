@@ -1,0 +1,1 @@
+SELECT x4.108 + (4 >> 2), x4.108 + (4 >> 2) FROM v234503 AS x4 ORDER BY x4.108 + (4 >> 2) COLLATE utf8mb3_persian_ci, x4.x1.v234484 + 384 COLLATE utf8mb3_bin

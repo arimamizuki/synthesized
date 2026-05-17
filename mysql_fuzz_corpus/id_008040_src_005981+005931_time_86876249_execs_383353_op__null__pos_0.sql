@@ -1,0 +1,1 @@
+UPDATE v172187 AS x1 SET x1.v172188 = 6 WHERE NOT v172193 IN ('ag', 'ef', 'ğŸ[INV]£')

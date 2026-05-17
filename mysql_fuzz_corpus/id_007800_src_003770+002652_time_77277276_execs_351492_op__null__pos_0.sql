@@ -1,0 +1,1 @@
+SELECT x6.Name_exp_1, x6.Name_exp_1, STR_TO_DATE('%Y', NOT 'EXAMPLE' IN (0)) AS x3, x6.Name_exp_1 FROM v155477 AS x6 ORDER BY (UPDATEXML(x6.Name_exp_1, '1', '1'))

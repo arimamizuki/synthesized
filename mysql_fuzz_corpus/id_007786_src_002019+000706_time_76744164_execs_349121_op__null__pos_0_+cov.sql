@@ -1,0 +1,1 @@
+WITH x8 AS (SELECT SUM(x7.view馃惉) AS x10, SUM(x7.v154601) AS x11, x7.v154601 FROM x13 GROUP BY x7.view馃惉) SELECT x7.view馃惉, x7.view馃惉, ADDTIME(CAST('' AS BINARY), 'GeometryCollection(point(0 0),)') AS x4, x7.v154601 FROM v154600 AS x7 WHERE ('1', x7.v154601) IN (('1', '01-01-01'), ('1', '2001-1-1 0:0:0'), ('1', '02-02-02'))

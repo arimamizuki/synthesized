@@ -1,0 +1,1 @@
+UPDATE v365 AS x1 SET x1.v366 = v366 * 17 WHERE x1.v366 = 'project_table' AND v366 <> 8 LIMIT 10

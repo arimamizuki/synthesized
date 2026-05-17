@@ -1,0 +1,1 @@
+UPDATE v2958 AS x0 SET v2961 = v2959 - 50 WHERE v2961 = 'rob'

@@ -1,0 +1,1 @@
+CREATE TABLE v17053 (v17054 GEOMETRY NOT NULL, INDEX(A(4))) AS SELECT @@innodb_read_only, @@transaction_read_only, @@read_only, @@super_read_only

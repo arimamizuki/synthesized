@@ -1,0 +1,1 @@
+UPDATE v128517 AS x1 SET v128518 = (v128518 + 1) % 2 WHERE NOT v128518 IN ('green', 'blue')

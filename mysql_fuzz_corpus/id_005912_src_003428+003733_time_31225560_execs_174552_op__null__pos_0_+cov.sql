@@ -1,0 +1,1 @@
+UPDATE v71576 AS x1 SET x1.v71578 = CONCAT(v71579, ', Updated2') WHERE v71577 IN (@dt_one, @dbl_two, @int_one)

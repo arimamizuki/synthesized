@@ -1,0 +1,1 @@
+CREATE INDEX v139540 ON v138940((x3.x2 + 10 * x8.v138693), (VALUES (x1)), (VALUES (v138849)), (x1 + x2), (2 > 1))

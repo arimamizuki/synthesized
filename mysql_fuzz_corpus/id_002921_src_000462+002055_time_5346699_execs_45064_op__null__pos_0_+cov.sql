@@ -1,0 +1,1 @@
+UPDATE v12578 AS x1 SET x1.v12572 = 'new_dest' WHERE v12573 LIKE 'user%' LIMIT 5

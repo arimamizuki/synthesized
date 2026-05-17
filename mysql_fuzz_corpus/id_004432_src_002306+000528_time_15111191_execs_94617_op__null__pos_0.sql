@@ -1,0 +1,1 @@
+SELECT x2.v30700 FROM v30699 AS x2 WHERE x2.v30700 = '13_characters'

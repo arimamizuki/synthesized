@@ -1,0 +1,1 @@
+UPDATE v68845 AS x1 LEFT JOIN v69375 AS x7 ON x1.v68357 = 1002 SET x1.v68357 = 'Ford' WHERE x1.v68357 IN ('Current_tls_capath', '0000-00-00 00:00:00', 'wait/lock/metadata/sql/mdl')

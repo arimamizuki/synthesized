@@ -1,0 +1,1 @@
+CREATE VIEW v141614 AS SELECT FIELD('x', 'x', 'x', 'x', 'x', 'x') FROM v141613 AS x2

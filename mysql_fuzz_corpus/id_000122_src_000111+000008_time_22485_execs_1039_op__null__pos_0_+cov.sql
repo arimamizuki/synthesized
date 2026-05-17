@@ -1,0 +1,1 @@
+UPDATE v51 AS x0 LEFT JOIN v65 AS x1 ON x0.v53 = x0.v53 SET v53 = CONCAT('abcd', v53 % 21)

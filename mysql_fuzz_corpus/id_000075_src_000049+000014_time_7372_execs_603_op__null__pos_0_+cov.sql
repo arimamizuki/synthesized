@@ -1,0 +1,1 @@
+UPDATE v1 AS x1 NATURAL JOIN v42 AS x4 SET v4 = 'test20'

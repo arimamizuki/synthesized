@@ -1,0 +1,1 @@
+INSERT INTO v75783 (v75784) VALUES ('0'), ('0')

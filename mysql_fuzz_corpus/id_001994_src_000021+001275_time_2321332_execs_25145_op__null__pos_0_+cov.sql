@@ -1,0 +1,1 @@
+INSERT INTO v5577 (v5578) VALUES ('~'), (NULL), ('X'), (1999)

@@ -1,0 +1,1 @@
+UPDATE v78029 AS x1 SET v78032 = ST_GEOMFROMTEXT('/a/descendant::*') WHERE v78030 = 'qqqq'

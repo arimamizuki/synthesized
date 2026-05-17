@@ -1,0 +1,1 @@
+UPDATE v65 AS x1 JOIN v84 AS x2 ON x1.v71 = x1.v68 SET v71 = 100 * v70

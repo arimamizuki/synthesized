@@ -1,0 +1,1 @@
+UPDATE v2482 AS x0 LEFT JOIN v2365 AS x1 ON x0.v2483 = x0.v2483 AND x0.v2483 = 3 SET x0.v2483 = AES_DECRYPT(JSON_REMOVE(v2483, '$."last-updated"'), 'a', NULL) WHERE v2483 = 'zzzz'

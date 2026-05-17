@@ -1,0 +1,1 @@
+UPDATE v17496 AS x0 SET x0.v17497 = 'test2' WHERE v17497 = 1 AND v17497 >= 'x'

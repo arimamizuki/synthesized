@@ -1,0 +1,1 @@
+UPDATE v82184 AS x0 SET x0.v82185 = JSON_CONTAINS(JSON_ARRAY(CAST('12:32:69' AS TIME)), 'false') WHERE @@innodb_purge_stop_now LIKE 'c%'

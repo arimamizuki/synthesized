@@ -1,0 +1,1 @@
+WITH RECURSIVE x10 AS (SELECT '2' FROM x11, x12 AS x15, x13 AS x16 LEFT JOIN x14 ON x8.v44364 >= 74 AND x8.v44365 <= 0 LIMIT 100000000) SELECT x8.v44365, x8.v44364, EXTRACTVALUE(ROLES_GRAPHML(), 'count(//edge)') AS x4, x8.v44364 FROM v44363 AS x8 WHERE x8.v44364 IN ('UTC', 'Universal', 'MET', 'Europe/Moscow', 'leap/Europe/Moscow', 'Japan', 'CET', 'US/Pacific')

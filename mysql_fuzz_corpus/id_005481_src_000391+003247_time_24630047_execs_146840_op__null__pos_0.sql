@@ -1,0 +1,1 @@
+UPDATE v57956 AS x0 SET v57958 = 'yellow' WHERE x0.v57958 = 99

@@ -1,0 +1,1 @@
+UPDATE v71960 AS x1 LEFT JOIN v72963 AS x2 ON (x1.v71966 = x1.v71961) SET x1.v71965 = v71964 * 10 WHERE 'ndb_%' LIKE 'あいうえおかきくけこさしすせそ'

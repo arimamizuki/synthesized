@@ -1,0 +1,1 @@
+UPDATE v9419 AS x0, v9411 AS x4 SET x0.x2 = 'test3' WHERE x1 = 1 AND x2 >= 'x'

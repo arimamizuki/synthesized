@@ -1,0 +1,1 @@
+CREATE TABLE v638 (v639 ENUM('aaa', 'bbb') AUTO_INCREMENT COMMENT 'Whether to verify the server certificate.')

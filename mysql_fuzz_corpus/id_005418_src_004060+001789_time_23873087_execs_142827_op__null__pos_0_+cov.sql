@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT 1 AS x15, 'G' AS x16, 40 AS x17 UNION SELECT 2, 'G', 60 UNION SELECT 3, 'S', 60 UNION SELECT 4, 'S', 20) SELECT x8.Name_exp_1, x8.Name_exp_1, CAST(27 / CAST(x8.Name_exp_1 / x8.Name_exp_1 AS CHAR) AS SIGNED) / 17 AS x4, x8.Name_exp_1 FROM v55768 AS x8 WHERE x8.Name_exp_1 IS NULL OR x8.Name_exp_1 < 0 OR x8.Name_exp_1 > 1

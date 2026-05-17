@@ -1,0 +1,1 @@
+UPDATE v6077 AS x1 LEFT JOIN v6082 AS x2 ON x1.v6079 = x1.v6079 SET x1.v6078 = 'init_connect' WHERE v6078 = 0.0

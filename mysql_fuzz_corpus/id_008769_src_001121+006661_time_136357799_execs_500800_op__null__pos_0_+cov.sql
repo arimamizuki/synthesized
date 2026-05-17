@@ -1,0 +1,1 @@
+SELECT x3.x1 FROM v232630 AS x3 WHERE x3.x2 = 'Table_open_cache_hits'

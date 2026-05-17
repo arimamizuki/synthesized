@@ -1,0 +1,1 @@
+UPDATE v98701 AS x1, v98871 AS x5 SET v98689 = LEFT(v98689, 1) WHERE x1.s1 > 0 AND x1.s1 = 'Ashton'

@@ -1,0 +1,1 @@
+SELECT x2.x2 FROM v118589 AS x2 WHERE (x2.x2 > 4) AND (x2.x2 = 3 OR x2.x2 = 40) AND x2.v118590 = x2.x2

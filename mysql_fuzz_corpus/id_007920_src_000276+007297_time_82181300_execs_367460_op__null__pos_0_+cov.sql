@@ -1,0 +1,1 @@
+UPDATE v163797 AS x1 SET v163799 = 'kristofer' WHERE (v163798 % '') > 32767

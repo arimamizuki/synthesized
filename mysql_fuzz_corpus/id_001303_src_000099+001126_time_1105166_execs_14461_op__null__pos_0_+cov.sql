@@ -1,0 +1,1 @@
+INSERT INTO v2748 (v2751) VALUES ('2006-06-13'), (89), ('KÃ¤li KÃ¤li 2+4'), (177), ('082034'), ('undeclared')

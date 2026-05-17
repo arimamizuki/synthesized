@@ -1,0 +1,1 @@
+UPDATE v44759 AS x1 NATURAL JOIN v44734 AS x5 SET x1 = LAST_INSERT_ID(x2) WHERE x2 = 'mysqltest' AND x2 = 'mysqltest_1' AND x1 = 'localhost'

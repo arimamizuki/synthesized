@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT * FROM x10 WHERE x7.v78222 > 3 UNION SELECT * FROM x11) SELECT x7.v78222, x7.v78221, ST_ASTEXT(ST_DIFFERENCE(MULTIPOINT(POINT(-1, 1)), POINT(-1, -1))) AS x4, x7.v78221 FROM v78220 AS x7 WHERE x7.v78221 IN ('sort_buffer_size', 'max_connections', 'max_digest_length', 'innodb_fast_shutdown', 'innodb_default_row_format', 'innodb_flush_log_at_trx_commit')

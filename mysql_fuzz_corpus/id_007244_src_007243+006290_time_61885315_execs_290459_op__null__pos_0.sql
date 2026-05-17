@@ -1,0 +1,1 @@
+SELECT x9.x2, x9.x2, SUM(x9.x2) OVER () AS x4, x9.v127228 FROM v128097 AS x9

@@ -1,0 +1,1 @@
+CREATE TABLE v56512 (v56513 ENUM('目', 'ss', '6', 'Europe'))

@@ -1,0 +1,1 @@
+UPDATE v98871 AS x1 SET v98807 = 'datetime' WHERE v98807 < 7

@@ -1,0 +1,1 @@
+INSERT INTO v3767 (v3760) VALUES (100), ('c')

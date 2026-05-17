@@ -1,0 +1,1 @@
+CREATE TEMPORARY TABLE v83944 (v83945 DOUBLE(10, 3) PRIMARY KEY COMMENT 'The file used for the Certificate Authority (CA) certificate.') ENGINE=MyISAM ROW_FORMAT=REDUNDANT

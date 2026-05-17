@@ -1,0 +1,1 @@
+UPDATE v15816 AS x1 LEFT JOIN v15159 AS x2 ON x1.x1 = x1.x1 AND FUNC(x1.x1) = x1.x1 SET x1 = CONCAT(x1, ', Updated from a = 100') WHERE x1.x1 IS NULL OR x1.x1 < x1.x1

@@ -1,0 +1,1 @@
+UPDATE v180749 AS x0 JOIN v181798 AS x1 ON TRUE SET v180750 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": -2}}' WHERE NOT v180750 IN (1, 2, 6, 7, 9, 10, 11)

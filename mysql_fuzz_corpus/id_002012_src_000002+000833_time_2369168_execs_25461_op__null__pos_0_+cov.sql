@@ -1,0 +1,1 @@
+SELECT x9.v5300, x9.v5300, x9.v5300 AS x3, x9.v5300 FROM v5298 AS x9 WHERE x9.v5299 = 'john' COLLATE utf8mb4_0900_ai_ci

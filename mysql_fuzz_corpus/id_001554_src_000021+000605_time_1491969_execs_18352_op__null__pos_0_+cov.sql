@@ -1,0 +1,1 @@
+INSERT INTO v3632 (v3635) VALUES (3), (@aux)

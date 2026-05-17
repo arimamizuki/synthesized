@@ -1,0 +1,1 @@
+SELECT x0.f1(1), x1.metaphon('x'), HEX(INET6_ATON('192.168.1.2')) AS x2, x3.current_user() FROM v29662 AS x5 WHERE x5.Name_exp_1 BETWEEN '2011-10-01 00:00:00' AND '2011-10-29 02:00:00'

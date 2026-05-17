@@ -1,0 +1,1 @@
+CREATE VIEW v63592 AS SELECT x2.x1 FROM v61349 AS x2 WHERE x2.x1 = 'test' AND x2.x1 = 'v1'

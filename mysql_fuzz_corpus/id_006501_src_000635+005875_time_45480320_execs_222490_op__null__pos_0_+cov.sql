@@ -1,0 +1,1 @@
+UPDATE v94598 AS x1 SET v94599 = (1 / 0) WHERE x1.v94599 = 'ger' AND x1.v94599 = x1.v94599

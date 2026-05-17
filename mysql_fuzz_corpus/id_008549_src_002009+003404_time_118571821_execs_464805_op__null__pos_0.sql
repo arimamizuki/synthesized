@@ -1,0 +1,1 @@
+UPDATE v212793 AS x1 SET v212794 = '{"Password_locking": 1}' WHERE NOT (NOT (v212794))

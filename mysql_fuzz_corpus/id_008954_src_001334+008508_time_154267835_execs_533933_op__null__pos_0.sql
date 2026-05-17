@@ -1,0 +1,1 @@
+UPDATE v248525 AS x1 LEFT OUTER JOIN v248808 AS x6 ON x1.v248527 = x1.v248526 SET v248527 = 'Studio/Bach' WHERE x1.v248526 = @orig_mysqlx_ssl_key

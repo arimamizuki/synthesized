@@ -1,0 +1,1 @@
+UPDATE v66120 AS x0 SET x0.x3 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE x3 = 'old'

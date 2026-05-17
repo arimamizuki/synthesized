@@ -1,0 +1,1 @@
+CREATE INDEX v5580 ON v5508(((v5509 + x2) / NULLIF(1, 0)))

@@ -1,0 +1,1 @@
+UPDATE v8273 AS x0, v8607 AS x1 JOIN v7924 AS x2 ON x1.v8608 = x1.v8608 SET v8275 = 'yellow'

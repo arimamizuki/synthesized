@@ -1,0 +1,1 @@
+UPDATE v5269 AS x0 SET x0.v5271 = 'test6'

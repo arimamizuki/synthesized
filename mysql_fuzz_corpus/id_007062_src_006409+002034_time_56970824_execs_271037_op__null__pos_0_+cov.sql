@@ -1,0 +1,1 @@
+WITH x8 AS (SELECT 1), x9 AS (SELECT 2) SELECT x7.x2, x7.x2, SUM(x7.x2) / COUNT(*) AS x4, x7.x2 FROM v118613 AS x7 WHERE x7.x2 = 58 AND x7.x2 LIKE 'x'

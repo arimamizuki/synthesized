@@ -1,0 +1,1 @@
+UPDATE v137669 AS x0 SET x0.v137617 = CONCAT(v137617, 'data was: /') WHERE v137617 = 'new_value'

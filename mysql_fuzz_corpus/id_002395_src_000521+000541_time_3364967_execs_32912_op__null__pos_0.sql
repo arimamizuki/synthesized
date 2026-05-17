@@ -1,0 +1,1 @@
+UPDATE v8021 AS x0 SET x0.v8023 = 'aaaaaaaaaaaaaaaa' WHERE x0.v8022 = x0.v8022

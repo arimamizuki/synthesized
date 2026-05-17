@@ -1,0 +1,1 @@
+UPDATE v133715 AS x0 SET v133717 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE x0.v133717 = 1 AND x0.v133716 = 1 OR x0.v133716 IS NULL

@@ -1,0 +1,1 @@
+UPDATE v72489 AS x1 SET v72490 = 'DELETE FROM non_existing_table a USING non_existing_table a'

@@ -1,0 +1,1 @@
+UPDATE v70242 AS x1 SET x1.v70244 = 85984 WHERE INSERT('server_version=x', '1', 30000, 20) > 19

@@ -1,0 +1,1 @@
+UPDATE v2977 AS x1 JOIN v2859 AS x6 ON x1.v2979 = x1.v2978 SET x1.v2979 = 'replace' WHERE v2978 = -2

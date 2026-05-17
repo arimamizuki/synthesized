@@ -1,0 +1,1 @@
+SELECT x2.v14229 FROM v14228 AS x2 WHERE JSON_EXTRACT(@v1, '$.query_type') = 'x' AND x2.v14230 = 20 AND x2.v14230 = 6

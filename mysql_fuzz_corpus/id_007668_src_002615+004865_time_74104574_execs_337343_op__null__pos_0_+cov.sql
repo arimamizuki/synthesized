@@ -1,0 +1,1 @@
+UPDATE v149632 AS x1 INNER JOIN v149652 AS x6 ON x1.v149633 = 'private' SET x1.v149633 = 't1' WHERE v149633 IN (@str_two, @dt_two, @str_five)

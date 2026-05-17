@@ -1,0 +1,1 @@
+CREATE VIEW v1036 AS SELECT MAX(x2.v667) + 1, MAX(x2.v667) + 1, MAX(x2.v666) + 1, MAX(x2.v665) + 1, MAX(x2.v665) + 1, MAX(x2.v667) + 1, MAX(x2.v665) + 1 FROM v664 AS x2

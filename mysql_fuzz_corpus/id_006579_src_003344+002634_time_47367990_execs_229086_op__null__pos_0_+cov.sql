@@ -1,0 +1,1 @@
+CREATE TABLE v97915 (v97916 VARCHAR(255) DEFAULT NULL, v97917 INT, PRIMARY KEY (v97916)) AS SELECT @@error_count, @@transaction_read_only, @@character_set_client, @@default_storage_engine

@@ -1,0 +1,1 @@
+UPDATE v4357 AS x1 SET x1.v4360 = CONCAT(CURRENT_TIMESTAMP()) WHERE v4364 = 'same_value_col1' AND v4361 = 'same_value_col3'

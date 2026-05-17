@@ -1,0 +1,1 @@
+UPDATE v118589 AS x1 SET x1.v118590 = STR_TO_DATE('%m /%d/%Y', '31/11/22')

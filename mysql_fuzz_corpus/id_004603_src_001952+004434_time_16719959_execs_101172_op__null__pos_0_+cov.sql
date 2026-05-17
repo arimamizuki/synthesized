@@ -1,0 +1,1 @@
+CREATE INDEX v34369 ON v34357(((4 + 2) / NULLIF(2, '')))

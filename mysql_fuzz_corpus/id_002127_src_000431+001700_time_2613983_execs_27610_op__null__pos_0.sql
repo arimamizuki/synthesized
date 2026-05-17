@@ -1,0 +1,1 @@
+UPDATE v6152 AS x1 RIGHT JOIN v6144 AS x7 ON x1.v6154 SET v6154 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": 2}}' WHERE v6154 = 'tr15'

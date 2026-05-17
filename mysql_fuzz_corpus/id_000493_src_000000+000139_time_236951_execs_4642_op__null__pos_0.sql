@@ -1,0 +1,1 @@
+CREATE VIEW v609 AS SELECT x3.metered(x2.v598) AS x1 FROM v597 AS x2

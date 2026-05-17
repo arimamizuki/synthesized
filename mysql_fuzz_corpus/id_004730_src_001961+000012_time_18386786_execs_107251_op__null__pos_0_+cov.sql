@@ -1,0 +1,1 @@
+UPDATE v37592 AS x1 SET x2 = CONCAT('abcd', x2 % 21) WHERE x2 > 10 AND x2 <= 18

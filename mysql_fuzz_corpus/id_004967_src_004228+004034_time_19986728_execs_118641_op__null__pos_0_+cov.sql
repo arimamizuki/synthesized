@@ -1,0 +1,1 @@
+UPDATE v42068 AS x1 SET v42070 = 'private' WHERE v42070 LIKE JSON_CONTAINS('key2', 'key4')

@@ -1,0 +1,1 @@
+SELECT x1.x1 FROM v167695 AS x1 WHERE x1.x2 = 'def_interval' AND x1.x1 = 'localhost' AND (DATEDIFF(x1.x1, '0000-01-01') + 1) = (DATEDIFF(NOW(), '0000-01-01') + 1)

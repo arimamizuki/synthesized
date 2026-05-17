@@ -1,0 +1,1 @@
+UPDATE v31625 AS x1 NATURAL JOIN v31102 AS x5 SET v31626 = POINT(0, 0) WHERE v31626 IN ('lmn', 'qa_auth_server')

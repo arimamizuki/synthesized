@@ -1,0 +1,1 @@
+UPDATE v3645 AS x0 NATURAL JOIN v3559 AS x1 SET x0.v3646 = 'test/t1' WHERE v3646 = 'old'

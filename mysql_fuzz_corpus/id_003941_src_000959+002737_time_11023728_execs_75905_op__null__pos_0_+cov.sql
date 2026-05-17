@@ -1,0 +1,1 @@
+UPDATE v23296 AS x0 SET v23297 = AES_DECRYPT(v23298, '<ns:element xmlns:ns="myns"/>') WHERE v23297 LIKE 'mysqltest_%'

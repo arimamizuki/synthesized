@@ -1,0 +1,1 @@
+UPDATE v64296 AS x1 LEFT JOIN v64002 AS x6 ON x1.x1 = x1.x2 SET x3 = x2 % 3 WHERE x1 > 2

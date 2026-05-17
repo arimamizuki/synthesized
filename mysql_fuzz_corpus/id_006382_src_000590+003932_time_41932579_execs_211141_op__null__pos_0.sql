@@ -1,0 +1,1 @@
+UPDATE v89394 AS x1 SET v89395 = CONVERT_TZ(v89395, 'UTC', 'UTC') WHERE v89395 IN ('EXAMPLE', 'transaction_alloc_block_size', 5.5, 'c373e9f5ad0791a0dab5444553544200')

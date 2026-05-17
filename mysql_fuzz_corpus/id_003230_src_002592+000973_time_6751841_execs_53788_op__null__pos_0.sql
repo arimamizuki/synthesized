@@ -1,0 +1,1 @@
+UPDATE v15376 AS x1 SET v15342 = CONCAT(x1, ', Updated from a = -2') WHERE v15342 = '2006-11-06'

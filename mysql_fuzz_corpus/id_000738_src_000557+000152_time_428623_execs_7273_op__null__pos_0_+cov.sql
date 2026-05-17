@@ -1,0 +1,1 @@
+CREATE TABLE v1147 (v1148 ENUM('Asia', 'ÿáúëêà', '002')) ENGINE=InnoDB WITH (TABLESPACE=ts1)

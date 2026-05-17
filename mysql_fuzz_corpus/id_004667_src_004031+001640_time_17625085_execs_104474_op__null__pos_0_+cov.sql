@@ -1,0 +1,1 @@
+UPDATE v36669 AS x0 SET v36671 = 'new_user' WHERE x0.v36670 IN ('c', 'uk', 'query_prealloc_size', 'debug_sync', 'string', 7, 8, 119)

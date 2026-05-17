@@ -1,0 +1,1 @@
+UPDATE v256326 AS x1 NATURAL JOIN v256326 AS x6 SET v256327 = v256328 - 1 WHERE v256327 IN ('2.2', 'disconnect_on_expired_password', 1.11)

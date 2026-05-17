@@ -1,0 +1,1 @@
+WITH RECURSIVE x7 AS (SELECT 1 UNION SELECT x6.v137616 FROM x12 AS x14, x13 AS x15) SELECT x6.x3, x6.v137616, EXPORT_SET(3, 'on', NULL, 'sep') AS x3, x6.v137616 FROM v138129 AS x6 WHERE NOT x6.v137616 IN ('query_prealloc_size', 1.100000, '\\r', 'mysql.session', 'log_error_services', 100)

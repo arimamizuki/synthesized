@@ -1,0 +1,1 @@
+UPDATE v1143 AS x0 SET v1146 = REGEXP_SUBSTR('b', 'b', 1) WHERE v1146 = 'test1'

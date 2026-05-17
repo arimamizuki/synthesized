@@ -1,0 +1,1 @@
+UPDATE v621 AS x0 LEFT JOIN v622 AS x1 ON x0.x1 = x0.x2 AND x0.x2 = 3 SET x2 = 155

@@ -1,0 +1,1 @@
+UPDATE v33525 AS x0 SET x0.v33526 = @Open_table_definitions + 1 WHERE v33526 = '' AND v33527 = 'localhost'

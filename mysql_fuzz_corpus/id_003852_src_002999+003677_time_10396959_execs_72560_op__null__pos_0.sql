@@ -1,0 +1,1 @@
+UPDATE v22315 AS x0 SET x2 = (@tmp := @tmp + 1) WHERE v22090 = 'new_user' LIMIT 5

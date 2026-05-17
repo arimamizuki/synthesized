@@ -1,0 +1,1 @@
+UPDATE v9996 AS x0 SET x0.x1 = '807780'

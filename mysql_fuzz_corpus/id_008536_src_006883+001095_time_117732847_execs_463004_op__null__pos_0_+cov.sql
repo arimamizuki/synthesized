@@ -1,0 +1,1 @@
+UPDATE v212603 AS x1 SET v212604 = '{"Password_locking": 1}' WHERE x1.v212604 = 60

@@ -1,0 +1,1 @@
+UPDATE v4973 AS x0 LEFT OUTER JOIN v4983 AS x1 ON x0.v4975 = x0.1995-09-01 SET v4974 = '{"Password_locking": {"failed_login_attempts": 2}}' WHERE 1995-09-01 IN (13, 26, 39, 52)

@@ -1,0 +1,1 @@
+UPDATE v13946 AS x1 JOIN v14221 AS x4 ON ('-  ') SET v13948 = ST_GEOMFROMTEXT('POINT(221 193)') WHERE 'ssl%' LIKE '%Locking system tables'

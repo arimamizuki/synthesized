@@ -1,0 +1,1 @@
+CREATE INDEX v800 ON v675((v677 = 1))

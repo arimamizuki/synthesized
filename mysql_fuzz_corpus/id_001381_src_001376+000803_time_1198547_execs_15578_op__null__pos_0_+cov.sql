@@ -1,0 +1,1 @@
+UPDATE v3001 AS x1 JOIN v2962 AS x6 ON (1) SET x1 = x1 * 10 WHERE x1 = 'he'

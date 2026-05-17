@@ -1,0 +1,1 @@
+UPDATE v151533 AS x0 SET x0.v151535 = 'rozn' WHERE v151536 = @a

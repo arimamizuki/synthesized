@@ -1,0 +1,1 @@
+INSERT INTO v3757 (v3758) VALUES ('x'), (NULL), ('d'), ('x'), ('u')

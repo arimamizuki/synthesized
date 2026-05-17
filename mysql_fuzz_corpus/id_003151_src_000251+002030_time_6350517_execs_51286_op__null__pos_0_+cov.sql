@@ -1,0 +1,1 @@
+WITH RECURSIVE x6 AS (SELECT COUNT(*) FROM x13) SELECT x5.x2, x5.x2, MAX(x5.x1 + x5.x2) AS x3, x5.x1 FROM v14127 AS x5 WHERE x5.x2 LIKE 'v1_%' AND x5.x1 <> 'ndb_binlog_index'

@@ -1,0 +1,1 @@
+UPDATE v24019 AS x0 SET v24020 = 'new_user' WHERE v24022 = v24026

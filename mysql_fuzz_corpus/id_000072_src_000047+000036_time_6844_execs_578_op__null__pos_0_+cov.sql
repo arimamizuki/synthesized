@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v33 AS x2

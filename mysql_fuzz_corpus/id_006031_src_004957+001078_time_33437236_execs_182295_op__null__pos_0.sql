@@ -1,0 +1,1 @@
+UPDATE v74994 AS x1 JOIN v74994 AS x8 ON x1.x1 = x1.x1 SET x1.x2 = x1.x1 + 1 WHERE x2 = 3

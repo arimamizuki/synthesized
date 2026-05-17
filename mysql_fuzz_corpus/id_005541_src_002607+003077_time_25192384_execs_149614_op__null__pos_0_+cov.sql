@@ -1,0 +1,1 @@
+UPDATE v59445 AS x0 SET x0.v59446 = 'user1' WHERE v59446 = 'vw' OR v59446 = 'Studio/Bach'

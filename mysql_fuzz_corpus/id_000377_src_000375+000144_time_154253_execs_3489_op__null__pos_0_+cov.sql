@@ -1,0 +1,1 @@
+UPDATE v317 AS x1 SET v319 = 'v2c' WHERE (x1.v319 IS NULL) >> (16 - 3) LIMIT 2

@@ -1,0 +1,1 @@
+SELECT x3.Name_exp_1, x3.Name_exp_1 FROM v36700 AS x3

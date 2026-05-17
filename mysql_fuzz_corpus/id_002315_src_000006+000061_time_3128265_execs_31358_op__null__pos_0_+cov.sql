@@ -1,0 +1,1 @@
+INSERT INTO v7358 (v7359) VALUES (10), ('capped')

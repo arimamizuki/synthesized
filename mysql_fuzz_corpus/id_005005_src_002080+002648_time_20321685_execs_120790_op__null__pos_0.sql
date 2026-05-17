@@ -1,0 +1,1 @@
+CREATE INDEX v43480 ON v43281((INSERT('abc', 4, 3, '1234') + 1), (INSERT('abc', 4, 3, '1234') + 2), (INSERT('abc', 4, 3, '1234') + 3), (INSERT('abc', 4, 3, '1234') + 4), (INSERT('abc', 4, 3, '1234') + 5))

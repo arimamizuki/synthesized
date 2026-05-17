@@ -1,0 +1,1 @@
+CREATE INDEX v37190 ON v34945((REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) + 1), (REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) + 2), (REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) + 3), (REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) + 4), (REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) + 5))

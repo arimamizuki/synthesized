@@ -1,0 +1,1 @@
+UPDATE v79399 AS x0 SET v79400 = 'Opened_table_definitions' WHERE x0.v79400 IN (1, '03:00:00')

@@ -1,0 +1,1 @@
+UPDATE v9990 AS x0, v10013 AS x3 SET v9991 = 'd' WHERE v9991 = 'mysqltest' AND v9991 = 'mysqltest_1' AND v9991 = 'localhost'

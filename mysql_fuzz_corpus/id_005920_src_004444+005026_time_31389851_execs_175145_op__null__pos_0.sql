@@ -1,0 +1,1 @@
+UPDATE v71845 AS x1 SET v71847 = '2003-12-04' WHERE v71847 IN ('usa', 'UTC', 0.6, 'tables_priv', 14, 'rbr_exec_mode')

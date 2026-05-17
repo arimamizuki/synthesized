@@ -1,0 +1,1 @@
+UPDATE v178678 AS x1 SET v178679 = UNHEX(v178679) WHERE NOT v178679 IN ('green', 'black,blue,green')

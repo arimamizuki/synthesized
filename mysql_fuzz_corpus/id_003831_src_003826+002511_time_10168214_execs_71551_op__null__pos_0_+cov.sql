@@ -1,0 +1,1 @@
+UPDATE v21629 AS x0 NATURAL JOIN v21855 AS x1 SET v21630 = 'YES' WHERE x0.v21630 = 'wait/lock/metadata/sql/mdl'

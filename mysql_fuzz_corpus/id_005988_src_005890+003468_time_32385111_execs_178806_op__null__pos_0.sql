@@ -1,0 +1,1 @@
+INSERT INTO v73245 (v73246) VALUES ('subdirectory')

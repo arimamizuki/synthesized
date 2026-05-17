@@ -1,0 +1,1 @@
+UPDATE v39218 AS x1 SET v39220 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": -2}}' WHERE v39220 IN (0, 20000101000000, 20000101230000) LIMIT 3

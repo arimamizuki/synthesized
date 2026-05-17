@@ -1,0 +1,1 @@
+WITH RECURSIVE x8 AS (SELECT * FROM x10 UNION SELECT * FROM x11) SELECT x0.func_plusone(1), @@session.x5.x1, REPLACE('str', 'from', NULL) AS x2, @@global.x6.x3 FROM v16730 AS x7 WHERE x7.v16731 > 5 AND NOT (x7.v16731 > 10)

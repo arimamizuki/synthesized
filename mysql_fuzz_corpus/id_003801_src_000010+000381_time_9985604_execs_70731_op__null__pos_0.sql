@@ -1,0 +1,1 @@
+CREATE TABLE v21735 (v21736 ENUM('x', 'Ã¶', 'podp') CHARACTER SET ucs2)

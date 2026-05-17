@@ -1,0 +1,1 @@
+INSERT INTO v3729 (v3730, v3731) VALUES (NULL, 'aaaa')

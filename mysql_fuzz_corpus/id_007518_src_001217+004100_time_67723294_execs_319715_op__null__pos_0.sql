@@ -1,0 +1,1 @@
+UPDATE v141690 AS x1 SET x1.v141692 = (@my_ts - @my_time) WHERE x1.v141692 IN (1, '\\n')

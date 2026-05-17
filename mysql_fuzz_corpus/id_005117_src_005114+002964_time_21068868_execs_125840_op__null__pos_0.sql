@@ -1,0 +1,1 @@
+SELECT x7.v46283, x7.v46285, 'Exceeds threshold of +19%' AS x3, x7.v46285 FROM v46282 AS x7

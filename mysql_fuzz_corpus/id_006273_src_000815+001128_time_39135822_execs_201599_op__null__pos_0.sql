@@ -1,0 +1,1 @@
+UPDATE v85065 AS x1 SET x1.v85068 = 'Open_table_definitions' WHERE v85068 LIKE 'a '

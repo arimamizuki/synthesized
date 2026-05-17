@@ -1,0 +1,1 @@
+UPDATE v26040 AS x1 JOIN v25756 AS x4 ON x1.v26043 = -x1.v26043 SET v26042 = (@tmp := @tmp + 1)

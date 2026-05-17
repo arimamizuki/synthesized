@@ -1,0 +1,1 @@
+UPDATE v8880 AS x0 SET v8881 = '{"Password_locking": 1}' WHERE v8881 >= 1 AND v8881 < 1

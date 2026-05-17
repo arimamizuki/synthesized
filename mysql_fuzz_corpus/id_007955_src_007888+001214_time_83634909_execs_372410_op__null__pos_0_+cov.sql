@@ -1,0 +1,1 @@
+CREATE TABLE v167324 (v167325 INT, v167326 INT, INDEX(v167325)) AS SELECT ST_ASTEXT(ST_DIFFERENCE(ST_GEOMFROMTEXT('GeometryCollection(GeometryCollection(Point(1 1)), GeometryCollection(linestring(1 1, 2 2)))'), ST_GEOMFROMTEXT('GeometryCollection(GeometryCollection(Point(1 1)))'))) AS x3

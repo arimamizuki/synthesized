@@ -1,0 +1,1 @@
+UPDATE v226151 AS x1 SET v226152 = SHA2(v226153, 256) WHERE (v226152, v226152, v226152) IN ((@int_one, @dec_one, @str_one), (@int_two, @dec_two, @str_two), (@int_five, @dec_five, @str_five))

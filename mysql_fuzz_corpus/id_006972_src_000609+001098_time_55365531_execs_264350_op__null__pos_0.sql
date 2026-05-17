@@ -1,0 +1,1 @@
+UPDATE v115194 AS x1 SET v115195 = @pwd WHERE (x1.v115195 IS NULL) >> ('' COLLATE 'utf8mb4_0900_ai_ci')

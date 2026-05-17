@@ -1,0 +1,1 @@
+SELECT x5.v3546, x5.s1 FROM v3559 AS x5

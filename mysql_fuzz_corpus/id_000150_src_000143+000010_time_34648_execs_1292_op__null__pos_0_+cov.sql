@@ -1,0 +1,1 @@
+UPDATE v136 AS x0 JOIN v1 AS x4 ON (x0.v137 = 10) SET v138 = CONCAT(v137, ', Updated from a = -2')

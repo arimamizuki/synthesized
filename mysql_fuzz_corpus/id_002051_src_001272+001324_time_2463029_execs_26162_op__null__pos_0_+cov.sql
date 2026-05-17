@@ -1,0 +1,1 @@
+SELECT x2.v6074 FROM v6072 AS x2 WHERE ((x2.v6073 = '1 Bedroom' OR x2.v6074 = 'Studio/Bach') AND (x2.v6074 <= 500)) OR ((x2.v6074 = '2 Bedroom') AND (x2.v6073 <= 550)) OR ((x2.v6074 = 'Shared/Roomate') AND (x2.v6074 <= 300)) OR x2.v6074 = 1.100000

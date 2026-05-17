@@ -1,0 +1,1 @@
+UPDATE v188579 AS x1 SET x1.v188580 = '0.73' WHERE x1.v188581 IN ('mtr', 5, 6)

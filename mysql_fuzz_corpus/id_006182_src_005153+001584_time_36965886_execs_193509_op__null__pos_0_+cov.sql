@@ -1,0 +1,1 @@
+CREATE TABLE v81446 (v81447 INT, v81448 INT AS (v81447)) AS SELECT /*+ JOIN_PREFIX(x3, x5.x4, x6) */ 'The\\\\\\\\\\\\\\\\ZEnd'

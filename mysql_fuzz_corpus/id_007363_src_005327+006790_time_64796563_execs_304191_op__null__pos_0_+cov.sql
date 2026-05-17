@@ -1,0 +1,1 @@
+UPDATE v134743 AS x1 JOIN v134097 AS x2 ON 1 SET v134744 = CONCAT(v134745, ', Updated from a = 100') WHERE v134745 = @min_cid OR v134745 = @max_cid OR v134745 = 666

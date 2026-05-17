@@ -1,0 +1,1 @@
+UPDATE v94575 AS x1 LEFT JOIN v95075 AS x2 ON x1.v94577 = x1.v94576 SET x1.v94576 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE v94576 LIKE v94577

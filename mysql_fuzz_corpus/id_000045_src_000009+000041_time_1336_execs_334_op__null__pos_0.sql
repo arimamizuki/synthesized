@@ -1,0 +1,1 @@
+INSERT INTO v1 (v4, v2, v3) VALUES (37, 'detained', 'coarse')

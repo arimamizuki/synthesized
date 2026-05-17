@@ -1,0 +1,1 @@
+INSERT INTO v11934 (v11942) VALUES (' aaaaa aaaa')

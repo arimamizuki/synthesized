@@ -1,0 +1,1 @@
+UPDATE v3001 AS x1 LEFT JOIN v2850 AS x5 ON x1.x1 = x1.x1 SET x1.x1 = 'hellotrudy' WHERE CONCAT(x1, x1, x1, x1) = 'AAAA2003-03-011051'

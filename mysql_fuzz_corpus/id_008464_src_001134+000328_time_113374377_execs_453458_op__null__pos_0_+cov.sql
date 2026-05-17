@@ -1,0 +1,1 @@
+UPDATE v208472 AS x1 STRAIGHT_JOIN v208408 AS x7 ON TRUE SET x1.Name_exp_1 = -x1.Name_exp_1 WHERE NOT Name_exp_1 IN ('x', 'x', 'x')

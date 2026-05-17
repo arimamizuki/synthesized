@@ -1,0 +1,1 @@
+UPDATE v36509 AS x1 SET v36511 = 'b' WHERE v36511 IN (@dbl_one, @dbl_two, @dbl_five)

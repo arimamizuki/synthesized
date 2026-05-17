@@ -1,0 +1,1 @@
+SELECT x6.x4, x6.v86952, x6.x3, x6.v86929 FROM v87764 AS x6 WHERE x6.x3 = 'x'

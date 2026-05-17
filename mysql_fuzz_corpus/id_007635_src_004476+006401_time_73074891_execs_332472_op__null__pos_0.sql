@@ -1,0 +1,1 @@
+SELECT x3.v147510 FROM v147508 AS x3 WHERE x3.v147510 = 'mysqltest_1' OR x3.v147510 = 'mysqltest_2' OR x3.v147510 = 'mysqltest_3'

@@ -1,0 +1,1 @@
+SELECT x1.x2 FROM v58146 AS x1

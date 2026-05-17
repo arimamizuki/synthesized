@@ -1,0 +1,1 @@
+UPDATE v231 AS x0 NATURAL JOIN v272 AS x1 SET s1 = 'v7n v6c v5n v3l'

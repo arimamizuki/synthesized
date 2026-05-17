@@ -1,0 +1,1 @@
+UPDATE v20117 AS x1 SET v20118 = REGEXP_REPLACE('b', 'b', 'y') WHERE v20118 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

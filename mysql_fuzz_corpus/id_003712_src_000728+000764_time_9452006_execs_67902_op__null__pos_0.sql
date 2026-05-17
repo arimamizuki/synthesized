@@ -1,0 +1,1 @@
+UPDATE v20238 AS x1 SET x1.v20239 = CONVERT_TZ(v20239, 'UTC', 'Europe/Moscow') WHERE v20239 = 'mysqltest_db1' AND v20239 = 't_no_priv'

@@ -1,0 +1,1 @@
+UPDATE v150092 AS x0 SET v150094 = 'yyy' WHERE v150094 = 'new_dest'

@@ -1,0 +1,1 @@
+UPDATE v28076 AS x1 SET v28077 = 100 WHERE (@intvalx := v28077) <> 'k'

@@ -1,0 +1,1 @@
+CREATE TABLE v251696 (v251697 FLOAT, v251698 INT, v251699 CHAR(100), v251700 DECIMAL) AS SELECT ST_ASTEXT(ST_DIFFERENCE(ST_GEOMFROMTEXT('GeometryCollection(GeometryCollection(Point(1 1)), GeometryCollection(linestring(1 1, 2 2)))'), PI())) AS x5

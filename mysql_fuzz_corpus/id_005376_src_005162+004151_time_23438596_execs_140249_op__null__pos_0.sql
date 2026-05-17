@@ -1,0 +1,1 @@
+UPDATE v54164 AS x1 SET x1.v54165 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE v54165 LIKE 'r%'

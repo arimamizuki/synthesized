@@ -1,0 +1,1 @@
+UPDATE v20117 AS x0 SET v20118 = 1100 WHERE x0.v20118 = 'DELETE FROM non_existing_table a USING non_existing_table a'

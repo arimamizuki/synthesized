@@ -1,0 +1,1 @@
+CREATE INDEX v92 ON v24((v26 + 3))

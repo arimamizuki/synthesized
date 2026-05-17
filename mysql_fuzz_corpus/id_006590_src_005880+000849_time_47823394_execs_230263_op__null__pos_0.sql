@@ -1,0 +1,1 @@
+UPDATE v97017 AS x1 LEFT JOIN v98213 AS x2 ON x1.v97018 <=> MAKETIME(24, 60, 4) AND x1.v97018 <=> x1.v97018 SET x1.v97018 = 1 + @binlog_handler_commit WHERE (x1.v97018 IS NULL) >> ('' COLLATE 'utf8mb4_0900_ai_ci')

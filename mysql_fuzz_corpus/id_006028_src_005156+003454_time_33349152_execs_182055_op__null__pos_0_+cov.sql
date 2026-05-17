@@ -1,0 +1,1 @@
+CREATE TABLE v75574 (v75575 INT NOT NULL AUTO_INCREMENT, v75576 INT DEFAULT NULL, v75577 VARCHAR(1) DEFAULT NULL, PRIMARY KEY (v75576)) AS SELECT /*+ NO_MERGE(x6) NO_BNL(x7) */ 'The\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ZEnd' FROM x4 AS x8

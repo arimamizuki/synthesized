@@ -1,0 +1,1 @@
+UPDATE v8880 AS x1 SET x1.v8881 = CONCAT('@', TRIM('*' FROM '*s*')) WHERE v8881 > 1

@@ -1,0 +1,1 @@
+UPDATE v1239 AS x1 STRAIGHT_JOIN v1274 AS x5 ON (x1.v1240 = x1.v1240) SET v1240 = 'New Test String' WHERE v1240 = 'plug_dest'

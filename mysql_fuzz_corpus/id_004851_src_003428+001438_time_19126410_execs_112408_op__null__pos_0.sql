@@ -1,0 +1,1 @@
+UPDATE v39944 AS x1 SET v39945 = 'DELETE FROM t1 a USING t1 a' WHERE x1.v39945 IN (@dt_one, @dt_one, @time_five)

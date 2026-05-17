@@ -1,0 +1,1 @@
+UPDATE v129605 AS x1 SET x1.x1 = 'v8l v7n v5n v3l' WHERE x1.x1 = x1.x1 AND MATCH(x1) AGAINST('steve' IN BOOLEAN MODE)

@@ -1,0 +1,1 @@
+UPDATE v202 AS x1 JOIN v239 AS x4 ON x1.v203 = 1 SET v203 = 'DELETE FROM non_existing_table a USING non_existing_table a' WHERE x1.v203 = 'Ssl_cipher' AND LIKELY(v203) <= 'Brand#23' = v203

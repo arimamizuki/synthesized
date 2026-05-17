@@ -1,0 +1,1 @@
+UPDATE v27421 AS x0 SET x0.v27422 = 'event_scheduler' WHERE v27422 = 'DEN' AND v27422 = 2

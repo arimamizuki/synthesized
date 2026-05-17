@@ -1,0 +1,1 @@
+UPDATE v29150 AS x1 INNER JOIN v29288 AS x2 ON (x1.v29151 = 4 OR x1.v29151 = 'Ford') SET v29151 = '' WHERE v29151 = 'kristofer'

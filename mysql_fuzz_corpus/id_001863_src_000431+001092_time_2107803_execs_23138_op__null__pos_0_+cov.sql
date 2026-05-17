@@ -1,0 +1,1 @@
+UPDATE v5223 AS x1 LEFT JOIN v5216 AS x4 ON x1.v5224 = 'a' SET v5224 = 'new_value' WHERE v5224 = @u AND v5224 = @h

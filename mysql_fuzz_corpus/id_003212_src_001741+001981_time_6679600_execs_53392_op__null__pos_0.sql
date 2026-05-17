@@ -1,0 +1,1 @@
+UPDATE v15478 AS x1 STRAIGHT_JOIN v15248 AS x4 SET v15479 = 'this test once revealed a bug' WHERE x1.v15479 = x1.v15479 AND x1.v15479 = x1.v15479 AND x1.v15479 = 1

@@ -1,0 +1,1 @@
+UPDATE v7564 AS x1 JOIN v7034 AS x4 ON x1.v7565 = AVG(x1.v7565) AND x1.v7565 = x1.v7565 SET v7565 = ST_GEOMFROMTEXT('/a[true() and true()]') WHERE v7565 = 'x' AND v7565 > 1 AND v7565 >= 1

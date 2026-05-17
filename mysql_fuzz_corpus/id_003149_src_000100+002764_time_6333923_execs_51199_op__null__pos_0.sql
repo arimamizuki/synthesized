@@ -1,0 +1,1 @@
+INSERT INTO v14712 (v14713) VALUES ('bruises')

@@ -1,0 +1,1 @@
+CREATE INDEX v380 ON v295((1 - v296))

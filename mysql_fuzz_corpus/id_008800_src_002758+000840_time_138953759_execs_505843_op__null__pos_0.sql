@@ -1,0 +1,1 @@
+UPDATE v234892 AS x1 SET v234893 = 'v' WHERE v234893 LIKE 'mysqltest\\\\_%'

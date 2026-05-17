@@ -1,0 +1,1 @@
+UPDATE v5296 AS x0 SET x0.v5297 = v5297 + 10 + v5297 WHERE v5297 = 'x'

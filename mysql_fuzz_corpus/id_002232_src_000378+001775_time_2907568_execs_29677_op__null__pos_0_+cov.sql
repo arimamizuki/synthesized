@@ -1,0 +1,1 @@
+UPDATE v6939 AS x1 SET v6940 = 'mmm' WHERE (256 >> 3) >> ('' COLLATE '/a[contains(../a,"j")]') LIMIT 5

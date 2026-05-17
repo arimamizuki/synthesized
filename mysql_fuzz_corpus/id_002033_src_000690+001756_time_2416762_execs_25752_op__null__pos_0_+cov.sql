@@ -1,0 +1,1 @@
+UPDATE v5365 AS x1 SET x1.v5366 = @Opened_table_definitions + 4 WHERE x1.v5366 = ST_GEOMFROMTEXT('POINT(95 35)')

@@ -1,0 +1,1 @@
+CREATE TABLE v235842 AS SELECT COUNT(DISTINCT x4.v235453, x4.v235453), GET_LOCK('Eingetragener Verein Sitz im Ausland', '/a/b[1+0]') FROM v235452 AS x4

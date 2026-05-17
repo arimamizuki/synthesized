@@ -1,0 +1,1 @@
+UPDATE v48928 AS x1 SET v48930 = CONCAT(v48929, 'x') WHERE ('' COLLATE 'utf8mb4_0900_ai_ci') >> ('' COLLATE 'utf8mb4_0900_ai_ci') LIMIT 9

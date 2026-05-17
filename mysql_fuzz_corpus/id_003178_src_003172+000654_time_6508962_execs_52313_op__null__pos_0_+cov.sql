@@ -1,0 +1,1 @@
+UPDATE v15149 AS x1 NATURAL JOIN v15130 AS x7 SET v15150 = v15150 % 0 WHERE v15151 IN ('UTC', 'Universal', 'MET', 'Europe/Moscow', 'leap/Europe/Moscow', 'Japan', 'CET', 'US/Pacific')

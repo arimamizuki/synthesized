@@ -1,0 +1,1 @@
+UPDATE v1820 AS x0, v1728 AS x6 SET x0.v1812 = 'col_datetime' WHERE x0.v1812 = 2147483648

@@ -1,0 +1,1 @@
+UPDATE v3864 AS x1 RIGHT OUTER JOIN v3712 AS x2 ON x1.x1 = x1.x1 SET x3 = CONCAT('1e-', x3) WHERE x3 IN ('Current_tls_version', 1)

@@ -1,0 +1,1 @@
+UPDATE v6025 AS x1 SET x1.v6026 = 'test20' WHERE v6026 = 't1'

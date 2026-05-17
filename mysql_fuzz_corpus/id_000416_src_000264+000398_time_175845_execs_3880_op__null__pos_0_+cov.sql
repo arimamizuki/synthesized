@@ -1,0 +1,1 @@
+UPDATE v405 AS x0 SET x0.v406 = REPEAT('o', ' ') WHERE v406 = 'hello'

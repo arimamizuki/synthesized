@@ -1,0 +1,1 @@
+CREATE TABLE v5917 (v5918 ENUM('ae', 'oe', 'ue', 'ss') CHECK (v5918 > '2007-01-01')) DEFAULT CHARACTER SET=latin1 COLLATE=latin1_german2_ci

@@ -1,0 +1,1 @@
+INSERT INTO v9187 (v9188) VALUES ('521002'), ('MoscowI')

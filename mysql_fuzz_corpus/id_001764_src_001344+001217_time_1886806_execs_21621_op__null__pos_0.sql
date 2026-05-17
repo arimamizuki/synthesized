@@ -1,0 +1,1 @@
+UPDATE v4656 AS x1 SET v4658 = CONCAT(v4657, ', Updated2') WHERE LEFT(v4658, 1) > 'n'

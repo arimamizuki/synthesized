@@ -1,0 +1,1 @@
+CREATE TABLE v29501 (v29502 INT PRIMARY KEY, v29503 INT CHECK (v29503 < 10)) AS SELECT 'c1', 'c2 ', ' c3', ' c4 ', 'Name_exp_2'

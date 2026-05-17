@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT 1 AS x10 UNION ALL SELECT x6.x1 + 1 FROM x11 WHERE x6.x3 < 124) SELECT x6.x1, x6.x3, x6.x2 ->> '$.x' AS x3, x6.x2 FROM v11418 AS x6 WHERE ST_EQUALS(x6.x3, ST_POINTFROMTEXT('Firma (Kapitalgesellschaft) Sitz im Ausland'))

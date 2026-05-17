@@ -1,0 +1,1 @@
+SELECT x3.Name_exp_1 FROM v216243 AS x3 WHERE (x3.Name_exp_1 = 10 AND x3.Name_exp_1 = 2) OR (x3.Name_exp_1 = 10 AND x3.Name_exp_1 = 3) OR (x3.Name_exp_1 = 'patnom' AND x3.Name_exp_1 = 'Al')

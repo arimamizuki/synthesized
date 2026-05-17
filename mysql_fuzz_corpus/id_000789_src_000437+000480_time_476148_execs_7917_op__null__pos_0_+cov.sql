@@ -1,0 +1,1 @@
+UPDATE v1310 AS x1 RIGHT JOIN v1186 AS x2 ON x1.v1311 = x1.v1312 SET x1.v1311 = AES_DECRYPT(AES_ENCRYPT('my_text', 'my_key_string', '', 'pbkdf2_hmac'), 'my_key_string', '', 'pbkdf2_hmac') WHERE v1311 > 1

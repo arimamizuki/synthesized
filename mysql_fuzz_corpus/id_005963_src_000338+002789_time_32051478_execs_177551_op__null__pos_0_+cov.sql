@@ -1,0 +1,1 @@
+CREATE TABLE v73365 (v73366 INT NOT NULL, v73367 INT, v73368 VARCHAR(1), PRIMARY KEY (v73367)) AS SELECT REGEXP_INSTR('aaabcabcabc', 'A+', 1, 1, 1, 'c'), EXTRACTVALUE('<a><b>b</b><c>c</c></a>', '/a/b | /a/c'), LOCALTIME(3), CURRENT_TIME(), CURRENT_TIMESTAMP(0), LOCALTIMESTAMP(1), MID(NULL, NULL, NULL), EXTRACTVALUE('<a><b>b</b><b!>b!</b!></a>', '//b!')

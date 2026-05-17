@@ -1,0 +1,1 @@
+WITH x10 AS (SELECT 1 AS x13) SELECT x7.v22956, x7.v22956, SUM(DISTINCT x7.v22956) AS x4, x7.v22956 FROM v22955 AS x7 WHERE x7.v22956 IN ('wait/io/table/sql/handler')

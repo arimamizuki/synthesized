@@ -1,0 +1,1 @@
+UPDATE v10747 AS x0 SET x0.v10749 = STR_TO_DATE('nope', '%Y')

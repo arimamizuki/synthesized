@@ -1,0 +1,1 @@
+WITH x6 AS (SELECT 1) SELECT x5.v737, x5.v734, RPAD('a', 0, '') AS x2, x5.v734 FROM v730 AS x5 WHERE x5.v740 = x5.v740 AND x5.v736 = x5.v739 AND x5.v738 = 128

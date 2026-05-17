@@ -1,0 +1,1 @@
+UPDATE v482 AS x1 LEFT JOIN v317 AS x2 ON x1.v484 = 'v7n v5n v3l' SET x1.v483 = 'index_merge_sort_union=off' WHERE v484 = 100 LIMIT 10

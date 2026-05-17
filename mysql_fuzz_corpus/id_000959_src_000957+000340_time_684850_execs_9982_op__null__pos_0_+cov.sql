@@ -1,0 +1,1 @@
+UPDATE v1719 AS x2 JOIN v1723 AS x7 ON x2.v1722 = x2.v1721 SET v1722 = AES_DECRYPT(v1721, '<ns:element xmlns:ns="myns"/>') WHERE v1721 LIKE 'a      '

@@ -1,0 +1,1 @@
+UPDATE v372 AS x0 SET x1 = CONCAT('-', v319) WHERE X(x2) AND X(v318) AND x2 = 1

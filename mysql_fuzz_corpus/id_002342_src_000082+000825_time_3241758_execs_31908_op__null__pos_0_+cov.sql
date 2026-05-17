@@ -1,0 +1,1 @@
+INSERT INTO v7564 (v7565) VALUES ('xy2')

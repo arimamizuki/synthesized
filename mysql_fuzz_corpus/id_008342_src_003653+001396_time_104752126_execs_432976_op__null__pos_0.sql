@@ -1,0 +1,1 @@
+CREATE INDEX v197371 ON v197356((TRIM(LEADING 'foo' FROM 'foo') + 1), (TRIM(LEADING 'foo' FROM 'foo') + 2), (TRIM(LEADING 'foo' FROM 'foo') + 3), (TRIM(LEADING 'foo' FROM 'foo') + 4), (TRIM(LEADING 'foo' FROM 'foo') + 5))

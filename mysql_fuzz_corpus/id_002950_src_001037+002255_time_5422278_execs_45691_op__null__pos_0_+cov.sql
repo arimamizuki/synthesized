@@ -1,0 +1,1 @@
+CREATE VIEW v12794 AS SELECT *, FIELD(NULL, 'str1', 'str2') AS x1, 'events_logs_tests' AS x2 FROM v12755 AS x5, v12743 AS x6 WHERE X(x5.x2, x6.v12744)

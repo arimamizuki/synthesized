@@ -1,0 +1,1 @@
+UPDATE v7211 AS x1 LEFT JOIN v6877 AS x2 ON x1.v7217 = x1.v7214 SET v7213 = 'couldbemuchworse_street' WHERE v7217 BETWEEN 64 AND 66

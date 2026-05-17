@@ -1,0 +1,1 @@
+INSERT INTO v24 (v25) VALUES ('xy2')

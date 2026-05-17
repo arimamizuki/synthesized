@@ -1,0 +1,1 @@
+SELECT x2.Name_exp_1 FROM v59906 AS x2 WHERE x2.Name_exp_1 = 'Table_open_cache_misses'

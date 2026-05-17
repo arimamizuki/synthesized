@@ -1,0 +1,1 @@
+INSERT INTO v6308 (v6310) VALUES (1), ('b'), ('c'), ('d')

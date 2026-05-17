@@ -1,0 +1,1 @@
+UPDATE v185369 AS x0 SET x0.v185371 = 'f' WHERE v185371 LIKE 'さしすせそかきくけこあいうえお%'

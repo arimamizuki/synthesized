@@ -1,0 +1,1 @@
+UPDATE v28070 AS x1 JOIN v28121 AS x5 ON x1.x1 = x1.x2 SET x1.x2 = -1 WHERE NOT ((x1 < 5 OR x2 < 10) AND (NOT (x1 > 16) OR x1 > 17))

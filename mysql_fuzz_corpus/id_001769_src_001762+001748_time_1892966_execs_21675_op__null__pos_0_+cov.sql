@@ -1,0 +1,1 @@
+INSERT INTO v4716 (v4745, v4753) VALUES (@decval, @arg02)

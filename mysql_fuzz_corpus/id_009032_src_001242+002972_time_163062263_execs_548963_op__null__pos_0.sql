@@ -1,0 +1,1 @@
+CREATE VIEW v255821 AS SELECT MAKE_SET(111, 222, '//node[text()="`mysql.sys`@`localhost`"]') FROM v254834 AS x2

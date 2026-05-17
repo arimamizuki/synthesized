@@ -1,0 +1,1 @@
+SELECT x0.st_y(), x1.st_x() FROM v4615 AS x2

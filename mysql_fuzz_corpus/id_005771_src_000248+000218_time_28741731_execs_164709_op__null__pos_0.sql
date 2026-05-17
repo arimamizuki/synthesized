@@ -1,0 +1,1 @@
+UPDATE v66401 AS x1 JOIN v66401 AS x5 ON 1 SET Name_exp_1 = 5 WHERE Name_exp_1 LIKE 'p%'

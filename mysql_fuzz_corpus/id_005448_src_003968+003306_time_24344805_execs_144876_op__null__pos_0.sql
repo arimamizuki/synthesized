@@ -1,0 +1,1 @@
+UPDATE v55669 AS x1 JOIN v55703 AS x2 ON x1.v55670 = x1.v55670 SET v55670 = 'test_plugin_server' WHERE v55670 = x1.v55670

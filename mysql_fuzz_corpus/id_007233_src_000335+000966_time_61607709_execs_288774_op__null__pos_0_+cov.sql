@@ -1,0 +1,1 @@
+UPDATE v127279 AS x0 SET x0.x2 = 5 WHERE (x0.x2 IS NULL) >> ('' COLLATE 'utf8mb4_0900_ai_ci')

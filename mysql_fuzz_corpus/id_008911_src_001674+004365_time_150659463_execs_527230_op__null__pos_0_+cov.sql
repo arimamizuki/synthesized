@@ -1,0 +1,1 @@
+UPDATE v246012 AS x1 SET v246013 = BIN(v246013) WHERE v246013 IN ('2.2', 'disconnect_on_expired_password', 1.11)

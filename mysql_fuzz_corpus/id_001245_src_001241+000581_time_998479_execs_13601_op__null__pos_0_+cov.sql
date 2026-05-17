@@ -1,0 +1,1 @@
+SELECT * FROM v2346 AS x0

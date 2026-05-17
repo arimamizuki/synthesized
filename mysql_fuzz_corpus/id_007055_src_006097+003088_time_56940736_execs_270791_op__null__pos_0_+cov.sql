@@ -1,0 +1,1 @@
+UPDATE v118613 AS x1 SET x2 = 9999 WHERE x1.x2 > x1.x2 OR x1.x2 <> 2

@@ -1,0 +1,1 @@
+UPDATE v9352 AS x1 LEFT JOIN v9168 AS x5 ON x1.v9353 >= 2 AND x1.v9353 = x1.v9353 AND (x1.v9353 > 0 OR x1.v9353 IS NULL) SET v9353 = 'UNASSIGNED' WHERE v9353 IN (@str_one, @str_two, @str_five)

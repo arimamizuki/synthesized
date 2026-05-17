@@ -1,0 +1,1 @@
+UPDATE v17734 AS x1 SET x1.v17736 = CONCAT('@', TRIM('*' FROM '*s*')) WHERE v17735 IN (@dt_one, @dt_two, @dt_five)

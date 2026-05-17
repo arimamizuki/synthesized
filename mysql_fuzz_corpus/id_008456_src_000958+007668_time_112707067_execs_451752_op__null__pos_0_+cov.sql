@@ -1,0 +1,1 @@
+UPDATE v206276 AS x0 SET v206277 = CONCAT('gui_', x0.v206277) WHERE x0.v206277 LIKE '%helloworld%'

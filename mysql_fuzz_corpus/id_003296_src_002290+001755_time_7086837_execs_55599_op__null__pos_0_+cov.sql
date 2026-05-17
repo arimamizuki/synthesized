@@ -1,0 +1,1 @@
+WITH x10 AS (SELECT * FROM x11 LIMIT 3) SELECT x7.v16341, x7.v16341, LPAD(NULL, 'holder_name_space_', 'x') AS x4, x7.v16339 FROM v16338 AS x7 WHERE x7.v16341 > 1

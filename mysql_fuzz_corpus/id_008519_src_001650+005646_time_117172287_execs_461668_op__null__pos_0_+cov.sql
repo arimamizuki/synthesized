@@ -1,0 +1,1 @@
+UPDATE v212187 AS x1 SET x1.v212188 = 'red,green' WHERE x1.v212188 = 298

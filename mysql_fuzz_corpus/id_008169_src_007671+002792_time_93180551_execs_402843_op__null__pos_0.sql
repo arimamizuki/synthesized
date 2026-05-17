@@ -1,0 +1,1 @@
+SELECT RANK() OVER (ORDER BY x1.Name_exp_1 * 4294967295, x1.Name_exp_1 + x1.Name_exp_1 - ASCII(x1.Name_exp_1) - x1.Name_exp_1), PERCENT_RANK() OVER () FROM v183024 AS x1

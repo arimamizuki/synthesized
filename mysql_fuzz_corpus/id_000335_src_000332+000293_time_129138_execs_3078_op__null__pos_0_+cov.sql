@@ -1,0 +1,1 @@
+UPDATE v365 AS x1, v367 AS x6 SET x1.v366 = CAST(SHA(x1.v366 >> 'fixme') AS DECIMAL(22, 2)) WHERE v366 = 'Open'

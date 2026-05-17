@@ -1,0 +1,1 @@
+WITH RECURSIVE x10 AS (SELECT 0 AS x16 UNION ALL SELECT 2 * x9.x2 + 2 FROM x17 WHERE x9.x2 < 50 UNION ALL SELECT 2 * x9.x1 + 1 FROM x13 WHERE x9.x1 < 50) SELECT x9.x1, x9.x2, x9.x1 AS x3, x9.x2 FROM v68472 AS x9 WHERE x9.x2 = 'x' AND x9.x1 = 'x' AND (x9.x2 = 'x' OR x9.x2 = 'x')

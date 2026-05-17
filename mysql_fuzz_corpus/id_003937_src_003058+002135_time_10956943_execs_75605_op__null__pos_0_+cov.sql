@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT x5.x1 AS x10 UNION SELECT x5.x1 + 1 FROM x11 WHERE x5.x1 < 10) SELECT x5.x1, x5.x1, COUNT(*) = 6 AS x2, x5.x1 FROM v23523 AS x5 WHERE x5.x1 IN ('max_heap_table_size', 'f', 5.5e100)

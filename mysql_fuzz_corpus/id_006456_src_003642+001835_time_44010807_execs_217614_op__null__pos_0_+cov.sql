@@ -1,0 +1,1 @@
+UPDATE v92101 AS x1 SET x1.v92102 = '1234' WHERE (1 = 1 OR 2 = 2) <> (@v := v92103)

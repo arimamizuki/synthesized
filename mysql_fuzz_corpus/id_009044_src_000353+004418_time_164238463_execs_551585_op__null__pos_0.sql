@@ -1,0 +1,1 @@
+UPDATE v257002 AS x0 SET x0.v257004 = CONCAT(x0.v257004, v257003) WHERE v257003 = TIME(STR_TO_DATE(DATE_FORMAT('2009-05-04', CONCAT_WS(':', '%i', '%a', '%x', '%s', '%j')), CONCAT_WS('-', '%V', '%s', '%U'))) AND v257004 BETWEEN CURDATE() AND STR_TO_DATE(DATE_FORMAT(v257004, CONCAT_WS('-', '%h', '%s', '%v')), CONCAT_WS('-', '%V', '%H'))

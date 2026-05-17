@@ -1,0 +1,1 @@
+CREATE TABLE v116867 (v116868 INT DEFAULT 1, v116869 ENUM('closed', '2', 'zz[INV]‚ƒ„…†‡ˆ‰Š‹Œ[INV][INV][INV][INV]‘’“”•–—˜™š›œ[INV][INV]Ÿ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ') CHARACTER SET latin1 NOT NULL) AS SELECT GREATEST(CAST('1995-05-05' AS DATE), '10-10-10')

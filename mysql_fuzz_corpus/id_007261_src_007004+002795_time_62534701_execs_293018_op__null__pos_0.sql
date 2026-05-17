@@ -1,0 +1,1 @@
+UPDATE v129212 AS x0 LEFT JOIN v129281 AS x1 ON x0.v129213 = 'private' SET x0.v129213 = 3 WHERE v129214 = ' ' AND v129213 = ' ' AND (((v129214 = '1 Bedroom' OR v129214 = 'Studio/Bach') AND (v129214 <= 500)) OR ((v129214 = '2 Bedroom') AND (v129213 <= 550)) OR ((v129214 = 'Shared/Roomate') AND (v129214 <= 300)) OR ((v129214 = 'Room and Board') AND (v129213 <= 500)))

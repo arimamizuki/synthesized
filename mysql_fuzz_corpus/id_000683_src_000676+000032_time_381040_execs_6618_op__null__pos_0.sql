@@ -1,0 +1,1 @@
+UPDATE v875 AS x0 SET v878 = 5 WHERE v880 = '1invalid'

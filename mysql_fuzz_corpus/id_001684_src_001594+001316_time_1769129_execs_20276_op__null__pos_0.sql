@@ -1,0 +1,1 @@
+UPDATE v4354 AS x1, v4354 AS x8 SET x1.v4355 = x1.v4356 + 123 WHERE v4355 = 'aaa'

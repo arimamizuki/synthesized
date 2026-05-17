@@ -1,0 +1,1 @@
+UPDATE v6221 AS x0 NATURAL JOIN v6189 AS x1 SET x0.x1 = ROW('a', '/a/b', 'c') WHERE x1 = CONNECTION_ID()

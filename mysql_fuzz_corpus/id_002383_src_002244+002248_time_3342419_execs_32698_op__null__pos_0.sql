@@ -1,0 +1,1 @@
+SELECT x8.x1, x8.x1, CONCAT_WS('sep', 'string', NULL) AS x4, x8.x1 FROM v8006 AS x8

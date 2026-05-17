@@ -1,0 +1,1 @@
+UPDATE v57886 AS x1 SET v57887 = 'test_plugin_server' WHERE ((v57889 AND v57888) OR v57887) <> '100'

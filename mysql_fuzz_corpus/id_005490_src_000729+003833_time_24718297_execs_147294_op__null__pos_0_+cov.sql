@@ -1,0 +1,1 @@
+UPDATE v57956 AS x1 SET x1.v57958 = CONCAT(v57958, ', Updated from a = -2') WHERE v57958 = @u AND v57957 = @h

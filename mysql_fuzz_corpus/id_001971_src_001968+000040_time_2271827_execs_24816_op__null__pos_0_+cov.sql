@@ -1,0 +1,1 @@
+INSERT INTO v5596 (v5597) VALUES ('extracted')

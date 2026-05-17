@@ -1,0 +1,1 @@
+UPDATE v317 AS x0 JOIN v314 AS x4 ON (x0.v319 = 10) SET v318 = @check WHERE v319 = @keyword3_id

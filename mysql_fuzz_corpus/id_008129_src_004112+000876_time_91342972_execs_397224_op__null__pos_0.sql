@@ -1,0 +1,1 @@
+UPDATE v180293 AS x1 SET x1.v180295 = REPEAT(LEFT(v180295, ''), 65) WHERE NOT v180294 IN ('innodb_monitor_enable', 'innodb_monitor_disable', 'innodb_monitor_reset', 'innodb_monitor_reset_all', 'rbr_exec_mode')

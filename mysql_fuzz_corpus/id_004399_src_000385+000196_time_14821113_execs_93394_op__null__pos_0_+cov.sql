@@ -1,0 +1,1 @@
+UPDATE v31049 AS x0 SET v31050 = 57 + 1 WHERE v31051 = 5 AND (v31051, v31051) IN ((@a, @b), (@c, @d))

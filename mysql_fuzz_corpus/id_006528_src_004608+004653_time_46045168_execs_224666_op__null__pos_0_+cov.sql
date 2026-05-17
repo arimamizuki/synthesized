@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v95182 AS x2 WHERE x2.x1 > x2.x1 OR x2.x1 <> x2.x1

@@ -1,0 +1,1 @@
+SELECT x4.x1, x4.x1 FROM v381 AS x4

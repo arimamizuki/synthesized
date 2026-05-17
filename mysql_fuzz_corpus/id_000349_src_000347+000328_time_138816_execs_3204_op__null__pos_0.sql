@@ -1,0 +1,1 @@
+UPDATE v291 AS x1 JOIN v311 AS x2 ON x1.v292 = x1.v292 SET x1.v292 = CONCAT('test', 2001 - 10 - 6.0) WHERE v292 = 'test' AND AVG(v292) = 3.0

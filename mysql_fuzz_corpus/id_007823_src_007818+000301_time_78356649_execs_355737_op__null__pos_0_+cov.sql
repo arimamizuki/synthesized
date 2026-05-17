@@ -1,0 +1,1 @@
+UPDATE v157572 AS x1 SET x1.v157430 = 'v4l' WHERE x3 IN (2, 5, 6)

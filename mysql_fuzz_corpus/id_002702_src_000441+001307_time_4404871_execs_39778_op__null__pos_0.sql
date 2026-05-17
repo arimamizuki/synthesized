@@ -1,0 +1,1 @@
+UPDATE v9978 AS x1 SET v9979 = 'hi' WHERE v9980 ->> '$.x' = 'x'

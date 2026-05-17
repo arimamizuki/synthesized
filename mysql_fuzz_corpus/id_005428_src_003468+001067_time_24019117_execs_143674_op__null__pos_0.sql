@@ -1,0 +1,1 @@
+INSERT INTO v55525 (v55401, v55399) VALUES ('rural', 'investigations')

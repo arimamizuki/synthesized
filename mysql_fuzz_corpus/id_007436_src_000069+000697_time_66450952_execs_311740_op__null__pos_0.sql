@@ -1,0 +1,1 @@
+UPDATE v137615 AS x1 SET v137616 = 'v8l v7n v6c v5n' WHERE x1.v137616 = @category1_id

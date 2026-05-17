@@ -1,0 +1,1 @@
+CREATE INDEX v35134 ON v34945((REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) - REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1)))

@@ -1,0 +1,1 @@
+UPDATE v1078 AS x1 LEFT JOIN v1210 AS x2 ON x1.v1079 = x1.v1080 SET v1079 = CONCAT(v1080, '+con1') WHERE v1080 = 'plug_user'

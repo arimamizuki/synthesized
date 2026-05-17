@@ -1,0 +1,1 @@
+UPDATE v255634 AS x1, v255677 AS x6 SET v254467 = POWER(1, 1) + POWER(1, 1) + POWER(1, 1.000000) + v254467 WHERE v254466 IN ('2.2', 'disconnect_on_expired_password', 1.11)

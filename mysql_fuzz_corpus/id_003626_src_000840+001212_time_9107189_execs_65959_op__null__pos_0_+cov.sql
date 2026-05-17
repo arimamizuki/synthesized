@@ -1,0 +1,1 @@
+UPDATE v20117 AS x0 SET x0.v20118 = 'test11' WHERE v20118 = '1invalid'

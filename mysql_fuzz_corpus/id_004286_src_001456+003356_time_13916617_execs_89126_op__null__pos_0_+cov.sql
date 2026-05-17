@@ -1,0 +1,1 @@
+WITH x10 AS (SELECT 0 UNION ALL SELECT x7.Name_exp_1 + 1 FROM x14 WHERE x7.Name_exp_1 < 19) SELECT x7.Name_exp_1, x7.Name_exp_1, LEAD(x7.Name_exp_1, 1, 'abc') OVER () AS x4, x7.Name_exp_1 FROM v29508 AS x7 WHERE x7.Name_exp_1 AND x7.Name_exp_1 IN ('f')

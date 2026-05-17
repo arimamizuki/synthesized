@@ -1,0 +1,1 @@
+UPDATE v77825 AS x0 SET v77715 = CONCAT(v77715, ', Updated2') WHERE x1 = x1 COLLATE utf8mb4_unicode_ci

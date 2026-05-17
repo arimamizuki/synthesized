@@ -1,0 +1,1 @@
+SELECT x5.v252946, x5.v252946 FROM v252944 AS x5 ORDER BY x5.v252946 COLLATE utf8mb3_general_ci, x5.v252945 COLLATE utf8mb3_general_ci

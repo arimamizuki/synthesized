@@ -1,0 +1,1 @@
+UPDATE v73348 AS x1 JOIN v74178 AS x4 ON x1.v73349 = x1.v73349 SET v73349 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE CAST('2009-04-03 00:00:01' AS DATETIME) < '2006-11-06 04:08:36.0'

@@ -1,0 +1,1 @@
+CREATE TABLE v181669 (v181670 INT DEFAULT 1, v181671 ENUM('closed', '2', 'zz[INV]‚ƒ„…†‡ˆ‰Š‹Œ[INV][INV][INV][INV]‘’“”•–—˜™š›œ[INV][INV]Ÿ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ') CHARACTER SET latin1 NOT NULL) AS SELECT TO_SECONDS(NULL) AS x3

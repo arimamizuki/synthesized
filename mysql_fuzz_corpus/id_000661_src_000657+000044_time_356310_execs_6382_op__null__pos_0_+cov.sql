@@ -1,0 +1,1 @@
+CREATE INDEX v985 ON v916((v917 - v917))

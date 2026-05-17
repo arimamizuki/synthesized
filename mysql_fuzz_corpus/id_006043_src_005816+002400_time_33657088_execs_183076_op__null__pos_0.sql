@@ -1,0 +1,1 @@
+CREATE TABLE v77007 (v77008 TINYINT) AS SELECT @@innodb_purge_stop_now, @@validate_password_number_count, @@debug, @@lower_case_table_names

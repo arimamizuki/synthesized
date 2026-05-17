@@ -1,0 +1,1 @@
+INSERT INTO v4357 (v4363, v4365, v4360, v4361, v4362) VALUES (@spaces, @arg02, @arg00, @arg02, @arg02)

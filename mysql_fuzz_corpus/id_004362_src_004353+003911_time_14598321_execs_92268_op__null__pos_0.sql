@@ -1,0 +1,1 @@
+INSERT INTO v30690 (x1) VALUES ('023006'), (22), (7), ('mutations')

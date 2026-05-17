@@ -1,0 +1,1 @@
+CREATE INDEX v987 ON v675((1 - v676))

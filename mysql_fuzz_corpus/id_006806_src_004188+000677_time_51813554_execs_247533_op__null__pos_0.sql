@@ -1,0 +1,1 @@
+UPDATE v107804 AS x1, v107241 AS x5 SET x1.x1 = -45.34e-306 WHERE NOT (x1 = 1 AND x1 >= 'a' AND (x1 = 'c' OR (x1 = 'd' AND x1 = 2)))

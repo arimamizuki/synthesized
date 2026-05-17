@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT x7.x1 FROM x11) SELECT x7.x1, x7.x1, (~x7.x1) = 0 AS x4, x7.x1 FROM v131124 AS x7 WHERE x7.x1 <= 0.8

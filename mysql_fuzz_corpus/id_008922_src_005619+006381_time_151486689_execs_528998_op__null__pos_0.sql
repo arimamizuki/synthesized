@@ -1,0 +1,1 @@
+SELECT x3.Name_exp_1 FROM v246213 AS x3 WHERE x3.Name_exp_1 = x3.Name_exp_1 AND x3.Name_exp_1 <= 1

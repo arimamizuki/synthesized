@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT * FROM x10) SELECT x7.x1, x7.x1, 1 + LAG(SUM(x7.x1 / x7.x1), 1, 1 + SUM(x7.x1 / x7.x1)) OVER (ORDER BY x7.x1) AS x3, x7.x1 FROM v117111 AS x7 WHERE x7.x1 < 250

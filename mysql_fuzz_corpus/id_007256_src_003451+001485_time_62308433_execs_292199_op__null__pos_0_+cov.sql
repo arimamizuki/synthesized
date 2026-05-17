@@ -1,0 +1,1 @@
+WITH x10 AS (SELECT x8.x1, x8.x1, x8.x1, GROUPING(x8.x1) AS x15 FROM x16 GROUP BY x8.x1, x8.x1, x8.x1 WITH ROLLUP) SELECT x8.x1, x8.x1, CONCAT(LEFT(x8.x1, CHAR_LENGTH(x8.x1) - LOCATE('x', REVERSE(x8.x1))), LEFT(@my_uuid, 8)) AS x4, x8.x1 FROM v128098 AS x8 WHERE 'lp' < x8.x1

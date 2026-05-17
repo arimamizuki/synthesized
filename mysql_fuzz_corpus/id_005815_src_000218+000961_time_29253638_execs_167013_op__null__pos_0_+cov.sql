@@ -1,0 +1,1 @@
+UPDATE v68860 AS x1 SET x1.v68861 = 'test_plugin_server' WHERE v68861 = 'new_value'

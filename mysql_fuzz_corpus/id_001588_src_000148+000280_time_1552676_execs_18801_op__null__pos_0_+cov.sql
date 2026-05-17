@@ -1,0 +1,1 @@
+UPDATE v3668 AS x1 SET x1.v3676 = ROW('test', 2, ROW(3, 33)) WHERE v3674 = 'A' LIMIT 3

@@ -1,0 +1,1 @@
+INSERT INTO v3772 (v3774) VALUES (1), (1), (2), (2)

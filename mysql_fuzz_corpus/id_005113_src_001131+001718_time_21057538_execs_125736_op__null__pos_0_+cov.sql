@@ -1,0 +1,1 @@
+UPDATE v46215 AS x1 SET v46216 = 'empty_pwd' WHERE v46216 LIKE 'a%'

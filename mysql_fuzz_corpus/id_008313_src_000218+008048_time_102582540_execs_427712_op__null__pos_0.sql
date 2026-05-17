@@ -1,0 +1,1 @@
+UPDATE v193396 AS x0 SET v192858 = 'hi' WHERE x0.v192858 LIKE 'memory/temptable%'

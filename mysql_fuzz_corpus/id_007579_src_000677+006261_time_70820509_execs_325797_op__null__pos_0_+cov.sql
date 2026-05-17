@@ -1,0 +1,1 @@
+UPDATE v143810 AS x1 SET v143751 = '+7(912)800-80-01' WHERE x2 = 'dep1' AND x2 = 'Croatia'

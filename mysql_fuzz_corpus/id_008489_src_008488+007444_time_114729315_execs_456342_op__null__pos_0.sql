@@ -1,0 +1,1 @@
+UPDATE v208295 AS x1 SET v208296 = 'aaaxxx' WHERE v208296 IN (@dec_one, @dec_two, @dec_five)

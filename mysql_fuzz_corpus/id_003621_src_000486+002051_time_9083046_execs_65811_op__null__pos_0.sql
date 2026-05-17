@@ -1,0 +1,1 @@
+UPDATE v20117 AS x1 SET x1.v20118 = 'schema_auto_increment_columns' WHERE (@v := v20118) <> 0

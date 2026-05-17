@@ -1,0 +1,1 @@
+CREATE INDEX v56 ON v42(v46, (v44 + v44), v49)

@@ -1,0 +1,1 @@
+INSERT INTO v40814 (v40815) VALUES (''), ('2023-1-1'), ('X'), (NULL)

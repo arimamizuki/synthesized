@@ -1,0 +1,1 @@
+UPDATE v101837 AS x0 SET view馃惉 = view馃惉 + 10 + view馃惉 WHERE x0.view馃惉 = 'v8l v7n v6c v5n'

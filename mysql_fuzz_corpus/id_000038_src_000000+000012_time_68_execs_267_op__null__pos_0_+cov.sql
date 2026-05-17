@@ -1,0 +1,1 @@
+CREATE VIEW v0 AS SELECT x1.v3 + 1, x1.v1 + 1 FROM v0 AS x1

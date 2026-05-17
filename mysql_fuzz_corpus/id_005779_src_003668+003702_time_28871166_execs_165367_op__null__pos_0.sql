@@ -1,0 +1,1 @@
+INSERT INTO v68347 (v68353, v68351, v68355) VALUES (@dblval, @d, @A)

@@ -1,0 +1,1 @@
+UPDATE v8996 AS x1 SET v8992 = 'mmm' WHERE SUM(DISTINCT SUBSTRING('x', 1, 3)) = 'test1'

@@ -1,0 +1,1 @@
+SELECT x3(x4).v1362, x3(x4).v1363 FROM v1361 AS x3(x4)

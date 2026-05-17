@@ -1,0 +1,1 @@
+UPDATE v61174 AS x0 SET v61175 = 'c' WHERE v61175 LIKE '%user%' AND v61175 <> 'performance_schema'

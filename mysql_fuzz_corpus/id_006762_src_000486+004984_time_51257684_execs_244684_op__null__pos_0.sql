@@ -1,0 +1,1 @@
+UPDATE v106612 AS x1 SET x1.v106601 = 'aaaaaaaaaa' WHERE v106601 <> 'sys' AND REGEXP_LIKE(v106601, 'x')

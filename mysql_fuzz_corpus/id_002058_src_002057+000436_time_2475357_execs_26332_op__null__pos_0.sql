@@ -1,0 +1,1 @@
+CREATE INDEX v6135 ON v6039((1 >= 2))

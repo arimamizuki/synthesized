@@ -1,0 +1,1 @@
+UPDATE v26670 AS x1 SET v26673 = 8 WHERE NOT (v26673 >= 0 AND NULL AND (@b := @b + 1))

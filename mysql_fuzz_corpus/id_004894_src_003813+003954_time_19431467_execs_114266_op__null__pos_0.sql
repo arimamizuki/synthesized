@@ -1,0 +1,1 @@
+SELECT * FROM v40655 AS x0 JOIN v40543 AS x2 ON x0.v40656 = 'test_drop' AND LOCATE('x', x0.v40656) = 0

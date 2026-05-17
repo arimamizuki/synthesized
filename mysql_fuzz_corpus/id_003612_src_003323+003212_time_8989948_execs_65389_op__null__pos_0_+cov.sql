@@ -1,0 +1,1 @@
+UPDATE v19490 AS x0 SET v19491 = CONCAT(v19491, @l := @l + 1) WHERE x0.v19491 = 'foo'

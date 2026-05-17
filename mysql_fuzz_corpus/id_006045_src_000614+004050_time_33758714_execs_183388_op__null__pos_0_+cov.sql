@@ -1,0 +1,1 @@
+CREATE TABLE v77145 (v77146 ENUM('c', 'a', 'aaa') NOT NULL) COLLATE=latin1_bin

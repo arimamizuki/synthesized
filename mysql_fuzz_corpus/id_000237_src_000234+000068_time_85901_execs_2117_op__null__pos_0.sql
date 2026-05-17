@@ -1,0 +1,1 @@
+UPDATE v231 AS x0 NATURAL JOIN v39 AS x1 SET x0.v197 = 'DELETE FROM non_existing_table a USING non_existing_table a' WHERE v197 = 'mysql' AND v197 = 't' AND s1 = 'PRIMARY' AND v197 = 'size'

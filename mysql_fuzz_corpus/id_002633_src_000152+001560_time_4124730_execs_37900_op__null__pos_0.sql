@@ -1,0 +1,1 @@
+UPDATE v9527 AS x1 JOIN v9527 AS x2 ON (((x1.x1 = x1.x1 AND x1.v8881 IS NULL) OR (x1.x1 = x1.v8881 AND x1.v9169 = 2)) AND ((x1.x1 = x1.x1 AND x1.v8881 IS NULL) OR (x1.x1 = x1.v8881 AND x1.x1 = 2))) SET v9169 = 'DELETE FROM t1 a USING t1 a' WHERE v9169 LIKE 'llll%'

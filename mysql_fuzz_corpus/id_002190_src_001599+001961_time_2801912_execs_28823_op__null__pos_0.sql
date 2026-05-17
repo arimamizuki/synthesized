@@ -1,0 +1,1 @@
+UPDATE v6233 AS x1 SET v6235 = CONCAT('1e-', v6235) WHERE v6234 IN ('event_scheduler', '0000-00-00 00:00:00.000001', '1901')

@@ -1,0 +1,1 @@
+UPDATE v138010 AS x1 LEFT JOIN v138109 AS x4 ON x1.x1 = x1.x1 SET x1 = 'Where' WHERE x1.x1 = x1.x1 AND x1.x1 = x1.x1 AND x1.x1 = 128

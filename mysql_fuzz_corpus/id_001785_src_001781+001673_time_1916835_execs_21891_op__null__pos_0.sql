@@ -1,0 +1,1 @@
+UPDATE v4834 AS x1 STRAIGHT_JOIN v4787 AS x2 ON (x1.v4836 = x1.v4835 AND x1.v4836 IN (3)) SET x1.v4835 = ROW('test' COLLATE utf8mb3_polish_ci, 'b', 'c') WHERE (v4835 AND v4835) AND (x1.v4836 <= 2 OR x1.v4835 IS NULL)

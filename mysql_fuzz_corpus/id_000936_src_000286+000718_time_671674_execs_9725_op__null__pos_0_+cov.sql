@@ -1,0 +1,1 @@
+UPDATE v1723 AS x0 SET x0.v1725 = 1 * v1724 WHERE v1725 = @u AND v1724 = @h

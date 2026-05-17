@@ -1,0 +1,1 @@
+UPDATE v72697 AS x1 JOIN v71957 AS x2 ON x1.v72698 > x1.v72698 SET x1.v72698 = 'test8' WHERE x1.v72698 = 18.3 AND v72698 = 'same_value_col3'

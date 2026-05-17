@@ -1,0 +1,1 @@
+UPDATE v102 AS x1 LEFT JOIN v239 AS x5 ON x1.v103 = x1.v103 SET v103 = 'new_value' WHERE v103 LIKE 'w%'

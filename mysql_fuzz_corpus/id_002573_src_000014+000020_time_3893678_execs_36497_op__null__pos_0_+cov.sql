@@ -1,0 +1,1 @@
+CREATE INDEX v9386 ON v9168((1), (1))

@@ -1,0 +1,1 @@
+CREATE VIEW v86172 AS SELECT *, ELT(1, 'string', NULL) AS x1, CAST(1 / 3 AS FLOAT) AS x2 FROM v85649 AS x3, v85570 AS x5 WHERE x5.v85571 = 'Handler_commit'

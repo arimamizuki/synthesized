@@ -1,0 +1,1 @@
+CREATE INDEX v7942 ON v7924(((DATE_FORMAT('x', '%M') + 0 + MAX(x1.v7919) + 1.1) / NULLIF(1, 0)), (CAST('-1:0:0' AS TIME)))

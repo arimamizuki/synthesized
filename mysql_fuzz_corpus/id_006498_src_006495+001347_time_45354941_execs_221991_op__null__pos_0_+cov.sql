@@ -1,0 +1,1 @@
+CREATE VIEW v94385 AS SELECT ST_SRID(ST_POLYGONFROMTEXT(@wkt_py, 4294967296)), EXTRACTVALUE('<a><or:or>test</or:or></a>', '<a><descendant-or-self>test</descendant-or-self></a>'), GROUPING(x2.fn(MIN(x1.v94240))), SUM(x3.func_plusone(1)), SUM(x1.v94240 + x1.v94240 + 0.0), SUM(2) FROM v94238 AS x1 GROUP BY MONTH(x1.v94240)

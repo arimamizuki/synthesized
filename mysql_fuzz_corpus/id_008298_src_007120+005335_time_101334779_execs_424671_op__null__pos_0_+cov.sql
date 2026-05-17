@@ -1,0 +1,1 @@
+CREATE TABLE v193195 (v193196 INT, v193197 VARCHAR(64)) AS SELECT @@delay_key_write, @@version_comment, @@profiling, @@debug

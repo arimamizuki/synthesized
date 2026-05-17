@@ -1,0 +1,1 @@
+INSERT INTO v15159 (v15124) VALUES (''), (NULL), (NULL), (2), (3), ('x'), ('x'), (4)

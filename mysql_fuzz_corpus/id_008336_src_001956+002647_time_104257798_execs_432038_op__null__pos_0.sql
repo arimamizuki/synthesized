@@ -1,0 +1,1 @@
+UPDATE v196799 AS x1 SET v196800 = 'DELETE FROM non_existing_table' WHERE v196800 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

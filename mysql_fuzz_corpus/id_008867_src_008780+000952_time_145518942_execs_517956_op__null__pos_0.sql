@@ -1,0 +1,1 @@
+UPDATE v241103 AS x0 SET x0.Name_exp_1 = 'b22551523' WHERE Name_exp_1 IS NULL

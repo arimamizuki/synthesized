@@ -1,0 +1,1 @@
+CREATE TABLE v20336 (v20337 CHAR(3), v20338 CHAR(4), v20339 CHAR(5), v20340 CHAR(6), INDEX(v20337, v20340, v20338, v20339)) AS SELECT @@ssl_cipher, @@SQL_MODE, @@query_alloc_block_size, @@long_query_time

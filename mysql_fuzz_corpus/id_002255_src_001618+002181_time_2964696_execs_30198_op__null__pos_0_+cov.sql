@@ -1,0 +1,1 @@
+INSERT INTO v7170 (v7171) VALUES ('嚏'), (2), ('085071'), ('BTXLX')

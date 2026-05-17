@@ -1,0 +1,1 @@
+UPDATE v8300 AS x0 LEFT JOIN v8326 AS x6 ON x0.v8022 = x0.v8022 AND x0.v8022 = x0.v8022 SET v8022 = v8022 + 10000 WHERE x0.v8022 IN (13, 'int_func_index', 39, 'Current_tls_cert')

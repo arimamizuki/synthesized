@@ -1,0 +1,1 @@
+UPDATE v48606 AS x1 SET v48607 = 'test_func1' WHERE v48607 LIKE 'mysqltest_%' LIMIT 2

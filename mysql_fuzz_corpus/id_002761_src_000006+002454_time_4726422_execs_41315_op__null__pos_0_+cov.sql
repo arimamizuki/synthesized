@@ -1,0 +1,1 @@
+INSERT INTO v11008 (v11010) VALUES (1), (2), (2)

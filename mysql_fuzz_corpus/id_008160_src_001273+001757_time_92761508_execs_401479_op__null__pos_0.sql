@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v182555 AS x2 WHERE x2.x1 IN (1, 1, 1, 1)

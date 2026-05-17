@@ -1,0 +1,1 @@
+UPDATE v64796 AS x0 LEFT JOIN v65082 AS x1 ON x0.v64797 = 1002 SET x0.v64797 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE v64797 LIKE 'log_slow_replica_statements'

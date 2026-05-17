@@ -1,0 +1,1 @@
+SELECT x7.v8893, x7.v8893, x7.v8893 AS x4, x7.v8893 FROM v8892 AS x7 WHERE INET6_ATON('2c0f:fff0::') | x7.v8893 = INET6_ATON('2c0f:fff0::')

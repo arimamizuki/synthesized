@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT * FROM x12 LIMIT 3) SELECT x8.v4478, x8.v4478, AVG(x8.v4478) AS x3, x8.v4478 FROM v4477 AS x8 WHERE x8.v4478 = 'default_def' AND x8.v4478 = 'localhost'

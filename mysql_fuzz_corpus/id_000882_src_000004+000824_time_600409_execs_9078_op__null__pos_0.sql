@@ -1,0 +1,1 @@
+SELECT x4.1, x4.1 FROM v1215 AS x4

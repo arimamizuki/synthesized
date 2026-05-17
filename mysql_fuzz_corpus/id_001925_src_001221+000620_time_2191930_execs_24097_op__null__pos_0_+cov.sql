@@ -1,0 +1,1 @@
+UPDATE v5373 AS x1 LEFT JOIN v5301 AS x5 ON x1.v5378 = 'test_drop' AND x1.v5378 = 'no_pwd_history' SET v5375 = REPEAT(LEFT(v5377, 1), 2) WHERE v5376 = ST_GEOMFROMTEXT('LINESTRING(-1 -1, 1 -1, -1 -1, -1 1, 1 1)')

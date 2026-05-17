@@ -1,0 +1,1 @@
+UPDATE v3576 AS x2 JOIN v3559 AS x5 ON x2.v3578 = x2.v3579 SET v3579 = 3 WHERE NOT JSON_SEARCH(@var, 'one', '%weedout%', NULL, '$**.operation') IS NULL

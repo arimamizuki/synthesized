@@ -1,0 +1,1 @@
+UPDATE v9199 AS x0 NATURAL JOIN v9002 AS x1 SET x0.v9200 = AES_DECRYPT(AES_ENCRYPT('my_text', 'my_key_string', '', 'pbkdf2_hmac', 4000, 10001), 'my_key_string', '', 'pbkdf2_hmac', 4000, 10001) WHERE ROW(ROW(1, x0.v9200) = ROW(1, v9200), v9200) = '2002-08-03'

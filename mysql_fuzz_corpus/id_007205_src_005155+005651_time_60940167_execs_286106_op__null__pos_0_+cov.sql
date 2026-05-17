@@ -1,0 +1,1 @@
+CREATE TABLE v126029 (v126030 CHAR(1), v126031 FLOAT) AS SELECT /*+ MAX_EXECUTION_TIME(0) BNL(x4.x3) */ 'The\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ZEnd'

@@ -1,0 +1,1 @@
+UPDATE v137615 AS x1 SET x1.v137616 = 'rozn' WHERE v137616 = 'ndbinfo'

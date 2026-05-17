@@ -1,0 +1,1 @@
+UPDATE v74106 AS x0 JOIN v73345 AS x3 ON 1 SET v74109 = 'init_connect'

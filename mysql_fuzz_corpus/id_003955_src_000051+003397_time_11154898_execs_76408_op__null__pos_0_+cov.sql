@@ -1,0 +1,1 @@
+CREATE INDEX v23899 ON v23523((x1 + 1), x1)

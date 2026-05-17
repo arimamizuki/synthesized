@@ -1,0 +1,1 @@
+SELECT x3.v51190 FROM v51172 AS x3 WHERE CONCAT_WS('string', CONCAT(CONCAT('08:50:27', x3.v51194 COLLATE utf8mb4_turkish_ci), LOWER(x3.v51217))) <> 'xyz'

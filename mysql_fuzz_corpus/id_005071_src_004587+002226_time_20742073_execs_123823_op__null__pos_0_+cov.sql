@@ -1,0 +1,1 @@
+UPDATE v44940 AS x1 SET x1.v44942 = REPLACE(v44942, '/a/and', 'y') WHERE v44941 = 'plug_user'

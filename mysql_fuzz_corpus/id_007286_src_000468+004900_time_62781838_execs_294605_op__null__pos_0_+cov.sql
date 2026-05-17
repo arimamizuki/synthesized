@@ -1,0 +1,1 @@
+UPDATE v129641 AS x1 SET x1.Name_exp_1 = CHAR_LENGTH(SHA2('', 224)) / 2 * 8 WHERE Name_exp_1 IS NULL LIMIT 2

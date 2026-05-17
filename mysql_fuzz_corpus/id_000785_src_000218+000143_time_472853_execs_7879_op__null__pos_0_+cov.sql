@@ -1,0 +1,1 @@
+UPDATE v1281 AS x0 LEFT JOIN v1227 AS x1 ON x0.v1282 = x0.v1282 AND x0.v1282 = 3 SET v1283 = 'this is A test' WHERE v1283 = '5cm' AND x0.v1282 = x0.v1282

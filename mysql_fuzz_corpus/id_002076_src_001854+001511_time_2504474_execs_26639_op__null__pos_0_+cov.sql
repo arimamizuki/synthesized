@@ -1,0 +1,1 @@
+CREATE VIEW v6221 AS SELECT UPDATEXML('<div><div><span>1</span><span>2</span></div></div>', '/', '<tr><td>1</td><td>2</td></tr>') AS x1 FROM v6189 AS x3 LIMIT 7

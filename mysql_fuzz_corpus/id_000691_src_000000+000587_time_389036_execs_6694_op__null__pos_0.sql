@@ -1,0 +1,1 @@
+CREATE VIEW v1037 AS SELECT MAX(x1.x1) + 1, MAX(x1.x1) + 1, MAX(x1.x1) + 1, MAX(x1.x1) + 1, MAX(x1.x1) + 1, MAX(x1.x1) + 1, MAX(x1.x1) + 1 FROM v837 AS x1

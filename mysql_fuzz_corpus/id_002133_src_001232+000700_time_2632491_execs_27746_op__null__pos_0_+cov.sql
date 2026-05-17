@@ -1,0 +1,1 @@
+UPDATE v6303 AS x1, v6222 AS x5 SET x1.v6305 = CHAR_LENGTH(SHA2('', 1)) / 100 * 8 WHERE 'ae' LIKE 'y%'

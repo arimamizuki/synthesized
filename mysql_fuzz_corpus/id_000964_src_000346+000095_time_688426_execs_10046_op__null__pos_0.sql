@@ -1,0 +1,1 @@
+UPDATE v1739 AS x1 RIGHT OUTER JOIN v1728 AS x2 ON x1.v1740 = x1.v1741 SET x1.v1741 = AES_DECRYPT(AES_ENCRYPT('my_text', 'my_key_string', '', 'pbkdf2_hmac', 4000, '10001'), 'my_key_string', '', 'pbkdf2_hmac', 4000, '10001') WHERE v1741 <> 5

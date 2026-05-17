@@ -1,0 +1,1 @@
+UPDATE v118595 AS x0 JOIN v118613 AS x4 ON x0.v118596 = x0.v118596 SET v118597 = @Open_table_definitions + 1 + 2 WHERE v118596 = 'a  '

@@ -1,0 +1,1 @@
+UPDATE v683 AS x0 SET x0.v684 = 'test14' WHERE v684 IN (13, 36, 5.5, 52)

@@ -1,0 +1,1 @@
+UPDATE v4669 AS x1 JOIN v4482 AS x2 ON (@id2 = @id3) SET v4670 = 'v4n'

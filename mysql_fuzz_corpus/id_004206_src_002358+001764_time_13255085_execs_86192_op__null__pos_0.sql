@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW v28456 AS SELECT ELT('/a/mod', 111, 222, '2405:1d00:ffff:ffff:ffff:ffff:ffff:ffff') FROM v28409 AS x2

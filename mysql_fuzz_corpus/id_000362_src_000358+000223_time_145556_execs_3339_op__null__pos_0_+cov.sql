@@ -1,0 +1,1 @@
+CREATE INDEX v456 ON v326((1 - v327))

@@ -1,0 +1,1 @@
+CREATE INDEX v516 ON v360((v362 + 3))

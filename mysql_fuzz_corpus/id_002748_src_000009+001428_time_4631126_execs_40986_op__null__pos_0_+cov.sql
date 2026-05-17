@@ -1,0 +1,1 @@
+INSERT INTO v9958 (v9960, v9959) VALUES (1, 1), (2, 1)

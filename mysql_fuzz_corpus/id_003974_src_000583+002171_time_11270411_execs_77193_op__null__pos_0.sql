@@ -1,0 +1,1 @@
+UPDATE v24119 AS x0 JOIN v24033 AS x1 ON x0.v24120 = x0.v24120 SET x0.v24120 = '2019-04-23' WHERE NOT v24120 IN ('green', 'black,blue,green')

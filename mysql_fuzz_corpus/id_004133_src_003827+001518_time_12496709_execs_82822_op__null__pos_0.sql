@@ -1,0 +1,1 @@
+UPDATE v26376 AS x1 LEFT JOIN v26863 AS x4 ON JSON_UNQUOTE(JSON_EXTRACT(x1.x1, '$.varc')) COLLATE utf8mb4_general_ci = x1.x1 SET x1 = 'v4l' WHERE x1.x1 <> 0.5 AND REGEXP_LIKE(x1, 'x')

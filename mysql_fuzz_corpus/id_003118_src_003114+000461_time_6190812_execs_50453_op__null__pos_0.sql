@@ -1,0 +1,1 @@
+UPDATE v14040 AS x1 LEFT JOIN v14071 AS x2 ON x1.v14041 = x1.v14041 SET v14041 = '2001-01-01 00:00:00.123456' WHERE v14041 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

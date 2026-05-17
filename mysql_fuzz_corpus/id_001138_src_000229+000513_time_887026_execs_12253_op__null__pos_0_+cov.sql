@@ -1,0 +1,1 @@
+UPDATE v2267 AS x1 LEFT JOIN v2263 AS x4 ON x1.v2268 = 'replica_type_conversions' SET v2268 = 'bb' WHERE v2268 = '2001-02-02 11:22:33.1' AND v2268 BETWEEN 8 AND 'KKK'

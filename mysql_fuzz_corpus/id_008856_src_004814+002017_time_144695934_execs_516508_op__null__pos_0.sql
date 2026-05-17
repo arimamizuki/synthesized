@@ -1,0 +1,1 @@
+INSERT INTO v238990 (v238991) VALUES (0), ('a'), (''), ('b')

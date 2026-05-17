@@ -1,0 +1,1 @@
+UPDATE v5313 AS x0 LEFT JOIN v5750 AS x1 ON x0.x1 = x0.x1 SET x0.x1 = GREATEST(x0.x1, 1) WHERE x1 = 'Opened_tables'

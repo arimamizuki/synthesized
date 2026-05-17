@@ -1,0 +1,1 @@
+INSERT INTO v45224 (v45226) VALUES (1), (2), (3), ('abcd'), ('abcde')

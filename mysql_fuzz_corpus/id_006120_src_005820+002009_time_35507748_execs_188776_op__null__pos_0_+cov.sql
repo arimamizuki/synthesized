@@ -1,0 +1,1 @@
+UPDATE v79401 AS x1 JOIN v79510 AS x7 ON x1.v79403 = 'v7n v5n v3l' NATURAL RIGHT JOIN v79387 AS x10 SET v79402 = X('x') / NULLIF(1, 0) WHERE v79402 LIKE 'log_queries_not_using_indexes'

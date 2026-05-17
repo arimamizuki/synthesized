@@ -1,0 +1,1 @@
+UPDATE v769 AS x0 SET x0.v770 = 'qqqq' WHERE v770 = 'b'

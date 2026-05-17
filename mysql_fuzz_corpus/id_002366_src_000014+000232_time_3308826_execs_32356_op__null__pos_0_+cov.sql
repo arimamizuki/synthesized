@@ -1,0 +1,1 @@
+CREATE INDEX v8003 ON v7924(((DATE_FORMAT('x', '%M') + 0 + DATE_FORMAT('x', '%M') + 0) / NULLIF(1, 0)))

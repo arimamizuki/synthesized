@@ -1,0 +1,1 @@
+UPDATE v63903 AS x1 SET x1.x2 = AES_DECRYPT(x2, 'x') WHERE LEFT(v63865, 1) = 'c'

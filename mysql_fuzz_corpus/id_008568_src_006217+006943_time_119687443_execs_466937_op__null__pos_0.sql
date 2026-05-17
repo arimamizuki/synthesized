@@ -1,0 +1,1 @@
+UPDATE v214287 AS x0 SET x0.v214288 = CONCAT(v214288, ', Updated from a = -2') WHERE v214288 LIKE '%offline_mode%'

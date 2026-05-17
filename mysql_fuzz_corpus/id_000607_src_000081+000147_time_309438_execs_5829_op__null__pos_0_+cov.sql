@@ -1,0 +1,1 @@
+CREATE INDEX v848 ON v675((v678 + v678))

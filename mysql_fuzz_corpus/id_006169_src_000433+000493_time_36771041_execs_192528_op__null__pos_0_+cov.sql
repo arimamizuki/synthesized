@@ -1,0 +1,1 @@
+UPDATE v79516 AS x1 LEFT JOIN v79898 AS x6 ON x1.v79519 = x1.v79517 AND x1.v79519 = DATE_ADD(x1.v79519, INTERVAL (INTERVAL '1' DAY) DAY) SET v79519 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE x1.v79518 LIKE 'aaaaa%'

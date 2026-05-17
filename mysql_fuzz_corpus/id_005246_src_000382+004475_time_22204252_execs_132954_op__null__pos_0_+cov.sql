@@ -1,0 +1,1 @@
+UPDATE v51167 AS x0 SET x0.v51169 = CONCAT(v51168, @category2_id := @a + 0 + COUNT(*)) WHERE v51168 = LAST_INSERT_ID()

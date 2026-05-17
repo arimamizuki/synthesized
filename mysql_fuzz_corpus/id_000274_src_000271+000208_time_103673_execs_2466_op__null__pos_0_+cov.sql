@@ -1,0 +1,1 @@
+UPDATE v317 AS x1 JOIN v295 AS x5 ON (x1.v319 = x1.v318) SET x1.v318 = @my_time WHERE v318 = 'mysqltest' AND v318 = 'mysqltest_1' AND v319 = 'localhost'

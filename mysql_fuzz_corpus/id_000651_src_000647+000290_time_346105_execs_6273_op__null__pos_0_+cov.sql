@@ -1,0 +1,1 @@
+UPDATE v617 AS x0 LEFT OUTER JOIN v791 AS x1 ON x0.v619 = x0.v619 SET v619 = @check WHERE v619 = 'qqqq'

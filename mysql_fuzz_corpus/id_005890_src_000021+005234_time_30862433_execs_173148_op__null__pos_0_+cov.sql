@@ -1,0 +1,1 @@
+INSERT INTO v71637 (v71639, v71638) VALUES ('causality', 'FAS'), (NULL, NULL), (4, 'zzzz'), (NULL, NULL)

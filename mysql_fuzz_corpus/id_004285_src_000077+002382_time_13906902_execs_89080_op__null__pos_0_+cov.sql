@@ -1,0 +1,1 @@
+CREATE INDEX v29534 ON v29500((REGEXP_INSTR('aaabcabcabc', 'A+', 1, 1, 1, 'c') - REGEXP_INSTR('aaabcabcabc', 'A+', 1, 1, 1, 'c')))

@@ -1,0 +1,1 @@
+UPDATE v4438 AS x0 SET v4440 = REPEAT('a', 256) WHERE x0.v4440 = @cu

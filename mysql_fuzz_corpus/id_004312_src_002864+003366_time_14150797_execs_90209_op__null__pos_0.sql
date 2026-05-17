@@ -1,0 +1,1 @@
+UPDATE v29915 AS x0 SET x0.v29917 = 'test12' WHERE x0.v29918 LIKE 'q%'

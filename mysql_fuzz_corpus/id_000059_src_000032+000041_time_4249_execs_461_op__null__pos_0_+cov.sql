@@ -1,0 +1,1 @@
+CREATE INDEX v23 ON v0((v2 + v1), v3)

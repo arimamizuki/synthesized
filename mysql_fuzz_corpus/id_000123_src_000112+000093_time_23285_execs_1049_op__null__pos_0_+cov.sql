@@ -1,0 +1,1 @@
+CREATE INDEX v140 ON v115(((v116 + v116) / NULLIF(1, 0)))

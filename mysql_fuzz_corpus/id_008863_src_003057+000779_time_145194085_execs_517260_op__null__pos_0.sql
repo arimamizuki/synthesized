@@ -1,0 +1,1 @@
+CREATE TABLE v240965 AS SELECT @test_compress_string := 'string for test compress function aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ' FROM v240234 AS x2

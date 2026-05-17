@@ -1,0 +1,1 @@
+INSERT INTO v6631 (v6632) VALUES (REGEXP_REPLACE('a', 'a', 'a')), (20)

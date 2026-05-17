@@ -1,0 +1,1 @@
+UPDATE v74 AS x0 JOIN v102 AS x1 ON (x0.v75 = x0.v76) SET x0.v75 = NULL WHERE v75 LIKE 'f%'

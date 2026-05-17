@@ -1,0 +1,1 @@
+UPDATE v42239 AS x1 SET v42240 = REPEAT('abc', 256) WHERE x1.v42240 = 'rob'

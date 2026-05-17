@@ -1,0 +1,1 @@
+UPDATE v1365 AS x1 SET v1367 = 'this is A test' WHERE v1366 LIKE 'mysqltest_%' AND v1367 LIKE 't_bug44738_%' LIMIT 12

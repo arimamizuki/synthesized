@@ -1,0 +1,1 @@
+CREATE INDEX v235 ON v229((v230 > 1))

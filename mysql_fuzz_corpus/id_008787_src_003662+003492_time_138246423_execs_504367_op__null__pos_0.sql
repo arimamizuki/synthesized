@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT x8.v234529 AS x12 FROM x13) SELECT x8.v234529, x8.v234529, @u := CAST('xxxx' AS DOUBLE) AS x4, x8.v234530 FROM v234528 AS x8 WHERE NOT x8.v234530 IN ('1', 'innodb_monitor_disable', '9999-12-31 23:59:59.999998', 'innodb_monitor_reset_all', 'rbr_exec_mode')

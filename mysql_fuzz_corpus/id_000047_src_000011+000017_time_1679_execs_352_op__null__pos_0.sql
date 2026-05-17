@@ -1,0 +1,1 @@
+SELECT x2.v4 FROM v1 AS x2

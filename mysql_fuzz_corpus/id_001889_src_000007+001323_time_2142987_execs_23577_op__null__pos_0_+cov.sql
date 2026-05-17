@@ -1,0 +1,1 @@
+INSERT INTO v5301 (v5302) VALUES (100), ('$dollar')

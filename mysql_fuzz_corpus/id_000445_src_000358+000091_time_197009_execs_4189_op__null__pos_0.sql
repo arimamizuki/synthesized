@@ -1,0 +1,1 @@
+CREATE INDEX v553 ON v535((v536 + 4))

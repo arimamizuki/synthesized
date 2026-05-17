@@ -1,0 +1,1 @@
+UPDATE v239 AS x1 JOIN v147 AS x5 ON (x1.x1 = 1) SET x2 = (NOW() - INTERVAL '5' DAY) WHERE x1 LIKE 'max_used_connections'

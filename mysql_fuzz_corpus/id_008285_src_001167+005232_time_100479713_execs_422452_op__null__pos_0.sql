@@ -1,0 +1,1 @@
+UPDATE v191052 AS x0 LEFT JOIN v192018 AS x7 ON x0.v191053 = 'v7n v5n v3l' SET v191054 = x0.v191055 + 27 WHERE v191053 IN ('2.2', 'disconnect_on_expired_password', 1.11)

@@ -1,0 +1,1 @@
+UPDATE v5240 AS x1, v5720 AS x4 SET v5241 = 'aaazzz' WHERE ('') >> (3 - 2) LIMIT 9

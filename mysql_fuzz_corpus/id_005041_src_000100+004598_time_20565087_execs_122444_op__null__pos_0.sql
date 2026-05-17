@@ -1,0 +1,1 @@
+INSERT INTO v45052 (v45053) VALUES ('üc'), ('uc'), ('ue'), ('ud'), ('Ü'), ('ueb'), ('uf')

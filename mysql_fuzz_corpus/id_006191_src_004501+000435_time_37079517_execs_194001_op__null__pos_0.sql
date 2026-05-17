@@ -1,0 +1,1 @@
+UPDATE v81313 AS x0 SET v81314 = 'v6c v3l' WHERE x0.v81315 = 18.3 AND v81316 = 'same_value_col3'

@@ -1,0 +1,1 @@
+UPDATE v208598 AS x0 SET jkl = (NOW() - INTERVAL '5' DAY) WHERE x0.10. = 18.3 AND v208599 = 'same_value_col3'

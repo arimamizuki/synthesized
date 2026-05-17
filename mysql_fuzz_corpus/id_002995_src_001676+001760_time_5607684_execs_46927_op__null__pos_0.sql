@@ -1,0 +1,1 @@
+UPDATE v12733 AS x1 SET x1.v12614 = CONCAT(v12642, ', Updated from a = -2') WHERE v12615 = 1

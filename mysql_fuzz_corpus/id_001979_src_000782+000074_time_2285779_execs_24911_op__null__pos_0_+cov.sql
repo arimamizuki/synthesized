@@ -1,0 +1,1 @@
+CREATE TABLE v5704 (v5705 ENUM('ä', 'ö', 'ü') CHARACTER SET utf8mb3 DEFAULT 'ü')

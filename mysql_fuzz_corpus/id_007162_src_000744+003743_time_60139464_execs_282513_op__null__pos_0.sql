@@ -1,0 +1,1 @@
+UPDATE v123653 AS x1 LEFT JOIN v123692 AS x5 ON NULL = 1.100000 SET x1 = 'w' WHERE x1 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

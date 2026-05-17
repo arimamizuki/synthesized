@@ -1,0 +1,1 @@
+UPDATE v651 AS x1 SET v612 = 'v7n v6c v3l' WHERE x1 = 32

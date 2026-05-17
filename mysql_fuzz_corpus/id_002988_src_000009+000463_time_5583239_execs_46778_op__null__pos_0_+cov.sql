@@ -1,0 +1,1 @@
+INSERT INTO v12866 (x7, v12791, v12790, v12789, v12793) VALUES (5.2, 'nem', '1991-07-14', 'garages', '15-01-2001 12:59:58'), (8.64, 'monty', 917, '456', '58'), (11.12, 'sinisa', 'uvlhiviingfglqfsrku', 'ccs', 'botany')

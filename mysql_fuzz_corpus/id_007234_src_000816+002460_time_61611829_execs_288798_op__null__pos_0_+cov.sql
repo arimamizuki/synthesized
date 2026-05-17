@@ -1,0 +1,1 @@
+UPDATE v127279 AS x1 SET x1.x2 = x1.x2 WHERE (x2, x2) > ('x', 'x')

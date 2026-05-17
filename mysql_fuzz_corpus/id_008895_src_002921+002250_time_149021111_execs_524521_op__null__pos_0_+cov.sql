@@ -1,0 +1,1 @@
+UPDATE v244460 AS x1 SET v244461 = 1 / NULL WHERE x1.v244461 = 'wait/lock/metadata/sql/mdl' LIMIT 999499999

@@ -1,0 +1,1 @@
+UPDATE v33345 AS x1 LEFT JOIN v33325 AS x4 ON x1.v33346 = x1.v33346 AND x1.v33346 = 'fr' SET v33346 = 'New Test String'

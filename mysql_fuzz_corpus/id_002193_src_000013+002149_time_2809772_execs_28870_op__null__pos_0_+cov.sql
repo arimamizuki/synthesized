@@ -1,0 +1,1 @@
+INSERT INTO v6680 (v6681) VALUES (1), ('Ramil')

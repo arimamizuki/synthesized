@@ -1,0 +1,1 @@
+SELECT x6.v175982, x6.v175980, NULL AS x3, x6.v175980 FROM v175979 AS x6 WHERE x6.v175981 = @con1_thread_id AND x6.v175981 LIKE '%Opening %tables' OR x6.v175981 LIKE '%Locking system tables' OR x6.v175981 LIKE '%System lock' ORDER BY x6.v175982 COLLATE utf8mb3_general_ci LIMIT 39

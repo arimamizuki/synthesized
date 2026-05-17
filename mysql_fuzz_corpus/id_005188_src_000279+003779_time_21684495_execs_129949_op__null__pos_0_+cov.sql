@@ -1,0 +1,1 @@
+UPDATE v48727 AS x0 SET x3 = REGEXP_REPLACE('b', 'b', 'y') WHERE ST_WITHIN(NOT x5.v48635 IS TRUE, ST_GEOMFROMTEXT('<a><or:or>test</or:or></a>'))

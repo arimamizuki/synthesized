@@ -1,0 +1,1 @@
+UPDATE v295 AS x1, v367 AS x5 SET v296 = CAST(SHA(x1.v296 >> 'fixme') AS JSON) WHERE v296 = '0'

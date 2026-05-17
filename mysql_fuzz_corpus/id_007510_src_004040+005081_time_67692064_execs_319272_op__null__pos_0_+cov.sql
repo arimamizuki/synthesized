@@ -1,0 +1,1 @@
+SELECT x2.1000, x2.v141600 FROM v141598 AS x2 ORDER BY 'test', (@f := x2.v141600), 'x', x2.v141600

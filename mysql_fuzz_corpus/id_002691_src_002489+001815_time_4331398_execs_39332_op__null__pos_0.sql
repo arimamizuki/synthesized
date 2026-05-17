@@ -1,0 +1,1 @@
+UPDATE v10282 AS x0 SET x0.v10147 = @e3 WHERE (x0.v10147 IS NULL) >> ('' COLLATE 'utf8mb4_0900_ai_ci')

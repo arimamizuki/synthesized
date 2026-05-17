@@ -1,0 +1,1 @@
+UPDATE v622 AS x1 LEFT JOIN v625 AS x2 ON (x1.v623 <= x1.v624) SET v623 = 'mno'

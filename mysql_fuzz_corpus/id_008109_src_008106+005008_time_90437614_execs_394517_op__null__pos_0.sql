@@ -1,0 +1,1 @@
+UPDATE v179328 AS x0 SET v179330 = LEFT(v179329, 1) WHERE @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND (x0.v179331 < 3 OR x0.v179332 IS NULL)

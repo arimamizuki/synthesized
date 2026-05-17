@@ -1,0 +1,1 @@
+CREATE INDEX v943 ON v782((v783 > 1))

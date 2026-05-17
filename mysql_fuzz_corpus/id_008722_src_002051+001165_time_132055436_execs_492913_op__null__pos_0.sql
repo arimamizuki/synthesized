@@ -1,0 +1,1 @@
+SELECT x2.v227885 FROM v227883 AS x2 WHERE x2.v227884 = 'schema_auto_increment_columns' OR x2.v227885 = 'schema_object_overview' OR x2.v227885 = 'schema_redundant_indexes' OR x2.v227885 = 'schema_unused_indexes' OR x2.v227885 = 10

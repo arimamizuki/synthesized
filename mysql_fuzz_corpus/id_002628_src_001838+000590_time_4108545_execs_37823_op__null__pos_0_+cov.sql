@@ -1,0 +1,1 @@
+SELECT x0.st_y(), x1.metaphon('x'), HEX(UUID_TO_BIN('{c8eb4b15-cb09-48bb-bbb2-e6a0b6b4d5c7}', TRUE)) AS x2, x3.database() FROM v9190 AS x5 WHERE x5.v9191 LIKE 'a%'

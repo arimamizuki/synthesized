@@ -1,0 +1,1 @@
+UPDATE v10667 AS x1 NATURAL JOIN v11088 AS x5 SET v10668 = 'somethingelse' WHERE v10668 = 'new_user' LIMIT 90

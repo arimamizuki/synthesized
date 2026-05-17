@@ -1,0 +1,1 @@
+SELECT x2.v241379 FROM v241378 AS x2 WHERE (x2.v241379 > 4 AND x2.v241379 IS NULL) OR (x2.v241379 = x2.v241379 AND x2.v241379 = x2.v241379) OR x2.v241379 = MD5('x') OR x2.v241379 = 'bb' OR x2.v241379 = 'x$schema_flattened_keys'

@@ -1,0 +1,1 @@
+UPDATE v13267 AS x0 SET x1 = x1 + 5 WHERE NOT ('%%green%%' = '23' AND x1 = 1)

@@ -1,0 +1,1 @@
+CREATE VIEW v29662 AS SELECT x4.Name_exp_1, 2 * x4.Name_exp_1 AS x2, 3 * x4.Name_exp_1 AS x3 FROM v29508 AS x4

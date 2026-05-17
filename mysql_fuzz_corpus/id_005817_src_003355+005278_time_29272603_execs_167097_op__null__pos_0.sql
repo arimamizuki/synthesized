@@ -1,0 +1,1 @@
+CREATE INDEX v69056 ON v69053((@@CORE_FILE + 1), (@@key_buffer_size + 2), (@@max_user_connections + 3), (v69054 + 4), (v69054 + 5))

@@ -1,0 +1,1 @@
+UPDATE v40655 AS x1 SET x1.v40657 = (x1.v40657 - 0e-3) WHERE v40656 = 'bbbbbb'

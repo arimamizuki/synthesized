@@ -1,0 +1,1 @@
+UPDATE v315 AS x0 LEFT JOIN v315 AS x1 USING (v316) SET v316 = 'plug_user' WHERE F1()

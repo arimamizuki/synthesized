@@ -1,0 +1,1 @@
+SELECT x8.v89578, x8.v89577, TIME('x') AS x4, x8.v89578 FROM v89576 AS x8 WHERE x8.v89577 = 'Chevy' AND x8.v89578 = 'localhost'

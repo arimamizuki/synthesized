@@ -1,0 +1,1 @@
+INSERT INTO v205896 (v205899, v205898, v205897) VALUES (REGEXP_REPLACE('a', 'a', 'x'), REGEXP_REPLACE('a', 'a', 'x'), REGEXP_REPLACE('a', 'a', 'a')), ('1.0000000000', 'nork sadu', '14474460')

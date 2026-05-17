@@ -1,0 +1,1 @@
+SELECT x3.v14069 FROM v14068 AS x3 WHERE LOCATE('x', x3.v14070) = 1 AND LOCATE('x', x3.v14070) > 0 AND x3.v14069 >= @my_start

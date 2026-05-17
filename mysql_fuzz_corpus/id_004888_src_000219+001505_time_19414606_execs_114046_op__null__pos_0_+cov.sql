@@ -1,0 +1,1 @@
+UPDATE v40606 AS x0 SET x0.v40607 = UUID() + x0.v40607 WHERE v40607 = 'john' COLLATE utf8mb4_0900_ai_ci

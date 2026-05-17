@@ -1,0 +1,1 @@
+INSERT INTO v206186 (v206188, v206190, v206189) VALUES (STR_TO_DATE('31.10.2004 15.30 abc', '%d.%m.%Y %H.%i'), STR_TO_DATE('15.10.2004', '%d.%m.%Y'), STR_TO_DATE('2019-12-31', '%Y-%m-%d'))

@@ -1,0 +1,1 @@
+UPDATE v3797 AS x0 LEFT OUTER JOIN v3864 AS x1 ON x0.v3669 = x0.v3669 SET x0.v3669 = 'col_datetime' WHERE (v3669 >= 'j')

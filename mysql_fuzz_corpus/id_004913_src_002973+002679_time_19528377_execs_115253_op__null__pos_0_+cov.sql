@@ -1,0 +1,1 @@
+UPDATE v40898 AS x0 SET x0.v40899 = CONCAT(v40899, ', Updated from a = 100') WHERE (DATEDIFF(NOW(), '0000-01-01') + 1) - (DATEDIFF(x0.v40899, '0000-01-01') + 1) >= 'SEA' AND v40899 = @topic1_id AND v40899 = 'w'

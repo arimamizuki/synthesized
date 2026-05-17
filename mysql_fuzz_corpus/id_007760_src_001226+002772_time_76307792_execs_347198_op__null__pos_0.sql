@@ -1,0 +1,1 @@
+UPDATE v153770 AS x1 SET x1.v153773 = ST_GEOMFROMTEXT('1.2.3.4') WHERE v153772 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

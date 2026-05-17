@@ -1,0 +1,1 @@
+UPDATE v317 AS x1 SET x1.v318 = 'bbbbbb' WHERE ABS(v318 = 256) = 0

@@ -1,0 +1,1 @@
+UPDATE v52286 AS x1 SET v52287 = 'Hello, view world' WHERE x1.v52287 = 'events_conn1_test2'

@@ -1,0 +1,1 @@
+SELECT x8.v3564, x8.v3563, 'This is temp. table' AS x4, x8.v3563 FROM v3716 AS x8

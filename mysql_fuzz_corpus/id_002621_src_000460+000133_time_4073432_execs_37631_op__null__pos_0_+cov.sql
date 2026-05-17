@@ -1,0 +1,1 @@
+UPDATE v9419 AS x1 SET x1.x2 = x1.x2 * 15 WHERE x1 IN (2, 7, 4) AND MATCH(x1) AGAINST('steve') LIMIT 10

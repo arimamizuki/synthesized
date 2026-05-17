@@ -1,0 +1,1 @@
+UPDATE v38449 AS x1 SET v38451 = ST_GEOMFROMTEXT('POINT(160 224)') WHERE @@debug LIKE 'example_func_example'

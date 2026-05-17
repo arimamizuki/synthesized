@@ -1,0 +1,1 @@
+CREATE TABLE v232345 (v232346 CHAR) AS SELECT ST_EQUALS(ST_GEOMFROMTEXT('GEOMETRYCOLLECTION(MULTIPOlygon(((2 2,4 2, 4 4, 2 4, 2 2)), ((-2 -2, -4 -2, -4 -4, -2 -4, -2 -2))), MULTIPOINT(4 4, -4 -4))'), ST_GEOMFROMTEXT('GEOMETRYCOLLECTION(POlygon((2 2,4 2, 4 4, 2 4, 2 2)), POLYGON((-2 -2, -4 -2, -4 -4, -2 -4, -2 -2)), POINT(4 4), POINT(-4 -4))')) AS x2, 't2 rows before small delete'

@@ -1,0 +1,1 @@
+UPDATE v206398 AS x1 SET x1 = 'couldbemuchworse_street' WHERE (x1.x1 IS NULL) >> ('%haha%')

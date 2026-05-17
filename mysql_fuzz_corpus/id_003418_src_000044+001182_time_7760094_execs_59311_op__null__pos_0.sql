@@ -1,0 +1,1 @@
+UPDATE v17548 AS x1 SET v17549 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE v17549 IN (1, 1)

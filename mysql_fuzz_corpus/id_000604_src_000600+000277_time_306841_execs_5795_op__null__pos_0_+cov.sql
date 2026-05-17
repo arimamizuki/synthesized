@@ -1,0 +1,1 @@
+INSERT INTO v743 (v744, v745) VALUES (37, 'flopping')

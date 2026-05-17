@@ -1,0 +1,1 @@
+UPDATE v5305 AS x1 SET v5306 = 105 WHERE v5306 = 'aaa'

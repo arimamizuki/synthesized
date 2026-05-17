@@ -1,0 +1,1 @@
+UPDATE v21310 AS x0 LEFT JOIN v21316 AS x5 ON FALSE SET x0.x1 = ST_GEOMFROMTEXT('POINT(44 47)') WHERE x1 IN (@str_one, @str_two, @str_five)

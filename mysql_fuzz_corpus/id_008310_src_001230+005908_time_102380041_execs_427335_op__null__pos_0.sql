@@ -1,0 +1,1 @@
+UPDATE v193809 AS x0 LEFT JOIN v194530 AS x5 ON TRUE SET x0.v193810 = 332 WHERE v193811 IN ('UTC', 'Universal', 'MET', 'Europe/Moscow', 'leap/Europe/Moscow', 'Japan', 'CET', 'US/Pacific')

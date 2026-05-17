@@ -1,0 +1,1 @@
+INSERT INTO v19419 (v19420) VALUES (''), ('2006-05-30'), ('whistled'), ('d')

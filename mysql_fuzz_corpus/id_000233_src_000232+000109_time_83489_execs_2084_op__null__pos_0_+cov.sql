@@ -1,0 +1,1 @@
+UPDATE v187 AS x1 JOIN v264 AS x2 ON x1.v191 = x1.v190 SET v191 = ST_GEOMFROMTEXT('POINT(93 99)') WHERE v191 = 'empty_pwd' AND v189 = 'localhost'

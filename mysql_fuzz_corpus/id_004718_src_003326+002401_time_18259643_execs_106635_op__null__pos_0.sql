@@ -1,0 +1,1 @@
+UPDATE v37592 AS x1 SET x2 = 'z' WHERE (x2 = 10 AND x2 = 2 AND x2 = 1 AND x2 = 1) OR (x2 = 2 AND x2 = 1)

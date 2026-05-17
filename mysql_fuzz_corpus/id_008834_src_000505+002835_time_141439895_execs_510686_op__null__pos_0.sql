@@ -1,0 +1,1 @@
+UPDATE v236433 AS x0 SET x0.v236424 = x5 * 50000 WHERE NOT x5 COLLATE utf8mb3_general_ci LIKE 'innodb_%'

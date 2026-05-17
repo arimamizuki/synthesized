@@ -1,0 +1,1 @@
+UPDATE v94670 AS x1 SET v94671 = 'test_func1' WHERE v94671 LIKE 'hon_ysuckl_'

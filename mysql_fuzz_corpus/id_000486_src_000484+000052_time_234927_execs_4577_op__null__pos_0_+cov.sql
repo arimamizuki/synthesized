@@ -1,0 +1,1 @@
+UPDATE v599 AS x0 SET x0.v601 = 22 WHERE (x0.v601 % 20) <> 0

@@ -1,0 +1,1 @@
+UPDATE v77982 AS x0 LEFT OUTER JOIN v77827 AS x1 ON x0.v77983 = x0.v77984 SET v77984 = 'couldbemuchworse_street' WHERE (v77983 % 5) > 3

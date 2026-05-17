@@ -1,0 +1,1 @@
+UPDATE v3792 AS x1 SET x1.x1 = CONCAT('test', x1) WHERE x1 <> 1

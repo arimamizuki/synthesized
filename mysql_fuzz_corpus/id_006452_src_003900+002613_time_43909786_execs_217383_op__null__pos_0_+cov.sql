@@ -1,0 +1,1 @@
+UPDATE v91425 AS x1 SET v91428 = v91427 % 12 WHERE @@version_compile_os = 'Current_tls_ca' AND @@version_compile_os = @orig_ssl_ca

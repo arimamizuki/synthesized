@@ -1,0 +1,1 @@
+UPDATE v347 AS x1, v381 AS x5 SET v348 = 'new_dest' WHERE v349 = 11

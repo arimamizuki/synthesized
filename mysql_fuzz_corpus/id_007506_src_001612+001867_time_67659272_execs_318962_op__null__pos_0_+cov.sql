@@ -1,0 +1,1 @@
+INSERT INTO v141081 (v141083, v141085, v141082) VALUES (1, NULL, NULL), (1, NULL, 'Ei saja'), (1, 1, 'retransmitting'), (1, NULL, 252306), (1, 2, '95.0000000000'), (2, 1, '2005-02-23 00:35:02.05'), (2, 2, '10:20:10AM'), (2, NULL, NULL), (2, NULL, NULL)

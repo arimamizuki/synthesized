@@ -1,0 +1,1 @@
+UPDATE v96816 AS x1 SET v96817 = REPEAT('1', 70000) WHERE LOCATE(@@basedir, @@query_alloc_block_size) IS NULL LIMIT 20

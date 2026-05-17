@@ -1,0 +1,1 @@
+CREATE TABLE v1399 (v1400 DATETIME COMMENT 'комментарий поля')

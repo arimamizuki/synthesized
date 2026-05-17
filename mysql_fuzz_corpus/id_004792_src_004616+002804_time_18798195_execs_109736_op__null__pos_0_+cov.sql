@@ -1,0 +1,1 @@
+SELECT x3.x2 FROM v38823 AS x3 WHERE x3.x1 < 'lp' AND x3.x2 = x3.x1

@@ -1,0 +1,1 @@
+UPDATE v48907 AS x0 SET v48908 = CONCAT(v48908, ', Updated2') WHERE v48908 IN ('lmn', '0')

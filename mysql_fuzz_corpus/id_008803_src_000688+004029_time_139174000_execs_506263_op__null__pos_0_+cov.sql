@@ -1,0 +1,1 @@
+UPDATE v234836 AS x0 JOIN v235262 AS x1 ON x0.v234838 = x0.v234837 SET x0.v234838 = @Opened_table_definitions + 2 WHERE v234837 LIKE '%user%' AND v234837 <> 'performance_schema'

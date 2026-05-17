@@ -1,0 +1,1 @@
+UPDATE v5373 AS x0 SET v5376 = 3.14E44 WHERE v5374 = 'KÃ¤li KÃ¤li 2+4'

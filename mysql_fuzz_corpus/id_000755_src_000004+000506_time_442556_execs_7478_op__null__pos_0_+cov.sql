@@ -1,0 +1,1 @@
+SELECT x3.x1, x3.x2 FROM v1100 AS x3

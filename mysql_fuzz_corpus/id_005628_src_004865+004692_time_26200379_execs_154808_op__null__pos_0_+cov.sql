@@ -1,0 +1,1 @@
+CREATE TABLE v61662 (v61663 INT, v61664 INT DEFAULT ('x')) AS SELECT 'This p1 should show up in profiling'

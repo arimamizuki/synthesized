@@ -1,0 +1,1 @@
+CREATE TABLE v3379 (v3380 ENUM('x', 'y', 'z') CHARACTER SET utf16) COLLATE=utf8mb4_sv_0900_ai_ci

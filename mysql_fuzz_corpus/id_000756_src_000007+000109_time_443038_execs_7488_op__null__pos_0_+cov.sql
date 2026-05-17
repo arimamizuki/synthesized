@@ -1,0 +1,1 @@
+INSERT INTO v1095 (v1074) VALUES ('Medicare'), (100)

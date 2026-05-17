@@ -1,0 +1,1 @@
+UPDATE v457 AS x1, v477 AS x5 SET v458 = 'init_connect' WHERE v458 = 'new_value'

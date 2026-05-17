@@ -1,0 +1,1 @@
+WITH x8 AS (SELECT * FROM x11 LIMIT 3) SELECT x6.v11593, x6.v11597, LEAD(x6.v11596, 0, x6.v11599) OVER () AS x3, x6.v11595 FROM v11592 AS x6 WHERE x6.v11594 LIKE 'Wait/Synch/Mutex/sql/Cost_constant_cache%'

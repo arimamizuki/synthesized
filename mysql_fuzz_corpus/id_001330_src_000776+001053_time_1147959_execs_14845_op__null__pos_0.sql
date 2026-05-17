@@ -1,0 +1,1 @@
+UPDATE v2831 AS x0 SET v2832 = 'new_user' WHERE ROW(1, 1)

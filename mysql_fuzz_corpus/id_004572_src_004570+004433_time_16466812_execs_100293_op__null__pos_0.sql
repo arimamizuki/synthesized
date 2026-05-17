@@ -1,0 +1,1 @@
+UPDATE v34000 AS x0 LEFT JOIN v33656 AS x5 ON x0.v34001 = 'dep2' AND x0.v34001 = 'John' SET v34001 = 'same_value_col3' WHERE x0.v34001 = 143

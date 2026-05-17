@@ -1,0 +1,1 @@
+UPDATE v20336 AS x0 SET v20337 = CONCAT(@@SQL_MODE, '+con2') WHERE LOCATE(@@query_alloc_block_size, @@query_alloc_block_size) IS NULL LIMIT 0

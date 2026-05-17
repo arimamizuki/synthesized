@@ -1,0 +1,1 @@
+UPDATE v15399 AS x1 STRAIGHT_JOIN v15695 AS x4 ON x1.x1 = x1.x3 SET x3 = 8 WHERE x3 = '5cm' AND x1.x2 = x1.x3

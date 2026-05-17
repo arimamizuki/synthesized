@@ -1,0 +1,1 @@
+UPDATE v6300 AS x0, v6082 AS x3 SET x1 = 'user1' WHERE x0.x1 = 1 AND x0.x1 = 1 OR x0.x1 IS NULL

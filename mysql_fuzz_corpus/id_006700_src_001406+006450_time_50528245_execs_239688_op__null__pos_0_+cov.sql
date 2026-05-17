@@ -1,0 +1,1 @@
+CREATE TABLE v102697 (v102698 INT PRIMARY KEY, v102699 CHAR(16), INDEX(B(4))) AS SELECT /*+ GROUP_INDEX(t index_other_id_covered_column) */ * FROM x3

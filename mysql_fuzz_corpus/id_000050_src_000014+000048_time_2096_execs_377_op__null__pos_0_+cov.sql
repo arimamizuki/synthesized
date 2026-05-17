@@ -1,0 +1,1 @@
+CREATE INDEX v15 ON v0((v2 + 1))

@@ -1,0 +1,1 @@
+UPDATE v5625 AS x1 JOIN v5296 AS x4 ON (x1.v5626 < 10 OR x1.v5627 < 10) SET v5626 = '{"Password_locking": {"password_lock_time_days": 2}}' WHERE v5626 = 0 AND v5626 = 2

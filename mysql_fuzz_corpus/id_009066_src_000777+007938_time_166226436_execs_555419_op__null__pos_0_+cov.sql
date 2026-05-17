@@ -1,0 +1,1 @@
+UPDATE v259192 AS x1, v258751 AS x6 SET x1.v259193 = 'inject' WHERE v259193 LIKE '%Æù×Á%'

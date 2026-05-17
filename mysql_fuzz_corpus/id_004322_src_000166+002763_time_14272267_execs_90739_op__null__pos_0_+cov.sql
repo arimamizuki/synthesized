@@ -1,0 +1,1 @@
+WITH RECURSIVE x8 AS (SELECT * FROM x14 UNION SELECT * FROM x15) SELECT x7.Name_exp_1, x7.Name_exp_1, CASE WHEN x7.Name_exp_1 = 0 THEN NULL ELSE 1 END AS x4, x7.Name_exp_1 FROM v29508 AS x7 WHERE x7.Name_exp_1 = 'psmith' AND x7.Name_exp_1 = 'rivercats'

@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT 2) SELECT x7.v30707, x7.v30707, 5.5 AS x3, x7.v30707 FROM v30705 AS x7 WHERE x7.v30706 IN (@dt_one, @dt_two, @dt_five)

@@ -1,0 +1,1 @@
+UPDATE v96286 AS x1 SET v96215 = ST_GEOMFROMTEXT('POINT(27 36)') WHERE x1.v96215 = x1.v96215 AND x1.v96215 <=> REPEAT('ab', @max_allowed_packet)

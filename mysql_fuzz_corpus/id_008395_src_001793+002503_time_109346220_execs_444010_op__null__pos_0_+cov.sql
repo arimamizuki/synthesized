@@ -1,0 +1,1 @@
+CREATE TABLE v204197 (v204198 ENUM('nowy', 'n', 'Yes', 'bbb', 'unique', 'xx', '5'), v204199 BIT(1), v204200 BIT(21)) CHARACTER SET=big5

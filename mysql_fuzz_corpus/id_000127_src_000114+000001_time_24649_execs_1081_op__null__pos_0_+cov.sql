@@ -1,0 +1,1 @@
+CREATE INDEX v144 ON v136((v138 > 1))

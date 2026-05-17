@@ -1,0 +1,1 @@
+UPDATE v44776 AS x1 SET v44777 = '{"Password_locking": {"password_lock_time_days": 2}}' WHERE TIMESTAMPDIFF(DAY, v44777, v44777) IS NULL

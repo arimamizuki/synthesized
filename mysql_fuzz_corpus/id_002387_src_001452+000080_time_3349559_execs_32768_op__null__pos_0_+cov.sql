@@ -1,0 +1,1 @@
+UPDATE v8076 AS x0 NATURAL JOIN v8007 AS x1 SET v8077 = 'Studio/Bach' WHERE v8077 IN ('test_plugin_server', 'qa_auth_server')

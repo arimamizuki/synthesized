@@ -1,0 +1,1 @@
+CREATE TABLE v12553 (v12554 ENUM('ä', 'a'))

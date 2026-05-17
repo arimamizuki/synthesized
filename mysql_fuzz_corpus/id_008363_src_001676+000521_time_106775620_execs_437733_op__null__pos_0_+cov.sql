@@ -1,0 +1,1 @@
+UPDATE v199986 AS x1 SET x1.Name_exp_1 = 11 WHERE Name_exp_1 LIKE '%_ｶ'

@@ -1,0 +1,1 @@
+UPDATE v129641 AS x1 JOIN v129563 AS x6 ON x1.Name_exp_1 = x1.LAST_DAY('x') + 0 SET Name_exp_1 = LAST_DAY('x') + 0 * 50 WHERE LAST_DAY('x') + 0 LIKE 'y%'

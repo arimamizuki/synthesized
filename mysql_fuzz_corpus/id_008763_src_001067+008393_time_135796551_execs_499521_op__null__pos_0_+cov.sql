@@ -1,0 +1,1 @@
+CREATE TABLE v232395 (v232396 ENUM('б', 'ACTIVE', 'foo', 'bbb') CHARACTER SET sjis)

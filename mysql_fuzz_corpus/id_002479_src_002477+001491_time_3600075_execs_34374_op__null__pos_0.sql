@@ -1,0 +1,1 @@
+SELECT x9.v8022, x9.v8022, ST_ASTEXT(x9.v8022) AS x4, x9.v8022 FROM v8300 AS x9 WHERE x9.v8022 LIKE '%events_logs_test%'

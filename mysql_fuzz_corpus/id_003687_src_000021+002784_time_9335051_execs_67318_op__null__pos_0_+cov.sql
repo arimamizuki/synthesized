@@ -1,0 +1,1 @@
+INSERT INTO v20122 (v20123) VALUES (''), (5), ('X'), (2)

@@ -1,0 +1,1 @@
+UPDATE v620 AS x0 NATURAL JOIN v614 AS x1 SET x2 = 'aaaaaaaaaa' WHERE x2 = 32

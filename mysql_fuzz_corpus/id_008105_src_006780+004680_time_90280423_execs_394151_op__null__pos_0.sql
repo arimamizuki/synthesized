@@ -1,0 +1,1 @@
+INSERT INTO v178717 (v178718) VALUES (4), (5), ('c')

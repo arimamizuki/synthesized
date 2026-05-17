@@ -1,0 +1,1 @@
+UPDATE v52286 AS x1 JOIN v52236 AS x2 ON x1.v52288 = x1.v52288 SET v52288 = 'james' WHERE v52287 = '1invalid'

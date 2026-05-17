@@ -1,0 +1,1 @@
+UPDATE v7904 AS x0 SET x0.v7906 = STR_TO_DATE('4/1/2010', '%m/%d/%Y')

@@ -1,0 +1,1 @@
+UPDATE v7339 AS x0 NATURAL JOIN v6850 AS x1 SET x0.v7178 = CONCAT('m') WHERE x2 = 'test' AND x2 = 'c'

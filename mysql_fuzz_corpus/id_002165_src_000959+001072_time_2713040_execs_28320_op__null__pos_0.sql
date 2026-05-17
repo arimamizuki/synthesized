@@ -1,0 +1,1 @@
+UPDATE v6293 AS x1 JOIN v6416 AS x7 ON x1.v6295 = x1.v6295 SET v6294 = AES_DECRYPT(v6295, '<ns:element xmlns:ns="myns"/>') WHERE x1.v6294 > 0

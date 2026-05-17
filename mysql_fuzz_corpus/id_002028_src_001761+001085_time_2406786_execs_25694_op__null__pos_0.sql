@@ -1,0 +1,1 @@
+UPDATE v5216 AS x0 NATURAL JOIN v5485 AS x1 SET v5217 = 'localhost' WHERE v5217 <> 'red'

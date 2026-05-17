@@ -1,0 +1,1 @@
+UPDATE v1135 AS x0 SET v1067 = x1 / 1

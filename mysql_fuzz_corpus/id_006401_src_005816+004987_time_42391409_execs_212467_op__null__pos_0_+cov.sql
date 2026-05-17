@@ -1,0 +1,1 @@
+CREATE TABLE v90026 (v90027 ENUM('x', 'y', 'z') CHARACTER SET utf16) AS SELECT @@internal_tmp_mem_storage_engine, @@key_buffer_size, @@max_user_connections, @@external_user

@@ -1,0 +1,1 @@
+CREATE TABLE v1966 (v1967 INT AUTO_INCREMENT, v1968 CHAR /* arc relationship, see cust_id */, v1969 INT /* FK to ab_physical_person *OR* ab_moral_person */, PRIMARY KEY (v1969))

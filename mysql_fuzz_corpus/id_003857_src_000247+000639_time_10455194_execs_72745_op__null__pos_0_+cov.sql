@@ -1,0 +1,1 @@
+UPDATE v22528 AS x0 SET x0.v22530 = (@my_ts - @my_time) WHERE v22529 = 'mysqltest_LC2'

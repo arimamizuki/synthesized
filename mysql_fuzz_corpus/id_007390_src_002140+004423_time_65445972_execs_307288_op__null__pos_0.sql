@@ -1,0 +1,1 @@
+CREATE VIEW v136217 AS SELECT x3.x1 FROM v135928 AS x3 WHERE x3.x2 LIKE 'character_set_client'

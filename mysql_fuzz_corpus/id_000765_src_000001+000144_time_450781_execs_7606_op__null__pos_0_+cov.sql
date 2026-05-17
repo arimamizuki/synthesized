@@ -1,0 +1,1 @@
+CREATE TABLE v1217 (v1218 ENUM('E', 'F', 'EÿF', 'F,E'), v1219 FLOAT(52))

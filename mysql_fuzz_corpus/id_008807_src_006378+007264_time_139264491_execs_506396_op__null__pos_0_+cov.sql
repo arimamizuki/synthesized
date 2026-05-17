@@ -1,0 +1,1 @@
+CREATE TABLE v235698 (v235699 FLOAT) AS SELECT ST_SRID(ST_MLINEFROMTEXT(@wkt_mls, -1)), TRUNCATE(-5678.123451, 0), EXTRACTVALUE('<a><attribute>test</attribute></a>', '/a/attribute'), EXTRACTVALUE(@xml, '/a/b[string-length()]'), ST_ASTEXT(POINT('123', '456')), EXTRACTVALUE(@xml, '//*[1>=1]'), SERVICE_GET_WRITE_LOCKS('negative', 'lock1', 1, 0)

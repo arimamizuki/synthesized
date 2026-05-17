@@ -1,0 +1,1 @@
+UPDATE v427 AS x1, v347 AS x7 SET x1.v429 = v430 * 18 WHERE v429 = @global_open_cache_miss

@@ -1,0 +1,1 @@
+SELECT x9.s1, x9.s1, x9.s1 + x9.Name_exp_s1 * (x9.s1 / 100) AS x4, x9.s1 FROM v3559 AS x9

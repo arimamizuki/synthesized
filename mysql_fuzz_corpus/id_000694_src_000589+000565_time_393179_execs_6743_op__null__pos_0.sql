@@ -1,0 +1,1 @@
+UPDATE v625 AS x1 RIGHT JOIN v668 AS x6 ON x1.x1 SET x1 = @Opened_table_definitions + 4 WHERE x1 = 8 AND F1() <> '01:01:00'

@@ -1,0 +1,1 @@
+UPDATE v51 AS x1 NATURAL JOIN v254 AS x8 SET x1.v52 = x1.v53 + 50 WHERE v53 = 'public'

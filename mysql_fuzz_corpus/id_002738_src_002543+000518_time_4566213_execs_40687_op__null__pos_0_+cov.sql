@@ -1,0 +1,1 @@
+UPDATE v9996 AS x0 LEFT JOIN v10984 AS x4 ON x0.x1 = 0 AND x0.x1 = 'John' SET x1 = 'aa' WHERE x1 LIKE 'net_buffer_length'

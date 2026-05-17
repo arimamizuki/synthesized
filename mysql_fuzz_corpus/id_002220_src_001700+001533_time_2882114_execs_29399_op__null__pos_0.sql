@@ -1,0 +1,1 @@
+INSERT INTO v6912 (v6873, v6874) VALUES (1, 'c'), (4, 'd')

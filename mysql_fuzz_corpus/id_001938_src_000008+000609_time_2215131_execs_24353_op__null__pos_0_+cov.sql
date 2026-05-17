@@ -1,0 +1,1 @@
+UPDATE v5454 AS x0 SET v5455 = v5455 + 12 WHERE GET_LOCK('test2', 0) = 1

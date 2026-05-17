@@ -1,0 +1,1 @@
+CREATE INDEX v157 ON v119((v121 - v123))

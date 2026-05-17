@@ -1,0 +1,1 @@
+UPDATE v38155 AS x1 LEFT JOIN v38013 AS x2 ON x1.v38158 = x1.v38158 AND x1.v38159 = x1.v38158 SET v38159 = AES_ENCRYPT(12.04, 'a') WHERE NOT v38156 IN ('root', 'mysql.sys', 'mysql.session', 'mysql.infoschema')

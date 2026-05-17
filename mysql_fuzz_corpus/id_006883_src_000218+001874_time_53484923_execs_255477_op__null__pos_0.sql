@@ -1,0 +1,1 @@
+UPDATE v111160 AS x1 SET v111161 = '{"Password_locking": 1}' WHERE v111161 = 'plug_user'

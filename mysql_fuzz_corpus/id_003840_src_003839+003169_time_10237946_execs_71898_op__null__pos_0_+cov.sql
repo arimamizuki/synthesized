@@ -1,0 +1,1 @@
+UPDATE v21526 AS x0 SET v21527 = 'New Test String' WHERE (RELEASE_LOCK('test3') IS NULL) >> (EXPORT_SET('a', 'a', 'a', 'a', 'a') IS NULL)

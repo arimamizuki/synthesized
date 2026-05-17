@@ -1,0 +1,1 @@
+INSERT INTO v29662 (Name_exp_1, x2) VALUES (0, '.www.mysql.com'), (100, '0003')

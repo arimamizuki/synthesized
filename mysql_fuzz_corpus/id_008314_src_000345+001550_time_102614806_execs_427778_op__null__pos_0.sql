@@ -1,0 +1,1 @@
+UPDATE v193362 AS x0 NATURAL RIGHT JOIN v193191 AS x5 SET x0.x1 = CONCAT('-', x1) WHERE x0.x1 <=> x0.x1 AND x0.x1 <=> x0.x1 AND x0.x1 <=> x0.x1 AND x0.x1 <=> x0.x1 AND 2 = 2

@@ -1,0 +1,1 @@
+UPDATE v104309 AS x0 SET x0.v104310 = 't_no_priv' WHERE NOT v104310 IN ('sys', 'mysql')

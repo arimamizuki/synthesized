@@ -1,0 +1,1 @@
+UPDATE v214287 AS x1 LEFT JOIN v214282 AS x5 ON x1.v214288 = x1.v214288 SET v214288 = '{"Password_locking": {"password_lock_time_days": 2}}' WHERE v214288 LIKE '%_ｶ'

@@ -1,0 +1,1 @@
+CREATE TABLE v92570 (v92571 SMALLINT, v92572 SMALLINT, v92573 SMALLINT, v92574 SMALLINT, v92575 SMALLINT, v92576 SMALLINT) AS SELECT @@sql_log_off, @@replica_net_timeout, @@ssl_cipher, @@Max_Allowed_Packet

@@ -1,0 +1,1 @@
+CREATE INDEX v141 ON v74((ABS(v76)))

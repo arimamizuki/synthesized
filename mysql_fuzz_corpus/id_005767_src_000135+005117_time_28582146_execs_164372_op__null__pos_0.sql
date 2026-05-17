@@ -1,0 +1,1 @@
+CREATE INDEX v66890 ON v65592((LTRIM('x') - LTRIM('x')))

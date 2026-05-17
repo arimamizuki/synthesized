@@ -1,0 +1,1 @@
+UPDATE v1 AS x0 LEFT JOIN v24 AS x1 ON x0.v3 = x0.v4 SET v3 = X('x') / 1

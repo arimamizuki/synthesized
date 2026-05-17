@@ -1,0 +1,1 @@
+UPDATE v26410 AS x0 SET x0.v26411 = 'mmm' WHERE v26411 = 1 AND MBRCONTAINS(ST_GEOMFROMTEXT('/a/@b[substring(.,2)="1"]'), v26411)

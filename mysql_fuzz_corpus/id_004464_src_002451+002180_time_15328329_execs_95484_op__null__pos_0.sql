@@ -1,0 +1,1 @@
+UPDATE v31943 AS x1 LEFT JOIN v31954 AS x4 ON x1.v31872 = x1.v31872 AND x1.v31872 = x1.v31872 SET v31872 = 'Hello, view world'

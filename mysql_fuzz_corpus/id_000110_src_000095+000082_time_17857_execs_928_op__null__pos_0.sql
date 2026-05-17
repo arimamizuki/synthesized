@@ -1,0 +1,1 @@
+UPDATE v77 AS x1 JOIN v1 AS x2 ON x1.RTRIM(123) = x1.RTRIM(123) SET RTRIM(123) = 'hellotrudy'

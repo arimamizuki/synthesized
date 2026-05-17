@@ -1,0 +1,1 @@
+UPDATE v3565 AS x0 NATURAL JOIN v3592 AS x1 SET v3566 = 'couldbemuchworse_street' WHERE x0.v3566 > 6174 AND v3566 < 900

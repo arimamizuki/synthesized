@@ -1,0 +1,1 @@
+UPDATE v2937 AS x0 LEFT JOIN v2831 AS x1 ON x0.v2939 = x0.v2939 SET v2939 = @open_cache_hits WHERE v2938 = '11.11'

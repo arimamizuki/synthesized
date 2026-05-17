@@ -1,0 +1,1 @@
+CREATE TABLE v46939 (v46940 SERIAL, v46941 INT) AS SELECT FLOOR(CONV(@my_uuidate, 16, 10) / @my_uuid_one_day)

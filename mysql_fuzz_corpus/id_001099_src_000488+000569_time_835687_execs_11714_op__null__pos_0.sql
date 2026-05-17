@@ -1,0 +1,1 @@
+UPDATE v2009 AS x2 JOIN v1939 AS x7 ON x2.x1 = x2.x1 SET x1 = x1 + 10 WHERE x1 <> 8

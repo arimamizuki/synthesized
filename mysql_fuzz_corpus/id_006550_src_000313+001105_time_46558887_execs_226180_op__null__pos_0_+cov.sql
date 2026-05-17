@@ -1,0 +1,1 @@
+CREATE VIEW v96137 AS SELECT *, CAST('0000-00-00 00:00' AS DATE) <> CAST('{"id":7}' AS YEAR) AS x2, ST_EQUALS(FN3(), ST_GEOMFROMTEXT('geometrycollection(geometrycollection(),polygon((0 0,0 10,10 10,10 0,0 0)))')) AS x3 FROM v94519 AS x6 JOIN v95699 AS x7 ON x6.v94520 = x6.v94520 WHERE x6.v94520 <= '2004-01-01 11:59:59'

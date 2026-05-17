@@ -1,0 +1,1 @@
+UPDATE v8263 AS x1 SET x1.v8265 = 'James' WHERE v8265 LIKE 'Opened_tables' ORDER BY v8264, v8264 COLLATE utf8mb4_0900_as_cs LIMIT 90

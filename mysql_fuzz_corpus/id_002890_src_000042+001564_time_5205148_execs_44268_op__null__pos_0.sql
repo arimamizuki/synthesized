@@ -1,0 +1,1 @@
+INSERT INTO v11763 (v11764, v11767, v11766, v11765, v11769, v11771, v11770, v11768) VALUES (101010.9999995, '/export/home/local/www/database/indexes/emailgids', '00:00:01.000008', 'bvmpqrj', '0000000118', 'drovers', 'Pyle', '524001')

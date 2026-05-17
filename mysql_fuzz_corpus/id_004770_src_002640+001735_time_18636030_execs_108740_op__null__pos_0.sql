@@ -1,0 +1,1 @@
+SELECT * FROM v37968 AS x1

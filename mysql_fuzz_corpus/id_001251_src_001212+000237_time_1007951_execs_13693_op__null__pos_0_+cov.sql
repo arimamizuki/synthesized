@@ -1,0 +1,1 @@
+INSERT INTO v2528 (v2468) VALUES (13), ('KÃ¤li KÃ¤li 2-4'), ('1970-01-01 00:00:01.099999'), (-8385959.0000007), ('KÃ¤li KÃ¤li 2-6'), ('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')

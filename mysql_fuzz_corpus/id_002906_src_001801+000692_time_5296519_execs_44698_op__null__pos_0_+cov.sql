@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT 010101 AS x14 UNION ALL SELECT * FROM x15 WHERE x8.v12463 <= 30) SELECT x8.v12463, x8.v12463, JSON_PRETTY(JSON_EXTRACT(x8.v12463, '$.steps[*].join_execution.steps[*]."materialize for intersect"')) AS x4, x8.v12463 FROM v12462 AS x8 WHERE (x8.v12463, x8.v12463, x8.v12463) >= (1, 2, 3)

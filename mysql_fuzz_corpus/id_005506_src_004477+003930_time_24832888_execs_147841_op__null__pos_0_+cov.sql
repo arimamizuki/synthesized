@@ -1,0 +1,1 @@
+UPDATE v58703 AS x1 SET v58264 = x1.v58264 + 5 WHERE 1 = norway sweden

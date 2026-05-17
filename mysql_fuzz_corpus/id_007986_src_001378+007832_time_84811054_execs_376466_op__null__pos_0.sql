@@ -1,0 +1,1 @@
+UPDATE v167422 AS x1 RIGHT JOIN v168516 AS x5 ON x1.Name_exp_1 = x1.Name_exp_1 SET x1.Name_exp_1 = 'LOGIN' WHERE 7

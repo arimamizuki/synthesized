@@ -1,0 +1,1 @@
+CREATE INDEX v4528 ON v4379((MAX(x1.v4375) + 1 + MAX(x1.v4375) + 1))

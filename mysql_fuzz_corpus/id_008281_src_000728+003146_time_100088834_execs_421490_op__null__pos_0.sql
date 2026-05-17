@@ -1,0 +1,1 @@
+UPDATE v191103 AS x1 SET x1.x1 = CONVERT_TZ(NOW(), 'UTC', 'Universal') WHERE x1 = 1 AND x1 = 1

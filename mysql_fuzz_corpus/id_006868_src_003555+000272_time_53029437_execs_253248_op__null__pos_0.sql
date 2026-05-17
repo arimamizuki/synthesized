@@ -1,0 +1,1 @@
+SELECT RANK() OVER (ORDER BY x5.Name_exp_2_x10.x & x10.x), X(x5.Name_exp_1_x10.x & x10.x, x5.Name_exp_2_x10.x & x10.x, 1) OVER (PARTITION BY x5.Name_exp_2_x10.x & x10.x ORDER BY CASE WHEN x5.Name_exp_1_x10.x & x10.x IS NULL THEN 1 ELSE 0 END, x5.Name_exp_1_x10.x & x10.x) FROM v110502 AS x5

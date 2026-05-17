@@ -1,0 +1,1 @@
+UPDATE v77721 AS x0 SET v77722 = 'test' WHERE v77723 LIKE 'a '

@@ -1,0 +1,1 @@
+UPDATE v689 AS x1 INNER JOIN v869 AS x2 ON x1.x1 = x1.x1 SET x1 = 'test20'

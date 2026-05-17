@@ -1,0 +1,1 @@
+UPDATE v61427 AS x0 LEFT JOIN v61427 AS x1 ON x0.Name_exp_1 = 1002 SET Name_exp_1 = REPEAT('c', 17 * 1024 * 1024) WHERE Name_exp_1 LIKE 'c%'

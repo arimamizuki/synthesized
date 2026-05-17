@@ -1,0 +1,1 @@
+UPDATE v1086 AS x2 JOIN v1093 AS x6 ON x2.v1087 = x2.v1088 SET v1088 = 'couldbemuchworse_street' WHERE v1087 LIKE 'p%'

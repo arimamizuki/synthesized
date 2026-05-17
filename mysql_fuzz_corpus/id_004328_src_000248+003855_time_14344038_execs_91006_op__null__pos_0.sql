@@ -1,0 +1,1 @@
+UPDATE v29091 AS x1 LEFT JOIN v29500 AS x2 ON x1.v29092 = 'private' SET v29092 = 'yellow' WHERE v29093 = -0.00

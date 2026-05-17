@@ -1,0 +1,1 @@
+SELECT x3.v175477 FROM v175873 AS x3 WHERE x3.v175477 IN ('c', 802616, 'Handler_write')

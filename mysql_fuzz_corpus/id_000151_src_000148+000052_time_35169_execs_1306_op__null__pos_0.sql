@@ -1,0 +1,1 @@
+UPDATE v51 AS x0 LEFT JOIN v51 AS x1 ON x0.v53 = x0.v52 SET v52 = 'v5l' WHERE v52 LIKE 'ã[INV]•ã[INV]—ã[INV]™ã[INV]›ã[INV][INV]ã[INV]‹ã[INV][INV]ã[INV][INV]ã[INV]‘ã[INV]“ã[INV]‚ã[INV]„ã[INV]†ã[INV]ˆã[INV]Š%'

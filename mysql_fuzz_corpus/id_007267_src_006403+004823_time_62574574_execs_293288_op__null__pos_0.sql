@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT 1 AS x11 UNION ALL SELECT x8.SUM(x1.20) + 1 FROM x12 WHERE x8.SUM(x1.ab) < 3) SELECT x8.SUM(x1.ab), x8.REGEXP_SUBSTR('ab\\nac\\nad', 'A.', 1, 1, 'i'), -(1) AS x4, x8.REGEXP_SUBSTR('ab\\nac\\nad', 'A.', 1, 1, 'i') FROM v129367 AS x8 WHERE NOT (NULL OR x8.REGEXP_SUBSTR('ab\\nac\\nad', 'A.', 1, 1, 'i'))

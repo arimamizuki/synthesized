@@ -1,0 +1,1 @@
+UPDATE v45617 AS x1 SET v45618 = 32 WHERE v45618 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

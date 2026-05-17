@@ -1,0 +1,1 @@
+SELECT x8.v1729, x8.v1729, 8 AS x4, x7.x8.v1729 FROM v1728 AS x8 WHERE x8.v1729 = 'Current_tls_ca' AND x8.v1729 = @orig_ssl_ca ORDER BY CASE WHEN X('x') IS NULL THEN 1 ELSE 0 END, X('x'), x8.v1729 LIMIT 4032

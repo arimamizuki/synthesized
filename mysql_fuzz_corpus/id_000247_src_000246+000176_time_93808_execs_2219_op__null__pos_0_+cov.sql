@@ -1,0 +1,1 @@
+UPDATE v229 AS x0 JOIN v74 AS x5 ON (x0.v230 = 10) SET x0.v230 = (3 - v230) WHERE v230 = 298

@@ -1,0 +1,1 @@
+INSERT INTO v51 (v52) VALUES ('KÃ¤li KÃ¤li 2-4'), ('KÃ¤li KÃ¤li 2-4'), ('KÃ¤li KÃ¤li 2+4'), ('KÃ¤li KÃ¤li 2+4'), ('KÃ¤li KÃ¤li 2-6'), ('KÃ¤li KÃ¤li 2-6')

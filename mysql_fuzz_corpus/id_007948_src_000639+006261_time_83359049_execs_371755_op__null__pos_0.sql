@@ -1,0 +1,1 @@
+CREATE TABLE v167115 (v167116 ENUM('Ğ¿Ñ€Ğ¾Ğ±Ğ°', 'Ğ¿Ñ€Ğ¾Ğ±Ğ°') CHARACTER SET utf8mb4) COLLATE=utf8mb4_bin CHARACTER SET=utf8mb4

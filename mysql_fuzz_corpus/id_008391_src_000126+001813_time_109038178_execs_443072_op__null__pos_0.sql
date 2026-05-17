@@ -1,0 +1,1 @@
+CREATE INDEX v203582 ON v203429((ABS(view馃惉)))

@@ -1,0 +1,1 @@
+UPDATE v91939 AS x1 SET v91940 = ST_GEOMFROMTEXT('POINT(88 18)') WHERE v91940 IN (30, 6, 'Current_tls_ciphersuites', 20000101230000, '\\b', 'Current_tls_crlpath', 0.9, 'query_alloc_block_size', 'max_connections', 2.100000, '2001-01-03 00:00:00') AND v91940 BETWEEN 'a' AND 'a '

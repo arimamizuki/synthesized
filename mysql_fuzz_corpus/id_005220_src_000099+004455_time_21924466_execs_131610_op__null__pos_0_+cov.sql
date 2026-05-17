@@ -1,0 +1,1 @@
+INSERT INTO v50341 (v48865) VALUES ('40'), (ST_GEOMFROMTEXT('POINT(30 193)')), ('founder'), ('1 - 03'), ('KÃ¤li KÃ¤li 2-6'), ('KÃ¤li KÃ¤li 2-6')

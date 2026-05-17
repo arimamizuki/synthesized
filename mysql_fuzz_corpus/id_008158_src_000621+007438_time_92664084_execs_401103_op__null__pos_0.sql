@@ -1,0 +1,1 @@
+UPDATE v182377 AS x0 SET x0.test = REPEAT('0', 'abcdeabcdeabcdeabcde') WHERE test = 'new_dest' LIMIT 2

@@ -1,0 +1,1 @@
+UPDATE v5230 AS x0 SET v5231 = 'Updated' WHERE v5232 = 'foo'

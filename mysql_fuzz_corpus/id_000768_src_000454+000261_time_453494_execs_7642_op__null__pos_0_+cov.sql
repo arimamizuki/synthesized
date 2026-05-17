@@ -1,0 +1,1 @@
+UPDATE v1093 AS x1 SET v1094 = ST_GEOMFROMTEXT('POINT(221 193)') WHERE v1094 = 'same_value_col1' AND v1094 = 'same_value_col3'

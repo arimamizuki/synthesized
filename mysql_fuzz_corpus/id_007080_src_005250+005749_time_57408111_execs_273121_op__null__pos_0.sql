@@ -1,0 +1,1 @@
+UPDATE v119527 AS x1 LEFT JOIN v119555 AS x7 ON x1.v119529 = 'dep2' AND x1.v119529 = 'INFORMATION_SCHEMA' SET x1.v119528 = @Opened_table_definitions + 4 + 2 WHERE x1.v119529 = 'wait/lock/metadata/sql/mdl'

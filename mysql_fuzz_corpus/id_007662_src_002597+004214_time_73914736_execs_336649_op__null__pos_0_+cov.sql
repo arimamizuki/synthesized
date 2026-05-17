@@ -1,0 +1,1 @@
+CREATE VIEW v149443 AS SELECT *, JSON_PRETTY(JSON_EXTRACT(x3.v149058, '$.steps[*].join_execution.steps[*]."materialize for except"')) AS x1, 'This is temp. table' AS x2 FROM v149057 AS x3, v148254 AS x4 WHERE NOT x3.v149060 IN ('green', 'black,blue,green')

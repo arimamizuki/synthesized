@@ -1,0 +1,1 @@
+UPDATE v6208 AS x1 JOIN v6155 AS x5 ON x1.v6209 = x1.v6209 AND x1.v6209 = x1.v6209 SET x1.v6209 = 'couldbemuchworse_street' WHERE x1.v6209 = 1 AND x1.v6209 = 1 OR x1.v6209 IS NULL

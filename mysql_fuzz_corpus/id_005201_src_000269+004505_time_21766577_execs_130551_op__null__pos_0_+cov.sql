@@ -1,0 +1,1 @@
+UPDATE v49000 AS x0 SET x1 = LEFT(x1, CHAR_LENGTH(x1) - 1) WHERE x0.x1 = @id

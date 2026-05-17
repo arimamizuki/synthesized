@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT 1 UNION ALL SELECT x7.Name_exp_2 + 1 FROM x10 WHERE x7.Name_exp_2 < 250) SELECT x7.Name_exp_4, x7.Name_exp_3, CAST(27 / CAST(x7.Name_exp_3 / x7.Name_exp_3 AS CHAR) AS SIGNED) / 17 AS x3, x7.Name_exp_4 FROM v52185 AS x7 WHERE x7.Name_exp_2 = 1414

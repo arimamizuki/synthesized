@@ -1,0 +1,1 @@
+INSERT INTO v5240 (v5241, v5242, v5243, v5246, v5248) VALUES ('711002', 1137, 104, 952, 361), ('beg', 'Pub/patnom/futur_divers.scs', 705, 076503, 6473.2230)

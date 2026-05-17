@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT x8.x1 * 0 AS x13 UNION ALL SELECT x8.x1 + 1 FROM x14 WHERE x8.x1 = 0) SELECT x8.x1, x4.x8.x1, BIT_OR(x8.x1) = 0 AS x5, x8.x1 FROM v21402 AS x8 WHERE x8.x1 = 'e1' AND x8.x1 = @full_mode

@@ -1,0 +1,1 @@
+UPDATE v59445 AS x1 JOIN v59499 AS x5 ON x1.v59446 = x1.v59446 SET v59446 = 'b' WHERE v59446 = 'plug_user'

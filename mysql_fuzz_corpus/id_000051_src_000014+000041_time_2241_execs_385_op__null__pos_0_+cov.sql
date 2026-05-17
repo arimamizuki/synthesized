@@ -1,0 +1,1 @@
+CREATE INDEX v16 ON v0(v4, v1, v2)

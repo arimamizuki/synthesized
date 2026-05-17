@@ -1,0 +1,1 @@
+WITH x7 AS (SELECT 1 AS x9 UNION ALL SELECT 1 + x6.v93469 FROM x10 WHERE x6.v93471 < 100) SELECT x0.f_def(), x1.INSERT(2, 3, 123, 'ğ[INV]Œ†ãƒ†Ã€a'), x5.metered(x6.v93469) AS x2, x3.SESS_VAR(@query2) FROM v93468 AS x6 WHERE (x11.INSERT(2, 3, 4294967295, 'ğ[INV]Œ†ãƒ†Ã€a') BETWEEN '80' AND 'FF') AND (NOT (@f)) AND (NOT (NOT ('%%green%%' = '23' AND x6.v93471 = 1)))

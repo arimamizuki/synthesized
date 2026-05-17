@@ -1,0 +1,1 @@
+UPDATE v311 AS x1, v372 AS x2 JOIN v383 AS x3 ON x2.v318 = x2.v319 SET x2 = 'DELETE FROM non_existing_table a USING non_existing_table a' WHERE F1()

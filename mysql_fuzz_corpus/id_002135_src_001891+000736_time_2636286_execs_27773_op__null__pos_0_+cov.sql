@@ -1,0 +1,1 @@
+UPDATE v6222 AS x1 SET v6223 = ROW('/a/b[count(.)=1]', v6223) WHERE x1.v6223 = 'test12'

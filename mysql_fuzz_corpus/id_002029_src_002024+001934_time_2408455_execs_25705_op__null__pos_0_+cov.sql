@@ -1,0 +1,1 @@
+UPDATE v5830 AS x0 SET x1 = REPEAT('b', 20)

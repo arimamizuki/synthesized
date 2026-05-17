@@ -1,0 +1,1 @@
+INSERT INTO v4839 (v4841) VALUES ('1.2345'), ('technically')

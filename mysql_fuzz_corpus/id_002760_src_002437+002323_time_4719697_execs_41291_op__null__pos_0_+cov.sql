@@ -1,0 +1,1 @@
+UPDATE v9996 AS x1 SET x1 = 'b' WHERE x1 IN (2, 3, 4, 5, 6, 7, 8, 9)

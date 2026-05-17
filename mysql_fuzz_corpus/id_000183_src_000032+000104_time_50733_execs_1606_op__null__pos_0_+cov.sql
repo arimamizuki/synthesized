@@ -1,0 +1,1 @@
+CREATE INDEX v234 ON v42(v46, v43, (1))

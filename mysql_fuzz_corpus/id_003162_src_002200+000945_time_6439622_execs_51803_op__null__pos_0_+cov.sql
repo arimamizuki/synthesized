@@ -1,0 +1,1 @@
+INSERT INTO v15010 (v15013, v15011, v15014, v15012, v15015) VALUES (@intvalx, @str_ascii, @fltvalx, @fltval, @int_five)

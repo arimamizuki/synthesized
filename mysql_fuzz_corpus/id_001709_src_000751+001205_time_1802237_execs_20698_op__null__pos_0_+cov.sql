@@ -1,0 +1,1 @@
+UPDATE v4467 AS x0 NATURAL JOIN v4427 AS x1 SET x0.v = 'i_s_parameters_test' WHERE LEFT(v, 1) > 'n'

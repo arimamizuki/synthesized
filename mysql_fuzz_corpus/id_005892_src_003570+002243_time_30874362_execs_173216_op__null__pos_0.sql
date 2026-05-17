@@ -1,0 +1,1 @@
+INSERT INTO v71637 (v71639, v71638) VALUES ('b', 'b'), ('2006-05-30', 176602), (2, 'b'), ('excitation', 'starlet')

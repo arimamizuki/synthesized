@@ -1,0 +1,1 @@
+UPDATE v16427 AS x0 LEFT JOIN v16260 AS x1 ON x0.x1 = x0.x2 AND FUNC(x0.x2) = x0.x2 SET x1 = 'CH' WHERE x2 = @u AND x1 = @h

@@ -1,0 +1,1 @@
+UPDATE v8402 AS x0 SET x1 = 3000 WHERE LEFT(x1, 1) > 'n'

@@ -1,0 +1,1 @@
+CREATE TABLE v12641 (v12642 ENUM('a', 'Unit', 'b')) ENGINE=myisam CHARACTER SET=gbk

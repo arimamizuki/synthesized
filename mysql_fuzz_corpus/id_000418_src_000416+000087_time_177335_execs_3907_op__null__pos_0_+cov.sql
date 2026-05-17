@@ -1,0 +1,1 @@
+UPDATE v326 AS x0 NATURAL JOIN v489 AS x1 SET v327 = '{"Password_locking": 1}' WHERE v327 = 'hello'

@@ -1,0 +1,1 @@
+UPDATE v1095 AS x0 SET v1074 = CONCAT('test', v1074) WHERE (v1074 % 3) <> 0

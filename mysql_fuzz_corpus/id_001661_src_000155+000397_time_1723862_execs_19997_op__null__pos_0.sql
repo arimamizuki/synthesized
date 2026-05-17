@@ -1,0 +1,1 @@
+UPDATE v4075 AS x1 JOIN v4104 AS x2 ON x1.v4029 = x1.v3660 SET x1.v4027 = 'test12'

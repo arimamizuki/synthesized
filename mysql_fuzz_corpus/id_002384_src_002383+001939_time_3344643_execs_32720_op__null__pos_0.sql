@@ -1,0 +1,1 @@
+SELECT x9.x1, x9.x1, x9.x1 <> 1 AS x4, x9.x1 FROM v8006 AS x9

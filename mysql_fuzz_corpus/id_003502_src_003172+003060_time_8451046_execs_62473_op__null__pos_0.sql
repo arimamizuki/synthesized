@@ -1,0 +1,1 @@
+UPDATE v18975 AS x0 SET v18976 = REPEAT(LEFT(v18977, 1), 65) WHERE v18976 IN ('sort_buffer_size', 'max_heap_table_size', 'replica_net_timeout', 'long_query_time', 'innodb_read_io_threads', 'innodb_redo_log_capacity', 'ft_query_expansion_limit')

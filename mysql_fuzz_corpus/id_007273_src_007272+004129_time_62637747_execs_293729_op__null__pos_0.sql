@@ -1,0 +1,1 @@
+SELECT x3.v129214 FROM v129212 AS x3 WHERE x3.v129214 >= 600 AND x3.v129213 <= 8 AND NOT x3.v129213 IN ('performance_schema', 'sys', 'mysql')

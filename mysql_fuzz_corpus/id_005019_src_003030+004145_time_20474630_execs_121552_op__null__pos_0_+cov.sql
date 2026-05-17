@@ -1,0 +1,1 @@
+SELECT * FROM v44776 AS x0 JOIN v44393 AS x3 ON x0.v44777 = 'time_zone' AND x0.v44777 = 200

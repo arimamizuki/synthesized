@@ -1,0 +1,1 @@
+CREATE TABLE v6158 (v6159 ENUM('y', 'n') DEFAULT ('y'))

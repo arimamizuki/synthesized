@@ -1,0 +1,1 @@
+INSERT INTO v77876 (v77877) VALUES (CONVERT_TZ('2015-07-01 01:00:00', 'UTC', 'No-such-time-zone'))

@@ -1,0 +1,1 @@
+UPDATE v145939 AS x1 SET v145940 = 'hellotrudy' WHERE v145940 = SHA2('a', 224)

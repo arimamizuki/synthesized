@@ -1,0 +1,1 @@
+UPDATE v332 AS x1 SET v333 = CONCAT(x1.v333, ', Updated') WHERE (x1.v333 IS NULL) >> ('' COLLATE 'utf8mb4_0900_ai_ci') LIMIT 0

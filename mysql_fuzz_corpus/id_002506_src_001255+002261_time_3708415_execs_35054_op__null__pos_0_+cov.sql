@@ -1,0 +1,1 @@
+UPDATE v8890 AS x1 RIGHT JOIN v8880 AS x5 ON x1.v8891 = x1.v8891 SET x1.v8891 = 'aaaaaaaaaaaaaaaa' WHERE v8891 < 'Chevy ' OR v8891 IS NULL

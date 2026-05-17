@@ -1,0 +1,1 @@
+SELECT x8.x2, x8.x2, 0.0 AS x4, x8.x2 FROM v22315 AS x8

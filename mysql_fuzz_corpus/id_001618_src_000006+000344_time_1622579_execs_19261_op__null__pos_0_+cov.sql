@@ -1,0 +1,1 @@
+INSERT INTO v3592 (v3594) VALUES (1), (2), ('C'), ('C')

@@ -1,0 +1,1 @@
+UPDATE v383 AS x0 SET v385 = LEFT(v386, CHAR_LENGTH(v384) - 5) WHERE v385 = 'max_connections'

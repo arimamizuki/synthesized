@@ -1,0 +1,1 @@
+UPDATE v39 AS x1 STRAIGHT_JOIN v24 AS x2 ON TRUE SET v41 = 'somethingelse'

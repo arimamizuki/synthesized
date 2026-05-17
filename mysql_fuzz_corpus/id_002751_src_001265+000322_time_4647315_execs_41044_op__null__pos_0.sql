@@ -1,0 +1,1 @@
+UPDATE v10955 AS x0 LEFT JOIN v10577 AS x5 ON x0.x2 = 0 AND x0.x2 = 'John' SET x0.x2 = 'user19857' WHERE x2 = 101

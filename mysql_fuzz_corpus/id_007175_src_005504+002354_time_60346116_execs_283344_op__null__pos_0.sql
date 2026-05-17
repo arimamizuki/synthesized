@@ -1,0 +1,1 @@
+WITH x10 AS (SELECT CASE WHEN x8.v123158 IN ('0') THEN x8.v123159 END AS x12 FROM x13) SELECT x8.v123159, x8.v123158, CASE x8.v123158 > 5000 WHEN TRUE THEN (1 / x8.v123158) ELSE 5000 END AS x4, x8.v123159 FROM v123157 AS x8 WHERE REGEXP_LIKE(x8.v123160, '^this is some text: to test - out\\\\.reg exp [[(][0-9]+[/\\\\][0-9]+[])][ ]*$')

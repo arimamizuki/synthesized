@@ -1,0 +1,1 @@
+UPDATE v16576 AS x1 SET v16577 = 'mysqltest_4' WHERE v16577 > 10 AND x1.v16577 <= 12

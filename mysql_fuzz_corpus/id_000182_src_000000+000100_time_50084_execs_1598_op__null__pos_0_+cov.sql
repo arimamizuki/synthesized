@@ -1,0 +1,1 @@
+CREATE VIEW v233 AS SELECT *, SEC_TO_TIME(3661.9) AS x1, HEX(-1) AS x2 FROM v136 AS x3, v145 AS x5 WHERE x3.v137 = 'schemata' AND x5.v146 = x3.v137 AND x5.v146 = 'mysql'

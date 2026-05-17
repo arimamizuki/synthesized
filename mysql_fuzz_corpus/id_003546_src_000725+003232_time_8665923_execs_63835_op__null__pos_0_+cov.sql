@@ -1,0 +1,1 @@
+UPDATE v19338 AS x0 SET Name_exp_2 = CONCAT('-', Name_exp_2) WHERE 1e308 + 1e308 = 13

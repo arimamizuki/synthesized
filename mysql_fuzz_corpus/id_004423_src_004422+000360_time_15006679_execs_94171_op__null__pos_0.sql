@@ -1,0 +1,1 @@
+UPDATE v31049 AS x1 SET v31050 = X(v31050) WHERE v31051 = 'Vancouver' AND v31050 = 'y' AND v31050 = 'y' AND (((v31050 = '1 Bedroom' OR v31050 = 'Studio/Bach') AND (v31051 <= 500)) OR ((v31050 = '2 Bedroom') AND (v31051 <= 550)) OR ((v31050 = 'Shared/Roomate') AND (v31051 <= 300)) OR ((v31050 = 'Room and Board') AND (v31050 <= 500))) AND v31051 = 'john' AND x1.v31050 = 1

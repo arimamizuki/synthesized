@@ -1,0 +1,1 @@
+UPDATE v11592 AS x1 RIGHT JOIN v11419 AS x2 ON x1.v11593 = x1.v11594 SET v11593 = 'bbb' WHERE v11597 IN (@time_one, @time_two, @time_five)

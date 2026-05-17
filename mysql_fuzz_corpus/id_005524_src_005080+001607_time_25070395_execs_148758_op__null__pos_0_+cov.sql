@@ -1,0 +1,1 @@
+INSERT INTO v58417 (v58418) VALUES (STR_TO_DATE('31.10.2004 15.30 abc', '%d.%m.%Y %H.%i'))

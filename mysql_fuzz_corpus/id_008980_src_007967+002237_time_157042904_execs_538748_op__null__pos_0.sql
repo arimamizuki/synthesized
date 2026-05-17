@@ -1,0 +1,1 @@
+SELECT x2.x1 FROM v251253 AS x2 WHERE x2.x1 = 'test2' AND x2.x1 = '@test.de' AND x2.x1 = 'DEN'

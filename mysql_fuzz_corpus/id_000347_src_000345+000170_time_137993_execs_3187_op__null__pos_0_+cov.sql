@@ -1,0 +1,1 @@
+UPDATE v405 AS x0 LEFT JOIN v326 AS x1 ON x0.60 = x0.v406 AND x0.1995-09-01 = 3 SET x0.v406 = CONCAT('test', 1995-09-01) WHERE v407 = 'test' AND v406 = 'time_zone'

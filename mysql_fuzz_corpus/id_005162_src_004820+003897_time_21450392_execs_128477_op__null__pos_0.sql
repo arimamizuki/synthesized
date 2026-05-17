@@ -1,0 +1,1 @@
+UPDATE v46455 AS x1 LEFT JOIN v46487 AS x7 ON x1.v46456 = 'dep2' AND x1.v46456 = 'John' SET x1.v46456 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE x1.v46456 IN (7, 8, 9)

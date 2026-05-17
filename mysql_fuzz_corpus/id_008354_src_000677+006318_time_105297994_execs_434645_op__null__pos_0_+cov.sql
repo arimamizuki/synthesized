@@ -1,0 +1,1 @@
+UPDATE v197601 AS x0 SET v197553 = 'plug_user' WHERE TRIM('å' FROM 'aæaå') = '5cm'

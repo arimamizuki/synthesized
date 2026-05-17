@@ -1,0 +1,1 @@
+SELECT * FROM v21578 AS x0 JOIN v21756 AS x3 ON x0.v21579 = 'test_drop' AND x0.v21579 = x0.v21579

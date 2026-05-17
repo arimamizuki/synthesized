@@ -1,0 +1,1 @@
+INSERT INTO v78425 (v78426, v78429, v78428) VALUES (@int_one, @category3_id, @dec_one)

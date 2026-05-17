@@ -1,0 +1,1 @@
+INSERT INTO v256675 (v256679, v256678, v256676) VALUES (@str_ascii, @str_ascii, @str_ascii), (@str_ascii, @str_utf8mb4, @str_utf8mb4)

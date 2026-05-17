@@ -1,0 +1,1 @@
+UPDATE v53875 AS x1 JOIN v53995 AS x6 ON x1.v53481 = x1.v53481 SET v53480 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": 2}}' WHERE x1.v53481 = LOWER(x1.v53481)

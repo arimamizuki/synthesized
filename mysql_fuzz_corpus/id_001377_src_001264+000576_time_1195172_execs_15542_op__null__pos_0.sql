@@ -1,0 +1,1 @@
+UPDATE v2856 AS x1, v2859 AS x2 JOIN v2859 AS x8 ON 0 JOIN v2863 AS x4 ON x8.v2862 = x8.v2860 SET v2858 = v2858 / NULLIF(1, 0) WHERE v2857 = 'wait/lock/metadata/sql/mdl'

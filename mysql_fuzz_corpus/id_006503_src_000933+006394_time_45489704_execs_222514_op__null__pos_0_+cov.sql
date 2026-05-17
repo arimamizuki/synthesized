@@ -1,0 +1,1 @@
+INSERT INTO v94618 (x1) VALUES ('mittens')

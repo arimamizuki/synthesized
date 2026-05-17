@@ -1,0 +1,1 @@
+UPDATE v365 AS x0 LEFT OUTER JOIN v295 AS x1 ON x0.v366 = x0.v366 SET x0.v366 = CONCAT('test', 6 - x0.v366) WHERE v366 = 'tstgroup1' AND x0.v366 = 1

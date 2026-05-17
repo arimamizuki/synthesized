@@ -1,0 +1,1 @@
+UPDATE v34945 AS x1 LEFT JOIN v34948 AS x6 ON x1.REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) = x1.REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) SET x1.REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) = 'test13' WHERE REGEXP_SUBSTR('ağŸ[INV]£ğŸ[INV]£b', '.', 1) = '18:00:00'

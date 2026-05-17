@@ -1,0 +1,1 @@
+UPDATE v19225 AS x1 SET v19227 = 'Updating the row' WHERE v19229 LIKE '%mysqltest_1%'

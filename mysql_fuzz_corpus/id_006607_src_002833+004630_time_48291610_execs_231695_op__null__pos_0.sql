@@ -1,0 +1,1 @@
+WITH x12 AS (SELECT x11.Name_exp_1 + 1 FROM x17) SELECT x11.Name_exp_1, x11.Name_exp_1, MBROVERLAPS(x11.Name_exp_1, x11.Name_exp_1) AS x4, x11.Name_exp_1 FROM v98995 AS x11 WHERE x11.Name_exp_1 <> x11.Name_exp_1 OR (x11.Name_exp_1 <> x11.Name_exp_1 AND x11.Name_exp_1 <> x11.Name_exp_1)

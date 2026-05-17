@@ -1,0 +1,1 @@
+UPDATE v597 AS x1 SET x1.v598 = UUID() + x1.v598 WHERE NOT v598 LIKE 'ndb_%'

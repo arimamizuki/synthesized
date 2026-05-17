@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT 1 AS x10 UNION ALL SELECT x5.x2 + 1 FROM x11 WHERE x5.x2 < 5) SELECT x5.v5507, x5.x2, x5.x2 AS x3, x5.v5507 FROM v5506 AS x5 WHERE x5.x2 IN ('innodb_fast_shutdown', 'sql_mode', 'innodb_default_row_format', 'max_digest_length', 'innodb_flush_log_at_trx_commit', 'disconnect_on_expired_password', 'innodb_checksum_algorithm')

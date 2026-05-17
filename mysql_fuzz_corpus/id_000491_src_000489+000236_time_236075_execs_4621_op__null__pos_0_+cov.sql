@@ -1,0 +1,1 @@
+UPDATE v599 AS x1 SET x1.v600 = ROW(1, x1.v601) WHERE v601 = 1 AND v601 = 'x'

@@ -1,0 +1,1 @@
+UPDATE v235660 AS x1 SET x1.v235662 = GET_LOCK('test2', 0) WHERE v235662 < 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnos'

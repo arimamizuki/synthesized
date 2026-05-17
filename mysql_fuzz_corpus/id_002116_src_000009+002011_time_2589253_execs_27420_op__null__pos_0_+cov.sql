@@ -1,0 +1,1 @@
+INSERT INTO v6326 (v6327) VALUES ('a     ')

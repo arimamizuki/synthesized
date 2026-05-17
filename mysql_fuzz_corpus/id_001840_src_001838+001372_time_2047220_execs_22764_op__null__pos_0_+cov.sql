@@ -1,0 +1,1 @@
+SELECT x0.database(), @@session.x5.x1, 1.000000000000 * 99.999999999998 / 100 AS x2, x3.metered(x7.x1) FROM v4924 AS x7 WHERE x7.x2 > '12011'

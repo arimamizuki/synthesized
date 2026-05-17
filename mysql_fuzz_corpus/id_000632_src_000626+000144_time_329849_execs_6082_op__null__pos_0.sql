@@ -1,0 +1,1 @@
+UPDATE v758 AS x0 LEFT JOIN v689 AS x1 ON x0.v759 = x0.v759 SET v759 = 'w' WHERE v759 = 's'

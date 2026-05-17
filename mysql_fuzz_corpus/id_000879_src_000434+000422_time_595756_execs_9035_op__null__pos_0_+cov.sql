@@ -1,0 +1,1 @@
+CREATE DEFINER="a @ b @ c"@localhost TABLE v1576 (v1577 INT, v1578 INT UNSIGNED)

@@ -1,0 +1,1 @@
+CREATE INDEX v28267 ON v27735((CAST((@a := @b := 1.0) / (@b := @a := GET_FORMAT(LOWER(x1.v27712), 'usa')) AS SIGNED)))

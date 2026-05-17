@@ -1,0 +1,1 @@
+UPDATE v0 AS x0 SET v2 = CONCAT('abcd', v3 % 21) WHERE v3 = 'wait/lock/metadata/sql/mdl'

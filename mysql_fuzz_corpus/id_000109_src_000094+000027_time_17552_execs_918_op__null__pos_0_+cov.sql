@@ -1,0 +1,1 @@
+UPDATE v42 AS x0 JOIN v119 AS x1 ON (x0.v48 = x0.v43) SET x0.v44 = NULL WHERE v49 + 5 > AVG(x0.v50) + x0.v45

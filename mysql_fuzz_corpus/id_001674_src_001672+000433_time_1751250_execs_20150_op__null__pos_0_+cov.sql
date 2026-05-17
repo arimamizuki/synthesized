@@ -1,0 +1,1 @@
+UPDATE v4273 AS x1 SET x1.v4275 = BIN(v4274) WHERE v4274 = '1invalid'

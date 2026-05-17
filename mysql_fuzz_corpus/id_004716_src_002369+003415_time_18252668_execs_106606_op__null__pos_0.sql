@@ -1,0 +1,1 @@
+SELECT x2.x2 FROM v37592 AS x2 WHERE x2.x2 = 3.0

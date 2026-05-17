@@ -1,0 +1,1 @@
+CREATE VIEW v47099 AS SELECT * FROM v46939 AS x1 WHERE x1.FLOOR(CONV(@my_uuidate, 16, 10) / @my_uuid_one_day) > '00:00:00'

@@ -1,0 +1,1 @@
+CREATE INDEX v142 ON v1((v4 + 1))

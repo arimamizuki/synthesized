@@ -1,0 +1,1 @@
+INSERT INTO v66120 (x3, x4, x5, x2) VALUES (REPEAT('b', 20), REPEAT('x', 128), REPEAT('x', 140000), REPEAT('b', 100))

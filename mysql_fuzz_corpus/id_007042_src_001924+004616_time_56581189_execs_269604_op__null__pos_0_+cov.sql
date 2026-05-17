@@ -1,0 +1,1 @@
+UPDATE v117057 AS x1 SET v117058 = IS_FREE_LOCK('test2') WHERE v117058 = 'teststring '

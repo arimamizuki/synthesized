@@ -1,0 +1,1 @@
+INSERT INTO v358 (x1, x2, v296) VALUES (@id, @arg02, @dec_one)

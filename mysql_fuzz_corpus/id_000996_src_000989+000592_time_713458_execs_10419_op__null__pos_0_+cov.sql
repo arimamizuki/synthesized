@@ -1,0 +1,1 @@
+UPDATE v1899 AS x1 INNER JOIN v1728 AS x4 ON x1.v1900 >= x1.v1900 SET v1900 = 'new_value' WHERE (v1900 % 5) > 3

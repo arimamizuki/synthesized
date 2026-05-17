@@ -1,0 +1,1 @@
+CREATE TABLE v38715 (v38716 DATETIME(5), v38717 BINARY(2) PRIMARY KEY, v38718 CHAR(3) CHARACTER SET utf8mb4) AS SELECT @@net_buffer_length, @@xxxxxxxxxx, @@max_sp_recursion_depth, @@log_queries_not_using_indexes

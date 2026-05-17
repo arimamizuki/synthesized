@@ -1,0 +1,1 @@
+UPDATE v17962 AS x1 NATURAL JOIN v17962 AS x5 SET v17965 = '2019-04-20' WHERE v17965 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

@@ -1,0 +1,1 @@
+CREATE TABLE v239229 (v239230 ENUM('口', 'Ğ¿Ñ€Ğ¾Ğ±Ğ°')) AS SELECT CRC32(4 + 2), STRCMP('Ü', 'uü'), CURRENT_USER(), VERSION()

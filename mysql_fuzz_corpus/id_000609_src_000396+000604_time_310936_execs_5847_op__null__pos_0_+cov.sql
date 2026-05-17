@@ -1,0 +1,1 @@
+UPDATE v671 AS x0 SET v612 = CHAR_LENGTH(SHA2('computed', 512)) / 2 * 8 WHERE v612 = 112

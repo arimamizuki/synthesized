@@ -1,0 +1,1 @@
+UPDATE v93647 AS x1 SET v93649 = CONCAT(v93648, ', Updated') WHERE v93649 = 'new_value'

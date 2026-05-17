@@ -1,0 +1,1 @@
+UPDATE v195156 AS x1 SET v195157 = 'new_user' WHERE x1.v195157 = 'tr14' LIMIT 8

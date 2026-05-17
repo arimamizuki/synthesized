@@ -1,0 +1,1 @@
+UPDATE v1295 AS x0 SET x0.v1296 = 4 WHERE v1297 = 'hij'

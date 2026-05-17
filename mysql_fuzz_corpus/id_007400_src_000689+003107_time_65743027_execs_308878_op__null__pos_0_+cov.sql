@@ -1,0 +1,1 @@
+UPDATE v136103 AS x1 LEFT JOIN v135848 AS x6 ON x1.x7 = x1.x7 SET x5 = CONCAT('gui_', x1.x7) WHERE x5 = 1 AND x3 = 1

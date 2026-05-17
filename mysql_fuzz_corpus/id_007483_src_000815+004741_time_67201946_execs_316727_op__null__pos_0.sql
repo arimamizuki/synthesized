@@ -1,0 +1,1 @@
+UPDATE v140104 AS x1 SET x1.v140106 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": 2}}' WHERE v140105 = @u AND v140105 = @h

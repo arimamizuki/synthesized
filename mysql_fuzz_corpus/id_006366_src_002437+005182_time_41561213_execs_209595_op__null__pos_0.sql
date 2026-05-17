@@ -1,0 +1,1 @@
+UPDATE v88812 AS x0 SET v88813 = @opened_tables + 1 WHERE v88813 IN ('1000-01-01', '2017-01-02', '2018-01-01')

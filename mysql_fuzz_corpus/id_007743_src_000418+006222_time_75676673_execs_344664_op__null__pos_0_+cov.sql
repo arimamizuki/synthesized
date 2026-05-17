@@ -1,0 +1,1 @@
+UPDATE v151497 AS x1 SET v151499 = '{"Password_locking": 1}' WHERE v151500 = 0

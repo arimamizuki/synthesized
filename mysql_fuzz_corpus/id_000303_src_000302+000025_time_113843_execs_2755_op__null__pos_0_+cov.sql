@@ -1,0 +1,1 @@
+CREATE INDEX v354 ON v291((v292 + 1))

@@ -1,0 +1,1 @@
+CREATE TABLE v6387 (v6388 INT CHECK (v6388 <> @@global.x3))

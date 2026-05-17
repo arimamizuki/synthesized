@@ -1,0 +1,1 @@
+UPDATE v812 AS x0 LEFT JOIN v743 AS x1 ON x0.v814 = x0.v814 SET v814 = 'Hello, view world' WHERE v814 = 'x' AND v813 = 1

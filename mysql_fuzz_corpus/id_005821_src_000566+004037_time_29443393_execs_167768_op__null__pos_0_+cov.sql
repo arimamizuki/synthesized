@@ -1,0 +1,1 @@
+UPDATE v68404 AS x1 NATURAL JOIN v69202 AS x5 SET v68290 = CONCAT(v68290, ', Updated from a = -2')

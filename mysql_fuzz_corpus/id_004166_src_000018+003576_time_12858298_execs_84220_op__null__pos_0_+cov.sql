@@ -1,0 +1,1 @@
+SELECT x1.v27740 FROM v27739 AS x1 WHERE x1.v27740 = 'Opened_table_definitions'

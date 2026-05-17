@@ -1,0 +1,1 @@
+UPDATE v7339 AS x0 NATURAL JOIN v7475 AS x1 SET v7178 = ((RPAD(1.0, 2048, 1)) + ('4(') ^ (0.1)) WHERE x2 = 1 AND x2 = 2

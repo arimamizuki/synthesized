@@ -1,0 +1,1 @@
+UPDATE v2996 AS x1 RIGHT JOIN v2952 AS x7 ON x1.x2 SET x3 = CONCAT(x2, ', Updated') WHERE NOT (x2 <> 10)

@@ -1,0 +1,1 @@
+UPDATE v4846 AS x0 LEFT OUTER JOIN v4888 AS x1 ON x0.v4847 = x0.v4847 SET x0.v4847 = MID(v4847 + 1e16, 'abcabcabc', 'POLYGON((0 5,-6 -17,12 17,0 5),(4 6,5 5,0 1,4 6))')

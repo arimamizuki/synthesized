@@ -1,0 +1,1 @@
+UPDATE v235558 AS x0 SET v234395 = ST_GEOMFROMTEXT('POINT(230 9)') WHERE x0.v234395 = 'wait/lock/metadata/sql/mdl'

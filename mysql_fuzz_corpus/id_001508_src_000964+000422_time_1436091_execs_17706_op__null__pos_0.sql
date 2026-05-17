@@ -1,0 +1,1 @@
+UPDATE v3576 AS x0 SET v3577 = ST_GEOMFROMTEXT('POINT(41 46)') WHERE v3578 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl')

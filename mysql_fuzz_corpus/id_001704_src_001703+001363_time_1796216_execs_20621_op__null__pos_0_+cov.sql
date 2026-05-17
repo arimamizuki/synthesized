@@ -1,0 +1,1 @@
+UPDATE v4467 AS x1 SET v = CONCAT(v4468, v) WHERE x1.ghi = x1.v4468 AND v4468 = 'green'

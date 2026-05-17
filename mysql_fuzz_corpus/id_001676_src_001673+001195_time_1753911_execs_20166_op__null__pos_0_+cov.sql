@@ -1,0 +1,1 @@
+UPDATE v3588 AS x1 SET x1.v3590 = CONCAT(v3589, ', Updated from a = -2') WHERE v3589 LIKE 'e%'

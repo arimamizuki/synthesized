@@ -1,0 +1,1 @@
+UPDATE v28223 AS x1 JOIN v27665 AS x5 ON (1) SET v28224 = CONCAT(v28224, '+con2') WHERE v28224 ->> '$.x' = 'x'

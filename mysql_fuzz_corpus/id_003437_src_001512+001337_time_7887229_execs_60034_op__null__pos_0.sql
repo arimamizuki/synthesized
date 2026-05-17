@@ -1,0 +1,1 @@
+UPDATE v18038 AS x1 NATURAL JOIN v17952 AS x5 SET v17963 = 'couldbemuchworse_street' WHERE v17963 = 'new_value'

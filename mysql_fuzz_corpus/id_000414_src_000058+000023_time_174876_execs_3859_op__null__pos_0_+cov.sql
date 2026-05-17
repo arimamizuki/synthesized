@@ -1,0 +1,1 @@
+CREATE INDEX v511 ON v494((-v495), v495)

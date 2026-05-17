@@ -1,0 +1,1 @@
+UPDATE v21708 AS x1 LEFT JOIN v21536 AS x4 ON x1.s1 = 'test20' SET v21447 = 'ts2' WHERE s1 = x1.s1 AND x1.s1 = v21447 AND x1.s1 = 256

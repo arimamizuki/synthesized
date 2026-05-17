@@ -1,0 +1,1 @@
+UPDATE v4630 AS x1 SET v4631 = CONCAT(v4631, ', Updated from a = -2') WHERE x1.v4631 = '1000-01-01 00:00:00'

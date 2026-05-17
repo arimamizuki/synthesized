@@ -1,0 +1,1 @@
+WITH x9 AS (SELECT 1 AS x22, 'G' AS x23, 40 AS x24 UNION SELECT 2, 'G', 60 UNION SELECT 3, 'S', 60 UNION SELECT 4, 'S', 20) SELECT x6.x1, x6.x1, x6.x1 >= 0 AND x6.x1 <= 5 AS x4, x6.x1, SUM(x6.x1), SUM(DISTINCT SUBSTRING('x', 1, 3)) FROM v186651 AS x6 WHERE x6.x1 = x6.x1 AND x6.x1 > x6.x1 AND x6.x1 = x6.x1 AND x6.x1 = 1 AND x6.x1 = -1 GROUP BY x6.x1, x6.x1, x6.x1

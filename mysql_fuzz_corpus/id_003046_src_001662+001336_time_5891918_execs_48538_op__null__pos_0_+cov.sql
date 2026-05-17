@@ -1,0 +1,1 @@
+UPDATE v13863 AS x0 SET v13865 = 1 + @binlog_handler_commit WHERE v13864 = '477' AND v13866 <> 11

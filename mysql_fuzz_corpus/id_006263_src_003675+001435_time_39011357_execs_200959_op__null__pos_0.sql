@@ -1,0 +1,1 @@
+UPDATE v84982 AS x0 SET v84983 = '{"Password_locking": {"failed_login_attempts": 2}}' WHERE v84983 = 'john' AND v84983 = CAST('john' AS BINARY)

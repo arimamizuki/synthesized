@@ -1,0 +1,1 @@
+INSERT INTO v20528 (v20530) VALUES ('009002'), ('ferociousness')

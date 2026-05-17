@@ -1,0 +1,1 @@
+UPDATE v6144 AS x1 SET v6145 = CHAR_LENGTH(SHA2('size', 384)) / 2 * 8 WHERE v6145 = 'mysql' AND v6145 = 't' AND v6145 = 'PRIMARY' AND v6145 = 'size' LIMIT 2

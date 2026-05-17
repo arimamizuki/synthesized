@@ -1,0 +1,1 @@
+SELECT x3.x1, x3.x1 FROM v21996 AS x3 ORDER BY RANK() OVER (ORDER BY (@f := 'x'))

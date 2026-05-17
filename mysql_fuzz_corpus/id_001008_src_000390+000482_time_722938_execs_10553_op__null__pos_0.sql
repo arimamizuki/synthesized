@@ -1,0 +1,1 @@
+UPDATE v1800 AS x0, v1719 AS x5 SET v1801 = (@tmp := @tmp + 1) WHERE x0.v1802 = 10

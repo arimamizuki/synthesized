@@ -1,0 +1,1 @@
+INSERT INTO v27008 (v27010) VALUES ('aa%'), ('cc%'), ('ch%')

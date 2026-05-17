@@ -1,0 +1,1 @@
+UPDATE v253057 AS x0 JOIN v253587 AS x1 ON TRUE SET v253059 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE NOT (NOT (NOT ('%%green%%' = '23' AND v253059 = 1)))

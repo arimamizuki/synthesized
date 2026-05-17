@@ -1,0 +1,1 @@
+UPDATE v157467 AS x0 SET x0.v157404 = 'SET_USER_ID' WHERE @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND @arg00 = @arg00 AND v157404 > 0

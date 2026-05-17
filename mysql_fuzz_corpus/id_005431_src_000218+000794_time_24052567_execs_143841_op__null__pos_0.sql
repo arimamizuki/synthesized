@@ -1,0 +1,1 @@
+UPDATE v56079 AS x1 SET v56081 = @old_description WHERE v56081 LIKE 'ã[INV]‚ã[INV]„ã[INV]†ã[INV]ˆã[INV]Šã[INV]‹ã[INV][INV]ã[INV][INV]ã[INV]‘ã[INV]“ã[INV]•ã[INV]—ã[INV]™ã[INV]›ã[INV][INV]'

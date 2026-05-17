@@ -1,0 +1,1 @@
+SELECT x3.v123616 FROM v123614 AS x3 WHERE NOT x3.v123615 IN ('root', 'mysql.sys', 'mysql.session', 'mysql.infoschema')

@@ -1,0 +1,1 @@
+CREATE INDEX v22 ON v1((v4 + 3))

@@ -1,0 +1,1 @@
+CREATE VIEW v149554 AS SELECT EXTRACTVALUE('<zot><tim0><01>10:39:15</01><02>140</02></tim0></zot>', '/zot/tim0/02') FROM v147754 AS x2

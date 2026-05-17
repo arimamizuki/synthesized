@@ -1,0 +1,1 @@
+UPDATE v40995 AS x1 SET v40997 = X('x') / 1 WHERE (12 % 0) = 1002

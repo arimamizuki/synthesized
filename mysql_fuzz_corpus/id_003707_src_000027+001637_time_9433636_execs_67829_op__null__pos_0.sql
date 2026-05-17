@@ -1,0 +1,1 @@
+INSERT INTO v20164 (x4, v20167, v20165, v20166) VALUES ('j', 'MobilComSuper92000D1(Akquise)', '03:38:07', '+0001000000')

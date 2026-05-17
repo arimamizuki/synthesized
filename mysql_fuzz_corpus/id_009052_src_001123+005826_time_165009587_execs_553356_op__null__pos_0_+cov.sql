@@ -1,0 +1,1 @@
+SELECT x4.x1 FROM v257583 AS x4 WHERE x4.x1 = '5'

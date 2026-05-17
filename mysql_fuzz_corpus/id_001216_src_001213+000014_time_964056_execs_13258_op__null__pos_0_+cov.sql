@@ -1,0 +1,1 @@
+UPDATE v2286 AS x1 SET v2288 = (NOW() - INTERVAL '5' DAY) WHERE v2287 = 'kristofer'

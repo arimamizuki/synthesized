@@ -1,0 +1,1 @@
+UPDATE v326 AS x2, v331 AS x7 SET v327 = LEFT(v327, 1)

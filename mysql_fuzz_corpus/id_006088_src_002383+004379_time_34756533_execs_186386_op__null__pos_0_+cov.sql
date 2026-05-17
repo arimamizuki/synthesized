@@ -1,0 +1,1 @@
+SELECT x5.v77841, x5.v77841, CONCAT_WS(', ', 'string', NULL) AS x2, x5.v77841 FROM v78168 AS x5

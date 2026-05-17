@@ -1,0 +1,1 @@
+UPDATE v10540 AS x1 INNER JOIN v10117 AS x2 ON (x1.v10541 = x1.v10542) SET v10541 = AES_DECRYPT(POINT(13, 0), '/a/@b[contains(.,"1")][contains(.,"2")][2]', NULL) WHERE v10542 = 3

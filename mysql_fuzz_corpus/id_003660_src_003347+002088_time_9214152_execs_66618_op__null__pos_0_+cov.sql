@@ -1,0 +1,1 @@
+CREATE TABLE v20327 (v20328 VARCHAR(255), v20329 VARCHAR(255)) AS SELECT @@character_set_client, @@ssl_key, @@IDENTITY, @@slow_query_log

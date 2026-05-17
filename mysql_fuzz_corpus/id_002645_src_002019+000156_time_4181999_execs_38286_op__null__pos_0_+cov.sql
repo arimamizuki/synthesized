@@ -1,0 +1,1 @@
+WITH RECURSIVE x9 AS (SELECT x7.v9971 FROM x11) SELECT x7.v9973, x7.v9975, '^^: The above should be ~= 8 + cost(select * from t1). Value less than 8 is an error' AS x4, x7.v9977 FROM v9969 AS x7 WHERE -2.0e0 <= x7.v9976

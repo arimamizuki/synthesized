@@ -1,0 +1,1 @@
+UPDATE v242492 AS x0, v241559 AS x5 SET x0.v241133 = 'test7' WHERE v241057 LIKE 'hon_ysuckl_'

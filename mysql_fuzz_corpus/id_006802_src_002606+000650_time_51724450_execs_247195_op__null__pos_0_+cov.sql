@@ -1,0 +1,1 @@
+UPDATE v106944 AS x0 SET x0.x3 = 1 * x3 WHERE x2 = 2 AND x2 = 2 AND x1 > 0 AND x3 < 100

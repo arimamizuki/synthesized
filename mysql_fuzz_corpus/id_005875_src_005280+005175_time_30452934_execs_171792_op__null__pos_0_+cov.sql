@@ -1,0 +1,1 @@
+CREATE VIEW v71044 AS SELECT NAME_CONST('var', 'c8eb4b15-cb09-48bb-bbb2-e6a0b6b4d5c7') COLLATE utf8mb4_la_0900_as_cs FROM v70755 AS x2

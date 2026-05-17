@@ -1,0 +1,1 @@
+UPDATE v367 AS x0 NATURAL JOIN v360 AS x1 SET x0.v369 = CONCAT('test', 6 - x0.v369) WHERE x0.v368 = x0.v369 AND x0.v368 = 'subp3'

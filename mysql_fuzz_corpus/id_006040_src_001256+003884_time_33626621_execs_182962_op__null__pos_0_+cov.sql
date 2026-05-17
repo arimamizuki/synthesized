@@ -1,0 +1,1 @@
+CREATE INDEX v76989 ON v75750((INSERT(2, 'is ', 0, 22) + 1), (INSERT(2, 'is ', 0, 22) + 2), (INSERT(2, 'is ', 0, 22) + 3), (INSERT(2, 'is ', 0, 22) + 4), (INSERT(2, 'is ', 0, 22) + 5))

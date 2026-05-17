@@ -1,0 +1,1 @@
+CREATE INDEX v20751 ON v20688((RTRIM('x') + 1), (RTRIM('x') + 2), (RTRIM('x') + 3), (RTRIM('x') + 4), (RTRIM('x') + 5))

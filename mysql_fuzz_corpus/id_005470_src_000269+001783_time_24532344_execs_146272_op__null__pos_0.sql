@@ -1,0 +1,1 @@
+UPDATE v57682 AS x1 SET x1.v57688 = REPEAT('c', 5.5 * 1024 * 1024) WHERE v57684 = @global_open_cache_overflow

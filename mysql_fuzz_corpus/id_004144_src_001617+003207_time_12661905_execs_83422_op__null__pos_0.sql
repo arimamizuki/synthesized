@@ -1,0 +1,1 @@
+INSERT INTO v26365 (v26367, v26368) VALUES (248016, 'castle'), (836, 59.9999999), (155202, 'mixture')

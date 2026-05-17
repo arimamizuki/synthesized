@@ -1,0 +1,1 @@
+CREATE INDEX v206795 ON v206191(view馃惉, view馃惉, view馃惉)

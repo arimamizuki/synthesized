@@ -1,0 +1,1 @@
+CREATE VIEW v123184 AS SELECT @topic2_id := @u7 := (@t2 := 1) + @t3 := 4 FROM v122820 AS x2

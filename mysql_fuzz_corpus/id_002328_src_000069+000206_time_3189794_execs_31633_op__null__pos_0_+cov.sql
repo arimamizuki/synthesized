@@ -1,0 +1,1 @@
+UPDATE v7655 AS x1, v7607 AS x4 SET v7656 = 13 + 99 WHERE x1.v7656 + 2560 = 'db'

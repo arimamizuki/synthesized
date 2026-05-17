@@ -1,0 +1,1 @@
+CREATE TABLE v97933 (v97934 SMALLINT(61), v97935 CHAR(5)) AS SELECT @@TIMESTAMP, @@VERSION, @@default_storage_engine, @@basedir

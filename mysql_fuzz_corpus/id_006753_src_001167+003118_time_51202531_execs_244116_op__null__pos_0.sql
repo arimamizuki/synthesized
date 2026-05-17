@@ -1,0 +1,1 @@
+UPDATE v106612 AS x0 SET v106601 = CONCAT(v106601, ', Updated from a = 100') WHERE v106601 = 'l'

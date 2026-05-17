@@ -1,0 +1,1 @@
+UPDATE v12578 AS x1 SET v12573 = 'NO' WHERE x1 = 'aaa '

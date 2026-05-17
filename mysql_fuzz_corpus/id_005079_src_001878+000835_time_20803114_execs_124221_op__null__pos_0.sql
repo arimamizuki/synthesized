@@ -1,0 +1,1 @@
+CREATE TABLE v45708 (v45709 VARCHAR(100), FOREIGN KEY (x2) REFERENCES x8 (x9)) COLLATE=ascii_bin AS SELECT STR_TO_DATE('x', 'x') AS x3, STR_TO_DATE('x', 'x') AS x4, STR_TO_DATE('x', 'x') AS x5, STR_TO_DATE('x', 'x') AS x6, STR_TO_DATE('x', 'x') AS x7

@@ -1,0 +1,1 @@
+CREATE VIEW v33568 AS SELECT x6.v33374, x6.v33371, CONCAT_WS('<------------------>', x6.v33373, x6.v33372) AS x5 FROM v33370 AS x6

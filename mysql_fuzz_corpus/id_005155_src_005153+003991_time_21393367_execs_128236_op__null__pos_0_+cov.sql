@@ -1,0 +1,1 @@
+CREATE TABLE v48298 (v48299 CHAR(4) NOT NULL) AS SELECT /*+ JOIN_SUFFIX(x2, x3) JOIN_SUFFIX(x4) */ 'The\\\\\\\\\\\\\\\\ZEnd'

@@ -1,0 +1,1 @@
+UPDATE v51323 AS x1 SET v51325 = 'updated' WHERE v51324 = 'no_pwd_history' AND (CHAR_LENGTH(@test_compress_string) = 5 OR v51324 < 'a00')

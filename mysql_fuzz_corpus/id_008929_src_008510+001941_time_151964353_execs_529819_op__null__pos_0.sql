@@ -1,0 +1,1 @@
+SELECT x3.v246888 FROM v246884 AS x3 WHERE x3.v246885 >= 'honeysuckle' AND x3.v246888 <= 'honoring'

@@ -1,0 +1,1 @@
+UPDATE v599 AS x0 SET v600 = v600 + 10 + v601 WHERE NOT v600 LIKE 'debug_%'

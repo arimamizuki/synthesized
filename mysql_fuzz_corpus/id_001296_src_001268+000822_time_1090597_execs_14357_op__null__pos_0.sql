@@ -1,0 +1,1 @@
+UPDATE v2459 AS x0 LEFT JOIN v2517 AS x6 ON x0.v2460 = x0.v2461 SET x0.v2462 = 2 * v2462 WHERE v2462 IN ('wait/io/table/sql/handler', 'wait/lock/table/sql/handler', 'wait/lock/metadata/sql/mdl') LIMIT 3

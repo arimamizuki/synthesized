@@ -1,0 +1,1 @@
+UPDATE v231 AS x1 JOIN v196 AS x4 ON (x1.v197 = x1.v197 AND x1.s1 = x1.s1 AND x1.s1 = x1.v197) SET s1 = 'new_user'

@@ -1,0 +1,1 @@
+UPDATE v5216 AS x1 SET v5218 = 'updated' WHERE x1.v5217 = 'a12' AND (CHAR_LENGTH(v5219) = 5 OR v5217 < 'a00')

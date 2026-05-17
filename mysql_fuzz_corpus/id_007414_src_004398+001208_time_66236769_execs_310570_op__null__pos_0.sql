@@ -1,0 +1,1 @@
+INSERT INTO v137615 (v137617, v137616) VALUES (10, '165010'), ('externally', 'title')

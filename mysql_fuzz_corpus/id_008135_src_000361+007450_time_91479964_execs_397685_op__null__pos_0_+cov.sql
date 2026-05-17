@@ -1,0 +1,1 @@
+CREATE TABLE v180975 (v180976 ENUM('a', '', 'b')) COLLATE=utf8_swedish_ci

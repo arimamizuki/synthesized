@@ -1,0 +1,1 @@
+SELECT x4.x1 FROM v96848 AS x4 WHERE x4.x1 < 200 AND x4.x1 = x4.x1

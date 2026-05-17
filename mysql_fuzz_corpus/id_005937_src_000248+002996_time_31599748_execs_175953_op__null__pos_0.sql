@@ -1,0 +1,1 @@
+UPDATE v72357 AS x1 NATURAL JOIN v72235 AS x4 SET v72358 = '{"Password_locking": {"failed_login_attempts": -2, "password_lock_time_days": 2}}' WHERE ROW(0, 2, 3) = ROW(v72359, v72359, v72358)

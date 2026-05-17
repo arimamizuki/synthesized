@@ -1,0 +1,1 @@
+CREATE TABLE v202 (v203 ENUM('E', 'F', 'EÿF', 'FÿE') NOT NULL DEFAULT 'E')

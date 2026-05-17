@@ -1,0 +1,1 @@
+UPDATE v2940 AS x1 SET x1.v2942 = '%' WHERE NOT ((x1.v2942 IS NULL) AND ((x1.v2942) <> (1)))

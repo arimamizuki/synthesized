@@ -1,0 +1,1 @@
+UPDATE v180259 AS x1 SET x1.v180261 = -x1.v180261 WHERE NOT v180260 IN ('-01:00:00', '00:00:00', 'auto_increment_increment')

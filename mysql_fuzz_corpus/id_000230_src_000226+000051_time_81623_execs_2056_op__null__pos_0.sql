@@ -1,0 +1,1 @@
+UPDATE v147 AS x1 JOIN v276 AS x5 ON x1.v148 = x1.v148 SET v148 = '2019-05-02' WHERE v148 = 'blue'

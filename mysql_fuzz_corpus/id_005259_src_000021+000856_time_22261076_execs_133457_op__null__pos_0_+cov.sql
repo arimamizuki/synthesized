@@ -1,0 +1,1 @@
+INSERT INTO v51361 (v51642) VALUES (1), (NULL), ('Judas'), (4)

@@ -1,0 +1,1 @@
+UPDATE v79718 AS x1 SET v79720 = LEFT(v79720, CHAR_LENGTH(v79719) - 3) WHERE x1.v79719 IN (32, 1.2, 'query_prealloc_size', 'innodb_flush_log_at_trx_commit', 'transaction_prealloc_size')

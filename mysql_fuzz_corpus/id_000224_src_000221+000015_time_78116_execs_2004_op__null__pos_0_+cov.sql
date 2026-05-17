@@ -1,0 +1,1 @@
+UPDATE v74 AS x0 SET v76 = 'hi' WHERE v76 > 10 AND v76 <= 18

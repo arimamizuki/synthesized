@@ -1,0 +1,1 @@
+CREATE VIEW v32 AS SELECT x6.v3 AS x1, 1 - x6.v2 AS x2 FROM v1 AS x6

@@ -1,0 +1,1 @@
+CREATE TABLE v28498 (v28499 INT, CONSTRAINT x2 FOREIGN KEY (x3) REFERENCES x4 (x5)) AS SELECT @@read_only, @@disabled_storage_engines, @@version_tokens_session_number, @@long_query_time

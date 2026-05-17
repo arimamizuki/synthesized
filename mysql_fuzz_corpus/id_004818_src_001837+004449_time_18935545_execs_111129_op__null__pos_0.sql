@@ -1,0 +1,1 @@
+UPDATE v39093 AS x0 LEFT JOIN v39338 AS x3 ON x0.v39094 = 'dep2' AND x0.v39094 = 'John' SET v39094 = '10:11:12' WHERE 1995 - 09 - 01 IN ('sys', 'innodb_flush_log_at_trx_commit', 736494, 52)

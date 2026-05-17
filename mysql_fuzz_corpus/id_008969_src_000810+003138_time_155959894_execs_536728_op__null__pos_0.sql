@@ -1,0 +1,1 @@
+CREATE TABLE v250450 (v250451 ENUM('001', '002', 'unique', 'active') DEFAULT (COT(RIGHT(':#.', 33))))

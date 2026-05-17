@@ -1,0 +1,1 @@
+INSERT INTO v75473 (v75474) VALUES ('-10000000'), (NULL), ('C'), ('rightful')

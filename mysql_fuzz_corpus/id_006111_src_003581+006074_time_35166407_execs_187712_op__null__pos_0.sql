@@ -1,0 +1,1 @@
+INSERT INTO v78701 (v77908, v77907, v77909, v77906) VALUES (1, 'trudy', '%Y-%m-%d %h:%i:%S', 'A3')

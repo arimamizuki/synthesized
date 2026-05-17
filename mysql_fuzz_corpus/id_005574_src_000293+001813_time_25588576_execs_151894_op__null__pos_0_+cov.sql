@@ -1,0 +1,1 @@
+CREATE VIEW v60490 AS SELECT EXTRACTVALUE('<a><b>b1</b><b>b2</b></a>', '/a/b[1]'), EXTRACTVALUE('<a><ancestor>test</ancestor></a>', '/a/ancestor'), ST_SRID(ST_POLYFROMWKB(@wkb_py, -1)), SUM(DISTINCT (TRUNCATE((0.1), NULL))) FROM v59653 AS x1

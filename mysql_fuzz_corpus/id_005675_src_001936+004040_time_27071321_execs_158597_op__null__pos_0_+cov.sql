@@ -1,0 +1,1 @@
+UPDATE v64323 AS x1, v64513 AS x7 RIGHT OUTER JOIN v64472 AS x8 ON x7.x1 = x7.x1 SET x1.v64324 = @Opened_table_definitions + 4 WHERE v64324 <> 2

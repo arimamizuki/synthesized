@@ -1,0 +1,1 @@
+UPDATE v842 AS x1 LEFT JOIN v826 AS x4 ON x1.v702 = x1.v702 SET v703 = 'test_func5' WHERE CONCAT(v702 COLLATE latin1_general_ci, v703 COLLATE latin1_swedish_ci) = 'AA'

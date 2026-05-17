@@ -1,0 +1,1 @@
+SELECT x2.x FROM v228859 AS x2 WHERE ROW(1, 2, 3) < ROW(x2.x, x2.x, x2.x)

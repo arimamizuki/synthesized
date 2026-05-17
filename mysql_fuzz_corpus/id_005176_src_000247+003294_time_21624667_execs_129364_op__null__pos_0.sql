@@ -1,0 +1,1 @@
+UPDATE v48702 AS x1 JOIN v48679 AS x5 ON (x1.Name_exp_1 = x1.Name_exp_1) SET Name_exp_1 = 'bbb' WHERE Name_exp_1 = CAST('2009-04-03' AS DATE)

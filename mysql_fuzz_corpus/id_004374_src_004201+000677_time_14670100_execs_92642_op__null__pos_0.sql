@@ -1,0 +1,1 @@
+UPDATE v30717 AS x1 SET x1 = x1 * 1 WHERE x1 = 5 OR x1 = NULL

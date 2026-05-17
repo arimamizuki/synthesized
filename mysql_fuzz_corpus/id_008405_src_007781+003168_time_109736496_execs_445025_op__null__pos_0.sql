@@ -1,0 +1,1 @@
+UPDATE v203820 AS x1 SET x1.v203855 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' WHERE v203856 IN ('2.2', 'disconnect_on_expired_password', 1.11)

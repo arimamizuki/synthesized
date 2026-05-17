@@ -1,0 +1,1 @@
+CREATE TABLE v247 (v248 ENUM('aaaa', 'Ğ¿Ñ€Ğ¾Ğ±Ğ°') CHARACTER SET utf8mb3)

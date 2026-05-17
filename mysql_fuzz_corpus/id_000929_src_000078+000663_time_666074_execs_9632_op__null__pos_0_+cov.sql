@@ -1,0 +1,1 @@
+CREATE INDEX v1730 ON v1719((CAST(JSON_EXTRACT(v1722, '$."auto-update"') AS CHAR)))

@@ -1,0 +1,1 @@
+UPDATE v7037 AS x2 LEFT JOIN v7236 AS x5 ON 1 SET v7038 = 4 WHERE v7038 = 'must_change' AND v7038 = 'localhost'

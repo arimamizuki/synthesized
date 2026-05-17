@@ -1,0 +1,1 @@
+UPDATE v15082 AS x1 SET v15086 = 14 WHERE (YEAR(@X) - YEAR('x')) >> (3 * 4) LIMIT 12

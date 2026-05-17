@@ -1,0 +1,1 @@
+INSERT INTO v232400 (v232401) VALUES ('~'), (NULL), ('joce8'), (5)

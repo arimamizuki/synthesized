@@ -1,0 +1,1 @@
+UPDATE v104308 AS x1 SET x1 = CONCAT(x1, @l := (@t2 := 1) + @t3) WHERE x1 = 57 + 1
