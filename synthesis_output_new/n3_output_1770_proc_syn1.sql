@@ -1,0 +1,449 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1355260 (v1355262 INT, v1355166 INT, x4 INT);
+CREATE TABLE IF NOT EXISTS v1355165 (v1355166 INT, x4 INT);
+CREATE TABLE IF NOT EXISTS v1355236 (v1355166 INT);
+CREATE TABLE IF NOT EXISTS v1356451 (v1356452 INT);
+CREATE TABLE IF NOT EXISTS v1355253 (v1356452 INT);
+CREATE TABLE IF NOT EXISTS v1355139 (v1355140 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1356382 (v1356383 VARCHAR(100), v1356719 INT);
+CREATE TABLE IF NOT EXISTS v1356718 (v1356719 INT);
+CREATE TABLE IF NOT EXISTS v1355106 (v1355107 VARCHAR(50), v1355108 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1356652 (v1355107 VARCHAR(50));
+INSERT INTO v1355260 VALUES (10, 1, 100), (20, 2, 200), (30, 3, 300);
+INSERT INTO v1355165 VALUES (1, 100), (2, 200), (3, 300);
+INSERT INTO v1355236 VALUES (1), (2), (3);
+INSERT INTO v1356451 VALUES (5), (10), (15), (20);
+INSERT INTO v1355253 VALUES (5), (10), (15), (20);
+INSERT INTO v1355139 VALUES ('user1'), ('user2'), ('admin'), ('guest');
+INSERT INTO v1356382 VALUES ('com_stmt_test', 1), ('other', 2), ('com_stmt_example', 3);
+INSERT INTO v1356718 VALUES (1), (2), (3);
+INSERT INTO v1355106 VALUES ('test20', ST_GEOMFROMTEXT('POINT(0 0)')), ('test21', ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO v1356652 VALUES ('test20'), ('test22');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+CREATE TABLE IF NOT EXISTS `table_gvnxly` (
+    `table_gvnxly_product_id` INT,
+    `table_gvnxly_category_id` INT,
+    `table_gvnxly_price` DECIMAL(10,2),
+    `table_gvnxly_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1sfbje` (
+    `table_1sfbje_category_id` INT,
+    `table_1sfbje_name` VARCHAR(50)
+);
+
+INSERT INTO `table_gvnxly` (`table_gvnxly_product_id`, `table_gvnxly_category_id`, `table_gvnxly_price`, `table_gvnxly_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1sfbje` (`table_1sfbje_category_id`, `table_1sfbje_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_COUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_COUNT
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_GVNXLY_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_COUNT * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj()) - -882 + (v_premium_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_5qkcdj() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10 UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(-44)) - -55 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(15)) - 83 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(76, 32)) - 587 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_I < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+CREATE TABLE IF NOT EXISTS `table_pjlwth` (
+    `table_pjlwth_emp_id` INT,
+    `table_pjlwth_department_id` INT,
+    `table_pjlwth_salary` INT,
+    `table_pjlwth_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcp73a` (
+    `table_hcp73a_department_id` INT,
+    `table_hcp73a_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pjlwth` (`table_pjlwth_emp_id`, `table_pjlwth_department_id`, `table_pjlwth_salary`, `table_pjlwth_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_hcp73a` (`table_hcp73a_department_id`, `table_hcp73a_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_STABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_PJLWTH_HIRE_DATE, CURDATE())), 0), COUNT(*)
+    INTO V_AVG_TENURE, V_EMPLOYEE_COUNT
+    FROM TABLE_PJLWTH
+    WHERE TABLE_PJLWTH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_SCORE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + ((MYSQL_FUNC_HANDLER_FUNC_POWER_evblp0(-20, -61)) - -40 + ((v_avg_tenure * 10) + (v_employee_count * 2)));
+
+    RETURN V_STABILITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_POWER_evblp0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_POWER_evblp0(P_BASE INT, P_EXP INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    WHILE V_I <= P_EXP DO
+        SET V_RESULT = V_RESULT * P_BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(-65)) - -617 + (10);
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, 0) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+CREATE TABLE IF NOT EXISTS `table_3iivgl` (
+    `table_3iivgl_supplier_id` INT,
+    `table_3iivgl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_3iivgl` (`table_3iivgl_supplier_id`, `table_3iivgl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_3IIVGL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_3IIVGL
+    WHERE TABLE_3IIVGL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7(46)) - 781 + (floor(v_rating * 20));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7----- */
+CREATE TABLE IF NOT EXISTS `table_c6u1yw` (
+    `table_c6u1yw_review_id` INT,
+    `table_c6u1yw_product_id` INT,
+    `table_c6u1yw_rating` DECIMAL(3,1),
+    `table_c6u1yw_helpful_count` INT,
+    `table_c6u1yw_review_date` DATE
+);
+
+INSERT INTO `table_c6u1yw` (`table_c6u1yw_review_id`, `table_c6u1yw_product_id`, `table_c6u1yw_rating`, `table_c6u1yw_helpful_count`, `table_c6u1yw_review_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_RATING INT DEFAULT 0;
+    DECLARE V_TOTAL_HELPFUL INT DEFAULT 0;
+    DECLARE V_REVIEW_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_C6U1YW_RATING), 0), COALESCE(SUM(TABLE_C6U1YW_HELPFUL_COUNT), 0), COUNT(*)
+    INTO V_AVG_RATING, V_TOTAL_HELPFUL, V_REVIEW_COUNT
+    FROM TABLE_C6U1YW
+    WHERE TABLE_C6U1YW_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_REVIEW_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = (V_AVG_RATING * 20) + (V_TOTAL_HELPFUL / 10) + (V_REVIEW_COUNT * 2);
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN 0;
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN 1;
+    ELSE RETURN 2;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1770_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cursor_val VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v1356383 FROM v1356382 WHERE v1356383 LIKE '%com_stmt%';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_temp = -1;
+
+    -- Statement 1: UPDATE with NATURAL JOIN and RIGHT JOIN
+    UPDATE v1355260 AS x1 
+    NATURAL JOIN v1355165 AS x5 
+    RIGHT JOIN v1355236 AS x6 ON x5.v1355166 = x5.x4 
+    SET v1355262 = p1 
+    WHERE CAST('2001-1-1 2:3:4' AS DATE) = CAST('2001-01-01' AS DATETIME);
+
+    -- Statement 2: UPDATE with JOIN and ORDER BY/LIMIT
+    UPDATE v1356451 AS x1 
+    JOIN v1355253 AS x5 ON x1.v1356452 <> x1.v1356452 
+    SET v1356452 = p2 
+    WHERE v1356452 > 6 
+    ORDER BY MIN(x1.v1356452) + MAX(x1.v1356452) 
+    LIMIT 5;
+
+    -- Statement 3: Simple UPDATE with NOT IN
+    UPDATE v1355139 AS x1 
+    SET v1355140 = 'new_user' 
+    WHERE NOT v1355140 IN (100, 100, 100, 100, 100, 100);
+
+    -- Statement 4: UPDATE with multiple JOINs and LIKE
+    UPDATE v1356382 AS x1 
+    NATURAL JOIN v1356718 AS x7 
+    RIGHT JOIN v1355106 AS x8 ON x7.v1356719 = x7.v1356719 
+    INNER JOIN v1356652 AS x12 ON x8.v1355107 = 'test20' 
+    SET v1356383 = CONCAT('modified_', p1) 
+    WHERE v1356383 LIKE '%com_stmt%';
+
+    -- Statement 5: INSERT with geometry functions
+    INSERT INTO v1355106 (v1355108, v1355107) 
+    VALUES (ST_GEOMFROMTEXT('POINT(153 33)'), ST_GEOMFROMTEXT('POINT(25 168)'));
+
+    -- Procedural logic: Use cursor to process updated rows
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_count = v_count + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic with CASE
+    CASE
+        WHEN v_count > 0 THEN
+            SET result = v_count;
+        ELSE
+            SET result = 0;
+    END CASE;
+
+    -- Use WHILE loop for additional processing
+    SET v_temp = 0;
+    WHILE (MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(-5)) - -815 + ((MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(26)) - 533 + (v_temp) < 3) DO
+        SET result = result + 1;
+        SET v_temp = v_temp + 1;
+    END WHILE;
+
+    -- Final error handling check
+    IF v_temp = -1 THEN
+        SET result = -1;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1770_proc(1, 1, @out_result);
+
+SELECT @out_result;

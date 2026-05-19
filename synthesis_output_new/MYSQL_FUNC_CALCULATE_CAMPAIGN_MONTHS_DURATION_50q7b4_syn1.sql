@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_lho0kf` (
+    `table_lho0kf_campaign_id` INT,
+    `table_lho0kf_start_date` DATE,
+    `table_lho0kf_end_date` DATE
+);
+
+INSERT INTO `table_lho0kf` (`table_lho0kf_campaign_id`, `table_lho0kf_start_date`, `table_lho0kf_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+CREATE TABLE IF NOT EXISTS `table_n1vs7c` (
+    `table_n1vs7c_customer_id` INT,
+    `table_n1vs7c_start_date` DATE
+);
+
+INSERT INTO `table_n1vs7c` (`table_n1vs7c_customer_id`, `table_n1vs7c_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N1VS7C_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N1VS7C
+    WHERE TABLE_N1VS7C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(-50)) - -203 + ((MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(76)) - -656 + (v_sum) + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(CARD_NUMBER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    IF CARD_NUMBER IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_INDEX <= CHAR_LENGTH(CARD_NUMBER) DO
+        SET V_CHAR = SUBSTRING(CARD_NUMBER, V_INDEX, 1);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        END IF;
+
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE;
+
+    IF V_DIGIT_COUNT >= 13 AND V_DIGIT_COUNT <= 19 THEN
+        SET V_RESULT = 1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_WARRANTY_MONTHS * 5) + (V_SECURITY_RATING * 10) - (V_COST / 100);
+
+    RETURN CAST(V_VALUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+CREATE TABLE IF NOT EXISTS `table_xqsksz` (
+    `table_xqsksz_emp_id` INT,
+    `table_xqsksz_department_id` INT,
+    `table_xqsksz_salary` INT,
+    `table_xqsksz_hire_date` DATE
+);
+
+INSERT INTO `table_xqsksz` (`table_xqsksz_emp_id`, `table_xqsksz_department_id`, `table_xqsksz_salary`, `table_xqsksz_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XQSKSZ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_XQSKSZ
+    WHERE TABLE_XQSKSZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es(16)) - -216 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(80)) - -781 + ((MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (floor(v_avg_salary))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(-8)) - -955 + (0);
+    END IF;
+
+    RETURN QUARTER(V_HIRE_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(3)) - 215 + (side * 4);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+CREATE TABLE IF NOT EXISTS `table_3honbg` (
+    `table_3honbg_product_id` INT,
+    `table_3honbg_category_id` INT,
+    `table_3honbg_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_oj1tlr` (
+    `table_oj1tlr_category_id` INT,
+    `table_oj1tlr_name` VARCHAR(50)
+);
+
+INSERT INTO `table_3honbg` (`table_3honbg_product_id`, `table_3honbg_category_id`, `table_3honbg_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_oj1tlr` (`table_oj1tlr_category_id`, `table_oj1tlr_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_3HONBG_PRICE), 0), COALESCE(MAX(TABLE_3HONBG_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM TABLE_3HONBG
+    WHERE TABLE_3HONBG_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = (V_AVG_PRICE * 100) / V_MAX_PRICE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es----- */
+CREATE TABLE IF NOT EXISTS `table_3h6spx` (
+    `table_3h6spx_customer_id` INT,
+    `table_3h6spx_registration_date` DATE,
+    `table_3h6spx_country` INT,
+    `table_3h6spx_customer_tier` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_577zj7` (
+    `table_577zj7_order_id` INT,
+    `table_577zj7_customer_id` INT,
+    `table_577zj7_order_date` DATE,
+    `table_577zj7_total_amount` DECIMAL(10,2),
+    `table_577zj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_3h6spx` (`table_3h6spx_customer_id`, `table_3h6spx_registration_date`, `table_3h6spx_country`, `table_3h6spx_customer_tier`) VALUES (1, '2024-01-01', 1, 1);
+
+INSERT INTO `table_577zj7` (`table_577zj7_order_id`, `table_577zj7_customer_id`, `table_577zj7_order_date`, `table_577zj7_total_amount`, `table_577zj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_TIER VARCHAR(20) DEFAULT 'BRONZE';
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LIFETIME_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(COUNT(*), 0), COALESCE(SUM(TABLE_577ZJ7_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_577ZJ7
+    WHERE TABLE_577ZJ7_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_577ZJ7_STATUS = 'COMPLETED';
+
+    SELECT TABLE_3H6SPX_CUSTOMER_TIER INTO V_CUSTOMER_TIER
+    FROM TABLE_3H6SPX
+    WHERE TABLE_3H6SPX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_CUSTOMER_TIER
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = V_TOTAL_REVENUE / V_ORDER_COUNT;
+        SET V_LIFETIME_VALUE = V_AVG_ORDER_VALUE * V_ORDER_COUNT * V_TIER_MULTIPLIER;
+    END IF;
+
+    RETURN V_LIFETIME_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_LHO0KF_START_DATE, TABLE_LHO0KF_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_LHO0KF
+    WHERE TABLE_LHO0KF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj()) - -627 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(61)) - 152 + (0));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(-13)) - 487 + (timestampdiff(month, v_start_date, v_end_date));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(1);

@@ -1,0 +1,397 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+CREATE TABLE IF NOT EXISTS `table_9duxm5` (
+    `table_9duxm5_emp_id` INT,
+    `table_9duxm5_department_id` INT,
+    `table_9duxm5_salary` INT
+);
+
+INSERT INTO `table_9duxm5` (`table_9duxm5_emp_id`, `table_9duxm5_department_id`, `table_9duxm5_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9DUXM5
+    WHERE TABLE_9DUXM5_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+CREATE TABLE IF NOT EXISTS `table_2vjwnh` (
+    `table_2vjwnh_subscription_id` INT,
+    `table_2vjwnh_customer_id` INT,
+    `table_2vjwnh_plan_type` VARCHAR(50),
+    `table_2vjwnh_start_date` DATE,
+    `table_2vjwnh_monthly_fee` INT,
+    `table_2vjwnh_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_es5g0e` (
+    `table_es5g0e_record_id` INT,
+    `table_es5g0e_subscription_id` INT,
+    `table_es5g0e_usage_date` DATE,
+    `table_es5g0e_mb_used` INT,
+    `table_es5g0e_call_minutes` INT
+);
+
+INSERT INTO `table_2vjwnh` (`table_2vjwnh_subscription_id`, `table_2vjwnh_customer_id`, `table_2vjwnh_plan_type`, `table_2vjwnh_start_date`, `table_2vjwnh_monthly_fee`, `table_2vjwnh_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_es5g0e` (`table_es5g0e_record_id`, `table_es5g0e_subscription_id`, `table_es5g0e_usage_date`, `table_es5g0e_mb_used`, `table_es5g0e_call_minutes`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(SUBSCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_FEE INT DEFAULT 30;
+    DECLARE V_DATA_LIMIT INT DEFAULT 5;
+    DECLARE V_CALL_LIMIT INT DEFAULT 500;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_CALLS_USED INT DEFAULT 0;
+    DECLARE V_OVERAGE_CHARGES INT DEFAULT 0;
+
+    SELECT TABLE_2VJWNH_PLAN_TYPE, TABLE_2VJWNH_MONTHLY_FEE
+    INTO V_PLAN_TYPE, V_MONTHLY_FEE
+    FROM TABLE_2VJWNH
+    WHERE TABLE_2VJWNH_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM;
+
+    SET V_DATA_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 50
+        WHEN 'GOLD' THEN 20
+        WHEN 'SILVER' THEN 10
+        ELSE 5
+    END;
+
+    SET V_CALL_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 2000
+        WHEN 'GOLD' THEN 1000
+        WHEN 'SILVER' THEN 500
+        ELSE 200
+    END;
+
+    SELECT COALESCE(SUM(TABLE_ES5G0E_MB_USED), 0), COALESCE(SUM(TABLE_ES5G0E_CALL_MINUTES), 0)
+    INTO V_DATA_USED, V_CALLS_USED
+    FROM TABLE_ES5G0E
+    WHERE TABLE_ES5G0E_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM
+      AND TABLE_ES5G0E_USAGE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
+
+    IF V_DATA_USED > V_DATA_LIMIT * 1024 THEN
+        SET V_OVERAGE_CHARGES = V_OVERAGE_CHARGES + ((V_DATA_USED - V_DATA_LIMIT * 1024) / 1024) * 10;
+    END IF;
+
+    IF V_CALLS_USED > V_CALL_LIMIT THEN
+        SET V_OVERAGE_CHARGES = (MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(49, -19)) - 132 + (v_overage_charges + ((v_calls_used - v_call_limit) / 100) * 5);
+    END IF;
+
+    RETURN V_OVERAGE_CHARGES;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+CREATE TABLE IF NOT EXISTS `table_q0ba91` (
+    `table_q0ba91_job_id` INT,
+    `table_q0ba91_inspector_id` INT,
+    `table_q0ba91_property_id` INT,
+    `table_q0ba91_inspection_type` VARCHAR(50),
+    `table_q0ba91_square_footage` INT,
+    `table_q0ba91_inspection_date` DATE,
+    `table_q0ba91_base_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ljuqz` (
+    `table_0ljuqz_property_id` INT,
+    `table_0ljuqz_property_type` VARCHAR(50),
+    `table_0ljuqz_year_built` INT,
+    `table_0ljuqz_num_rooms` INT
+);
+
+INSERT INTO `table_q0ba91` (`table_q0ba91_job_id`, `table_q0ba91_inspector_id`, `table_q0ba91_property_id`, `table_q0ba91_inspection_type`, `table_q0ba91_square_footage`, `table_q0ba91_inspection_date`, `table_q0ba91_base_fee`) VALUES (1, 1, 1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_0ljuqz` (`table_0ljuqz_property_id`, `table_0ljuqz_property_type`, `table_0ljuqz_year_built`, `table_0ljuqz_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(PROPERTY_ID_PARAM INT, INSPECTION_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SQUARE_FOOTAGE INT DEFAULT 1500;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_BASE_FEE INT DEFAULT 300;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0BA91_SQUARE_FOOTAGE, 1500), COALESCE(TABLE_0LJUQZ_YEAR_BUILT, 2000)
+    INTO V_SQUARE_FOOTAGE, V_YEAR_BUILT
+    FROM TABLE_Q0BA91 H
+    JOIN TABLE_0LJUQZ P ON TABLE_Q0BA91_PROPERTY_ID = TABLE_0LJUQZ_PROPERTY_ID
+    WHERE TABLE_Q0BA91_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + (V_SQUARE_FOOTAGE / 100) * 10;
+
+    IF (YEAR(CURDATE()) - V_YEAR_BUILT) > 30 THEN
+        SET V_AGE_SURCHARGE = 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACE INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR N > 100 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        INNER_LOOP: WHILE V_J <= N DO
+            IF V_I = V_J THEN
+                SET V_SUM = V_SUM + (V_I * V_J);
+            END IF;
+            SET V_J = V_J + (MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (1);
+        END WHILE INNER_LOOP;
+        SET V_J = 1;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (V_SHIPPING_COST * 100) / V_ORDER_VALUE;
+
+    RETURN (MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = LOOP_COUNT + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN 'LEAP_YEAR';
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN 'LEAP_YEAR';
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh----- */
+CREATE TABLE IF NOT EXISTS `table_taeluc` (
+    `table_taeluc_customer_id` INT,
+    `table_taeluc_registration_date` DATE,
+    `table_taeluc_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nlsd5g` (
+    `table_nlsd5g_order_id` INT,
+    `table_nlsd5g_customer_id` INT,
+    `table_nlsd5g_order_date` DATE,
+    `table_nlsd5g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_taeluc` (`table_taeluc_customer_id`, `table_taeluc_registration_date`, `table_taeluc_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_nlsd5g` (`table_nlsd5g_order_id`, `table_nlsd5g_customer_id`, `table_nlsd5g_order_date`, `table_nlsd5g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_INACTIVE INT DEFAULT 0;
+    DECLARE V_REACTIVATION_COST INT DEFAULT 0;
+
+    SELECT MAX(TABLE_NLSD5G_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_NLSD5G
+    WHERE TABLE_NLSD5G_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_INACTIVE = DATEDIFF(CURDATE(), V_LAST_ORDER_DATE);
+
+    SET V_REACTIVATION_COST = 10 + (V_DAYS_INACTIVE / 30) * 5;
+
+    RETURN V_REACTIVATION_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo----- */
+CREATE TABLE IF NOT EXISTS `table_t3i5av` (
+    `table_t3i5av_campaign_id` INT,
+    `table_t3i5av_status` VARCHAR(50)
+);
+
+INSERT INTO `table_t3i5av` (`table_t3i5av_campaign_id`, `table_t3i5av_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_T3I5AV_STATUS
+    INTO V_STATUS
+    FROM TABLE_T3I5AV
+    WHERE TABLE_T3I5AV_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 1;
+        WHEN 'PAUSED' THEN RETURN 2;
+        WHEN 'COMPLETED' THEN RETURN 3;
+        WHEN 'CANCELLED' THEN RETURN 4;
+        ELSE RETURN 0;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(TEXT INT, PATTERN INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEXT_LEN INT DEFAULT 0;
+    DECLARE V_PATTERN_LEN INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+    DECLARE V_MATCH_FOUND INT DEFAULT 0;
+
+    SET V_TEXT_LEN = CHAR_LENGTH(TEXT);
+    SET V_PATTERN_LEN = CHAR_LENGTH(PATTERN);
+
+    IF V_PATTERN_LEN = 0 OR V_PATTERN_LEN > V_TEXT_LEN THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_TEXT_LEN - V_PATTERN_LEN + 1 DO
+        SET V_J = 1;
+        SET V_MATCH_FOUND = 1;
+
+        INNER_LOOP: WHILE V_J <= V_PATTERN_LEN DO
+            IF SUBSTRING(TEXT, V_I + V_J - 1, 1) != SUBSTRING(PATTERN, V_J, 1) THEN
+                SET V_MATCH_FOUND = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_MATCH_FOUND = 1 THEN
+            RETURN V_I;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_mjor62() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(76, -47)) - 536 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(55)) - 728 + ((MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(22)) - 481 + ((MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(92)) - -566 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-6)) - 990 + (0)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PROC2_mjor62();

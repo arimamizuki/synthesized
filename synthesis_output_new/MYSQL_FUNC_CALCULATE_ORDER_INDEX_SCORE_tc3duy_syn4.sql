@@ -1,0 +1,332 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_hdcz7z` (
+    `table_hdcz7z_order_id` INT,
+    `table_hdcz7z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hdcz7z` (`table_hdcz7z_order_id`, `table_hdcz7z_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (-1);
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(18)) - 116 + (p_a mod p_b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+CREATE TABLE IF NOT EXISTS `table_wjhyu0` (
+    `table_wjhyu0_customer_id` INT,
+    `table_wjhyu0_registration_date` DATE
+);
+
+INSERT INTO `table_wjhyu0` (`table_wjhyu0_customer_id`, `table_wjhyu0_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REG_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_WJHYU0_REGISTRATION_DATE)
+    INTO V_REG_YEAR
+    FROM TABLE_WJHYU0
+    WHERE TABLE_WJHYU0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_REG_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(-65)) - -617 + (quarter(v_hire_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, (MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe()) - 67 + (0)) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_14_VALUES_ewrtoe() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 14 UNION SELECT 28 UNION SELECT 42 UNION SELECT 56 UNION SELECT 70 UNION SELECT 84 UNION SELECT 98 UNION SELECT 112 UNION SELECT 126 UNION SELECT 140 UNION SELECT 154 UNION SELECT 168 UNION SELECT 182 UNION SELECT 196;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+CREATE TABLE IF NOT EXISTS `table_5jb34m` (
+    `table_5jb34m_room_id` INT,
+    `table_5jb34m_room_type` VARCHAR(50),
+    `table_5jb34m_floor` INT,
+    `table_5jb34m_is_occupied` INT,
+    `table_5jb34m_daily_rate` INT,
+    `table_5jb34m_max_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nvdwjr` (
+    `table_nvdwjr_res_id` INT,
+    `table_nvdwjr_room_id` INT,
+    `table_nvdwjr_guest_id` INT,
+    `table_nvdwjr_check_in` INT,
+    `table_nvdwjr_check_out` INT,
+    `table_nvdwjr_guests_count` INT,
+    `table_nvdwjr_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5jb34m` (`table_5jb34m_room_id`, `table_5jb34m_room_type`, `table_5jb34m_floor`, `table_5jb34m_is_occupied`, `table_5jb34m_daily_rate`, `table_5jb34m_max_occupancy`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_nvdwjr` (`table_nvdwjr_res_id`, `table_nvdwjr_room_id`, `table_nvdwjr_guest_id`, `table_nvdwjr_check_in`, `table_nvdwjr_check_out`, `table_nvdwjr_guests_count`, `table_nvdwjr_total_price`) VALUES (1, 2, 3, 4, 5, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(ROOM_ID_PARAM INT, YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_OCCUPIED_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_NVDWJR_TOTAL_PRICE), 0) INTO V_TOTAL_REVENUE
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    SELECT COALESCE(TABLE_5JB34M_DAILY_RATE, 0) INTO V_DAILY_RATE
+    FROM TABLE_5JB34M
+    WHERE TABLE_5JB34M_ROOM_ID = ROOM_ID_PARAM;
+
+    SELECT COALESCE(SUM(DATEDIFF(TABLE_NVDWJR_CHECK_OUT, TABLE_NVDWJR_CHECK_IN)), 0) INTO V_OCCUPIED_DAYS
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(-46)) - 218 + (v_total_revenue + (v_occupied_days * v_daily_rate / 2));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - 101 + ((v_refund_total * 100) / v_order_total);
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (v_result * v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_HDCZ7Z_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_HDCZ7Z
+    WHERE TABLE_HDCZ7Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(-60, 7)) - 100 + ((MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(-34, -95)) - -502 + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - 101 + (floor(v_total * 0.1))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(1);

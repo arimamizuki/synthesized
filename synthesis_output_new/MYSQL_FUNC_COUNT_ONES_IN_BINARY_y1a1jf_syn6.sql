@@ -1,0 +1,358 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+CREATE TABLE IF NOT EXISTS `table_9ywali` (
+    `table_9ywali_campaign_id` INT,
+    `table_9ywali_budget` INT,
+    `table_9ywali_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_06pwt4` (
+    `table_06pwt4_conversion_id` INT,
+    `table_06pwt4_campaign_id` INT,
+    `table_06pwt4_conversion_value` INT
+);
+
+INSERT INTO `table_9ywali` (`table_9ywali_campaign_id`, `table_9ywali_budget`, `table_9ywali_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_06pwt4` (`table_06pwt4_conversion_id`, `table_06pwt4_campaign_id`, `table_06pwt4_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_VALUE_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_06PWT4_CONVERSION_VALUE), 0), COUNT(*)
+    INTO V_TOTAL_VALUE, V_CONVERSION_COUNT
+    FROM TABLE_06PWT4
+    WHERE TABLE_06PWT4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VALUE_INDEX = V_TOTAL_VALUE / V_CONVERSION_COUNT;
+
+    RETURN FLOOR(V_VALUE_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+CREATE TABLE IF NOT EXISTS `table_7gncdo` (
+    `table_7gncdo_product_id` INT,
+    `table_7gncdo_category_id` INT
+);
+
+INSERT INTO `table_7gncdo` (`table_7gncdo_product_id`, `table_7gncdo_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_7GNCDO
+    WHERE TABLE_7GNCDO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - 850 + ((MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d(86)) - -7 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+CREATE TABLE IF NOT EXISTS `table_ljz443` (
+    `table_ljz443_order_id` INT,
+    `table_ljz443_customer_id` INT,
+    `table_ljz443_restaurant_id` INT,
+    `table_ljz443_driver_id` INT,
+    `table_ljz443_order_total` DECIMAL(10,2),
+    `table_ljz443_delivery_fee` INT,
+    `table_ljz443_order_time` DATE,
+    `table_ljz443_delivery_time` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cn41jp` (
+    `table_cn41jp_restaurant_id` INT,
+    `table_cn41jp_name` VARCHAR(50),
+    `table_cn41jp_cuisine_type` VARCHAR(50),
+    `table_cn41jp_avg_preparation_time` DATE
+);
+
+INSERT INTO `table_ljz443` (`table_ljz443_order_id`, `table_ljz443_customer_id`, `table_ljz443_restaurant_id`, `table_ljz443_driver_id`, `table_ljz443_order_total`, `table_ljz443_delivery_fee`, `table_ljz443_order_time`, `table_ljz443_delivery_time`) VALUES (1, 2, 3, 4, 1.0, 6, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_cn41jp` (`table_cn41jp_restaurant_id`, `table_cn41jp_name`, `table_cn41jp_cuisine_type`, `table_cn41jp_avg_preparation_time`) VALUES (1, 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TIME DATETIME;
+    DECLARE V_DELIVERY_TIME DATETIME;
+    DECLARE V_PREPARATION_TIME INT DEFAULT 15;
+    DECLARE V_TOTAL_DELIVERY_MINS INT DEFAULT 0;
+    DECLARE V_DELIVERY_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_LJZ443_ORDER_TIME, TABLE_LJZ443_DELIVERY_TIME
+    INTO V_ORDER_TIME, V_DELIVERY_TIME
+    FROM TABLE_LJZ443 O
+    WHERE TABLE_LJZ443_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TIME IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DELIVERY_TIME IS NULL THEN
+        SET V_DELIVERY_TIME = NOW();
+    END IF;
+
+    SET V_TOTAL_DELIVERY_MINS = TIMESTAMPDIFF(MINUTE, V_ORDER_TIME, V_DELIVERY_TIME);
+
+    SET V_DELIVERY_SCORE = 100 - (V_TOTAL_DELIVERY_MINS - V_PREPARATION_TIME);
+
+    IF V_DELIVERY_SCORE < 0 THEN
+        SET V_DELIVERY_SCORE = 0;
+    END IF;
+
+    RETURN V_DELIVERY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz----- */
+CREATE TABLE IF NOT EXISTS `table_605e7b` (
+    `table_605e7b_customer_id` INT,
+    `table_605e7b_order_date` DATE,
+    `table_605e7b_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_605e7b` (`table_605e7b_customer_id`, `table_605e7b_order_date`, `table_605e7b_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SPAN INT DEFAULT 1;
+
+    SELECT COUNT(*), DATEDIFF(MAX(TABLE_605E7B_ORDER_DATE), MIN(TABLE_605E7B_ORDER_DATE)) + 1
+    INTO V_ORDER_COUNT, V_DAYS_SPAN
+    FROM TABLE_605E7B
+    WHERE TABLE_605E7B_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT <= 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(-64)) - 967 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(49)) - -212 + ((MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(-11)) - -377 + (0)));
+    END IF;
+
+    RETURN FLOOR((V_ORDER_COUNT * 30) / V_DAYS_SPAN);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+CREATE TABLE IF NOT EXISTS `table_g5e0fi` (
+    `table_g5e0fi_product_id` INT,
+    `table_g5e0fi_stock_quantity` INT
+);
+
+INSERT INTO `table_g5e0fi` (`table_g5e0fi_product_id`, `table_g5e0fi_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G5E0FI_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_G5E0FI
+    WHERE TABLE_G5E0FI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK > 1000 THEN
+        RETURN 5;
+    ELSEIF V_STOCK > 500 THEN
+        RETURN 4;
+    ELSEIF V_STOCK > 100 THEN
+        RETURN 3;
+    ELSEIF V_STOCK > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+CREATE TABLE IF NOT EXISTS `table_u9lbfu` (
+    `table_u9lbfu_customer_id` INT,
+    `table_u9lbfu_status` VARCHAR(50)
+);
+
+INSERT INTO `table_u9lbfu` (`table_u9lbfu_customer_id`, `table_u9lbfu_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_U9LBFU_STATUS
+    INTO V_STATUS
+    FROM TABLE_U9LBFU
+    WHERE TABLE_U9LBFU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'PENDING' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+CREATE TABLE IF NOT EXISTS `table_ar5of1` (
+    `table_ar5of1_product_id` INT,
+    `table_ar5of1_category_id` INT,
+    `table_ar5of1_price` DECIMAL(10,2),
+    `table_ar5of1_stock_quantity` INT
+);
+
+INSERT INTO `table_ar5of1` (`table_ar5of1_product_id`, `table_ar5of1_category_id`, `table_ar5of1_price`, `table_ar5of1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_AR5OF1_PRICE * TABLE_AR5OF1_STOCK_QUANTITY), 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_AR5OF1
+    WHERE TABLE_AR5OF1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_INVENTORY_VALUE / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+CREATE TABLE IF NOT EXISTS `table_hyqlgg` (
+    `table_hyqlgg_campaign_id` INT,
+    `table_hyqlgg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hyqlgg` (`table_hyqlgg_campaign_id`, `table_hyqlgg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HYQLGG_STATUS
+    INTO V_STATUS
+    FROM TABLE_HYQLGG
+    WHERE TABLE_HYQLGG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC3_yq9y3r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC3_yq9y3r() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = (MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz(51)) - 390 + ((MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(55)) - 19 + (abs(num)));
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        IF V_TEMP MOD 2 = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_PROC3_yq9y3r()) - 806 + (v_count) + 1;
+        END IF;
+        SET V_TEMP = V_TEMP DIV 2;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(1);

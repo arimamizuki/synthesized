@@ -1,0 +1,423 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+CREATE TABLE IF NOT EXISTS `table_fvpibn` (
+    `table_fvpibn_product_id` INT,
+    `table_fvpibn_supplier_id` INT
+);
+
+INSERT INTO `table_fvpibn` (`table_fvpibn_product_id`, `table_fvpibn_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_FVPIBN_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN (MYSQL_FUNC_PROC_VECTOR_nlaylc()) - -362 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+CREATE TABLE IF NOT EXISTS `table_95d2jl` (
+    `table_95d2jl_vec` INT
+);
+
+INSERT INTO `table_95d2jl` (`table_95d2jl_vec`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_95D2JL_VEC INTO RESULT FROM `TABLE_95D2JL` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(-73)) - -514 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+CREATE TABLE IF NOT EXISTS `table_iy3rb0` (
+    `table_iy3rb0_order_id` INT,
+    `table_iy3rb0_customer_id` INT,
+    `table_iy3rb0_order_date` DATE,
+    `table_iy3rb0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5xz50t` (
+    `table_5xz50t_customer_id` INT,
+    `table_5xz50t_country` INT
+);
+
+INSERT INTO `table_iy3rb0` (`table_iy3rb0_order_id`, `table_iy3rb0_customer_id`, `table_iy3rb0_order_date`, `table_iy3rb0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_5xz50t` (`table_5xz50t_customer_id`, `table_5xz50t_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_ORDERS INT DEFAULT 0;
+    DECLARE V_PRIOR_ORDERS INT DEFAULT 0;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_ORDERS - V_PRIOR_ORDERS) * 100) / V_PRIOR_ORDERS;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+CREATE TABLE IF NOT EXISTS `table_vh9l8d` (
+    `table_vh9l8d_emp_id` INT,
+    `table_vh9l8d_department_id` INT,
+    `table_vh9l8d_salary` INT,
+    `table_vh9l8d_hire_date` DATE,
+    `table_vh9l8d_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_vh9l8d` (`table_vh9l8d_emp_id`, `table_vh9l8d_department_id`, `table_vh9l8d_salary`, `table_vh9l8d_hire_date`, `table_vh9l8d_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_ELIGIBLE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VH9L8D_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_VH9L8D_HIRE_DATE, CURDATE()), COALESCE(TABLE_VH9L8D_SALARY, 0)
+    INTO V_PERFORMANCE_RATING, V_YEARS_EMPLOYED, V_SALARY
+    FROM TABLE_VH9L8D
+    WHERE TABLE_VH9L8D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_PERFORMANCE_RATING >= 3.5 AND V_YEARS_EMPLOYED >= (MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(-91)) - 973 + (1) THEN
+        SET V_BONUS_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_BONUS_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DATA_FABRICACAO_5mz9t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN CURRENT_YEAR - DATA_FIRST;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + (MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(-92)) - -502 + (v_curr);
+        SET V_PREV = V_CURR;
+        SET V_CURR = (MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(-51)) - -128 + (v_next);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+CREATE TABLE IF NOT EXISTS `table_02dgpw` (
+    `table_02dgpw_policy_id` INT,
+    `table_02dgpw_customer_id` INT,
+    `table_02dgpw_bike_value` INT,
+    `table_02dgpw_bike_type` VARCHAR(50),
+    `table_02dgpw_annual_premium` INT,
+    `table_02dgpw_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_beolwf` (
+    `table_beolwf_claim_id` INT,
+    `table_beolwf_policy_id` INT,
+    `table_beolwf_claim_date` DATE,
+    `table_beolwf_claim_amount` DECIMAL(10,2),
+    `table_beolwf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_02dgpw` (`table_02dgpw_policy_id`, `table_02dgpw_customer_id`, `table_02dgpw_bike_value`, `table_02dgpw_bike_type`, `table_02dgpw_annual_premium`, `table_02dgpw_deductible_amount`) VALUES (1, 2, 3, 'test', 5, 1.0);
+
+INSERT INTO `table_beolwf` (`table_beolwf_claim_id`, `table_beolwf_policy_id`, `table_beolwf_claim_date`, `table_beolwf_claim_amount`, `table_beolwf_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_02DGPW_BIKE_VALUE, 10000), COALESCE(TABLE_02DGPW_ANNUAL_PREMIUM, 500), COALESCE(TABLE_02DGPW_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_02DGPW
+    WHERE TABLE_02DGPW_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = V_BIKE_VALUE / 1000;
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + (cast(v_final_premium as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ah7ot` (
+    `table_4ah7ot_student_id` INT,
+    `table_4ah7ot_name` VARCHAR(50),
+    `table_4ah7ot_class_id` INT,
+    `table_4ah7ot_score` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hqvgbn` (
+    `table_hqvgbn_class_id` INT,
+    `table_hqvgbn_teacher_id` INT,
+    `table_hqvgbn_average_score` INT
+);
+
+INSERT INTO `table_4ah7ot` (`table_4ah7ot_student_id`, `table_4ah7ot_name`, `table_4ah7ot_class_id`, `table_4ah7ot_score`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_hqvgbn` (`table_hqvgbn_class_id`, `table_hqvgbn_teacher_id`, `table_hqvgbn_average_score`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLASS_AVG INT DEFAULT 0;
+    DECLARE V_STUDENT_COUNT INT DEFAULT 0;
+    DECLARE V_BELOW_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_CURVE_FACTOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HQVGBN_AVERAGE_SCORE, 0)
+    INTO V_CLASS_AVG
+    FROM TABLE_HQVGBN
+    WHERE TABLE_HQVGBN_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_STUDENT_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_BELOW_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE < V_CLASS_AVG;
+
+    SELECT COUNT(*)
+    INTO V_ABOVE_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE >= V_CLASS_AVG;
+
+    IF V_STUDENT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_BELOW_AVG_COUNT > V_ABOVE_AVG_COUNT THEN
+        SET V_CURVE_FACTOR = -((V_BELOW_AVG_COUNT - V_ABOVE_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    ELSE
+        SET V_CURVE_FACTOR = ((V_ABOVE_AVG_COUNT - V_BELOW_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    END IF;
+
+    RETURN V_CURVE_FACTOR;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = (MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(-12)) - 899 + ((MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(29)) - 425 + (v_order_total - v_refund_total));
+
+    RETURN (MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(-77)) - -936 + ((MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(-74)) - -932 + (v_net_revenue));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(1);

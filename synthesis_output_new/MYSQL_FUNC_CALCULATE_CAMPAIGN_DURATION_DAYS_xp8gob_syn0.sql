@@ -1,0 +1,377 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_w5wcxl` (
+    `table_w5wcxl_campaign_id` INT,
+    `table_w5wcxl_channel` INT,
+    `table_w5wcxl_target_audience` INT,
+    `table_w5wcxl_budget` INT,
+    `table_w5wcxl_start_date` DATE,
+    `table_w5wcxl_end_date` DATE,
+    `table_w5wcxl_status` VARCHAR(50)
+);
+
+INSERT INTO `table_w5wcxl` (`table_w5wcxl_campaign_id`, `table_w5wcxl_channel`, `table_w5wcxl_target_audience`, `table_w5wcxl_budget`, `table_w5wcxl_start_date`, `table_w5wcxl_end_date`, `table_w5wcxl_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_LCM INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+    DECLARE V_REMAINDER INT DEFAULT 0;
+
+    SET V_TEMP_A = A;
+    SET V_TEMP_B = B;
+
+    GCD_LOOP: WHILE V_TEMP_B != 0 DO
+        SET V_REMAINDER = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_TEMP_B;
+        SET V_TEMP_B = V_REMAINDER;
+    END WHILE GCD_LOOP;
+
+    SET V_GCD = V_TEMP_A;
+
+    IF V_GCD = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LCM = (A / V_GCD) * B;
+
+    RETURN V_LCM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs(40)) - 144 + (a - b);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 3;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF N <= 2 OR N % 2 != 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_I = 3;
+
+    OUTER_LOOP: WHILE V_I <= N / 2 DO
+        SET V_IS_PRIME = 1;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_J = N - V_I;
+            SET V_IS_PRIME = 1;
+            SET V_J = 2;
+
+            CHECK_LOOP: WHILE V_J * V_J <= V_J DO
+                IF V_J % V_J = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE CHECK_LOOP;
+                END IF;
+                SET V_J = V_J + 1;
+            END WHILE CHECK_LOOP;
+
+            IF V_IS_PRIME = 1 THEN
+                RETURN V_I;
+            END IF;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp----- */
+CREATE TABLE IF NOT EXISTS `table_o55pfk` (
+    `table_o55pfk_table_id` INT,
+    `table_o55pfk_capacity` INT,
+    `table_o55pfk_is_occupied` INT,
+    `table_o55pfk_section` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t5plmj` (
+    `table_t5plmj_res_id` INT,
+    `table_t5plmj_table_id` INT,
+    `table_t5plmj_guest_count` INT,
+    `table_t5plmj_reservation_date` DATE,
+    `table_t5plmj_reservation_time` DATE,
+    `table_t5plmj_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o55pfk` (`table_o55pfk_table_id`, `table_o55pfk_capacity`, `table_o55pfk_is_occupied`, `table_o55pfk_section`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_t5plmj` (`table_t5plmj_res_id`, `table_t5plmj_table_id`, `table_t5plmj_guest_count`, `table_t5plmj_reservation_date`, `table_t5plmj_reservation_time`, `table_t5plmj_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(TABLE_ID_PARAM INT, GUEST_COUNT_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_IS_OCCUPIED INT DEFAULT 0;
+    DECLARE V_SECTION_CAPACITY INT DEFAULT 0;
+    DECLARE V_RESERVED_COUNT INT DEFAULT 0;
+    DECLARE V_CAN_ACCOMMODATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O55PFK_CAPACITY, 0), COALESCE(TABLE_O55PFK_IS_OCCUPIED, 0)
+    INTO V_CAPACITY, V_IS_OCCUPIED
+    FROM TABLE_O55PFK
+    WHERE TABLE_O55PFK_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVED_COUNT
+    FROM TABLE_T5PLMJ
+    WHERE TABLE_T5PLMJ_TABLE_ID = TABLE_ID_PARAM
+      AND TABLE_T5PLMJ_STATUS IN ('CONFIRMED', 'PENDING');
+
+    SET V_SECTION_CAPACITY = V_CAPACITY - V_RESERVED_COUNT;
+
+    IF V_IS_OCCUPIED = 1 THEN
+        SET V_CAN_ACCOMMODATE = 0;
+    ELSEIF V_SECTION_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 1;
+    ELSEIF V_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 2;
+    ELSE
+        SET V_CAN_ACCOMMODATE = 0;
+    END IF;
+
+    RETURN V_CAN_ACCOMMODATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+CREATE TABLE IF NOT EXISTS `table_ah3i1s` (
+    `table_ah3i1s_campaign_id` INT,
+    `table_ah3i1s_budget` INT
+);
+
+INSERT INTO `table_ah3i1s` (`table_ah3i1s_campaign_id`, `table_ah3i1s_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AH3I1S_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_AH3I1S
+    WHERE TABLE_AH3I1S_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(88)) - 204 + ((MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(-78)) - 452 + ((MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + (v_budget / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = LOOP_COUNT + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+CREATE TABLE IF NOT EXISTS `table_dc8xhv` (
+    `table_dc8xhv_customer_id` INT,
+    `table_dc8xhv_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_dc8xhv` (`table_dc8xhv_customer_id`, `table_dc8xhv_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_DC8XHV_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_DC8XHV
+    WHERE TABLE_DC8XHV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d(-42)) - -30 + (100);
+        WHEN 'PREMIUM' THEN RETURN 50;
+        WHEN 'BASIC' THEN RETURN 20;
+        ELSE RETURN 5;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d----- */
+CREATE TABLE IF NOT EXISTS `table_der9s6` (
+    `table_der9s6_customer_id` INT,
+    `table_der9s6_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_der9s6` (`table_der9s6_customer_id`, `table_der9s6_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DER9S6_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_DER9S6
+    WHERE TABLE_DER9S6_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTHLY_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+CREATE TABLE IF NOT EXISTS `table_lrokng` (
+    `table_lrokng_customer_id` INT,
+    `table_lrokng_order_date` DATE,
+    `table_lrokng_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lrokng` (`table_lrokng_customer_id`, `table_lrokng_order_date`, `table_lrokng_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_LROKNG_CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM TABLE_LROKNG
+    WHERE TABLE_LROKNG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(-27, -55)) - 793 + ((v_order_count * 100) / v_customer_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+CREATE TABLE IF NOT EXISTS `table_97n3j7` (
+    `table_97n3j7_order_id` INT,
+    `table_97n3j7_warehouse_id` INT,
+    `table_97n3j7_order_date` DATE,
+    `table_97n3j7_total_items` DECIMAL(10,2),
+    `table_97n3j7_total_weight` DECIMAL(10,2),
+    `table_97n3j7_shipping_method` INT,
+    `table_97n3j7_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_97n3j7` (`table_97n3j7_order_id`, `table_97n3j7_warehouse_id`, `table_97n3j7_order_date`, `table_97n3j7_total_items`, `table_97n3j7_total_weight`, `table_97n3j7_shipping_method`, `table_97n3j7_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 1.0, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(ORDER_ID_PARAM INT, SHIPPING_METHOD_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 10;
+    DECLARE V_WEIGHT_COST INT DEFAULT 0;
+    DECLARE V_METHOD_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_97N3J7_TOTAL_WEIGHT, 0) INTO V_TOTAL_WEIGHT
+    FROM TABLE_97N3J7
+    WHERE TABLE_97N3J7_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE SHIPPING_METHOD_PARAM
+        WHEN 'STANDARD' THEN SET V_METHOD_MULTIPLIER = 1;
+        WHEN 'EXPRESS' THEN SET V_METHOD_MULTIPLIER = 2;
+        WHEN 'OVERNIGHT' THEN SET V_METHOD_MULTIPLIER = 3;
+        WHEN 'INTERNATIONAL' THEN SET V_METHOD_MULTIPLIER = 5;
+        ELSE SET V_METHOD_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_WEIGHT_COST = V_TOTAL_WEIGHT / 10;
+    SET V_TOTAL_COST = (V_BASE_COST + V_WEIGHT_COST) * V_METHOD_MULTIPLIER;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_W5WCXL_START_DATE, TABLE_W5WCXL_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W5WCXL
+    WHERE TABLE_W5WCXL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(-55)) - -818 + ((MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + ((MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(12, -60)) - -907 + (0)));
+    END IF;
+
+    SET V_DURATION_DAYS = (MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(70, -6)) - -590 + (datediff(v_end_date, v_start_date));
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(1);

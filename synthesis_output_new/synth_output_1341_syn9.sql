@@ -1,0 +1,450 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS x3 (id INT PRIMARY KEY, B CHAR(16), other_id INT, index_other_id_covered_column INT);
+CREATE TABLE IF NOT EXISTS v102662 (v102651 INT, data VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v102704 (v102693 INT, name VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v102741 (id INT PRIMARY KEY, col1 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v102867 (v102868 INT);
+INSERT INTO x3 VALUES (1, 'test1', 10, 100), (2, 'test2', 20, 200), (3, 'test3', 30, 300);
+INSERT INTO v102662 VALUES (-5, 'negative'), (10, 'positive'), (-2, 'negative');
+INSERT INTO v102704 VALUES (1, 'alpha'), (2, 'beta'), (3, 'gamma');
+INSERT INTO v102741 VALUES (1, 'data1'), (2, 'data2');
+INSERT INTO v102867 VALUES (0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+CREATE TABLE IF NOT EXISTS `table_viimne` (
+    `table_viimne_emp_id` INT,
+    `table_viimne_dept_id` INT,
+    `table_viimne_salary` INT,
+    `table_viimne_hire_date` DATE,
+    `table_viimne_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_cv0uu0` (
+    `table_cv0uu0_dept_id` INT,
+    `table_cv0uu0_name` VARCHAR(50),
+    `table_cv0uu0_avg_salary` INT
+);
+
+INSERT INTO `table_viimne` (`table_viimne_emp_id`, `table_viimne_dept_id`, `table_viimne_salary`, `table_viimne_hire_date`, `table_viimne_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_cv0uu0` (`table_cv0uu0_dept_id`, `table_cv0uu0_name`, `table_cv0uu0_avg_salary`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_MARKET_AVG_SALARY INT DEFAULT 50000;
+    DECLARE V_COMPETITIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VIIMNE_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CV0UU0_AVG_SALARY, 50000)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_CV0UU0 D
+    JOIN TABLE_VIIMNE E ON TABLE_CV0UU0_DEPT_ID = TABLE_VIIMNE_DEPT_ID
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_VIIMNE_PERFORMANCE_RATING, 3.0)
+    INTO V_PERFORMANCE
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMPETITIVENESS_SCORE = ((V_SALARY - V_MARKET_AVG_SALARY) * 100) / V_MARKET_AVG_SALARY;
+
+    IF V_SALARY < V_DEPT_AVG_SALARY THEN
+        SET V_COMPETITIVENESS_SCORE = V_COMPETITIVENESS_SCORE - 10;
+    END IF;
+
+    IF V_PERFORMANCE >= 4.5 THEN
+        SET V_COMPETITIVENESS_SCORE = V_COMPETITIVENESS_SCORE + 15;
+    END IF;
+
+    RETURN V_COMPETITIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+CREATE TABLE IF NOT EXISTS `table_82nhzq` (
+    `table_82nhzq_ctext` VARCHAR(255)
+);
+
+INSERT INTO `table_82nhzq` (`table_82nhzq_ctext`) VALUES ('sample_text');
+
+/* -----Called: MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TEXT_r5pjjb() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_82NHZQ`;
+    RETURN (MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(-37)) - 439 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(12)) - -143 + (result_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+CREATE TABLE IF NOT EXISTS `table_ze3ja4` (
+    `table_ze3ja4_order_id` INT,
+    `table_ze3ja4_customer_id` INT,
+    `table_ze3ja4_order_date` DATE
+);
+
+INSERT INTO `table_ze3ja4` (`table_ze3ja4_order_id`, `table_ze3ja4_customer_id`, `table_ze3ja4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_ZE3JA4_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_ZE3JA4
+    WHERE TABLE_ZE3JA4_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(48)) - 438 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(55)) - 728 + (v_year));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN 'LEAP_YEAR';
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN 'LEAP_YEAR';
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+CREATE TABLE IF NOT EXISTS `table_h1shr7` (
+    `table_h1shr7_emp_id` INT,
+    `table_h1shr7_department_id` INT,
+    `table_h1shr7_hire_date` DATE,
+    `table_h1shr7_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cm7r4q` (
+    `table_cm7r4q_department_id` INT,
+    `table_cm7r4q_name` VARCHAR(50)
+);
+
+INSERT INTO `table_h1shr7` (`table_h1shr7_emp_id`, `table_h1shr7_department_id`, `table_h1shr7_hire_date`, `table_h1shr7_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_cm7r4q` (`table_cm7r4q_department_id`, `table_cm7r4q_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_PRIOR_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_YEAR_HIRES = (MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(88)) - -995 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = (MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg()) - 546 + (((v_current_year_hires - v_prior_year_hires) * 100) / v_prior_year_hires);
+
+    RETURN (MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl(-16)) - -262 + (v_growth_rate);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10
+        UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20
+        UNION SELECT 22 UNION SELECT 24 UNION SELECT 26 UNION SELECT 28 UNION SELECT 30
+        UNION SELECT 32 UNION SELECT 34 UNION SELECT 36 UNION SELECT 38 UNION SELECT 40;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl----- */
+CREATE TABLE IF NOT EXISTS `table_7ljzqz` (
+    `table_7ljzqz_order_id` INT,
+    `table_7ljzqz_customer_id` INT,
+    `table_7ljzqz_order_date` DATE,
+    `table_7ljzqz_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_h7c6zi` (
+    `table_h7c6zi_customer_id` INT,
+    `table_h7c6zi_country` INT
+);
+
+INSERT INTO `table_7ljzqz` (`table_7ljzqz_order_id`, `table_7ljzqz_customer_id`, `table_7ljzqz_order_date`, `table_7ljzqz_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_h7c6zi` (`table_h7c6zi_customer_id`, `table_h7c6zi_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_INTERVAL INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_7LJZQZ_ORDER_DATE), MAX(TABLE_7LJZQZ_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_7LJZQZ
+    WHERE TABLE_7LJZQZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER, V_FIRST_ORDER);
+
+    SET V_AVG_INTERVAL = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(2)) - 873 + (v_avg_interval);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms----- */
+CREATE TABLE IF NOT EXISTS `table_is35f3` (
+    `table_is35f3_emp_id` INT,
+    `table_is35f3_manager_id` INT,
+    `table_is35f3_salary` INT,
+    `table_is35f3_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bdh819` (
+    `table_bdh819_dept_id` INT,
+    `table_bdh819_budget` INT,
+    `table_bdh819_allocated_budget` INT
+);
+
+INSERT INTO `table_is35f3` (`table_is35f3_emp_id`, `table_is35f3_manager_id`, `table_is35f3_salary`, `table_is35f3_department_id`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_bdh819` (`table_bdh819_dept_id`, `table_bdh819_budget`, `table_bdh819_allocated_budget`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_IS35F3_SALARY), 0) INTO V_TOTAL_SALARY
+    FROM TABLE_IS35F3
+    WHERE TABLE_IS35F3_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_BDH819_BUDGET, 0) INTO V_BUDGET
+    FROM TABLE_BDH819
+    WHERE TABLE_BDH819_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARY * 100) / V_BUDGET;
+
+    RETURN CAST(V_UTILIZATION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+CREATE TABLE IF NOT EXISTS `table_gg067m` (
+    `table_gg067m_rental_id` INT,
+    `table_gg067m_customer_id` INT,
+    `table_gg067m_boat_id` INT,
+    `table_gg067m_rental_hours` INT,
+    `table_gg067m_hourly_rate` INT,
+    `table_gg067m_fuel_included` INT,
+    `table_gg067m_captain_required` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1tuyv7` (
+    `table_1tuyv7_boat_id` INT,
+    `table_1tuyv7_boat_type` VARCHAR(50),
+    `table_1tuyv7_make` INT,
+    `table_1tuyv7_model` INT,
+    `table_1tuyv7_length_feet` INT,
+    `table_1tuyv7_capacity` INT
+);
+
+INSERT INTO `table_gg067m` (`table_gg067m_rental_id`, `table_gg067m_customer_id`, `table_gg067m_boat_id`, `table_gg067m_rental_hours`, `table_gg067m_hourly_rate`, `table_gg067m_fuel_included`, `table_gg067m_captain_required`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_1tuyv7` (`table_1tuyv7_boat_id`, `table_1tuyv7_boat_type`, `table_1tuyv7_make`, `table_1tuyv7_model`, `table_1tuyv7_length_feet`, `table_1tuyv7_capacity`) VALUES (1, 'test', 3, 4, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 4;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CAPTAIN_FEE INT DEFAULT 150;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GG067M_RENTAL_HOURS, 4), COALESCE(TABLE_GG067M_HOURLY_RATE, 200), COALESCE(TABLE_GG067M_CAPTAIN_REQUIRED, 0)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE, V_CAPTAIN_FEE
+    FROM TABLE_GG067M
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT TABLE_1TUYV7_LENGTH_FEET * 5 INTO V_FUEL_SURCHARGE
+    FROM TABLE_GG067M BR
+    JOIN TABLE_1TUYV7 B ON TABLE_GG067M_BOAT_ID = TABLE_1TUYV7_BOAT_ID
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM AND TABLE_GG067M_FUEL_INCLUDED = 0;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE + V_FUEL_SURCHARGE;
+
+    IF V_CAPTAIN_FEE > 0 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + V_CAPTAIN_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1341(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v102651 FROM v102662 WHERE v102651 < -1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: Create table v102697 from x3 (simulated as dynamic DDL)
+    SET @sql1 = 'CREATE TABLE IF NOT EXISTS v102697 (v102698 INT PRIMARY KEY, v102699 CHAR(16), INDEX(B(4))) AS SELECT * FROM x3';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Statement 2: Use cursor to iterate SELECT and count rows
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = (MYSQL_FUNC_PROC_TEXT_r5pjjb()) - -706 + ((MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(63)) - -549 + (v_counter)) + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 3: Create table v102705 from v102704
+    SET @sql3 = 'CREATE TABLE IF NOT EXISTS v102705 AS SELECT x4.v102693, 2 * x4.v102693 AS x2, 3 * x4.v102693 AS x3 FROM v102704 AS x4';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+
+    -- Statement 4: Create index using expression (simulated as ALTER TABLE)
+    SET @sql4 = 'ALTER TABLE v102741 ADD INDEX v102761((LEFT(123, 2) + 1 + 1))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+
+    -- Statement 5: Insert value into v102867 with conditional logic
+    IF p1 > 0 THEN
+        SET @sql5 = 'INSERT INTO v102867 (v102868) VALUES (-185204736)';
+    ELSE
+        SET @sql5 = 'INSERT INTO v102867 (v102868) VALUES (0)';
+    END IF;
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Use WHILE loop to count additional rows
+    WHILE v_counter < p2 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- Use CASE for final result adjustment
+    CASE
+        WHEN v_counter > 100 THEN SET result = v_counter;
+        WHEN v_counter > 50 THEN SET result = v_counter * 2;
+        ELSE SET result = v_counter + p1;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1341(1, 1, @out_result);
+
+SELECT @out_result;

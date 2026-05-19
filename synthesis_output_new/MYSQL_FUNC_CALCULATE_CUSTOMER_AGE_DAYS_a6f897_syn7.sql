@@ -1,0 +1,358 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_m6at5n` (
+    `table_m6at5n_customer_id` INT,
+    `table_m6at5n_registration_date` DATE
+);
+
+INSERT INTO `table_m6at5n` (`table_m6at5n_customer_id`, `table_m6at5n_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+CREATE TABLE IF NOT EXISTS `table_hyqlgg` (
+    `table_hyqlgg_campaign_id` INT,
+    `table_hyqlgg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hyqlgg` (`table_hyqlgg_campaign_id`, `table_hyqlgg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HYQLGG_STATUS
+    INTO V_STATUS
+    FROM TABLE_HYQLGG
+    WHERE TABLE_HYQLGG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TIME_wu095y----- */
+CREATE TABLE IF NOT EXISTS `table_z2mr2n` (
+    `table_z2mr2n_ctime` INT
+);
+
+INSERT INTO `table_z2mr2n` (`table_z2mr2n_ctime`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TIME_wu095y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIME_wu095y() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT `TABLE_Z2MR2N_CTIME` INTO RESULT FROM `TABLE_Z2MR2N`;
+    RETURN (MYSQL_FUNC_SUM_1_TO_N_qv6wf6(-93)) - 656 + ((MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + ((MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(-57)) - -158 + (result)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+CREATE TABLE IF NOT EXISTS `table_i7vfnv` (
+    `table_i7vfnv_campaign_id` INT,
+    `table_i7vfnv_start_date` DATE,
+    `table_i7vfnv_end_date` DATE,
+    `table_i7vfnv_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_okzpao` (
+    `table_okzpao_conversion_id` INT,
+    `table_okzpao_campaign_id` INT,
+    `table_okzpao_conversion_date` DATE,
+    `table_okzpao_conversion_value` INT
+);
+
+INSERT INTO `table_i7vfnv` (`table_i7vfnv_campaign_id`, `table_i7vfnv_start_date`, `table_i7vfnv_end_date`, `table_i7vfnv_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_okzpao` (`table_okzpao_conversion_id`, `table_okzpao_campaign_id`, `table_okzpao_conversion_date`, `table_okzpao_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUALITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_OKZPAO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_VALUE
+    FROM TABLE_OKZPAO
+    WHERE TABLE_OKZPAO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TOTAL_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = V_TOTAL_VALUE / V_TOTAL_CONVERSIONS;
+
+    RETURN FLOOR(V_QUALITY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(-97)) - -942 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(13)) - 734 + (v_sum)) + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+CREATE TABLE IF NOT EXISTS `table_u6bv6v` (
+    `table_u6bv6v_campaign_id` INT,
+    `table_u6bv6v_start_date` DATE
+);
+
+INSERT INTO `table_u6bv6v` (`table_u6bv6v_campaign_id`, `table_u6bv6v_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_U6BV6V_START_DATE)
+    INTO V_DAY
+    FROM TABLE_U6BV6V
+    WHERE TABLE_U6BV6V_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+CREATE TABLE IF NOT EXISTS `table_r42k1u` (
+    `table_r42k1u_product_id` INT,
+    `table_r42k1u_sku` INT,
+    `table_r42k1u_name` VARCHAR(50),
+    `table_r42k1u_category_id` INT,
+    `table_r42k1u_price` DECIMAL(10,2),
+    `table_r42k1u_cost` DECIMAL(10,2),
+    `table_r42k1u_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_032md1` (
+    `table_032md1_transaction_id` INT,
+    `table_032md1_product_id` INT,
+    `table_032md1_quantity` INT,
+    `table_032md1_transaction_date` DATE
+);
+
+INSERT INTO `table_r42k1u` (`table_r42k1u_product_id`, `table_r42k1u_sku`, `table_r42k1u_name`, `table_r42k1u_category_id`, `table_r42k1u_price`, `table_r42k1u_cost`, `table_r42k1u_stock_quantity`) VALUES (1, 2, 'test', 4, 1.0, 1.0, 7);
+
+INSERT INTO `table_032md1` (`table_032md1_transaction_id`, `table_032md1_product_id`, `table_032md1_quantity`, `table_032md1_transaction_date`) VALUES (1, 2, 3, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_RECENT_SALES_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R42K1U_PRICE, 0), COALESCE(TABLE_R42K1U_COST, 0)
+    INTO V_PRICE, V_COST
+    FROM TABLE_R42K1U
+    WHERE TABLE_R42K1U_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RECENT_SALES_COUNT
+    FROM TABLE_032MD1
+    WHERE TABLE_032MD1_PRODUCT_ID = PRODUCT_ID_PARAM
+      AND TABLE_032MD1_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_PRICE - V_COST) * 100) / V_PRICE;
+
+    IF V_RECENT_SALES_COUNT < 5 THEN
+        SET V_PROFIT_MARGIN = V_PROFIT_MARGIN - 10;
+    END IF;
+
+    RETURN CAST(V_PROFIT_MARGIN AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, TABLE_M6AT5N_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_DAYS
+    FROM TABLE_M6AT5N
+    WHERE TABLE_M6AT5N_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(-64)) - 967 + (v_age_days);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(1);

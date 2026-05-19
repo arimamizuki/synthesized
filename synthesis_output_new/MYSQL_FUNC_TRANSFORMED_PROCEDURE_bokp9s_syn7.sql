@@ -1,0 +1,405 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_egi8wp (
+    table_egi8wp_User CHAR(32),
+    table_egi8wp_Host CHAR(255),
+    table_egi8wp_Grantor CHAR(93)
+);
+
+INSERT INTO table_egi8wp (`table_egi8wp_User`, `table_egi8wp_Host`, `table_egi8wp_Grantor`) VALUES
+('u2', 'localhost', 'test_grantor');
+
+/* -----Called: MYSQL_FUNC_COUNT_DIGITS_pqsn4s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_DIGITS_pqsn4s(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(74)) - 53 + (abs(num));
+
+    IF V_TEMP = 0 THEN
+        RETURN 1;
+    END IF;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_COUNT = (MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(97)) - -373 + ((MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(20, 55)) - -411 + (v_count + 1));
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+CREATE TABLE IF NOT EXISTS `table_o8t87v` (
+    `table_o8t87v_order_id` INT,
+    `table_o8t87v_customer_id` INT,
+    `table_o8t87v_order_date` DATE,
+    `table_o8t87v_total_amount` DECIMAL(10,2),
+    `table_o8t87v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_satxgm` (
+    `table_satxgm_order_id` INT,
+    `table_satxgm_product_id` INT,
+    `table_satxgm_quantity` INT,
+    `table_satxgm_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o8t87v` (`table_o8t87v_order_id`, `table_o8t87v_customer_id`, `table_o8t87v_order_date`, `table_o8t87v_total_amount`, `table_o8t87v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_satxgm` (`table_satxgm_order_id`, `table_satxgm_product_id`, `table_satxgm_quantity`, `table_satxgm_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(ORDER_ID_PARAM INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT;
+    DECLARE V_DISCOUNT INT;
+    DECLARE V_FINAL_PRICE INT;
+
+    SELECT COALESCE(SUM(TABLE_SATXGM_QUANTITY * TABLE_SATXGM_UNIT_PRICE), 0) INTO V_SUBTOTAL
+    FROM TABLE_SATXGM
+    WHERE TABLE_SATXGM_ORDER_ID = ORDER_ID_PARAM;
+
+    IF DISCOUNT_PERCENT < 0 THEN
+        SET DISCOUNT_PERCENT = 0;
+    ELSEIF DISCOUNT_PERCENT > 50 THEN
+        SET DISCOUNT_PERCENT = 50;
+    END IF;
+
+    SET V_DISCOUNT = (MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy()) - 510 + (v_subtotal * discount_percent / 100);
+    SET V_FINAL_PRICE = V_SUBTOTAL - V_DISCOUNT;
+
+    RETURN V_FINAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+CREATE TABLE IF NOT EXISTS `table_1ac6i8` (
+    `table_1ac6i8_category_id` INT,
+    `table_1ac6i8_stock_quantity` INT
+);
+
+INSERT INTO `table_1ac6i8` (`table_1ac6i8_category_id`, `table_1ac6i8_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_1AC6I8_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_1AC6I8
+    WHERE TABLE_1AC6I8_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(-50)) - -473 + (v_net_revenue);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+CREATE TABLE IF NOT EXISTS `table_cwk400` (
+    `table_cwk400_part_id` INT,
+    `table_cwk400_part_name` VARCHAR(50),
+    `table_cwk400_category_id` INT,
+    `table_cwk400_price` DECIMAL(10,2),
+    `table_cwk400_stock_quantity` INT,
+    `table_cwk400_reorder_point` INT
+);
+
+INSERT INTO `table_cwk400` (`table_cwk400_part_id`, `table_cwk400_part_name`, `table_cwk400_category_id`, `table_cwk400_price`, `table_cwk400_stock_quantity`, `table_cwk400_reorder_point`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(PART_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CWK400_STOCK_QUANTITY, 0), COALESCE(TABLE_CWK400_REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM TABLE_CWK400
+    WHERE TABLE_CWK400_PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_STOCK_RATIO = (V_STOCK * 100) / V_REORDER_POINT;
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = 100;
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = 80;
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = 60;
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = 40;
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = 20;
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+CREATE TABLE IF NOT EXISTS `table_lho0kf` (
+    `table_lho0kf_campaign_id` INT,
+    `table_lho0kf_start_date` DATE,
+    `table_lho0kf_end_date` DATE
+);
+
+INSERT INTO `table_lho0kf` (`table_lho0kf_campaign_id`, `table_lho0kf_start_date`, `table_lho0kf_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_LHO0KF_START_DATE, TABLE_LHO0KF_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_LHO0KF
+    WHERE TABLE_LHO0KF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(-54)) - -932 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1(13, -15)) - -156 + (timestampdiff(month, v_start_date, v_end_date));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B) / 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv(55)) - -231 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv----- */
+CREATE TABLE IF NOT EXISTS `table_81q8gq` (
+    `table_81q8gq_meter_id` INT,
+    `table_81q8gq_customer_id` INT,
+    `table_81q8gq_meter_type` VARCHAR(50),
+    `table_81q8gq_current_reading` INT,
+    `table_81q8gq_previous_reading` INT,
+    `table_81q8gq_reading_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_94fi8f` (
+    `table_94fi8f_tariff_id` INT,
+    `table_94fi8f_tier_name` VARCHAR(50),
+    `table_94fi8f_min_units` INT,
+    `table_94fi8f_rate_per_unit` INT
+);
+
+INSERT INTO `table_81q8gq` (`table_81q8gq_meter_id`, `table_81q8gq_customer_id`, `table_81q8gq_meter_type`, `table_81q8gq_current_reading`, `table_81q8gq_previous_reading`, `table_81q8gq_reading_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_94fi8f` (`table_94fi8f_tariff_id`, `table_94fi8f_tier_name`, `table_94fi8f_min_units`, `table_94fi8f_rate_per_unit`) VALUES (1, '2024-01-01', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 25;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_81Q8GQ_CURRENT_READING, 0), COALESCE(TABLE_81Q8GQ_PREVIOUS_READING, 0)
+    INTO V_CURRENT_READING, V_PREVIOUS_READING
+    FROM TABLE_81Q8GQ
+    WHERE TABLE_81Q8GQ_METER_ID = METER_ID_PARAM;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 3);
+
+    IF V_CONSUMPTION > 100 THEN
+        SET V_TOTAL_BILL = V_TOTAL_BILL + ((V_CONSUMPTION - 100) * 5);
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+CREATE TABLE IF NOT EXISTS `table_k70n3e` (
+    `table_k70n3e_order_id` INT,
+    `table_k70n3e_customer_id` INT,
+    `table_k70n3e_store_id` INT,
+    `table_k70n3e_order_date` DATE,
+    `table_k70n3e_total_amount` DECIMAL(10,2),
+    `table_k70n3e_delivery_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ty3v91` (
+    `table_ty3v91_store_id` INT,
+    `table_ty3v91_name` VARCHAR(50),
+    `table_ty3v91_region` INT,
+    `table_ty3v91_delivery_radius_miles` INT
+);
+
+INSERT INTO `table_k70n3e` (`table_k70n3e_order_id`, `table_k70n3e_customer_id`, `table_k70n3e_store_id`, `table_k70n3e_order_date`, `table_k70n3e_total_amount`, `table_k70n3e_delivery_fee`) VALUES (1, 2, 3, '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_ty3v91` (`table_ty3v91_store_id`, `table_ty3v91_name`, `table_ty3v91_region`, `table_ty3v91_delivery_radius_miles`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DELIVERY_FEE INT DEFAULT 5;
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_ADDITIONAL_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_DELIVERY_FEE INT DEFAULT 0;
+
+    SELECT TABLE_TY3V91_DELIVERY_RADIUS_MILES INTO V_DELIVERY_RADIUS
+    FROM TABLE_K70N3E O
+    JOIN TABLE_TY3V91 S ON TABLE_K70N3E_STORE_ID = TABLE_TY3V91_STORE_ID
+    WHERE TABLE_K70N3E_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_DELIVERY_RADIUS > 10 THEN
+        SET V_ADDITIONAL_FEE = (V_DELIVERY_RADIUS - 10) * 2;
+    END IF;
+
+    SET V_TOTAL_DELIVERY_FEE = V_BASE_DELIVERY_FEE + V_ADDITIONAL_FEE;
+
+    RETURN CAST(V_TOTAL_DELIVERY_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_EGI8WP
+    WHERE TABLE_EGI8WP_USER LIKE 'U2%';
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(-13)) - -4 + ((MYSQL_FUNC_COUNT_DIGITS_pqsn4s(4)) - 403 + (result_count));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s();

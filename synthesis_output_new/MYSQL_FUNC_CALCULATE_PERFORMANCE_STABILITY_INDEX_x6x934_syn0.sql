@@ -1,0 +1,356 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ifypaz` (
+    `table_ifypaz_emp_id` INT,
+    `table_ifypaz_department_id` INT,
+    `table_ifypaz_salary` INT,
+    `table_ifypaz_hire_date` DATE,
+    `table_ifypaz_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_ifypaz` (`table_ifypaz_emp_id`, `table_ifypaz_department_id`, `table_ifypaz_salary`, `table_ifypaz_hire_date`, `table_ifypaz_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_APPLY_DISCOUNT_x3iuux----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_APPLY_DISCOUNT_x3iuux(ORIGINAL_PRICE INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISCOUNTED_PRICE INT DEFAULT 0;
+    SET V_DISCOUNTED_PRICE = ORIGINAL_PRICE - (ORIGINAL_PRICE * DISCOUNT_PERCENT / 100);
+    RETURN V_DISCOUNTED_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1----- */
+CREATE TABLE IF NOT EXISTS `table_jk1f0u` (
+    `table_jk1f0u_res_id` INT,
+    `table_jk1f0u_room_id` INT,
+    `table_jk1f0u_guest_id` INT,
+    `table_jk1f0u_check_in_date` DATE,
+    `table_jk1f0u_check_out_date` DATE,
+    `table_jk1f0u_total_price` DECIMAL(10,2),
+    `table_jk1f0u_status` VARCHAR(50)
+);
+
+INSERT INTO `table_jk1f0u` (`table_jk1f0u_res_id`, `table_jk1f0u_room_id`, `table_jk1f0u_guest_id`, `table_jk1f0u_check_in_date`, `table_jk1f0u_check_out_date`, `table_jk1f0u_total_price`, `table_jk1f0u_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(RES_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+
+    SELECT TABLE_JK1F0U_CHECK_IN_DATE, TABLE_JK1F0U_CHECK_OUT_DATE
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM TABLE_JK1F0U
+    WHERE TABLE_JK1F0U_RES_ID = RES_ID_PARAM;
+
+    IF V_CHECK_IN IS NULL OR V_CHECK_OUT IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS < 0 THEN
+        SET V_NIGHTS = 0;
+    END IF;
+
+    RETURN V_NIGHTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(RADIUS INT, DISTANCE_FROM_CENTER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TANGENT_LENGTH DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SQUARED_DISTANCE INT DEFAULT 0;
+    DECLARE V_SQUARED_RADIUS INT DEFAULT 0;
+
+    IF DISTANCE_FROM_CENTER <= RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQUARED_DISTANCE = (MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(-32)) - 204 + (distance_from_center * distance_from_center);
+    SET V_SQUARED_RADIUS = RADIUS * RADIUS;
+
+    SET V_TANGENT_LENGTH = (MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(80)) - -338 + (sqrt(v_squared_distance - v_squared_radius));
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(-81)) - -95 + (floor(v_tangent_length));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+CREATE TABLE IF NOT EXISTS `table_th8mrt` (
+    `table_th8mrt_customer_id` INT,
+    `table_th8mrt_order_id` INT
+);
+
+INSERT INTO `table_th8mrt` (`table_th8mrt_customer_id`, `table_th8mrt_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MIN(TABLE_TH8MRT_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_TH8MRT
+    WHERE TABLE_TH8MRT_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (v_order_id);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N + 1;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET V_DELAY_SCORE = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (MYSQL_FUNC_CALCULATE_CAR_WASH_PRICE_zj46w5(-80, 76)) - -860 + ((v_actual_days - v_expected_days) * 5);
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAR_WASH_PRICE_zj46w5----- */
+CREATE TABLE IF NOT EXISTS `table_0rda9g` (
+    `table_0rda9g_appointment_id` INT,
+    `table_0rda9g_customer_id` INT,
+    `table_0rda9g_car_id` INT,
+    `table_0rda9g_wash_type` VARCHAR(50),
+    `table_0rda9g_appointment_date` DATE,
+    `table_0rda9g_duration_minutes` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_lwdu99` (
+    `table_lwdu99_car_id` INT,
+    `table_lwdu99_make` INT,
+    `table_lwdu99_model` INT,
+    `table_lwdu99_car_type` VARCHAR(50),
+    `table_lwdu99_size_category` INT
+);
+
+INSERT INTO `table_0rda9g` (`table_0rda9g_appointment_id`, `table_0rda9g_customer_id`, `table_0rda9g_car_id`, `table_0rda9g_wash_type`, `table_0rda9g_appointment_date`, `table_0rda9g_duration_minutes`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_lwdu99` (`table_lwdu99_car_id`, `table_lwdu99_make`, `table_lwdu99_model`, `table_lwdu99_car_type`, `table_lwdu99_size_category`) VALUES (1, 2, 3, 'test', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAR_WASH_PRICE_zj46w5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAR_WASH_PRICE_zj46w5(CAR_ID_PARAM INT, WASH_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SIZE_CATEGORY INT DEFAULT 1;
+    DECLARE V_BASE_PRICE INT DEFAULT 20;
+    DECLARE V_WASH_TYPE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_LWDU99_SIZE_CATEGORY, 1) INTO V_SIZE_CATEGORY
+    FROM TABLE_LWDU99
+    WHERE TABLE_LWDU99_CAR_ID = CAR_ID_PARAM;
+
+    CASE WASH_TYPE_PARAM
+        WHEN 'BASIC' THEN SET V_WASH_TYPE_MULTIPLIER = 1;
+        WHEN 'STANDARD' THEN SET V_WASH_TYPE_MULTIPLIER = 2;
+        WHEN 'PREMIUM' THEN SET V_WASH_TYPE_MULTIPLIER = 3;
+        WHEN 'FULL_DETAIL' THEN SET V_WASH_TYPE_MULTIPLIER = 5;
+        ELSE SET V_WASH_TYPE_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * V_SIZE_CATEGORY * V_WASH_TYPE_MULTIPLIER;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+CREATE TABLE IF NOT EXISTS table_hdmev5 (
+    table_hdmev5_rental_id INT,
+    table_hdmev5_inventory_id INT,
+    table_hdmev5_return_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS table_1hevtl (
+    table_1hevtl_inventory_id INT
+);
+
+INSERT INTO table_hdmev5 (`table_hdmev5_rental_id`, `table_hdmev5_inventory_id`, `table_hdmev5_return_date`) VALUES (1, 2, '2024-01-01');
+
+INSERT INTO table_1hevtl (`table_1hevtl_inventory_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(P_INVENTORY_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTALS INT;
+    DECLARE V_OUT INT;
+
+    SELECT COUNT(*) INTO V_RENTALS
+    FROM TABLE_HDMEV5
+    WHERE TABLE_HDMEV5_INVENTORY_ID = P_INVENTORY_ID;
+
+    IF V_RENTALS = 0 THEN
+        RETURN 1;
+    END IF;
+
+    SELECT COUNT(TABLE_HDMEV5_RENTAL_ID) INTO V_OUT
+    FROM TABLE_1HEVTL LEFT JOIN TABLE_HDMEV5 USING(TABLE_1HEVTL_INVENTORY_ID)
+    WHERE TABLE_1HEVTL.TABLE_1HEVTL_INVENTORY_ID = P_INVENTORY_ID
+    AND TABLE_HDMEV5.TABLE_HDMEV5_RETURN_DATE IS NULL;
+
+    IF V_OUT > 0 THEN
+        RETURN 0;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IFYPAZ_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_IFYPAZ_HIRE_DATE, CURDATE()), COALESCE(TABLE_IFYPAZ_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_IFYPAZ
+    WHERE TABLE_IFYPAZ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (V_TENURE_YEARS * 10) + (V_PERFORMANCE * 25) - (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(-35, 50)) - -558 + ((MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(89)) - -869 + ((MYSQL_FUNC_APPLY_DISCOUNT_x3iuux(-11, -50)) - 38 + (v_stability_index)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(1);

@@ -1,0 +1,386 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pc0wb8` (
+    `table_pc0wb8_order_id` INT,
+    `table_pc0wb8_customer_id` INT
+);
+
+INSERT INTO `table_pc0wb8` (`table_pc0wb8_order_id`, `table_pc0wb8_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE VAL
+        WHEN 1 THEN RETURN 'ONE';
+        WHEN 2 THEN RETURN 'TWO';
+        WHEN 3 THEN RETURN 'THREE';
+        ELSE RETURN 'OTHER';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+CREATE TABLE IF NOT EXISTS `table_xqsksz` (
+    `table_xqsksz_emp_id` INT,
+    `table_xqsksz_department_id` INT,
+    `table_xqsksz_salary` INT,
+    `table_xqsksz_hire_date` DATE
+);
+
+INSERT INTO `table_xqsksz` (`table_xqsksz_emp_id`, `table_xqsksz_department_id`, `table_xqsksz_salary`, `table_xqsksz_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XQSKSZ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_XQSKSZ
+    WHERE TABLE_XQSKSZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+CREATE TABLE IF NOT EXISTS `table_khmak7` (
+    `table_khmak7_order_id` INT,
+    `table_khmak7_customer_id` INT,
+    `table_khmak7_order_date` DATE,
+    `table_khmak7_total_amount` DECIMAL(10,2),
+    `table_khmak7_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_7res4i` (
+    `table_7res4i_order_id` INT,
+    `table_7res4i_product_id` INT,
+    `table_7res4i_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0dame` (
+    `table_l0dame_product_id` INT,
+    `table_l0dame_category_id` INT,
+    `table_l0dame_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_khmak7` (`table_khmak7_order_id`, `table_khmak7_customer_id`, `table_khmak7_order_date`, `table_khmak7_total_amount`, `table_khmak7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_7res4i` (`table_7res4i_order_id`, `table_7res4i_product_id`, `table_7res4i_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_l0dame` (`table_l0dame_product_id`, `table_l0dame_category_id`, `table_l0dame_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_HIGH_VALUE_ITEMS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_7RES4I_QUANTITY * TABLE_L0DAME_PRICE), (MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l()) - -767 + (0)), COUNT(*)
+    INTO V_SUBTOTAL, V_TOTAL_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_HIGH_VALUE_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM AND TABLE_L0DAME_PRICE > 100;
+
+    IF V_TOTAL_ITEMS > 0 AND (V_HIGH_VALUE_ITEMS * 100 / V_TOTAL_ITEMS) > 50 THEN
+        SET V_DISCOUNT_PERCENTAGE = 15;
+    ELSEIF V_SUBTOTAL > 1000 THEN
+        SET V_DISCOUNT_PERCENTAGE = 10;
+    ELSEIF V_SUBTOTAL > 500 THEN
+        SET V_DISCOUNT_PERCENTAGE = 5;
+    ELSE
+        SET V_DISCOUNT_PERCENTAGE = 0;
+    END IF;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN INT DEFAULT 1000;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 25 UNION SELECT 50 UNION SELECT 75 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I < V_MIN THEN
+            SET V_MIN = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MIN;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+CREATE TABLE IF NOT EXISTS `table_rheaey` (
+    `table_rheaey_session_id` INT,
+    `table_rheaey_student_id` INT,
+    `table_rheaey_tutor_id` INT,
+    `table_rheaey_subject` INT,
+    `table_rheaey_duration_minutes` INT,
+    `table_rheaey_hourly_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fc028m` (
+    `table_fc028m_student_id` INT,
+    `table_fc028m_grade_level` INT,
+    `table_fc028m_school_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rheaey` (`table_rheaey_session_id`, `table_rheaey_student_id`, `table_rheaey_tutor_id`, `table_rheaey_subject`, `table_rheaey_duration_minutes`, `table_rheaey_hourly_rate`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_fc028m` (`table_fc028m_student_id`, `table_fc028m_grade_level`, `table_fc028m_school_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(SESSION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_GRADE_LEVEL INT DEFAULT 0;
+    DECLARE V_TOTAL_INVOICE INT DEFAULT 0;
+    DECLARE V_RUSH_FEE INT DEFAULT 0;
+
+    SELECT TABLE_RHEAEY_DURATION_MINUTES, TABLE_RHEAEY_HOURLY_RATE, COALESCE(TABLE_FC028M_GRADE_LEVEL, 9)
+    INTO V_DURATION, V_HOURLY_RATE, V_GRADE_LEVEL
+    FROM TABLE_RHEAEY T
+    JOIN TABLE_FC028M S ON TABLE_RHEAEY_STUDENT_ID = TABLE_FC028M_STUDENT_ID
+    WHERE TABLE_RHEAEY_SESSION_ID = SESSION_ID_PARAM;
+
+    SET V_TOTAL_INVOICE = (V_DURATION * V_HOURLY_RATE) / 60;
+
+    IF V_DURATION > 120 THEN
+        SET V_RUSH_FEE = V_TOTAL_INVOICE * 15 / 100;
+        SET V_TOTAL_INVOICE = (MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(65, 43)) - -240 + (v_total_invoice + v_rush_fee);
+    END IF;
+
+    RETURN CAST(V_TOTAL_INVOICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+CREATE TABLE IF NOT EXISTS `table_dnotdk` (
+    `table_dnotdk_job_id` INT,
+    `table_dnotdk_customer_id` INT,
+    `table_dnotdk_mover_id` INT,
+    `table_dnotdk_origin_zip` INT,
+    `table_dnotdk_dest_zip` INT,
+    `table_dnotdk_distance_miles` INT,
+    `table_dnotdk_truck_size` INT,
+    `table_dnotdk_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kr203y` (
+    `table_kr203y_zip_code` INT,
+    `table_kr203y_zone` INT,
+    `table_kr203y_base_rate_per_mile` INT
+);
+
+INSERT INTO `table_dnotdk` (`table_dnotdk_job_id`, `table_dnotdk_customer_id`, `table_dnotdk_mover_id`, `table_dnotdk_origin_zip`, `table_dnotdk_dest_zip`, `table_dnotdk_distance_miles`, `table_dnotdk_truck_size`, `table_dnotdk_base_price`) VALUES (1, 2, 3, 4, 5, 6, 7, 1.0);
+
+INSERT INTO `table_kr203y` (`table_kr203y_zip_code`, `table_kr203y_zone`, `table_kr203y_base_rate_per_mile`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(DISTANCE_MILES_PARAM INT, TRUCK_SIZE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_TRUCK_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 50;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    CASE TRUCK_SIZE_PARAM
+        WHEN 'SMALL' THEN SET V_TRUCK_MULTIPLIER = 1;
+        WHEN 'MEDIUM' THEN SET V_TRUCK_MULTIPLIER = 2;
+        WHEN 'LARGE' THEN SET V_TRUCK_MULTIPLIER = 3;
+        WHEN 'EXTRA_LARGE' THEN SET V_TRUCK_MULTIPLIER = 4;
+        ELSE SET V_TRUCK_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_ESTIMATE = (MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(-74)) - -932 + ((MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(6, 81)) - 242 + ((distance_miles_param * v_base_rate * v_truck_multiplier) + v_fuel_surcharge));
+
+    IF DISTANCE_MILES_PARAM > 500 THEN
+        SET V_TOTAL_ESTIMATE = V_TOTAL_ESTIMATE - (V_TOTAL_ESTIMATE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A + P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+CREATE TABLE IF NOT EXISTS `table_fvpibn` (
+    `table_fvpibn_product_id` INT,
+    `table_fvpibn_supplier_id` INT
+);
+
+INSERT INTO `table_fvpibn` (`table_fvpibn_product_id`, `table_fvpibn_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_FVPIBN_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(-53)) - -849 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+CREATE TABLE IF NOT EXISTS `table_7fkt7q` (
+    `table_7fkt7q_customer_id` INT,
+    `table_7fkt7q_registration_date` DATE,
+    `table_7fkt7q_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0kckz6` (
+    `table_0kckz6_order_id` INT,
+    `table_0kckz6_customer_id` INT,
+    `table_0kckz6_order_date` DATE,
+    `table_0kckz6_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7fkt7q` (`table_7fkt7q_customer_id`, `table_7fkt7q_registration_date`, `table_7fkt7q_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_0kckz6` (`table_0kckz6_order_id`, `table_0kckz6_customer_id`, `table_0kckz6_order_date`, `table_0kckz6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CURRENT_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEMAND_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_AVG_MONTHLY_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY YEAR(TABLE_0KCKZ6_ORDER_DATE), MONTH(TABLE_0KCKZ6_ORDER_DATE);
+
+    SELECT COALESCE(SUM(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_CURRENT_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND YEAR(TABLE_0KCKZ6_ORDER_DATE) = YEAR(CURDATE())
+    AND MONTH(TABLE_0KCKZ6_ORDER_DATE) = V_CURRENT_MONTH;
+
+    IF V_AVG_MONTHLY_SPEND = 0 THEN
+        RETURN (MYSQL_FUNC_PROC_TINYINT_wstbiu()) - 970 + (100);
+    END IF;
+
+    SET V_DEMAND_INDEX = (V_CURRENT_SPEND * 100) / V_AVG_MONTHLY_SPEND;
+
+    RETURN V_DEMAND_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TINYINT_wstbiu----- */
+CREATE TABLE IF NOT EXISTS `table_jb6756` (
+    table_jb6756_ctinyint TINYINT
+);
+
+INSERT INTO `table_jb6756` (`table_jb6756_ctinyint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TINYINT_wstbiu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TINYINT_wstbiu() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_JB6756_CTINYINT) INTO RESULT FROM `TABLE_JB6756`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_PC0WB8
+    WHERE TABLE_PC0WB8_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(37)) - 469 + ((MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(44)) - -206 + ((MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(-13)) - 487 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(62)) - -907 + (v_count))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(1);

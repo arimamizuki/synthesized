@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pjlwth` (
+    `table_pjlwth_emp_id` INT,
+    `table_pjlwth_department_id` INT,
+    `table_pjlwth_salary` INT,
+    `table_pjlwth_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcp73a` (
+    `table_hcp73a_department_id` INT,
+    `table_hcp73a_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pjlwth` (`table_pjlwth_emp_id`, `table_pjlwth_department_id`, `table_pjlwth_salary`, `table_pjlwth_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_hcp73a` (`table_hcp73a_department_id`, `table_hcp73a_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+CREATE TABLE IF NOT EXISTS `table_069dtw` (
+    `table_069dtw_customer_id` INT,
+    `table_069dtw_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_069dtw` (`table_069dtw_customer_id`, `table_069dtw_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_069DTW_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_069DTW
+    WHERE TABLE_069DTW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(93)) - 476 + (v_monthly_cost * 12);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44----- */
+CREATE TABLE IF NOT EXISTS `table_l04g3f` (
+    `table_l04g3f_emp_id` INT,
+    `table_l04g3f_salary` INT
+);
+
+INSERT INTO `table_l04g3f` (`table_l04g3f_emp_id`, `table_l04g3f_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_VALUE_o8rf44(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_L04G3F_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_L04G3F
+    WHERE TABLE_L04G3F_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(-98, 26)) - 600 + ((MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(54)) - -121 + (floor(v_salary))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+CREATE TABLE IF NOT EXISTS `table_8jt2fd` (
+    `table_8jt2fd_contract_id` INT,
+    `table_8jt2fd_client_id` INT,
+    `table_8jt2fd_guard_id` INT,
+    `table_8jt2fd_contract_type` VARCHAR(50),
+    `table_8jt2fd_monthly_cost` DECIMAL(10,2),
+    `table_8jt2fd_num_guards` INT,
+    `table_8jt2fd_patrol_area_sqft` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yt4y9e` (
+    `table_yt4y9e_guard_id` INT,
+    `table_yt4y9e_name` VARCHAR(50),
+    `table_yt4y9e_experience_years` INT,
+    `table_yt4y9e_hourly_rate` INT
+);
+
+INSERT INTO `table_8jt2fd` (`table_8jt2fd_contract_id`, `table_8jt2fd_client_id`, `table_8jt2fd_guard_id`, `table_8jt2fd_contract_type`, `table_8jt2fd_monthly_cost`, `table_8jt2fd_num_guards`, `table_8jt2fd_patrol_area_sqft`) VALUES (1, 2, 3, 'test', 1.0, 6, 7);
+
+INSERT INTO `table_yt4y9e` (`table_yt4y9e_guard_id`, `table_yt4y9e_name`, `table_yt4y9e_experience_years`, `table_yt4y9e_hourly_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 5000;
+    DECLARE V_NUM_GUARDS INT DEFAULT 2;
+    DECLARE V_PATROL_AREA INT DEFAULT 10000;
+    DECLARE V_AREA_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8JT2FD_MONTHLY_COST, 5000), COALESCE(TABLE_8JT2FD_NUM_GUARDS, 2), COALESCE(TABLE_8JT2FD_PATROL_AREA_SQFT, 10000)
+    INTO V_MONTHLY_COST, V_NUM_GUARDS, V_PATROL_AREA
+    FROM TABLE_8JT2FD
+    WHERE TABLE_8JT2FD_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_MONTHLY_COST * V_NUM_GUARDS;
+
+    IF V_PATROL_AREA > 50000 THEN
+        SET V_AREA_SURCHARGE = V_TOTAL_VALUE * 20 / 100;
+        SET V_TOTAL_VALUE = V_TOTAL_VALUE + V_AREA_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = (MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(-38)) - 540 + (v_base_price);
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_AREA / 100) * 10;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_ROOMS * 15);
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 150 / 100;
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+CREATE TABLE IF NOT EXISTS `table_14m53w` (
+    `table_14m53w_order_id` INT,
+    `table_14m53w_customer_id` INT,
+    `table_14m53w_order_date` DATE,
+    `table_14m53w_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_i2tsnq` (
+    `table_i2tsnq_shipment_id` INT,
+    `table_i2tsnq_order_id` INT,
+    `table_i2tsnq_shipping_cost` DECIMAL(10,2),
+    `table_i2tsnq_delivery_date` DATE
+);
+
+INSERT INTO `table_14m53w` (`table_14m53w_order_id`, `table_14m53w_customer_id`, `table_14m53w_order_date`, `table_14m53w_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_i2tsnq` (`table_i2tsnq_shipment_id`, `table_i2tsnq_order_id`, `table_i2tsnq_shipping_cost`, `table_i2tsnq_delivery_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_14M53W_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_14M53W
+    WHERE TABLE_14M53W_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_I2TSNQ_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_I2TSNQ
+    WHERE TABLE_I2TSNQ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg()) - 582 + ((MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(16, 13, 1, 50, 69)) - 522 + (upper(input_str)));
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(X INT, Y INT, A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE DECIMAL(10,4) DEFAULT 0.00;
+    SET V_DISTANCE = ABS(A * X + B * Y + C) / SQRT(A * A + B * B);
+    RETURN FLOOR(V_DISTANCE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(-34)) - -424 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + (v_result) * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+CREATE TABLE IF NOT EXISTS `table_nsm6c8` (
+    `table_nsm6c8_campaign_id` INT,
+    `table_nsm6c8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nsm6c8` (`table_nsm6c8_campaign_id`, `table_nsm6c8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_NSM6C8_STATUS
+    INTO V_STATUS
+    FROM TABLE_NSM6C8
+    WHERE TABLE_NSM6C8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_STABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_PJLWTH_HIRE_DATE, CURDATE())), 0), COUNT(*)
+    INTO V_AVG_TENURE, V_EMPLOYEE_COUNT
+    FROM TABLE_PJLWTH
+    WHERE TABLE_PJLWTH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_SCORE = (MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(-81)) - 20 + ((v_avg_tenure * 10) + (v_employee_count * 2));
+
+    RETURN V_STABILITY_SCORE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(1);

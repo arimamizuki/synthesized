@@ -1,0 +1,407 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_24zccf` (
+    `table_24zccf_customer_id` INT,
+    `table_24zccf_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ehvt7w` (
+    `table_ehvt7w_order_id` INT,
+    `table_ehvt7w_customer_id` INT,
+    `table_ehvt7w_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_24zccf` (`table_24zccf_customer_id`, `table_24zccf_country`) VALUES (1, 1);
+
+INSERT INTO `table_ehvt7w` (`table_ehvt7w_order_id`, `table_ehvt7w_customer_id`, `table_ehvt7w_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik----- */
+CREATE TABLE IF NOT EXISTS `table_i5gepj` (
+    `table_i5gepj_product_id` INT,
+    `table_i5gepj_category_id` INT,
+    `table_i5gepj_price` DECIMAL(10,2),
+    `table_i5gepj_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o2ctj5` (
+    `table_o2ctj5_order_id` INT,
+    `table_o2ctj5_product_id` INT,
+    `table_o2ctj5_quantity` INT
+);
+
+INSERT INTO `table_i5gepj` (`table_i5gepj_product_id`, `table_i5gepj_category_id`, `table_i5gepj_price`, `table_i5gepj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_o2ctj5` (`table_o2ctj5_order_id`, `table_o2ctj5_product_id`, `table_o2ctj5_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_ALERT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I5GEPJ_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_I5GEPJ
+    WHERE TABLE_I5GEPJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_O2CTJ5_QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM TABLE_O2CTJ5
+    WHERE TABLE_O2CTJ5_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_ALERT_THRESHOLD = FLOOR(V_AVG_DAILY_SALES * 7);
+
+    IF V_STOCK < V_ALERT_THRESHOLD THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(39)) - -286 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * N;
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+CREATE TABLE IF NOT EXISTS `table_bgkvze` (
+    `table_bgkvze_cdouble` INT
+);
+
+INSERT INTO `table_bgkvze` (`table_bgkvze_cdouble`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_BGKVZE_CDOUBLE) INTO RESULT FROM `TABLE_BGKVZE`;
+    RETURN (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(2)) - 487 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN 5;
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN 4;
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN 3;
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+CREATE TABLE IF NOT EXISTS `table_9ug538` (
+    `table_9ug538_campaign_id` INT,
+    `table_9ug538_start_date` DATE,
+    `table_9ug538_end_date` DATE,
+    `table_9ug538_budget` INT,
+    `table_9ug538_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_me64fy` (
+    `table_me64fy_conversion_id` INT,
+    `table_me64fy_campaign_id` INT,
+    `table_me64fy_conversion_date` DATE
+);
+
+INSERT INTO `table_9ug538` (`table_9ug538_campaign_id`, `table_9ug538_start_date`, `table_9ug538_end_date`, `table_9ug538_budget`, `table_9ug538_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_me64fy` (`table_me64fy_conversion_id`, `table_me64fy_campaign_id`, `table_me64fy_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAMPAIGN_DAYS INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_VELOCITY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT DATEDIFF(TABLE_9UG538_END_DATE, TABLE_9UG538_START_DATE)
+    INTO V_CAMPAIGN_DAYS
+    FROM TABLE_9UG538
+    WHERE TABLE_9UG538_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CONVERSIONS
+    FROM TABLE_ME64FY
+    WHERE TABLE_ME64FY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY = (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + (v_total_conversions / v_campaign_days);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(39)) - 663 + (floor(v_velocity));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et----- */
+CREATE TABLE IF NOT EXISTS `table_698f1s` (
+    `table_698f1s_customer_id` INT,
+    `table_698f1s_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_698f1s` (`table_698f1s_customer_id`, `table_698f1s_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_698F1S_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_698F1S
+    WHERE TABLE_698F1S_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET V_DELAY_SCORE = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(2)) - 125 + ((v_actual_days - v_expected_days) * 5);
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ts7o4` (
+    `table_4ts7o4_order_id` INT,
+    `table_4ts7o4_customer_id` INT,
+    `table_4ts7o4_order_date` DATE,
+    `table_4ts7o4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_y3npq4` (
+    `table_y3npq4_order_id` INT,
+    `table_y3npq4_product_id` INT,
+    `table_y3npq4_quantity` INT,
+    `table_y3npq4_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4ts7o4` (`table_4ts7o4_order_id`, `table_4ts7o4_customer_id`, `table_4ts7o4_order_date`, `table_4ts7o4_status`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_y3npq4` (`table_y3npq4_order_id`, `table_y3npq4_product_id`, `table_y3npq4_quantity`, `table_y3npq4_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_ITEM_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_FRAUD_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_Y3NPQ4_QUANTITY * TABLE_Y3NPQ4_UNIT_PRICE), 0), COUNT(*)
+    INTO V_ORDER_TOTAL, V_ITEM_COUNT
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_Y3NPQ4_PRODUCT_ID)
+    INTO V_UNIQUE_PRODUCTS
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ITEM_COUNT > 0 THEN
+        SET V_AVG_ITEM_PRICE = V_ORDER_TOTAL / V_ITEM_COUNT;
+    END IF;
+
+    IF V_ORDER_TOTAL > 10000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 30;
+    END IF;
+
+    IF V_UNIQUE_PRODUCTS < V_ITEM_COUNT / 2 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 20;
+    END IF;
+
+    IF V_AVG_ITEM_PRICE > 5000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 25;
+    END IF;
+
+    RETURN LEAST(V_FRAUD_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), (MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - 633 + (0))
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_EHVT7W O
+    JOIN TABLE_24ZCCF C ON TABLE_EHVT7W_CUSTOMER_ID = TABLE_24ZCCF_CUSTOMER_ID
+    WHERE TABLE_24ZCCF_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_EHVT7W;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(22)) - -456 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - -890 + ((v_country_revenue * 100) / v_total_revenue));
+
+    RETURN (MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(-40)) - 678 + (v_market_share);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(1);

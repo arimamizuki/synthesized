@@ -1,0 +1,382 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+CREATE TABLE IF NOT EXISTS `table_t4xtqx` (
+    `table_t4xtqx_order_id` INT,
+    `table_t4xtqx_customer_id` INT,
+    `table_t4xtqx_order_date` DATE,
+    `table_t4xtqx_total_amount` DECIMAL(10,2),
+    `table_t4xtqx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_evisnb` (
+    `table_evisnb_payment_id` INT,
+    `table_evisnb_order_id` INT,
+    `table_evisnb_payment_date` DATE,
+    `table_evisnb_amount_paid` INT
+);
+
+INSERT INTO `table_t4xtqx` (`table_t4xtqx_order_id`, `table_t4xtqx_customer_id`, `table_t4xtqx_order_date`, `table_t4xtqx_total_amount`, `table_t4xtqx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_evisnb` (`table_evisnb_payment_id`, `table_evisnb_order_id`, `table_evisnb_payment_date`, `table_evisnb_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_COMPLETION_STATUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T4XTQX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_T4XTQX
+    WHERE TABLE_T4XTQX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EVISNB_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_EVISNB
+    WHERE TABLE_EVISNB_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT_PAID >= V_ORDER_TOTAL THEN
+        RETURN 100;
+    END IF;
+
+    SET V_COMPLETION_STATUS = (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((v_amount_paid * 100) / v_order_total);
+
+    RETURN V_COMPLETION_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, (MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(-73)) - -514 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(80)) - -781 + (0)))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = (MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(44)) - 508 + (v_total_sold / v_current_stock);
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+CREATE TABLE IF NOT EXISTS `table_3honbg` (
+    `table_3honbg_product_id` INT,
+    `table_3honbg_category_id` INT,
+    `table_3honbg_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_oj1tlr` (
+    `table_oj1tlr_category_id` INT,
+    `table_oj1tlr_name` VARCHAR(50)
+);
+
+INSERT INTO `table_3honbg` (`table_3honbg_product_id`, `table_3honbg_category_id`, `table_3honbg_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_oj1tlr` (`table_oj1tlr_category_id`, `table_oj1tlr_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_3HONBG_PRICE), 0), COALESCE(MAX(TABLE_3HONBG_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM TABLE_3HONBG
+    WHERE TABLE_3HONBG_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = (V_AVG_PRICE * 100) / V_MAX_PRICE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+CREATE TABLE IF NOT EXISTS `table_iy3rb0` (
+    `table_iy3rb0_order_id` INT,
+    `table_iy3rb0_customer_id` INT,
+    `table_iy3rb0_order_date` DATE,
+    `table_iy3rb0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5xz50t` (
+    `table_5xz50t_customer_id` INT,
+    `table_5xz50t_country` INT
+);
+
+INSERT INTO `table_iy3rb0` (`table_iy3rb0_order_id`, `table_iy3rb0_customer_id`, `table_iy3rb0_order_date`, `table_iy3rb0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_5xz50t` (`table_5xz50t_customer_id`, `table_5xz50t_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_ORDERS INT DEFAULT 0;
+    DECLARE V_PRIOR_ORDERS INT DEFAULT 0;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_ORDERS = (MYSQL_FUNC_COUNT_BITS_SET_sk78sm(-82)) - 39 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_ORDERS - V_PRIOR_ORDERS) * 100) / V_PRIOR_ORDERS;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (v_count + 1);
+        END IF;
+        SET V_TEMP = V_TEMP >> 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, 0), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_N * 2;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+CREATE TABLE IF NOT EXISTS `table_3iwn00` (
+    `table_3iwn00_emp_id` INT,
+    `table_3iwn00_salary` INT
+);
+
+INSERT INTO `table_3iwn00` (`table_3iwn00_emp_id`, `table_3iwn00_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3IWN00_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_3IWN00
+    WHERE TABLE_3IWN00_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(-65)) - -617 + (floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, 0) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= (MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = (MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(90)) - 112 + (first_term + (num_terms - 1) * common_diff);
+    SET V_SUM = (MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(-2)) - 961 + ((num_terms * (first_term + v_last_term)) / 2);
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(1, 1, 1);

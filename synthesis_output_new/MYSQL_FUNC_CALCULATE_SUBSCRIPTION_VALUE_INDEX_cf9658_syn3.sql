@@ -1,0 +1,358 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1sqpyn` (
+    `table_1sqpyn_customer_id` INT,
+    `table_1sqpyn_status` VARCHAR(50),
+    `table_1sqpyn_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1sqpyn` (`table_1sqpyn_customer_id`, `table_1sqpyn_status`, `table_1sqpyn_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+CREATE TABLE IF NOT EXISTS table_pi4u01 (
+    table_pi4u01_name VARCHAR(50)
+);
+
+INSERT INTO table_pi4u01 (`table_pi4u01_name`) VALUES ('test');
+
+/* -----Called: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(START_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE TOWN_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TOWN_COUNT 
+    FROM TABLE_PI4U01 
+    WHERE TABLE_PI4U01_NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN TOWN_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+CREATE TABLE IF NOT EXISTS `table_1ffs7g` (
+    `table_1ffs7g_customer_id` INT,
+    `table_1ffs7g_status` VARCHAR(50)
+);
+
+INSERT INTO `table_1ffs7g` (`table_1ffs7g_customer_id`, `table_1ffs7g_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACTIVE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ACTIVE_COUNT
+    FROM TABLE_1FFS7G
+    WHERE TABLE_1FFS7G_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1FFS7G_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov(-99)) - 200 + (v_active_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov----- */
+CREATE TABLE IF NOT EXISTS `table_6jxhs5` (
+    `table_6jxhs5_inventory_id` INT,
+    `table_6jxhs5_product_id` INT,
+    `table_6jxhs5_quantity` INT,
+    `table_6jxhs5_warehouse_id` INT,
+    `table_6jxhs5_last_updated` DATE
+);
+
+INSERT INTO `table_6jxhs5` (`table_6jxhs5_inventory_id`, `table_6jxhs5_product_id`, `table_6jxhs5_quantity`, `table_6jxhs5_warehouse_id`, `table_6jxhs5_last_updated`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_USAGE INT DEFAULT 10;
+    DECLARE V_DAYS_UNTIL_STOCKOUT INT;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6JXHS5_QUANTITY), 0) INTO V_TOTAL_QUANTITY
+    FROM TABLE_6JXHS5
+    WHERE TABLE_6JXHS5_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_QUANTITY <= 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_DAYS_UNTIL_STOCKOUT = V_TOTAL_QUANTITY / NULLIF(V_AVG_DAILY_USAGE, 0);
+
+    CASE
+        WHEN V_DAYS_UNTIL_STOCKOUT < 7 THEN SET V_PRIORITY = 100;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 14 THEN SET V_PRIORITY = 75;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 30 THEN SET V_PRIORITY = 50;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 60 THEN SET V_PRIORITY = 25;
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+CREATE TABLE IF NOT EXISTS `table_ze3ja4` (
+    `table_ze3ja4_order_id` INT,
+    `table_ze3ja4_customer_id` INT,
+    `table_ze3ja4_order_date` DATE
+);
+
+INSERT INTO `table_ze3ja4` (`table_ze3ja4_order_id`, `table_ze3ja4_customer_id`, `table_ze3ja4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_ZE3JA4_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_ZE3JA4
+    WHERE TABLE_ZE3JA4_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(9)) - 250 + (v_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+CREATE TABLE IF NOT EXISTS `table_6i0q6l` (
+    `table_6i0q6l_ad_id` INT,
+    `table_6i0q6l_company_id` INT,
+    `table_6i0q6l_location_id` INT,
+    `table_6i0q6l_billboard_size` INT,
+    `table_6i0q6l_monthly_rent` INT,
+    `table_6i0q6l_duration_months` INT,
+    `table_6i0q6l_impressions_expected` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8fquy9` (
+    `table_8fquy9_location_id` INT,
+    `table_8fquy9_city` INT,
+    `table_8fquy9_traffic_count` INT,
+    `table_8fquy9_visibility_score` INT
+);
+
+INSERT INTO `table_6i0q6l` (`table_6i0q6l_ad_id`, `table_6i0q6l_company_id`, `table_6i0q6l_location_id`, `table_6i0q6l_billboard_size`, `table_6i0q6l_monthly_rent`, `table_6i0q6l_duration_months`, `table_6i0q6l_impressions_expected`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_8fquy9` (`table_8fquy9_location_id`, `table_8fquy9_city`, `table_8fquy9_traffic_count`, `table_8fquy9_visibility_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(AD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 5000;
+    DECLARE V_IMPRESSIONS_EXPECTED INT DEFAULT 0;
+    DECLARE V_TRAFFIC_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6I0Q6L_MONTHLY_RENT, 5000), COALESCE(TABLE_6I0Q6L_IMPRESSIONS_EXPECTED, 100000)
+    INTO V_MONTHLY_RENT, V_IMPRESSIONS_EXPECTED
+    FROM TABLE_6I0Q6L
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8FQUY9_TRAFFIC_COUNT, 50000)
+    INTO V_TRAFFIC_COUNT
+    FROM TABLE_6I0Q6L BA
+    JOIN TABLE_8FQUY9 BL ON TABLE_6I0Q6L_LOCATION_ID = TABLE_8FQUY9_LOCATION_ID
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SET V_ROI_SCORE = (V_IMPRESSIONS_EXPECTED * V_TRAFFIC_COUNT) / V_MONTHLY_RENT;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < (MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(-92)) - -72 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (1);
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN BASE;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(0)) - -639 + (base * power_recursive(base, exponent - 1));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+CREATE TABLE IF NOT EXISTS table_5s385z (
+    table_5s385z_id INT,
+    table_5s385z_preco INT
+);
+
+INSERT INTO table_5s385z (`table_5s385z_id`, `table_5s385z_preco`) VALUES (3, 150);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(VAR_REMEDIO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_PRECO INT DEFAULT 0;
+    
+    SELECT TABLE_5S385Z_PRECO INTO RESULT_PRECO
+    FROM TABLE_5S385Z
+    WHERE TABLE_5S385Z.TABLE_5S385Z_ID = VAR_REMEDIO;
+    
+    RETURN RESULT_PRECO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+CREATE TABLE IF NOT EXISTS `table_ik0x1s` (
+    `table_ik0x1s_campaign_id` INT,
+    `table_ik0x1s_start_date` DATE,
+    `table_ik0x1s_end_date` DATE,
+    `table_ik0x1s_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_np8rkj` (
+    `table_np8rkj_conversion_id` INT,
+    `table_np8rkj_campaign_id` INT,
+    `table_np8rkj_conversion_date` DATE
+);
+
+INSERT INTO `table_ik0x1s` (`table_ik0x1s_campaign_id`, `table_ik0x1s_start_date`, `table_ik0x1s_end_date`, `table_ik0x1s_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_np8rkj` (`table_np8rkj_conversion_id`, `table_np8rkj_campaign_id`, `table_np8rkj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_OLDER_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TREND INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_RECENT_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    SELECT COUNT(*)
+    INTO V_OLDER_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    AND TABLE_NP8RKJ_CONVERSION_DATE < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    IF V_OLDER_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TREND = ((V_RECENT_CONVERSIONS - V_OLDER_CONVERSIONS) * 100) / V_OLDER_CONVERSIONS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (v_trend);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 12 / 100;
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = V_ENTRY_FEE * 2;
+    END CASE;
+
+    RETURN CAST(V_PRIZE_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1SQPYN_STATUS, COALESCE(TABLE_1SQPYN_MONTHLY_COST, (MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(12)) - -143 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(-1)) - 368 + (0))))
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_1SQPYN
+    WHERE TABLE_1SQPYN_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(37)) - 848 + (v_monthly_cost * 5);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(1);

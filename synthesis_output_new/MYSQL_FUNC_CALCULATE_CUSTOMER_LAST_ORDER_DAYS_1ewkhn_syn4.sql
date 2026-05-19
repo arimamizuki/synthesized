@@ -1,0 +1,414 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_jgwy5p` (
+    `table_jgwy5p_order_id` INT,
+    `table_jgwy5p_customer_id` INT,
+    `table_jgwy5p_order_date` DATE
+);
+
+INSERT INTO `table_jgwy5p` (`table_jgwy5p_order_id`, `table_jgwy5p_customer_id`, `table_jgwy5p_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz----- */
+CREATE TABLE IF NOT EXISTS `table_k0i4vp` (
+    `table_k0i4vp_campaign_id` INT,
+    `table_k0i4vp_start_date` DATE,
+    `table_k0i4vp_end_date` DATE
+);
+
+INSERT INTO `table_k0i4vp` (`table_k0i4vp_campaign_id`, `table_k0i4vp_start_date`, `table_k0i4vp_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION INT DEFAULT 0;
+
+    SELECT DATEDIFF(TABLE_K0I4VP_END_DATE, TABLE_K0I4VP_START_DATE)
+    INTO V_DURATION
+    FROM TABLE_K0I4VP
+    WHERE TABLE_K0I4VP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow(-37)) - -210 + ((MYSQL_FUNC_FIBONACCI_NUMBER_z1ajp7(3)) - -573 + ((MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(38, -56)) - 805 + ((MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(99)) - 614 + (v_duration))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(P_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+    DECLARE V_MAX_SEARCH INT DEFAULT 1000;
+
+    SET V_CURRENT = P_NUM + 1;
+
+    SEARCH_LOOP: WHILE V_CURRENT <= P_NUM + V_MAX_SEARCH DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            RETURN V_CURRENT;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE SEARCH_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+CREATE TABLE IF NOT EXISTS `table_xma1f9` (
+    `table_xma1f9_appointment_id` INT,
+    `table_xma1f9_pet_id` INT,
+    `table_xma1f9_service_type` VARCHAR(50),
+    `table_xma1f9_appointment_date` DATE,
+    `table_xma1f9_duration_minutes` INT,
+    `table_xma1f9_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_23iq77` (
+    `table_23iq77_pet_id` INT,
+    `table_23iq77_breed` INT,
+    `table_23iq77_size` INT,
+    `table_23iq77_age_months` INT
+);
+
+INSERT INTO `table_xma1f9` (`table_xma1f9_appointment_id`, `table_xma1f9_pet_id`, `table_xma1f9_service_type`, `table_xma1f9_appointment_date`, `table_xma1f9_duration_minutes`, `table_xma1f9_base_price`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_23iq77` (`table_23iq77_pet_id`, `table_23iq77_breed`, `table_23iq77_size`, `table_23iq77_age_months`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(PET_ID_PARAM INT, SERVICE_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_SIZE VARCHAR(10) DEFAULT 'MEDIUM';
+    DECLARE V_PET_AGE INT DEFAULT 12;
+    DECLARE V_BASE_PRICE INT DEFAULT 40;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_23IQ77_SIZE, 'MEDIUM'), TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_PET_SIZE, V_PET_AGE
+    FROM TABLE_23IQ77
+    WHERE TABLE_23IQ77_PET_ID = PET_ID_PARAM;
+
+    SET V_PET_AGE = 12;
+
+    CASE V_PET_SIZE
+        WHEN 'LARGE' THEN SET V_SIZE_MULTIPLIER = 2;
+        WHEN 'MEDIUM' THEN SET V_SIZE_MULTIPLIER = 1;
+        WHEN 'SMALL' THEN SET V_SIZE_MULTIPLIER = 0;
+        ELSE SET V_SIZE_MULTIPLIER = 1;
+    END CASE;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'FULL_GROOMING' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BATH' THEN SET V_BASE_PRICE = 40;
+        WHEN 'HAIRCUT' THEN SET V_BASE_PRICE = 60;
+        WHEN 'NAIL_TRIM' THEN SET V_BASE_PRICE = 20;
+        ELSE SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(11)) - 319 + (50);
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * V_SIZE_MULTIPLIER;
+
+    IF V_PET_AGE < 6 THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE + 10;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+CREATE TABLE IF NOT EXISTS `table_kcy5si` (
+    `table_kcy5si_meter_id` INT,
+    `table_kcy5si_customer_id` INT,
+    `table_kcy5si_meter_type` VARCHAR(50),
+    `table_kcy5si_current_reading` INT,
+    `table_kcy5si_previous_reading` INT,
+    `table_kcy5si_tariff_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c44eze` (
+    `table_c44eze_panel_id` INT,
+    `table_c44eze_meter_id` INT,
+    `table_c44eze_capacity_kw` INT,
+    `table_c44eze_installation_date` DATE,
+    `table_c44eze_efficiency_percent` INT
+);
+
+INSERT INTO `table_kcy5si` (`table_kcy5si_meter_id`, `table_kcy5si_customer_id`, `table_kcy5si_meter_type`, `table_kcy5si_current_reading`, `table_kcy5si_previous_reading`, `table_kcy5si_tariff_rate`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c44eze` (`table_c44eze_panel_id`, `table_c44eze_meter_id`, `table_c44eze_capacity_kw`, `table_c44eze_installation_date`, `table_c44eze_efficiency_percent`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY_KW INT DEFAULT 5;
+    DECLARE V_EFFICIENCY_PERCENT INT DEFAULT 80;
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_CREDIT_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C44EZE_CAPACITY_KW, 5), COALESCE(TABLE_C44EZE_EFFICIENCY_PERCENT, 80)
+    INTO V_CAPACITY_KW, V_EFFICIENCY_PERCENT
+    FROM TABLE_C44EZE
+    WHERE TABLE_C44EZE_METER_ID = METER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_KCY5SI_CURRENT_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_KCY5SI
+    WHERE TABLE_KCY5SI_METER_ID = METER_ID_PARAM;
+
+    SET V_CREDIT_AMOUNT = (V_CAPACITY_KW * V_EFFICIENCY_PERCENT * V_CURRENT_READING) / 1000;
+
+    RETURN CAST(V_CREDIT_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_NUMBER_z1ajp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_NUMBER_z1ajp7(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 2;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = (MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(86)) - -457 + (1) THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_COUNTER <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_COUNTER = (MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx()) - 757 + (v_counter + 1));
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 3 UNION SELECT 6 UNION SELECT 9 UNION SELECT 12;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+CREATE TABLE IF NOT EXISTS `table_s5c2sb` (
+    `table_s5c2sb_listing_id` INT,
+    `table_s5c2sb_employer_id` INT,
+    `table_s5c2sb_title` INT,
+    `table_s5c2sb_salary_min` INT,
+    `table_s5c2sb_salary_max` INT,
+    `table_s5c2sb_posted_date` DATE,
+    `table_s5c2sb_application_deadline` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_w5l6s0` (
+    `table_w5l6s0_application_id` INT,
+    `table_w5l6s0_listing_id` INT,
+    `table_w5l6s0_applicant_id` INT,
+    `table_w5l6s0_applied_date` DATE,
+    `table_w5l6s0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s5c2sb` (`table_s5c2sb_listing_id`, `table_s5c2sb_employer_id`, `table_s5c2sb_title`, `table_s5c2sb_salary_min`, `table_s5c2sb_salary_max`, `table_s5c2sb_posted_date`, `table_s5c2sb_application_deadline`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_w5l6s0` (`table_w5l6s0_application_id`, `table_w5l6s0_listing_id`, `table_w5l6s0_applicant_id`, `table_w5l6s0_applied_date`, `table_w5l6s0_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(LISTING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_MIN INT DEFAULT 0;
+    DECLARE V_SALARY_MAX INT DEFAULT 0;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_POSTED INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_S5C2SB_SALARY_MIN), 0), COALESCE(MAX(TABLE_S5C2SB_SALARY_MAX), 0), COUNT(*)
+    INTO V_SALARY_MIN, V_SALARY_MAX, V_APPLICATION_COUNT
+    FROM TABLE_S5C2SB L
+    LEFT JOIN TABLE_W5L6S0 A ON TABLE_S5C2SB_LISTING_ID = TABLE_W5L6S0_LISTING_ID
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM
+    GROUP BY TABLE_S5C2SB_LISTING_ID;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_S5C2SB_POSTED_DATE) INTO V_DAYS_SINCE_POSTED
+    FROM TABLE_S5C2SB
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM;
+
+    IF V_DAYS_SINCE_POSTED = 0 THEN
+        SET V_DAYS_SINCE_POSTED = 1;
+    END IF;
+
+    SET V_ENGAGEMENT_SCORE = (V_APPLICATION_COUNT * 100) / V_DAYS_SINCE_POSTED;
+
+    IF V_SALARY_MAX > 100000 THEN
+        SET V_ENGAGEMENT_SCORE = (MYSQL_FUNC_FUNC2_nz67cs()) - -915 + (v_engagement_score + 20);
+    END IF;
+
+    RETURN CAST(V_ENGAGEMENT_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC2_nz67cs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow----- */
+CREATE TABLE IF NOT EXISTS `table_2cndtn` (
+    `table_2cndtn_product_id` INT,
+    `table_2cndtn_category_id` INT,
+    `table_2cndtn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_asrjx0` (
+    `table_asrjx0_category_id` INT,
+    `table_asrjx0_name` VARCHAR(50)
+);
+
+INSERT INTO `table_2cndtn` (`table_2cndtn_product_id`, `table_2cndtn_category_id`, `table_2cndtn_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_asrjx0` (`table_asrjx0_category_id`, `table_asrjx0_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_jsztow(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_2CNDTN_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_2CNDTN
+    WHERE TABLE_2CNDTN_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM TABLE_2CNDTN
+    WHERE TABLE_2CNDTN_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_PROFITABILITY_INDEX = FLOOR(V_AVG_PRICE * V_PRODUCT_COUNT / 100);
+
+    RETURN V_PROFITABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MAX(TABLE_JGWY5P_ORDER_DATE)
+    INTO V_LAST_ORDER
+    FROM TABLE_JGWY5P
+    WHERE TABLE_JGWY5P_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz(-22)) - -750 + (999);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_LAST_ORDER);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(1);

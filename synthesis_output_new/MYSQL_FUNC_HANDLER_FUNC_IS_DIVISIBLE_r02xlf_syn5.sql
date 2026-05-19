@@ -1,0 +1,355 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+CREATE TABLE IF NOT EXISTS `table_u9lbfu` (
+    `table_u9lbfu_customer_id` INT,
+    `table_u9lbfu_status` VARCHAR(50)
+);
+
+INSERT INTO `table_u9lbfu` (`table_u9lbfu_customer_id`, `table_u9lbfu_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_U9LBFU_STATUS
+    INTO V_STATUS
+    FROM TABLE_U9LBFU
+    WHERE TABLE_U9LBFU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'PENDING' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABS_x5vvm7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABS_x5vvm7(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(-37, 16)) - 432 + (n) < 0 THEN
+        RETURN -N;
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+CREATE TABLE IF NOT EXISTS table_4tkghb (
+    table_4tkghb_inventory_id INT PRIMARY KEY,
+    table_4tkghb_film_id INT,
+    table_4tkghb_store_id INT
+);
+
+CREATE TABLE IF NOT EXISTS table_qb1ggy (
+    table_qb1ggy_rental_id INT PRIMARY KEY,
+    table_qb1ggy_inventory_id INT,
+    table_qb1ggy_return_date DATE
+);
+
+INSERT INTO table_4tkghb (`table_4tkghb_inventory_id`, `table_4tkghb_film_id`, `table_4tkghb_store_id`) VALUES (1, 2, 3);
+
+INSERT INTO table_qb1ggy (`table_qb1ggy_rental_id`, `table_qb1ggy_inventory_id`, `table_qb1ggy_return_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE FILM_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*)
+    INTO FILM_COUNT
+    FROM TABLE_4TKGHB
+    WHERE TABLE_4TKGHB_FILM_ID = P_FILM_ID
+    AND TABLE_4TKGHB_STORE_ID = P_STORE_ID
+    AND NOT EXISTS (
+        SELECT 1 FROM TABLE_QB1GGY 
+        WHERE TABLE_QB1GGY.TABLE_QB1GGY_INVENTORY_ID = TABLE_4TKGHB.TABLE_4TKGHB_INVENTORY_ID 
+        AND TABLE_QB1GGY.TABLE_QB1GGY_RETURN_DATE IS NULL
+    );
+    
+    RETURN FILM_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+CREATE TABLE IF NOT EXISTS `table_ycmequ` (
+    `table_ycmequ_emp_id` INT,
+    `table_ycmequ_department_id` INT
+);
+
+INSERT INTO `table_ycmequ` (`table_ycmequ_emp_id`, `table_ycmequ_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_YCMEQU_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_YCMEQU
+    WHERE TABLE_YCMEQU_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(-72)) - 4 + ((MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(89, 68, 86)) - -753 + (v_dept_id % 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > (MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + (1000) THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+CREATE TABLE IF NOT EXISTS `table_ukztpb` (
+    `table_ukztpb_donation_id` INT,
+    `table_ukztpb_donor_id` INT,
+    `table_ukztpb_campaign_id` INT,
+    `table_ukztpb_amount` DECIMAL(10,2),
+    `table_ukztpb_donation_date` DATE,
+    `table_ukztpb_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4jtf78` (
+    `table_4jtf78_campaign_id` INT,
+    `table_4jtf78_name` VARCHAR(50),
+    `table_4jtf78_goal_amount` DECIMAL(10,2),
+    `table_4jtf78_raised_amount` DECIMAL(10,2),
+    `table_4jtf78_start_date` DATE
+);
+
+INSERT INTO `table_ukztpb` (`table_ukztpb_donation_id`, `table_ukztpb_donor_id`, `table_ukztpb_campaign_id`, `table_ukztpb_amount`, `table_ukztpb_donation_date`, `table_ukztpb_payment_method`) VALUES (1, 2, 3, 1.0, '2024-01-01', 6);
+
+INSERT INTO `table_4jtf78` (`table_4jtf78_campaign_id`, `table_4jtf78_name`, `table_4jtf78_goal_amount`, `table_4jtf78_raised_amount`, `table_4jtf78_start_date`) VALUES (1, 'test', 1.0, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4JTF78_GOAL_AMOUNT, 1000), COALESCE(TABLE_4JTF78_RAISED_AMOUNT, (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(-63)) - -893 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(62)) - -411 + (0)))
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM TABLE_4JTF78
+    WHERE TABLE_4JTF78_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_UKZTPB_AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM TABLE_UKZTPB
+    WHERE TABLE_UKZTPB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * 100) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_PROGRESS_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+CREATE TABLE IF NOT EXISTS `table_q6xalv` (
+    `table_q6xalv_customer_id` INT,
+    `table_q6xalv_registration_date` DATE
+);
+
+INSERT INTO `table_q6xalv` (`table_q6xalv_customer_id`, `table_q6xalv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_Q6XALV_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_Q6XALV
+    WHERE TABLE_Q6XALV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um----- */
+CREATE TABLE IF NOT EXISTS `table_xb9hgj` (
+    `table_xb9hgj_customer_id` INT,
+    `table_xb9hgj_start_date` DATE
+);
+
+INSERT INTO `table_xb9hgj` (`table_xb9hgj_customer_id`, `table_xb9hgj_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_XB9HGJ_START_DATE)
+    INTO V_WEEK
+    FROM TABLE_XB9HGJ
+    WHERE TABLE_XB9HGJ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(P_N INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_D = 0 THEN
+        RETURN (MYSQL_FUNC_GET_ABS_x5vvm7(33)) - -280 + (-(MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + (1));
+    END IF;
+
+    IF P_N MOD P_D = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_SUBSCRIPTION_STATUS_33u883(49)) - -212 + (-1);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(58)) - -984 + (v_result);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(1, 1);

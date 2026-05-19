@@ -1,0 +1,433 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v119 (
+    v120 INT,
+    v121 VARCHAR(100),
+    v122 VARCHAR(100),
+    v123 VARCHAR(200)
+);
+CREATE TABLE IF NOT EXISTS v24 (
+    v25 INT,
+    v26 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v77 (
+    v166 VARCHAR(100)
+);
+INSERT INTO v119 VALUES
+(1, 'testL', 'password', '0000000001070000000100000001060000000100000001010000000000000000000000'),
+(2, 'helloL', 'root', '0000000001070000000100000001060000000100000001010000000000000000000000');
+INSERT INTO v24 VALUES
+(100, 'wl3836'),
+(200, 'abcL'),
+(300, 'xyz');
+INSERT INTO v77 VALUES
+('12345'),
+('abc123'),
+('xyz789');
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+CREATE TABLE IF NOT EXISTS `table_cejk8t` (
+    `table_cejk8t_campaign_id` INT,
+    `table_cejk8t_channel` INT,
+    `table_cejk8t_budget` INT,
+    `table_cejk8t_status` VARCHAR(50)
+);
+
+INSERT INTO `table_cejk8t` (`table_cejk8t_campaign_id`, `table_cejk8t_channel`, `table_cejk8t_budget`, `table_cejk8t_status`) VALUES (1, 1, 1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_CEJK8T_CHANNEL, COALESCE(TABLE_CEJK8T_BUDGET, 0), TABLE_CEJK8T_STATUS
+    INTO V_CHANNEL, V_BUDGET, V_STATUS
+    FROM TABLE_CEJK8T
+    WHERE TABLE_CEJK8T_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_BUDGET / 100
+        WHEN 'ORGANIC' THEN V_BUDGET / 50
+        WHEN 'SOCIAL' THEN V_BUDGET / 75
+        ELSE V_BUDGET / 100
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_NEXT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF P_N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I < P_N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+CREATE TABLE IF NOT EXISTS `table_rfgcxf` (
+    `table_rfgcxf_customer_id` INT,
+    `table_rfgcxf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_rfgcxf` (`table_rfgcxf_customer_id`, `table_rfgcxf_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_RFGCXF
+    WHERE TABLE_RFGCXF_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_RFGCXF_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(-61)) - 853 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_SQUARES_btf2hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + (V_COUNTER * V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+CREATE TABLE IF NOT EXISTS `table_hc8gc6` (
+    `table_hc8gc6_school_id` INT,
+    `table_hc8gc6_name` VARCHAR(50),
+    `table_hc8gc6_district` INT,
+    `table_hc8gc6_school_type` VARCHAR(50),
+    `table_hc8gc6_enrollment_count` INT,
+    `table_hc8gc6_budget_per_student` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_byxr69` (
+    `table_byxr69_student_id` INT,
+    `table_byxr69_school_id` INT,
+    `table_byxr69_grade_level` INT,
+    `table_byxr69_attendance_rate` INT
+);
+
+INSERT INTO `table_hc8gc6` (`table_hc8gc6_school_id`, `table_hc8gc6_name`, `table_hc8gc6_district`, `table_hc8gc6_school_type`, `table_hc8gc6_enrollment_count`, `table_hc8gc6_budget_per_student`) VALUES (1, 'test', 1, 'test', 1, 1);
+
+INSERT INTO `table_byxr69` (`table_byxr69_student_id`, `table_byxr69_school_id`, `table_byxr69_grade_level`, `table_byxr69_attendance_rate`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(SCHOOL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_COUNT INT DEFAULT 0;
+    DECLARE V_BUDGET_PER_STUDENT INT DEFAULT 0;
+    DECLARE V_AVG_ATTENDANCE DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_GRADE_LEVEL_COUNT INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HC8GC6_ENROLLMENT_COUNT, 0), COALESCE(TABLE_HC8GC6_BUDGET_PER_STUDENT, 0)
+    INTO V_ENROLLMENT_COUNT, V_BUDGET_PER_STUDENT
+    FROM TABLE_HC8GC6
+    WHERE TABLE_HC8GC6_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_BYXR69_ATTENDANCE_RATE), 0)
+    INTO V_AVG_ATTENDANCE
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_BYXR69_GRADE_LEVEL)
+    INTO V_GRADE_LEVEL_COUNT
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62(-43)) - 309 + ((v_avg_attendance * 2) + (v_grade_level_count * 15) + (v_budget_per_student / 100));
+
+    RETURN V_EFFECTIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62----- */
+CREATE TABLE IF NOT EXISTS `table_qq48o8` (
+    `table_qq48o8_supplier_id` INT,
+    `table_qq48o8_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qq48o8` (`table_qq48o8_supplier_id`, `table_qq48o8_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QQ48O8_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QQ48O8
+    WHERE TABLE_QQ48O8_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+CREATE TABLE IF NOT EXISTS `table_6dotge` (
+    `table_6dotge_customer_id` INT,
+    `table_6dotge_order_date` DATE
+);
+
+INSERT INTO `table_6dotge` (`table_6dotge_customer_id`, `table_6dotge_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(MAX(TABLE_6DOTGE_ORDER_DATE))
+    INTO V_MONTH
+    FROM TABLE_6DOTGE
+    WHERE TABLE_6DOTGE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(29)) - -945 + (v_month);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(-46)) - 156 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+CREATE TABLE IF NOT EXISTS `table_vnxm9k` (
+    `table_vnxm9k_emp_id` INT,
+    `table_vnxm9k_manager_id` INT,
+    `table_vnxm9k_department_id` INT,
+    `table_vnxm9k_salary` INT
+);
+
+INSERT INTO `table_vnxm9k` (`table_vnxm9k_emp_id`, `table_vnxm9k_manager_id`, `table_vnxm9k_department_id`, `table_vnxm9k_salary`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT 0;
+
+    SELECT MIN(TABLE_VNXM9K_EMP_ID)
+    INTO V_CURRENT_EMP
+    FROM TABLE_VNXM9K
+    WHERE TABLE_VNXM9K_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_VNXM9K_MANAGER_ID IS NULL;
+
+    WHILE V_CURRENT_EMP IS NOT NULL DO
+        SET V_MAX_DEPTH = V_MAX_DEPTH + 1;
+        SELECT MIN(TABLE_VNXM9K_EMP_ID)
+        INTO V_CURRENT_EMP
+        FROM TABLE_VNXM9K
+        WHERE TABLE_VNXM9K_MANAGER_ID = V_CURRENT_EMP;
+    END WHILE;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0029(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_v25 INT;
+    DECLARE v_v26 VARCHAR(100);
+    DECLARE v_v123 VARCHAR(200);
+    DECLARE v_validate_result VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v25, v26 FROM v24 WHERE v26 LIKE '%L';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Statement 1: UPDATE v119 with VALIDATE_PASSWORD_STRENGTH and LEFT JOIN
+    UPDATE v119 AS x1 
+    LEFT OUTER JOIN v24 AS x5 ON x1.v120 = x1.v123 
+    SET v122 = VALIDATE_PASSWORD_STRENGTH('root') 
+    WHERE v121 LIKE '%L';
+    
+    SET v_counter = (MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(-31)) - -577 + (v_counter) + ROW_COUNT();
+
+    -- Statement 2: UPDATE v24 SET v25 = 1100
+    UPDATE v24 AS x0 SET v25 = 1100 WHERE v26 LIKE 'wl3836';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE v24 SET v26 = 'aa'
+    UPDATE v24 AS x0 SET v26 = 'aa';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: UPDATE v119 with CONCAT
+    UPDATE v119 AS x1 
+    SET v123 = CONCAT('0', x1.v123, '0000000001070000000100000001060000000100000001010000000000000000000000');
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 5: CREATE INDEX using dynamic SQL
+    SET @sql = 'CREATE INDEX v166 ON v77((SUBSTRING(RTRIM(123), 1, 2)))';
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    SET v_counter = v_counter + 1;
+
+    -- Use cursor with loop to iterate and apply conditional logic
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_v25, v_v26;
+        IF v_done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Apply CASE/WHEN logic
+        CASE 
+            WHEN v_v25 > 500 THEN
+                SET v_counter = v_counter + 10;
+            WHEN (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(95)) - 488 + (v_v25 between 100 and 500) THEN
+                SET v_counter = v_counter + 5;
+            ELSE
+                SET v_counter = v_counter + 1;
+        END CASE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use WHILE loop for additional processing
+    WHILE p1 > 0 DO
+        SET v_counter = v_counter + 1;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+    -- Use REPEAT loop for validation
+    REPEAT
+        SET v_counter = v_counter + 1;
+        SET p2 = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (p2) - 1;
+    UNTIL p2 <= 0 END REPEAT;
+
+    -- Use SIGNAL for error handling demonstration
+    IF v_counter < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Counter should not be negative';
+    END IF;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0029(1, 1, @out_result);
+
+SELECT @out_result;

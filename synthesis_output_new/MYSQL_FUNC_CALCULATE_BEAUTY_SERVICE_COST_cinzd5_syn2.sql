@@ -1,0 +1,369 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gtn1m7` (
+    `table_gtn1m7_appt_id` INT,
+    `table_gtn1m7_client_id` INT,
+    `table_gtn1m7_stylist_id` INT,
+    `table_gtn1m7_service_id` INT,
+    `table_gtn1m7_appointment_date` DATE,
+    `table_gtn1m7_duration_minutes` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t6eu0r` (
+    `table_t6eu0r_service_id` INT,
+    `table_t6eu0r_service_name` VARCHAR(50),
+    `table_t6eu0r_base_price` DECIMAL(10,2),
+    `table_t6eu0r_category` INT
+);
+
+INSERT INTO `table_gtn1m7` (`table_gtn1m7_appt_id`, `table_gtn1m7_client_id`, `table_gtn1m7_stylist_id`, `table_gtn1m7_service_id`, `table_gtn1m7_appointment_date`, `table_gtn1m7_duration_minutes`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_t6eu0r` (`table_t6eu0r_service_id`, `table_t6eu0r_service_name`, `table_t6eu0r_base_price`, `table_t6eu0r_category`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_FIND_MAX_VALUE_felclh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_MAX_VALUE_felclh(ARR_SIZE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT -2147483648;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_CURRENT_VAL INT;
+
+    IF ARR_SIZE <= (MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(79, 89)) - -529 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SAMPLE_LOOP: WHILE V_COUNTER <= ARR_SIZE DO
+        SET V_CURRENT_VAL = FLOOR(1 + RAND() * 1000);
+        IF V_CURRENT_VAL > V_MAX THEN
+            SET V_MAX = V_CURRENT_VAL;
+        END IF;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SAMPLE_LOOP;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+CREATE TABLE IF NOT EXISTS `table_uhea2z` (
+    `table_uhea2z_ship_id` INT,
+    `table_uhea2z_order_id` INT,
+    `table_uhea2z_weight` INT,
+    `table_uhea2z_shipping_cost` DECIMAL(10,2),
+    `table_uhea2z_zone` INT,
+    `table_uhea2z_delivery_days` INT
+);
+
+INSERT INTO `table_uhea2z` (`table_uhea2z_ship_id`, `table_uhea2z_order_id`, `table_uhea2z_weight`, `table_uhea2z_shipping_cost`, `table_uhea2z_zone`, `table_uhea2z_delivery_days`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(ORDER_ID_PARAM INT, ZONE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 500;
+    DECLARE V_ZONE_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UHEA2Z_WEIGHT, 0) INTO V_WEIGHT
+    FROM TABLE_UHEA2Z
+    WHERE TABLE_UHEA2Z_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE ZONE_PARAM
+        WHEN 1 THEN SET V_ZONE_COST = 0;
+        WHEN 2 THEN SET V_ZONE_COST = 100;
+        WHEN 3 THEN SET V_ZONE_COST = 200;
+        WHEN 4 THEN SET V_ZONE_COST = 300;
+        ELSE SET V_ZONE_COST = 500;
+    END CASE;
+
+    SET V_TOTAL_COST = V_BASE_COST + (V_WEIGHT * 10) + V_ZONE_COST;
+
+    RETURN (MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (v_total_cost);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(-49)) - 936 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (v_temp mod 10));
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN (MYSQL_FUNC_PROC_BIT_ea2fyr()) - 988 + (-1);
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + (v_position + 1);
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN NULL;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET V_I = (MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(-44, -90)) - -623 + (v_i + 1);
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SLANT_HEIGHT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_SLANT_HEIGHT = SQRT(RADIUS * RADIUS + HEIGHT * HEIGHT);
+    SET V_SURFACE_AREA = (MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(-78, 28)) - -527 + (3.14159 * radius * (radius + v_slant_height));
+
+    RETURN FLOOR(V_SURFACE_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+CREATE TABLE IF NOT EXISTS `table_nw3b9o` (
+    `table_nw3b9o_zone_id` INT,
+    `table_nw3b9o_hourly_rate` INT,
+    `table_nw3b9o_max_capacity` INT,
+    `table_nw3b9o_current_occupied` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8u2yi0` (
+    `table_8u2yi0_trans_id` INT,
+    `table_8u2yi0_vehicle_id` INT,
+    `table_8u2yi0_zone_id` INT,
+    `table_8u2yi0_entry_time` DATE,
+    `table_8u2yi0_exit_time` DATE,
+    `table_8u2yi0_amount_paid` INT
+);
+
+INSERT INTO `table_nw3b9o` (`table_nw3b9o_zone_id`, `table_nw3b9o_hourly_rate`, `table_nw3b9o_max_capacity`, `table_nw3b9o_current_occupied`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_8u2yi0` (`table_8u2yi0_trans_id`, `table_8u2yi0_vehicle_id`, `table_8u2yi0_zone_id`, `table_8u2yi0_entry_time`, `table_8u2yi0_exit_time`, `table_8u2yi0_amount_paid`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(ZONE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_MAX_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_OCCUPIED INT DEFAULT 0;
+    DECLARE V_BASE_FEE INT DEFAULT 0;
+    DECLARE V_SURGE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NW3B9O_HOURLY_RATE, 10), COALESCE(TABLE_NW3B9O_MAX_CAPACITY, 100)
+    INTO V_HOURLY_RATE, V_MAX_CAPACITY
+    FROM TABLE_NW3B9O
+    WHERE TABLE_NW3B9O_ZONE_ID = ZONE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_OCCUPIED
+    FROM TABLE_8U2YI0
+    WHERE TABLE_8U2YI0_ZONE_ID = ZONE_ID_PARAM AND TABLE_8U2YI0_EXIT_TIME IS NULL;
+
+    SET V_BASE_FEE = HOURS_PARAM * V_HOURLY_RATE;
+
+    IF V_CURRENT_OCCUPIED > V_MAX_CAPACITY * 80 / 100 THEN
+        SET V_SURGE_FEE = V_BASE_FEE * 25 / 100;
+    END IF;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + V_SURGE_FEE;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+CREATE TABLE IF NOT EXISTS `table_wvbnyq` (
+    `table_wvbnyq_cbit` BIT(1)
+);
+
+INSERT INTO `table_wvbnyq` (`table_wvbnyq_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT_ea2fyr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT TABLE_WVBNYQ_CBIT FROM `TABLE_WVBNYQ`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO RESULT;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+CREATE TABLE IF NOT EXISTS `table_zdhyse` (
+    `table_zdhyse_customer_id` INT,
+    `table_zdhyse_registration_date` DATE
+);
+
+INSERT INTO `table_zdhyse` (`table_zdhyse_customer_id`, `table_zdhyse_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_ZDHYSE_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM TABLE_ZDHYSE
+    WHERE TABLE_ZDHYSE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(-85)) - 855 + (v_lifespan_months);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+CREATE TABLE IF NOT EXISTS `table_uyis6v` (
+    `table_uyis6v_order_id` INT,
+    `table_uyis6v_customer_id` INT,
+    `table_uyis6v_order_date` DATE,
+    `table_uyis6v_total_amount` DECIMAL(10,2),
+    `table_uyis6v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2nffbi` (
+    `table_2nffbi_refund_id` INT,
+    `table_2nffbi_order_id` INT,
+    `table_2nffbi_refund_amount` DECIMAL(10,2),
+    `table_2nffbi_refund_date` DATE,
+    `table_2nffbi_reason` INT
+);
+
+INSERT INTO `table_uyis6v` (`table_uyis6v_order_id`, `table_uyis6v_customer_id`, `table_uyis6v_order_date`, `table_uyis6v_total_amount`, `table_uyis6v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_2nffbi` (`table_2nffbi_refund_id`, `table_2nffbi_order_id`, `table_2nffbi_refund_amount`, `table_2nffbi_refund_date`, `table_2nffbi_reason`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UYIS6V_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_UYIS6V
+    WHERE TABLE_UYIS6V_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2NFFBI_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_2NFFBI
+    WHERE TABLE_2NFFBI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_AMOUNT * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(APPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TIP_PERCENT INT DEFAULT 15;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T6EU0R_BASE_PRICE, 50), COALESCE(TABLE_GTN1M7_DURATION_MINUTES, 60)
+    INTO V_BASE_PRICE, V_DURATION
+    FROM TABLE_GTN1M7 A
+    JOIN TABLE_T6EU0R S ON TABLE_GTN1M7_SERVICE_ID = TABLE_T6EU0R_SERVICE_ID
+    WHERE TABLE_GTN1M7_APPT_ID = APPT_ID_PARAM;
+
+    IF V_DURATION > 90 THEN
+        SET V_TIP_PERCENT = 20;
+    END IF;
+
+    SET V_TOTAL_COST = V_BASE_PRICE + (V_BASE_PRICE * V_TIP_PERCENT / 100);
+
+    RETURN (MYSQL_FUNC_FIND_MAX_VALUE_felclh(-43)) - -485 + (cast(v_total_cost as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(1);

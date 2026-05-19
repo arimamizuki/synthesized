@@ -1,0 +1,351 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_azh2nr` (
+    `table_azh2nr_order_id` INT,
+    `table_azh2nr_order_date` DATE
+);
+
+INSERT INTO `table_azh2nr` (`table_azh2nr_order_id`, `table_azh2nr_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+CREATE TABLE IF NOT EXISTS `table_3iwn00` (
+    `table_3iwn00_emp_id` INT,
+    `table_3iwn00_salary` INT
+);
+
+INSERT INTO `table_3iwn00` (`table_3iwn00_emp_id`, `table_3iwn00_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3IWN00_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_3IWN00
+    WHERE TABLE_3IWN00_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x----- */
+CREATE TABLE IF NOT EXISTS `table_zu4p8z` (
+    `table_zu4p8z_category_id` INT,
+    `table_zu4p8z_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_zu4p8z` (`table_zu4p8z_category_id`, `table_zu4p8z_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_ZU4P8Z_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_ZU4P8Z
+    WHERE TABLE_ZU4P8Z_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(-44)) - -55 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - 679 + (floor(v_avg_price)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+CREATE TABLE IF NOT EXISTS `table_vj4mz4` (
+    `table_vj4mz4_campaign_id` INT,
+    `table_vj4mz4_status` VARCHAR(50)
+);
+
+INSERT INTO `table_vj4mz4` (`table_vj4mz4_campaign_id`, `table_vj4mz4_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_VJ4MZ4_STATUS
+    INTO V_STATUS
+    FROM TABLE_VJ4MZ4
+    WHERE TABLE_VJ4MZ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(-92)) - -502 + (case when v_status = 'active' then 1 else 0 end);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+CREATE TABLE IF NOT EXISTS `table_02dgpw` (
+    `table_02dgpw_policy_id` INT,
+    `table_02dgpw_customer_id` INT,
+    `table_02dgpw_bike_value` INT,
+    `table_02dgpw_bike_type` VARCHAR(50),
+    `table_02dgpw_annual_premium` INT,
+    `table_02dgpw_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_beolwf` (
+    `table_beolwf_claim_id` INT,
+    `table_beolwf_policy_id` INT,
+    `table_beolwf_claim_date` DATE,
+    `table_beolwf_claim_amount` DECIMAL(10,2),
+    `table_beolwf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_02dgpw` (`table_02dgpw_policy_id`, `table_02dgpw_customer_id`, `table_02dgpw_bike_value`, `table_02dgpw_bike_type`, `table_02dgpw_annual_premium`, `table_02dgpw_deductible_amount`) VALUES (1, 2, 3, 'test', 5, 1.0);
+
+INSERT INTO `table_beolwf` (`table_beolwf_claim_id`, `table_beolwf_policy_id`, `table_beolwf_claim_date`, `table_beolwf_claim_amount`, `table_beolwf_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_02DGPW_BIKE_VALUE, 10000), COALESCE(TABLE_02DGPW_ANNUAL_PREMIUM, 500), COALESCE(TABLE_02DGPW_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_02DGPW
+    WHERE TABLE_02DGPW_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = (MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + ((MYSQL_FUNC_PROC_VECTOR_nlaylc()) - -362 + (v_bike_value / 1000));
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(-76)) - -82 + (cast(v_final_premium as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+CREATE TABLE IF NOT EXISTS `table_95d2jl` (
+    `table_95d2jl_vec` INT
+);
+
+INSERT INTO `table_95d2jl` (`table_95d2jl_vec`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_95D2JL_VEC INTO RESULT FROM `TABLE_95D2JL` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A - B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+CREATE TABLE IF NOT EXISTS `table_uto37x` (
+    `table_uto37x_doctor_id` INT,
+    `table_uto37x_specialization` INT,
+    `table_uto37x_years_experience` INT,
+    `table_uto37x_consultation_fee` INT,
+    `table_uto37x_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jyc3v8` (
+    `table_jyc3v8_appointment_id` INT,
+    `table_jyc3v8_doctor_id` INT,
+    `table_jyc3v8_patient_id` INT,
+    `table_jyc3v8_appointment_date` DATE,
+    `table_jyc3v8_duration_minutes` INT,
+    `table_jyc3v8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_uto37x` (`table_uto37x_doctor_id`, `table_uto37x_specialization`, `table_uto37x_years_experience`, `table_uto37x_consultation_fee`, `table_uto37x_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_jyc3v8` (`table_jyc3v8_appointment_id`, `table_jyc3v8_doctor_id`, `table_jyc3v8_patient_id`, `table_jyc3v8_appointment_date`, `table_jyc3v8_duration_minutes`, `table_jyc3v8_status`) VALUES (1, 2, 3, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(DOCTOR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UTO37X_YEARS_EXPERIENCE, 0), COALESCE(TABLE_UTO37X_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM TABLE_UTO37X
+    WHERE TABLE_UTO37X_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM TABLE_JYC3V8
+    WHERE TABLE_JYC3V8_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_JYC3V8_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_JYC3V8_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = 22;
+    SET V_UTILIZATION_RATE = (V_APPOINTMENTS_THIS_MONTH * 100) / V_WORKING_DAYS;
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = V_UTILIZATION_RATE + 10;
+    END IF;
+
+    RETURN LEAST(V_UTILIZATION_RATE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+CREATE TABLE IF NOT EXISTS `table_3iivgl` (
+    `table_3iivgl_supplier_id` INT,
+    `table_3iivgl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_3iivgl` (`table_3iivgl_supplier_id`, `table_3iivgl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_3IIVGL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_3IIVGL
+    WHERE TABLE_3IIVGL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(85, 70)) - -149 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4()) - -410 + (floor(v_rating * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 6 UNION SELECT 12 UNION SELECT 18 UNION SELECT 24 UNION SELECT 30 UNION SELECT 36;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+CREATE TABLE IF NOT EXISTS `table_8el8bx` (
+    `table_8el8bx_reg_id` INT,
+    `table_8el8bx_attendee_id` INT,
+    `table_8el8bx_conference_id` INT,
+    `table_8el8bx_registration_date` DATE,
+    `table_8el8bx_ticket_type` VARCHAR(50),
+    `table_8el8bx_total_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_29ijnu` (
+    `table_29ijnu_conference_id` INT,
+    `table_29ijnu_name` VARCHAR(50),
+    `table_29ijnu_start_date` DATE,
+    `table_29ijnu_venue_id` INT,
+    `table_29ijnu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8el8bx` (`table_8el8bx_reg_id`, `table_8el8bx_attendee_id`, `table_8el8bx_conference_id`, `table_8el8bx_registration_date`, `table_8el8bx_ticket_type`, `table_8el8bx_total_paid`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_29ijnu` (`table_29ijnu_conference_id`, `table_29ijnu_name`, `table_29ijnu_start_date`, `table_29ijnu_venue_id`, `table_29ijnu_base_price`) VALUES (1, 'test', '2024-01-01', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(CONFERENCE_ID_PARAM INT, DAYS_BEFORE_EVENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_29IJNU_BASE_PRICE, 100) INTO V_BASE_PRICE
+    FROM TABLE_29IJNU
+    WHERE TABLE_29IJNU_CONFERENCE_ID = CONFERENCE_ID_PARAM;
+
+    IF DAYS_BEFORE_EVENT >= 30 THEN
+        SET V_DISCOUNT_PERCENT = 25;
+    ELSEIF DAYS_BEFORE_EVENT >= 14 THEN
+        SET V_DISCOUNT_PERCENT = 15;
+    ELSEIF DAYS_BEFORE_EVENT >= 7 THEN
+        SET V_DISCOUNT_PERCENT = 10;
+    ELSE
+        SET V_DISCOUNT_PERCENT = 0;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - (V_BASE_PRICE * V_DISCOUNT_PERCENT / 100);
+
+    RETURN CAST(V_FINAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_AZH2NR_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_AZH2NR
+    WHERE TABLE_AZH2NR_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_VALUE_lzao6x(73)) - -209 + ((MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(90)) - 112 + (v_year));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(1);

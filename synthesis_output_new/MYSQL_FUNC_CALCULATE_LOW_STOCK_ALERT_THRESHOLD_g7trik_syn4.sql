@@ -1,0 +1,455 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_i5gepj` (
+    `table_i5gepj_product_id` INT,
+    `table_i5gepj_category_id` INT,
+    `table_i5gepj_price` DECIMAL(10,2),
+    `table_i5gepj_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o2ctj5` (
+    `table_o2ctj5_order_id` INT,
+    `table_o2ctj5_product_id` INT,
+    `table_o2ctj5_quantity` INT
+);
+
+INSERT INTO `table_i5gepj` (`table_i5gepj_product_id`, `table_i5gepj_category_id`, `table_i5gepj_price`, `table_i5gepj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_o2ctj5` (`table_o2ctj5_order_id`, `table_o2ctj5_product_id`, `table_o2ctj5_quantity`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+CREATE TABLE IF NOT EXISTS `table_alvd0j` (
+    `table_alvd0j_customer_id` INT,
+    `table_alvd0j_plan_type` VARCHAR(50),
+    `table_alvd0j_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_alvd0j` (`table_alvd0j_customer_id`, `table_alvd0j_plan_type`, `table_alvd0j_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_ALVD0J_PLAN_TYPE, COALESCE(TABLE_ALVD0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_ALVD0J
+    WHERE TABLE_ALVD0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_MONTHLY_COST > 500 OR V_PLAN_TYPE = 'ENTERPRISE' THEN
+        RETURN 5;
+    ELSEIF V_MONTHLY_COST > 200 OR V_PLAN_TYPE = 'PREMIUM' THEN
+        RETURN 4;
+    ELSEIF V_MONTHLY_COST > 100 THEN
+        RETURN 3;
+    ELSEIF V_MONTHLY_COST > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+CREATE TABLE IF NOT EXISTS `table_21q6aw` (
+    `table_21q6aw_rental_id` INT,
+    `table_21q6aw_customer_id` INT,
+    `table_21q6aw_bicycle_id` INT,
+    `table_21q6aw_rental_date` DATE,
+    `table_21q6aw_rental_hours` INT,
+    `table_21q6aw_hourly_rate` INT,
+    `table_21q6aw_return_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cb6kwj` (
+    `table_cb6kwj_bicycle_id` INT,
+    `table_cb6kwj_bicycle_type` VARCHAR(50),
+    `table_cb6kwj_condition` INT,
+    `table_cb6kwj_value` INT
+);
+
+INSERT INTO `table_21q6aw` (`table_21q6aw_rental_id`, `table_21q6aw_customer_id`, `table_21q6aw_bicycle_id`, `table_21q6aw_rental_date`, `table_21q6aw_rental_hours`, `table_21q6aw_hourly_rate`, `table_21q6aw_return_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_cb6kwj` (`table_cb6kwj_bicycle_id`, `table_cb6kwj_bicycle_type`, `table_cb6kwj_condition`, `table_cb6kwj_value`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 10;
+    DECLARE V_BICYCLE_VALUE INT DEFAULT 500;
+    DECLARE V_INSURANCE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_21Q6AW_RENTAL_HOURS, 1), COALESCE(TABLE_21Q6AW_HOURLY_RATE, 10)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE
+    FROM TABLE_21Q6AW
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CB6KWJ_VALUE, 500) INTO V_BICYCLE_VALUE
+    FROM TABLE_21Q6AW BR
+    JOIN TABLE_CB6KWJ B ON TABLE_21Q6AW_BICYCLE_ID = TABLE_CB6KWJ_BICYCLE_ID
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE;
+
+    IF V_BICYCLE_VALUE > 1000 THEN
+        SET V_INSURANCE_FEE = V_RENTAL_HOURS * 5;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_INSURANCE_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_TEST_FUNC_wf2zzx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_FUNC_wf2zzx(NUMBER_1_VAR INT, NUMBER_2_VAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+  DECLARE I              INT DEFAULT 1;
+  DECLARE MESSAGE_VAR    VARCHAR(400);
+  DECLARE RESULT         INT DEFAULT 0;
+  
+  SET MESSAGE_VAR = CONCAT('COMMON FACTORS OF ', NUMBER_1_VAR, ' AND ',NUMBER_2_VAR,':');
+  WHILE ((I <= NUMBER_1_VAR) AND (I < NUMBER_2_VAR))  DO
+    
+    IF ((NUMBER_1_VAR % I = 0) AND (NUMBER_2_VAR % I = 0)) THEN
+      SET MESSAGE_VAR = CONCAT(MESSAGE_VAR," ", I);
+      SET RESULT = I;
+      END IF;
+    
+    SET I = I + 1;
+  END WHILE;
+  
+  RETURN (MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(92, -78)) - 241 + ((MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(88, -30)) - -568 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(-47)) - -358 + (result)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn----- */
+CREATE TABLE IF NOT EXISTS `table_bkf1vk` (
+    `table_bkf1vk_department_id` INT,
+    `table_bkf1vk_salary` INT
+);
+
+INSERT INTO `table_bkf1vk` (`table_bkf1vk_department_id`, `table_bkf1vk_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_BKF1VK_SALARY), 0)
+    INTO V_AVG
+    FROM TABLE_BKF1VK
+    WHERE TABLE_BKF1VK_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+CREATE TABLE IF NOT EXISTS `table_dpem7n` (
+    `table_dpem7n_unit_id` INT,
+    `table_dpem7n_facility_id` INT,
+    `table_dpem7n_unit_size` INT,
+    `table_dpem7n_monthly_rate` INT,
+    `table_dpem7n_climate_controlled` INT,
+    `table_dpem7n_current_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4mro06` (
+    `table_4mro06_rental_id` INT,
+    `table_4mro06_unit_id` INT,
+    `table_4mro06_customer_id` INT,
+    `table_4mro06_start_date` DATE,
+    `table_4mro06_rental_months` INT,
+    `table_4mro06_monthly_payment` INT
+);
+
+INSERT INTO `table_dpem7n` (`table_dpem7n_unit_id`, `table_dpem7n_facility_id`, `table_dpem7n_unit_size`, `table_dpem7n_monthly_rate`, `table_dpem7n_climate_controlled`, `table_dpem7n_current_occupancy`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_4mro06` (`table_4mro06_rental_id`, `table_4mro06_unit_id`, `table_4mro06_customer_id`, `table_4mro06_start_date`, `table_4mro06_rental_months`, `table_4mro06_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(UNIT_ID_PARAM INT, MONTHS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RATE INT DEFAULT 100;
+    DECLARE V_CLIMATE_PREMIUM INT DEFAULT 20;
+    DECLARE V_SIZE_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DPEM7N_MONTHLY_RATE, 100)
+    INTO V_MONTHLY_RATE
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM;
+
+    SELECT TABLE_DPEM7N_MONTHLY_RATE * 20 / 100 INTO V_CLIMATE_PREMIUM
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM AND TABLE_DPEM7N_CLIMATE_CONTROLLED = 1;
+
+    SET V_TOTAL_COST = (V_MONTHLY_RATE + V_CLIMATE_PREMIUM) * MONTHS_PARAM;
+
+    IF MONTHS_PARAM >= 12 THEN
+        SET V_SIZE_DISCOUNT = V_TOTAL_COST * 10 / 100;
+        SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5(-87)) - -783 + (v_total_cost - v_size_discount);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - 101 + (cast(v_total_cost as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa()) - 427 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 20 UNION SELECT 40 UNION SELECT 60 UNION SELECT 80 UNION SELECT 100 UNION SELECT 120 UNION SELECT 140 UNION SELECT 160 UNION SELECT 180 UNION SELECT 200 UNION SELECT 220 UNION SELECT 240 UNION SELECT 260 UNION SELECT 280 UNION SELECT 300 UNION SELECT 320 UNION SELECT 340 UNION SELECT 360 UNION SELECT 380 UNION SELECT 400;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(-12)) - 741 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+CREATE TABLE IF NOT EXISTS `table_8pj70z` (
+    `table_8pj70z_booking_id` INT,
+    `table_8pj70z_guest_id` INT,
+    `table_8pj70z_room_id` INT,
+    `table_8pj70z_check_in_date` DATE,
+    `table_8pj70z_check_out_date` DATE,
+    `table_8pj70z_room_rate` INT,
+    `table_8pj70z_extra_charges` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmlc8e` (
+    `table_lmlc8e_room_id` INT,
+    `table_lmlc8e_room_type` VARCHAR(50),
+    `table_lmlc8e_base_rate` INT,
+    `table_lmlc8e_max_occupancy` INT
+);
+
+INSERT INTO `table_8pj70z` (`table_8pj70z_booking_id`, `table_8pj70z_guest_id`, `table_8pj70z_room_id`, `table_8pj70z_check_in_date`, `table_8pj70z_check_out_date`, `table_8pj70z_room_rate`, `table_8pj70z_extra_charges`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_lmlc8e` (`table_lmlc8e_room_id`, `table_lmlc8e_room_type`, `table_lmlc8e_base_rate`, `table_lmlc8e_max_occupancy`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+    DECLARE V_ROOM_RATE INT DEFAULT 100;
+    DECLARE V_EXTRA_CHARGES INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8PJ70Z_CHECK_IN_DATE, CURDATE()), COALESCE(TABLE_8PJ70Z_CHECK_OUT_DATE, CURDATE())
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_ROOM_RATE, 100) INTO V_ROOM_RATE
+    FROM TABLE_8PJ70Z HB
+    JOIN TABLE_LMLC8E R ON TABLE_8PJ70Z_ROOM_ID = TABLE_LMLC8E_ROOM_ID
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_EXTRA_CHARGES, 0) INTO V_EXTRA_CHARGES
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS <= 0 THEN
+        SET V_NIGHTS = 1;
+    END IF;
+
+    SET V_TOTAL_COST = (V_NIGHTS * V_ROOM_RATE) + V_EXTRA_CHARGES;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5----- */
+CREATE TABLE IF NOT EXISTS `table_4sjwty` (
+    `table_4sjwty_order_id` INT,
+    `table_4sjwty_customer_id` INT,
+    `table_4sjwty_order_date` DATE,
+    `table_4sjwty_total_amount` DECIMAL(10,2),
+    `table_4sjwty_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mvkzgz` (
+    `table_mvkzgz_customer_id` INT,
+    `table_mvkzgz_tier_level` INT
+);
+
+INSERT INTO `table_4sjwty` (`table_4sjwty_order_id`, `table_4sjwty_customer_id`, `table_4sjwty_order_date`, `table_4sjwty_total_amount`, `table_4sjwty_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_mvkzgz` (`table_mvkzgz_customer_id`, `table_mvkzgz_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_MIGRATION_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_MVKZGZ_TIER_LEVEL
+    INTO V_CURRENT_TIER
+    FROM TABLE_MVKZGZ
+    WHERE TABLE_MVKZGZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4SJWTY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_4SJWTY
+    WHERE TABLE_4SJWTY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_4SJWTY_STATUS = 'COMPLETED';
+
+    CASE V_CURRENT_TIER
+        WHEN 'BRONZE' THEN
+            IF V_TOTAL_SPENT >= 500 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 200 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = 10;
+            END IF;
+        WHEN 'SILVER' THEN
+            IF V_TOTAL_SPENT >= 2000 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 1000 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = 10;
+            END IF;
+        WHEN 'GOLD' THEN
+            IF V_TOTAL_SPENT >= 5000 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 3000 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = 10;
+            END IF;
+        ELSE SET V_MIGRATION_SCORE = 0;
+    END CASE;
+
+    RETURN V_MIGRATION_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_ALERT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I5GEPJ_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_I5GEPJ
+    WHERE TABLE_I5GEPJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_O2CTJ5_QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM TABLE_O2CTJ5
+    WHERE TABLE_O2CTJ5_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_ALERT_THRESHOLD = (MYSQL_FUNC_TEST_FUNC_wf2zzx(-25, -57)) - 280 + (floor(v_avg_daily_sales * 7));
+
+    IF V_STOCK < V_ALERT_THRESHOLD THEN
+        RETURN (MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(-26)) - 648 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(90)) - 216 + (1));
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(1);

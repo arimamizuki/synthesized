@@ -1,0 +1,354 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_fp000x` (
+    `table_fp000x_order_id` INT,
+    `table_fp000x_customer_id` INT,
+    `table_fp000x_order_date` DATE,
+    `table_fp000x_total_amount` DECIMAL(10,2),
+    `table_fp000x_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mueyct` (
+    `table_mueyct_payment_id` INT,
+    `table_mueyct_order_id` INT,
+    `table_mueyct_payment_method` INT,
+    `table_mueyct_amount_paid` INT,
+    `table_mueyct_transaction_fee` INT
+);
+
+INSERT INTO `table_fp000x` (`table_fp000x_order_id`, `table_fp000x_customer_id`, `table_fp000x_order_date`, `table_fp000x_total_amount`, `table_fp000x_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_mueyct` (`table_mueyct_payment_id`, `table_mueyct_order_id`, `table_mueyct_payment_method`, `table_mueyct_amount_paid`, `table_mueyct_transaction_fee`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz----- */
+CREATE TABLE IF NOT EXISTS `table_l7idkt` (
+    `table_l7idkt_supplier_id` INT,
+    `table_l7idkt_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_l7idkt` (`table_l7idkt_supplier_id`, `table_l7idkt_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_L7IDKT_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_L7IDKT
+    WHERE TABLE_L7IDKT_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 15);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+CREATE TABLE IF NOT EXISTS `table_3na05m` (
+    `table_3na05m_cdatetime` DATETIME
+);
+
+INSERT INTO `table_3na05m` (`table_3na05m_cdatetime`) VALUES ('2024-01-01 10:00:00');
+
+/* -----Called: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATETIME_otj76p() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_3NA05M`;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+CREATE TABLE IF NOT EXISTS `table_6jyzbz` (
+    `table_6jyzbz_supplier_id` INT,
+    `table_6jyzbz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6jyzbz` (`table_6jyzbz_supplier_id`, `table_6jyzbz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_6JYZBZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_6JYZBZ
+    WHERE TABLE_6JYZBZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(-77)) - 263 + (floor(v_rating * 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+CREATE TABLE IF NOT EXISTS `table_ttn14y` (
+    `table_ttn14y_claim_id` INT,
+    `table_ttn14y_policy_id` INT,
+    `table_ttn14y_claim_date` DATE,
+    `table_ttn14y_claim_amount` DECIMAL(10,2),
+    `table_ttn14y_status` VARCHAR(50),
+    `table_ttn14y_processing_days` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hwxj55` (
+    `table_hwxj55_policy_id` INT,
+    `table_hwxj55_customer_id` INT,
+    `table_hwxj55_policy_type` VARCHAR(50),
+    `table_hwxj55_premium_annual` INT
+);
+
+INSERT INTO `table_ttn14y` (`table_ttn14y_claim_id`, `table_ttn14y_policy_id`, `table_ttn14y_claim_date`, `table_ttn14y_claim_amount`, `table_ttn14y_status`, `table_ttn14y_processing_days`) VALUES (1, 2, '2024-01-01', 1.0, 'test', 6);
+
+INSERT INTO `table_hwxj55` (`table_hwxj55_policy_id`, `table_hwxj55_customer_id`, `table_hwxj55_policy_type`, `table_hwxj55_premium_annual`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_AVG_PROCESSING_DAYS DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_APPROVED_CLAIMS INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_TTN14Y_PROCESSING_DAYS), 0)
+    INTO V_TOTAL_CLAIMS, V_AVG_PROCESSING_DAYS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPROVED_CLAIMS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM AND TABLE_TTN14Y_STATUS = 'APPROVED';
+
+    IF V_TOTAL_CLAIMS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_EFFICIENCY_SCORE = 100 - (V_AVG_PROCESSING_DAYS * 2) + (V_APPROVED_CLAIMS * 10 / V_TOTAL_CLAIMS);
+
+    RETURN GREATEST(V_EFFICIENCY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusterset_members (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusters (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusterset_members (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusters (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERS C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_VALUE_1ykrf9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_VALUE_1ykrf9(X INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(-95)) - 160 + ((MYSQL_FUNC_GET_CLIENTS_6uq4wc()) - -657 + (-x));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+CREATE TABLE IF NOT EXISTS table_7qogrt (
+    table_7qogrt_id INT,
+    table_7qogrt_name VARCHAR(100)
+);
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (1, 'Client A');
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (2, 'Client B');
+
+/* -----Called: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CLIENTS_6uq4wc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROW_COUNT INT;
+    
+    SELECT COUNT(*) INTO ROW_COUNT FROM TABLE_7QOGRT;
+    
+    RETURN ROW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+CREATE TABLE IF NOT EXISTS `table_kt12e3` (
+    `table_kt12e3_customer_id` INT,
+    `table_kt12e3_registration_date` DATE,
+    `table_kt12e3_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dh8s23` (
+    `table_dh8s23_order_id` INT,
+    `table_dh8s23_customer_id` INT,
+    `table_dh8s23_order_date` DATE,
+    `table_dh8s23_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kt12e3` (`table_kt12e3_customer_id`, `table_kt12e3_registration_date`, `table_kt12e3_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_dh8s23` (`table_dh8s23_order_id`, `table_dh8s23_customer_id`, `table_dh8s23_order_date`, `table_dh8s23_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM TABLE_DH8S23
+    WHERE TABLE_DH8S23_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM TABLE_DH8S23 O
+    JOIN TABLE_KT12E3 C ON TABLE_DH8S23_CUSTOMER_ID = TABLE_KT12E3_CUSTOMER_ID
+    WHERE TABLE_KT12E3_COUNTRY = (SELECT TABLE_KT12E3_COUNTRY FROM TABLE_KT12E3 WHERE TABLE_KT12E3_CUSTOMER_ID = CUSTOMER_ID_PARAM);
+
+    IF V_COUNTRY_ORDERS = (MYSQL_FUNC_IS_PALINDROME_datj06(82)) - -422 + ((MYSQL_FUNC_PROC2_ktdgwa()) - 741 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION = (V_CUSTOMER_ORDERS * 100) / V_COUNTRY_ORDERS;
+
+    RETURN V_PENETRATION;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_ktdgwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_ktdgwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_datj06----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_TRANSACTION_FEE INT DEFAULT 0;
+    DECLARE V_PAYMENT_METHOD VARCHAR(20) DEFAULT 'CREDIT_CARD';
+    DECLARE V_PROCESSING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FP000X_TOTAL_AMOUNT, (MYSQL_FUNC_NEGATE_VALUE_1ykrf9(1)) - 423 + ((MYSQL_FUNC_PROC_DATETIME_otj76p()) - -433 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(71)) - 801 + (0))))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_FP000X
+    WHERE TABLE_FP000X_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT TABLE_MUEYCT_PAYMENT_METHOD, COALESCE(TABLE_MUEYCT_AMOUNT_PAID, 0), COALESCE(TABLE_MUEYCT_TRANSACTION_FEE, 0)
+    INTO V_PAYMENT_METHOD, V_AMOUNT_PAID, V_TRANSACTION_FEE
+    FROM TABLE_MUEYCT
+    WHERE TABLE_MUEYCT_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROCESSING_EFFICIENCY = (MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(-32)) - -298 + (100 - ((v_transaction_fee * 100) / v_order_total));
+
+    CASE V_PAYMENT_METHOD
+        WHEN 'WIRE_TRANSFER' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 10;
+        WHEN 'CREDIT_CARD' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 3;
+        WHEN 'CRYPTOCURRENCY' THEN SET V_PROCESSING_EFFICIENCY = (MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - 797 + (v_processing_efficiency - 5);
+        ELSE SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 2;
+    END CASE;
+
+    RETURN GREATEST(V_PROCESSING_EFFICIENCY, 0);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(1);

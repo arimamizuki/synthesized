@@ -1,0 +1,423 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_dw24b3` (
+    `table_dw24b3_customer_id` INT,
+    `table_dw24b3_order_date` DATE
+);
+
+INSERT INTO `table_dw24b3` (`table_dw24b3_customer_id`, `table_dw24b3_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+CREATE TABLE IF NOT EXISTS `table_ebd300` (
+    `table_ebd300_meter_id` INT,
+    `table_ebd300_customer_id` INT,
+    `table_ebd300_meter_reading` INT,
+    `table_ebd300_reading_date` DATE,
+    `table_ebd300_consumption_kwh` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7mak4e` (
+    `table_7mak4e_tariff_id` INT,
+    `table_7mak4e_tier_name` VARCHAR(50),
+    `table_7mak4e_min_kwh` INT,
+    `table_7mak4e_max_kwh` INT,
+    `table_7mak4e_rate_per_kwh` INT
+);
+
+INSERT INTO `table_ebd300` (`table_ebd300_meter_id`, `table_ebd300_customer_id`, `table_ebd300_meter_reading`, `table_ebd300_reading_date`, `table_ebd300_consumption_kwh`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_7mak4e` (`table_7mak4e_tariff_id`, `table_7mak4e_tier_name`, `table_7mak4e_min_kwh`, `table_7mak4e_max_kwh`, `table_7mak4e_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 10;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+    DECLARE V_PEAK_CONSUMPTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_PREVIOUS_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1 OFFSET 1;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 15);
+
+    IF V_CONSUMPTION > 500 THEN
+        SET V_PEAK_CONSUMPTION = V_CONSUMPTION - 500;
+        SET V_TOTAL_BILL = V_TOTAL_BILL + (V_PEAK_CONSUMPTION * 25);
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+CREATE TABLE IF NOT EXISTS `table_qa1oat` (
+    `table_qa1oat_emp_id` INT,
+    `table_qa1oat_department_id` INT
+);
+
+INSERT INTO `table_qa1oat` (`table_qa1oat_emp_id`, `table_qa1oat_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_QA1OAT
+    WHERE TABLE_QA1OAT_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT > 50 THEN
+        RETURN 5;
+    ELSEIF V_EMP_COUNT > 20 THEN
+        RETURN 4;
+    ELSEIF V_EMP_COUNT > 10 THEN
+        RETURN 3;
+    ELSEIF V_EMP_COUNT > 5 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, (MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(31)) - -928 + (0)), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = V_QUALITY_SCORE - 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0(83)) - -305 + (cast(v_quality_score as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= V_SQRT_N DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+            IF V_DIVISOR != N / V_DIVISOR THEN
+                SET V_SUM = V_SUM + (N / V_DIVISOR);
+            END IF;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0----- */
+CREATE TABLE IF NOT EXISTS `table_9owccq` (
+    `table_9owccq_emp_id` INT,
+    `table_9owccq_department_id` INT,
+    `table_9owccq_salary` INT
+);
+
+INSERT INTO `table_9owccq` (`table_9owccq_emp_id`, `table_9owccq_department_id`, `table_9owccq_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_9OWCCQ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_9OWCCQ
+    WHERE TABLE_9OWCCQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = (MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(50, -34, -66)) - -113 + (floor(v_category_avg_price * 0.2));
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = V_DISCOUNT_THRESHOLD + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(VAL INT, MIN_VAL INT, MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(98)) - 179 + (val) < MIN_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE BELOW MINIMUM';
+    END IF;
+    IF VAL > MAX_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE ABOVE MAXIMUM';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN 2;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_FACTOR = 3;
+
+    WHILE (MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(-38, -31)) - -751 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(-88)) - 867 + (v_factor)) <= V_SQRT_N DO
+        IF N % V_FACTOR = 0 THEN
+            RETURN V_FACTOR;
+        END IF;
+        SET V_FACTOR = V_FACTOR + 2;
+    END WHILE;
+
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+CREATE TABLE IF NOT EXISTS `table_ch02g9` (
+    `table_ch02g9_customer_id` INT,
+    `table_ch02g9_country` INT
+);
+
+INSERT INTO `table_ch02g9` (`table_ch02g9_customer_id`, `table_ch02g9_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_CH02G9_COUNTRY
+    INTO V_COUNTRY
+    FROM TABLE_CH02G9
+    WHERE TABLE_CH02G9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_COUNTRY
+        WHEN 'USA' THEN 1
+        WHEN 'UK' THEN 2
+        WHEN 'CN' THEN 3
+        WHEN 'JP' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+CREATE TABLE IF NOT EXISTS `table_if4wjn` (
+    `table_if4wjn_appointment_id` INT,
+    `table_if4wjn_customer_id` INT,
+    `table_if4wjn_therapist_id` INT,
+    `table_if4wjn_service_type` VARCHAR(50),
+    `table_if4wjn_duration_minutes` INT,
+    `table_if4wjn_appointment_date` DATE,
+    `table_if4wjn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6nekv6` (
+    `table_6nekv6_service_id` INT,
+    `table_6nekv6_name` VARCHAR(50),
+    `table_6nekv6_base_price` DECIMAL(10,2),
+    `table_6nekv6_duration_default` INT
+);
+
+INSERT INTO `table_if4wjn` (`table_if4wjn_appointment_id`, `table_if4wjn_customer_id`, `table_if4wjn_therapist_id`, `table_if4wjn_service_type`, `table_if4wjn_duration_minutes`, `table_if4wjn_appointment_date`, `table_if4wjn_price`) VALUES (1, 2, 3, 'test', 5, '2024-01-01', 1.0);
+
+INSERT INTO `table_6nekv6` (`table_6nekv6_service_id`, `table_6nekv6_name`, `table_6nekv6_base_price`, `table_6nekv6_duration_default`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(SERVICE_TYPE_PARAM INT, ADD_ONS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 80;
+    DECLARE V_ADDON_COST INT DEFAULT 30;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'MASSAGE' THEN SET V_BASE_PRICE = 100;
+        WHEN 'FACIAL' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BODY_WRAP' THEN SET V_BASE_PRICE = 120;
+        WHEN 'REFLEXOLOGY' THEN SET V_BASE_PRICE = 60;
+        ELSE SET V_BASE_PRICE = 80;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE + (ADD_ONS_PARAM * V_ADDON_COST);
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_DW24B3_ORDER_DATE), MAX(TABLE_DW24B3_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_DW24B3
+    WHERE TABLE_DW24B3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(-1)) - 248 + ((MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(0)) - 519 + (0)));
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_FIRST_ORDER, V_LAST_ORDER);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(1);

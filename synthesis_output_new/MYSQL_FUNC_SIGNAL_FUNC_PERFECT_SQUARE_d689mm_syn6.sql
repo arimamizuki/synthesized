@@ -1,0 +1,411 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+CREATE TABLE IF NOT EXISTS `table_q0ba91` (
+    `table_q0ba91_job_id` INT,
+    `table_q0ba91_inspector_id` INT,
+    `table_q0ba91_property_id` INT,
+    `table_q0ba91_inspection_type` VARCHAR(50),
+    `table_q0ba91_square_footage` INT,
+    `table_q0ba91_inspection_date` DATE,
+    `table_q0ba91_base_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ljuqz` (
+    `table_0ljuqz_property_id` INT,
+    `table_0ljuqz_property_type` VARCHAR(50),
+    `table_0ljuqz_year_built` INT,
+    `table_0ljuqz_num_rooms` INT
+);
+
+INSERT INTO `table_q0ba91` (`table_q0ba91_job_id`, `table_q0ba91_inspector_id`, `table_q0ba91_property_id`, `table_q0ba91_inspection_type`, `table_q0ba91_square_footage`, `table_q0ba91_inspection_date`, `table_q0ba91_base_fee`) VALUES (1, 1, 1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_0ljuqz` (`table_0ljuqz_property_id`, `table_0ljuqz_property_type`, `table_0ljuqz_year_built`, `table_0ljuqz_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(PROPERTY_ID_PARAM INT, INSPECTION_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SQUARE_FOOTAGE INT DEFAULT 1500;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_BASE_FEE INT DEFAULT 300;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0BA91_SQUARE_FOOTAGE, 1500), COALESCE(TABLE_0LJUQZ_YEAR_BUILT, 2000)
+    INTO V_SQUARE_FOOTAGE, V_YEAR_BUILT
+    FROM TABLE_Q0BA91 H
+    JOIN TABLE_0LJUQZ P ON TABLE_Q0BA91_PROPERTY_ID = TABLE_0LJUQZ_PROPERTY_ID
+    WHERE TABLE_Q0BA91_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + (V_SQUARE_FOOTAGE / 100) * 10;
+
+    IF (YEAR(CURDATE()) - V_YEAR_BUILT) > 30 THEN
+        SET V_AGE_SURCHARGE = 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4(-57)) - 852 + (cast(v_total_fee as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4----- */
+CREATE TABLE IF NOT EXISTS `table_r4nmyl` (
+    `table_r4nmyl_order_id` INT,
+    `table_r4nmyl_customer_id` INT,
+    `table_r4nmyl_order_date` DATE,
+    `table_r4nmyl_total_amount` DECIMAL(10,2),
+    `table_r4nmyl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_o5gt4k` (
+    `table_o5gt4k_refund_id` INT,
+    `table_o5gt4k_order_id` INT,
+    `table_o5gt4k_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_r4nmyl` (`table_r4nmyl_order_id`, `table_r4nmyl_customer_id`, `table_r4nmyl_order_date`, `table_r4nmyl_total_amount`, `table_r4nmyl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_o5gt4k` (`table_o5gt4k_refund_id`, `table_o5gt4k_order_id`, `table_o5gt4k_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_PROFIT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R4NMYL_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_R4NMYL
+    WHERE TABLE_R4NMYL_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O5GT4K_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_O5GT4K
+    WHERE TABLE_O5GT4K_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_PROFIT = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN V_PROFIT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7----- */
+CREATE TABLE IF NOT EXISTS `table_9vv48d` (
+    `table_9vv48d_customer_id` INT,
+    `table_9vv48d_country` INT
+);
+
+INSERT INTO `table_9vv48d` (`table_9vv48d_customer_id`, `table_9vv48d_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9VV48D
+    WHERE TABLE_9VV48D_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+CREATE TABLE IF NOT EXISTS `table_g3imfa` (
+    `table_g3imfa_order_id` INT,
+    `table_g3imfa_customer_id` INT,
+    `table_g3imfa_order_date` DATE,
+    `table_g3imfa_total_amount` DECIMAL(10,2),
+    `table_g3imfa_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_koyw4b` (
+    `table_koyw4b_order_id` INT,
+    `table_koyw4b_product_id` INT,
+    `table_koyw4b_quantity` INT
+);
+
+INSERT INTO `table_g3imfa` (`table_g3imfa_order_id`, `table_g3imfa_customer_id`, `table_g3imfa_order_date`, `table_g3imfa_total_amount`, `table_g3imfa_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_koyw4b` (`table_koyw4b_order_id`, `table_koyw4b_product_id`, `table_koyw4b_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_KOYW4B_QUANTITY), 0)
+    INTO V_TOTAL_ITEMS
+    FROM TABLE_KOYW4B
+    WHERE TABLE_KOYW4B_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(-23)) - 273 + (v_total_items);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+CREATE TABLE IF NOT EXISTS `table_foekw5` (
+    `table_foekw5_emp_id` INT,
+    `table_foekw5_department_id` INT,
+    `table_foekw5_salary` INT,
+    `table_foekw5_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_p5a7l2` (
+    `table_p5a7l2_department_id` INT,
+    `table_p5a7l2_name` VARCHAR(50),
+    `table_p5a7l2_location` INT
+);
+
+INSERT INTO `table_foekw5` (`table_foekw5_emp_id`, `table_foekw5_department_id`, `table_foekw5_salary`, `table_foekw5_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_p5a7l2` (`table_p5a7l2_department_id`, `table_p5a7l2_name`, `table_p5a7l2_location`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUARTILE INT DEFAULT 2;
+
+    SELECT TABLE_FOEKW5_SALARY
+    INTO V_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FOEKW5_SALARY), 0)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_DEPARTMENT_ID = (SELECT TABLE_FOEKW5_DEPARTMENT_ID FROM TABLE_FOEKW5 WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM);
+
+    IF V_SALARY > V_DEPT_AVG_SALARY * 1.5 THEN
+        SET V_QUARTILE = 4;
+    ELSEIF V_SALARY > V_DEPT_AVG_SALARY * 1.25 THEN
+        SET V_QUARTILE = (MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(-43)) - 389 + (3);
+    ELSEIF V_SALARY < V_DEPT_AVG_SALARY * 0.75 THEN
+        SET V_QUARTILE = 1;
+    END IF;
+
+    RETURN V_QUARTILE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF NUM <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CHECK_LOOP: WHILE V_DIVISOR < NUM DO
+        IF NUM MOD V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + (1);
+    END WHILE CHECK_LOOP;
+
+    IF V_SUM = NUM THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+CREATE TABLE IF NOT EXISTS `table_h1shr7` (
+    `table_h1shr7_emp_id` INT,
+    `table_h1shr7_department_id` INT,
+    `table_h1shr7_hire_date` DATE,
+    `table_h1shr7_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cm7r4q` (
+    `table_cm7r4q_department_id` INT,
+    `table_cm7r4q_name` VARCHAR(50)
+);
+
+INSERT INTO `table_h1shr7` (`table_h1shr7_emp_id`, `table_h1shr7_department_id`, `table_h1shr7_hire_date`, `table_h1shr7_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_cm7r4q` (`table_cm7r4q_department_id`, `table_cm7r4q_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_PRIOR_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_YEAR_HIRES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_YEAR_HIRES - V_PRIOR_YEAR_HIRES) * 100) / V_PRIOR_YEAR_HIRES;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(41)) - -150 + (v_growth_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+CREATE TABLE IF NOT EXISTS `table_6o33dj` (
+    `table_6o33dj_emp_id` INT,
+    `table_6o33dj_department_id` INT,
+    `table_6o33dj_salary` INT,
+    `table_6o33dj_hire_date` DATE
+);
+
+INSERT INTO `table_6o33dj` (`table_6o33dj_emp_id`, `table_6o33dj_department_id`, `table_6o33dj_salary`, `table_6o33dj_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+    DECLARE V_AVG_SALARY_INCREASE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT YEAR(TABLE_6O33DJ_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_6O33DJ
+    WHERE TABLE_6O33DJ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_AVG_SALARY_INCREASE = (YEAR(CURDATE()) - V_HIRE_YEAR) * 0.03 * 100;
+
+    RETURN FLOOR(V_AVG_SALARY_INCREASE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(90)) - 216 + (v_divisor + 1);
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+CREATE TABLE IF NOT EXISTS `table_alvd0j` (
+    `table_alvd0j_customer_id` INT,
+    `table_alvd0j_plan_type` VARCHAR(50),
+    `table_alvd0j_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_alvd0j` (`table_alvd0j_customer_id`, `table_alvd0j_plan_type`, `table_alvd0j_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_ALVD0J_PLAN_TYPE, COALESCE(TABLE_ALVD0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_ALVD0J
+    WHERE TABLE_ALVD0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_MONTHLY_COST > 500 OR V_PLAN_TYPE = 'ENTERPRISE' THEN
+        RETURN 5;
+    ELSEIF V_MONTHLY_COST > 200 OR V_PLAN_TYPE = 'PREMIUM' THEN
+        RETURN 4;
+    ELSEIF V_MONTHLY_COST > 100 THEN
+        RETURN 3;
+    ELSEIF V_MONTHLY_COST > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERFECT_SQUARE_d689mm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ROOT INT;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'CANNOT COMPUTE SQUARE ROOT OF NEGATIVE';
+    END IF;
+    SET V_ROOT = (MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(-94)) - 175 + (floor(sqrt(n)));
+    IF (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7(0)) - 249 + ((MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(49, -19)) - 132 + (v_root)) * V_ROOT != N THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER IS NOT A PERFECT SQUARE';
+    END IF;
+    RETURN V_ROOT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_PERFECT_SQUARE_d689mm(1);

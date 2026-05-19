@@ -1,0 +1,403 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_24zccf` (
+    `table_24zccf_customer_id` INT,
+    `table_24zccf_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ehvt7w` (
+    `table_ehvt7w_order_id` INT,
+    `table_ehvt7w_customer_id` INT,
+    `table_ehvt7w_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_24zccf` (`table_24zccf_customer_id`, `table_24zccf_country`) VALUES (1, 1);
+
+INSERT INTO `table_ehvt7w` (`table_ehvt7w_order_id`, `table_ehvt7w_customer_id`, `table_ehvt7w_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq----- */
+CREATE TABLE IF NOT EXISTS `table_7s2v0h` (
+    `table_7s2v0h_category_id` INT,
+    `table_7s2v0h_price` DECIMAL(10,2),
+    `table_7s2v0h_stock_quantity` INT
+);
+
+INSERT INTO `table_7s2v0h` (`table_7s2v0h_category_id`, `table_7s2v0h_price`, `table_7s2v0h_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_7S2V0H_PRICE), 0), COALESCE(SUM(TABLE_7S2V0H_STOCK_QUANTITY), 0)
+    INTO V_AVG_PRICE, V_TOTAL_STOCK
+    FROM TABLE_7S2V0H
+    WHERE TABLE_7S2V0H_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR((V_AVG_PRICE * V_TOTAL_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+CREATE TABLE IF NOT EXISTS `table_9w5f3o` (
+    `table_9w5f3o_emp_id` INT,
+    `table_9w5f3o_department_id` INT,
+    `table_9w5f3o_salary` INT
+);
+
+INSERT INTO `table_9w5f3o` (`table_9w5f3o_emp_id`, `table_9w5f3o_department_id`, `table_9w5f3o_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_9W5F3O_DEPARTMENT_ID, COALESCE(TABLE_9W5F3O_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9W5F3O_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(-52)) - -439 + (floor((v_salary * 100) / v_dept_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+CREATE TABLE IF NOT EXISTS `table_ndpa18` (
+    `table_ndpa18_order_id` INT,
+    `table_ndpa18_customer_id` INT,
+    `table_ndpa18_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ndpa18` (`table_ndpa18_order_id`, `table_ndpa18_customer_id`, `table_ndpa18_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NDPA18_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_NDPA18
+    WHERE TABLE_NDPA18_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(SIZE INT, POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF SIZE <= 0 OR POSITIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET POSITIONS = POSITIONS % SIZE;
+    IF POSITIONS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20(69)) - -836 + ((size * (size - 1)) / 2);
+    END IF;
+
+    SET V_I = 1;
+    WHILE V_I <= POSITIONS DO
+        SET V_J = SIZE;
+        WHILE V_J > 1 DO
+            SET V_RESULT = (MYSQL_FUNC_PROC_DATETIME_otj76p()) - -433 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(-50)) - 268 + (v_result)) + 1;
+            SET V_J = V_J - 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+CREATE TABLE IF NOT EXISTS `table_s4ygf6` (
+    `table_s4ygf6_emp_id` INT,
+    `table_s4ygf6_salary` INT,
+    `table_s4ygf6_hire_date` DATE
+);
+
+INSERT INTO `table_s4ygf6` (`table_s4ygf6_emp_id`, `table_s4ygf6_salary`, `table_s4ygf6_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S4YGF6_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_S4YGF6_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE
+    FROM TABLE_S4YGF6
+    WHERE TABLE_S4YGF6_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR((V_SALARY * V_TENURE) / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20----- */
+CREATE TABLE IF NOT EXISTS `table_klq01t` (
+    `table_klq01t_property_id` INT,
+    `table_klq01t_address` INT,
+    `table_klq01t_property_type` VARCHAR(50),
+    `table_klq01t_area_sqft` INT,
+    `table_klq01t_bedrooms` INT,
+    `table_klq01t_bathrooms` INT,
+    `table_klq01t_list_price` DECIMAL(10,2),
+    `table_klq01t_year_built` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jqczbe` (
+    `table_jqczbe_commission_id` INT,
+    `table_jqczbe_property_id` INT,
+    `table_jqczbe_agent_id` INT,
+    `table_jqczbe_commission_rate` INT,
+    `table_jqczbe_sale_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_klq01t` (`table_klq01t_property_id`, `table_klq01t_address`, `table_klq01t_property_type`, `table_klq01t_area_sqft`, `table_klq01t_bedrooms`, `table_klq01t_bathrooms`, `table_klq01t_list_price`, `table_klq01t_year_built`) VALUES (1, 2, 'test', 4, 5, 6, 1.0, 8);
+
+INSERT INTO `table_jqczbe` (`table_jqczbe_commission_id`, `table_jqczbe_property_id`, `table_jqczbe_agent_id`, `table_jqczbe_commission_rate`, `table_jqczbe_sale_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIST_PRICE INT DEFAULT 0;
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 0;
+    DECLARE V_AGE INT DEFAULT 0;
+    DECLARE V_PRICE_PER_SQFT INT DEFAULT 0;
+    DECLARE V_ADJUSTED_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KLQ01T_LIST_PRICE, 0), COALESCE(TABLE_KLQ01T_AREA_SQFT, 0), COALESCE(TABLE_KLQ01T_BEDROOMS, 0), COALESCE(TABLE_KLQ01T_BATHROOMS, 0), COALESCE(TABLE_KLQ01T_YEAR_BUILT, 2000)
+    INTO V_LIST_PRICE, V_AREA, V_BEDROOMS, V_BATHROOMS, V_YEAR_BUILT
+    FROM TABLE_KLQ01T
+    WHERE TABLE_KLQ01T_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_AGE = YEAR(CURDATE()) - V_YEAR_BUILT;
+    SET V_PRICE_PER_SQFT = V_LIST_PRICE / NULLIF(V_AREA, 0);
+
+    SET V_ADJUSTED_PRICE = V_LIST_PRICE;
+
+    IF V_AGE > 30 THEN
+        SET V_ADJUSTED_PRICE = V_ADJUSTED_PRICE - (V_ADJUSTED_PRICE * 10 / 100);
+    END IF;
+
+    SET V_ADJUSTED_PRICE = V_ADJUSTED_PRICE + (V_BEDROOMS * 5000) + (V_BATHROOMS * 3000);
+
+    RETURN CAST(V_ADJUSTED_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+CREATE TABLE IF NOT EXISTS `table_3na05m` (
+    `table_3na05m_cdatetime` DATETIME
+);
+
+INSERT INTO `table_3na05m` (`table_3na05m_cdatetime`) VALUES ('2024-01-01 10:00:00');
+
+/* -----Called: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATETIME_otj76p() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_3NA05M`;
+    
+    RETURN (MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(81)) - 194 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+CREATE TABLE IF NOT EXISTS `table_9o63nl` (
+    `table_9o63nl_transaction_id` INT,
+    `table_9o63nl_account_id` INT,
+    `table_9o63nl_transaction_date` DATE,
+    `table_9o63nl_transaction_type` VARCHAR(50),
+    `table_9o63nl_amount` DECIMAL(10,2),
+    `table_9o63nl_balance_after` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7t580` (
+    `table_i7t580_account_id` INT,
+    `table_i7t580_customer_id` INT,
+    `table_i7t580_account_type` INT,
+    `table_i7t580_credit_limit` INT
+);
+
+INSERT INTO `table_9o63nl` (`table_9o63nl_transaction_id`, `table_9o63nl_account_id`, `table_9o63nl_transaction_date`, `table_9o63nl_transaction_type`, `table_9o63nl_amount`, `table_9o63nl_balance_after`) VALUES (1, 2, '2024-01-01', 'test', 1.0, 6);
+
+INSERT INTO `table_i7t580` (`table_i7t580_account_id`, `table_i7t580_customer_id`, `table_i7t580_account_type`, `table_i7t580_credit_limit`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(TRANSACTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AMOUNT INT DEFAULT 0;
+    DECLARE V_ACCOUNT_AVG DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_ACCOUNT_STDDEV DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_Z_SCORE DECIMAL(6,2) DEFAULT 0.00;
+    DECLARE V_DEVIATION_COUNT INT DEFAULT 0;
+    DECLARE V_IS_SUSPICIOUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9O63NL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9O63NL_AMOUNT), 0), COUNT(*)
+    INTO V_ACCOUNT_AVG, V_DEVIATION_COUNT
+    FROM TABLE_9O63NL T
+    JOIN TABLE_I7T580 A ON TABLE_9O63NL_ACCOUNT_ID = TABLE_I7T580_ACCOUNT_ID
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_DEVIATION_COUNT < 10 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT STDDEV(TABLE_9O63NL_AMOUNT)
+    INTO V_ACCOUNT_STDDEV
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_ACCOUNT_STDDEV > 0 THEN
+        SET V_Z_SCORE = (V_AMOUNT - V_ACCOUNT_AVG) / V_ACCOUNT_STDDEV;
+    END IF;
+
+    IF ABS(V_Z_SCORE) > 3 THEN
+        SET V_IS_SUSPICIOUS = 1;
+    END IF;
+
+    RETURN V_IS_SUSPICIOUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+CREATE TABLE IF NOT EXISTS `table_cfexjo` (
+    `table_cfexjo_campaign_id` INT,
+    `table_cfexjo_target_audience_size` INT,
+    `table_cfexjo_budget` INT,
+    `table_cfexjo_start_date` DATE,
+    `table_cfexjo_end_date` DATE,
+    `table_cfexjo_channel` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m5fef2` (
+    `table_m5fef2_conversion_id` INT,
+    `table_m5fef2_campaign_id` INT,
+    `table_m5fef2_conversion_date` DATE,
+    `table_m5fef2_conversion_value` INT
+);
+
+INSERT INTO `table_cfexjo` (`table_cfexjo_campaign_id`, `table_cfexjo_target_audience_size`, `table_cfexjo_budget`, `table_cfexjo_start_date`, `table_cfexjo_end_date`, `table_cfexjo_channel`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_m5fef2` (`table_m5fef2_conversion_id`, `table_m5fef2_campaign_id`, `table_m5fef2_conversion_date`, `table_m5fef2_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TARGET_SIZE INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CFEXJO_TARGET_AUDIENCE_SIZE, 1000)
+    INTO V_TARGET_SIZE
+    FROM TABLE_CFEXJO
+    WHERE TABLE_CFEXJO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_M5FEF2_CONVERSION_VALUE), 0)
+    INTO V_CONVERSION_COUNT, V_TOTAL_VALUE
+    FROM TABLE_M5FEF2
+    WHERE TABLE_M5FEF2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TARGET_SIZE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_CONVERSION_COUNT * 100) / V_TARGET_SIZE;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), (MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(81)) - 194 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(75)) - 232 + (0)))
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_EHVT7W O
+    JOIN TABLE_24ZCCF C ON TABLE_EHVT7W_CUSTOMER_ID = TABLE_24ZCCF_CUSTOMER_ID
+    WHERE TABLE_24ZCCF_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_EHVT7W;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(-42)) - 150 + ((v_country_revenue * 100) / v_total_revenue);
+
+    RETURN (MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(70, 34)) - -400 + (v_market_share);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(1);

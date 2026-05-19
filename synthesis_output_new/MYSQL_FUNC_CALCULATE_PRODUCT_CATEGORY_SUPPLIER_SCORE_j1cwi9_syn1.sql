@@ -1,0 +1,392 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_cz6psu` (
+    `table_cz6psu_product_id` INT,
+    `table_cz6psu_supplier_id` INT,
+    `table_cz6psu_category_id` INT
+);
+
+INSERT INTO `table_cz6psu` (`table_cz6psu_product_id`, `table_cz6psu_supplier_id`, `table_cz6psu_category_id`) VALUES (1, 1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+CREATE TABLE IF NOT EXISTS `table_14m53w` (
+    `table_14m53w_order_id` INT,
+    `table_14m53w_customer_id` INT,
+    `table_14m53w_order_date` DATE,
+    `table_14m53w_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_i2tsnq` (
+    `table_i2tsnq_shipment_id` INT,
+    `table_i2tsnq_order_id` INT,
+    `table_i2tsnq_shipping_cost` DECIMAL(10,2),
+    `table_i2tsnq_delivery_date` DATE
+);
+
+INSERT INTO `table_14m53w` (`table_14m53w_order_id`, `table_14m53w_customer_id`, `table_14m53w_order_date`, `table_14m53w_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_i2tsnq` (`table_i2tsnq_shipment_id`, `table_i2tsnq_order_id`, `table_i2tsnq_shipping_cost`, `table_i2tsnq_delivery_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_14M53W_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_14M53W
+    WHERE TABLE_14M53W_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_I2TSNQ_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_I2TSNQ
+    WHERE TABLE_I2TSNQ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+CREATE TABLE IF NOT EXISTS `table_vc2b5u` (
+    `table_vc2b5u_emp_id` INT,
+    `table_vc2b5u_department_id` INT,
+    `table_vc2b5u_salary` INT,
+    `table_vc2b5u_hire_date` DATE,
+    `table_vc2b5u_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_se6mls` (
+    `table_se6mls_department_id` INT,
+    `table_se6mls_name` VARCHAR(50),
+    `table_se6mls_manager_id` INT
+);
+
+INSERT INTO `table_vc2b5u` (`table_vc2b5u_emp_id`, `table_vc2b5u_department_id`, `table_vc2b5u_salary`, `table_vc2b5u_hire_date`, `table_vc2b5u_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_se6mls` (`table_se6mls_department_id`, `table_se6mls_name`, `table_se6mls_manager_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_PERFORMANCE_RATING), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_INDEX = (MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(80)) - -352 + ((v_avg_performance * 30) + (v_avg_salary / 1000) + (v_employee_count / 5));
+
+    RETURN V_PERFORMANCE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_IS_PRIME = 1;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J < V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                ITERATE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_I = (MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(76)) - -860 + (v_i + 1);
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = ((V_ORDER_TOTAL - V_SHIPPING_COST) * 100) / V_ORDER_TOTAL;
+
+    RETURN V_SHIPPING_MARGIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(37)) - 100 + (p_a + p_b + p_c);
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(56)) - 25 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+CREATE TABLE IF NOT EXISTS `table_g5rndo` (
+    `table_g5rndo_emp_id` INT,
+    `table_g5rndo_salary` INT,
+    `table_g5rndo_hire_date` DATE
+);
+
+INSERT INTO `table_g5rndo` (`table_g5rndo_emp_id`, `table_g5rndo_salary`, `table_g5rndo_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G5RNDO_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_G5RNDO
+    WHERE TABLE_G5RNDO_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(81)) - 194 + (floor(v_salary / 12));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+CREATE TABLE IF NOT EXISTS `table_9o63nl` (
+    `table_9o63nl_transaction_id` INT,
+    `table_9o63nl_account_id` INT,
+    `table_9o63nl_transaction_date` DATE,
+    `table_9o63nl_transaction_type` VARCHAR(50),
+    `table_9o63nl_amount` DECIMAL(10,2),
+    `table_9o63nl_balance_after` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7t580` (
+    `table_i7t580_account_id` INT,
+    `table_i7t580_customer_id` INT,
+    `table_i7t580_account_type` INT,
+    `table_i7t580_credit_limit` INT
+);
+
+INSERT INTO `table_9o63nl` (`table_9o63nl_transaction_id`, `table_9o63nl_account_id`, `table_9o63nl_transaction_date`, `table_9o63nl_transaction_type`, `table_9o63nl_amount`, `table_9o63nl_balance_after`) VALUES (1, 2, '2024-01-01', 'test', 1.0, 6);
+
+INSERT INTO `table_i7t580` (`table_i7t580_account_id`, `table_i7t580_customer_id`, `table_i7t580_account_type`, `table_i7t580_credit_limit`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(TRANSACTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AMOUNT INT DEFAULT 0;
+    DECLARE V_ACCOUNT_AVG DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_ACCOUNT_STDDEV DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_Z_SCORE DECIMAL(6,2) DEFAULT 0.00;
+    DECLARE V_DEVIATION_COUNT INT DEFAULT 0;
+    DECLARE V_IS_SUSPICIOUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9O63NL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9O63NL_AMOUNT), 0), COUNT(*)
+    INTO V_ACCOUNT_AVG, V_DEVIATION_COUNT
+    FROM TABLE_9O63NL T
+    JOIN TABLE_I7T580 A ON TABLE_9O63NL_ACCOUNT_ID = TABLE_I7T580_ACCOUNT_ID
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_DEVIATION_COUNT < 10 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT STDDEV(TABLE_9O63NL_AMOUNT)
+    INTO V_ACCOUNT_STDDEV
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_ACCOUNT_STDDEV > 0 THEN
+        SET V_Z_SCORE = (V_AMOUNT - V_ACCOUNT_AVG) / V_ACCOUNT_STDDEV;
+    END IF;
+
+    IF ABS(V_Z_SCORE) > 3 THEN
+        SET V_IS_SUSPICIOUS = 1;
+    END IF;
+
+    RETURN V_IS_SUSPICIOUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    READ_LOOP: LOOP
+        SET V_RESULT = V_RESULT + 1;
+        IF V_RESULT >= N THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = V_MAX_SALARY - V_MIN_SALARY;
+
+    RETURN FLOOR(V_SALARY_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_CZ6PSU_SUPPLIER_ID, TABLE_CZ6PSU_CATEGORY_ID
+    INTO V_SUPPLIER_ID, V_CATEGORY_ID
+    FROM TABLE_CZ6PSU
+    WHERE TABLE_CZ6PSU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(37)) - 100 + ((MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(80)) - 932 + ((MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(-38)) - 540 + ((v_supplier_id + v_category_id) % 100))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(1);

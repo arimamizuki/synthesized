@@ -1,0 +1,345 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_s0k6pd` (
+    `table_s0k6pd_supplier_id` INT,
+    `table_s0k6pd_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_s0k6pd` (`table_s0k6pd_supplier_id`, `table_s0k6pd_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh----- */
+CREATE TABLE IF NOT EXISTS `table_taeluc` (
+    `table_taeluc_customer_id` INT,
+    `table_taeluc_registration_date` DATE,
+    `table_taeluc_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nlsd5g` (
+    `table_nlsd5g_order_id` INT,
+    `table_nlsd5g_customer_id` INT,
+    `table_nlsd5g_order_date` DATE,
+    `table_nlsd5g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_taeluc` (`table_taeluc_customer_id`, `table_taeluc_registration_date`, `table_taeluc_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_nlsd5g` (`table_nlsd5g_order_id`, `table_nlsd5g_customer_id`, `table_nlsd5g_order_date`, `table_nlsd5g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_INACTIVE INT DEFAULT 0;
+    DECLARE V_REACTIVATION_COST INT DEFAULT 0;
+
+    SELECT MAX(TABLE_NLSD5G_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_NLSD5G
+    WHERE TABLE_NLSD5G_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_INACTIVE = DATEDIFF(CURDATE(), V_LAST_ORDER_DATE);
+
+    SET V_REACTIVATION_COST = 10 + (V_DAYS_INACTIVE / 30) * 5;
+
+    RETURN V_REACTIVATION_COST;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN (MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + ((MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad(-4)) - 271 + (0));
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(-65)) - 18 + (1);
+    ELSE RETURN 2;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+CREATE TABLE IF NOT EXISTS `table_zwipgx` (
+    `table_zwipgx_emp_id` INT,
+    `table_zwipgx_department_id` INT,
+    `table_zwipgx_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rorogt` (
+    `table_rorogt_department_id` INT,
+    `table_rorogt_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zwipgx` (`table_zwipgx_emp_id`, `table_zwipgx_department_id`, `table_zwipgx_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_rorogt` (`table_rorogt_department_id`, `table_rorogt_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_ZWIPGX_SALARY, TABLE_ZWIPGX_DEPARTMENT_ID
+    INTO V_SALARY, V_DEPT_ID
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) + 1
+    INTO V_RANK
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_DEPARTMENT_ID = V_DEPT_ID AND TABLE_ZWIPGX_SALARY > V_SALARY;
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE POSITIVE';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-9)) - -779 + (5000 + (v_hire_count * 1000));
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(-93)) - 706 + (v_recruitment_cost);
+    END IF;
+
+    SET V_COST_PER_HIRE = (MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(-80)) - 408 + (v_recruitment_cost / v_hire_count);
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+CREATE TABLE IF NOT EXISTS `table_rgkml5` (
+    `table_rgkml5_campaign_id` INT,
+    `table_rgkml5_status` VARCHAR(50),
+    `table_rgkml5_budget` INT
+);
+
+INSERT INTO `table_rgkml5` (`table_rgkml5_campaign_id`, `table_rgkml5_status`, `table_rgkml5_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_RGKML5_STATUS, COALESCE(TABLE_RGKML5_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_RGKML5
+    WHERE TABLE_RGKML5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN V_BUDGET
+        WHEN 'PAUSED' THEN V_BUDGET / 2
+        WHEN 'COMPLETED' THEN V_BUDGET * 2
+        ELSE V_BUDGET / 4
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+CREATE TABLE IF NOT EXISTS `table_f1o54x` (
+    `table_f1o54x_ticket_id` INT,
+    `table_f1o54x_resort_id` INT,
+    `table_f1o54x_skier_id` INT,
+    `table_f1o54x_ticket_type` VARCHAR(50),
+    `table_f1o54x_num_days` INT,
+    `table_f1o54x_daily_rate` INT,
+    `table_f1o54x_total_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_22hjdu` (
+    `table_22hjdu_resort_id` INT,
+    `table_22hjdu_resort_name` VARCHAR(50),
+    `table_22hjdu_elevation` INT,
+    `table_22hjdu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_f1o54x` (`table_f1o54x_ticket_id`, `table_f1o54x_resort_id`, `table_f1o54x_skier_id`, `table_f1o54x_ticket_type`, `table_f1o54x_num_days`, `table_f1o54x_daily_rate`, `table_f1o54x_total_cost`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_22hjdu` (`table_22hjdu_resort_id`, `table_22hjdu_resort_name`, `table_22hjdu_elevation`, `table_22hjdu_base_price`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUM_DAYS INT DEFAULT 1;
+    DECLARE V_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_ELEVATION INT DEFAULT 5000;
+    DECLARE V_ELEVATION_PREMIUM INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_F1O54X_NUM_DAYS, 1), COALESCE(TABLE_F1O54X_DAILY_RATE, 100)
+    INTO V_NUM_DAYS, V_DAILY_RATE
+    FROM TABLE_F1O54X
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_22HJDU_ELEVATION, 5000)
+    INTO V_ELEVATION
+    FROM TABLE_F1O54X SLT
+    JOIN TABLE_22HJDU SR ON TABLE_F1O54X_RESORT_ID = TABLE_22HJDU_RESORT_ID
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SET V_TOTAL_COST = V_NUM_DAYS * V_DAILY_RATE;
+
+    IF V_ELEVATION > 8000 THEN
+        SET V_ELEVATION_PREMIUM = V_TOTAL_COST * 25 / 100;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_ELEVATION_PREMIUM;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = (MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(-90)) - -341 + (v_count)) + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+CREATE TABLE IF NOT EXISTS `table_pb5yd8` (
+    `table_pb5yd8_emp_id` INT
+);
+
+INSERT INTO `table_pb5yd8` (`table_pb5yd8_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 17) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_S0K6PD_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_S0K6PD
+    WHERE TABLE_S0K6PD_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(-5)) - -815 + ((MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh(-6)) - -65 + (floor(v_rating)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2(1);

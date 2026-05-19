@@ -1,0 +1,464 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_cwk400` (
+    `table_cwk400_part_id` INT,
+    `table_cwk400_part_name` VARCHAR(50),
+    `table_cwk400_category_id` INT,
+    `table_cwk400_price` DECIMAL(10,2),
+    `table_cwk400_stock_quantity` INT,
+    `table_cwk400_reorder_point` INT
+);
+
+INSERT INTO `table_cwk400` (`table_cwk400_part_id`, `table_cwk400_part_name`, `table_cwk400_category_id`, `table_cwk400_price`, `table_cwk400_stock_quantity`, `table_cwk400_reorder_point`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = V_TOTAL_HOURS * V_AVG_HOURLY_RATE;
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(-52)) - -439 + (cast(v_total_revenue as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+CREATE TABLE IF NOT EXISTS `table_ndpa18` (
+    `table_ndpa18_order_id` INT,
+    `table_ndpa18_customer_id` INT,
+    `table_ndpa18_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ndpa18` (`table_ndpa18_order_id`, `table_ndpa18_customer_id`, `table_ndpa18_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NDPA18_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_NDPA18
+    WHERE TABLE_NDPA18_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FOOSP_ack96d()) - 703 + ((MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c(47)) - -923 + (floor(v_total))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c----- */
+CREATE TABLE IF NOT EXISTS `table_ya6y3k` (
+    `table_ya6y3k_campaign_id` INT,
+    `table_ya6y3k_channel_type` VARCHAR(50),
+    `table_ya6y3k_target_demographic` INT,
+    `table_ya6y3k_budget` INT,
+    `table_ya6y3k_start_date` DATE,
+    `table_ya6y3k_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mj9bj6` (
+    `table_mj9bj6_conversion_id` INT,
+    `table_mj9bj6_campaign_id` INT,
+    `table_mj9bj6_conversion_value` INT,
+    `table_mj9bj6_conversion_cost` DECIMAL(10,2),
+    `table_mj9bj6_conversion_date` DATE
+);
+
+INSERT INTO `table_ya6y3k` (`table_ya6y3k_campaign_id`, `table_ya6y3k_channel_type`, `table_ya6y3k_target_demographic`, `table_ya6y3k_budget`, `table_ya6y3k_start_date`, `table_ya6y3k_end_date`) VALUES (1, '2024-01-01', 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_mj9bj6` (`table_mj9bj6_conversion_id`, `table_mj9bj6_campaign_id`, `table_mj9bj6_conversion_value`, `table_mj9bj6_conversion_cost`, `table_mj9bj6_conversion_date`) VALUES (1, 2, 3, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSION_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSION_COST INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_YA6Y3K_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_YA6Y3K
+    WHERE TABLE_YA6Y3K_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_MJ9BJ6_CONVERSION_VALUE), 0), COALESCE(SUM(TABLE_MJ9BJ6_CONVERSION_COST), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_CONVERSION_VALUE, V_TOTAL_CONVERSION_COST
+    FROM TABLE_MJ9BJ6
+    WHERE TABLE_MJ9BJ6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = ((V_TOTAL_CONVERSION_VALUE - V_TOTAL_CONVERSION_COST) * 100) / V_CAMPAIGN_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + (floor(v_category_avg_price * 0.2));
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = V_DISCOUNT_THRESHOLD + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = V_QUANTITY * V_UNIT_PRICE;
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = V_TOTAL + (V_TOTAL * V_REFILLS * 80 / 100);
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = V_TOTAL + 25;
+    END IF;
+
+    RETURN CAST(V_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FOOSP_ack96d----- */
+CREATE TABLE IF NOT EXISTS test.t1 (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.t1 (col1, col2) VALUES ('foo', 42);
+
+/* -----Called: MYSQL_FUNC_FOOSP_ack96d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP_ack96d() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    INSERT INTO TEST.T1
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN (MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(-47, -54)) - -523 + (1);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(STR1 INT, STR2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEN1 INT DEFAULT 0;
+    DECLARE V_LEN2 INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SET V_LEN1 = CHAR_LENGTH(STR1);
+    SET V_LEN2 = CHAR_LENGTH(STR2);
+
+    IF V_LEN1 = 0 OR V_LEN2 = 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_LEN1 DO
+        SET V_J = 1;
+        INNER_LOOP: WHILE V_J <= V_LEN2 DO
+            IF SUBSTRING(STR1, V_I, 1) = SUBSTRING(STR2, V_J, 1) THEN
+                SET V_COUNT = (MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(57)) - 382 + (v_count) + 1;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_I = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(-61)) - 169 + (v_i + 1);
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+CREATE TABLE IF NOT EXISTS `table_gwdcp2` (
+    `table_gwdcp2_order_id` INT,
+    `table_gwdcp2_customer_id` INT,
+    `table_gwdcp2_order_date` DATE,
+    `table_gwdcp2_total_amount` DECIMAL(10,2),
+    `table_gwdcp2_shipping_method` INT,
+    `table_gwdcp2_estimated_delivery_days` INT
+);
+
+INSERT INTO `table_gwdcp2` (`table_gwdcp2_order_id`, `table_gwdcp2_customer_id`, `table_gwdcp2_order_date`, `table_gwdcp2_total_amount`, `table_gwdcp2_shipping_method`, `table_gwdcp2_estimated_delivery_days`) VALUES (1, 2, '2024-01-01', 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 0;
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'STANDARD';
+
+    SELECT COALESCE(TABLE_GWDCP2_ESTIMATED_DELIVERY_DAYS, 5), TABLE_GWDCP2_SHIPPING_METHOD
+    INTO V_ESTIMATED_DAYS, V_SHIPPING_METHOD
+    FROM TABLE_GWDCP2
+    WHERE TABLE_GWDCP2_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_ACTUAL_DAYS = V_ESTIMATED_DAYS + 2;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'EXPRESS' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 15);
+        WHEN 'PRIORITY' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 12);
+        WHEN 'STANDARD' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 10);
+        ELSE SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 8);
+    END CASE;
+
+    RETURN GREATEST(V_RELIABILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(START_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE START_VAL > 0 DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(-92)) - -16 + (v_result + start_val);
+        SET START_VAL = START_VAL - 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq----- */
+CREATE TABLE IF NOT EXISTS `table_bmkvj4` (
+    `table_bmkvj4_campaign_id` INT,
+    `table_bmkvj4_channel` INT,
+    `table_bmkvj4_budget` INT,
+    `table_bmkvj4_start_date` DATE,
+    `table_bmkvj4_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_7dxq8p` (
+    `table_7dxq8p_conversion_id` INT,
+    `table_7dxq8p_campaign_id` INT,
+    `table_7dxq8p_conversion_value` INT
+);
+
+INSERT INTO `table_bmkvj4` (`table_bmkvj4_campaign_id`, `table_bmkvj4_channel`, `table_bmkvj4_budget`, `table_bmkvj4_start_date`, `table_bmkvj4_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_7dxq8p` (`table_7dxq8p_conversion_id`, `table_7dxq8p_campaign_id`, `table_7dxq8p_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_MIX_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_BMKVJ4_CHANNEL, COALESCE(TABLE_BMKVJ4_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_BMKVJ4
+    WHERE TABLE_BMKVJ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_7DXQ8P_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_7DXQ8P
+    WHERE TABLE_7DXQ8P_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_SCORE = (V_REVENUE * 2) / GREATEST(V_BUDGET, 1);
+        WHEN 'ORGANIC' THEN SET V_MIX_SCORE = V_REVENUE * 3;
+        WHEN 'SOCIAL' THEN SET V_MIX_SCORE = (V_REVENUE * 150) / GREATEST(V_BUDGET, 1);
+        ELSE SET V_MIX_SCORE = V_REVENUE;
+    END CASE;
+
+    RETURN V_MIX_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(PART_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CWK400_STOCK_QUANTITY, 0), COALESCE(TABLE_CWK400_REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM TABLE_CWK400
+    WHERE TABLE_CWK400_PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_STOCK_RATIO = (V_STOCK * (MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + (100)) / V_REORDER_POINT;
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = 100;
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = 80;
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = 60;
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = 40;
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = 20;
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(1);

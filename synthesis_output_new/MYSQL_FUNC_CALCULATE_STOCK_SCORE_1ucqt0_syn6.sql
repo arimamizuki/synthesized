@@ -1,0 +1,386 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_lk5a67` (
+    `table_lk5a67_product_id` INT,
+    `table_lk5a67_stock_quantity` INT
+);
+
+INSERT INTO `table_lk5a67` (`table_lk5a67_product_id`, `table_lk5a67_stock_quantity`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7----- */
+CREATE TABLE IF NOT EXISTS `table_kvnaj6` (
+    `table_kvnaj6_order_id` INT,
+    `table_kvnaj6_customer_id` INT,
+    `table_kvnaj6_order_date` DATE,
+    `table_kvnaj6_total_amount` DECIMAL(10,2),
+    `table_kvnaj6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4rmv6c` (
+    `table_4rmv6c_order_id` INT,
+    `table_4rmv6c_product_id` INT,
+    `table_4rmv6c_quantity` INT,
+    `table_4rmv6c_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kvnaj6` (`table_kvnaj6_order_id`, `table_kvnaj6_customer_id`, `table_kvnaj6_order_date`, `table_kvnaj6_total_amount`, `table_kvnaj6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4rmv6c` (`table_4rmv6c_order_id`, `table_4rmv6c_product_id`, `table_4rmv6c_quantity`, `table_4rmv6c_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_4RMV6C_QUANTITY * TABLE_4RMV6C_UNIT_PRICE), 0), COALESCE(SUM(TABLE_4RMV6C_QUANTITY), 0)
+    INTO V_TOTAL_AMOUNT, V_TOTAL_ITEMS
+    FROM TABLE_4RMV6C
+    WHERE TABLE_4RMV6C_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_PRICE = V_TOTAL_AMOUNT / V_TOTAL_ITEMS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(-51)) - -128 + (v_avg_price);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = (MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(76, 32)) - 587 + (round(v_gpa * 100));
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_I < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(-60)) - -225 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_EMP_INFO_rpit5m(-29)) - 978 + (quarter(v_registration_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+CREATE TABLE IF NOT EXISTS `table_bzoodp` (
+    `table_bzoodp_property_id` INT,
+    `table_bzoodp_landlord_id` INT,
+    `table_bzoodp_property_type` VARCHAR(50),
+    `table_bzoodp_monthly_rent` INT,
+    `table_bzoodp_deposit_amount` DECIMAL(10,2),
+    `table_bzoodp_num_units` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_s3k6c0` (
+    `table_s3k6c0_lease_id` INT,
+    `table_s3k6c0_property_id` INT,
+    `table_s3k6c0_tenant_id` INT,
+    `table_s3k6c0_start_date` DATE,
+    `table_s3k6c0_end_date` DATE,
+    `table_s3k6c0_monthly_payment` INT
+);
+
+INSERT INTO `table_bzoodp` (`table_bzoodp_property_id`, `table_bzoodp_landlord_id`, `table_bzoodp_property_type`, `table_bzoodp_monthly_rent`, `table_bzoodp_deposit_amount`, `table_bzoodp_num_units`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_s3k6c0` (`table_s3k6c0_lease_id`, `table_s3k6c0_property_id`, `table_s3k6c0_tenant_id`, `table_s3k6c0_start_date`, `table_s3k6c0_end_date`, `table_s3k6c0_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_NUM_UNITS INT DEFAULT 0;
+    DECLARE V_OCCUPIED_UNITS INT DEFAULT 0;
+    DECLARE V_VACANCY_RATE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BZOODP_MONTHLY_RENT, 0), COALESCE(TABLE_BZOODP_NUM_UNITS, 1)
+    INTO V_MONTHLY_RENT, V_NUM_UNITS
+    FROM TABLE_BZOODP
+    WHERE TABLE_BZOODP_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_OCCUPIED_UNITS
+    FROM TABLE_S3K6C0
+    WHERE TABLE_S3K6C0_PROPERTY_ID = PROPERTY_ID_PARAM
+      AND TABLE_S3K6C0_END_DATE > CURDATE();
+
+    IF V_NUM_UNITS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_VACANCY_RATE = ((V_NUM_UNITS - V_OCCUPIED_UNITS) * 100) / V_NUM_UNITS;
+    SET V_RISK_SCORE = V_VACANCY_RATE;
+
+    IF V_MONTHLY_RENT > 5000 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_RISK_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+CREATE TABLE IF NOT EXISTS table_k95o9w (
+    table_k95o9w_emp_no INT,
+    table_k95o9w_first_name VARCHAR(50)
+);
+
+INSERT INTO table_k95o9w (`table_k95o9w_emp_no`, `table_k95o9w_first_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_INFO_rpit5m(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_K95O9W E 
+    WHERE TABLE_K95O9W_EMP_NO = P_EMP_NO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - -813 + (10);
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+CREATE TABLE IF NOT EXISTS `table_82h4u6` (
+    `table_82h4u6_product_id` INT,
+    `table_82h4u6_category_id` INT
+);
+
+INSERT INTO `table_82h4u6` (`table_82h4u6_product_id`, `table_82h4u6_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc(4)) - 47 + (category_id_param % 50);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc----- */
+CREATE TABLE IF NOT EXISTS `table_9pcwja` (
+    `table_9pcwja_customer_id` INT,
+    `table_9pcwja_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_9pcwja` (`table_9pcwja_customer_id`, `table_9pcwja_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_9PCWJA_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_9PCWJA
+    WHERE TABLE_9PCWJA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN 3
+        WHEN 'PREMIUM' THEN 2
+        WHEN 'BASIC' THEN 1
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_LK5A67_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_LK5A67
+    WHERE TABLE_LK5A67_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + ((MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7(-72)) - 413 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + (least(v_stock, 100))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(1);

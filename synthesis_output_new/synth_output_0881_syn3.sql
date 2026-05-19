@@ -1,0 +1,452 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v31003 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v31004 INT DEFAULT 0,
+    v31005 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v31108 (
+    v31109 INT,
+    v31110 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v30681 (
+    v30682 INT,
+    v30683 VARCHAR(50),
+    v30684 INT
+);
+CREATE TABLE IF NOT EXISTS v30839 (
+    v30840 INT,
+    v30841 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v31141 (
+    v31142 VARCHAR(50),
+    v31143 INT
+);
+INSERT INTO v31003 (v31004, v31005) VALUES (10, 'yellow'), (20, 'yacht'), (30, 'xray'), (40, 'zebra');
+INSERT INTO v31108 (v31109, v31110) VALUES (2, 'test'), (50, 'other'), (100, 'data');
+INSERT INTO v30681 (v30682, v30683, v30684) VALUES (1, 'apple', 5), (2, 'banana', 7), (3, 'cherry', 3);
+INSERT INTO v30839 (v30840, v30841) VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO v31141 (v31142, v31143) VALUES ('pattern', 1), ('test', 2), ('abc', 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+CREATE TABLE IF NOT EXISTS `table_9ywali` (
+    `table_9ywali_campaign_id` INT,
+    `table_9ywali_budget` INT,
+    `table_9ywali_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_06pwt4` (
+    `table_06pwt4_conversion_id` INT,
+    `table_06pwt4_campaign_id` INT,
+    `table_06pwt4_conversion_value` INT
+);
+
+INSERT INTO `table_9ywali` (`table_9ywali_campaign_id`, `table_9ywali_budget`, `table_9ywali_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_06pwt4` (`table_06pwt4_conversion_id`, `table_06pwt4_campaign_id`, `table_06pwt4_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_VALUE_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_06PWT4_CONVERSION_VALUE), (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(-72)) - 326 + ((MYSQL_FUNC_POWER_INT_xe7375(-37, 57)) - 442 + (0))), COUNT(*)
+    INTO V_TOTAL_VALUE, V_CONVERSION_COUNT
+    FROM TABLE_06PWT4
+    WHERE TABLE_06PWT4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VALUE_INDEX = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(-36)) - -379 + (v_total_value / v_conversion_count);
+
+    RETURN FLOOR(V_VALUE_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_INT_xe7375----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_INT_xe7375(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF EXPONENT < (MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4()) - 922 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I < EXPONENT DO
+        SET V_RESULT = (MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by()) - 204 + (v_result * base);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE DIAG_COUNT INT DEFAULT 0;
+    DECLARE MYSQL_ERRNO INT;
+    DECLARE SQLSTATE_VAL VARCHAR(5);
+    DECLARE MSG TEXT;
+    
+    GET DIAGNOSTICS CONDITION 1 MYSQL_ERRNO = MYSQL_ERRNO, SQLSTATE_VAL = RETURNED_SQLSTATE, MSG = MESSAGE_TEXT;
+    SET DIAG_COUNT = DIAG_COUNT + 1;
+    
+    RETURN DIAG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN INT DEFAULT 100;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 25 UNION SELECT 5 UNION SELECT 30 UNION SELECT 15 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I < V_MIN THEN
+            SET V_MIN = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MIN;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+CREATE TABLE IF NOT EXISTS `table_eivnkn` (
+    `table_eivnkn_emp_id` INT,
+    `table_eivnkn_department_id` INT,
+    `table_eivnkn_salary` INT,
+    `table_eivnkn_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1bu658` (
+    `table_1bu658_department_id` INT,
+    `table_1bu658_name` VARCHAR(50)
+);
+
+INSERT INTO `table_eivnkn` (`table_eivnkn_emp_id`, `table_eivnkn_department_id`, `table_eivnkn_salary`, `table_eivnkn_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1bu658` (`table_1bu658_department_id`, `table_1bu658_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_SENIOR_COUNT INT DEFAULT 0;
+    DECLARE V_SENIORITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SENIOR_COUNT
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE()) >= 5;
+
+    SET V_SENIORITY_INDEX = (MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(-57)) - -854 + ((v_avg_tenure * 10) + (v_senior_count * 15));
+
+    RETURN V_SENIORITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+CREATE TABLE IF NOT EXISTS `table_34i93l` (
+    `table_34i93l_customer_id` INT,
+    `table_34i93l_registration_date` DATE,
+    `table_34i93l_tier_level` INT,
+    `table_34i93l_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vp00q0` (
+    `table_vp00q0_order_id` INT,
+    `table_vp00q0_customer_id` INT,
+    `table_vp00q0_order_date` DATE,
+    `table_vp00q0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1gdozo` (
+    `table_1gdozo_review_id` INT,
+    `table_1gdozo_customer_id` INT,
+    `table_1gdozo_product_id` INT,
+    `table_1gdozo_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_34i93l` (`table_34i93l_customer_id`, `table_34i93l_registration_date`, `table_34i93l_tier_level`, `table_34i93l_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_vp00q0` (`table_vp00q0_order_id`, `table_vp00q0_customer_id`, `table_vp00q0_order_date`, `table_vp00q0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_1gdozo` (`table_1gdozo_review_id`, `table_1gdozo_customer_id`, `table_1gdozo_product_id`, `table_1gdozo_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_34I93L_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_34I93L
+    WHERE TABLE_34I93L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_VP00Q0_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM TABLE_VP00Q0
+    WHERE TABLE_VP00Q0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_1GDOZO_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_1GDOZO
+    WHERE TABLE_1GDOZO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    SET V_LOYALTY_SCORE = (V_ORDER_COUNT * 10) + (V_TOTAL_SPENT / 100) + (V_AVG_REVIEW_RATING * 15);
+    SET V_LOYALTY_SCORE = V_LOYALTY_SCORE * V_TIER_MULTIPLIER / 2;
+
+    RETURN V_LOYALTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+CREATE TABLE IF NOT EXISTS `table_07mi7x` (
+    `table_07mi7x_emp_id` INT,
+    `table_07mi7x_hire_date` DATE,
+    `table_07mi7x_salary` INT
+);
+
+INSERT INTO `table_07mi7x` (`table_07mi7x_emp_id`, `table_07mi7x_hire_date`, `table_07mi7x_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_07MI7X_HIRE_DATE, CURDATE()), COALESCE(TABLE_07MI7X_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_07MI7X
+    WHERE TABLE_07MI7X_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(46, -96)) - 615 + ((MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(67)) - -705 + ((v_tenure * 1000) + floor(v_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A & P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk()) - 716 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 50 UNION SELECT 100 UNION SELECT 150 UNION SELECT 200;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0881(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_lead_val INT DEFAULT 0;
+    DECLARE v_coalesce_val INT DEFAULT 0;
+    DECLARE v_regex_check INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v31109 FROM v31108 WHERE v31109 = 2;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE with SLEEP
+    SET @sql1 = 'UPDATE v31003 AS x1 SET v31004 = v31004 + SLEEP(0.01) WHERE v31005 LIKE ''y%''';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Statement 2: Recursive CTE with SELECT INTO
+    SET @sql2 = 'WITH RECURSIVE x8 AS (SELECT 0 UNION SELECT x6.v31109 + 1 FROM v31108 AS x6 WHERE x6.v31109 = 2 AND x6.v31109 < 100) SELECT v31109 INTO @v_cte_val FROM v31108 AS x6 WHERE x6.v31109 = 2 LIMIT 1';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_val = COALESCE(@v_cte_val, 0);
+
+    -- Statement 3: Window function with ORDER BY
+    SET @sql3 = 'SELECT x4.v30683, LEAD(x4.v30684, 5, 7) OVER (ORDER BY x4.v30682) AS lead_col FROM v30681 AS x4 ORDER BY CASE WHEN ''x'' THEN 1 ELSE 0 END, lead_col LIMIT 1';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+
+    -- Statement 4: Recursive CTE with COALESCE and session variable
+    SET @sql4 = "WITH RECURSIVE x10 AS (SELECT 0 UNION ALL SELECT x4.v30840 + 1 FROM v30839 AS x4 WHERE x4.v30840 + 1 < 20) SELECT COALESCE(x4.v30840, NULL) INTO @v_coalesce FROM v30839 AS x4 WHERE x4.v30840 = 'a' LIMIT 1";
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_coalesce_val = COALESCE(@v_coalesce, 0);
+
+    -- Statement 5: REGEXP_LIKE check
+    SET @sql5 = "SELECT REGEXP_LIKE('', v31142) INTO @v_regex FROM v31141 AS x7 LIMIT 1";
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_regex_check = COALESCE(@v_regex, 0);
+
+    -- Procedural logic with IF/ELSE and LOOP
+    IF v_val > 0 THEN
+        SET v_counter = (MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(55)) - 19 + (v_counter) + 1;
+    ELSE
+        SET v_counter = v_counter - 1;
+    END IF;
+
+    -- Loop using WHILE
+    WHILE v_counter < 5 DO
+        SET v_counter = v_counter + 1;
+        -- CASE statement
+        CASE v_counter
+            WHEN 3 THEN
+                SET v_counter = v_counter + 10;
+            WHEN 4 THEN
+                SET v_counter = v_counter + 20;
+            ELSE
+                SET v_counter = v_counter + 1;
+        END CASE;
+    END WHILE;
+
+    -- Cursor usage
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final result based on all operations
+    SET result = v_counter + v_coalesce_val + v_regex_check;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0881(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,437 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_nqwaay` (
+    `table_nqwaay_order_id` INT,
+    `table_nqwaay_customer_id` INT,
+    `table_nqwaay_order_date` DATE,
+    `table_nqwaay_total_amount` DECIMAL(10,2),
+    `table_nqwaay_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rjmeai` (
+    `table_rjmeai_order_id` INT,
+    `table_rjmeai_product_id` INT,
+    `table_rjmeai_quantity` INT
+);
+
+INSERT INTO `table_nqwaay` (`table_nqwaay_order_id`, `table_nqwaay_customer_id`, `table_nqwaay_order_date`, `table_nqwaay_total_amount`, `table_nqwaay_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_rjmeai` (`table_rjmeai_order_id`, `table_rjmeai_product_id`, `table_rjmeai_quantity`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+CREATE TABLE IF NOT EXISTS `table_ebd300` (
+    `table_ebd300_meter_id` INT,
+    `table_ebd300_customer_id` INT,
+    `table_ebd300_meter_reading` INT,
+    `table_ebd300_reading_date` DATE,
+    `table_ebd300_consumption_kwh` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7mak4e` (
+    `table_7mak4e_tariff_id` INT,
+    `table_7mak4e_tier_name` VARCHAR(50),
+    `table_7mak4e_min_kwh` INT,
+    `table_7mak4e_max_kwh` INT,
+    `table_7mak4e_rate_per_kwh` INT
+);
+
+INSERT INTO `table_ebd300` (`table_ebd300_meter_id`, `table_ebd300_customer_id`, `table_ebd300_meter_reading`, `table_ebd300_reading_date`, `table_ebd300_consumption_kwh`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_7mak4e` (`table_7mak4e_tariff_id`, `table_7mak4e_tier_name`, `table_7mak4e_min_kwh`, `table_7mak4e_max_kwh`, `table_7mak4e_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 10;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+    DECLARE V_PEAK_CONSUMPTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_PREVIOUS_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1 OFFSET 1;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 15);
+
+    IF V_CONSUMPTION > 500 THEN
+        SET V_PEAK_CONSUMPTION = V_CONSUMPTION - 500;
+        SET V_TOTAL_BILL = V_TOTAL_BILL + (V_PEAK_CONSUMPTION * 25);
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+CREATE TABLE IF NOT EXISTS `table_pe877c` (
+    `table_pe877c_employee_id` INT,
+    `table_pe877c_department_id` INT,
+    `table_pe877c_salary` INT,
+    `table_pe877c_hire_date` DATE,
+    `table_pe877c_is_remote` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvva5n` (
+    `table_vvva5n_project_id` INT,
+    `table_vvva5n_team_lead_id` INT,
+    `table_vvva5n_budget` INT,
+    `table_vvva5n_deadline` INT,
+    `table_vvva5n_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pe877c` (`table_pe877c_employee_id`, `table_pe877c_department_id`, `table_pe877c_salary`, `table_pe877c_hire_date`, `table_pe877c_is_remote`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_vvva5n` (`table_vvva5n_project_id`, `table_vvva5n_team_lead_id`, `table_vvva5n_budget`, `table_vvva5n_deadline`, `table_vvva5n_status`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_REMOTE INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PROJECT_COUNT INT DEFAULT 0;
+    DECLARE V_COMPLETED_PROJECTS INT DEFAULT 0;
+    DECLARE V_REMOTE_IMPACT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PE877C_IS_REMOTE, 0), COALESCE(TABLE_PE877C_SALARY, 50000)
+    INTO V_IS_REMOTE, V_SALARY
+    FROM TABLE_PE877C
+    WHERE TABLE_PE877C_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_VVVA5N_STATUS = 'COMPLETED' THEN 1 END)
+    INTO V_PROJECT_COUNT, V_COMPLETED_PROJECTS
+    FROM TABLE_VVVA5N
+    WHERE TABLE_VVVA5N_TEAM_LEAD_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_IS_REMOTE = 1 THEN
+        SET V_REMOTE_IMPACT_SCORE = 80 + (V_COMPLETED_PROJECTS * 5) - (V_SALARY / 10000);
+    ELSE
+        SET V_REMOTE_IMPACT_SCORE = 70 + (V_COMPLETED_PROJECTS * 3);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(15)) - 754 + ((MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + (v_remote_impact_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A <= 0 OR P_B <= 0 THEN
+        RETURN -1;
+    END IF;
+
+    WHILE P_B <> 0 DO
+        SET V_TEMP = P_B;
+        SET P_B = P_A MOD P_B;
+        SET P_A = V_TEMP;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN P_A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+CREATE TABLE IF NOT EXISTS `table_6l8uxl` (
+    `table_6l8uxl_warranty_id` INT,
+    `table_6l8uxl_product_id` INT,
+    `table_6l8uxl_purchase_date` DATE,
+    `table_6l8uxl_warranty_months` INT,
+    `table_6l8uxl_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6l8uxl` (`table_6l8uxl_warranty_id`, `table_6l8uxl_product_id`, `table_6l8uxl_purchase_date`, `table_6l8uxl_warranty_months`, `table_6l8uxl_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT TABLE_6L8UXL_PURCHASE_DATE, TABLE_6L8UXL_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM TABLE_6L8UXL
+    WHERE TABLE_6L8UXL_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (date_add(v_purchase_date, interval v_warranty_months month));
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, 0), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SP_COUNT INT DEFAULT 0;
+    
+    SAVEPOINT SP1;
+    SET SP_COUNT = (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(-84)) - 260 + (sp_count) + 1;
+    
+    ROLLBACK TO SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RELEASE SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RETURN SP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+CREATE TABLE IF NOT EXISTS `table_sm6ixz` (
+    `table_sm6ixz_product_id` INT,
+    `table_sm6ixz_category_id` INT,
+    `table_sm6ixz_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_sm6ixz` (`table_sm6ixz_product_id`, `table_sm6ixz_category_id`, `table_sm6ixz_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_SM6IXZ_PRICE), 0), COALESCE(MIN(TABLE_SM6IXZ_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_SM6IXZ
+    WHERE TABLE_SM6IXZ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(-61, -17)) - -135 + (v_max_price - v_min_price);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(P_START_NUM INT, P_END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+
+    IF P_START_NUM > P_END_NUM THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt(-61, 40)) - -908 + (0);
+    END IF;
+
+    SET V_CURRENT = P_START_NUM;
+
+    OUTER_LOOP: WHILE V_CURRENT <= P_END_NUM DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_DIVERSITY_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_RJMEAI_PRODUCT_ID), COALESCE(SUM(TABLE_RJMEAI_QUANTITY), (MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(50)) - 421 + (0))
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_ITEMS
+    FROM TABLE_RJMEAI
+    WHERE TABLE_RJMEAI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DIVERSITY_INDEX = (MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s()) - 753 + ((v_unique_products * 100) / v_total_items);
+
+    RETURN (MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(0)) - 519 + (v_diversity_index);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(1);

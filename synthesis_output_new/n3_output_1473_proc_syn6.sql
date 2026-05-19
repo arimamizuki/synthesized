@@ -1,0 +1,464 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1261741 (v1261742 INT, v1261743 INT);
+CREATE TABLE IF NOT EXISTS v1262501 (v1262502 ENUM('E', 'F', 'E,F', 'F,E') NOT NULL DEFAULT 'E') COLLATE=utf8mb4_vi_0900_as_cs;
+CREATE TABLE IF NOT EXISTS v1262590 (v1262591 CHAR(35), v1262592 ENUM('a5', 'sliding', 'two', 'Ã¼')) COLLATE=utf8mb3_bin;
+CREATE TABLE IF NOT EXISTS v1261669 (v1261670 INT);
+INSERT INTO v1261741 (v1261742, v1261743) VALUES (1996, NULL), (1997, 2), (1, NULL), (0, 5);
+INSERT INTO v1262501 (v1262502) VALUES ('E'), ('F'), ('E,F');
+INSERT INTO v1262590 (v1262591, v1262592) VALUES ('test1', 'a5'), ('test2', 'sliding'), (NULL, 'two');
+INSERT INTO v1261669 (v1261670) VALUES (500), (1000), (1500);
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 18 UNION SELECT 36 UNION SELECT 54 UNION SELECT 72 UNION SELECT 90 UNION SELECT 108 UNION SELECT 126 UNION SELECT 144 UNION SELECT 162 UNION SELECT 180 UNION SELECT 198 UNION SELECT 216 UNION SELECT 234 UNION SELECT 252 UNION SELECT 270 UNION SELECT 288 UNION SELECT 306;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_0575----- */
+CREATE TABLE IF NOT EXISTS v12224 (v12225 ENUM('a', '', 'b')) ENGINE=MyISAM DEFAULT CHARACTER SET=utf8mb3 AUTO_INCREMENT=63;
+CREATE TABLE IF NOT EXISTS v12220 (id INT PRIMARY KEY, v12221 DECIMAL(10,1));
+CREATE TABLE IF NOT EXISTS v12158 (v12161 VARCHAR(50), v12159 INT, v12160 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v11347 (id INT PRIMARY KEY, val TEXT);
+CREATE TABLE IF NOT EXISTS x13 (id INT PRIMARY KEY, v12161 INT);
+INSERT INTO v12224 VALUES ('a'), (''), ('b'), ('a'), ('b');
+INSERT INTO v12220 VALUES (1, 0.1), (2, 0.2), (3, 0.3);
+INSERT INTO v12158 VALUES ('morty', 100, 't1'), ('rick', 200, 't2'), ('morty', 300, 't1');
+INSERT INTO v11347 VALUES (1, 'test'), (2, '0000-00-00 00:00:00.1'), (3, 'value');
+INSERT INTO x13 VALUES (1, 50), (2, 100), (3, 150);
+
+/* -----Called: synth_output_0575----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0575(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_enum_val VARCHAR(10);
+    DECLARE v_view_val VARCHAR(100);
+    DECLARE v_select_val INT;
+    DECLARE v_replace_val VARCHAR(255);
+    DECLARE v_case_val VARCHAR(100);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v12225 FROM v12224 WHERE v12225 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Input validation using IF/ELSE
+    IF p1 <= 0 OR p2 <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Input parameters must be positive integers';
+    END IF;
+
+    -- Statement 1: CREATE TABLE (recreate for freshness)
+    SET @sql1 = 'CREATE TABLE IF NOT EXISTS v12224 (v12225 ENUM(''a'', '''', ''b'')) ENGINE=MyISAM DEFAULT CHARACTER SET=utf8mb3 AUTO_INCREMENT=63';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Insert additional data based on input
+    INSERT INTO v12224 VALUES ('a'), (''), ('b');
+
+    -- Statement 2: CREATE VIEW v12226 using dynamic SQL
+    SET @sql2 = 'CREATE OR REPLACE VIEW v12226 AS SELECT CASE x2.v12221 WHEN 0.1 THEN ''c'' END AS x1 FROM v12220 AS x2';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+
+    -- Use cursor with loop (WHILE) to process enum values
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_enum_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 3: CTE with SELECT (using WITH and window function adaptation)
+    SET @sql3 = 'WITH x9 AS (SELECT x8.v12161 + 1 AS val FROM v12158 AS x8 WHERE x8.v12161 = ''morty'' AND x8.v12160 = ''t1'') SELECT COALESCE(SUM(val), 0) INTO @result3 FROM x9';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_select_val = @result3;
+
+    -- Statement 4: CREATE VIEW v12229 using dynamic SQL
+    SET @sql4 = 'CREATE OR REPLACE VIEW v12229 AS SELECT REPLACE(2.9993936277913e-241, ''0000-00-00 00:00:00.1'', 3) AS x1 FROM v11347 AS x1';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+
+    -- Extract value from view using SELECT INTO
+    SELECT x1 INTO v_replace_val FROM v12229 LIMIT 1;
+
+    -- Statement 5: CREATE VIEW v12239 using dynamic SQL
+    SET @sql5 = 'CREATE OR REPLACE VIEW v12239 AS SELECT CASE ''str'' WHEN ''STR'' THEN ''str'' WHEN NULL THEN ''null'' END AS x1 FROM v12229 AS x3';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Get case value using REPEAT...UNTIL loop
+    SET v_case_val = NULL;
+    REPEAT
+        SELECT x1 INTO v_case_val FROM v12239 LIMIT 1;
+        SET v_counter = v_counter + 1;
+    UNTIL v_case_val IS NOT NULL OR v_counter > 10
+    END REPEAT;
+
+    -- Final calculation using CASE/WHEN
+    SET result = CASE
+        WHEN p1 > p2 THEN v_counter + v_select_val
+        WHEN p1 < p2 THEN v_counter - v_select_val
+        ELSE v_counter * v_select_val
+    END;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+CREATE TABLE IF NOT EXISTS `table_toccpm` (
+    `table_toccpm_emp_id` INT,
+    `table_toccpm_department_id` INT,
+    `table_toccpm_salary` INT
+);
+
+INSERT INTO `table_toccpm` (`table_toccpm_emp_id`, `table_toccpm_department_id`, `table_toccpm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TOCCPM_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_TOCCPM_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_DEPARTMENT_ID = (SELECT TABLE_TOCCPM_DEPARTMENT_ID FROM TABLE_TOCCPM WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_RATIO = (V_SALARY * 100) / V_DEPT_AVG;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(22)) - -456 + (v_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+CREATE TABLE IF NOT EXISTS `table_9ug538` (
+    `table_9ug538_campaign_id` INT,
+    `table_9ug538_start_date` DATE,
+    `table_9ug538_end_date` DATE,
+    `table_9ug538_budget` INT,
+    `table_9ug538_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_me64fy` (
+    `table_me64fy_conversion_id` INT,
+    `table_me64fy_campaign_id` INT,
+    `table_me64fy_conversion_date` DATE
+);
+
+INSERT INTO `table_9ug538` (`table_9ug538_campaign_id`, `table_9ug538_start_date`, `table_9ug538_end_date`, `table_9ug538_budget`, `table_9ug538_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_me64fy` (`table_me64fy_conversion_id`, `table_me64fy_campaign_id`, `table_me64fy_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAMPAIGN_DAYS INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_VELOCITY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT DATEDIFF(TABLE_9UG538_END_DATE, TABLE_9UG538_START_DATE)
+    INTO V_CAMPAIGN_DAYS
+    FROM TABLE_9UG538
+    WHERE TABLE_9UG538_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CONVERSIONS
+    FROM TABLE_ME64FY
+    WHERE TABLE_ME64FY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY = (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i(-84)) - -942 + (v_total_conversions / v_campaign_days);
+
+    RETURN FLOOR(V_VELOCITY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i----- */
+CREATE TABLE IF NOT EXISTS `table_meokd9` (
+    `table_meokd9_category_id` INT,
+    `table_meokd9_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_meokd9` (`table_meokd9_category_id`, `table_meokd9_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_MEOKD9_PRICE), 0)
+    INTO V_AVG
+    FROM TABLE_MEOKD9
+    WHERE TABLE_MEOKD9_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+CREATE TABLE IF NOT EXISTS `table_cwk400` (
+    `table_cwk400_part_id` INT,
+    `table_cwk400_part_name` VARCHAR(50),
+    `table_cwk400_category_id` INT,
+    `table_cwk400_price` DECIMAL(10,2),
+    `table_cwk400_stock_quantity` INT,
+    `table_cwk400_reorder_point` INT
+);
+
+INSERT INTO `table_cwk400` (`table_cwk400_part_id`, `table_cwk400_part_name`, `table_cwk400_category_id`, `table_cwk400_price`, `table_cwk400_stock_quantity`, `table_cwk400_reorder_point`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(PART_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CWK400_STOCK_QUANTITY, 0), COALESCE(TABLE_CWK400_REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM TABLE_CWK400
+    WHERE TABLE_CWK400_PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_STOCK_RATIO = (MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by()) - 204 + ((v_stock * (MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt(-61, 40)) - -908 + ((MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(-43, -29)) - 304 + (100))) / v_reorder_point);
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = 100;
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = 80;
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = 60;
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = 40;
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = 20;
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(START_NUM INT, END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF START_NUM > END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MAX_b3ozyt(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE DIAG_COUNT INT DEFAULT 0;
+    DECLARE MYSQL_ERRNO INT;
+    DECLARE SQLSTATE_VAL VARCHAR(5);
+    DECLARE MSG TEXT;
+    
+    GET DIAGNOSTICS CONDITION 1 MYSQL_ERRNO = MYSQL_ERRNO, SQLSTATE_VAL = RETURNED_SQLSTATE, MSG = MESSAGE_TEXT;
+    SET DIAG_COUNT = DIAG_COUNT + 1;
+    
+    RETURN DIAG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1473_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_enum_val VARCHAR(10);
+    DECLARE v_char_val CHAR(35);
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_loop_done INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v1262592, v1262591 FROM v1262590 WHERE v1262592 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = 1;
+
+    -- 1. UPDATE statement adaptation: Update v1261741 using p1 and p2
+    UPDATE v1261741 AS x0 
+    SET x0.v1261743 = (CASE WHEN v1261742 = 1 THEN 1 ELSE v1261742 + 1 END) 
+    WHERE x0.v1261743 IS NULL AND x0.v1261742 = p1;
+
+    -- 2. CREATE TABLE v1262501 already exists, insert data using p2
+    IF (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(58)) - 401 + (p2 > 0) THEN
+        INSERT INTO v1262501 (v1262502) VALUES ('F');
+    ELSE
+        INSERT INTO v1262501 (v1262502) VALUES ('E');
+    END IF;
+
+    -- 3. INSERT INTO v1262590 with values from p1 and p2
+    INSERT INTO v1262590 (v1262591, v1262592) VALUES (CONCAT('p1_', p1), 'a5'), (CONCAT('p2_', p2), 'sliding');
+
+    -- 4. UPDATE v1261669 with EXTRACTVALUE and p2
+    UPDATE v1261669 AS x0 
+    SET x0.v1261670 = EXTRACTVALUE('<a>a</a>', '/a[false()and false()]') + p2
+    WHERE x0.v1261670 = p1;
+
+    -- 5. Use CURSOR to iterate over v1262590 and count rows
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_enum_val, v_char_val;
+        IF (MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(42)) - 948 + (v_loop_done) THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = (MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(-50)) - -473 + (v_counter) + 1;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Additional procedural logic: WHILE loop and CASE
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+        CASE 
+            WHEN v_counter = 5 THEN
+                SET v_counter = v_counter + 1;
+            WHEN v_counter = 8 THEN
+CALL synth_output_0575(51, 64, @_syn_15996);
+                SET v_counter = v_counter + @_syn_15996 - 7 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9()) - 776 + (2));
+            ELSE
+                SET v_counter = v_counter;
+        END CASE;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1473_proc(1, 1, @out_result);
+
+SELECT @out_result;

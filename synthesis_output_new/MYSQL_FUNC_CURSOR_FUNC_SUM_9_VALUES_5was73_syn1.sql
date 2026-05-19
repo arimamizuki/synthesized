@@ -1,0 +1,349 @@
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= (MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(-61)) - 853 + (1) THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = V_SUM + V_I;
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_SQUARES_btf2hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + (V_COUNTER * V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+CREATE TABLE IF NOT EXISTS `table_sqshp3` (
+    `table_sqshp3_emp_id` INT,
+    `table_sqshp3_department_id` INT,
+    `table_sqshp3_hire_date` DATE
+);
+
+INSERT INTO `table_sqshp3` (`table_sqshp3_emp_id`, `table_sqshp3_department_id`, `table_sqshp3_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_SQSHP3_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_SQSHP3
+    WHERE TABLE_SQSHP3_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(97)) - -373 + (floor(v_avg_tenure * 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN V_NET_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+CREATE TABLE IF NOT EXISTS `table_u6bv6v` (
+    `table_u6bv6v_campaign_id` INT,
+    `table_u6bv6v_start_date` DATE
+);
+
+INSERT INTO `table_u6bv6v` (`table_u6bv6v_campaign_id`, `table_u6bv6v_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_U6BV6V_START_DATE)
+    INTO V_DAY
+    FROM TABLE_U6BV6V
+    WHERE TABLE_U6BV6V_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(84)) - -148 + (v_day);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF STR IS NULL OR STR = '' THEN
+        SIGNAL SQLSTATE '22004' SET MESSAGE_TEXT = 'CANNOT PARSE NULL OR EMPTY STRING';
+    END IF;
+    IF NOT STR REGEXP '^[+-]?[0-9]+$' THEN
+        SIGNAL SQLSTATE '22018' SET MESSAGE_TEXT = 'STRING IS NOT A VALID INTEGER';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(-32)) - -298 + (cast(str as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+CREATE TABLE IF NOT EXISTS `table_6jyzbz` (
+    `table_6jyzbz_supplier_id` INT,
+    `table_6jyzbz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6jyzbz` (`table_6jyzbz_supplier_id`, `table_6jyzbz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_6JYZBZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_6JYZBZ
+    WHERE TABLE_6JYZBZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (floor(v_rating * 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 12 / 100;
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = V_ENTRY_FEE * 2;
+    END CASE;
+
+    RETURN CAST(V_PRIZE_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE;
+
+    SET V_TOTAL_PRICE = (MYSQL_FUNC_PROC_DECIMAL_zozmya()) - 940 + (v_total_price + (v_area / 100) * 10);
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_ROOMS * 15);
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 150 / 100;
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+CREATE TABLE IF NOT EXISTS `table_m5l6r9` (
+    `table_m5l6r9_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `table_m5l6r9` (`table_m5l6r9_cdecimal`) VALUES (42);
+
+/* -----Called: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(TABLE_M5L6R9_CDECIMAL AS SIGNED) INTO RESULT FROM `TABLE_M5L6R9` LIMIT 1;
+    RETURN COALESCE(RESULT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(-98, 26)) - 600 + ((MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(13)) - 734 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(98)) - 519 + (v_sum) + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73();

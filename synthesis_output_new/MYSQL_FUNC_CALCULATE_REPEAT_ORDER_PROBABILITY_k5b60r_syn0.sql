@@ -1,0 +1,454 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_dec6ga` (
+    `table_dec6ga_order_id` INT,
+    `table_dec6ga_customer_id` INT,
+    `table_dec6ga_order_date` DATE,
+    `table_dec6ga_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_a2ykm0` (
+    `table_a2ykm0_customer_id` INT,
+    `table_a2ykm0_country` INT
+);
+
+INSERT INTO `table_dec6ga` (`table_dec6ga_order_id`, `table_dec6ga_customer_id`, `table_dec6ga_order_date`, `table_dec6ga_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_a2ykm0` (`table_a2ykm0_customer_id`, `table_a2ykm0_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+CREATE TABLE IF NOT EXISTS `table_apsp1p` (
+    `table_apsp1p_customer_id` INT,
+    `table_apsp1p_registration_date` DATE,
+    `table_apsp1p_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j667hh` (
+    `table_j667hh_order_id` INT,
+    `table_j667hh_customer_id` INT,
+    `table_j667hh_order_date` DATE,
+    `table_j667hh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_apsp1p` (`table_apsp1p_customer_id`, `table_apsp1p_registration_date`, `table_apsp1p_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_j667hh` (`table_j667hh_order_id`, `table_j667hh_customer_id`, `table_j667hh_order_date`, `table_j667hh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM TABLE_J667HH
+        WHERE TABLE_J667HH_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(TABLE_J667HH_ORDER_DATE), MONTH(TABLE_J667HH_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 1.5;
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN FLOOR(V_PATTERN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+CREATE TABLE IF NOT EXISTS `table_tenjc7` (
+    `table_tenjc7_product_id` INT,
+    `table_tenjc7_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tenjc7` (`table_tenjc7_product_id`, `table_tenjc7_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TENJC7_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_TENJC7
+    WHERE TABLE_TENJC7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN (MYSQL_FUNC_DISCOUNT_rxl9cd(40)) - 357 + (5);
+    ELSEIF V_PRICE > 500 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(-77)) - 263 + (4);
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+CREATE TABLE IF NOT EXISTS `table_ttn14y` (
+    `table_ttn14y_claim_id` INT,
+    `table_ttn14y_policy_id` INT,
+    `table_ttn14y_claim_date` DATE,
+    `table_ttn14y_claim_amount` DECIMAL(10,2),
+    `table_ttn14y_status` VARCHAR(50),
+    `table_ttn14y_processing_days` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hwxj55` (
+    `table_hwxj55_policy_id` INT,
+    `table_hwxj55_customer_id` INT,
+    `table_hwxj55_policy_type` VARCHAR(50),
+    `table_hwxj55_premium_annual` INT
+);
+
+INSERT INTO `table_ttn14y` (`table_ttn14y_claim_id`, `table_ttn14y_policy_id`, `table_ttn14y_claim_date`, `table_ttn14y_claim_amount`, `table_ttn14y_status`, `table_ttn14y_processing_days`) VALUES (1, 2, '2024-01-01', 1.0, 'test', 6);
+
+INSERT INTO `table_hwxj55` (`table_hwxj55_policy_id`, `table_hwxj55_customer_id`, `table_hwxj55_policy_type`, `table_hwxj55_premium_annual`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_AVG_PROCESSING_DAYS DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_APPROVED_CLAIMS INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_TTN14Y_PROCESSING_DAYS), 0)
+    INTO V_TOTAL_CLAIMS, V_AVG_PROCESSING_DAYS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPROVED_CLAIMS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM AND TABLE_TTN14Y_STATUS = 'APPROVED';
+
+    IF V_TOTAL_CLAIMS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_EFFICIENCY_SCORE = 100 - (V_AVG_PROCESSING_DAYS * 2) + (V_APPROVED_CLAIMS * 10 / V_TOTAL_CLAIMS);
+
+    RETURN GREATEST(V_EFFICIENCY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DISCOUNT_rxl9cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DISCOUNT_rxl9cd(AGE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+  IF AGE < 15 THEN RETURN 0;
+  ELSEIF AGE < 30 THEN RETURN 10;
+  ELSEIF AGE < 50 THEN RETURN (MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + ((MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(-2, 73)) - -787 + (20));
+  ELSE RETURN 30;
+  END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A < P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry----- */
+CREATE TABLE IF NOT EXISTS `table_l89u66` (
+    `table_l89u66_contract_id` INT,
+    `table_l89u66_customer_id` INT,
+    `table_l89u66_equipment_type` VARCHAR(50),
+    `table_l89u66_contract_term_years` INT,
+    `table_l89u66_annual_cost` DECIMAL(10,2),
+    `table_l89u66_last_service_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sj3wnn` (
+    `table_sj3wnn_record_id` INT,
+    `table_sj3wnn_contract_id` INT,
+    `table_sj3wnn_service_date` DATE,
+    `table_sj3wnn_service_type` VARCHAR(50),
+    `table_sj3wnn_labor_hours` INT,
+    `table_sj3wnn_parts_replaced` INT
+);
+
+INSERT INTO `table_l89u66` (`table_l89u66_contract_id`, `table_l89u66_customer_id`, `table_l89u66_equipment_type`, `table_l89u66_contract_term_years`, `table_l89u66_annual_cost`, `table_l89u66_last_service_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_sj3wnn` (`table_sj3wnn_record_id`, `table_sj3wnn_contract_id`, `table_sj3wnn_service_date`, `table_sj3wnn_service_type`, `table_sj3wnn_labor_hours`, `table_sj3wnn_parts_replaced`) VALUES (1, 2, '2024-01-01', 'test', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANNUAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_TOTAL_PARTS_COST INT DEFAULT 0;
+    DECLARE V_SERVICE_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L89U66_ANNUAL_COST, 500)
+    INTO V_ANNUAL_COST
+    FROM TABLE_L89U66
+    WHERE TABLE_L89U66_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SJ3WNN_LABOR_HOURS), 0), COUNT(*)
+    INTO V_TOTAL_LABOR_HOURS, V_SERVICE_COUNT
+    FROM TABLE_SJ3WNN
+    WHERE TABLE_SJ3WNN_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SJ3WNN_PARTS_REPLACED), 0) INTO V_TOTAL_PARTS_COST
+    FROM TABLE_SJ3WNN
+    WHERE TABLE_SJ3WNN_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_ROI_SCORE = V_ANNUAL_COST - (V_TOTAL_LABOR_HOURS * 75) - V_TOTAL_PARTS_COST;
+
+    RETURN (MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc(87)) - -38 + (cast(v_roi_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EVALUATE_NUMBER_CLASSIFICATION_cupvnc(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_POSITIVE INT DEFAULT 0;
+    DECLARE V_IS_EVEN INT DEFAULT 0;
+    DECLARE V_IS_PERFECT_SQUARE INT DEFAULT 0;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+    DECLARE V_CLASS_SCORE INT DEFAULT 0;
+
+    IF N > 0 THEN
+        SET V_IS_POSITIVE = (MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(49)) - 320 + (1);
+    END IF;
+
+    IF N % 2 = 0 THEN
+        SET V_IS_EVEN = 1;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(ABS(N)));
+    IF V_SQRT_N * V_SQRT_N = ABS(N) THEN
+        SET V_IS_PERFECT_SQUARE = 1;
+    END IF;
+
+    SET V_CLASS_SCORE = (V_IS_POSITIVE * 4) + (V_IS_EVEN * 2) + V_IS_PERFECT_SQUARE;
+
+    RETURN V_CLASS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+CREATE TABLE IF NOT EXISTS `table_9mgf73` (
+    `table_9mgf73_class_id` INT,
+    `table_9mgf73_instructor_id` INT,
+    `table_9mgf73_class_type` VARCHAR(50),
+    `table_9mgf73_duration_minutes` INT,
+    `table_9mgf73_max_capacity` INT,
+    `table_9mgf73_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_t7gqnp` (
+    `table_t7gqnp_booking_id` INT,
+    `table_t7gqnp_member_id` INT,
+    `table_t7gqnp_class_id` INT,
+    `table_t7gqnp_booking_date` DATE,
+    `table_t7gqnp_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9mgf73` (`table_9mgf73_class_id`, `table_9mgf73_instructor_id`, `table_9mgf73_class_type`, `table_9mgf73_duration_minutes`, `table_9mgf73_max_capacity`, `table_9mgf73_price`) VALUES (1, 2, 'test', 4, 5, 1.0);
+
+INSERT INTO `table_t7gqnp` (`table_t7gqnp_booking_id`, `table_t7gqnp_member_id`, `table_t7gqnp_class_id`, `table_t7gqnp_booking_date`, `table_t7gqnp_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_CAPACITY INT DEFAULT 20;
+    DECLARE V_BOOKED_COUNT INT DEFAULT 0;
+    DECLARE V_ACTUAL_ATTENDANCE INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_BOOKED_COUNT
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COALESCE(MAX(TABLE_9MGF73_MAX_CAPACITY), 20)
+    INTO V_MAX_CAPACITY
+    FROM TABLE_9MGF73 F
+    WHERE TABLE_9MGF73_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTUAL_ATTENDANCE
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM AND TABLE_T7GQNP_ATTENDANCE_STATUS = 'ATTENDED';
+
+    IF V_MAX_CAPACITY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_COUNT * 100) / V_MAX_CAPACITY;
+
+    IF V_OCCUPANCY_PERCENT > 100 THEN
+        SET V_OCCUPANCY_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_ORDER_PROBABILITY_k5b60r(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_PROBABILITY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_DEC6GA
+    WHERE TABLE_DEC6GA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(DATEDIFF(CURDATE(), MAX(TABLE_DEC6GA_ORDER_DATE)), (MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry(26)) - -728 + (0))
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_DEC6GA
+    WHERE TABLE_DEC6GA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROBABILITY = (MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(-39)) - -733 + (100 - least((v_days_since_last_order * 5) + (100 / v_order_count), 100));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(-13)) - 913 + ((MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(-61, -51)) - 85 + (greatest(v_probability, 0)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REPEAT_ORDER_PROBABILITY_k5b60r(1);

@@ -1,0 +1,328 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1hsdg0` (
+    `table_1hsdg0_category_id` INT
+);
+
+INSERT INTO `table_1hsdg0` (`table_1hsdg0_category_id`) VALUES (1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+CREATE TABLE IF NOT EXISTS `table_q6xalv` (
+    `table_q6xalv_customer_id` INT,
+    `table_q6xalv_registration_date` DATE
+);
+
+INSERT INTO `table_q6xalv` (`table_q6xalv_customer_id`, `table_q6xalv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_Q6XALV_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_Q6XALV
+    WHERE TABLE_Q6XALV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+CREATE TABLE IF NOT EXISTS `table_orbfvy` (
+    `table_orbfvy_product_id` INT,
+    `table_orbfvy_category_id` INT,
+    `table_orbfvy_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_orbfvy` (`table_orbfvy_product_id`, `table_orbfvy_category_id`, `table_orbfvy_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_ORBFVY
+    WHERE TABLE_ORBFVY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_ORBFVY;
+
+    RETURN FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_NEGATE_VALUE_1ykrf9(1)) - 423 + ((MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(45)) - 29 + ((MYSQL_FUNC_PROC_BIT1_7d7is7()) - -908 + (-1)));
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + (p_a / p_b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+CREATE TABLE IF NOT EXISTS `table_gmjb6t` (
+    `table_gmjb6t_cbit` BIT(1)
+);
+
+INSERT INTO `table_gmjb6t` (`table_gmjb6t_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT1_7d7is7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    
+    SELECT CAST(TABLE_GMJB6T_CBIT AS UNSIGNED) INTO RESULT 
+    FROM `TABLE_GMJB6T` 
+    LIMIT 1;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1----- */
+CREATE TABLE IF NOT EXISTS `table_y6pcvf` (
+    `table_y6pcvf_animal_id` INT,
+    `table_y6pcvf_name` VARCHAR(50),
+    `table_y6pcvf_species` INT,
+    `table_y6pcvf_breed` INT,
+    `table_y6pcvf_age_months` INT,
+    `table_y6pcvf_weight_kg` INT,
+    `table_y6pcvf_adoption_fee` INT,
+    `table_y6pcvf_arrival_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vkheg9` (
+    `table_vkheg9_application_id` INT,
+    `table_vkheg9_animal_id` INT,
+    `table_vkheg9_applicant_id` INT,
+    `table_vkheg9_application_date` DATE,
+    `table_vkheg9_status` VARCHAR(50)
+);
+
+INSERT INTO `table_y6pcvf` (`table_y6pcvf_animal_id`, `table_y6pcvf_name`, `table_y6pcvf_species`, `table_y6pcvf_breed`, `table_y6pcvf_age_months`, `table_y6pcvf_weight_kg`, `table_y6pcvf_adoption_fee`, `table_y6pcvf_arrival_date`) VALUES (1, '2024-01-01', 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vkheg9` (`table_vkheg9_application_id`, `table_vkheg9_animal_id`, `table_vkheg9_applicant_id`, `table_vkheg9_application_date`, `table_vkheg9_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(ANIMAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANIMAL_AGE INT DEFAULT 0;
+    DECLARE V_ADOPTION_FEE INT DEFAULT 100;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_MATCH_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()),
+           COALESCE(TABLE_Y6PCVF_ADOPTION_FEE, 100)
+    INTO V_ANIMAL_AGE, V_ADOPTION_FEE
+    FROM TABLE_Y6PCVF
+    WHERE TABLE_Y6PCVF_ANIMAL_ID = ANIMAL_ID_PARAM;
+
+    SET V_ANIMAL_AGE = (MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(-59)) - 840 + (12);
+
+    SELECT COUNT(*) INTO V_APPLICATION_COUNT
+    FROM TABLE_VKHEG9
+    WHERE TABLE_VKHEG9_ANIMAL_ID = ANIMAL_ID_PARAM AND TABLE_VKHEG9_STATUS = 'PENDING';
+
+    SET V_MATCH_SCORE = 100 - V_ANIMAL_AGE - (V_ADOPTION_FEE / 10) + (V_APPLICATION_COUNT * 10);
+
+    RETURN CAST(V_MATCH_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+CREATE TABLE IF NOT EXISTS `table_0rmlv2` (
+    `table_0rmlv2_id` INT,
+    `table_0rmlv2_username` VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6aha2u` (
+    `table_6aha2u_user_id` INT
+);
+
+INSERT INTO `table_0rmlv2` (`table_0rmlv2_id`, `table_0rmlv2_username`) VALUES (1, 'test');
+
+INSERT INTO `table_6aha2u` (`table_6aha2u_user_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(P_USERNAME_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE USERNAME_VAL VARCHAR(30);
+    DECLARE PHOTO_COUNT INT;
+    
+    SELECT `TABLE_0RMLV2_USERNAME` INTO USERNAME_VAL FROM `TABLE_0RMLV2` WHERE `TABLE_0RMLV2_ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF USERNAME_VAL IS NULL THEN
+        RETURN 0;
+    END IF;
+    
+    SELECT COUNT(UP.`TABLE_6AHA2U_USER_ID`) INTO PHOTO_COUNT
+    FROM `TABLE_6AHA2U` AS UP
+    LEFT JOIN `TABLE_0RMLV2` AS U ON U.`TABLE_0RMLV2_ID` = UP.`TABLE_6AHA2U_USER_ID`
+    WHERE U.`TABLE_0RMLV2_USERNAME` = USERNAME_VAL;
+    
+    RETURN COALESCE(PHOTO_COUNT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_VALUE_1ykrf9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_VALUE_1ykrf9(X INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(-65)) - 18 + (-x);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+CREATE TABLE IF NOT EXISTS `table_zwipgx` (
+    `table_zwipgx_emp_id` INT,
+    `table_zwipgx_department_id` INT,
+    `table_zwipgx_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rorogt` (
+    `table_rorogt_department_id` INT,
+    `table_rorogt_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zwipgx` (`table_zwipgx_emp_id`, `table_zwipgx_department_id`, `table_zwipgx_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_rorogt` (`table_rorogt_department_id`, `table_rorogt_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_ZWIPGX_SALARY, TABLE_ZWIPGX_DEPARTMENT_ID
+    INTO V_SALARY, V_DEPT_ID
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) + 1
+    INTO V_RANK
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_DEPARTMENT_ID = V_DEPT_ID AND TABLE_ZWIPGX_SALARY > V_SALARY;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + (v_rank);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_1HSDG0
+    WHERE TABLE_1HSDG0_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(-85, -79)) - -461 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(51)) - -618 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(62)) - -411 + (v_count)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(1);

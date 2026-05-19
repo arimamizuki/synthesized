@@ -1,0 +1,400 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_an7207` (
+    `table_an7207_emp_id` INT,
+    `table_an7207_manager_id` INT,
+    `table_an7207_department_id` INT,
+    `table_an7207_salary` INT,
+    `table_an7207_hire_date` DATE
+);
+
+INSERT INTO `table_an7207` (`table_an7207_emp_id`, `table_an7207_manager_id`, `table_an7207_department_id`, `table_an7207_salary`, `table_an7207_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(PRICE INT, QTY INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISCOUNT DECIMAL(10,2);
+
+    CASE
+        WHEN QTY >= 100 THEN SET V_DISCOUNT = PRICE * 0.20;
+        WHEN QTY >= 50 THEN SET V_DISCOUNT = PRICE * 0.15;
+        WHEN QTY >= 20 THEN SET V_DISCOUNT = PRICE * 0.10;
+        WHEN QTY >= 10 THEN SET V_DISCOUNT = PRICE * 0.05;
+        ELSE SET V_DISCOUNT = 0;
+    END CASE;
+
+    RETURN PRICE - V_DISCOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+CREATE TABLE IF NOT EXISTS `table_90sd8x` (
+    `table_90sd8x_property_id` INT,
+    `table_90sd8x_location` INT,
+    `table_90sd8x_bedrooms` INT,
+    `table_90sd8x_bathrooms` INT,
+    `table_90sd8x_monthly_rent` INT,
+    `table_90sd8x_property_tax_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_19x1zt` (
+    `table_19x1zt_request_id` INT,
+    `table_19x1zt_property_id` INT,
+    `table_19x1zt_request_date` DATE,
+    `table_19x1zt_estimated_cost` DECIMAL(10,2),
+    `table_19x1zt_priority` INT
+);
+
+INSERT INTO `table_90sd8x` (`table_90sd8x_property_id`, `table_90sd8x_location`, `table_90sd8x_bedrooms`, `table_90sd8x_bathrooms`, `table_90sd8x_monthly_rent`, `table_90sd8x_property_tax_annual`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_19x1zt` (`table_19x1zt_request_id`, `table_19x1zt_property_id`, `table_19x1zt_request_date`, `table_19x1zt_estimated_cost`, `table_19x1zt_priority`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_ANNUAL_PROPERTY_TAX INT DEFAULT 0;
+    DECLARE V_MAINTENANCE_COST_ANNUAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_INCOME INT DEFAULT 0;
+    DECLARE V_NET_YIELD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_90SD8X_MONTHLY_RENT, 0), COALESCE(TABLE_90SD8X_PROPERTY_TAX_ANNUAL, 0)
+    INTO V_MONTHLY_RENT, V_ANNUAL_PROPERTY_TAX
+    FROM TABLE_90SD8X
+    WHERE TABLE_90SD8X_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_19X1ZT_ESTIMATED_COST), 0)
+    INTO V_MAINTENANCE_COST_ANNUAL
+    FROM TABLE_19X1ZT
+    WHERE TABLE_19X1ZT_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_ANNUAL_INCOME = (V_MONTHLY_RENT * 12) - V_ANNUAL_PROPERTY_TAX - V_MAINTENANCE_COST_ANNUAL;
+
+    RETURN V_ANNUAL_INCOME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+CREATE TABLE IF NOT EXISTS `table_2waz00` (
+    `table_2waz00_emp_id` INT,
+    `table_2waz00_department_id` INT,
+    `table_2waz00_hire_date` DATE,
+    `table_2waz00_salary` INT
+);
+
+INSERT INTO `table_2waz00` (`table_2waz00_emp_id`, `table_2waz00_department_id`, `table_2waz00_hire_date`, `table_2waz00_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_2WAZ00_SALARY), 0),
+           COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_2WAZ00_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_2WAZ00
+    WHERE TABLE_2WAZ00_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9(98)) - -543 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(87)) - 599 + (floor((v_avg_salary * v_avg_tenure) / greatest(v_emp_count, 1))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn----- */
+CREATE TABLE IF NOT EXISTS `table_jgwy5p` (
+    `table_jgwy5p_order_id` INT,
+    `table_jgwy5p_customer_id` INT,
+    `table_jgwy5p_order_date` DATE
+);
+
+INSERT INTO `table_jgwy5p` (`table_jgwy5p_order_id`, `table_jgwy5p_customer_id`, `table_jgwy5p_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MAX(TABLE_JGWY5P_ORDER_DATE)
+    INTO V_LAST_ORDER
+    FROM TABLE_JGWY5P
+    WHERE TABLE_JGWY5P_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER IS NULL THEN
+        RETURN 999;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_LAST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9----- */
+CREATE TABLE IF NOT EXISTS `table_6gsq8i` (
+    `table_6gsq8i_emp_id` INT,
+    `table_6gsq8i_department_id` INT,
+    `table_6gsq8i_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_pj7xye` (
+    `table_pj7xye_department_id` INT,
+    `table_pj7xye_name` VARCHAR(50)
+);
+
+INSERT INTO `table_6gsq8i` (`table_6gsq8i_emp_id`, `table_6gsq8i_department_id`, `table_6gsq8i_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_pj7xye` (`table_pj7xye_department_id`, `table_pj7xye_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_6GSQ8I_SALARY), (MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7(-87)) - 962 + (0)), COALESCE(MAX(TABLE_6GSQ8I_SALARY), 0), COALESCE(MIN(TABLE_6GSQ8I_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_6GSQ8I
+    WHERE TABLE_6GSQ8I_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_AVG_SALARY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = (MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(-54)) - -932 + ((MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(70, 34)) - -400 + (((v_max_salary - v_min_salary) * 100) / v_avg_salary));
+
+    RETURN V_VARIANCE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(SIZE INT, POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF SIZE <= 0 OR POSITIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET POSITIONS = POSITIONS % SIZE;
+    IF POSITIONS = 0 THEN
+        RETURN (SIZE * (SIZE - 1)) / 2;
+    END IF;
+
+    SET V_I = 1;
+    WHILE V_I <= POSITIONS DO
+        SET V_J = SIZE;
+        WHILE V_J > 1 DO
+            SET V_RESULT = V_RESULT + 1;
+            SET V_J = V_J - 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+CREATE TABLE IF NOT EXISTS `table_k70n3e` (
+    `table_k70n3e_order_id` INT,
+    `table_k70n3e_customer_id` INT,
+    `table_k70n3e_store_id` INT,
+    `table_k70n3e_order_date` DATE,
+    `table_k70n3e_total_amount` DECIMAL(10,2),
+    `table_k70n3e_delivery_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ty3v91` (
+    `table_ty3v91_store_id` INT,
+    `table_ty3v91_name` VARCHAR(50),
+    `table_ty3v91_region` INT,
+    `table_ty3v91_delivery_radius_miles` INT
+);
+
+INSERT INTO `table_k70n3e` (`table_k70n3e_order_id`, `table_k70n3e_customer_id`, `table_k70n3e_store_id`, `table_k70n3e_order_date`, `table_k70n3e_total_amount`, `table_k70n3e_delivery_fee`) VALUES (1, 2, 3, '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_ty3v91` (`table_ty3v91_store_id`, `table_ty3v91_name`, `table_ty3v91_region`, `table_ty3v91_delivery_radius_miles`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DELIVERY_FEE INT DEFAULT 5;
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_ADDITIONAL_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_DELIVERY_FEE INT DEFAULT 0;
+
+    SELECT TABLE_TY3V91_DELIVERY_RADIUS_MILES INTO V_DELIVERY_RADIUS
+    FROM TABLE_K70N3E O
+    JOIN TABLE_TY3V91 S ON TABLE_K70N3E_STORE_ID = TABLE_TY3V91_STORE_ID
+    WHERE TABLE_K70N3E_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_DELIVERY_RADIUS > 10 THEN
+        SET V_ADDITIONAL_FEE = (V_DELIVERY_RADIUS - 10) * 2;
+    END IF;
+
+    SET V_TOTAL_DELIVERY_FEE = V_BASE_DELIVERY_FEE + V_ADDITIONAL_FEE;
+
+    RETURN CAST(V_TOTAL_DELIVERY_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7----- */
+CREATE TABLE IF NOT EXISTS `table_jxahv8` (
+    `table_jxahv8_prescription_id` INT,
+    `table_jxahv8_pet_id` INT,
+    `table_jxahv8_vet_id` INT,
+    `table_jxahv8_medication_name` VARCHAR(50),
+    `table_jxahv8_dosage_mg` INT,
+    `table_jxahv8_frequency` INT,
+    `table_jxahv8_duration_days` INT,
+    `table_jxahv8_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_xfr3z3` (
+    `table_xfr3z3_pet_id` INT,
+    `table_xfr3z3_weight_kg` INT,
+    `table_xfr3z3_breed` INT
+);
+
+INSERT INTO `table_jxahv8` (`table_jxahv8_prescription_id`, `table_jxahv8_pet_id`, `table_jxahv8_vet_id`, `table_jxahv8_medication_name`, `table_jxahv8_dosage_mg`, `table_jxahv8_frequency`, `table_jxahv8_duration_days`, `table_jxahv8_price`) VALUES (1, 2, 3, 'test', 5, 6, 7, 1.0);
+
+INSERT INTO `table_xfr3z3` (`table_xfr3z3_pet_id`, `table_xfr3z3_weight_kg`, `table_xfr3z3_breed`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7(PRESCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DOSAGE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 7;
+    DECLARE V_BASE_PRICE INT DEFAULT 20;
+    DECLARE V_WEIGHT_FACTOR INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JXAHV8_DOSAGE_MG, 50), COALESCE(TABLE_JXAHV8_DURATION_DAYS, 7)
+    INTO V_DOSAGE, V_DURATION
+    FROM TABLE_JXAHV8
+    WHERE TABLE_JXAHV8_PRESCRIPTION_ID = PRESCRIPTION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_XFR3Z3_WEIGHT_KG, 5) INTO V_WEIGHT_FACTOR
+    FROM TABLE_JXAHV8 VP
+    JOIN TABLE_XFR3Z3 P ON TABLE_JXAHV8_PET_ID = TABLE_XFR3Z3_PET_ID
+    WHERE TABLE_JXAHV8_PRESCRIPTION_ID = PRESCRIPTION_ID_PARAM;
+
+    SET V_TOTAL_COST = V_BASE_PRICE + (V_DOSAGE / 10) * 5 + (V_DURATION * 2);
+
+    IF V_WEIGHT_FACTOR > 30 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 15;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_MOD_pufptq----- */
+CREATE TABLE IF NOT EXISTS `table_ak02w3` (
+    `table_ak02w3_customer_id` INT,
+    `table_ak02w3_country` INT
+);
+
+INSERT INTO `table_ak02w3` (`table_ak02w3_customer_id`, `table_ak02w3_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_MOD_pufptq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_MOD_pufptq(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_AK02W3
+    WHERE TABLE_AK02W3_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_AN7207_SALARY, TIMESTAMPDIFF(YEAR, TABLE_AN7207_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_AN7207
+    WHERE TABLE_AN7207_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_MOD_pufptq(-30)) - 363 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(-70)) - -242 + ((MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(-96)) - -88 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(-57, -26)) - 168 + (v_salary * (1 + v_tenure_years * 0.02)))));
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - 959 + (floor(v_adjusted_salary));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(1);

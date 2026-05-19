@@ -1,0 +1,431 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS test_t1 (a CHAR(16), b INT);
+CREATE TABLE IF NOT EXISTS test_t2 (a CHAR(16), b INT, c INT);
+INSERT INTO test_t2 VALUES ('x', 1, 10), ('y', 2, 20), ('z', 3, 30), ('w', 4, 40), ('v', 5, 50);
+INSERT INTO test_t1 VALUES ('init', 0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+CREATE TABLE IF NOT EXISTS `table_yywzmn` (
+    `table_yywzmn_supplier_id` INT,
+    `table_yywzmn_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_yywzmn` (`table_yywzmn_supplier_id`, `table_yywzmn_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_YYWZMN_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_YYWZMN
+    WHERE TABLE_YYWZMN_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+CREATE TABLE IF NOT EXISTS `table_s3jw0e` (
+    `table_s3jw0e_emp_id` INT,
+    `table_s3jw0e_department_id` INT,
+    `table_s3jw0e_salary` INT,
+    `table_s3jw0e_hire_date` DATE,
+    `table_s3jw0e_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_s3jw0e` (`table_s3jw0e_emp_id`, `table_s3jw0e_department_id`, `table_s3jw0e_salary`, `table_s3jw0e_hire_date`, `table_s3jw0e_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TALENT_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S3JW0E_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_S3JW0E_HIRE_DATE, CURDATE()), COALESCE(TABLE_S3JW0E_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_S3JW0E
+    WHERE TABLE_S3JW0E_EMP_ID = EMP_ID_PARAM;
+
+    SET V_TALENT_INDEX = (MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod(87)) - -888 + ((v_performance * 40) + (v_tenure_years * 10) + (v_salary / 500));
+
+    RETURN (MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(76)) - 728 + (v_talent_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod----- */
+CREATE TABLE IF NOT EXISTS `table_lxxcyt` (
+    `table_lxxcyt_customer_id` INT,
+    `table_lxxcyt_registration_date` DATE,
+    `table_lxxcyt_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8m6y37` (
+    `table_8m6y37_order_id` INT,
+    `table_8m6y37_customer_id` INT,
+    `table_8m6y37_order_date` DATE,
+    `table_8m6y37_total_amount` DECIMAL(10,2),
+    `table_8m6y37_shipping_country` INT
+);
+
+INSERT INTO `table_lxxcyt` (`table_lxxcyt_customer_id`, `table_lxxcyt_registration_date`, `table_lxxcyt_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_8m6y37` (`table_8m6y37_order_id`, `table_8m6y37_customer_id`, `table_8m6y37_order_date`, `table_8m6y37_total_amount`, `table_8m6y37_shipping_country`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CROSS_BORDER_RATIO_on2eod(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CROSS_BORDER_ORDERS INT DEFAULT 0;
+    DECLARE V_CROSS_BORDER_RATIO INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_LXXCYT_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_LXXCYT
+    WHERE TABLE_LXXCYT_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_8M6Y37
+    WHERE TABLE_8M6Y37_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CROSS_BORDER_ORDERS
+    FROM TABLE_8M6Y37
+    WHERE TABLE_8M6Y37_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_8M6Y37_SHIPPING_COUNTRY != V_CUSTOMER_COUNTRY;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CROSS_BORDER_RATIO = (V_CROSS_BORDER_ORDERS * 100) / V_TOTAL_ORDERS;
+
+    RETURN V_CROSS_BORDER_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(LIMIT_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_COMPOSITE INT DEFAULT 0;
+
+    IF LIMIT_NUM < (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(-1)) - 368 + (2) THEN
+        RETURN (MYSQL_FUNC_CALCULATE_STUDENT_DEPARTMENT_CONTRIBUTION_hgk8w9(7)) - 329 + (0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= LIMIT_NUM DO
+        SET V_IS_COMPOSITE = 0;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_COMPOSITE = 1;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_COMPOSITE = 0 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(-92)) - -488 + (v_count) + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STUDENT_DEPARTMENT_CONTRIBUTION_hgk8w9----- */
+CREATE TABLE IF NOT EXISTS `table_wg5zo3` (
+    `table_wg5zo3_student_id` INT,
+    `table_wg5zo3_name` VARCHAR(50),
+    `table_wg5zo3_gpa` INT,
+    `table_wg5zo3_major_id` INT,
+    `table_wg5zo3_enrollment_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nytk0q` (
+    `table_nytk0q_major_id` INT,
+    `table_nytk0q_name` VARCHAR(50),
+    `table_nytk0q_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mi2vhp` (
+    `table_mi2vhp_department_id` INT,
+    `table_mi2vhp_name` VARCHAR(50),
+    `table_mi2vhp_budget` INT
+);
+
+INSERT INTO `table_wg5zo3` (`table_wg5zo3_student_id`, `table_wg5zo3_name`, `table_wg5zo3_gpa`, `table_wg5zo3_major_id`, `table_wg5zo3_enrollment_year`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_nytk0q` (`table_nytk0q_major_id`, `table_nytk0q_name`, `table_nytk0q_department_id`) VALUES (1, 'test', 3);
+
+INSERT INTO `table_mi2vhp` (`table_mi2vhp_department_id`, `table_mi2vhp_name`, `table_mi2vhp_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STUDENT_DEPARTMENT_CONTRIBUTION_hgk8w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STUDENT_DEPARTMENT_CONTRIBUTION_hgk8w9(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_MAJOR_ID INT DEFAULT 0;
+    DECLARE V_DEPARTMENT_ID INT DEFAULT 0;
+    DECLARE V_DEPT_STUDENT_COUNT INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CONTRIBUTION_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WG5ZO3_GPA, 0.00), TABLE_WG5ZO3_MAJOR_ID
+    INTO V_GPA, V_MAJOR_ID
+    FROM TABLE_WG5ZO3
+    WHERE TABLE_WG5ZO3_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT TABLE_NYTK0Q_DEPARTMENT_ID
+    INTO V_DEPARTMENT_ID
+    FROM TABLE_NYTK0Q
+    WHERE TABLE_NYTK0Q_MAJOR_ID = V_MAJOR_ID;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_WG5ZO3_GPA), 0.00)
+    INTO V_DEPT_STUDENT_COUNT, V_DEPT_AVG_GPA
+    FROM TABLE_WG5ZO3 S
+    JOIN TABLE_NYTK0Q M ON TABLE_WG5ZO3_MAJOR_ID = TABLE_NYTK0Q_MAJOR_ID
+    WHERE TABLE_NYTK0Q_DEPARTMENT_ID = V_DEPARTMENT_ID;
+
+    IF V_GPA > V_DEPT_AVG_GPA THEN
+        SET V_CONTRIBUTION_SCORE = ((V_GPA - V_DEPT_AVG_GPA) * 100) + (V_DEPT_STUDENT_COUNT * 2);
+    ELSE
+        SET V_CONTRIBUTION_SCORE = (V_GPA * 100) / GREATEST(V_DEPT_AVG_GPA, 1);
+    END IF;
+
+    RETURN FLOOR(V_CONTRIBUTION_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+CREATE TABLE IF NOT EXISTS `table_8bnzgq` (
+    `table_8bnzgq_emp_id` INT,
+    `table_8bnzgq_department_id` INT
+);
+
+INSERT INTO `table_8bnzgq` (`table_8bnzgq_emp_id`, `table_8bnzgq_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8BNZGQ
+    WHERE TABLE_8BNZGQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT * 10;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+CREATE TABLE IF NOT EXISTS `table_1ffs7g` (
+    `table_1ffs7g_customer_id` INT,
+    `table_1ffs7g_status` VARCHAR(50)
+);
+
+INSERT INTO `table_1ffs7g` (`table_1ffs7g_customer_id`, `table_1ffs7g_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACTIVE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ACTIVE_COUNT
+    FROM TABLE_1FFS7G
+    WHERE TABLE_1FFS7G_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1FFS7G_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + (v_active_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (V_SPENT / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+CREATE TABLE IF NOT EXISTS `table_0nask3` (
+    `table_0nask3_emp_id` INT,
+    `table_0nask3_hire_date` DATE
+);
+
+INSERT INTO `table_0nask3` (`table_0nask3_emp_id`, `table_0nask3_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_0NASK3_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM TABLE_0NASK3
+    WHERE TABLE_0NASK3_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_procedure_cur1_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE a CHAR(16);
+    DECLARE b INT;
+    DECLARE c INT;
+    DECLARE done INT DEFAULT 0;
+    DECLARE sum_val INT DEFAULT 0;
+    DECLARE cnt INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT a, b, c FROM test_t2;
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
+
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO a, b, c;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        IF b > p1 THEN
+            SET sum_val = (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(60)) - 955 + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try()) - 105 + (sum_val)) + (b + c);
+            SET cnt = cnt + 1;
+            INSERT INTO test_t1 VALUES (a, b + c);
+        ELSE
+            SET sum_val = sum_val + (MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(8)) - -330 + ((b * c));
+            SET cnt = cnt + 1;
+            INSERT INTO test_t1 VALUES (a, b * c);
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    CASE
+        WHEN cnt > p2 THEN
+            SET result = sum_val / cnt;
+        WHEN (MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(5)) - 647 + (cnt = p2) THEN
+            SET result = sum_val;
+        ELSE
+            SET result = cnt;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL sp_procedure_cur1_proc(1, 1, @out_result);
+
+SELECT @out_result;

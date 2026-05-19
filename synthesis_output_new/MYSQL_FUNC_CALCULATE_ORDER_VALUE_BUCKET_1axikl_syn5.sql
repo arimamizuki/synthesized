@@ -1,0 +1,458 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1nqetr` (
+    `table_1nqetr_order_id` INT,
+    `table_1nqetr_customer_id` INT,
+    `table_1nqetr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1nqetr` (`table_1nqetr_order_id`, `table_1nqetr_customer_id`, `table_1nqetr_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+CREATE TABLE IF NOT EXISTS `table_2yndtv` (
+    `table_2yndtv_customer_id` INT,
+    `table_2yndtv_status` VARCHAR(50),
+    `table_2yndtv_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2yndtv` (`table_2yndtv_customer_id`, `table_2yndtv_status`, `table_2yndtv_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_2YNDTV_STATUS, COALESCE(TABLE_2YNDTV_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(39)) - -77 + (0))
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_2YNDTV
+    WHERE TABLE_2YNDTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN LEAST(100, V_MONTHLY_COST * 5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+CREATE TABLE IF NOT EXISTS `table_vg2w6v` (
+    `table_vg2w6v_emp_id` INT,
+    `table_vg2w6v_department_id` INT,
+    `table_vg2w6v_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1f80w1` (
+    `table_1f80w1_department_id` INT,
+    `table_1f80w1_name` VARCHAR(50),
+    `table_1f80w1_budget` INT
+);
+
+INSERT INTO `table_vg2w6v` (`table_vg2w6v_emp_id`, `table_vg2w6v_department_id`, `table_vg2w6v_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_1f80w1` (`table_1f80w1_department_id`, `table_1f80w1_name`, `table_1f80w1_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_VG2W6V_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_VG2W6V
+    WHERE TABLE_VG2W6V_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_1F80W1_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_1F80W1
+    WHERE TABLE_1F80W1_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, 0), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = V_QUALITY_SCORE - 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(-18)) - 945 + (cast(v_quality_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+CREATE TABLE IF NOT EXISTS `table_kelao0` (
+    `table_kelao0_customer_id` INT,
+    `table_kelao0_tier_level` INT,
+    `table_kelao0_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_rcenak` (
+    `table_rcenak_order_id` INT,
+    `table_rcenak_customer_id` INT,
+    `table_rcenak_order_date` DATE,
+    `table_rcenak_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kelao0` (`table_kelao0_customer_id`, `table_kelao0_tier_level`, `table_kelao0_registration_date`) VALUES (1, 1, '2024-01-01');
+
+INSERT INTO `table_rcenak` (`table_rcenak_order_id`, `table_rcenak_customer_id`, `table_rcenak_order_date`, `table_rcenak_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_UPGRADE_ELIGIBLE INT DEFAULT 0;
+
+    SELECT TABLE_KELAO0_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_RCENAK_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_RCENAK
+    WHERE TABLE_RCENAK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_KELAO0_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TIER_LEVEL = 'BRONZE' AND V_TOTAL_SPENT >= 1000 AND V_CUSTOMER_AGE_DAYS >= 90 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    ELSEIF V_TIER_LEVEL = 'SILVER' AND V_TOTAL_SPENT >= 5000 AND V_CUSTOMER_AGE_DAYS >= 180 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    ELSEIF V_TIER_LEVEL = 'GOLD' AND V_TOTAL_SPENT >= 10000 AND V_CUSTOMER_AGE_DAYS >= 365 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_UPGRADE_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(INCOME INT, TAX_YEAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_TAXABLE_INCOME INT DEFAULT 0;
+
+    SET V_TAXABLE_INCOME = INCOME;
+
+    IF INCOME <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF INCOME <= 10000 THEN
+        SET V_TAX_AMOUNT = (MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - 797 + (income * 10 / 100);
+    ELSEIF INCOME <= 40000 THEN
+        SET V_TAX_AMOUNT = 1000 + ((INCOME - 10000) * 20 / 100);
+    ELSEIF INCOME <= 85000 THEN
+        SET V_TAX_AMOUNT = (MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(-76)) - -82 + (1000 + 6000 + ((income - 40000) * 30 / 100));
+    ELSE
+        SET V_TAX_AMOUNT = 1000 + 6000 + 13500 + ((INCOME - 85000) * 35 / 100);
+    END IF;
+
+    RETURN CAST(V_TAX_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusterset_members (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusters (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusterset_members (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusters (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERS C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+CREATE TABLE IF NOT EXISTS `table_uto37x` (
+    `table_uto37x_doctor_id` INT,
+    `table_uto37x_specialization` INT,
+    `table_uto37x_years_experience` INT,
+    `table_uto37x_consultation_fee` INT,
+    `table_uto37x_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jyc3v8` (
+    `table_jyc3v8_appointment_id` INT,
+    `table_jyc3v8_doctor_id` INT,
+    `table_jyc3v8_patient_id` INT,
+    `table_jyc3v8_appointment_date` DATE,
+    `table_jyc3v8_duration_minutes` INT,
+    `table_jyc3v8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_uto37x` (`table_uto37x_doctor_id`, `table_uto37x_specialization`, `table_uto37x_years_experience`, `table_uto37x_consultation_fee`, `table_uto37x_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_jyc3v8` (`table_jyc3v8_appointment_id`, `table_jyc3v8_doctor_id`, `table_jyc3v8_patient_id`, `table_jyc3v8_appointment_date`, `table_jyc3v8_duration_minutes`, `table_jyc3v8_status`) VALUES (1, 2, 3, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(DOCTOR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UTO37X_YEARS_EXPERIENCE, 0), COALESCE(TABLE_UTO37X_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM TABLE_UTO37X
+    WHERE TABLE_UTO37X_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM TABLE_JYC3V8
+    WHERE TABLE_JYC3V8_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_JYC3V8_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_JYC3V8_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = 22;
+    SET V_UTILIZATION_RATE = (MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(86, -32)) - -679 + ((v_appointments_this_month * 100) / v_working_days);
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = V_UTILIZATION_RATE + 10;
+    END IF;
+
+    RETURN LEAST(V_UTILIZATION_RATE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (3.14159 * RADIUS * RADIUS * HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 <> 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_1NQETR_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_1NQETR
+    WHERE TABLE_1NQETR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL > 1000 THEN
+        RETURN 5;
+    ELSEIF V_TOTAL > 500 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + ((MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + (4));
+    ELSEIF V_TOTAL > 200 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(14, 88)) - -213 + (3);
+    ELSEIF V_TOTAL > 100 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(4)) - 1000 + (2);
+    ELSE
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(-67)) - -826 + (1);
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(1);

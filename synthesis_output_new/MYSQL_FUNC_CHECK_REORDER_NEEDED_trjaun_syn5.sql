@@ -1,0 +1,441 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_jyrr2f` (
+    `table_jyrr2f_inventory_id` INT,
+    `table_jyrr2f_product_id` INT,
+    `table_jyrr2f_warehouse_id` INT,
+    `table_jyrr2f_quantity` INT,
+    `table_jyrr2f_last_updated` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_dtagt9` (
+    `table_dtagt9_product_id` INT,
+    `table_dtagt9_name` VARCHAR(50),
+    `table_dtagt9_reorder_level` INT,
+    `table_dtagt9_unit_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_jyrr2f` (`table_jyrr2f_inventory_id`, `table_jyrr2f_product_id`, `table_jyrr2f_warehouse_id`, `table_jyrr2f_quantity`, `table_jyrr2f_last_updated`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_dtagt9` (`table_dtagt9_product_id`, `table_dtagt9_name`, `table_dtagt9_reorder_level`, `table_dtagt9_unit_cost`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+CREATE TABLE IF NOT EXISTS `table_nfhkgx` (
+    `table_nfhkgx_policy_id` INT,
+    `table_nfhkgx_customer_id` INT,
+    `table_nfhkgx_policy_type` VARCHAR(50),
+    `table_nfhkgx_premium_amount` DECIMAL(10,2),
+    `table_nfhkgx_coverage_amount` DECIMAL(10,2),
+    `table_nfhkgx_start_date` DATE,
+    `table_nfhkgx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tr1zz3` (
+    `table_tr1zz3_claim_id` INT,
+    `table_tr1zz3_policy_id` INT,
+    `table_tr1zz3_claim_amount` DECIMAL(10,2),
+    `table_tr1zz3_claim_date` DATE,
+    `table_tr1zz3_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nfhkgx` (`table_nfhkgx_policy_id`, `table_nfhkgx_customer_id`, `table_nfhkgx_policy_type`, `table_nfhkgx_premium_amount`, `table_nfhkgx_coverage_amount`, `table_nfhkgx_start_date`, `table_nfhkgx_status`) VALUES (1, 2, 'test', 1.0, 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_tr1zz3` (`table_tr1zz3_claim_id`, `table_tr1zz3_policy_id`, `table_tr1zz3_claim_amount`, `table_tr1zz3_claim_date`, `table_tr1zz3_status`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM INT DEFAULT 0;
+    DECLARE V_COVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NFHKGX_PREMIUM_AMOUNT, 0), COALESCE(TABLE_NFHKGX_COVERAGE_AMOUNT, 0)
+    INTO V_PREMIUM, V_COVERAGE
+    FROM TABLE_NFHKGX
+    WHERE TABLE_NFHKGX_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_TR1ZZ3_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_AMOUNT
+    FROM TABLE_TR1ZZ3
+    WHERE TABLE_TR1ZZ3_POLICY_ID = POLICY_ID_PARAM AND TABLE_TR1ZZ3_STATUS = 'APPROVED';
+
+    SET V_SCORE = (V_COVERAGE / NULLIF(V_PREMIUM, 0)) - (V_CLAIM_AMOUNT / 100);
+
+    IF V_TOTAL_CLAIMS > 5 THEN
+        SET V_SCORE = (MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(-43, -29)) - 304 + (v_score - 20);
+    END IF;
+
+    RETURN CAST(V_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(START_NUM INT, END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF START_NUM > END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+CREATE TABLE IF NOT EXISTS table_wpq3qd (
+    table_wpq3qd_emp_no INT,
+    table_wpq3qd_salary INT
+);
+
+INSERT INTO table_wpq3qd (`table_wpq3qd_emp_no`, `table_wpq3qd_salary`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(TABLE_WPQ3QD_SALARY) - MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (ifnull(salary_calc, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL = -2147483648 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'INTEGER OVERFLOW FOR ABSOLUTE VALUE';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(76)) - -958 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(89)) - 916 + ((MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf(-3)) - -241 + (abs(val))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf----- */
+CREATE TABLE IF NOT EXISTS `table_dq34sb` (
+    `table_dq34sb_estimate_id` INT,
+    `table_dq34sb_customer_id` INT,
+    `table_dq34sb_mover_id` INT,
+    `table_dq34sb_inventory_items` INT,
+    `table_dq34sb_distance_miles` INT,
+    `table_dq34sb_packing_required` INT,
+    `table_dq34sb_estimated_hours` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_epurly` (
+    `table_epurly_company_id` INT,
+    `table_epurly_name` VARCHAR(50),
+    `table_epurly_hourly_rate` INT,
+    `table_epurly_deposit_percent` INT
+);
+
+INSERT INTO `table_dq34sb` (`table_dq34sb_estimate_id`, `table_dq34sb_customer_id`, `table_dq34sb_mover_id`, `table_dq34sb_inventory_items`, `table_dq34sb_distance_miles`, `table_dq34sb_packing_required`, `table_dq34sb_estimated_hours`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_epurly` (`table_epurly_company_id`, `table_epurly_name`, `table_epurly_hourly_rate`, `table_epurly_deposit_percent`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf(ESTIMATE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_ITEMS INT DEFAULT 0;
+    DECLARE V_DISTANCE_MILES INT DEFAULT 0;
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 100;
+    DECLARE V_PACKING_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DQ34SB_INVENTORY_ITEMS, 50), COALESCE(TABLE_DQ34SB_DISTANCE_MILES, 100), COALESCE(TABLE_DQ34SB_ESTIMATED_HOURS, 4)
+    INTO V_INVENTORY_ITEMS, V_DISTANCE_MILES, V_ESTIMATED_HOURS
+    FROM TABLE_DQ34SB
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_EPURLY_HOURLY_RATE, 100)
+    INTO V_HOURLY_RATE
+    FROM TABLE_DQ34SB ME
+    JOIN TABLE_EPURLY MC ON TABLE_DQ34SB_MOVER_ID = TABLE_EPURLY_COMPANY_ID
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM;
+
+    SELECT 200 INTO V_PACKING_FEE
+    FROM TABLE_DQ34SB
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM AND TABLE_DQ34SB_PACKING_REQUIRED = 1;
+
+    SET V_TOTAL_ESTIMATE = (MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(11)) - -163 + ((v_estimated_hours * v_hourly_rate) + v_packing_fee + (v_inventory_items * 2));
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+CREATE TABLE IF NOT EXISTS `table_exts6s` (
+    `table_exts6s_employee_id` INT,
+    `table_exts6s_department_id` INT,
+    `table_exts6s_salary` INT,
+    `table_exts6s_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4gafba` (
+    `table_4gafba_bonus_id` INT,
+    `table_4gafba_employee_id` INT,
+    `table_4gafba_bonus_amount` DECIMAL(10,2),
+    `table_4gafba_bonus_date` DATE
+);
+
+INSERT INTO `table_exts6s` (`table_exts6s_employee_id`, `table_exts6s_department_id`, `table_exts6s_salary`, `table_exts6s_performance_rating`) VALUES (1, 2, 3, 1.0);
+
+INSERT INTO `table_4gafba` (`table_4gafba_bonus_id`, `table_4gafba_employee_id`, `table_4gafba_bonus_amount`, `table_4gafba_bonus_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PREVIOUS_BONUS_TOTAL INT DEFAULT 0;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+    DECLARE V_RATING_MULTIPLIER DECIMAL(3,2) DEFAULT 1.00;
+
+    SELECT COALESCE(TABLE_EXTS6S_SALARY, 0), COALESCE(TABLE_EXTS6S_PERFORMANCE_RATING, 3.00)
+    INTO V_SALARY, V_PERFORMANCE_RATING
+    FROM TABLE_EXTS6S
+    WHERE TABLE_EXTS6S_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4GAFBA_BONUS_AMOUNT), 0)
+    INTO V_PREVIOUS_BONUS_TOTAL
+    FROM TABLE_4GAFBA
+    WHERE TABLE_4GAFBA_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_RATING_MULTIPLIER = V_PERFORMANCE_RATING / 3.00;
+
+    SET V_BONUS_AMOUNT = (V_SALARY * V_RATING_MULTIPLIER) / 10;
+
+    IF V_PERFORMANCE_RATING >= 4.5 THEN
+        SET V_BONUS_AMOUNT = V_BONUS_AMOUNT + (V_BONUS_AMOUNT * 50 / 100);
+    END IF;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+CREATE TABLE IF NOT EXISTS `table_m6at5n` (
+    `table_m6at5n_customer_id` INT,
+    `table_m6at5n_registration_date` DATE
+);
+
+INSERT INTO `table_m6at5n` (`table_m6at5n_customer_id`, `table_m6at5n_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, TABLE_M6AT5N_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_DAYS
+    FROM TABLE_M6AT5N
+    WHERE TABLE_M6AT5N_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(-70)) - 694 + (floor(v_competitiveness));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+CREATE TABLE IF NOT EXISTS `table_5g7p83` (
+    `table_5g7p83_course_id` INT,
+    `table_5g7p83_department_id` INT,
+    `table_5g7p83_credits` INT,
+    `table_5g7p83_difficulty_level` INT,
+    `table_5g7p83_enrollment_capacity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q25s0v` (
+    `table_q25s0v_student_id` INT,
+    `table_q25s0v_course_id` INT,
+    `table_q25s0v_grade` INT,
+    `table_q25s0v_semester` INT
+);
+
+INSERT INTO `table_5g7p83` (`table_5g7p83_course_id`, `table_5g7p83_department_id`, `table_5g7p83_credits`, `table_5g7p83_difficulty_level`, `table_5g7p83_enrollment_capacity`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_q25s0v` (`table_q25s0v_student_id`, `table_q25s0v_course_id`, `table_q25s0v_grade`, `table_q25s0v_semester`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIFFICULTY_LEVEL INT DEFAULT 1;
+    DECLARE V_ENROLLMENT_CAPACITY INT DEFAULT 30;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_FAIL_RATE DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DIFFICULTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5G7P83_DIFFICULTY_LEVEL, 1), COALESCE(TABLE_5G7P83_ENROLLMENT_CAPACITY, 30)
+    INTO V_DIFFICULTY_LEVEL, V_ENROLLMENT_CAPACITY
+    FROM TABLE_5G7P83
+    WHERE TABLE_5G7P83_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_ENROLLMENT
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COALESCE(AVG(CASE TABLE_Q25S0V_GRADE WHEN 'F' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_FAIL_RATE
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SET V_DIFFICULTY_SCORE = (V_DIFFICULTY_LEVEL * 20) + ((V_CURRENT_ENROLLMENT * 100) / V_ENROLLMENT_CAPACITY) + V_FAIL_RATE;
+
+    RETURN FLOOR(V_DIFFICULTY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun(PRODUCT_ID_PARAM INT, WAREHOUSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_QTY INT DEFAULT 0;
+    DECLARE V_REORDER_LEVEL INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_ORDER_QTY INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JYRR2F_QUANTITY, 0), COALESCE(TABLE_DTAGT9_REORDER_LEVEL, 10), COALESCE(TABLE_DTAGT9_UNIT_COST, 0)
+    INTO V_CURRENT_QTY, V_REORDER_LEVEL, V_UNIT_COST
+    FROM TABLE_JYRR2F I
+    JOIN TABLE_DTAGT9 P ON TABLE_JYRR2F_PRODUCT_ID = TABLE_DTAGT9_PRODUCT_ID
+    WHERE TABLE_JYRR2F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_JYRR2F_WAREHOUSE_ID = WAREHOUSE_ID_PARAM;
+
+    IF V_CURRENT_QTY < V_REORDER_LEVEL THEN
+        SET V_ORDER_QTY = V_REORDER_LEVEL * 2 - V_CURRENT_QTY;
+        SET V_TOTAL_VALUE = (MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(90)) - -507 + (v_order_qty * v_unit_cost);
+        RETURN (MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(-91, 78)) - -501 + ((MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(35)) - 176 + (v_total_value));
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun(1, 1);

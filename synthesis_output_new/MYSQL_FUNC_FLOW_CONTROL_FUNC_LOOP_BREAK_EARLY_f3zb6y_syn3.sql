@@ -1,0 +1,298 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+CREATE TABLE IF NOT EXISTS `table_75ig4z` (
+    `table_75ig4z_flight_id` INT,
+    `table_75ig4z_origin` INT,
+    `table_75ig4z_destination` INT,
+    `table_75ig4z_departure_time` DATE,
+    `table_75ig4z_arrival_time` DATE,
+    `table_75ig4z_aircraft_type` VARCHAR(50),
+    `table_75ig4z_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ch532i` (
+    `table_ch532i_leg_id` INT,
+    `table_ch532i_booking_id` INT,
+    `table_ch532i_flight_id` INT,
+    `table_ch532i_seat_class` INT,
+    `table_ch532i_seat_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_75ig4z` (`table_75ig4z_flight_id`, `table_75ig4z_origin`, `table_75ig4z_destination`, `table_75ig4z_departure_time`, `table_75ig4z_arrival_time`, `table_75ig4z_aircraft_type`, `table_75ig4z_base_price`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_ch532i` (`table_ch532i_leg_id`, `table_ch532i_booking_id`, `table_ch532i_flight_id`, `table_ch532i_seat_class`, `table_ch532i_seat_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPARTURE TIME;
+    DECLARE V_ARRIVAL TIME;
+    DECLARE V_DURATION_MINS INT DEFAULT 0;
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_DELAY_RISK INT DEFAULT 0;
+
+    SELECT TABLE_75IG4Z_DEPARTURE_TIME, TABLE_75IG4Z_ARRIVAL_TIME, TABLE_75IG4Z_BASE_PRICE
+    INTO V_DEPARTURE, V_ARRIVAL, V_PRICE
+    FROM TABLE_75IG4Z
+    WHERE TABLE_75IG4Z_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    IF V_DEPARTURE IS NULL OR V_ARRIVAL IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_MINS = TIME_TO_SEC(TIMEDIFF(V_ARRIVAL, V_DEPARTURE)) / 60;
+
+    IF V_DURATION_MINS < 0 THEN
+        SET V_DURATION_MINS = (MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(44)) - 508 + (v_duration_mins + 1440);
+    END IF;
+
+    IF V_DURATION_MINS > 480 THEN
+        SET V_DELAY_RISK = (MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(-36, 16, -81)) - -861 + ((MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(53)) - 254 + (v_duration_mins / 60));
+    END IF;
+
+    RETURN (MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + (cast(v_duration_mins + v_delay_risk as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_N * 2;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+CREATE TABLE IF NOT EXISTS `table_exbt6p` (
+    `table_exbt6p_task_id` INT,
+    `table_exbt6p_project_id` INT,
+    `table_exbt6p_assignee_id` INT,
+    `table_exbt6p_estimated_hours` INT,
+    `table_exbt6p_actual_hours` INT,
+    `table_exbt6p_status` VARCHAR(50),
+    `table_exbt6p_priority` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0kik0` (
+    `table_o0kik0_project_id` INT,
+    `table_o0kik0_project_name` VARCHAR(50),
+    `table_o0kik0_start_date` DATE,
+    `table_o0kik0_deadline` INT,
+    `table_o0kik0_budget` INT
+);
+
+INSERT INTO `table_exbt6p` (`table_exbt6p_task_id`, `table_exbt6p_project_id`, `table_exbt6p_assignee_id`, `table_exbt6p_estimated_hours`, `table_exbt6p_actual_hours`, `table_exbt6p_status`, `table_exbt6p_priority`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_o0kik0` (`table_o0kik0_project_id`, `table_o0kik0_project_name`, `table_o0kik0_start_date`, `table_o0kik0_deadline`, `table_o0kik0_budget`) VALUES (1, 'test', '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ESTIMATED INT DEFAULT 0;
+    DECLARE V_TOTAL_ACTUAL INT DEFAULT 0;
+    DECLARE V_COMPLETED_TASKS INT DEFAULT 0;
+    DECLARE V_TOTAL_TASKS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EXBT6P_ESTIMATED_HOURS), 0), COALESCE(SUM(TABLE_EXBT6P_ACTUAL_HOURS), 0), COUNT(*)
+    INTO V_TOTAL_ESTIMATED, V_TOTAL_ACTUAL, V_TOTAL_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_COMPLETED_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM AND TABLE_EXBT6P_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_TASKS = 0 THEN
+        RETURN (MYSQL_FUNC_BUG9056_PROC1_uaqsvs(52, -78)) - -412 + (50);
+    END IF;
+
+    SET V_HEALTH_SCORE = (V_COMPLETED_TASKS * 100) / V_TOTAL_TASKS;
+
+    IF V_TOTAL_ACTUAL > V_TOTAL_ESTIMATED THEN
+        SET V_HEALTH_SCORE = V_HEALTH_SCORE - 20;
+    END IF;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(19, 100)) - -110 + (cast(v_health_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    SET V_MAX = A;
+    IF B > V_MAX THEN SET V_MAX = B; END IF;
+    IF C > V_MAX THEN SET V_MAX = C; END IF;
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(-47, 81)) - -438 + (v_max);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(PART INT, TOTAL INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF TOTAL = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'TOTAL CANNOT BE ZERO';
+    END IF;
+    IF PART < 0 OR TOTAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUES CANNOT BE NEGATIVE';
+    END IF;
+    RETURN (PART / TOTAL) * 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+CREATE TABLE IF NOT EXISTS `table_zwipgx` (
+    `table_zwipgx_emp_id` INT,
+    `table_zwipgx_department_id` INT,
+    `table_zwipgx_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rorogt` (
+    `table_rorogt_department_id` INT,
+    `table_rorogt_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zwipgx` (`table_zwipgx_emp_id`, `table_zwipgx_department_id`, `table_zwipgx_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_rorogt` (`table_rorogt_department_id`, `table_rorogt_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_ZWIPGX_SALARY, TABLE_ZWIPGX_DEPARTMENT_ID
+    INTO V_SALARY, V_DEPT_ID
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) + 1
+    INTO V_RANK
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_DEPARTMENT_ID = V_DEPT_ID AND TABLE_ZWIPGX_SALARY > V_SALARY;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + (v_rank);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_EARLY_f3zb6y(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    MY_LOOP: LOOP
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(-52)) - 808 + (v_sum + v_i);
+        SET V_I = (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(-65)) - 18 + (v_i + 1);
+        IF V_SUM > TARGET THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF V_I > 1000 THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_EARLY_f3zb6y(1);

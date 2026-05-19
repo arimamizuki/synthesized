@@ -1,0 +1,380 @@
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_oucg37----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_oucg37(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    WHILE N > 0 DO
+        SET V_COUNT = V_COUNT + (N & 1);
+        SET N = N >> 1;
+    END WHILE;
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+CREATE TABLE IF NOT EXISTS `table_x92ggb` (
+    `table_x92ggb_order_id` INT,
+    `table_x92ggb_customer_id` INT,
+    `table_x92ggb_order_date` DATE,
+    `table_x92ggb_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrtan3` (
+    `table_wrtan3_customer_id` INT,
+    `table_wrtan3_registration_date` DATE
+);
+
+INSERT INTO `table_x92ggb` (`table_x92ggb_order_id`, `table_x92ggb_customer_id`, `table_x92ggb_order_date`, `table_x92ggb_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wrtan3` (`table_wrtan3_customer_id`, `table_wrtan3_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPECTED_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_X92GGB
+    WHERE TABLE_X92GGB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_WRTAN3_REGISTRATION_DATE) / 30
+    INTO V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_WRTAN3
+    WHERE TABLE_WRTAN3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_ORDERS = V_CUSTOMER_AGE_MONTHS * 0.5;
+    SET V_REPEAT_RATE = FLOOR((V_ORDER_COUNT / V_EXPECTED_ORDERS) * 100);
+
+    RETURN V_REPEAT_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+CREATE TABLE IF NOT EXISTS `table_129mia` (
+    `table_129mia_customer_id` INT,
+    `table_129mia_registration_date` DATE,
+    `table_129mia_tier_level` INT,
+    `table_129mia_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qvw4li` (
+    `table_qvw4li_order_id` INT,
+    `table_qvw4li_customer_id` INT,
+    `table_qvw4li_order_date` DATE,
+    `table_qvw4li_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tkbm59` (
+    `table_tkbm59_review_id` INT,
+    `table_tkbm59_customer_id` INT,
+    `table_tkbm59_product_id` INT,
+    `table_tkbm59_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_129mia` (`table_129mia_customer_id`, `table_129mia_registration_date`, `table_129mia_tier_level`, `table_129mia_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_qvw4li` (`table_qvw4li_order_id`, `table_qvw4li_customer_id`, `table_qvw4li_order_date`, `table_qvw4li_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_tkbm59` (`table_tkbm59_review_id`, `table_tkbm59_customer_id`, `table_tkbm59_product_id`, `table_tkbm59_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_CHURN_RISK_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_129MIA_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_129MIA
+    WHERE TABLE_129MIA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), MAX(TABLE_QVW4LI_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_LAST_ORDER_DATE
+    FROM TABLE_QVW4LI
+    WHERE TABLE_QVW4LI_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), V_LAST_ORDER_DATE)
+    INTO V_DAYS_SINCE_LAST_ORDER;
+
+    SELECT COALESCE(AVG(TABLE_TKBM59_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_TKBM59
+    WHERE TABLE_TKBM59_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_CHURN_RISK_SCORE = 50;
+
+    IF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 30;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 60 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 30 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    IF V_AVG_REVIEW_RATING < 3.0 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 15;
+    END IF;
+
+    IF V_ORDER_COUNT < 3 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    RETURN LEAST(V_CHURN_RISK_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SQUARE_4pyj0b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SQUARE_4pyj0b(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(-49)) - 784 + ((MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(-92)) - -72 + ((MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(3, 84, -40)) - 945 + (n * n)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(SUM INT, INTEREST INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(-44)) - 809 + ((MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs(68)) - -471 + (cast(sum * pow(1 + interest / 100.0, years) as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs----- */
+CREATE TABLE IF NOT EXISTS `table_ey63si` (
+    `table_ey63si_order_id` INT,
+    `table_ey63si_customer_id` INT,
+    `table_ey63si_order_date` DATE,
+    `table_ey63si_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gelcxf` (
+    `table_gelcxf_customer_id` INT,
+    `table_gelcxf_tier_level` INT
+);
+
+INSERT INTO `table_ey63si` (`table_ey63si_order_id`, `table_ey63si_customer_id`, `table_ey63si_order_date`, `table_ey63si_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_gelcxf` (`table_gelcxf_customer_id`, `table_gelcxf_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs(TIER_LEVEL_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_EY63SI_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_EY63SI O
+    JOIN TABLE_GELCXF C ON TABLE_EY63SI_CUSTOMER_ID = TABLE_GELCXF_CUSTOMER_ID
+    WHERE TABLE_GELCXF_TIER_LEVEL = TIER_LEVEL_PARAM;
+
+    SET V_THRESHOLD = FLOOR(V_AVG_ORDER_VALUE * 1.5);
+
+    RETURN V_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+CREATE TABLE IF NOT EXISTS `table_0era44` (
+    `table_0era44_policy_id` INT,
+    `table_0era44_customer_id` INT,
+    `table_0era44_property_value` INT,
+    `table_0era44_coverage_limit` INT,
+    `table_0era44_deductible_amount` DECIMAL(10,2),
+    `table_0era44_premium_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r40gj7` (
+    `table_r40gj7_claim_id` INT,
+    `table_r40gj7_policy_id` INT,
+    `table_r40gj7_claim_date` DATE,
+    `table_r40gj7_claim_amount` DECIMAL(10,2),
+    `table_r40gj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_0era44` (`table_0era44_policy_id`, `table_0era44_customer_id`, `table_0era44_property_value`, `table_0era44_coverage_limit`, `table_0era44_deductible_amount`, `table_0era44_premium_annual`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_r40gj7` (`table_r40gj7_claim_id`, `table_r40gj7_policy_id`, `table_r40gj7_claim_date`, `table_r40gj7_claim_amount`, `table_r40gj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PROPERTY_VALUE INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_COVERAGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0ERA44_PROPERTY_VALUE, 0), COALESCE(TABLE_0ERA44_COVERAGE_LIMIT, 0), COALESCE(TABLE_0ERA44_DEDUCTIBLE_AMOUNT, 0)
+    INTO V_PROPERTY_VALUE, V_COVERAGE_LIMIT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_0ERA44
+    WHERE TABLE_0ERA44_POLICY_ID = POLICY_ID_PARAM;
+
+    IF V_PROPERTY_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COVERAGE_RATIO = (V_COVERAGE_LIMIT * 100) / V_PROPERTY_VALUE;
+
+    IF V_COVERAGE_RATIO >= 80 AND V_DEDUCTIBLE_AMOUNT <= 1000 THEN
+        RETURN 100;
+    ELSEIF V_COVERAGE_RATIO >= 60 THEN
+        RETURN 75;
+    ELSE
+        RETURN 50;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+CREATE TABLE IF NOT EXISTS table_5s385z (
+    table_5s385z_id INT,
+    table_5s385z_preco INT
+);
+
+INSERT INTO table_5s385z (`table_5s385z_id`, `table_5s385z_preco`) VALUES (3, 150);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(VAR_REMEDIO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_PRECO INT DEFAULT 0;
+    
+    SELECT TABLE_5S385Z_PRECO INTO RESULT_PRECO
+    FROM TABLE_5S385Z
+    WHERE TABLE_5S385Z.TABLE_5S385Z_ID = VAR_REMEDIO;
+    
+    RETURN RESULT_PRECO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+CREATE TABLE IF NOT EXISTS `table_y6h4yf` (
+    `table_y6h4yf_playlist_id` INT,
+    `table_y6h4yf_user_id` INT,
+    `table_y6h4yf_playlist_name` VARCHAR(50),
+    `table_y6h4yf_track_count` INT,
+    `table_y6h4yf_total_duration` DECIMAL(10,2),
+    `table_y6h4yf_creation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ewdcw9` (
+    `table_ewdcw9_follower_id` INT,
+    `table_ewdcw9_playlist_id` INT,
+    `table_ewdcw9_follow_date` DATE
+);
+
+INSERT INTO `table_y6h4yf` (`table_y6h4yf_playlist_id`, `table_y6h4yf_user_id`, `table_y6h4yf_playlist_name`, `table_y6h4yf_track_count`, `table_y6h4yf_total_duration`, `table_y6h4yf_creation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ewdcw9` (`table_ewdcw9_follower_id`, `table_ewdcw9_playlist_id`, `table_ewdcw9_follow_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(PLAYLIST_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_DURATION INT DEFAULT 0;
+    DECLARE V_FOLLOWER_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y6H4YF_TRACK_COUNT, 0), COALESCE(TABLE_Y6H4YF_TOTAL_DURATION, 0)
+    INTO V_TRACK_COUNT, V_TOTAL_DURATION
+    FROM TABLE_Y6H4YF
+    WHERE TABLE_Y6H4YF_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_FOLLOWER_COUNT
+    FROM TABLE_EWDCW9
+    WHERE TABLE_EWDCW9_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = (V_FOLLOWER_COUNT * 50) + (V_TRACK_COUNT * 2) + (V_TOTAL_DURATION / 60);
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD2NUMS_l7c47k(NUM1 INT, NUM2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_SQUARE_4pyj0b(87)) - -668 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(-25)) - 819 + ((MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(-36)) - 174 + ((MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + ((MYSQL_FUNC_COUNT_BITS_SET_oucg37(78)) - -862 + (num1 + num2)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_ADD2NUMS_l7c47k(1, 1);

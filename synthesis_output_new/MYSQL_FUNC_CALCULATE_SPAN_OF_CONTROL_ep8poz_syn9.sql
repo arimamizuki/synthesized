@@ -1,0 +1,389 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = (MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(22)) - 600 + (n);
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN (MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(62, 82)) - -855 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = 0 - V_NUMERIC_VAL;
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_BOOLEAN_km7s69----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(FLAG INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF FLAG = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(30)) - -72 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(9)) - -923 + ((MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl(-16)) - -262 + (1)));
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl----- */
+CREATE TABLE IF NOT EXISTS `table_7ljzqz` (
+    `table_7ljzqz_order_id` INT,
+    `table_7ljzqz_customer_id` INT,
+    `table_7ljzqz_order_date` DATE,
+    `table_7ljzqz_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_h7c6zi` (
+    `table_h7c6zi_customer_id` INT,
+    `table_h7c6zi_country` INT
+);
+
+INSERT INTO `table_7ljzqz` (`table_7ljzqz_order_id`, `table_7ljzqz_customer_id`, `table_7ljzqz_order_date`, `table_7ljzqz_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_h7c6zi` (`table_h7c6zi_customer_id`, `table_h7c6zi_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_INTERVAL_0f5zxl(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_INTERVAL INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_7LJZQZ_ORDER_DATE), MAX(TABLE_7LJZQZ_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_7LJZQZ
+    WHERE TABLE_7LJZQZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER, V_FIRST_ORDER);
+
+    SET V_AVG_INTERVAL = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN V_AVG_INTERVAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+CREATE TABLE IF NOT EXISTS `table_isab02` (
+    `table_isab02_order_id` INT,
+    `table_isab02_order_date` DATE
+);
+
+INSERT INTO `table_isab02` (`table_isab02_order_id`, `table_isab02_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_ISAB02_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_ISAB02
+    WHERE TABLE_ISAB02_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+CREATE TABLE IF NOT EXISTS `table_m6at5n` (
+    `table_m6at5n_customer_id` INT,
+    `table_m6at5n_registration_date` DATE
+);
+
+INSERT INTO `table_m6at5n` (`table_m6at5n_customer_id`, `table_m6at5n_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, TABLE_M6AT5N_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_DAYS
+    FROM TABLE_M6AT5N
+    WHERE TABLE_M6AT5N_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(-85)) - -35 + ((MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + (v_age_days));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = V_TOTAL_HOURS * V_AVG_HOURLY_RATE;
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_REVENUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+CREATE TABLE IF NOT EXISTS `table_jtm566` (
+    `table_jtm566_order_id` INT,
+    `table_jtm566_customer_id` INT,
+    `table_jtm566_order_date` DATE,
+    `table_jtm566_total_amount` DECIMAL(10,2),
+    `table_jtm566_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ae03tz` (
+    `table_ae03tz_refund_id` INT,
+    `table_ae03tz_order_id` INT,
+    `table_ae03tz_refund_amount` DECIMAL(10,2),
+    `table_ae03tz_reason` INT
+);
+
+INSERT INTO `table_jtm566` (`table_jtm566_order_id`, `table_jtm566_customer_id`, `table_jtm566_order_date`, `table_jtm566_total_amount`, `table_jtm566_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ae03tz` (`table_ae03tz_refund_id`, `table_ae03tz_order_id`, `table_ae03tz_refund_amount`, `table_ae03tz_reason`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_COUNT INT DEFAULT 0;
+    DECLARE V_RISK_INDICATOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JTM566_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_JTM566
+    WHERE TABLE_JTM566_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_REFUND_COUNT
+    FROM TABLE_AE03TZ
+    WHERE TABLE_AE03TZ_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_RISK_INDICATOR = V_REFUND_COUNT * 20 + (V_ORDER_TOTAL / 100);
+
+    IF V_ORDER_TOTAL > 500 THEN
+        SET V_RISK_INDICATOR = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(-24)) - 743 + (v_risk_indicator) + 15;
+    END IF;
+
+    RETURN V_RISK_INDICATOR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+CREATE TABLE IF NOT EXISTS `table_4impjk` (
+    `table_4impjk_customer_id` INT,
+    `table_4impjk_plan_type` VARCHAR(50),
+    `table_4impjk_monthly_cost` DECIMAL(10,2),
+    `table_4impjk_start_date` DATE,
+    `table_4impjk_renewal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_akwwie` (
+    `table_akwwie_invoice_id` INT,
+    `table_akwwie_customer_id` INT,
+    `table_akwwie_invoice_date` DATE,
+    `table_akwwie_amount_due` DECIMAL(10,2),
+    `table_akwwie_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4impjk` (`table_4impjk_customer_id`, `table_4impjk_plan_type`, `table_4impjk_monthly_cost`, `table_4impjk_start_date`, `table_4impjk_renewal_date`) VALUES (1, 'test', 1.0, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_akwwie` (`table_akwwie_invoice_id`, `table_akwwie_customer_id`, `table_akwwie_invoice_date`, `table_akwwie_amount_due`, `table_akwwie_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_INVOICE_COUNT INT DEFAULT 0;
+    DECLARE V_PAID_INVOICES INT DEFAULT 0;
+    DECLARE V_RENEWAL_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_4IMPJK_PLAN_TYPE, COALESCE(TABLE_4IMPJK_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_4IMPJK
+    WHERE TABLE_4IMPJK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_AKWWIE_STATUS = 'PAID' THEN 1 END)
+    INTO V_INVOICE_COUNT, V_PAID_INVOICES
+    FROM TABLE_AKWWIE
+    WHERE TABLE_AKWWIE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RENEWAL_SCORE = (V_PAID_INVOICES * 100) / GREATEST(V_INVOICE_COUNT, 1);
+
+    IF V_PLAN_TYPE = 'ENTERPRISE' THEN
+        SET V_RENEWAL_SCORE = V_RENEWAL_SCORE + 20;
+    ELSEIF V_PLAN_TYPE = 'PREMIUM' THEN
+        SET V_RENEWAL_SCORE = V_RENEWAL_SCORE + 10;
+    END IF;
+
+    RETURN LEAST(V_RENEWAL_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(89)) - 916 + ((MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882(-3)) - -773 + (v_direct_reports));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(1);

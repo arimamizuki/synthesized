@@ -1,0 +1,373 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_nsm6c8` (
+    `table_nsm6c8_campaign_id` INT,
+    `table_nsm6c8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nsm6c8` (`table_nsm6c8_campaign_id`, `table_nsm6c8_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+CREATE TABLE IF NOT EXISTS `table_cse3r2` (
+    `table_cse3r2_order_id` INT,
+    `table_cse3r2_customer_id` INT,
+    `table_cse3r2_order_date` DATE,
+    `table_cse3r2_total_amount` DECIMAL(10,2),
+    `table_cse3r2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_pvtnbo` (
+    `table_pvtnbo_shipment_id` INT,
+    `table_pvtnbo_order_id` INT,
+    `table_pvtnbo_carrier` INT,
+    `table_pvtnbo_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cse3r2` (`table_cse3r2_order_id`, `table_cse3r2_customer_id`, `table_cse3r2_order_date`, `table_cse3r2_total_amount`, `table_cse3r2_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_pvtnbo` (`table_pvtnbo_shipment_id`, `table_pvtnbo_order_id`, `table_pvtnbo_carrier`, `table_pvtnbo_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(CARRIER_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_EFFICIENCY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_PVTNBO_SHIPPING_COST), 0)
+    INTO V_AVG_SHIPPING_COST
+    FROM TABLE_PVTNBO
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_CSE3R2_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_PVTNBO S
+    JOIN TABLE_CSE3R2 O ON TABLE_PVTNBO_ORDER_ID = TABLE_CSE3R2_ORDER_ID
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    IF V_AVG_ORDER_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_EFFICIENCY = (V_AVG_SHIPPING_COST / V_AVG_ORDER_VALUE) * 100;
+
+    RETURN FLOOR(V_COST_EFFICIENCY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+CREATE TABLE IF NOT EXISTS `table_bth9h0` (
+    `table_bth9h0_campaign_id` INT,
+    `table_bth9h0_start_date` DATE
+);
+
+INSERT INTO `table_bth9h0` (`table_bth9h0_campaign_id`, `table_bth9h0_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BTH9H0_START_DATE)
+    INTO V_YEAR
+    FROM TABLE_BTH9H0
+    WHERE TABLE_BTH9H0_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(12)) - -371 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(59)) - 635 + (v_year));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+CREATE TABLE IF NOT EXISTS `table_qyoum0` (
+    `table_qyoum0_supplier_id` INT,
+    `table_qyoum0_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qyoum0` (`table_qyoum0_supplier_id`, `table_qyoum0_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QYOUM0_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QYOUM0
+    WHERE TABLE_QYOUM0_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(30)) - -72 + (floor(v_rating * 20));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+CREATE TABLE IF NOT EXISTS `table_isab02` (
+    `table_isab02_order_id` INT,
+    `table_isab02_order_date` DATE
+);
+
+INSERT INTO `table_isab02` (`table_isab02_order_id`, `table_isab02_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_ISAB02_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_ISAB02
+    WHERE TABLE_ISAB02_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+CREATE TABLE IF NOT EXISTS `table_nv01cq` (
+    `table_nv01cq_customer_id` INT,
+    `table_nv01cq_country` INT
+);
+
+INSERT INTO `table_nv01cq` (`table_nv01cq_customer_id`, `table_nv01cq_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NV01CQ
+    WHERE TABLE_NV01CQ_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv----- */
+CREATE TABLE IF NOT EXISTS `table_rpis3d` (
+    `table_rpis3d_student_id` INT,
+    `table_rpis3d_name` VARCHAR(50),
+    `table_rpis3d_exam_score` INT,
+    `table_rpis3d_assignment_score` INT,
+    `table_rpis3d_participation_score` INT
+);
+
+INSERT INTO `table_rpis3d` (`table_rpis3d_student_id`, `table_rpis3d_name`, `table_rpis3d_exam_score`, `table_rpis3d_assignment_score`, `table_rpis3d_participation_score`) VALUES (1, 'test', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXAM_SCORE INT DEFAULT 0;
+    DECLARE V_ASSIGNMENT_SCORE INT DEFAULT 0;
+    DECLARE V_PARTICIPATION INT DEFAULT 0;
+    DECLARE V_FINAL_GRADE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RPIS3D_EXAM_SCORE, 0), COALESCE(TABLE_RPIS3D_ASSIGNMENT_SCORE, 0), COALESCE(TABLE_RPIS3D_PARTICIPATION_SCORE, 0)
+    INTO V_EXAM_SCORE, V_ASSIGNMENT_SCORE, V_PARTICIPATION
+    FROM TABLE_RPIS3D
+    WHERE TABLE_RPIS3D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_FINAL_GRADE = (V_EXAM_SCORE * 50 / 100) + (V_ASSIGNMENT_SCORE * 40 / 100) + (V_PARTICIPATION * 10 / 100);
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(44)) - 508 + ((MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(-84, 99)) - -608 + (cast(v_final_grade as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+CREATE TABLE IF NOT EXISTS `table_a7d4j5` (
+    `table_a7d4j5_number_id` INT,
+    `table_a7d4j5_customer_id` INT,
+    `table_a7d4j5_area_code` INT,
+    `table_a7d4j5_number_type` INT,
+    `table_a7d4j5_monthly_fee` INT,
+    `table_a7d4j5_activation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_r7szof` (
+    `table_r7szof_number_id` INT,
+    `table_r7szof_call_minutes` INT,
+    `table_r7szof_data_mb` TEXT,
+    `table_r7szof_sms_count` INT,
+    `table_r7szof_billing_month` INT
+);
+
+INSERT INTO `table_a7d4j5` (`table_a7d4j5_number_id`, `table_a7d4j5_customer_id`, `table_a7d4j5_area_code`, `table_a7d4j5_number_type`, `table_a7d4j5_monthly_fee`, `table_a7d4j5_activation_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_r7szof` (`table_r7szof_number_id`, `table_r7szof_call_minutes`, `table_r7szof_data_mb`, `table_r7szof_sms_count`, `table_r7szof_billing_month`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(NUMBER_ID_PARAM INT, BILLING_MONTH_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_CALL_MINUTES INT DEFAULT 0;
+    DECLARE V_DATA_MB INT DEFAULT 0;
+    DECLARE V_SMS_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_CALL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_A7D4J5_MONTHLY_FEE, COALESCE(TABLE_R7SZOF_CALL_MINUTES, 0), COALESCE(TABLE_R7SZOF_DATA_MB, 0), COALESCE(TABLE_R7SZOF_SMS_COUNT, 0)
+    INTO V_MONTHLY_FEE, V_CALL_MINUTES, V_DATA_MB, V_SMS_COUNT
+    FROM TABLE_A7D4J5 T
+    LEFT JOIN TABLE_R7SZOF U ON TABLE_A7D4J5_NUMBER_ID = TABLE_R7SZOF_NUMBER_ID AND TABLE_R7SZOF_BILLING_MONTH = BILLING_MONTH_PARAM
+    WHERE TABLE_A7D4J5_NUMBER_ID = NUMBER_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_MONTHLY_FEE;
+
+    IF V_CALL_MINUTES > 500 THEN
+        SET V_CALL_OVERAGE = V_CALL_MINUTES - 500;
+        SET V_TOTAL_CHARGES = (MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(-38)) - -908 + (v_total_charges + (v_call_overage * 2));
+    END IF;
+
+    IF V_DATA_MB > 5000 THEN
+        SET V_TOTAL_CHARGES = V_TOTAL_CHARGES + ((V_DATA_MB - 5000) / 100) * 5;
+    END IF;
+
+    RETURN CAST(V_TOTAL_CHARGES AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(LENGTH_PARAM INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PASSWORD VARCHAR(100) DEFAULT '';
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR_CODE INT DEFAULT 0;
+    DECLARE V_USE_SPECIAL INT DEFAULT 0;
+
+    IF LENGTH_PARAM <= 0 THEN
+        RETURN '';
+    END IF;
+
+    SET V_I = 1;
+
+    PASSWORD_LOOP: WHILE V_I <= LENGTH_PARAM DO
+        SET V_USE_SPECIAL = RAND() * 10;
+
+        IF V_USE_SPECIAL < 3 AND V_I < LENGTH_PARAM THEN
+            SET V_CHAR_CODE = RAND() * 10 + 33;
+        ELSEIF V_USE_SPECIAL < 6 THEN
+            SET V_CHAR_CODE = RAND() * 26 + 65;
+        ELSE
+            SET V_CHAR_CODE = RAND() * 26 + 97;
+        END IF;
+
+        SET V_PASSWORD = CONCAT(V_PASSWORD, CHAR(V_CHAR_CODE));
+        SET V_I = V_I + 1;
+    END WHILE PASSWORD_LOOP;
+
+    RETURN V_PASSWORD;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(-59)) - -979 + (p_n * 2);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+CREATE TABLE IF NOT EXISTS `table_tgavgl` (
+    `table_tgavgl_order_id` INT,
+    `table_tgavgl_customer_id` INT,
+    `table_tgavgl_order_date` DATE,
+    `table_tgavgl_total_amount` DECIMAL(10,2),
+    `table_tgavgl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d0pa5w` (
+    `table_d0pa5w_customer_id` INT,
+    `table_d0pa5w_customer_segment` INT
+);
+
+INSERT INTO `table_tgavgl` (`table_tgavgl_order_id`, `table_tgavgl_customer_id`, `table_tgavgl_order_date`, `table_tgavgl_total_amount`, `table_tgavgl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_d0pa5w` (`table_d0pa5w_customer_id`, `table_d0pa5w_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_SEGMENT_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_D0PA5W_CUSTOMER_SEGMENT
+    INTO V_SEGMENT
+    FROM TABLE_D0PA5W
+    WHERE TABLE_D0PA5W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SEGMENT_ORDER_COUNT
+    FROM TABLE_TGAVGL O
+    JOIN TABLE_D0PA5W C ON TABLE_TGAVGL_CUSTOMER_ID = TABLE_D0PA5W_CUSTOMER_ID
+    WHERE TABLE_D0PA5W_CUSTOMER_SEGMENT = V_SEGMENT
+    AND MONTH(TABLE_TGAVGL_ORDER_DATE) = MONTH(CURDATE())
+    AND YEAR(TABLE_TGAVGL_ORDER_DATE) = YEAR(CURDATE());
+
+    RETURN V_SEGMENT_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_NSM6C8_STATUS
+    INTO V_STATUS
+    FROM TABLE_NSM6C8
+    WHERE TABLE_NSM6C8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(1);

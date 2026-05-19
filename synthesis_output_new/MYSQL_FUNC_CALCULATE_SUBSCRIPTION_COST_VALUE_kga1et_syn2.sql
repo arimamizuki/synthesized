@@ -1,0 +1,340 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_698f1s` (
+    `table_698f1s_customer_id` INT,
+    `table_698f1s_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_698f1s` (`table_698f1s_customer_id`, `table_698f1s_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ADD2NUMS_l7c47k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD2NUMS_l7c47k(NUM1 INT, NUM2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(-53)) - -673 + ((MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(93)) - 965 + ((MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(85, 70)) - -149 + (num1 + num2)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+CREATE TABLE IF NOT EXISTS `table_8el8bx` (
+    `table_8el8bx_reg_id` INT,
+    `table_8el8bx_attendee_id` INT,
+    `table_8el8bx_conference_id` INT,
+    `table_8el8bx_registration_date` DATE,
+    `table_8el8bx_ticket_type` VARCHAR(50),
+    `table_8el8bx_total_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_29ijnu` (
+    `table_29ijnu_conference_id` INT,
+    `table_29ijnu_name` VARCHAR(50),
+    `table_29ijnu_start_date` DATE,
+    `table_29ijnu_venue_id` INT,
+    `table_29ijnu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8el8bx` (`table_8el8bx_reg_id`, `table_8el8bx_attendee_id`, `table_8el8bx_conference_id`, `table_8el8bx_registration_date`, `table_8el8bx_ticket_type`, `table_8el8bx_total_paid`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_29ijnu` (`table_29ijnu_conference_id`, `table_29ijnu_name`, `table_29ijnu_start_date`, `table_29ijnu_venue_id`, `table_29ijnu_base_price`) VALUES (1, 'test', '2024-01-01', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(CONFERENCE_ID_PARAM INT, DAYS_BEFORE_EVENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_29IJNU_BASE_PRICE, 100) INTO V_BASE_PRICE
+    FROM TABLE_29IJNU
+    WHERE TABLE_29IJNU_CONFERENCE_ID = CONFERENCE_ID_PARAM;
+
+    IF DAYS_BEFORE_EVENT >= 30 THEN
+        SET V_DISCOUNT_PERCENT = 25;
+    ELSEIF DAYS_BEFORE_EVENT >= 14 THEN
+        SET V_DISCOUNT_PERCENT = 15;
+    ELSEIF DAYS_BEFORE_EVENT >= 7 THEN
+        SET V_DISCOUNT_PERCENT = 10;
+    ELSE
+        SET V_DISCOUNT_PERCENT = 0;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - (V_BASE_PRICE * V_DISCOUNT_PERCENT / 100);
+
+    RETURN CAST(V_FINAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5----- */
+CREATE TABLE IF NOT EXISTS `table_gtn1m7` (
+    `table_gtn1m7_appt_id` INT,
+    `table_gtn1m7_client_id` INT,
+    `table_gtn1m7_stylist_id` INT,
+    `table_gtn1m7_service_id` INT,
+    `table_gtn1m7_appointment_date` DATE,
+    `table_gtn1m7_duration_minutes` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t6eu0r` (
+    `table_t6eu0r_service_id` INT,
+    `table_t6eu0r_service_name` VARCHAR(50),
+    `table_t6eu0r_base_price` DECIMAL(10,2),
+    `table_t6eu0r_category` INT
+);
+
+INSERT INTO `table_gtn1m7` (`table_gtn1m7_appt_id`, `table_gtn1m7_client_id`, `table_gtn1m7_stylist_id`, `table_gtn1m7_service_id`, `table_gtn1m7_appointment_date`, `table_gtn1m7_duration_minutes`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_t6eu0r` (`table_t6eu0r_service_id`, `table_t6eu0r_service_name`, `table_t6eu0r_base_price`, `table_t6eu0r_category`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(APPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TIP_PERCENT INT DEFAULT 15;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T6EU0R_BASE_PRICE, 50), COALESCE(TABLE_GTN1M7_DURATION_MINUTES, 60)
+    INTO V_BASE_PRICE, V_DURATION
+    FROM TABLE_GTN1M7 A
+    JOIN TABLE_T6EU0R S ON TABLE_GTN1M7_SERVICE_ID = TABLE_T6EU0R_SERVICE_ID
+    WHERE TABLE_GTN1M7_APPT_ID = APPT_ID_PARAM;
+
+    IF V_DURATION > 90 THEN
+        SET V_TIP_PERCENT = (MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + (20);
+    END IF;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (v_base_price + (v_base_price * v_tip_percent / 100));
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A - B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(-23)) - -91 + (-1);
+    END IF;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+CREATE TABLE IF NOT EXISTS `table_6kv6h0` (
+    `table_6kv6h0_emp_id` INT,
+    `table_6kv6h0_department_id` INT,
+    `table_6kv6h0_salary` INT,
+    `table_6kv6h0_hire_date` DATE,
+    `table_6kv6h0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6kv6h0` (`table_6kv6h0_emp_id`, `table_6kv6h0_department_id`, `table_6kv6h0_salary`, `table_6kv6h0_hire_date`, `table_6kv6h0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6KV6H0_SALARY, 0), COALESCE(TABLE_6KV6H0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_6KV6H0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_6KV6H0
+    WHERE TABLE_6KV6H0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f(-98)) - 61 + ((v_salary / 1000) + (v_performance * 10) + (v_tenure_years * 3));
+
+    RETURN V_COMP_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f----- */
+CREATE TABLE IF NOT EXISTS `table_30rgjj` (
+    `table_30rgjj_product_id` INT,
+    `table_30rgjj_category_id` INT,
+    `table_30rgjj_price` DECIMAL(10,2),
+    `table_30rgjj_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x7ez2h` (
+    `table_x7ez2h_category_id` INT,
+    `table_x7ez2h_name` VARCHAR(50)
+);
+
+INSERT INTO `table_30rgjj` (`table_30rgjj_product_id`, `table_30rgjj_category_id`, `table_30rgjj_price`, `table_30rgjj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_x7ez2h` (`table_x7ez2h_category_id`, `table_x7ez2h_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_STOCK DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_30RGJJ_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_30RGJJ
+    WHERE TABLE_30RGJJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_30RGJJ_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_AVG_STOCK
+    FROM TABLE_30RGJJ
+    WHERE TABLE_30RGJJ_CATEGORY_ID = (SELECT TABLE_30RGJJ_CATEGORY_ID FROM TABLE_30RGJJ WHERE TABLE_30RGJJ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    IF V_STOCK < V_CATEGORY_AVG_STOCK * 0.5 THEN
+        SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(-90)) - -341 + (100);
+    ELSEIF V_STOCK > V_CATEGORY_AVG_STOCK * 1.5 THEN
+        SET V_RISK_INDEX = 50;
+    ELSE
+        SET V_RISK_INDEX = 25;
+    END IF;
+
+    RETURN V_RISK_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+CREATE TABLE IF NOT EXISTS `table_pb5yd8` (
+    `table_pb5yd8_emp_id` INT
+);
+
+INSERT INTO `table_pb5yd8` (`table_pb5yd8_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 17) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_698F1S_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_698F1S
+    WHERE TABLE_698F1S_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_ADD2NUMS_l7c47k(20, -11)) - 487 + ((MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(3)) - 215 + (v_cost));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(1);

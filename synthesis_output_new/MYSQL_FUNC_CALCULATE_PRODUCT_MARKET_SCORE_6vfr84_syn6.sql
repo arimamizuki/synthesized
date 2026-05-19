@@ -1,0 +1,365 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_btero6` (
+    `table_btero6_product_id` INT,
+    `table_btero6_category_id` INT,
+    `table_btero6_price` DECIMAL(10,2),
+    `table_btero6_stock_quantity` INT,
+    `table_btero6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_aomfn6` (
+    `table_aomfn6_supplier_id` INT,
+    `table_aomfn6_supplier_rating` DECIMAL(3,1),
+    `table_aomfn6_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_md6z0a` (
+    `table_md6z0a_order_id` INT,
+    `table_md6z0a_product_id` INT,
+    `table_md6z0a_quantity` INT
+);
+
+INSERT INTO `table_btero6` (`table_btero6_product_id`, `table_btero6_category_id`, `table_btero6_price`, `table_btero6_stock_quantity`, `table_btero6_supplier_id`) VALUES (1, 2, 1.0, 4, 5);
+
+INSERT INTO `table_aomfn6` (`table_aomfn6_supplier_id`, `table_aomfn6_supplier_rating`, `table_aomfn6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `table_md6z0a` (`table_md6z0a_order_id`, `table_md6z0a_product_id`, `table_md6z0a_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = V_TEMP >> 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+CREATE TABLE IF NOT EXISTS `table_vhtw5f` (
+    `table_vhtw5f_emp_id` INT,
+    `table_vhtw5f_department_id` INT,
+    `table_vhtw5f_salary` INT,
+    `table_vhtw5f_hire_date` DATE,
+    `table_vhtw5f_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4ljt9e` (
+    `table_4ljt9e_department_id` INT,
+    `table_4ljt9e_name` VARCHAR(50)
+);
+
+INSERT INTO `table_vhtw5f` (`table_vhtw5f_emp_id`, `table_vhtw5f_department_id`, `table_vhtw5f_salary`, `table_vhtw5f_hire_date`, `table_vhtw5f_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_4ljt9e` (`table_4ljt9e_department_id`, `table_4ljt9e_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_VHTW5F_HIRE_DATE, CURDATE()), COALESCE(TABLE_VHTW5F_PERFORMANCE_RATING, 0), COALESCE(TABLE_VHTW5F_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_VHTW5F
+    WHERE TABLE_VHTW5F_EMP_ID = EMP_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_TENURE_YEARS * 20) + (V_PERFORMANCE * 15) + (V_SALARY / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+CREATE TABLE IF NOT EXISTS `table_s4ygf6` (
+    `table_s4ygf6_emp_id` INT,
+    `table_s4ygf6_salary` INT,
+    `table_s4ygf6_hire_date` DATE
+);
+
+INSERT INTO `table_s4ygf6` (`table_s4ygf6_emp_id`, `table_s4ygf6_salary`, `table_s4ygf6_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S4YGF6_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_S4YGF6_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE
+    FROM TABLE_S4YGF6
+    WHERE TABLE_S4YGF6_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(51)) - -490 + ((MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(65, 43)) - -240 + (floor((v_salary * v_tenure) / 10000)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+CREATE TABLE IF NOT EXISTS `table_dnotdk` (
+    `table_dnotdk_job_id` INT,
+    `table_dnotdk_customer_id` INT,
+    `table_dnotdk_mover_id` INT,
+    `table_dnotdk_origin_zip` INT,
+    `table_dnotdk_dest_zip` INT,
+    `table_dnotdk_distance_miles` INT,
+    `table_dnotdk_truck_size` INT,
+    `table_dnotdk_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kr203y` (
+    `table_kr203y_zip_code` INT,
+    `table_kr203y_zone` INT,
+    `table_kr203y_base_rate_per_mile` INT
+);
+
+INSERT INTO `table_dnotdk` (`table_dnotdk_job_id`, `table_dnotdk_customer_id`, `table_dnotdk_mover_id`, `table_dnotdk_origin_zip`, `table_dnotdk_dest_zip`, `table_dnotdk_distance_miles`, `table_dnotdk_truck_size`, `table_dnotdk_base_price`) VALUES (1, 2, 3, 4, 5, 6, 7, 1.0);
+
+INSERT INTO `table_kr203y` (`table_kr203y_zip_code`, `table_kr203y_zone`, `table_kr203y_base_rate_per_mile`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(DISTANCE_MILES_PARAM INT, TRUCK_SIZE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_TRUCK_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 50;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    CASE TRUCK_SIZE_PARAM
+        WHEN 'SMALL' THEN SET V_TRUCK_MULTIPLIER = 1;
+        WHEN 'MEDIUM' THEN SET V_TRUCK_MULTIPLIER = 2;
+        WHEN 'LARGE' THEN SET V_TRUCK_MULTIPLIER = 3;
+        WHEN 'EXTRA_LARGE' THEN SET V_TRUCK_MULTIPLIER = 4;
+        ELSE SET V_TRUCK_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_ESTIMATE = (DISTANCE_MILES_PARAM * V_BASE_RATE * V_TRUCK_MULTIPLIER) + V_FUEL_SURCHARGE;
+
+    IF DISTANCE_MILES_PARAM > 500 THEN
+        SET V_TOTAL_ESTIMATE = V_TOTAL_ESTIMATE - (V_TOTAL_ESTIMATE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+CREATE TABLE IF NOT EXISTS `table_tqo94u` (
+    `table_tqo94u_emp_id` INT,
+    `table_tqo94u_hire_date` DATE
+);
+
+INSERT INTO `table_tqo94u` (`table_tqo94u_emp_id`, `table_tqo94u_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_TQO94U_HIRE_DATE)
+    INTO V_WEEK
+    FROM TABLE_TQO94U
+    WHERE TABLE_TQO94U_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = 0;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(VAL INT, MIN_VAL INT, MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(-17)) - -96 + (val) < MIN_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE BELOW MINIMUM';
+    END IF;
+    IF VAL > MAX_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE ABOVE MAXIMUM';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+CREATE TABLE IF NOT EXISTS `table_cnc54j` (
+    `table_cnc54j_customer_id` INT
+);
+
+INSERT INTO `table_cnc54j` (`table_cnc54j_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CUSTOMER_ID_PARAM % 10;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+CREATE TABLE IF NOT EXISTS `table_smasih` (
+    `table_smasih_account_id` INT,
+    `table_smasih_customer_id` INT,
+    `table_smasih_account_type` INT,
+    `table_smasih_balance` INT,
+    `table_smasih_interest_rate` INT,
+    `table_smasih_opened_date` DATE
+);
+
+INSERT INTO `table_smasih` (`table_smasih_account_id`, `table_smasih_customer_id`, `table_smasih_account_type`, `table_smasih_balance`, `table_smasih_interest_rate`, `table_smasih_opened_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_DAYS_HELD INT DEFAULT 0;
+    DECLARE V_INTEREST_EARNED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SMASIH_BALANCE, 0), COALESCE(TABLE_SMASIH_INTEREST_RATE, 0.00)
+    INTO V_BALANCE, V_INTEREST_RATE
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_SMASIH_OPENED_DATE)
+    INTO V_DAYS_HELD
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_INTEREST_EARNED = (V_BALANCE * V_INTEREST_RATE * V_DAYS_HELD) / 36500;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(28)) - 620 + (floor(v_interest_earned));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+CREATE TABLE IF NOT EXISTS `table_3c891b` (
+    `table_3c891b_customer_id` INT,
+    `table_3c891b_country` INT
+);
+
+INSERT INTO `table_3c891b` (`table_3c891b_customer_id`, `table_3c891b_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_3C891B
+    WHERE TABLE_3C891B_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BTERO6_PRICE, 0), COALESCE(TABLE_BTERO6_STOCK_QUANTITY, 0), COALESCE(TABLE_AOMFN6_SUPPLIER_RATING, 3.0), COALESCE(TABLE_AOMFN6_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM TABLE_BTERO6 P
+    LEFT JOIN TABLE_AOMFN6 S ON TABLE_BTERO6_SUPPLIER_ID = TABLE_AOMFN6_SUPPLIER_ID
+    WHERE TABLE_BTERO6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MD6Z0A_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_MD6Z0A
+    WHERE TABLE_MD6Z0A_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(62)) - -246 + ((MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(50, -34, -66)) - -113 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - 168 + ((v_supplier_rating * 20) - (v_lead_time * 2) + (v_sales_volume / 10))));
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_VALUE_INDEX_0wzm8k(-50)) - 268 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(94)) - 483 + (v_market_score)) - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(1);

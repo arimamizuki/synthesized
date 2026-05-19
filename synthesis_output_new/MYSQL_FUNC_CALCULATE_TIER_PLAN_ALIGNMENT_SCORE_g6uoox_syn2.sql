@@ -1,0 +1,392 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gt6jol` (
+    `table_gt6jol_customer_id` INT,
+    `table_gt6jol_plan_type` VARCHAR(50),
+    `table_gt6jol_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_avp7kg` (
+    `table_avp7kg_customer_id` INT,
+    `table_avp7kg_tier_level` INT
+);
+
+INSERT INTO `table_gt6jol` (`table_gt6jol_customer_id`, `table_gt6jol_plan_type`, `table_gt6jol_status`) VALUES (1, 'test', 'test');
+
+INSERT INTO `table_avp7kg` (`table_avp7kg_customer_id`, `table_avp7kg_tier_level`) VALUES (1, 2);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+CREATE TABLE IF NOT EXISTS `table_x92ggb` (
+    `table_x92ggb_order_id` INT,
+    `table_x92ggb_customer_id` INT,
+    `table_x92ggb_order_date` DATE,
+    `table_x92ggb_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrtan3` (
+    `table_wrtan3_customer_id` INT,
+    `table_wrtan3_registration_date` DATE
+);
+
+INSERT INTO `table_x92ggb` (`table_x92ggb_order_id`, `table_x92ggb_customer_id`, `table_x92ggb_order_date`, `table_x92ggb_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wrtan3` (`table_wrtan3_customer_id`, `table_wrtan3_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPECTED_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_X92GGB
+    WHERE TABLE_X92GGB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_WRTAN3_REGISTRATION_DATE) / 30
+    INTO V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_WRTAN3
+    WHERE TABLE_WRTAN3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS = (MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(-60)) - -225 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_ORDERS = V_CUSTOMER_AGE_MONTHS * 0.5;
+    SET V_REPEAT_RATE = FLOOR((V_ORDER_COUNT / V_EXPECTED_ORDERS) * 100);
+
+    RETURN V_REPEAT_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+CREATE TABLE IF NOT EXISTS `table_bzoodp` (
+    `table_bzoodp_property_id` INT,
+    `table_bzoodp_landlord_id` INT,
+    `table_bzoodp_property_type` VARCHAR(50),
+    `table_bzoodp_monthly_rent` INT,
+    `table_bzoodp_deposit_amount` DECIMAL(10,2),
+    `table_bzoodp_num_units` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_s3k6c0` (
+    `table_s3k6c0_lease_id` INT,
+    `table_s3k6c0_property_id` INT,
+    `table_s3k6c0_tenant_id` INT,
+    `table_s3k6c0_start_date` DATE,
+    `table_s3k6c0_end_date` DATE,
+    `table_s3k6c0_monthly_payment` INT
+);
+
+INSERT INTO `table_bzoodp` (`table_bzoodp_property_id`, `table_bzoodp_landlord_id`, `table_bzoodp_property_type`, `table_bzoodp_monthly_rent`, `table_bzoodp_deposit_amount`, `table_bzoodp_num_units`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_s3k6c0` (`table_s3k6c0_lease_id`, `table_s3k6c0_property_id`, `table_s3k6c0_tenant_id`, `table_s3k6c0_start_date`, `table_s3k6c0_end_date`, `table_s3k6c0_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_NUM_UNITS INT DEFAULT 0;
+    DECLARE V_OCCUPIED_UNITS INT DEFAULT 0;
+    DECLARE V_VACANCY_RATE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BZOODP_MONTHLY_RENT, 0), COALESCE(TABLE_BZOODP_NUM_UNITS, 1)
+    INTO V_MONTHLY_RENT, V_NUM_UNITS
+    FROM TABLE_BZOODP
+    WHERE TABLE_BZOODP_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_OCCUPIED_UNITS
+    FROM TABLE_S3K6C0
+    WHERE TABLE_S3K6C0_PROPERTY_ID = PROPERTY_ID_PARAM
+      AND TABLE_S3K6C0_END_DATE > CURDATE();
+
+    IF V_NUM_UNITS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_VACANCY_RATE = ((V_NUM_UNITS - V_OCCUPIED_UNITS) * 100) / V_NUM_UNITS;
+    SET V_RISK_SCORE = V_VACANCY_RATE;
+
+    IF V_MONTHLY_RENT > 5000 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_RISK_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(-94)) - 175 + (p_n * p_n * p_n);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+CREATE TABLE IF NOT EXISTS `table_g3imfa` (
+    `table_g3imfa_order_id` INT,
+    `table_g3imfa_customer_id` INT,
+    `table_g3imfa_order_date` DATE,
+    `table_g3imfa_total_amount` DECIMAL(10,2),
+    `table_g3imfa_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_koyw4b` (
+    `table_koyw4b_order_id` INT,
+    `table_koyw4b_product_id` INT,
+    `table_koyw4b_quantity` INT
+);
+
+INSERT INTO `table_g3imfa` (`table_g3imfa_order_id`, `table_g3imfa_customer_id`, `table_g3imfa_order_date`, `table_g3imfa_total_amount`, `table_g3imfa_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_koyw4b` (`table_koyw4b_order_id`, `table_koyw4b_product_id`, `table_koyw4b_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_KOYW4B_QUANTITY), 0)
+    INTO V_TOTAL_ITEMS
+    FROM TABLE_KOYW4B
+    WHERE TABLE_KOYW4B_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_TOTAL_ITEMS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_0pawyu(13)) - 168 + ((MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf(-59)) - 130 + (-1));
+    END IF;
+
+    SET V_RESULT = ROUND(P_A / P_B);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf----- */
+CREATE TABLE IF NOT EXISTS `table_q1al41` (
+    `table_q1al41_emp_id` INT,
+    `table_q1al41_hire_date` DATE
+);
+
+INSERT INTO `table_q1al41` (`table_q1al41_emp_id`, `table_q1al41_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARS_AT_COMPANY_pi47gf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_Q1AL41_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM TABLE_Q1AL41
+    WHERE TABLE_Q1AL41_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_0pawyu----- */
+CREATE TABLE IF NOT EXISTS `table_yo2rnx` (
+    `table_yo2rnx_customer_id` INT,
+    `table_yo2rnx_registration_date` DATE,
+    `table_yo2rnx_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_27boi3` (
+    `table_27boi3_order_id` INT,
+    `table_27boi3_customer_id` INT,
+    `table_27boi3_order_date` DATE,
+    `table_27boi3_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_yo2rnx` (`table_yo2rnx_customer_id`, `table_yo2rnx_registration_date`, `table_yo2rnx_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_27boi3` (`table_27boi3_order_id`, `table_27boi3_customer_id`, `table_27boi3_order_date`, `table_27boi3_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_0pawyu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_0pawyu(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT MIN(TABLE_27BOI3_ORDER_DATE), MAX(TABLE_27BOI3_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_27BOI3
+    WHERE TABLE_27BOI3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LIFESPAN_MONTHS = TIMESTAMPDIFF(MONTH, V_FIRST_ORDER_DATE, COALESCE(V_LAST_ORDER_DATE, CURDATE()));
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(37, 75)) - -316 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4()) - -410 + (v_lifespan_months));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 6 UNION SELECT 12 UNION SELECT 18 UNION SELECT 24 UNION SELECT 30 UNION SELECT 36;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem()) - 362 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(P_BASE INT, P_EXP INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= P_EXP DO
+        SET V_RESULT = V_RESULT * P_BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_ALIGNMENT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_GT6JOL_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_GT6JOL
+    WHERE TABLE_GT6JOL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_AVP7KG_TIER_LEVEL
+    INTO V_TIER
+    FROM TABLE_AVP7KG
+    WHERE TABLE_AVP7KG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF (V_TIER = 'PLATINUM' AND V_PLAN_TYPE = 'ENTERPRISE') OR
+       (V_TIER = 'GOLD' AND V_PLAN_TYPE = 'PREMIUM') OR
+       (V_TIER = 'SILVER' AND V_PLAN_TYPE = 'BASIC') THEN
+        SET V_ALIGNMENT_SCORE = 100;
+    ELSEIF (V_TIER IN ('PLATINUM', 'GOLD') AND V_PLAN_TYPE IN ('PREMIUM', 'ENTERPRISE')) OR
+            (V_TIER = 'SILVER' AND V_PLAN_TYPE IN ('BASIC', 'PREMIUM')) THEN
+        SET V_ALIGNMENT_SCORE = (MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(-36)) - 174 + (70);
+    ELSE
+        SET V_ALIGNMENT_SCORE = (MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(-21, -81)) - 764 + ((MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(-73)) - -814 + (30));
+    END IF;
+
+    RETURN V_ALIGNMENT_SCORE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(1);

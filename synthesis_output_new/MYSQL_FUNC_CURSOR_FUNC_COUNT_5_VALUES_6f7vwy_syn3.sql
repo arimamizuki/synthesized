@@ -1,0 +1,359 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(-31)) - -921 + ((v_subtotal * tax_rate_percent) / 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(49)) - -348 + (v_tax_amount);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+CREATE TABLE IF NOT EXISTS `table_6fslpk` (
+    `table_6fslpk_project_id` INT,
+    `table_6fslpk_client_id` INT,
+    `table_6fslpk_project_manager_id` INT,
+    `table_6fslpk_budget` INT,
+    `table_6fslpk_spent_amount` DECIMAL(10,2),
+    `table_6fslpk_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6fslpk` (`table_6fslpk_project_id`, `table_6fslpk_client_id`, `table_6fslpk_project_manager_id`, `table_6fslpk_budget`, `table_6fslpk_spent_amount`, `table_6fslpk_status`) VALUES (1, 2, 3, 4, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+    DECLARE V_VARIANCE_PCT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6FSLPK_BUDGET, 0), COALESCE(TABLE_6FSLPK_SPENT_AMOUNT, 0)
+    INTO V_BUDGET, V_SPENT
+    FROM TABLE_6FSLPK
+    WHERE TABLE_6FSLPK_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = V_BUDGET - V_SPENT;
+    SET V_VARIANCE_PCT = (V_VARIANCE * 100) / V_BUDGET;
+
+    RETURN V_VARIANCE_PCT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+CREATE TABLE IF NOT EXISTS `table_0lv4pt` (
+    `table_0lv4pt_case_id` INT,
+    `table_0lv4pt_attorney_id` INT,
+    `table_0lv4pt_case_type` VARCHAR(50),
+    `table_0lv4pt_filing_date` DATE,
+    `table_0lv4pt_settlement_amount` DECIMAL(10,2),
+    `table_0lv4pt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ljafqt` (
+    `table_ljafqt_attorney_id` INT,
+    `table_ljafqt_name` VARCHAR(50),
+    `table_ljafqt_hourly_rate` INT,
+    `table_ljafqt_experience_years` INT
+);
+
+INSERT INTO `table_0lv4pt` (`table_0lv4pt_case_id`, `table_0lv4pt_attorney_id`, `table_0lv4pt_case_type`, `table_0lv4pt_filing_date`, `table_0lv4pt_settlement_amount`, `table_0lv4pt_status`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ljafqt` (`table_ljafqt_attorney_id`, `table_ljafqt_name`, `table_ljafqt_hourly_rate`, `table_ljafqt_experience_years`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SETTLEMENT_AMOUNT INT DEFAULT 0;
+    DECLARE V_ATTORNEY_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CASE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0LV4PT_SETTLEMENT_AMOUNT, 0)
+    INTO V_SETTLEMENT_AMOUNT
+    FROM TABLE_0LV4PT
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LJAFQT_HOURLY_RATE, 200)
+    INTO V_HOURLY_RATE
+    FROM TABLE_0LV4PT LC
+    JOIN TABLE_LJAFQT A ON TABLE_0LV4PT_ATTORNEY_ID = TABLE_LJAFQT_ATTORNEY_ID
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SET V_CASE_VALUE = V_SETTLEMENT_AMOUNT;
+
+    IF V_CASE_VALUE > 100000 THEN
+        SET V_CASE_VALUE = V_CASE_VALUE - (V_CASE_VALUE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_CASE_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > (MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t(-31)) - -813 + (0) THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7(16)) - 239 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7----- */
+CREATE TABLE IF NOT EXISTS `table_zvc3qp` (
+    `table_zvc3qp_item_id` INT,
+    `table_zvc3qp_sku` INT,
+    `table_zvc3qp_name` VARCHAR(50),
+    `table_zvc3qp_warehouse_id` INT,
+    `table_zvc3qp_quantity_on_hand` INT,
+    `table_zvc3qp_reorder_point` INT,
+    `table_zvc3qp_unit_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f19oo8` (
+    `table_f19oo8_txn_id` INT,
+    `table_f19oo8_item_id` INT,
+    `table_f19oo8_txn_type` VARCHAR(50),
+    `table_f19oo8_quantity` INT,
+    `table_f19oo8_txn_date` DATE
+);
+
+INSERT INTO `table_zvc3qp` (`table_zvc3qp_item_id`, `table_zvc3qp_sku`, `table_zvc3qp_name`, `table_zvc3qp_warehouse_id`, `table_zvc3qp_quantity_on_hand`, `table_zvc3qp_reorder_point`, `table_zvc3qp_unit_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_f19oo8` (`table_f19oo8_txn_id`, `table_f19oo8_item_id`, `table_f19oo8_txn_type`, `table_f19oo8_quantity`, `table_f19oo8_txn_date`) VALUES (1, 2, 'test', 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_OUTGOING INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ZVC3QP_QUANTITY_ON_HAND, 0), COALESCE(TABLE_ZVC3QP_REORDER_POINT, 0), COALESCE(TABLE_ZVC3QP_UNIT_COST, 0)
+    INTO V_CURRENT_STOCK, V_REORDER_POINT, V_UNIT_COST
+    FROM TABLE_ZVC3QP
+    WHERE TABLE_ZVC3QP_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT COALESCE(SUM(ABS(TABLE_F19OO8_QUANTITY)), 0) INTO V_TOTAL_OUTGOING
+    FROM TABLE_F19OO8
+    WHERE TABLE_F19OO8_ITEM_ID = ITEM_ID_PARAM
+      AND TABLE_F19OO8_TXN_TYPE IN ('OUT', 'SALE', 'TRANSFER')
+      AND TABLE_F19OO8_TXN_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = (V_TOTAL_OUTGOING * V_UNIT_COST) / V_CURRENT_STOCK;
+
+    IF V_CURRENT_STOCK < V_REORDER_POINT THEN
+        SET V_TURNOVER_RATE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(-6, 95)) - 952 + (v_turnover_rate - 10);
+    END IF;
+
+    RETURN CAST(V_TURNOVER_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CELSIUS_TO_FAHRENHEIT_85yr2t(CELSIUS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FAHRENHEIT DECIMAL(5,2) DEFAULT 0.00;
+    SET V_FAHRENHEIT = (CELSIUS * 9 / 5) + 32;
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01(63)) - -568 + (floor(v_fahrenheit));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01----- */
+CREATE TABLE IF NOT EXISTS `table_0rbc87` (
+    `table_0rbc87_product_id` INT,
+    `table_0rbc87_price` DECIMAL(10,2),
+    `table_0rbc87_stock_quantity` INT
+);
+
+INSERT INTO `table_0rbc87` (`table_0rbc87_product_id`, `table_0rbc87_price`, `table_0rbc87_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0RBC87_PRICE, 0), COALESCE(TABLE_0RBC87_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_0RBC87
+    WHERE TABLE_0RBC87_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_GCD_zzsrc1(30, 90)) - -820 + (floor(v_price / greatest(v_stock, 1)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_zzsrc1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_zzsrc1(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF (MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri()) - 936 + (a) < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE IF_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 5;
+    
+    IF VAL > 10 THEN
+        SET IF_COUNT = 10;
+    ELSEIF VAL > 5 THEN
+        SET IF_COUNT = 5;
+    ELSE
+        SET IF_COUNT = 0;
+    END IF;
+    
+    RETURN IF_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + ((MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(-16, -20)) - 290 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy();

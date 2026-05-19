@@ -1,0 +1,398 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_4rpywt (
+    table_4rpywt_emp_no INT,
+    table_4rpywt_first_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS table_qtgf21 (
+    table_qtgf21_emp_no INT,
+    table_qtgf21_salary DECIMAL(10,2)
+);
+
+INSERT INTO table_4rpywt (`table_4rpywt_emp_no`, `table_4rpywt_first_name`) VALUES (10001, 'Georgi');
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 60117);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 62102);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 66074);
+
+/* -----Called: MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde(87, 33, 60)) - -93 + ((MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(-95)) - -803 + (v_age_months));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+CREATE TABLE IF NOT EXISTS `table_3o46m6` (
+    `table_3o46m6_campaign_id` INT,
+    `table_3o46m6_budget` INT,
+    `table_3o46m6_start_date` DATE,
+    `table_3o46m6_end_date` DATE,
+    `table_3o46m6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_olefgc` (
+    `table_olefgc_conversion_id` INT,
+    `table_olefgc_campaign_id` INT,
+    `table_olefgc_conversion_value` INT
+);
+
+INSERT INTO `table_3o46m6` (`table_3o46m6_campaign_id`, `table_3o46m6_budget`, `table_3o46m6_start_date`, `table_3o46m6_end_date`, `table_3o46m6_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_olefgc` (`table_olefgc_conversion_id`, `table_olefgc_campaign_id`, `table_olefgc_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3O46M6_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_3O46M6
+    WHERE TABLE_3O46M6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OLEFGC_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_OLEFGC
+    WHERE TABLE_OLEFGC_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_S = (MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(87)) - 572 + ((MYSQL_FUNC_FACTORIAL_3sonsj(5)) - 164 + ((a + b + c) / 2.0));
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FACTORIAL_3sonsj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FACTORIAL_3sonsj(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN -1;
+    END IF;
+
+    IF N = 0 OR N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    COUNTER_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE COUNTER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+CREATE TABLE IF NOT EXISTS `table_2jb7oh` (
+    `table_2jb7oh_order_id` INT,
+    `table_2jb7oh_customer_id` INT,
+    `table_2jb7oh_order_date` DATE,
+    `table_2jb7oh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2jb7oh` (`table_2jb7oh_order_id`, `table_2jb7oh_customer_id`, `table_2jb7oh_order_date`, `table_2jb7oh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_2JB7OH_ORDER_DATE), MAX(TABLE_2JB7OH_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_2JB7OH
+    WHERE TABLE_2JB7OH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(62)) - 457 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_V2_CS_ADD_INVALIDATED_MEMBER_t6uenr(80, 90)) - 31 + ((MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(65)) - -397 + (floor(datediff(v_last_order, v_first_order) / (v_order_count - 1))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+CREATE TABLE IF NOT EXISTS `table_r8spts` (
+    `table_r8spts_product_id` INT,
+    `table_r8spts_customer_id` INT,
+    `table_r8spts_product_type` VARCHAR(50),
+    `table_r8spts_warranty_years` INT,
+    `table_r8spts_coverage_amount` DECIMAL(10,2),
+    `table_r8spts_premium_annual` INT,
+    `table_r8spts_deductible` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oabm0f` (
+    `table_oabm0f_claim_id` INT,
+    `table_oabm0f_product_id` INT,
+    `table_oabm0f_claim_date` DATE,
+    `table_oabm0f_repair_cost` DECIMAL(10,2),
+    `table_oabm0f_status` VARCHAR(50)
+);
+
+INSERT INTO `table_r8spts` (`table_r8spts_product_id`, `table_r8spts_customer_id`, `table_r8spts_product_type`, `table_r8spts_warranty_years`, `table_r8spts_coverage_amount`, `table_r8spts_premium_annual`, `table_r8spts_deductible`) VALUES (1, 2, 'test', 4, 1.0, 6, 7);
+
+INSERT INTO `table_oabm0f` (`table_oabm0f_claim_id`, `table_oabm0f_product_id`, `table_oabm0f_claim_date`, `table_oabm0f_repair_cost`, `table_oabm0f_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WARRANTY_YEARS INT DEFAULT 2;
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R8SPTS_WARRANTY_YEARS, 2), COALESCE(TABLE_R8SPTS_COVERAGE_AMOUNT, 1000), COALESCE(TABLE_R8SPTS_DEDUCTIBLE, 100)
+    INTO V_WARRANTY_YEARS, V_COVERAGE_AMOUNT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_R8SPTS
+    WHERE TABLE_R8SPTS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OABM0F_REPAIR_COST), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_OABM0F
+    WHERE TABLE_OABM0F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_OABM0F_STATUS = 'APPROVED';
+
+    SET V_COVERAGE_SCORE = (V_WARRANTY_YEARS * 20) + (V_COVERAGE_AMOUNT / 100) - (V_DEDUCTIBLE_AMOUNT / 10);
+
+    IF V_TOTAL_CLAIMS > 500 THEN
+        SET V_COVERAGE_SCORE = V_COVERAGE_SCORE - 30;
+    END IF;
+
+    RETURN CAST(V_COVERAGE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+CREATE TABLE IF NOT EXISTS `table_ebp46e` (
+    `table_ebp46e_customer_id` INT,
+    `table_ebp46e_plan_type` VARCHAR(50),
+    `table_ebp46e_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebp46e` (`table_ebp46e_customer_id`, `table_ebp46e_plan_type`, `table_ebp46e_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_EBP46E_PLAN_TYPE, COALESCE(TABLE_EBP46E_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_EBP46E
+    WHERE TABLE_EBP46E_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST / 2;
+        WHEN 'PREMIUM' THEN RETURN (MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m(-88)) - 138 + (v_monthly_cost / 3);
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST / 4;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m----- */
+CREATE TABLE IF NOT EXISTS `table_ids638` (
+    `table_ids638_emp_id` INT,
+    `table_ids638_manager_id` INT,
+    `table_ids638_department_id` INT,
+    `table_ids638_salary` INT,
+    `table_ids638_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_x43z64` (
+    `table_x43z64_department_id` INT,
+    `table_x43z64_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ids638` (`table_ids638_emp_id`, `table_ids638_manager_id`, `table_ids638_department_id`, `table_ids638_salary`, `table_ids638_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_x43z64` (`table_x43z64_department_id`, `table_x43z64_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_AVG_REPORT_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_LEADER_SALARY INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_IDS638_SALARY), 0)
+    INTO V_AVG_REPORT_SALARY
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT TABLE_IDS638_SALARY
+    INTO V_LEADER_SALARY
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_EMP_ID = EMP_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (V_DIRECT_REPORTS * 10) + (V_AVG_REPORT_SALARY / 100) + (V_LEADER_SALARY / 10000 * 20);
+
+    RETURN V_EFFECTIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_ADD_INVALIDATED_MEMBER_t6uenr----- */
+CREATE TABLE IF NOT EXISTS table_3dncw0 (
+    table_3dncw0_clusterset_id VARCHAR(36),
+    table_3dncw0_cluster_id VARCHAR(36),
+    table_3dncw0_view_id INT
+);
+
+CREATE TABLE IF NOT EXISTS table_jymw7u (
+    table_jymw7u_clusterset_id VARCHAR(36),
+    table_jymw7u_view_id INT
+);
+
+INSERT INTO table_jymw7u (`table_jymw7u_clusterset_id`, `table_jymw7u_view_id`) VALUES ('test', 2);
+
+INSERT INTO table_3dncw0 (`table_3dncw0_clusterset_id`, `table_3dncw0_cluster_id`, `table_3dncw0_view_id`) VALUES ('test', 'test', 3);
+
+/* -----Called: MYSQL_FUNC_V2_CS_ADD_INVALIDATED_MEMBER_t6uenr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_ADD_INVALIDATED_MEMBER_t6uenr(CS_ID INT, TABLE_3DNCW0_CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MAX_VIEW_ID INT;
+    
+    SELECT MAX(TABLE_JYMW7U_VIEW_ID) INTO MAX_VIEW_ID
+    FROM TABLE_JYMW7U
+    WHERE TABLE_JYMW7U_CLUSTERSET_ID = CAST(CS_ID AS CHAR(36));
+    
+    DELETE FROM TABLE_3DNCW0
+    WHERE TABLE_3DNCW0.TABLE_3DNCW0_CLUSTERSET_ID = CAST(CS_ID AS CHAR(36))
+      AND TABLE_3DNCW0.TABLE_3DNCW0_CLUSTER_ID = CAST(TABLE_3DNCW0_CLUSTER_ID AS CHAR(36))
+      AND TABLE_3DNCW0.TABLE_3DNCW0_VIEW_ID = MAX_VIEW_ID;
+    
+    RETURN ROW_COUNT();
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_AVG_SALARY_5keii4(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE AVG_SALARY INT;
+    
+    SELECT CAST(AVG(TABLE_QTGF21_SALARY) AS UNSIGNED) INTO AVG_SALARY
+    FROM TABLE_4RPYWT E 
+    JOIN TABLE_QTGF21 S ON TABLE_4RPYWT_EMP_NO = TABLE_QTGF21_EMP_NO
+    WHERE TABLE_4RPYWT_EMP_NO = P_EMP_NO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(9)) - -923 + ((MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(-98, -47)) - -38 + (avg_salary));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_EMP_AVG_SALARY_5keii4(1);

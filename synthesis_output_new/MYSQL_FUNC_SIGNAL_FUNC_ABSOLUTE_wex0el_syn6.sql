@@ -1,0 +1,408 @@
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_LEAP_YEAR INT DEFAULT 0;
+
+    IF (YEAR_PARAM % 4 = 0 AND YEAR_PARAM % 100 != 0) OR (YEAR_PARAM % 400 = 0) THEN
+        SET V_IS_LEAP_YEAR = 1;
+    END IF;
+
+    IF V_IS_LEAP_YEAR = 1 THEN
+        RETURN 366;
+    END IF;
+
+    RETURN 365;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN 'FIZZBUZZ';
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN CAST(N AS CHAR);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_BASED_SALARY_ADJUSTMENT_11jigq----- */
+CREATE TABLE IF NOT EXISTS `table_p8ko1o` (
+    `table_p8ko1o_emp_id` INT,
+    `table_p8ko1o_department_id` INT,
+    `table_p8ko1o_salary` INT,
+    `table_p8ko1o_hire_date` DATE,
+    `table_p8ko1o_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wkbvtu` (
+    `table_wkbvtu_department_id` INT,
+    `table_wkbvtu_name` VARCHAR(50)
+);
+
+INSERT INTO `table_p8ko1o` (`table_p8ko1o_emp_id`, `table_p8ko1o_department_id`, `table_p8ko1o_salary`, `table_p8ko1o_hire_date`, `table_p8ko1o_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_wkbvtu` (`table_wkbvtu_department_id`, `table_wkbvtu_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_BASED_SALARY_ADJUSTMENT_11jigq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BASED_SALARY_ADJUSTMENT_11jigq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY INT DEFAULT 0;
+
+    SELECT TABLE_P8KO1O_SALARY, COALESCE(TABLE_P8KO1O_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_P8KO1O_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_P8KO1O
+    WHERE TABLE_P8KO1O_EMP_ID = EMP_ID_PARAM;
+
+    IF V_PERFORMANCE >= 4.5 THEN
+        SET V_ADJUSTED_SALARY = V_SALARY * 1.15;
+    ELSEIF V_PERFORMANCE >= 4.0 THEN
+        SET V_ADJUSTED_SALARY = V_SALARY * 1.10;
+    ELSEIF V_PERFORMANCE >= 3.5 THEN
+        SET V_ADJUSTED_SALARY = V_SALARY * 1.05;
+    ELSE
+        SET V_ADJUSTED_SALARY = V_SALARY;
+    END IF;
+
+    RETURN V_ADJUSTED_SALARY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+CREATE TABLE IF NOT EXISTS `table_ffie3d` (
+    `table_ffie3d_product_id` INT,
+    `table_ffie3d_category_id` INT,
+    `table_ffie3d_supplier_id` INT,
+    `table_ffie3d_unit_cost` DECIMAL(10,2),
+    `table_ffie3d_unit_price` DECIMAL(10,2),
+    `table_ffie3d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wl2lrm` (
+    `table_wl2lrm_order_id` INT,
+    `table_wl2lrm_product_id` INT,
+    `table_wl2lrm_quantity` INT
+);
+
+INSERT INTO `table_ffie3d` (`table_ffie3d_product_id`, `table_ffie3d_category_id`, `table_ffie3d_supplier_id`, `table_ffie3d_unit_cost`, `table_ffie3d_unit_price`, `table_ffie3d_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `table_wl2lrm` (`table_wl2lrm_order_id`, `table_wl2lrm_product_id`, `table_wl2lrm_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FFIE3D_UNIT_COST, 0), COALESCE(TABLE_FFIE3D_UNIT_PRICE, 0), COALESCE(TABLE_FFIE3D_STOCK_QUANTITY, 0)
+    INTO V_UNIT_COST, V_UNIT_PRICE, V_STOCK_QUANTITY
+    FROM TABLE_FFIE3D
+    WHERE TABLE_FFIE3D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WL2LRM_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_WL2LRM
+    WHERE TABLE_WL2LRM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_UNIT_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_UNIT_PRICE - V_UNIT_COST) * 100) / V_UNIT_PRICE;
+
+    SET V_PROFITABILITY_INDEX = (V_PROFIT_MARGIN * V_SALES_VOLUME) / GREATEST(V_STOCK_QUANTITY, 1);
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(94)) - 483 + (v_profitability_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+CREATE TABLE IF NOT EXISTS `table_vhtw5f` (
+    `table_vhtw5f_emp_id` INT,
+    `table_vhtw5f_department_id` INT,
+    `table_vhtw5f_salary` INT,
+    `table_vhtw5f_hire_date` DATE,
+    `table_vhtw5f_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4ljt9e` (
+    `table_4ljt9e_department_id` INT,
+    `table_4ljt9e_name` VARCHAR(50)
+);
+
+INSERT INTO `table_vhtw5f` (`table_vhtw5f_emp_id`, `table_vhtw5f_department_id`, `table_vhtw5f_salary`, `table_vhtw5f_hire_date`, `table_vhtw5f_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_4ljt9e` (`table_4ljt9e_department_id`, `table_4ljt9e_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_VHTW5F_HIRE_DATE, CURDATE()), COALESCE(TABLE_VHTW5F_PERFORMANCE_RATING, 0), COALESCE(TABLE_VHTW5F_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_VHTW5F
+    WHERE TABLE_VHTW5F_EMP_ID = EMP_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_TENURE_YEARS * 20) + (V_PERFORMANCE * 15) + (V_SALARY / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+CREATE TABLE IF NOT EXISTS `table_w56b1h` (
+    `table_w56b1h_emp_id` INT,
+    `table_w56b1h_department_id` INT,
+    `table_w56b1h_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ispea` (
+    `table_0ispea_department_id` INT,
+    `table_0ispea_name` VARCHAR(50),
+    `table_0ispea_budget` INT
+);
+
+INSERT INTO `table_w56b1h` (`table_w56b1h_emp_id`, `table_w56b1h_department_id`, `table_w56b1h_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_0ispea` (`table_0ispea_department_id`, `table_0ispea_name`, `table_0ispea_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_W56B1H;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_W56B1H
+    WHERE TABLE_W56B1H_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_AVG_SALARY = 0 THEN
+        RETURN 50;
+    END IF;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+CREATE TABLE IF NOT EXISTS `table_9duxm5` (
+    `table_9duxm5_emp_id` INT,
+    `table_9duxm5_department_id` INT,
+    `table_9duxm5_salary` INT
+);
+
+INSERT INTO `table_9duxm5` (`table_9duxm5_emp_id`, `table_9duxm5_department_id`, `table_9duxm5_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9DUXM5
+    WHERE TABLE_9DUXM5_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(-42, -7)) - 378 + ((MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx(-58)) - -282 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx----- */
+CREATE TABLE IF NOT EXISTS `table_r1u2hz` (
+    `table_r1u2hz_member_id` INT,
+    `table_r1u2hz_name` VARCHAR(50),
+    `table_r1u2hz_membership_type` VARCHAR(50),
+    `table_r1u2hz_join_date` DATE,
+    `table_r1u2hz_monthly_fee` INT,
+    `table_r1u2hz_trainer_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o2covd` (
+    `table_o2covd_session_id` INT,
+    `table_o2covd_member_id` INT,
+    `table_o2covd_trainer_id` INT,
+    `table_o2covd_session_date` DATE,
+    `table_o2covd_duration_minutes` INT
+);
+
+INSERT INTO `table_r1u2hz` (`table_r1u2hz_member_id`, `table_r1u2hz_name`, `table_r1u2hz_membership_type`, `table_r1u2hz_join_date`, `table_r1u2hz_monthly_fee`, `table_r1u2hz_trainer_id`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_o2covd` (`table_o2covd_session_id`, `table_o2covd_member_id`, `table_o2covd_trainer_id`, `table_o2covd_session_date`, `table_o2covd_duration_minutes`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MEMBER_MONTHLY_SPENDING_zwylfx(MEMBER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_SESSION_COUNT INT DEFAULT 0;
+    DECLARE V_SESSION_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_SPENDING INT DEFAULT 0;
+    DECLARE V_ACTIVE_SESSIONS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R1U2HZ_MONTHLY_FEE, 0) INTO V_MONTHLY_FEE
+    FROM TABLE_R1U2HZ
+    WHERE TABLE_R1U2HZ_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTIVE_SESSIONS
+    FROM TABLE_O2COVD
+    WHERE TABLE_O2COVD_MEMBER_ID = MEMBER_ID_PARAM
+      AND TABLE_O2COVD_SESSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_SESSION_COST = V_SESSION_COST * V_ACTIVE_SESSIONS;
+    SET V_TOTAL_SPENDING = V_MONTHLY_FEE + V_SESSION_COST;
+
+    RETURN V_TOTAL_SPENDING;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * RADIUS * RADIUS * HEIGHT;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(-57)) - -854 + (floor(v_volume));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+CREATE TABLE IF NOT EXISTS `table_34i93l` (
+    `table_34i93l_customer_id` INT,
+    `table_34i93l_registration_date` DATE,
+    `table_34i93l_tier_level` INT,
+    `table_34i93l_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vp00q0` (
+    `table_vp00q0_order_id` INT,
+    `table_vp00q0_customer_id` INT,
+    `table_vp00q0_order_date` DATE,
+    `table_vp00q0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1gdozo` (
+    `table_1gdozo_review_id` INT,
+    `table_1gdozo_customer_id` INT,
+    `table_1gdozo_product_id` INT,
+    `table_1gdozo_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_34i93l` (`table_34i93l_customer_id`, `table_34i93l_registration_date`, `table_34i93l_tier_level`, `table_34i93l_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_vp00q0` (`table_vp00q0_order_id`, `table_vp00q0_customer_id`, `table_vp00q0_order_date`, `table_vp00q0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_1gdozo` (`table_1gdozo_review_id`, `table_1gdozo_customer_id`, `table_1gdozo_product_id`, `table_1gdozo_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_34I93L_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_34I93L
+    WHERE TABLE_34I93L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_VP00Q0_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM TABLE_VP00Q0
+    WHERE TABLE_VP00Q0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_1GDOZO_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_1GDOZO
+    WHERE TABLE_1GDOZO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    SET V_LOYALTY_SCORE = (V_ORDER_COUNT * 10) + (V_TOTAL_SPENT / 100) + (V_AVG_REVIEW_RATING * 15);
+    SET V_LOYALTY_SCORE = V_LOYALTY_SCORE * V_TIER_MULTIPLIER / 2;
+
+    RETURN V_LOYALTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(-6)) - 570 + (p_n) < 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-6)) - 990 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(24)) - 512 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(83)) - -929 + ((MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(-50)) - 516 + (-p_n))));
+    END IF;
+    RETURN P_N;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(1);

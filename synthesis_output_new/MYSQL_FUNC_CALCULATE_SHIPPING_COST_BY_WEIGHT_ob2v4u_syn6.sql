@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_8t1b7g` (
+    `table_8t1b7g_zone_id` INT,
+    `table_8t1b7g_weight_min` INT,
+    `table_8t1b7g_weight_max` INT,
+    `table_8t1b7g_base_rate` INT,
+    `table_8t1b7g_per_kg_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_tik0vj` (
+    `table_tik0vj_order_id` INT,
+    `table_tik0vj_destination_zone` INT,
+    `table_tik0vj_package_weight` INT
+);
+
+INSERT INTO `table_8t1b7g` (`table_8t1b7g_zone_id`, `table_8t1b7g_weight_min`, `table_8t1b7g_weight_max`, `table_8t1b7g_base_rate`, `table_8t1b7g_per_kg_rate`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_tik0vj` (`table_tik0vj_order_id`, `table_tik0vj_destination_zone`, `table_tik0vj_package_weight`) VALUES (1, 1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+CREATE TABLE IF NOT EXISTS `table_r8spts` (
+    `table_r8spts_product_id` INT,
+    `table_r8spts_customer_id` INT,
+    `table_r8spts_product_type` VARCHAR(50),
+    `table_r8spts_warranty_years` INT,
+    `table_r8spts_coverage_amount` DECIMAL(10,2),
+    `table_r8spts_premium_annual` INT,
+    `table_r8spts_deductible` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oabm0f` (
+    `table_oabm0f_claim_id` INT,
+    `table_oabm0f_product_id` INT,
+    `table_oabm0f_claim_date` DATE,
+    `table_oabm0f_repair_cost` DECIMAL(10,2),
+    `table_oabm0f_status` VARCHAR(50)
+);
+
+INSERT INTO `table_r8spts` (`table_r8spts_product_id`, `table_r8spts_customer_id`, `table_r8spts_product_type`, `table_r8spts_warranty_years`, `table_r8spts_coverage_amount`, `table_r8spts_premium_annual`, `table_r8spts_deductible`) VALUES (1, 2, 'test', 4, 1.0, 6, 7);
+
+INSERT INTO `table_oabm0f` (`table_oabm0f_claim_id`, `table_oabm0f_product_id`, `table_oabm0f_claim_date`, `table_oabm0f_repair_cost`, `table_oabm0f_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WARRANTY_YEARS INT DEFAULT 2;
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R8SPTS_WARRANTY_YEARS, 2), COALESCE(TABLE_R8SPTS_COVERAGE_AMOUNT, 1000), COALESCE(TABLE_R8SPTS_DEDUCTIBLE, 100)
+    INTO V_WARRANTY_YEARS, V_COVERAGE_AMOUNT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_R8SPTS
+    WHERE TABLE_R8SPTS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OABM0F_REPAIR_COST), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_OABM0F
+    WHERE TABLE_OABM0F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_OABM0F_STATUS = 'APPROVED';
+
+    SET V_COVERAGE_SCORE = (MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(-39)) - -733 + ((v_warranty_years * 20) + (v_coverage_amount / 100) - (v_deductible_amount / 10));
+
+    IF V_TOTAL_CLAIMS > 500 THEN
+        SET V_COVERAGE_SCORE = V_COVERAGE_SCORE - 30;
+    END IF;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(79, -80)) - -833 + (cast(v_coverage_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_s7bu64(STR INT, TIMES INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET TIMES = TIMES - 1;
+    UNTIL TIMES <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+CREATE TABLE IF NOT EXISTS `table_apsp1p` (
+    `table_apsp1p_customer_id` INT,
+    `table_apsp1p_registration_date` DATE,
+    `table_apsp1p_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j667hh` (
+    `table_j667hh_order_id` INT,
+    `table_j667hh_customer_id` INT,
+    `table_j667hh_order_date` DATE,
+    `table_j667hh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_apsp1p` (`table_apsp1p_customer_id`, `table_apsp1p_registration_date`, `table_apsp1p_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_j667hh` (`table_j667hh_order_id`, `table_j667hh_customer_id`, `table_j667hh_order_date`, `table_j667hh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM TABLE_J667HH
+        WHERE TABLE_J667HH_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(TABLE_J667HH_ORDER_DATE), MONTH(TABLE_J667HH_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 1.5;
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN FLOOR(V_PATTERN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+CREATE TABLE IF NOT EXISTS `table_gc4iyl` (
+    `table_gc4iyl_customer_id` INT,
+    `table_gc4iyl_registration_date` DATE
+);
+
+INSERT INTO `table_gc4iyl` (`table_gc4iyl_customer_id`, `table_gc4iyl_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GC4IYL_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_GC4IYL
+    WHERE TABLE_GC4IYL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_oucg37----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_oucg37(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    WHILE N > 0 DO
+        SET V_COUNT = (MYSQL_FUNC_IS_POSITIVE_kz2ysr(-67)) - -794 + (v_count) + (N & 1);
+        SET N = N >> 1;
+    END WHILE;
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_POSITIVE_kz2ysr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_POSITIVE_kz2ysr(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N > (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (0) THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, 0), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+CREATE TABLE IF NOT EXISTS `table_wq63dn` (
+    `table_wq63dn_invoice_id` INT,
+    `table_wq63dn_customer_id` INT,
+    `table_wq63dn_issue_date` DATE,
+    `table_wq63dn_due_date` DATE,
+    `table_wq63dn_total_amount` DECIMAL(10,2),
+    `table_wq63dn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_a5vkrv` (
+    `table_a5vkrv_payment_id` INT,
+    `table_a5vkrv_invoice_id` INT,
+    `table_a5vkrv_payment_date` DATE,
+    `table_a5vkrv_amount_paid` INT
+);
+
+INSERT INTO `table_wq63dn` (`table_wq63dn_invoice_id`, `table_wq63dn_customer_id`, `table_wq63dn_issue_date`, `table_wq63dn_due_date`, `table_wq63dn_total_amount`, `table_wq63dn_status`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_a5vkrv` (`table_a5vkrv_payment_id`, `table_a5vkrv_invoice_id`, `table_a5vkrv_payment_date`, `table_a5vkrv_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_AGING_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WQ63DN_TOTAL_AMOUNT, 0), TABLE_WQ63DN_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_DUE_DATE
+    FROM TABLE_WQ63DN
+    WHERE TABLE_WQ63DN_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_A5VKRV_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_A5VKRV
+    WHERE TABLE_A5VKRV_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_AMOUNT_PAID;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AGING_DAYS = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_AGING_DAYS < 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AGING_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(-54)) - 478 + (p_a * p_b * p_c);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+CREATE TABLE IF NOT EXISTS `table_1n374m` (
+    `table_1n374m_customer_id` INT,
+    `table_1n374m_status` VARCHAR(50),
+    `table_1n374m_monthly_cost` DECIMAL(10,2),
+    `table_1n374m_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_1n374m` (`table_1n374m_customer_id`, `table_1n374m_status`, `table_1n374m_monthly_cost`, `table_1n374m_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1N374M_PLAN_TYPE, COALESCE(TABLE_1N374M_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_1N374M
+    WHERE TABLE_1N374M_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1N374M_STATUS = 'ACTIVE';
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_BY_WEIGHT_ob2v4u(ZONE_ID_PARAM INT, WEIGHT_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 0;
+    DECLARE V_PER_KG_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_WEIGHT_KG INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8T1B7G_BASE_RATE, 10), COALESCE(TABLE_8T1B7G_PER_KG_RATE, 5)
+    INTO V_BASE_RATE, V_PER_KG_RATE
+    FROM TABLE_8T1B7G
+    WHERE TABLE_8T1B7G_ZONE_ID = ZONE_ID_PARAM
+      AND TABLE_8T1B7G_WEIGHT_MIN <= WEIGHT_PARAM
+      AND TABLE_8T1B7G_WEIGHT_MAX >= WEIGHT_PARAM;
+
+    SET V_WEIGHT_KG = (MYSQL_FUNC_COUNT_BITS_SET_oucg37(78)) - -862 + (ceil(weight_param / 1000));
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(20)) - 219 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(17)) - 78 + (v_base_rate + (v_weight_kg * v_per_kg_rate)));
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx(-43, -96, 81)) - 622 + ((MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(65)) - -397 + (v_total_cost));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SHIPPING_COST_BY_WEIGHT_ob2v4u(1, 1);

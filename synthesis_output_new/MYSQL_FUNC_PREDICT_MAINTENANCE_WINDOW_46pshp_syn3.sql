@@ -1,0 +1,418 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1do798` (
+    `table_1do798_device_id` INT,
+    `table_1do798_location` INT,
+    `table_1do798_device_type` VARCHAR(50),
+    `table_1do798_last_maintenance_date` DATE,
+    `table_1do798_operating_hours` DECIMAL(3,1),
+    `table_1do798_failure_probability` INT
+);
+
+INSERT INTO `table_1do798` (`table_1do798_device_id`, `table_1do798_location`, `table_1do798_device_type`, `table_1do798_last_maintenance_date`, `table_1do798_operating_hours`, `table_1do798_failure_probability`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 6);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+CREATE TABLE IF NOT EXISTS `table_42vfje` (
+    `table_42vfje_customer_id` INT,
+    `table_42vfje_country` INT,
+    `table_42vfje_registration_date` DATE
+);
+
+INSERT INTO `table_42vfje` (`table_42vfje_customer_id`, `table_42vfje_country`, `table_42vfje_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_42VFJE
+    WHERE TABLE_42VFJE_COUNTRY = COUNTRY_PARAM AND YEAR(TABLE_42VFJE_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_LCM INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+    DECLARE V_REMAINDER INT DEFAULT 0;
+
+    SET V_TEMP_A = A;
+    SET V_TEMP_B = B;
+
+    GCD_LOOP: WHILE (MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(-52)) - 808 + (v_temp_b) != 0 DO
+        SET V_REMAINDER = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_TEMP_B;
+        SET V_TEMP_B = V_REMAINDER;
+    END WHILE GCD_LOOP;
+
+    SET V_GCD = V_TEMP_A;
+
+    IF V_GCD = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LCM = (MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(-12)) - 741 + ((a / v_gcd) * b);
+
+    RETURN V_LCM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+CREATE TABLE IF NOT EXISTS `table_75ig4z` (
+    `table_75ig4z_flight_id` INT,
+    `table_75ig4z_origin` INT,
+    `table_75ig4z_destination` INT,
+    `table_75ig4z_departure_time` DATE,
+    `table_75ig4z_arrival_time` DATE,
+    `table_75ig4z_aircraft_type` VARCHAR(50),
+    `table_75ig4z_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ch532i` (
+    `table_ch532i_leg_id` INT,
+    `table_ch532i_booking_id` INT,
+    `table_ch532i_flight_id` INT,
+    `table_ch532i_seat_class` INT,
+    `table_ch532i_seat_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_75ig4z` (`table_75ig4z_flight_id`, `table_75ig4z_origin`, `table_75ig4z_destination`, `table_75ig4z_departure_time`, `table_75ig4z_arrival_time`, `table_75ig4z_aircraft_type`, `table_75ig4z_base_price`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_ch532i` (`table_ch532i_leg_id`, `table_ch532i_booking_id`, `table_ch532i_flight_id`, `table_ch532i_seat_class`, `table_ch532i_seat_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPARTURE TIME;
+    DECLARE V_ARRIVAL TIME;
+    DECLARE V_DURATION_MINS INT DEFAULT 0;
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_DELAY_RISK INT DEFAULT 0;
+
+    SELECT TABLE_75IG4Z_DEPARTURE_TIME, TABLE_75IG4Z_ARRIVAL_TIME, TABLE_75IG4Z_BASE_PRICE
+    INTO V_DEPARTURE, V_ARRIVAL, V_PRICE
+    FROM TABLE_75IG4Z
+    WHERE TABLE_75IG4Z_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    IF V_DEPARTURE IS NULL OR V_ARRIVAL IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_MINS = TIME_TO_SEC(TIMEDIFF(V_ARRIVAL, V_DEPARTURE)) / 60;
+
+    IF V_DURATION_MINS < 0 THEN
+        SET V_DURATION_MINS = V_DURATION_MINS + 1440;
+    END IF;
+
+    IF V_DURATION_MINS > 480 THEN
+        SET V_DELAY_RISK = V_DURATION_MINS / 60;
+    END IF;
+
+    RETURN CAST(V_DURATION_MINS + V_DELAY_RISK AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+CREATE TABLE IF NOT EXISTS `table_8pj70z` (
+    `table_8pj70z_booking_id` INT,
+    `table_8pj70z_guest_id` INT,
+    `table_8pj70z_room_id` INT,
+    `table_8pj70z_check_in_date` DATE,
+    `table_8pj70z_check_out_date` DATE,
+    `table_8pj70z_room_rate` INT,
+    `table_8pj70z_extra_charges` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmlc8e` (
+    `table_lmlc8e_room_id` INT,
+    `table_lmlc8e_room_type` VARCHAR(50),
+    `table_lmlc8e_base_rate` INT,
+    `table_lmlc8e_max_occupancy` INT
+);
+
+INSERT INTO `table_8pj70z` (`table_8pj70z_booking_id`, `table_8pj70z_guest_id`, `table_8pj70z_room_id`, `table_8pj70z_check_in_date`, `table_8pj70z_check_out_date`, `table_8pj70z_room_rate`, `table_8pj70z_extra_charges`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_lmlc8e` (`table_lmlc8e_room_id`, `table_lmlc8e_room_type`, `table_lmlc8e_base_rate`, `table_lmlc8e_max_occupancy`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+    DECLARE V_ROOM_RATE INT DEFAULT 100;
+    DECLARE V_EXTRA_CHARGES INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8PJ70Z_CHECK_IN_DATE, CURDATE()), COALESCE(TABLE_8PJ70Z_CHECK_OUT_DATE, CURDATE())
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_ROOM_RATE, 100) INTO V_ROOM_RATE
+    FROM TABLE_8PJ70Z HB
+    JOIN TABLE_LMLC8E R ON TABLE_8PJ70Z_ROOM_ID = TABLE_LMLC8E_ROOM_ID
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_EXTRA_CHARGES, 0) INTO V_EXTRA_CHARGES
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS <= 0 THEN
+        SET V_NIGHTS = 1;
+    END IF;
+
+    SET V_TOTAL_COST = (V_NIGHTS * V_ROOM_RATE) + V_EXTRA_CHARGES;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET V_DELAY_SCORE = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 5;
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 3 UNION SELECT 6 UNION SELECT 9 UNION SELECT 12;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h(-51)) - 286 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h----- */
+CREATE TABLE IF NOT EXISTS `table_rfqzh7` (
+    `table_rfqzh7_product_id` INT,
+    `table_rfqzh7_stock_quantity` INT
+);
+
+INSERT INTO `table_rfqzh7` (`table_rfqzh7_product_id`, `table_rfqzh7_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RFQZH7_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_RFQZH7
+    WHERE TABLE_RFQZH7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK < 10 THEN
+        RETURN 1;
+    ELSEIF V_STOCK < 50 THEN
+        RETURN 2;
+    ELSEIF V_STOCK < 100 THEN
+        RETURN 3;
+    ELSE
+        RETURN 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm(11)) - -883 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm----- */
+CREATE TABLE IF NOT EXISTS `table_eej8k8` (
+    `table_eej8k8_customer_id` INT,
+    `table_eej8k8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_eej8k8` (`table_eej8k8_customer_id`, `table_eej8k8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_EEJ8K8
+    WHERE TABLE_EEJ8K8_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_EEJ8K8_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(56)) - 25 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+CREATE TABLE IF NOT EXISTS `table_g5rndo` (
+    `table_g5rndo_emp_id` INT,
+    `table_g5rndo_salary` INT,
+    `table_g5rndo_hire_date` DATE
+);
+
+INSERT INTO `table_g5rndo` (`table_g5rndo_emp_id`, `table_g5rndo_salary`, `table_g5rndo_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G5RNDO_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_G5RNDO
+    WHERE TABLE_G5RNDO_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 12);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(DEVICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_OPERATING_HOURS INT DEFAULT 0;
+    DECLARE V_FAILURE_PROB DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DAYS_SINCE_MAINTENANCE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1DO798_OPERATING_HOURS, 0), COALESCE(TABLE_1DO798_FAILURE_PROBABILITY, 0.00)
+    INTO V_OPERATING_HOURS, V_FAILURE_PROB
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_1DO798_LAST_MAINTENANCE_DATE)
+    INTO V_DAYS_SINCE_MAINTENANCE
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SET V_RISK_SCORE = (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + ((v_operating_hours / 100) + (v_failure_prob * 100) + (v_days_since_maintenance / 10));
+
+    IF V_RISK_SCORE > 80 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_3_6_9_12_qfi3zx()) - 757 + ((MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(12, -60)) - -907 + (1));
+    ELSEIF V_RISK_SCORE > 50 THEN
+        RETURN 7;
+    ELSEIF V_RISK_SCORE > (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(-52)) - 167 + (30) THEN
+        RETURN 30;
+    ELSE
+        RETURN 90;
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(1);

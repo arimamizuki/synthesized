@@ -1,0 +1,390 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1hn7bd` (
+    `table_1hn7bd_ctimestamp` TIMESTAMP
+);
+
+INSERT INTO `table_1hn7bd` (`table_1hn7bd_ctimestamp`) VALUES ('2024-01-01 10:00:00');
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(15)) - 754 + ((MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + (v_sum + v_i));
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, (MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(80)) - -352 + (0)), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_PAID_AMOUNT;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = 15;
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = 10;
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (V_BALANCE_DUE * V_PENALTY_RATE) / 100;
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_IS_PRIME = 1;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J < V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                ITERATE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+CREATE TABLE IF NOT EXISTS `table_6l8uxl` (
+    `table_6l8uxl_warranty_id` INT,
+    `table_6l8uxl_product_id` INT,
+    `table_6l8uxl_purchase_date` DATE,
+    `table_6l8uxl_warranty_months` INT,
+    `table_6l8uxl_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6l8uxl` (`table_6l8uxl_warranty_id`, `table_6l8uxl_product_id`, `table_6l8uxl_purchase_date`, `table_6l8uxl_warranty_months`, `table_6l8uxl_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT TABLE_6L8UXL_PURCHASE_DATE, TABLE_6L8UXL_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM TABLE_6L8UXL
+    WHERE TABLE_6L8UXL_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < (MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(93)) - -732 + (0) THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+CREATE TABLE IF NOT EXISTS `table_tbqwc8` (
+    `table_tbqwc8_order_id` INT,
+    `table_tbqwc8_customer_id` INT,
+    `table_tbqwc8_order_date` DATE,
+    `table_tbqwc8_total_amount` DECIMAL(10,2),
+    `table_tbqwc8_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_di8erf` (
+    `table_di8erf_shipment_id` INT,
+    `table_di8erf_order_id` INT,
+    `table_di8erf_carrier` INT,
+    `table_di8erf_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tbqwc8` (`table_tbqwc8_order_id`, `table_tbqwc8_customer_id`, `table_tbqwc8_order_date`, `table_tbqwc8_total_amount`, `table_tbqwc8_shipping_method`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_di8erf` (`table_di8erf_shipment_id`, `table_di8erf_order_id`, `table_di8erf_carrier`, `table_di8erf_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TBQWC8_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(-66)) - 857 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_TBQWC8
+    WHERE TABLE_TBQWC8_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_DI8ERF_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_DI8ERF
+    WHERE TABLE_DI8ERF_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(-67)) - -489 + (v_cost_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+CREATE TABLE IF NOT EXISTS `table_ib0m3v` (
+    `table_ib0m3v_product_id` INT,
+    `table_ib0m3v_stock_quantity` INT
+);
+
+INSERT INTO `table_ib0m3v` (`table_ib0m3v_product_id`, `table_ib0m3v_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IB0M3V_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_IB0M3V
+    WHERE TABLE_IB0M3V_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = LEAST(V_STOCK / 10, 100);
+
+    RETURN V_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+CREATE TABLE IF NOT EXISTS `table_qrf16h` (
+    `table_qrf16h_customer_id` INT,
+    `table_qrf16h_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_qrf16h` (`table_qrf16h_customer_id`, `table_qrf16h_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_QRF16H_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_QRF16H
+    WHERE TABLE_QRF16H_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 1000;
+        WHEN 'PREMIUM' THEN RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (500);
+        WHEN 'BASIC' THEN RETURN 100;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+CREATE TABLE IF NOT EXISTS `table_2jb7oh` (
+    `table_2jb7oh_order_id` INT,
+    `table_2jb7oh_customer_id` INT,
+    `table_2jb7oh_order_date` DATE,
+    `table_2jb7oh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2jb7oh` (`table_2jb7oh_order_id`, `table_2jb7oh_customer_id`, `table_2jb7oh_order_date`, `table_2jb7oh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_2JB7OH_ORDER_DATE), MAX(TABLE_2JB7OH_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_2JB7OH
+    WHERE TABLE_2JB7OH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(5)) - 593 + (floor(datediff(v_last_order, v_first_order) / (v_order_count - 1)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIMESTAMP_0m3n7o() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_1HN7BD`;
+    RETURN (MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(87)) - 572 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - -337 + (result));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PROC_TIMESTAMP_0m3n7o();

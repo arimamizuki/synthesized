@@ -1,0 +1,377 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+CREATE TABLE IF NOT EXISTS `table_nqwaay` (
+    `table_nqwaay_order_id` INT,
+    `table_nqwaay_customer_id` INT,
+    `table_nqwaay_order_date` DATE,
+    `table_nqwaay_total_amount` DECIMAL(10,2),
+    `table_nqwaay_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rjmeai` (
+    `table_rjmeai_order_id` INT,
+    `table_rjmeai_product_id` INT,
+    `table_rjmeai_quantity` INT
+);
+
+INSERT INTO `table_nqwaay` (`table_nqwaay_order_id`, `table_nqwaay_customer_id`, `table_nqwaay_order_date`, `table_nqwaay_total_amount`, `table_nqwaay_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_rjmeai` (`table_rjmeai_order_id`, `table_rjmeai_product_id`, `table_rjmeai_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_DIVERSITY_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_RJMEAI_PRODUCT_ID), COALESCE(SUM(TABLE_RJMEAI_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_ITEMS
+    FROM TABLE_RJMEAI
+    WHERE TABLE_RJMEAI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DIVERSITY_INDEX = (V_UNIQUE_PRODUCTS * 100) / V_TOTAL_ITEMS;
+
+    RETURN V_DIVERSITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+CREATE TABLE IF NOT EXISTS table_7qogrt (
+    table_7qogrt_id INT,
+    table_7qogrt_name VARCHAR(100)
+);
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (1, 'Client A');
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (2, 'Client B');
+
+/* -----Called: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CLIENTS_6uq4wc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROW_COUNT INT;
+    
+    SELECT COUNT(*) INTO ROW_COUNT FROM TABLE_7QOGRT;
+    
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(-13)) - -544 + ((MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(-30)) - -103 + (row_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+CREATE TABLE IF NOT EXISTS `table_o1nktm` (
+    `table_o1nktm_appraisal_id` INT,
+    `table_o1nktm_customer_id` INT,
+    `table_o1nktm_item_id` INT,
+    `table_o1nktm_item_type` VARCHAR(50),
+    `table_o1nktm_carat_weight` INT,
+    `table_o1nktm_clarity_grade` INT,
+    `table_o1nktm_appraisal_value` INT,
+    `table_o1nktm_appraisal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_pnmyy1` (
+    `table_pnmyy1_item_id` INT,
+    `table_pnmyy1_item_type` VARCHAR(50),
+    `table_pnmyy1_metal_type` VARCHAR(50),
+    `table_pnmyy1_gemstone_type` VARCHAR(50),
+    `table_pnmyy1_purchase_date` DATE
+);
+
+INSERT INTO `table_o1nktm` (`table_o1nktm_appraisal_id`, `table_o1nktm_customer_id`, `table_o1nktm_item_id`, `table_o1nktm_item_type`, `table_o1nktm_carat_weight`, `table_o1nktm_clarity_grade`, `table_o1nktm_appraisal_value`, `table_o1nktm_appraisal_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_pnmyy1` (`table_pnmyy1_item_id`, `table_pnmyy1_item_type`, `table_pnmyy1_metal_type`, `table_pnmyy1_gemstone_type`, `table_pnmyy1_purchase_date`) VALUES (1, 'test', 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CARAT_WEIGHT INT DEFAULT 0;
+    DECLARE V_APPRAISAL_VALUE INT DEFAULT 0;
+    DECLARE V_METAL_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O1NKTM_CARAT_WEIGHT, 1), COALESCE(TABLE_O1NKTM_APPRAISAL_VALUE, 1000)
+    INTO V_CARAT_WEIGHT, V_APPRAISAL_VALUE
+    FROM TABLE_O1NKTM
+    WHERE TABLE_O1NKTM_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT CASE TABLE_PNMYY1_METAL_TYPE
+        WHEN 'PLATINUM' THEN 3
+        WHEN 'GOLD' THEN 2
+        WHEN 'SILVER' THEN 1
+        ELSE 1
+    END INTO V_METAL_MULTIPLIER
+    FROM TABLE_PNMYY1
+    WHERE TABLE_PNMYY1_ITEM_ID = ITEM_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_APPRAISAL_VALUE * V_METAL_MULTIPLIER + V_CARAT_WEIGHT * 100;
+
+    RETURN CAST(V_TOTAL_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(MONTH_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE MONTH_NUM
+        WHEN 1 THEN RETURN 'JANUARY';
+        WHEN 2 THEN RETURN 'FEBRUARY';
+        WHEN 3 THEN RETURN 'MARCH';
+        WHEN 4 THEN RETURN 'APRIL';
+        WHEN 5 THEN RETURN 'MAY';
+        WHEN 6 THEN RETURN 'JUNE';
+        WHEN 7 THEN RETURN 'JULY';
+        WHEN 8 THEN RETURN 'AUGUST';
+        WHEN 9 THEN RETURN 'SEPTEMBER';
+        WHEN 10 THEN RETURN 'OCTOBER';
+        WHEN 11 THEN RETURN 'NOVEMBER';
+        WHEN 12 THEN RETURN 'DECEMBER';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_SELECT_EMPLOYESS_u93us2----- */
+CREATE TABLE IF NOT EXISTS table_jm6vm1 (
+    table_jm6vm1_emp_no INT,
+    table_jm6vm1_first_name VARCHAR(50),
+    table_jm6vm1_last_name VARCHAR(50),
+    table_jm6vm1_birth_date DATE,
+    table_jm6vm1_hire_date DATE
+);
+
+/* -----Called: MYSQL_FUNC_SELECT_EMPLOYESS_u93us2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SELECT_EMPLOYESS_u93us2() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROW_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO ROW_COUNT 
+    FROM TABLE_JM6VM1 
+    LIMIT 1000;
+    
+    RETURN ROW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF (MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(-11)) - -377 + ((MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(76, 32)) - 587 + (a)) < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF (MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(90)) - -75 + (b) < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_I < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+CREATE TABLE IF NOT EXISTS `table_nr5gub` (
+    `table_nr5gub_customer_id` INT,
+    `table_nr5gub_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nr5gub` (`table_nr5gub_customer_id`, `table_nr5gub_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NR5GUB
+    WHERE TABLE_NR5GUB_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_NR5GUB_STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+CREATE TABLE IF NOT EXISTS `table_g5e0fi` (
+    `table_g5e0fi_product_id` INT,
+    `table_g5e0fi_stock_quantity` INT
+);
+
+INSERT INTO `table_g5e0fi` (`table_g5e0fi_product_id`, `table_g5e0fi_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G5E0FI_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_G5E0FI
+    WHERE TABLE_G5E0FI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK > 1000 THEN
+        RETURN 5;
+    ELSEIF V_STOCK > 500 THEN
+        RETURN 4;
+    ELSEIF V_STOCK > 100 THEN
+        RETURN 3;
+    ELSEIF V_STOCK > 50 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2(-70)) - 660 + (2);
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2----- */
+CREATE TABLE IF NOT EXISTS `table_zb0s9i` (
+    `table_zb0s9i_emp_id` INT,
+    `table_zb0s9i_dept_id` INT,
+    `table_zb0s9i_salary` INT,
+    `table_zb0s9i_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_6cxx64` (
+    `table_6cxx64_dept_id` INT,
+    `table_6cxx64_name` VARCHAR(50),
+    `table_6cxx64_is_remote_friendly` INT
+);
+
+INSERT INTO `table_zb0s9i` (`table_zb0s9i_emp_id`, `table_zb0s9i_dept_id`, `table_zb0s9i_salary`, `table_zb0s9i_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_6cxx64` (`table_6cxx64_dept_id`, `table_6cxx64_name`, `table_6cxx64_is_remote_friendly`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DEPT_REMOTE_FRIENDLY INT DEFAULT 0;
+    DECLARE V_PRODUCTIVITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ZB0S9I_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_ZB0S9I_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_ZB0S9I
+    WHERE TABLE_ZB0S9I_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6CXX64_IS_REMOTE_FRIENDLY, 0)
+    INTO V_DEPT_REMOTE_FRIENDLY
+    FROM TABLE_6CXX64 D
+    JOIN TABLE_ZB0S9I E ON TABLE_6CXX64_DEPT_ID = TABLE_ZB0S9I_DEPT_ID
+    WHERE TABLE_ZB0S9I_EMP_ID = EMP_ID_PARAM;
+
+    SET V_PRODUCTIVITY_SCORE = (V_YEARS_EMPLOYED * 10) + (V_SALARY / 10000 * 5);
+
+    IF V_DEPT_REMOTE_FRIENDLY = 1 THEN
+        SET V_PRODUCTIVITY_SCORE = V_PRODUCTIVITY_SCORE + 15;
+    END IF;
+
+    RETURN V_PRODUCTIVITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_INT_xe7375(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF EXPONENT < (MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88)) - 635 + ((MYSQL_FUNC_GET_CLIENTS_6uq4wc()) - -657 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I < EXPONENT DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(39)) - -380 + (v_result) * BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_POWER_INT_xe7375(1, 1);

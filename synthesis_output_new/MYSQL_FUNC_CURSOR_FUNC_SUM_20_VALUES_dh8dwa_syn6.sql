@@ -1,0 +1,351 @@
+/* -----Called: MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE IF_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 5;
+    
+    IF VAL > 10 THEN
+        SET IF_COUNT = 10;
+    ELSEIF VAL > 5 THEN
+        SET IF_COUNT = 5;
+    ELSE
+        SET IF_COUNT = 0;
+    END IF;
+    
+    RETURN IF_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_DIVERSITY_SCORE_yof2eh----- */
+CREATE TABLE IF NOT EXISTS `table_e01by8` (
+    `table_e01by8_order_id` INT,
+    `table_e01by8_customer_id` INT,
+    `table_e01by8_order_date` DATE,
+    `table_e01by8_total_amount` DECIMAL(10,2),
+    `table_e01by8_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ibuhwz` (
+    `table_ibuhwz_order_id` INT,
+    `table_ibuhwz_product_id` INT,
+    `table_ibuhwz_quantity` INT
+);
+
+INSERT INTO `table_e01by8` (`table_e01by8_order_id`, `table_e01by8_customer_id`, `table_e01by8_order_date`, `table_e01by8_total_amount`, `table_e01by8_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ibuhwz` (`table_ibuhwz_order_id`, `table_ibuhwz_product_id`, `table_ibuhwz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_DIVERSITY_SCORE_yof2eh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_DIVERSITY_SCORE_yof2eh(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_DIVERSITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(DISTINCT TABLE_IBUHWZ_PRODUCT_ID), COALESCE(SUM(TABLE_IBUHWZ_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_ITEMS
+    FROM TABLE_IBUHWZ
+    WHERE TABLE_IBUHWZ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DIVERSITY_SCORE = (V_UNIQUE_PRODUCTS * 100.0) / V_TOTAL_ITEMS;
+
+    RETURN FLOOR(V_DIVERSITY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+CREATE TABLE IF NOT EXISTS `table_q6el64` (
+    `table_q6el64_emp_id` INT
+);
+
+INSERT INTO `table_q6el64` (`table_q6el64_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 7) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (V_SHIPPING_COST * 100) / V_ORDER_VALUE;
+
+    RETURN (MYSQL_FUNC_FUNC1_dvat8j()) - 542 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_dvat8j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+CREATE TABLE IF NOT EXISTS `table_ot2tv9` (
+    `table_ot2tv9_system_id` INT,
+    `table_ot2tv9_customer_id` INT,
+    `table_ot2tv9_system_type` VARCHAR(50),
+    `table_ot2tv9_monitoring_monthly` INT,
+    `table_ot2tv9_equipment_cost` DECIMAL(10,2),
+    `table_ot2tv9_installation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ysvqnk` (
+    `table_ysvqnk_alert_id` INT,
+    `table_ysvqnk_system_id` INT,
+    `table_ysvqnk_alert_date` DATE,
+    `table_ysvqnk_alert_type` VARCHAR(50),
+    `table_ysvqnk_response_time_minutes` DATE
+);
+
+INSERT INTO `table_ot2tv9` (`table_ot2tv9_system_id`, `table_ot2tv9_customer_id`, `table_ot2tv9_system_type`, `table_ot2tv9_monitoring_monthly`, `table_ot2tv9_equipment_cost`, `table_ot2tv9_installation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ysvqnk` (`table_ysvqnk_alert_id`, `table_ysvqnk_system_id`, `table_ysvqnk_alert_date`, `table_ysvqnk_alert_type`, `table_ysvqnk_response_time_minutes`) VALUES (1, 2, '2024-01-01', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(SYSTEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONITORING_MONTHLY INT DEFAULT 30;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_ALERT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_RESPONSE_TIME INT DEFAULT 0;
+    DECLARE V_SECURITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OT2TV9_MONITORING_MONTHLY, 30), COALESCE(TABLE_OT2TV9_EQUIPMENT_COST, 500)
+    INTO V_MONITORING_MONTHLY, V_EQUIPMENT_COST
+    FROM TABLE_OT2TV9
+    WHERE TABLE_OT2TV9_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_YSVQNK_RESPONSE_TIME_MINUTES), 0)
+    INTO V_ALERT_COUNT, V_AVG_RESPONSE_TIME
+    FROM TABLE_YSVQNK
+    WHERE TABLE_YSVQNK_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SET V_SECURITY_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(-86)) - -288 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(-43)) - -748 + ((MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h(-51)) - 286 + (100 - (v_alert_count * 5) - (v_avg_response_time / 2))));
+
+    RETURN CAST(V_SECURITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h----- */
+CREATE TABLE IF NOT EXISTS `table_rfqzh7` (
+    `table_rfqzh7_product_id` INT,
+    `table_rfqzh7_stock_quantity` INT
+);
+
+INSERT INTO `table_rfqzh7` (`table_rfqzh7_product_id`, `table_rfqzh7_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_REORDER_LEVEL_n6ev9h(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RFQZH7_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_RFQZH7
+    WHERE TABLE_RFQZH7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK < 10 THEN
+        RETURN 1;
+    ELSEIF V_STOCK < 50 THEN
+        RETURN 2;
+    ELSEIF V_STOCK < 100 THEN
+        RETURN 3;
+    ELSE
+        RETURN 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+CREATE TABLE IF NOT EXISTS `table_mss9em` (
+    `table_mss9em_customer_id` INT
+);
+
+INSERT INTO `table_mss9em` (`table_mss9em_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUB_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_SUB_COUNT
+    FROM TABLE_MSS9EM
+    WHERE TABLE_MSS9EM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN LEAST(V_SUB_COUNT, 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(11)) - 319 + (v_quarter);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+CREATE TABLE IF NOT EXISTS `table_kcy5si` (
+    `table_kcy5si_meter_id` INT,
+    `table_kcy5si_customer_id` INT,
+    `table_kcy5si_meter_type` VARCHAR(50),
+    `table_kcy5si_current_reading` INT,
+    `table_kcy5si_previous_reading` INT,
+    `table_kcy5si_tariff_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c44eze` (
+    `table_c44eze_panel_id` INT,
+    `table_c44eze_meter_id` INT,
+    `table_c44eze_capacity_kw` INT,
+    `table_c44eze_installation_date` DATE,
+    `table_c44eze_efficiency_percent` INT
+);
+
+INSERT INTO `table_kcy5si` (`table_kcy5si_meter_id`, `table_kcy5si_customer_id`, `table_kcy5si_meter_type`, `table_kcy5si_current_reading`, `table_kcy5si_previous_reading`, `table_kcy5si_tariff_rate`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c44eze` (`table_c44eze_panel_id`, `table_c44eze_meter_id`, `table_c44eze_capacity_kw`, `table_c44eze_installation_date`, `table_c44eze_efficiency_percent`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY_KW INT DEFAULT 5;
+    DECLARE V_EFFICIENCY_PERCENT INT DEFAULT 80;
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_CREDIT_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C44EZE_CAPACITY_KW, 5), COALESCE(TABLE_C44EZE_EFFICIENCY_PERCENT, 80)
+    INTO V_CAPACITY_KW, V_EFFICIENCY_PERCENT
+    FROM TABLE_C44EZE
+    WHERE TABLE_C44EZE_METER_ID = METER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_KCY5SI_CURRENT_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_KCY5SI
+    WHERE TABLE_KCY5SI_METER_ID = METER_ID_PARAM;
+
+    SET V_CREDIT_AMOUNT = (V_CAPACITY_KW * V_EFFICIENCY_PERCENT * V_CURRENT_READING) / 1000;
+
+    RETURN CAST(V_CREDIT_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 20 UNION SELECT 40 UNION SELECT 60 UNION SELECT 80 UNION SELECT 100 UNION SELECT 120 UNION SELECT 140 UNION SELECT 160 UNION SELECT 180 UNION SELECT 200 UNION SELECT 220 UNION SELECT 240 UNION SELECT 260 UNION SELECT 280 UNION SELECT 300 UNION SELECT 320 UNION SELECT 340 UNION SELECT 360 UNION SELECT 380 UNION SELECT 400;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + ((MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri()) - 936 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(-2)) - -429 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(53)) - -464 + (v_sum) + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa();

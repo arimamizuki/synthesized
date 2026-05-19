@@ -1,0 +1,415 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_o0411s` (
+    `table_o0411s_category_id` INT,
+    `table_o0411s_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o0411s` (`table_o0411s_category_id`, `table_o0411s_price`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_COMPLIANCE_SCORE_5j06cr----- */
+CREATE TABLE IF NOT EXISTS `table_avvdae` (
+    `table_avvdae_order_id` INT,
+    `table_avvdae_customer_id` INT,
+    `table_avvdae_order_date` DATE,
+    `table_avvdae_subtotal` DECIMAL(10,2),
+    `table_avvdae_tax_amount` DECIMAL(10,2),
+    `table_avvdae_discount_amount` INT,
+    `table_avvdae_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_avvdae` (`table_avvdae_order_id`, `table_avvdae_customer_id`, `table_avvdae_order_date`, `table_avvdae_subtotal`, `table_avvdae_tax_amount`, `table_avvdae_discount_amount`, `table_avvdae_total_amount`) VALUES (1, 2, '2024-01-01', 1.0, 1.0, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_COMPLIANCE_SCORE_5j06cr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_COMPLIANCE_SCORE_5j06cr(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_DISCOUNT_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_EXPECTED_TOTAL INT DEFAULT 0;
+    DECLARE V_TAX_RATE DECIMAL(5,4) DEFAULT 0.0825;
+    DECLARE V_COMPLIANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AVVDAE_SUBTOTAL, 0), COALESCE(TABLE_AVVDAE_TAX_AMOUNT, 0), COALESCE(TABLE_AVVDAE_DISCOUNT_AMOUNT, 0), COALESCE(TABLE_AVVDAE_TOTAL_AMOUNT, 0)
+    INTO V_SUBTOTAL, V_TAX_AMOUNT, V_DISCOUNT_AMOUNT, V_TOTAL_AMOUNT
+    FROM TABLE_AVVDAE
+    WHERE TABLE_AVVDAE_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EXPECTED_TOTAL = V_SUBTOTAL - V_DISCOUNT_AMOUNT + (V_SUBTOTAL * V_TAX_RATE);
+
+    SET V_COMPLIANCE_SCORE = 100 - ABS(V_TOTAL_AMOUNT - V_EXPECTED_TOTAL);
+
+    RETURN GREATEST(V_COMPLIANCE_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+CREATE TABLE IF NOT EXISTS `table_jg3dpu` (
+    `table_jg3dpu_emp_id` INT,
+    `table_jg3dpu_department_id` INT,
+    `table_jg3dpu_salary` INT
+);
+
+INSERT INTO `table_jg3dpu` (`table_jg3dpu_emp_id`, `table_jg3dpu_department_id`, `table_jg3dpu_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_JG3DPU_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM TABLE_JG3DPU
+    WHERE TABLE_JG3DPU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(5)) - 593 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(-39)) - 651 + ((MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(-2, 73)) - -787 + ((MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + ((MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(-2)) - -429 + (floor(v_salary_sum))))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+CREATE TABLE IF NOT EXISTS `table_ot2tv9` (
+    `table_ot2tv9_system_id` INT,
+    `table_ot2tv9_customer_id` INT,
+    `table_ot2tv9_system_type` VARCHAR(50),
+    `table_ot2tv9_monitoring_monthly` INT,
+    `table_ot2tv9_equipment_cost` DECIMAL(10,2),
+    `table_ot2tv9_installation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ysvqnk` (
+    `table_ysvqnk_alert_id` INT,
+    `table_ysvqnk_system_id` INT,
+    `table_ysvqnk_alert_date` DATE,
+    `table_ysvqnk_alert_type` VARCHAR(50),
+    `table_ysvqnk_response_time_minutes` DATE
+);
+
+INSERT INTO `table_ot2tv9` (`table_ot2tv9_system_id`, `table_ot2tv9_customer_id`, `table_ot2tv9_system_type`, `table_ot2tv9_monitoring_monthly`, `table_ot2tv9_equipment_cost`, `table_ot2tv9_installation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ysvqnk` (`table_ysvqnk_alert_id`, `table_ysvqnk_system_id`, `table_ysvqnk_alert_date`, `table_ysvqnk_alert_type`, `table_ysvqnk_response_time_minutes`) VALUES (1, 2, '2024-01-01', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(SYSTEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONITORING_MONTHLY INT DEFAULT 30;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_ALERT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_RESPONSE_TIME INT DEFAULT 0;
+    DECLARE V_SECURITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OT2TV9_MONITORING_MONTHLY, 30), COALESCE(TABLE_OT2TV9_EQUIPMENT_COST, 500)
+    INTO V_MONITORING_MONTHLY, V_EQUIPMENT_COST
+    FROM TABLE_OT2TV9
+    WHERE TABLE_OT2TV9_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_YSVQNK_RESPONSE_TIME_MINUTES), 0)
+    INTO V_ALERT_COUNT, V_AVG_RESPONSE_TIME
+    FROM TABLE_YSVQNK
+    WHERE TABLE_YSVQNK_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SET V_SECURITY_SCORE = 100 - (V_ALERT_COUNT * 5) - (V_AVG_RESPONSE_TIME / 2);
+
+    RETURN CAST(V_SECURITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A < P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(-23, -81)) - 130 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+CREATE TABLE IF NOT EXISTS `table_wp8tiy` (
+    `table_wp8tiy_order_id` INT,
+    `table_wp8tiy_customer_id` INT,
+    `table_wp8tiy_order_date` DATE,
+    `table_wp8tiy_status` VARCHAR(50),
+    `table_wp8tiy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d83unb` (
+    `table_d83unb_order_id` INT,
+    `table_d83unb_product_id` INT,
+    `table_d83unb_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7n22ut` (
+    `table_7n22ut_product_id` INT,
+    `table_7n22ut_category_id` INT,
+    `table_7n22ut_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wp8tiy` (`table_wp8tiy_order_id`, `table_wp8tiy_customer_id`, `table_wp8tiy_order_date`, `table_wp8tiy_status`, `table_wp8tiy_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_d83unb` (`table_d83unb_order_id`, `table_d83unb_product_id`, `table_d83unb_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_7n22ut` (`table_7n22ut_product_id`, `table_7n22ut_category_id`, `table_7n22ut_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(CUSTOMER_ID_PARAM INT, CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CATEGORY_REVENUE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PREFERENCE_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_D83UNB_QUANTITY * TABLE_7N22UT_PRICE), 0)
+    INTO V_CATEGORY_ORDER_COUNT, V_CATEGORY_REVENUE
+    FROM TABLE_WP8TIY O
+    JOIN TABLE_D83UNB OI ON TABLE_WP8TIY_ORDER_ID = TABLE_D83UNB_ORDER_ID
+    JOIN TABLE_7N22UT P ON TABLE_D83UNB_PRODUCT_ID = TABLE_7N22UT_PRODUCT_ID
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_7N22UT_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WP8TIY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_WP8TIY
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREFERENCE_SCORE = ((V_CATEGORY_ORDER_COUNT * 1.0) / V_TOTAL_ORDER_COUNT * 50) +
+                             ((V_CATEGORY_REVENUE * 1.0) / V_TOTAL_REVENUE * 50);
+
+    RETURN FLOOR(V_PREFERENCE_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+CREATE TABLE IF NOT EXISTS `table_9dqpf3` (
+    `table_9dqpf3_campaign_id` INT,
+    `table_9dqpf3_start_date` DATE,
+    `table_9dqpf3_end_date` DATE,
+    `table_9dqpf3_budget` INT
+);
+
+INSERT INTO `table_9dqpf3` (`table_9dqpf3_campaign_id`, `table_9dqpf3_start_date`, `table_9dqpf3_end_date`, `table_9dqpf3_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_9DQPF3_BUDGET, 0), DATEDIFF(TABLE_9DQPF3_END_DATE, TABLE_9DQPF3_START_DATE) + 1
+    INTO V_BUDGET, V_DAYS
+    FROM TABLE_9DQPF3
+    WHERE TABLE_9DQPF3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DAYS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < (MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(76, 32)) - 587 + (0) THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE (MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(21)) - 80 + (v_i) < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_TENURE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_O0411S_PRICE), 0)
+    INTO V_TOTAL
+    FROM TABLE_O0411S
+    WHERE TABLE_O0411S_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(78)) - -864 + ((MYSQL_FUNC_CALCULATE_TAX_COMPLIANCE_SCORE_5j06cr(-49)) - -506 + (floor(v_total)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(1);

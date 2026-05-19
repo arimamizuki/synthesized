@@ -1,0 +1,398 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc----- */
+CREATE TABLE IF NOT EXISTS `table_wghfa1` (
+    `table_wghfa1_product_id` INT,
+    `table_wghfa1_supplier_id` INT,
+    `table_wghfa1_price` DECIMAL(10,2),
+    `table_wghfa1_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_on8z78` (
+    `table_on8z78_supplier_id` INT,
+    `table_on8z78_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_wghfa1` (`table_wghfa1_product_id`, `table_wghfa1_supplier_id`, `table_wghfa1_price`, `table_wghfa1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_on8z78` (`table_on8z78_supplier_id`, `table_on8z78_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_DEPENDENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ON8Z78_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_ON8Z78
+    WHERE TABLE_ON8Z78_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WGHFA1_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_TOTAL_STOCK
+    FROM TABLE_WGHFA1
+    WHERE TABLE_WGHFA1_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_DEPENDENCY_SCORE = (MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(-49)) - 784 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(30)) - 207 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(-52)) - 167 + ((v_product_count * 10) + (v_total_stock / 100) + (v_rating * 5))));
+
+    RETURN V_DEPENDENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+CREATE TABLE IF NOT EXISTS `table_42vfje` (
+    `table_42vfje_customer_id` INT,
+    `table_42vfje_country` INT,
+    `table_42vfje_registration_date` DATE
+);
+
+INSERT INTO `table_42vfje` (`table_42vfje_customer_id`, `table_42vfje_country`, `table_42vfje_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_42VFJE
+    WHERE TABLE_42VFJE_COUNTRY = COUNTRY_PARAM AND YEAR(TABLE_42VFJE_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+CREATE TABLE IF NOT EXISTS `table_573a30` (
+    `table_573a30_campaign_id` INT,
+    `table_573a30_channel` INT,
+    `table_573a30_budget_allocated` INT,
+    `table_573a30_start_date` DATE,
+    `table_573a30_end_date` DATE,
+    `table_573a30_leads_generated` INT,
+    `table_573a30_conversions` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7rfnt` (
+    `table_i7rfnt_spend_id` INT,
+    `table_i7rfnt_campaign_id` INT,
+    `table_i7rfnt_spend_date` DATE,
+    `table_i7rfnt_amount_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_573a30` (`table_573a30_campaign_id`, `table_573a30_channel`, `table_573a30_budget_allocated`, `table_573a30_start_date`, `table_573a30_end_date`, `table_573a30_leads_generated`, `table_573a30_conversions`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_i7rfnt` (`table_i7rfnt_spend_id`, `table_i7rfnt_campaign_id`, `table_i7rfnt_spend_date`, `table_i7rfnt_amount_spent`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_LEADS_GENERATED INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPEND INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_573A30_BUDGET_ALLOCATED, (MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(-83)) - -752 + (0)), COALESCE(TABLE_573A30_LEADS_GENERATED, 0), COALESCE(TABLE_573A30_CONVERSIONS, 0)
+    INTO V_BUDGET, V_LEADS_GENERATED, V_CONVERSIONS
+    FROM TABLE_573A30
+    WHERE TABLE_573A30_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_I7RFNT_AMOUNT_SPENT), 0) INTO V_TOTAL_SPEND
+    FROM TABLE_I7RFNT
+    WHERE TABLE_I7RFNT_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_CONVERSIONS * 100) - V_TOTAL_SPEND) * 100 / V_BUDGET;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+CREATE TABLE IF NOT EXISTS `table_6pbou9` (
+    `table_6pbou9_reading_id` INT,
+    `table_6pbou9_meter_id` INT,
+    `table_6pbou9_reading_date` DATE,
+    `table_6pbou9_kwh_used` INT,
+    `table_6pbou9_reading_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5nr18y` (
+    `table_5nr18y_tier_id` INT,
+    `table_5nr18y_tier_name` VARCHAR(50),
+    `table_5nr18y_min_kwh` INT,
+    `table_5nr18y_max_kwh` INT,
+    `table_5nr18y_rate_per_kwh` INT
+);
+
+INSERT INTO `table_6pbou9` (`table_6pbou9_reading_id`, `table_6pbou9_meter_id`, `table_6pbou9_reading_date`, `table_6pbou9_kwh_used`, `table_6pbou9_reading_type`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_5nr18y` (`table_5nr18y_tier_id`, `table_5nr18y_tier_name`, `table_5nr18y_min_kwh`, `table_5nr18y_max_kwh`, `table_5nr18y_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PEAK_KWH INT DEFAULT 0;
+    DECLARE V_OFFPEAK_KWH INT DEFAULT 0;
+    DECLARE V_PEAK_RATE INT DEFAULT 15;
+    DECLARE V_OFFPEAK_RATE INT DEFAULT 8;
+    DECLARE V_TOTAL_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_PEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'PEAK';
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_OFFPEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'OFFPEAK';
+
+    SET V_TOTAL_CHARGE = (V_PEAK_KWH * V_PEAK_RATE) + (V_OFFPEAK_KWH * V_OFFPEAK_RATE);
+
+    RETURN CAST(V_TOTAL_CHARGE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+CREATE TABLE IF NOT EXISTS `table_y6h4yf` (
+    `table_y6h4yf_playlist_id` INT,
+    `table_y6h4yf_user_id` INT,
+    `table_y6h4yf_playlist_name` VARCHAR(50),
+    `table_y6h4yf_track_count` INT,
+    `table_y6h4yf_total_duration` DECIMAL(10,2),
+    `table_y6h4yf_creation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ewdcw9` (
+    `table_ewdcw9_follower_id` INT,
+    `table_ewdcw9_playlist_id` INT,
+    `table_ewdcw9_follow_date` DATE
+);
+
+INSERT INTO `table_y6h4yf` (`table_y6h4yf_playlist_id`, `table_y6h4yf_user_id`, `table_y6h4yf_playlist_name`, `table_y6h4yf_track_count`, `table_y6h4yf_total_duration`, `table_y6h4yf_creation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ewdcw9` (`table_ewdcw9_follower_id`, `table_ewdcw9_playlist_id`, `table_ewdcw9_follow_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(PLAYLIST_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_DURATION INT DEFAULT 0;
+    DECLARE V_FOLLOWER_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y6H4YF_TRACK_COUNT, 0), COALESCE(TABLE_Y6H4YF_TOTAL_DURATION, 0)
+    INTO V_TRACK_COUNT, V_TOTAL_DURATION
+    FROM TABLE_Y6H4YF
+    WHERE TABLE_Y6H4YF_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_FOLLOWER_COUNT
+    FROM TABLE_EWDCW9
+    WHERE TABLE_EWDCW9_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = (MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(20, 55)) - -411 + ((MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(82, 8, 46)) - -254 + ((v_follower_count * 50) + (v_track_count * 2) + (v_total_duration / 60)));
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(A1 INT, R INT, N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NTH_TERM INT DEFAULT 0;
+    SET V_NTH_TERM = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v(62)) - 70 + ((MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(46, -96)) - 615 + (a1 * pow(r, n - 1)));
+    RETURN V_NTH_TERM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A & P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v----- */
+CREATE TABLE IF NOT EXISTS `table_j3bj4c` (
+    `table_j3bj4c_customer_id` INT,
+    `table_j3bj4c_country` INT,
+    `table_j3bj4c_registration_date` DATE
+);
+
+INSERT INTO `table_j3bj4c` (`table_j3bj4c_customer_id`, `table_j3bj4c_country`, `table_j3bj4c_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(MONTH, TABLE_J3BJ4C_REGISTRATION_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_J3BJ4C
+    WHERE TABLE_J3BJ4C_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(-80, 7)) - -983 + (floor(v_avg_tenure));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(N INT, DIVISOR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = -V_REVERSED;
+    END IF;
+
+    IF DIVISOR > 0 AND V_REVERSED % DIVISOR = 0 THEN
+        RETURN V_REVERSED;
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+CREATE TABLE IF NOT EXISTS `table_o8t87v` (
+    `table_o8t87v_order_id` INT,
+    `table_o8t87v_customer_id` INT,
+    `table_o8t87v_order_date` DATE,
+    `table_o8t87v_total_amount` DECIMAL(10,2),
+    `table_o8t87v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_satxgm` (
+    `table_satxgm_order_id` INT,
+    `table_satxgm_product_id` INT,
+    `table_satxgm_quantity` INT,
+    `table_satxgm_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o8t87v` (`table_o8t87v_order_id`, `table_o8t87v_customer_id`, `table_o8t87v_order_date`, `table_o8t87v_total_amount`, `table_o8t87v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_satxgm` (`table_satxgm_order_id`, `table_satxgm_product_id`, `table_satxgm_quantity`, `table_satxgm_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(ORDER_ID_PARAM INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT;
+    DECLARE V_DISCOUNT INT;
+    DECLARE V_FINAL_PRICE INT;
+
+    SELECT COALESCE(SUM(TABLE_SATXGM_QUANTITY * TABLE_SATXGM_UNIT_PRICE), 0) INTO V_SUBTOTAL
+    FROM TABLE_SATXGM
+    WHERE TABLE_SATXGM_ORDER_ID = ORDER_ID_PARAM;
+
+    IF DISCOUNT_PERCENT < 0 THEN
+        SET DISCOUNT_PERCENT = 0;
+    ELSEIF DISCOUNT_PERCENT > 50 THEN
+        SET DISCOUNT_PERCENT = 50;
+    END IF;
+
+    SET V_DISCOUNT = V_SUBTOTAL * DISCOUNT_PERCENT / 100;
+    SET V_FINAL_PRICE = V_SUBTOTAL - V_DISCOUNT;
+
+    RETURN V_FINAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_IS_PRIME = 1;
+        SET V_J = (MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc(-20)) - -137 + (2);
+
+        INNER_LOOP: WHILE V_J < V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                ITERATE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(1);

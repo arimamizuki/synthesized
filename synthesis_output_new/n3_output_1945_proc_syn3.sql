@@ -1,0 +1,403 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1436467 (v1436468 TEXT, v1436469 INT);
+CREATE TABLE IF NOT EXISTS v1436708 (v1436709 INT);
+CREATE TABLE IF NOT EXISTS v1436659 (v1436660 DATETIME);
+CREATE TABLE IF NOT EXISTS v1436438 (v1436439 VARCHAR(255), v1436440 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1436647 (v1436649 VARCHAR(10));
+INSERT INTO v1436467 VALUES ('', 1), ('', 2), ('', 3), ('', 5);
+INSERT INTO v1436708 VALUES (1), (2), (3);
+INSERT INTO v1436659 VALUES ('2024-01-15 10:00:00'), ('2024-02-20 12:30:00');
+INSERT INTO v1436438 VALUES ('test', 'test'), ('other', 'different');
+INSERT INTO v1436647 VALUES ('old');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+CREATE TABLE IF NOT EXISTS `table_uhn84w` (
+    `table_uhn84w_emp_id` INT,
+    `table_uhn84w_salary` INT
+);
+
+INSERT INTO `table_uhn84w` (`table_uhn84w_emp_id`, `table_uhn84w_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_UHN84W_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_UHN84W
+    WHERE TABLE_UHN84W_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SUM_1_TO_N_qv6wf6(-93)) - 656 + (floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(-62)) - 208 + ((MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(-95)) - -131 + (v_sum)) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+CREATE TABLE IF NOT EXISTS `table_thz1np` (
+    `table_thz1np_product_id` INT,
+    `table_thz1np_category_id` INT,
+    `table_thz1np_price` DECIMAL(10,2),
+    `table_thz1np_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8ug1be` (
+    `table_8ug1be_category_id` INT,
+    `table_8ug1be_name` VARCHAR(50)
+);
+
+INSERT INTO `table_thz1np` (`table_thz1np_product_id`, `table_thz1np_category_id`, `table_thz1np_price`, `table_thz1np_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_8ug1be` (`table_8ug1be_category_id`, `table_8ug1be_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_STOCK DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_ADEQUACY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_THZ1NP_STOCK_QUANTITY), (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (0)), COUNT(*)
+    INTO V_TOTAL_STOCK, V_TOTAL_PRODUCTS
+    FROM TABLE_THZ1NP
+    WHERE TABLE_THZ1NP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_STOCK = V_TOTAL_STOCK / V_TOTAL_PRODUCTS;
+
+    SET V_ADEQUACY_SCORE = V_AVG_STOCK / 10;
+
+    RETURN V_ADEQUACY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, 0), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+CREATE TABLE IF NOT EXISTS `table_7d705x` (
+    `table_7d705x_campaign_id` INT,
+    `table_7d705x_start_date` DATE,
+    `table_7d705x_end_date` DATE,
+    `table_7d705x_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yar712` (
+    `table_yar712_conversion_id` INT,
+    `table_yar712_campaign_id` INT,
+    `table_yar712_conversion_value` INT
+);
+
+INSERT INTO `table_7d705x` (`table_7d705x_campaign_id`, `table_7d705x_start_date`, `table_7d705x_end_date`, `table_7d705x_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_yar712` (`table_yar712_conversion_id`, `table_yar712_campaign_id`, `table_yar712_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_COST_PER_ACQ INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7D705X_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_7D705X
+    WHERE TABLE_7D705X_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_YAR712
+    WHERE TABLE_YAR712_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_b1y87c(-98)) - 817 + (v_budget);
+    END IF;
+
+    SET V_COST_PER_ACQ = V_BUDGET / V_CONVERSIONS;
+
+    RETURN V_COST_PER_ACQ;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_b1y87c----- */
+CREATE TABLE IF NOT EXISTS `table_ksg9re` (
+    `table_ksg9re_category_id` INT,
+    `table_ksg9re_price` DECIMAL(10,2),
+    `table_ksg9re_stock_quantity` INT
+);
+
+INSERT INTO `table_ksg9re` (`table_ksg9re_category_id`, `table_ksg9re_price`, `table_ksg9re_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_b1y87c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFITABILITY_INDEX_b1y87c(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_KSG9RE_PRICE), 0), COALESCE(SUM(TABLE_KSG9RE_STOCK_QUANTITY), 0)
+    INTO V_AVG_PRICE, V_TOTAL_STOCK
+    FROM TABLE_KSG9RE
+    WHERE TABLE_KSG9RE_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + (floor((v_avg_price * v_total_stock) / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN NULL;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET V_I = V_I + 1;
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+CREATE TABLE IF NOT EXISTS `table_k3sawa` (
+    `table_k3sawa_order_id` INT,
+    `table_k3sawa_order_date` DATE
+);
+
+INSERT INTO `table_k3sawa` (`table_k3sawa_order_id`, `table_k3sawa_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_K3SAWA_ORDER_DATE)
+    INTO V_WEEK
+    FROM TABLE_K3SAWA
+    WHERE TABLE_K3SAWA_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (v_week);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1945_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_var1 INT;
+    DECLARE v_var2 VARCHAR(255);
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cursor_val VARCHAR(255);
+    DECLARE cur CURSOR FOR SELECT v1436440 FROM v1436438;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Use IF/ELSEIF/ELSE
+    IF p1 > 0 THEN
+        -- Adapt first UPDATE: Use parameter for condition
+        UPDATE v1436467 AS x1 SET v1436468 = REPEAT('c', 4000) WHERE NOT v1436469 IN (1, (MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(-14)) - 486 + (2), 3, 4) OR v1436469 = p1;
+        SET v_counter = v_counter + 1;
+    ELSEIF (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h()) - -820 + (p1 = 0) THEN
+        -- Adapt second UPDATE: Use parameter for value
+        UPDATE v1436708 AS x0 SET v1436709 = p2 WHERE CAST('11' AS CHAR) <> '5cm';
+        SET v_counter = v_counter + 2;
+    ELSE
+        -- Adapt third UPDATE: Use parameter in date comparison
+        UPDATE v1436659 AS x1 SET v1436660 = NOW() WHERE (EXISTS(SELECT 1 WHERE '520:33:32.77' < (v1436660 - INTERVAL (1) MONTH))) AND p1 < 0;
+        SET v_counter = v_counter + 3;
+    END IF;
+
+    -- Use CASE/WHEN
+    CASE p2
+        WHEN 1 THEN
+            -- Adapt fourth UPDATE: Use parameter for SOUNDEX comparison
+            UPDATE v1436438 AS x1 SET v1436439 = 'efjh' WHERE SOUNDEX(v1436440) = SOUNDEX(CONCAT('test', p1));
+            SET v_counter = v_counter + 4;
+        WHEN 2 THEN
+            -- Adapt INSERT: Use parameter for value
+            INSERT INTO v1436647 (v1436649) VALUES (CONCAT('x', p1));
+            SET v_counter = v_counter + 5;
+        ELSE
+            SET v_counter = v_counter + p2;
+    END CASE;
+
+    -- Use WHILE...DO loop with CURSOR
+    OPEN cur;
+    read_loop: WHILE v_done = 0 DO
+        FETCH cur INTO v_cursor_val;
+        IF v_done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+    CLOSE cur;
+
+    -- Use REPEAT...UNTIL loop
+    SET v_var1 = 0;
+    REPEAT
+        SET v_var1 = v_var1 + 1;
+        SET v_counter = v_counter + 1;
+    UNTIL v_var1 >= p1 END REPEAT;
+
+    -- Use LOOP...LEAVE with ITERATE
+    SET v_var1 = 0;
+    test_loop: LOOP
+        SET v_var1 = v_var1 + 1;
+        IF v_var1 > 5 THEN
+            LEAVE test_loop;
+        END IF;
+        IF v_var1 = 3 THEN
+            ITERATE test_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+
+    -- Use SIGNAL for error handling
+    IF (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(91)) - -565 + (v_counter < 0) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred during execution';
+    END IF;
+
+    -- Use GET DIAGNOSTICS
+    GET DIAGNOSTICS CONDITION 1 @err_no = MYSQL_ERRNO, @err_msg = MESSAGE_TEXT;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1945_proc(1, 1, @out_result);
+
+SELECT @out_result;

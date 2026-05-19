@@ -1,0 +1,390 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gq6pk8` (
+    `table_gq6pk8_customer_id` INT,
+    `table_gq6pk8_registration_date` DATE
+);
+
+INSERT INTO `table_gq6pk8` (`table_gq6pk8_customer_id`, `table_gq6pk8_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLUMBING_SERVICE_COST_1c68q9----- */
+CREATE TABLE IF NOT EXISTS `table_94srbn` (
+    `table_94srbn_call_id` INT,
+    `table_94srbn_customer_id` INT,
+    `table_94srbn_plumber_id` INT,
+    `table_94srbn_service_type` VARCHAR(50),
+    `table_94srbn_labor_hours` INT,
+    `table_94srbn_parts_cost` DECIMAL(10,2),
+    `table_94srbn_service_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_nokc0p` (
+    `table_nokc0p_plumber_id` INT,
+    `table_nokc0p_experience_years` INT,
+    `table_nokc0p_hourly_rate` INT,
+    `table_nokc0p_certification_level` INT
+);
+
+INSERT INTO `table_94srbn` (`table_94srbn_call_id`, `table_94srbn_customer_id`, `table_94srbn_plumber_id`, `table_94srbn_service_type`, `table_94srbn_labor_hours`, `table_94srbn_parts_cost`, `table_94srbn_service_date`) VALUES (1, 2, 3, 'test', 5, 1.0, '2024-01-01');
+
+INSERT INTO `table_nokc0p` (`table_nokc0p_plumber_id`, `table_nokc0p_experience_years`, `table_nokc0p_hourly_rate`, `table_nokc0p_certification_level`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLUMBING_SERVICE_COST_1c68q9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLUMBING_SERVICE_COST_1c68q9(CALL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_PARTS_COST INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 75;
+    DECLARE V_SERVICE_FEE INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_94SRBN_LABOR_HOURS, 0), COALESCE(TABLE_94SRBN_PARTS_COST, 0)
+    INTO V_LABOR_HOURS, V_PARTS_COST
+    FROM TABLE_94SRBN
+    WHERE TABLE_94SRBN_CALL_ID = CALL_ID_PARAM;
+
+    SELECT COALESCE(TABLE_NOKC0P_HOURLY_RATE, 75)
+    INTO V_HOURLY_RATE
+    FROM TABLE_94SRBN PC
+    JOIN TABLE_NOKC0P P ON TABLE_94SRBN_PLUMBER_ID = TABLE_NOKC0P_PLUMBER_ID
+    WHERE TABLE_94SRBN_CALL_ID = CALL_ID_PARAM;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(98)) - 179 + ((MYSQL_FUNC_HANDLER_FUNC_LCM_zgfuu6(-39, 74)) - 520 + (v_service_fee + (v_labor_hours * v_hourly_rate) + v_parts_cost));
+
+    RETURN (MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_VALUE_BY_SEGMENT_eltzpv(48)) - 341 + (cast(v_total_cost as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_VALUE_BY_SEGMENT_eltzpv----- */
+CREATE TABLE IF NOT EXISTS `table_rudql5` (
+    `table_rudql5_order_id` INT,
+    `table_rudql5_customer_id` INT,
+    `table_rudql5_order_date` DATE,
+    `table_rudql5_total_amount` DECIMAL(10,2),
+    `table_rudql5_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_l8x786` (
+    `table_l8x786_customer_id` INT,
+    `table_l8x786_customer_segment` INT
+);
+
+INSERT INTO `table_rudql5` (`table_rudql5_order_id`, `table_rudql5_customer_id`, `table_rudql5_order_date`, `table_rudql5_total_amount`, `table_rudql5_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_l8x786` (`table_l8x786_customer_id`, `table_l8x786_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_VALUE_BY_SEGMENT_eltzpv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ORDER_VALUE_BY_SEGMENT_eltzpv(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_CUSTOMER_AVG_ORDER INT DEFAULT 0;
+    DECLARE V_SEGMENT_AVG_ORDER INT DEFAULT 0;
+
+    SELECT TABLE_L8X786_CUSTOMER_SEGMENT
+    INTO V_SEGMENT
+    FROM TABLE_L8X786
+    WHERE TABLE_L8X786_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RUDQL5_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_AVG_ORDER
+    FROM TABLE_RUDQL5
+    WHERE TABLE_RUDQL5_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_RUDQL5_STATUS = 'COMPLETED';
+
+    SELECT COALESCE(AVG(TABLE_RUDQL5_TOTAL_AMOUNT), 0)
+    INTO V_SEGMENT_AVG_ORDER
+    FROM TABLE_RUDQL5 O
+    JOIN TABLE_L8X786 C ON TABLE_RUDQL5_CUSTOMER_ID = TABLE_L8X786_CUSTOMER_ID
+    WHERE TABLE_L8X786_CUSTOMER_SEGMENT = V_SEGMENT AND TABLE_RUDQL5_STATUS = 'COMPLETED';
+
+    IF V_SEGMENT_AVG_ORDER = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7()) - -552 + (floor((v_customer_avg_order * 100) / v_segment_avg_order));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 4 UNION SELECT 9 UNION SELECT 16 UNION SELECT 25;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_LCM_zgfuu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_LCM_zgfuu6(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A <= 0 OR P_B <= 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi(41)) - -663 + (-1);
+    END IF;
+
+    SET V_RESULT = (P_A * P_B) / (SELECT GREATEST(P_A, P_B) FROM DUAL);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi----- */
+CREATE TABLE IF NOT EXISTS `table_k6pkzo` (
+    `table_k6pkzo_claim_id` INT,
+    `table_k6pkzo_policy_id` INT,
+    `table_k6pkzo_claim_type` VARCHAR(50),
+    `table_k6pkzo_claim_amount` DECIMAL(10,2),
+    `table_k6pkzo_filing_date` DATE,
+    `table_k6pkzo_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_67wgmn` (
+    `table_67wgmn_transaction_id` INT,
+    `table_67wgmn_policy_id` INT,
+    `table_67wgmn_transaction_date` DATE,
+    `table_67wgmn_amount` DECIMAL(10,2),
+    `table_67wgmn_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `table_k6pkzo` (`table_k6pkzo_claim_id`, `table_k6pkzo_policy_id`, `table_k6pkzo_claim_type`, `table_k6pkzo_claim_amount`, `table_k6pkzo_filing_date`, `table_k6pkzo_status`) VALUES (1, 2, 'test', 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_67wgmn` (`table_67wgmn_transaction_id`, `table_67wgmn_policy_id`, `table_67wgmn_transaction_date`, `table_67wgmn_amount`, `table_67wgmn_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi(CLAIM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_FILING INT DEFAULT 0;
+    DECLARE V_TOTAL_TRANSACTIONS INT DEFAULT 0;
+    DECLARE V_PROCESSING_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_K6PKZO_CLAIM_AMOUNT, 0), DATEDIFF(CURDATE(), TABLE_K6PKZO_FILING_DATE)
+    INTO V_CLAIM_AMOUNT, V_DAYS_SINCE_FILING
+    FROM TABLE_K6PKZO
+    WHERE TABLE_K6PKZO_CLAIM_ID = CLAIM_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_TRANSACTIONS
+    FROM TABLE_67WGMN
+    WHERE TABLE_67WGMN_POLICY_ID = (SELECT TABLE_K6PKZO_POLICY_ID FROM TABLE_K6PKZO WHERE TABLE_K6PKZO_CLAIM_ID = CLAIM_ID_PARAM);
+
+    SET V_PROCESSING_SCORE = (V_TOTAL_TRANSACTIONS * 5) - V_DAYS_SINCE_FILING;
+
+    IF V_CLAIM_AMOUNT > 50000 THEN
+        SET V_PROCESSING_SCORE = V_PROCESSING_SCORE - 20;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(-3)) - 199 + (cast(v_processing_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw----- */
+CREATE TABLE IF NOT EXISTS `table_azh2nr` (
+    `table_azh2nr_order_id` INT,
+    `table_azh2nr_order_date` DATE
+);
+
+INSERT INTO `table_azh2nr` (`table_azh2nr_order_id`, `table_azh2nr_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_AZH2NR_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_AZH2NR
+    WHERE TABLE_AZH2NR_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56(-18)) - -159 + (0);
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN 2;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_FACTOR = (MYSQL_FUNC_EMP_INFO_rpit5m(-29)) - 978 + (3);
+
+    WHILE V_FACTOR <= V_SQRT_N DO
+        IF N % V_FACTOR = 0 THEN
+            RETURN V_FACTOR;
+        END IF;
+        SET V_FACTOR = V_FACTOR + 2;
+    END WHILE;
+
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+CREATE TABLE IF NOT EXISTS table_k95o9w (
+    table_k95o9w_emp_no INT,
+    table_k95o9w_first_name VARCHAR(50)
+);
+
+INSERT INTO table_k95o9w (`table_k95o9w_emp_no`, `table_k95o9w_first_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_INFO_rpit5m(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_K95O9W E 
+    WHERE TABLE_K95O9W_EMP_NO = P_EMP_NO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(-39)) - -436 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+CREATE TABLE IF NOT EXISTS `table_82n5hb` (
+    `table_82n5hb_customer_id` INT,
+    `table_82n5hb_country` INT
+);
+
+INSERT INTO `table_82n5hb` (`table_82n5hb_customer_id`, `table_82n5hb_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_82N5HB
+    WHERE TABLE_82N5HB_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56----- */
+CREATE TABLE IF NOT EXISTS `table_76sh7x` (
+    `table_76sh7x_order_id` INT,
+    `table_76sh7x_customer_id` INT,
+    `table_76sh7x_order_date` DATE,
+    `table_76sh7x_total_amount` DECIMAL(10,2),
+    `table_76sh7x_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kfhtet` (
+    `table_kfhtet_shipment_id` INT,
+    `table_kfhtet_order_id` INT,
+    `table_kfhtet_carrier` INT,
+    `table_kfhtet_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_76sh7x` (`table_76sh7x_order_id`, `table_76sh7x_customer_id`, `table_76sh7x_order_date`, `table_76sh7x_total_amount`, `table_76sh7x_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_kfhtet` (`table_kfhtet_shipment_id`, `table_kfhtet_order_id`, `table_kfhtet_carrier`, `table_kfhtet_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SELECTION_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KFHTET_SHIPPING_COST, 0), COALESCE(TABLE_76SH7X_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM TABLE_76SH7X O
+    LEFT JOIN TABLE_KFHTET S ON TABLE_76SH7X_ORDER_ID = TABLE_KFHTET_ORDER_ID
+    WHERE TABLE_76SH7X_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_SELECTION_INDEX = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_SELECTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_GQ6PK8_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_GQ6PK8
+    WHERE TABLE_GQ6PK8_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLUMBING_SERVICE_COST_1c68q9(44)) - 649 + (v_age_years);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(1);

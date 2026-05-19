@@ -1,0 +1,355 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_o1nktm` (
+    `table_o1nktm_appraisal_id` INT,
+    `table_o1nktm_customer_id` INT,
+    `table_o1nktm_item_id` INT,
+    `table_o1nktm_item_type` VARCHAR(50),
+    `table_o1nktm_carat_weight` INT,
+    `table_o1nktm_clarity_grade` INT,
+    `table_o1nktm_appraisal_value` INT,
+    `table_o1nktm_appraisal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_pnmyy1` (
+    `table_pnmyy1_item_id` INT,
+    `table_pnmyy1_item_type` VARCHAR(50),
+    `table_pnmyy1_metal_type` VARCHAR(50),
+    `table_pnmyy1_gemstone_type` VARCHAR(50),
+    `table_pnmyy1_purchase_date` DATE
+);
+
+INSERT INTO `table_o1nktm` (`table_o1nktm_appraisal_id`, `table_o1nktm_customer_id`, `table_o1nktm_item_id`, `table_o1nktm_item_type`, `table_o1nktm_carat_weight`, `table_o1nktm_clarity_grade`, `table_o1nktm_appraisal_value`, `table_o1nktm_appraisal_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_pnmyy1` (`table_pnmyy1_item_id`, `table_pnmyy1_item_type`, `table_pnmyy1_metal_type`, `table_pnmyy1_gemstone_type`, `table_pnmyy1_purchase_date`) VALUES (1, 'test', 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUBTRACT_rh4s2a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUBTRACT_rh4s2a(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(37)) - 567 + (p_a - p_b);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+CREATE TABLE IF NOT EXISTS `table_2bqs47` (
+    `table_2bqs47_emp_id` INT,
+    `table_2bqs47_hire_date` DATE
+);
+
+INSERT INTO `table_2bqs47` (`table_2bqs47_emp_id`, `table_2bqs47_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2BQS47_HIRE_DATE)
+    INTO V_MONTH
+    FROM TABLE_2BQS47
+    WHERE TABLE_2BQS47_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(-79)) - -721 + ((MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + (v_month));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = FLOOR(V_CATEGORY_AVG_PRICE * 0.2);
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = (MYSQL_FUNC_RECURSIVE_SUM_pkwdud(86, 70)) - -171 + (v_discount_threshold) + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RECURSIVE_SUM_pkwdud----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RECURSIVE_SUM_pkwdud(N INT, DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF DEPTH <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    IF DEPTH > 1 THEN
+        SET V_RESULT = V_RESULT + RECURSIVE_SUM(N - 1, DEPTH - 1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+CREATE TABLE IF NOT EXISTS `table_19h5rl` (
+    `table_19h5rl_campaign_id` INT,
+    `table_19h5rl_budget` INT,
+    `table_19h5rl_start_date` DATE,
+    `table_19h5rl_end_date` DATE,
+    `table_19h5rl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qizrpx` (
+    `table_qizrpx_conversion_id` INT,
+    `table_qizrpx_campaign_id` INT,
+    `table_qizrpx_conversion_value` INT
+);
+
+INSERT INTO `table_19h5rl` (`table_19h5rl_campaign_id`, `table_19h5rl_budget`, `table_19h5rl_start_date`, `table_19h5rl_end_date`, `table_19h5rl_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_qizrpx` (`table_qizrpx_conversion_id`, `table_qizrpx_campaign_id`, `table_qizrpx_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_ROI_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_19H5RL_BUDGET, 1), DATEDIFF(TABLE_19H5RL_END_DATE, TABLE_19H5RL_START_DATE)
+    INTO V_BUDGET, V_DURATION_DAYS
+    FROM TABLE_19H5RL
+    WHERE TABLE_19H5RL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QIZRPX_CONVERSION_VALUE), (MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri()) - 936 + (0))
+    INTO V_REVENUE
+    FROM TABLE_QIZRPX
+    WHERE TABLE_QIZRPX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100.0) / V_BUDGET / V_DURATION_DAYS;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(-85, -79)) - -461 + (floor(v_roi_index));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE IF_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 5;
+    
+    IF VAL > 10 THEN
+        SET IF_COUNT = 10;
+    ELSEIF VAL > 5 THEN
+        SET IF_COUNT = 5;
+    ELSE
+        SET IF_COUNT = 0;
+    END IF;
+    
+    RETURN (MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + ((MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(12)) - 123 + (if_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+CREATE TABLE IF NOT EXISTS `table_g6fcdl` (
+    `table_g6fcdl_product_id` INT,
+    `table_g6fcdl_supplier_id` INT,
+    `table_g6fcdl_price` DECIMAL(10,2),
+    `table_g6fcdl_stock_quantity` INT
+);
+
+INSERT INTO `table_g6fcdl` (`table_g6fcdl_product_id`, `table_g6fcdl_supplier_id`, `table_g6fcdl_price`, `table_g6fcdl_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G6FCDL_PRICE, 0), COALESCE(TABLE_G6FCDL_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_G6FCDL
+    WHERE TABLE_G6FCDL_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = (V_PRICE * V_STOCK) / 100;
+
+    RETURN V_INVENTORY_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN (MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(12)) - -622 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+CREATE TABLE IF NOT EXISTS `table_7sluij` (
+    `table_7sluij_emp_id` INT,
+    `table_7sluij_manager_id` INT,
+    `table_7sluij_department_id` INT,
+    `table_7sluij_salary` INT
+);
+
+INSERT INTO `table_7sluij` (`table_7sluij_emp_id`, `table_7sluij_manager_id`, `table_7sluij_department_id`, `table_7sluij_salary`) VALUES (1, NULL, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT NULL AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT TABLE_7SLUIJ_MANAGER_ID INTO V_CURRENT_EMP FROM TABLE_7SLUIJ WHERE TABLE_7SLUIJ_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = V_DEPTH + 1;
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+    RETURN P_A / P_B;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CARAT_WEIGHT INT DEFAULT 0;
+    DECLARE V_APPRAISAL_VALUE INT DEFAULT 0;
+    DECLARE V_METAL_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O1NKTM_CARAT_WEIGHT, 1), COALESCE(TABLE_O1NKTM_APPRAISAL_VALUE, 1000)
+    INTO V_CARAT_WEIGHT, V_APPRAISAL_VALUE
+    FROM TABLE_O1NKTM
+    WHERE TABLE_O1NKTM_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT CASE TABLE_PNMYY1_METAL_TYPE
+        WHEN 'PLATINUM' THEN 3
+        WHEN 'GOLD' THEN 2
+        WHEN 'SILVER' THEN 1
+        ELSE 1
+    END INTO V_METAL_MULTIPLIER
+    FROM TABLE_PNMYY1
+    WHERE TABLE_PNMYY1_ITEM_ID = ITEM_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_APPRAISAL_VALUE * V_METAL_MULTIPLIER + V_CARAT_WEIGHT * 100;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_SUBTRACT_rh4s2a(-78, -81)) - -21 + (cast(v_total_value as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(1);

@@ -1,0 +1,396 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_TOGGLE_BITS_b7n993----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TOGGLE_BITS_b7n993(NUM INT, BIT_POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_BIT_POS INT DEFAULT 0;
+    DECLARE V_CURRENT_BIT INT;
+
+    TOGGLE_LOOP: WHILE BIT_POSITIONS > 0 DO
+        SET V_BIT_POS = BIT_POSITIONS MOD 10;
+        SET V_CURRENT_BIT = (NUM >> V_BIT_POS) & 1;
+
+        IF V_CURRENT_BIT = 0 THEN
+            SET V_RESULT = (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + (v_result | (1 << v_bit_pos));
+        END IF;
+
+        SET BIT_POSITIONS = BIT_POSITIONS DIV 10;
+    END WHILE TOGGLE_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(29)) - -945 + (v_quantity * v_unit_price);
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = V_TOTAL + (V_TOTAL * V_REFILLS * 80 / 100);
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = (MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(-61)) - 853 + (v_total + 25);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - -155 + (cast(v_total as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+CREATE TABLE IF NOT EXISTS `table_tpfwx5` (
+    `table_tpfwx5_campaign_id` INT,
+    `table_tpfwx5_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tpfwx5` (`table_tpfwx5_campaign_id`, `table_tpfwx5_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_TPFWX5_STATUS
+    INTO V_STATUS
+    FROM TABLE_TPFWX5
+    WHERE TABLE_TPFWX5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN (MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(-83)) - -752 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(-87)) - -496 + (1));
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+CREATE TABLE IF NOT EXISTS `table_rpd9bu` (
+    `table_rpd9bu_customer_id` INT,
+    `table_rpd9bu_status` VARCHAR(50),
+    `table_rpd9bu_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rpd9bu` (`table_rpd9bu_customer_id`, `table_rpd9bu_status`, `table_rpd9bu_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_RPD9BU_STATUS, COALESCE(TABLE_RPD9BU_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_RPD9BU
+    WHERE TABLE_RPD9BU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+CREATE TABLE IF NOT EXISTS `table_6pbou9` (
+    `table_6pbou9_reading_id` INT,
+    `table_6pbou9_meter_id` INT,
+    `table_6pbou9_reading_date` DATE,
+    `table_6pbou9_kwh_used` INT,
+    `table_6pbou9_reading_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5nr18y` (
+    `table_5nr18y_tier_id` INT,
+    `table_5nr18y_tier_name` VARCHAR(50),
+    `table_5nr18y_min_kwh` INT,
+    `table_5nr18y_max_kwh` INT,
+    `table_5nr18y_rate_per_kwh` INT
+);
+
+INSERT INTO `table_6pbou9` (`table_6pbou9_reading_id`, `table_6pbou9_meter_id`, `table_6pbou9_reading_date`, `table_6pbou9_kwh_used`, `table_6pbou9_reading_type`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_5nr18y` (`table_5nr18y_tier_id`, `table_5nr18y_tier_name`, `table_5nr18y_min_kwh`, `table_5nr18y_max_kwh`, `table_5nr18y_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PEAK_KWH INT DEFAULT 0;
+    DECLARE V_OFFPEAK_KWH INT DEFAULT 0;
+    DECLARE V_PEAK_RATE INT DEFAULT 15;
+    DECLARE V_OFFPEAK_RATE INT DEFAULT 8;
+    DECLARE V_TOTAL_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_PEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'PEAK';
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_OFFPEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'OFFPEAK';
+
+    SET V_TOTAL_CHARGE = (V_PEAK_KWH * V_PEAK_RATE) + (V_OFFPEAK_KWH * V_OFFPEAK_RATE);
+
+    RETURN CAST(V_TOTAL_CHARGE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_SQUARES_btf2hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(93)) - -732 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + (V_COUNTER * V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+CREATE TABLE IF NOT EXISTS `table_tbqwc8` (
+    `table_tbqwc8_order_id` INT,
+    `table_tbqwc8_customer_id` INT,
+    `table_tbqwc8_order_date` DATE,
+    `table_tbqwc8_total_amount` DECIMAL(10,2),
+    `table_tbqwc8_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_di8erf` (
+    `table_di8erf_shipment_id` INT,
+    `table_di8erf_order_id` INT,
+    `table_di8erf_carrier` INT,
+    `table_di8erf_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tbqwc8` (`table_tbqwc8_order_id`, `table_tbqwc8_customer_id`, `table_tbqwc8_order_date`, `table_tbqwc8_total_amount`, `table_tbqwc8_shipping_method`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_di8erf` (`table_di8erf_shipment_id`, `table_di8erf_order_id`, `table_di8erf_carrier`, `table_di8erf_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TBQWC8_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_TBQWC8
+    WHERE TABLE_TBQWC8_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_DI8ERF_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_DI8ERF
+    WHERE TABLE_DI8ERF_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = (MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(-61)) - 25 + (v_honor_points) + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = (MYSQL_FUNC_TOGGLE_BITS_b7n993(13, 45)) - -197 + (v_honor_points + 5);
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(1);

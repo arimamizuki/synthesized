@@ -1,0 +1,409 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_t3oyhq` (
+    `table_t3oyhq_customer_id` INT,
+    `table_t3oyhq_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_e0ydbc` (
+    `table_e0ydbc_order_id` INT,
+    `table_e0ydbc_customer_id` INT,
+    `table_e0ydbc_order_date` DATE
+);
+
+INSERT INTO `table_t3oyhq` (`table_t3oyhq_customer_id`, `table_t3oyhq_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_e0ydbc` (`table_e0ydbc_order_id`, `table_e0ydbc_customer_id`, `table_e0ydbc_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    IF A = (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(75)) - 897 + (0) OR B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_IS_NEGATIVE = 0;
+    IF A < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET A = -A; END IF;
+    IF B < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET B = -B; END IF;
+
+    SET V_TEMP_A = A;
+
+    MULTIPLY_LOOP: WHILE V_TEMP_A > 0 DO
+        IF V_TEMP_A & 1 = 1 THEN
+            SET V_RESULT = V_RESULT + B;
+        END IF;
+        SET V_TEMP_A = V_TEMP_A >> 1;
+        SET B = B << 1;
+    END WHILE MULTIPLY_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        SET V_RESULT = -V_RESULT;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe----- */
+CREATE TABLE IF NOT EXISTS `table_34qlyp` (
+    `table_34qlyp_emp_id` INT,
+    `table_34qlyp_hire_date` DATE
+);
+
+INSERT INTO `table_34qlyp` (`table_34qlyp_emp_id`, `table_34qlyp_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_34QLYP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_34QLYP
+    WHERE TABLE_34QLYP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_TENURE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw----- */
+CREATE TABLE IF NOT EXISTS `table_3j8w7h` (
+    `table_3j8w7h_reservation_id` INT,
+    `table_3j8w7h_customer_id` INT,
+    `table_3j8w7h_restaurant_id` INT,
+    `table_3j8w7h_party_size` INT,
+    `table_3j8w7h_reservation_date` DATE,
+    `table_3j8w7h_duration_minutes` INT,
+    `table_3j8w7h_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ghvkl` (
+    `table_5ghvkl_restaurant_id` INT,
+    `table_5ghvkl_name` VARCHAR(50),
+    `table_5ghvkl_rating` DECIMAL(3,1),
+    `table_5ghvkl_cuisine_type` VARCHAR(50)
+);
+
+INSERT INTO `table_3j8w7h` (`table_3j8w7h_reservation_id`, `table_3j8w7h_customer_id`, `table_3j8w7h_restaurant_id`, `table_3j8w7h_party_size`, `table_3j8w7h_reservation_date`, `table_3j8w7h_duration_minutes`, `table_3j8w7h_deposit_amount`) VALUES (1, 2, 3, 4, '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_5ghvkl` (`table_5ghvkl_restaurant_id`, `table_5ghvkl_name`, `table_5ghvkl_rating`, `table_5ghvkl_cuisine_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(PARTY_SIZE_PARAM INT, RESTAURANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DEPOSIT INT DEFAULT 20;
+    DECLARE V_PER_PERSON INT DEFAULT 10;
+    DECLARE V_RATING_BONUS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEPOSIT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5GHVKL_RATING, 3) INTO V_RATING_BONUS
+    FROM TABLE_5GHVKL
+    WHERE TABLE_5GHVKL_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    SET V_TOTAL_DEPOSIT = V_BASE_DEPOSIT + (PARTY_SIZE_PARAM * V_PER_PERSON);
+
+    IF V_RATING_BONUS >= 4 THEN
+        SET V_TOTAL_DEPOSIT = (MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - -890 + (v_total_deposit + 20);
+    END IF;
+
+    RETURN CAST(V_TOTAL_DEPOSIT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 <> (MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(-13)) - -191 + (0) THEN
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(2)) - 834 + ((MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(-5)) - -576 + (1));
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+CREATE TABLE IF NOT EXISTS `table_2vm9l6` (
+    `table_2vm9l6_campaign_id` INT,
+    `table_2vm9l6_start_date` DATE,
+    `table_2vm9l6_end_date` DATE,
+    `table_2vm9l6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_khlm3q` (
+    `table_khlm3q_conversion_id` INT,
+    `table_khlm3q_campaign_id` INT,
+    `table_khlm3q_conversion_date` DATE
+);
+
+INSERT INTO `table_2vm9l6` (`table_2vm9l6_campaign_id`, `table_2vm9l6_start_date`, `table_2vm9l6_end_date`, `table_2vm9l6_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_khlm3q` (`table_khlm3q_conversion_id`, `table_khlm3q_campaign_id`, `table_khlm3q_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_DAYS_TO_CONVERT DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(DATEDIFF(TABLE_KHLM3Q_CONVERSION_DATE, TABLE_2VM9L6_START_DATE)), 0)
+    INTO V_AVG_DAYS_TO_CONVERT
+    FROM TABLE_KHLM3Q C
+    JOIN TABLE_2VM9L6 CAMP ON TABLE_KHLM3Q_CAMPAIGN_ID = TABLE_2VM9L6_CAMPAIGN_ID
+    WHERE TABLE_KHLM3Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = GREATEST(100 - (V_AVG_DAYS_TO_CONVERT * 5), 0);
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(44)) - -206 + (v_efficiency_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+CREATE TABLE IF NOT EXISTS `table_khmak7` (
+    `table_khmak7_order_id` INT,
+    `table_khmak7_customer_id` INT,
+    `table_khmak7_order_date` DATE,
+    `table_khmak7_total_amount` DECIMAL(10,2),
+    `table_khmak7_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_7res4i` (
+    `table_7res4i_order_id` INT,
+    `table_7res4i_product_id` INT,
+    `table_7res4i_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0dame` (
+    `table_l0dame_product_id` INT,
+    `table_l0dame_category_id` INT,
+    `table_l0dame_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_khmak7` (`table_khmak7_order_id`, `table_khmak7_customer_id`, `table_khmak7_order_date`, `table_khmak7_total_amount`, `table_khmak7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_7res4i` (`table_7res4i_order_id`, `table_7res4i_product_id`, `table_7res4i_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_l0dame` (`table_l0dame_product_id`, `table_l0dame_category_id`, `table_l0dame_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_HIGH_VALUE_ITEMS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_7RES4I_QUANTITY * TABLE_L0DAME_PRICE), 0), COUNT(*)
+    INTO V_SUBTOTAL, V_TOTAL_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_HIGH_VALUE_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM AND TABLE_L0DAME_PRICE > 100;
+
+    IF V_TOTAL_ITEMS > 0 AND (V_HIGH_VALUE_ITEMS * 100 / V_TOTAL_ITEMS) > 50 THEN
+        SET V_DISCOUNT_PERCENTAGE = 15;
+    ELSEIF V_SUBTOTAL > 1000 THEN
+        SET V_DISCOUNT_PERCENTAGE = 10;
+    ELSEIF V_SUBTOTAL > 500 THEN
+        SET V_DISCOUNT_PERCENTAGE = 5;
+    ELSE
+        SET V_DISCOUNT_PERCENTAGE = 0;
+    END IF;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+CREATE TABLE IF NOT EXISTS `table_8cjtte` (
+    `table_8cjtte_product_id` INT,
+    `table_8cjtte_supplier_id` INT,
+    `table_8cjtte_price` DECIMAL(10,2),
+    `table_8cjtte_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_upwhhl` (
+    `table_upwhhl_supplier_id` INT,
+    `table_upwhhl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_8cjtte` (`table_8cjtte_product_id`, `table_8cjtte_supplier_id`, `table_8cjtte_price`, `table_8cjtte_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_upwhhl` (`table_upwhhl_supplier_id`, `table_upwhhl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UPWHHL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_UPWHHL
+    WHERE TABLE_UPWHHL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_8CJTTE_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM TABLE_8CJTTE
+    WHERE TABLE_8CJTTE_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 5) + (V_AVG_PRICE / 10);
+
+    RETURN V_VALUE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+CREATE TABLE IF NOT EXISTS `table_1497my` (
+    `table_1497my_emp_id` INT,
+    `table_1497my_department_id` INT,
+    `table_1497my_salary` INT
+);
+
+INSERT INTO `table_1497my` (`table_1497my_emp_id`, `table_1497my_department_id`, `table_1497my_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_1497MY_SALARY), 0), COALESCE(AVG(TABLE_1497MY_SALARY), 1)
+    INTO V_DEPT_AVG, V_OVERALL_AVG
+    FROM TABLE_1497MY
+    WHERE TABLE_1497MY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MIN(TABLE_E0YDBC_ORDER_DATE), MAX(TABLE_E0YDBC_ORDER_DATE)
+    INTO V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_E0YDBC
+    WHERE TABLE_E0YDBC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER IS NULL THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_ODD_maeax4(4)) - 1000 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + ((MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(37, 21)) - 61 + (0)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(-76, -89)) - 708 + (datediff(v_last_order, v_first_order));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(1);

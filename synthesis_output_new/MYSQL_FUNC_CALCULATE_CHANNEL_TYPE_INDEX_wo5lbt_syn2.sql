@@ -1,0 +1,383 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qoro1u` (
+    `table_qoro1u_campaign_id` INT,
+    `table_qoro1u_channel` INT
+);
+
+INSERT INTO `table_qoro1u` (`table_qoro1u_campaign_id`, `table_qoro1u_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+CREATE TABLE IF NOT EXISTS `table_hdcz7z` (
+    `table_hdcz7z_order_id` INT,
+    `table_hdcz7z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hdcz7z` (`table_hdcz7z_order_id`, `table_hdcz7z_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_HDCZ7Z_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_HDCZ7Z
+    WHERE TABLE_HDCZ7Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL * 0.1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+CREATE TABLE IF NOT EXISTS `table_fedjkb` (
+    `table_fedjkb_product_id` INT,
+    `table_fedjkb_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fedjkb` (`table_fedjkb_product_id`, `table_fedjkb_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FEDJKB_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FEDJKB
+    WHERE TABLE_FEDJKB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(38, -56)) - 805 + ((MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + (floor(v_price)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+CREATE TABLE IF NOT EXISTS `table_xma1f9` (
+    `table_xma1f9_appointment_id` INT,
+    `table_xma1f9_pet_id` INT,
+    `table_xma1f9_service_type` VARCHAR(50),
+    `table_xma1f9_appointment_date` DATE,
+    `table_xma1f9_duration_minutes` INT,
+    `table_xma1f9_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_23iq77` (
+    `table_23iq77_pet_id` INT,
+    `table_23iq77_breed` INT,
+    `table_23iq77_size` INT,
+    `table_23iq77_age_months` INT
+);
+
+INSERT INTO `table_xma1f9` (`table_xma1f9_appointment_id`, `table_xma1f9_pet_id`, `table_xma1f9_service_type`, `table_xma1f9_appointment_date`, `table_xma1f9_duration_minutes`, `table_xma1f9_base_price`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_23iq77` (`table_23iq77_pet_id`, `table_23iq77_breed`, `table_23iq77_size`, `table_23iq77_age_months`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(PET_ID_PARAM INT, SERVICE_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_SIZE VARCHAR(10) DEFAULT 'MEDIUM';
+    DECLARE V_PET_AGE INT DEFAULT 12;
+    DECLARE V_BASE_PRICE INT DEFAULT 40;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_23IQ77_SIZE, 'MEDIUM'), TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_PET_SIZE, V_PET_AGE
+    FROM TABLE_23IQ77
+    WHERE TABLE_23IQ77_PET_ID = PET_ID_PARAM;
+
+    SET V_PET_AGE = 12;
+
+    CASE V_PET_SIZE
+        WHEN 'LARGE' THEN SET V_SIZE_MULTIPLIER = 2;
+        WHEN 'MEDIUM' THEN SET V_SIZE_MULTIPLIER = 1;
+        WHEN 'SMALL' THEN SET V_SIZE_MULTIPLIER = 0;
+        ELSE SET V_SIZE_MULTIPLIER = 1;
+    END CASE;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'FULL_GROOMING' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BATH' THEN SET V_BASE_PRICE = 40;
+        WHEN 'HAIRCUT' THEN SET V_BASE_PRICE = 60;
+        WHEN 'NAIL_TRIM' THEN SET V_BASE_PRICE = 20;
+        ELSE SET V_BASE_PRICE = 50;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * V_SIZE_MULTIPLIER;
+
+    IF V_PET_AGE < 6 THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE + 10;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+CREATE TABLE IF NOT EXISTS `table_8mbpj1` (
+    `table_8mbpj1_screening_id` INT,
+    `table_8mbpj1_movie_id` INT,
+    `table_8mbpj1_theater_id` INT,
+    `table_8mbpj1_show_time` DATE,
+    `table_8mbpj1_available_seats` INT,
+    `table_8mbpj1_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ma3ua6` (
+    `table_ma3ua6_booking_id` INT,
+    `table_ma3ua6_screening_id` INT,
+    `table_ma3ua6_customer_id` INT,
+    `table_ma3ua6_seats_booked` INT,
+    `table_ma3ua6_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8mbpj1` (`table_8mbpj1_screening_id`, `table_8mbpj1_movie_id`, `table_8mbpj1_theater_id`, `table_8mbpj1_show_time`, `table_8mbpj1_available_seats`, `table_8mbpj1_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_ma3ua6` (`table_ma3ua6_booking_id`, `table_ma3ua6_screening_id`, `table_ma3ua6_customer_id`, `table_ma3ua6_seats_booked`, `table_ma3ua6_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8MBPJ1_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM TABLE_8MBPJ1
+    WHERE TABLE_8MBPJ1_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MA3UA6_SEATS_BOOKED), (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + ((MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(34)) - -927 + (0))) INTO V_BOOKED_SEATS
+    FROM TABLE_MA3UA6
+    WHERE TABLE_MA3UA6_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_SEATS * 100) / V_AVAILABLE_SEATS;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+CREATE TABLE IF NOT EXISTS `table_rjv3br` (
+    `table_rjv3br_customer_id` INT,
+    `table_rjv3br_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ejry3z` (
+    `table_ejry3z_order_id` INT,
+    `table_ejry3z_customer_id` INT,
+    `table_ejry3z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rjv3br` (`table_rjv3br_customer_id`, `table_rjv3br_country`) VALUES (1, 1);
+
+INSERT INTO `table_ejry3z` (`table_ejry3z_order_id`, `table_ejry3z_customer_id`, `table_ejry3z_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_EJRY3Z O
+    JOIN TABLE_RJV3BR C ON TABLE_EJRY3Z_CUSTOMER_ID = TABLE_RJV3BR_CUSTOMER_ID
+    WHERE TABLE_RJV3BR_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(-73)) - -343 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+CREATE TABLE IF NOT EXISTS `table_0itd65` (
+    `table_0itd65_customer_id` INT,
+    `table_0itd65_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_09nz76` (
+    `table_09nz76_order_id` INT,
+    `table_09nz76_customer_id` INT,
+    `table_09nz76_order_date` DATE,
+    `table_09nz76_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0itd65` (`table_0itd65_customer_id`, `table_0itd65_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_09nz76` (`table_09nz76_order_id`, `table_09nz76_customer_id`, `table_09nz76_order_date`, `table_09nz76_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_0ITD65_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM TABLE_0ITD65
+    WHERE TABLE_0ITD65_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_09NZ76
+    WHERE TABLE_09NZ76_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (MYSQL_FUNC_RECURSIVE_SUM_pkwdud(86, 70)) - -171 + ((v_total_orders * 100) / v_total_visits);
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RECURSIVE_SUM_pkwdud----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RECURSIVE_SUM_pkwdud(N INT, DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF DEPTH <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    IF DEPTH > 1 THEN
+        SET V_RESULT = V_RESULT + RECURSIVE_SUM(N - 1, DEPTH - 1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_QORO1U_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_QORO1U
+    WHERE TABLE_QORO1U_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(1);

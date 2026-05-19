@@ -1,0 +1,409 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ckk542` (
+    `table_ckk542_customer_id` INT,
+    `table_ckk542_registration_date` DATE,
+    `table_ckk542_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t475kq` (
+    `table_t475kq_order_id` INT,
+    `table_t475kq_customer_id` INT,
+    `table_t475kq_order_date` DATE,
+    `table_t475kq_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ckk542` (`table_ckk542_customer_id`, `table_ckk542_registration_date`, `table_ckk542_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_t475kq` (`table_t475kq_order_id`, `table_t475kq_customer_id`, `table_t475kq_order_date`, `table_t475kq_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(JSON_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_LEN INT DEFAULT CHAR_LENGTH(JSON_STR);
+    DECLARE V_CHAR CHAR(1);
+    DECLARE V_BRACKET_COUNT INT DEFAULT 0;
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+
+    IF JSON_STR IS NULL OR JSON_STR = '' THEN
+        RETURN 0;
+    END IF;
+
+    PARSE_LOOP: WHILE V_POS <= V_LEN DO
+        SET V_CHAR = SUBSTRING(JSON_STR, V_POS, 1);
+
+        IF V_CHAR = '{' OR V_CHAR = '[' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT + 1;
+            IF V_BRACKET_COUNT > V_MAX_DEPTH THEN
+                SET V_MAX_DEPTH = V_BRACKET_COUNT;
+            END IF;
+        ELSEIF V_CHAR = '}' OR V_CHAR = ']' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT - 1;
+        END IF;
+
+        SET V_POS = V_POS + 1;
+    END WHILE PARSE_LOOP;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi----- */
+CREATE TABLE IF NOT EXISTS `table_rv3do3` (
+    `table_rv3do3_customer_id` INT
+);
+
+INSERT INTO `table_rv3do3` (`table_rv3do3_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(-31)) - -921 + ((MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(49)) - 320 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(5)) - 647 + ((MYSQL_FUNC_FOOFCT_45nhmr(84)) - -858 + ((MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + ((MYSQL_FUNC_DROPVIEWS_m4b55o(45)) - -722 + ((customer_id_param % 10) + 1))))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+CREATE TABLE IF NOT EXISTS table_ojycmm (
+    table_ojycmm_table_schema VARCHAR(64),
+    table_ojycmm_table_name VARCHAR(64)
+);
+
+INSERT INTO table_ojycmm (`table_ojycmm_table_schema`, `table_ojycmm_table_name`) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DROPVIEWS_m4b55o(PV_DATABASE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LV_STMT VARCHAR(1024);
+    DECLARE LV_VIEW_NAME VARCHAR(64);
+    DECLARE FETCHED INT DEFAULT 0;
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT 0;
+    
+    DECLARE VIEW_CURSOR CURSOR FOR
+        SELECT TABLE_OJYCMM_TABLE_NAME 
+        FROM TABLE_OJYCMM 
+        WHERE TABLE_OJYCMM_TABLE_SCHEMA = IFNULL(CONVERT(PV_DATABASE USING UTF8), DATABASE())
+        ORDER BY TABLE_OJYCMM_TABLE_NAME;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+    
+    OPEN VIEW_CURSOR;
+    
+    CURSOR_LOOP: LOOP
+        FETCH VIEW_CURSOR INTO LV_VIEW_NAME;
+        IF DONE = 1 THEN
+            LEAVE CURSOR_LOOP;
+        END IF;
+        
+        SET @SQL := CONCAT('DROP VIEW ', LV_VIEW_NAME);
+        SET VIEW_COUNT = VIEW_COUNT + 1;
+        
+        SET LV_STMT = @SQL;
+    END LOOP CURSOR_LOOP;
+    
+    CLOSE VIEW_CURSOR;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, (MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x(-77)) - -938 + (0))
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (V_SPENT / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x----- */
+CREATE TABLE IF NOT EXISTS `table_twy1qq` (
+    `table_twy1qq_campaign_id` INT,
+    `table_twy1qq_channel` INT,
+    `table_twy1qq_budget` INT,
+    `table_twy1qq_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jfmesh` (
+    `table_jfmesh_conversion_id` INT,
+    `table_jfmesh_campaign_id` INT,
+    `table_jfmesh_conversion_value` INT
+);
+
+INSERT INTO `table_twy1qq` (`table_twy1qq_campaign_id`, `table_twy1qq_channel`, `table_twy1qq_budget`, `table_twy1qq_status`) VALUES (1, 1, 1, 'test');
+
+INSERT INTO `table_jfmesh` (`table_jfmesh_conversion_id`, `table_jfmesh_campaign_id`, `table_jfmesh_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_CHANNEL_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_TWY1QQ_CHANNEL, COALESCE(TABLE_TWY1QQ_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_TWY1QQ
+    WHERE TABLE_TWY1QQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_JFMESH
+    WHERE TABLE_JFMESH_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_CHANNEL_INDEX = V_CONVERSIONS * 3;
+        WHEN 'ORGANIC' THEN SET V_CHANNEL_INDEX = V_CONVERSIONS * 5;
+        WHEN 'SOCIAL' THEN SET V_CHANNEL_INDEX = V_CONVERSIONS * 4;
+        ELSE SET V_CHANNEL_INDEX = V_CONVERSIONS * 2;
+    END CASE;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(36)) - 385 + (v_channel_index);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN LOG(X);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FOOFCT_45nhmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOFCT_45nhmr(X INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN X;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+CREATE TABLE IF NOT EXISTS `table_yywzmn` (
+    `table_yywzmn_supplier_id` INT,
+    `table_yywzmn_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_yywzmn` (`table_yywzmn_supplier_id`, `table_yywzmn_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_YYWZMN_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_YYWZMN
+    WHERE TABLE_YYWZMN_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+CREATE TABLE IF NOT EXISTS `table_9mgf73` (
+    `table_9mgf73_class_id` INT,
+    `table_9mgf73_instructor_id` INT,
+    `table_9mgf73_class_type` VARCHAR(50),
+    `table_9mgf73_duration_minutes` INT,
+    `table_9mgf73_max_capacity` INT,
+    `table_9mgf73_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_t7gqnp` (
+    `table_t7gqnp_booking_id` INT,
+    `table_t7gqnp_member_id` INT,
+    `table_t7gqnp_class_id` INT,
+    `table_t7gqnp_booking_date` DATE,
+    `table_t7gqnp_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9mgf73` (`table_9mgf73_class_id`, `table_9mgf73_instructor_id`, `table_9mgf73_class_type`, `table_9mgf73_duration_minutes`, `table_9mgf73_max_capacity`, `table_9mgf73_price`) VALUES (1, 2, 'test', 4, 5, 1.0);
+
+INSERT INTO `table_t7gqnp` (`table_t7gqnp_booking_id`, `table_t7gqnp_member_id`, `table_t7gqnp_class_id`, `table_t7gqnp_booking_date`, `table_t7gqnp_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_CAPACITY INT DEFAULT 20;
+    DECLARE V_BOOKED_COUNT INT DEFAULT 0;
+    DECLARE V_ACTUAL_ATTENDANCE INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_BOOKED_COUNT
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COALESCE(MAX(TABLE_9MGF73_MAX_CAPACITY), 20)
+    INTO V_MAX_CAPACITY
+    FROM TABLE_9MGF73 F
+    WHERE TABLE_9MGF73_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTUAL_ATTENDANCE
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM AND TABLE_T7GQNP_ATTENDANCE_STATUS = 'ATTENDED';
+
+    IF V_MAX_CAPACITY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_COUNT * 100) / V_MAX_CAPACITY;
+
+    IF V_OCCUPANCY_PERCENT > 100 THEN
+        SET V_OCCUPANCY_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+CREATE TABLE IF NOT EXISTS `table_6fslpk` (
+    `table_6fslpk_project_id` INT,
+    `table_6fslpk_client_id` INT,
+    `table_6fslpk_project_manager_id` INT,
+    `table_6fslpk_budget` INT,
+    `table_6fslpk_spent_amount` DECIMAL(10,2),
+    `table_6fslpk_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6fslpk` (`table_6fslpk_project_id`, `table_6fslpk_client_id`, `table_6fslpk_project_manager_id`, `table_6fslpk_budget`, `table_6fslpk_spent_amount`, `table_6fslpk_status`) VALUES (1, 2, 3, 4, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+    DECLARE V_VARIANCE_PCT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6FSLPK_BUDGET, 0), COALESCE(TABLE_6FSLPK_SPENT_AMOUNT, 0)
+    INTO V_BUDGET, V_SPENT
+    FROM TABLE_6FSLPK
+    WHERE TABLE_6FSLPK_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = V_BUDGET - V_SPENT;
+    SET V_VARIANCE_PCT = (V_VARIANCE * 100) / V_BUDGET;
+
+    RETURN V_VARIANCE_PCT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT_30D INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT_60D INT DEFAULT 0;
+    DECLARE V_VELOCITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_30D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_60D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 60 DAY);
+
+    IF V_ORDER_COUNT_60D = (MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi(48)) - 746 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY_SCORE = (V_ORDER_COUNT_30D * 2.0) / V_ORDER_COUNT_60D * 100;
+
+    RETURN (MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(47)) - -624 + (floor(v_velocity_score));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(1);

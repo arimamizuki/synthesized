@@ -1,0 +1,376 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_uyis6v` (
+    `table_uyis6v_order_id` INT,
+    `table_uyis6v_customer_id` INT,
+    `table_uyis6v_order_date` DATE,
+    `table_uyis6v_total_amount` DECIMAL(10,2),
+    `table_uyis6v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2nffbi` (
+    `table_2nffbi_refund_id` INT,
+    `table_2nffbi_order_id` INT,
+    `table_2nffbi_refund_amount` DECIMAL(10,2),
+    `table_2nffbi_refund_date` DATE,
+    `table_2nffbi_reason` INT
+);
+
+INSERT INTO `table_uyis6v` (`table_uyis6v_order_id`, `table_uyis6v_customer_id`, `table_uyis6v_order_date`, `table_uyis6v_total_amount`, `table_uyis6v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_2nffbi` (`table_2nffbi_refund_id`, `table_2nffbi_order_id`, `table_2nffbi_refund_amount`, `table_2nffbi_refund_date`, `table_2nffbi_reason`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+CREATE TABLE IF NOT EXISTS `table_7jm36x` (
+    `table_7jm36x_order_id` INT,
+    `table_7jm36x_order_date` DATE
+);
+
+INSERT INTO `table_7jm36x` (`table_7jm36x_order_id`, `table_7jm36x_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_7JM36X_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_7JM36X
+    WHERE TABLE_7JM36X_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s(-63, 85)) - -405 + ((MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(-46)) - 218 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_TOTAL * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s(A INT, B INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN A > B THEN
+            CASE
+                WHEN A > 0 THEN RETURN 'A_POSITIVE_LARGER';
+                ELSE RETURN 'A_NEGATIVE_LARGER';
+            END CASE;
+        WHEN A < B THEN
+            CASE
+                WHEN B > 0 THEN RETURN 'B_POSITIVE_LARGER';
+                ELSE RETURN 'B_NEGATIVE_LARGER';
+            END CASE;
+        ELSE RETURN 'EQUAL';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DISCOUNT_rxl9cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DISCOUNT_rxl9cd(AGE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+  IF AGE < 15 THEN RETURN (MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(-66)) - 857 + (0);
+  ELSEIF AGE < 30 THEN RETURN 10;
+  ELSEIF AGE < 50 THEN RETURN 20;
+  ELSE RETURN 30;
+  END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+CREATE TABLE IF NOT EXISTS `table_ib0m3v` (
+    `table_ib0m3v_product_id` INT,
+    `table_ib0m3v_stock_quantity` INT
+);
+
+INSERT INTO `table_ib0m3v` (`table_ib0m3v_product_id`, `table_ib0m3v_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IB0M3V_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_IB0M3V
+    WHERE TABLE_IB0M3V_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = (MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (least(v_stock / 10, 100));
+
+    RETURN V_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_HIRE_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = (MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(-98, -47)) - -38 + (30);
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = V_DISCOUNT + 20;
+    END IF;
+
+    SET V_FINAL_FARE = 25 - (25 * V_DISCOUNT / 100);
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(36)) - 837 + ((abs(a) / v_gcd) * abs(b));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+CREATE TABLE IF NOT EXISTS `table_lbmp6b` (
+    `table_lbmp6b_emp_id` INT,
+    `table_lbmp6b_department_id` INT,
+    `table_lbmp6b_salary` INT
+);
+
+INSERT INTO `table_lbmp6b` (`table_lbmp6b_emp_id`, `table_lbmp6b_department_id`, `table_lbmp6b_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_LBMP6B_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_LBMP6B_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_DEPARTMENT_ID = (SELECT TABLE_LBMP6B_DEPARTMENT_ID FROM TABLE_LBMP6B WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM);
+
+    RETURN FLOOR((V_SALARY * 100) / V_DEPT_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UYIS6V_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + ((MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-9)) - -807 + (0)))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_UYIS6V
+    WHERE TABLE_UYIS6V_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2NFFBI_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_2NFFBI
+    WHERE TABLE_2NFFBI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(-64)) - 947 + ((v_refund_amount * 100) / v_order_total);
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(1);

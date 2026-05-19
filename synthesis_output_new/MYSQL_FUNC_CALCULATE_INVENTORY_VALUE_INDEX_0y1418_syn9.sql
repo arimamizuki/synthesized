@@ -1,0 +1,332 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_g6fcdl` (
+    `table_g6fcdl_product_id` INT,
+    `table_g6fcdl_supplier_id` INT,
+    `table_g6fcdl_price` DECIMAL(10,2),
+    `table_g6fcdl_stock_quantity` INT
+);
+
+INSERT INTO `table_g6fcdl` (`table_g6fcdl_product_id`, `table_g6fcdl_supplier_id`, `table_g6fcdl_price`, `table_g6fcdl_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN BASE;
+    END IF;
+
+    RETURN BASE * POWER_RECURSIVE(BASE, EXPONENT - 1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+CREATE TABLE IF NOT EXISTS `table_3iivgl` (
+    `table_3iivgl_supplier_id` INT,
+    `table_3iivgl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_3iivgl` (`table_3iivgl_supplier_id`, `table_3iivgl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_3IIVGL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_3IIVGL
+    WHERE TABLE_3IIVGL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy()) - 510 + (floor(v_rating * 20));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = (MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(38)) - 555 + ((MYSQL_FUNC_CALCULATE_MARKETING_ROI_6uck6o(-28)) - -585 + (v_count) + 1);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ROI_6uck6o----- */
+CREATE TABLE IF NOT EXISTS `table_w2w22k` (
+    `table_w2w22k_campaign_id` INT,
+    `table_w2w22k_channel_type` VARCHAR(50),
+    `table_w2w22k_target_impressions` INT,
+    `table_w2w22k_actual_impressions` INT,
+    `table_w2w22k_cost_usd` DECIMAL(10,2),
+    `table_w2w22k_revenue_usd` INT
+);
+
+INSERT INTO `table_w2w22k` (`table_w2w22k_campaign_id`, `table_w2w22k_channel_type`, `table_w2w22k_target_impressions`, `table_w2w22k_actual_impressions`, `table_w2w22k_cost_usd`, `table_w2w22k_revenue_usd`) VALUES (1, 'test', 3, 4, 1.0, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ROI_6uck6o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ROI_6uck6o(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_W2W22K_COST_USD, 0), COALESCE(TABLE_W2W22K_REVENUE_USD, 0)
+    INTO V_COST, V_REVENUE
+    FROM TABLE_W2W22K
+    WHERE TABLE_W2W22K_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_COST = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_REVENUE - V_COST) * 100) / V_COST;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+CREATE TABLE IF NOT EXISTS `table_zoew3f` (
+    `table_zoew3f_campaign_id` INT,
+    `table_zoew3f_budget` INT,
+    `table_zoew3f_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qkdaim` (
+    `table_qkdaim_conversion_id` INT,
+    `table_qkdaim_campaign_id` INT,
+    `table_qkdaim_conversion_value` INT
+);
+
+INSERT INTO `table_zoew3f` (`table_zoew3f_campaign_id`, `table_zoew3f_budget`, `table_zoew3f_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_qkdaim` (`table_qkdaim_conversion_id`, `table_qkdaim_campaign_id`, `table_qkdaim_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REMAINING DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_ZOEW3F_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_ZOEW3F
+    WHERE TABLE_ZOEW3F_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QKDAIM_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_QKDAIM
+    WHERE TABLE_QKDAIM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_REMAINING = (MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(93, -26)) - 288 + (v_budget - v_spent);
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(-85, -79)) - -461 + (floor(v_remaining));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+    RETURN P_A / P_B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(-83)) - 336 + (v_sum + calculate_tree_depth_sum(n - 1, current_depth + 1));
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+CREATE TABLE IF NOT EXISTS `table_1yd99c` (
+    `table_1yd99c_policy_id` INT,
+    `table_1yd99c_customer_id` INT,
+    `table_1yd99c_monthly_benefit` INT,
+    `table_1yd99c_elimination_period_days` INT,
+    `table_1yd99c_benefit_duration_months` INT,
+    `table_1yd99c_premium_monthly` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5qb4ll` (
+    `table_5qb4ll_claim_id` INT,
+    `table_5qb4ll_policy_id` INT,
+    `table_5qb4ll_claim_start_date` DATE,
+    `table_5qb4ll_claim_end_date` DATE,
+    `table_5qb4ll_total_benefits_paid` INT
+);
+
+INSERT INTO `table_1yd99c` (`table_1yd99c_policy_id`, `table_1yd99c_customer_id`, `table_1yd99c_monthly_benefit`, `table_1yd99c_elimination_period_days`, `table_1yd99c_benefit_duration_months`, `table_1yd99c_premium_monthly`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_5qb4ll` (`table_5qb4ll_claim_id`, `table_5qb4ll_policy_id`, `table_5qb4ll_claim_start_date`, `table_5qb4ll_claim_end_date`, `table_5qb4ll_total_benefits_paid`) VALUES (1, 2, '2024-01-01', '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BENEFIT_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_MONTHLY_BENEFIT INT DEFAULT 0;
+    DECLARE V_REMAINING_MONTHS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1YD99C_BENEFIT_DURATION_MONTHS, 12), COALESCE(TABLE_1YD99C_MONTHLY_BENEFIT, 2000)
+    INTO V_BENEFIT_DURATION, V_MONTHLY_BENEFIT
+    FROM TABLE_1YD99C
+    WHERE TABLE_1YD99C_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5QB4LL_TOTAL_BENEFITS_PAID), 0) INTO V_TOTAL_PAID
+    FROM TABLE_5QB4LL
+    WHERE TABLE_5QB4LL_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_REMAINING_MONTHS = V_BENEFIT_DURATION - (V_TOTAL_PAID / V_MONTHLY_BENEFIT);
+
+    RETURN (MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(-16, -81, -94, 91)) - -433 + (cast(v_remaining_months as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE INT DEFAULT 0;
+    SET V_DISTANCE = (MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(-66)) - 448 + (abs(x1 - x2) + abs(y1 - y2));
+    RETURN V_DISTANCE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+CREATE TABLE IF NOT EXISTS `table_kyivf2` (
+    `table_kyivf2_emp_id` INT,
+    `table_kyivf2_department_id` INT,
+    `table_kyivf2_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_53omk0` (
+    `table_53omk0_emp_id` INT,
+    `table_53omk0_bonus_amount` DECIMAL(10,2),
+    `table_53omk0_bonus_date` DATE
+);
+
+INSERT INTO `table_kyivf2` (`table_kyivf2_emp_id`, `table_kyivf2_department_id`, `table_kyivf2_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_53omk0` (`table_53omk0_emp_id`, `table_53omk0_bonus_amount`, `table_53omk0_bonus_date`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_ANNUAL_COMPENSATION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KYIVF2_SALARY, 0) INTO V_BASE_SALARY
+    FROM TABLE_KYIVF2
+    WHERE TABLE_KYIVF2_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_53OMK0_BONUS_AMOUNT), 0) INTO V_TOTAL_BONUS
+    FROM TABLE_53OMK0
+    WHERE TABLE_53OMK0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ANNUAL_COMPENSATION = (V_BASE_SALARY * 12) + V_TOTAL_BONUS;
+
+    RETURN V_ANNUAL_COMPENSATION;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G6FCDL_PRICE, 0), COALESCE(TABLE_G6FCDL_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_G6FCDL
+    WHERE TABLE_G6FCDL_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(-44)) - -55 + ((v_price * v_stock) / 100);
+
+    RETURN (MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + (v_inventory_value);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(1);

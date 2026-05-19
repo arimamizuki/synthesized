@@ -1,0 +1,415 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_lho0kf` (
+    `table_lho0kf_campaign_id` INT,
+    `table_lho0kf_start_date` DATE,
+    `table_lho0kf_end_date` DATE
+);
+
+INSERT INTO `table_lho0kf` (`table_lho0kf_campaign_id`, `table_lho0kf_start_date`, `table_lho0kf_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5----- */
+CREATE TABLE IF NOT EXISTS `table_gq6pk8` (
+    `table_gq6pk8_customer_id` INT,
+    `table_gq6pk8_registration_date` DATE
+);
+
+INSERT INTO `table_gq6pk8` (`table_gq6pk8_customer_id`, `table_gq6pk8_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_GQ6PK8_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_GQ6PK8
+    WHERE TABLE_GQ6PK8_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(0)) - -328 + (v_age_years);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow----- */
+CREATE TABLE IF NOT EXISTS `table_24zccf` (
+    `table_24zccf_customer_id` INT,
+    `table_24zccf_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ehvt7w` (
+    `table_ehvt7w_order_id` INT,
+    `table_ehvt7w_customer_id` INT,
+    `table_ehvt7w_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_24zccf` (`table_24zccf_customer_id`, `table_24zccf_country`) VALUES (1, 1);
+
+INSERT INTO `table_ehvt7w` (`table_ehvt7w_order_id`, `table_ehvt7w_customer_id`, `table_ehvt7w_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_EHVT7W O
+    JOIN TABLE_24ZCCF C ON TABLE_EHVT7W_CUSTOMER_ID = TABLE_24ZCCF_CUSTOMER_ID
+    WHERE TABLE_24ZCCF_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_EHVT7W;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_MARKET_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_r43kyd----- */
+CREATE TABLE IF NOT EXISTS `table_1drrid` (
+    `table_1drrid_customer_id` INT,
+    `table_1drrid_order_date` DATE
+);
+
+INSERT INTO `table_1drrid` (`table_1drrid_customer_id`, `table_1drrid_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_r43kyd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_r43kyd(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MAX(TABLE_1DRRID_ORDER_DATE)
+    INTO V_LAST_ORDER
+    FROM TABLE_1DRRID
+    WHERE TABLE_1DRRID_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5(79)) - -209 + (datediff(curdate(), v_last_order));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5----- */
+CREATE TABLE IF NOT EXISTS `table_p1tdib` (
+    `table_p1tdib_product_id` INT,
+    `table_p1tdib_price` DECIMAL(10,2),
+    `table_p1tdib_stock_quantity` INT,
+    `table_p1tdib_reorder_level` INT
+);
+
+INSERT INTO `table_p1tdib` (`table_p1tdib_product_id`, `table_p1tdib_price`, `table_p1tdib_stock_quantity`, `table_p1tdib_reorder_level`) VALUES (1, 1.0, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_uikif5(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_LEVEL INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_P1TDIB_PRICE, 0), COALESCE(TABLE_P1TDIB_STOCK_QUANTITY, 0), COALESCE(TABLE_P1TDIB_REORDER_LEVEL, 0)
+    INTO V_PRICE, V_STOCK, V_REORDER_LEVEL
+    FROM TABLE_P1TDIB
+    WHERE TABLE_P1TDIB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = V_PRICE * V_STOCK;
+
+    IF V_STOCK < V_REORDER_LEVEL THEN
+        SET V_INVENTORY_VALUE = V_INVENTORY_VALUE + 1000;
+    END IF;
+
+    RETURN V_INVENTORY_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+CREATE TABLE IF NOT EXISTS `table_80vavx` (
+    `table_80vavx_lease_id` INT,
+    `table_80vavx_tenant_id` INT,
+    `table_80vavx_space_sqft` INT,
+    `table_80vavx_monthly_rate` INT,
+    `table_80vavx_start_date` DATE,
+    `table_80vavx_lease_term_months` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n274ub` (
+    `table_n274ub_tenant_id` INT,
+    `table_n274ub_company_name` VARCHAR(50),
+    `table_n274ub_industry` INT
+);
+
+INSERT INTO `table_80vavx` (`table_80vavx_lease_id`, `table_80vavx_tenant_id`, `table_80vavx_space_sqft`, `table_80vavx_monthly_rate`, `table_80vavx_start_date`, `table_80vavx_lease_term_months`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_n274ub` (`table_n274ub_tenant_id`, `table_n274ub_company_name`, `table_n274ub_industry`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(LEASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SPACE_SQFT INT DEFAULT 0;
+    DECLARE V_MONTHLY_RATE INT DEFAULT 50;
+    DECLARE V_LEASE_TERM INT DEFAULT 12;
+    DECLARE V_TOTAL_LEASE_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_80VAVX_SPACE_SQFT, 100), COALESCE(TABLE_80VAVX_MONTHLY_RATE, 50), COALESCE(TABLE_80VAVX_LEASE_TERM_MONTHS, 12)
+    INTO V_SPACE_SQFT, V_MONTHLY_RATE, V_LEASE_TERM
+    FROM TABLE_80VAVX
+    WHERE TABLE_80VAVX_LEASE_ID = LEASE_ID_PARAM;
+
+    SET V_TOTAL_LEASE_COST = (MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + (v_space_sqft * v_monthly_rate * v_lease_term);
+
+    IF V_SPACE_SQFT > 5000 THEN
+        SET V_TOTAL_LEASE_COST = V_TOTAL_LEASE_COST - (V_TOTAL_LEASE_COST * 5 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_LEASE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(MAX_ITER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE V_I < MAX_ITER AND V_RESULT < 1000 DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(-9)) - 424 + (v_result + v_i);
+        SET V_I = (MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk(38)) - -877 + (v_i + 1);
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk----- */
+CREATE TABLE IF NOT EXISTS `table_k7qjq4` (
+    `table_k7qjq4_customer_id` INT,
+    `table_k7qjq4_plan_type` VARCHAR(50),
+    `table_k7qjq4_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_k7qjq4` (`table_k7qjq4_customer_id`, `table_k7qjq4_plan_type`, `table_k7qjq4_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_K7QJQ4_PLAN_TYPE, COALESCE(TABLE_K7QJQ4_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_K7QJQ4
+    WHERE TABLE_K7QJQ4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 5;
+        WHEN 'PREMIUM' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 3;
+        WHEN 'BASIC' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 2;
+        ELSE SET V_PRICE_INDEX = V_MONTHLY_COST;
+    END CASE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+CREATE TABLE IF NOT EXISTS `table_u7y4da` (
+    `table_u7y4da_album_id` INT,
+    `table_u7y4da_artist_id` INT,
+    `table_u7y4da_title` INT,
+    `table_u7y4da_release_year` INT,
+    `table_u7y4da_total_tracks` DECIMAL(10,2),
+    `table_u7y4da_duration_seconds` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8qww15` (
+    `table_8qww15_track_id` INT,
+    `table_8qww15_album_id` INT,
+    `table_8qww15_track_number` INT,
+    `table_8qww15_duration` INT,
+    `table_8qww15_play_count` INT
+);
+
+INSERT INTO `table_u7y4da` (`table_u7y4da_album_id`, `table_u7y4da_artist_id`, `table_u7y4da_title`, `table_u7y4da_release_year`, `table_u7y4da_total_tracks`, `table_u7y4da_duration_seconds`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_8qww15` (`table_8qww15_track_id`, `table_8qww15_album_id`, `table_8qww15_track_number`, `table_8qww15_duration`, `table_8qww15_play_count`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(ALBUM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PLAYS INT DEFAULT 0;
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_DURATION INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_8QWW15_PLAY_COUNT), 0), COUNT(*), COALESCE(AVG(TABLE_8QWW15_DURATION), 0)
+    INTO V_TOTAL_PLAYS, V_TRACK_COUNT, V_AVG_DURATION
+    FROM TABLE_8QWW15
+    WHERE TABLE_8QWW15_ALBUM_ID = ALBUM_ID_PARAM;
+
+    IF V_TRACK_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + (v_total_plays / v_track_count);
+
+    IF V_AVG_DURATION > 240 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 100;
+    END IF;
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = V_QUANTITY * V_UNIT_PRICE;
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = V_TOTAL + (V_TOTAL * V_REFILLS * 80 / 100);
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = V_TOTAL + 25;
+    END IF;
+
+    RETURN CAST(V_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_LHO0KF_START_DATE, TABLE_LHO0KF_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_LHO0KF
+    WHERE TABLE_LHO0KF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(-6)) - -566 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_r43kyd(-55)) - 931 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(16)) - -460 + (0)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(-41)) - -247 + (timestampdiff(month, v_start_date, v_end_date));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(1);

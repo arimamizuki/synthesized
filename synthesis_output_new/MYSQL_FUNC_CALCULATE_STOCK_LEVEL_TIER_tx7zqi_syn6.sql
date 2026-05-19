@@ -1,0 +1,431 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_g5e0fi` (
+    `table_g5e0fi_product_id` INT,
+    `table_g5e0fi_stock_quantity` INT
+);
+
+INSERT INTO `table_g5e0fi` (`table_g5e0fi_product_id`, `table_g5e0fi_stock_quantity`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (V_SPENT / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+CREATE TABLE IF NOT EXISTS `table_apsp1p` (
+    `table_apsp1p_customer_id` INT,
+    `table_apsp1p_registration_date` DATE,
+    `table_apsp1p_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j667hh` (
+    `table_j667hh_order_id` INT,
+    `table_j667hh_customer_id` INT,
+    `table_j667hh_order_date` DATE,
+    `table_j667hh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_apsp1p` (`table_apsp1p_customer_id`, `table_apsp1p_registration_date`, `table_apsp1p_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_j667hh` (`table_j667hh_order_id`, `table_j667hh_customer_id`, `table_j667hh_order_date`, `table_j667hh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM TABLE_J667HH
+        WHERE TABLE_J667HH_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(TABLE_J667HH_ORDER_DATE), MONTH(TABLE_J667HH_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(79)) - -136 + ((MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(74)) - 371 + (v_avg_monthly_orders * 1.5));
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN FLOOR(V_PATTERN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+CREATE TABLE IF NOT EXISTS `table_inbu5d` (
+    `table_inbu5d_product_id` INT,
+    `table_inbu5d_category_id` INT,
+    `table_inbu5d_price` DECIMAL(10,2),
+    `table_inbu5d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_04apsc` (
+    `table_04apsc_order_id` INT,
+    `table_04apsc_product_id` INT,
+    `table_04apsc_quantity` INT
+);
+
+INSERT INTO `table_inbu5d` (`table_inbu5d_product_id`, `table_inbu5d_category_id`, `table_inbu5d_price`, `table_inbu5d_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_04apsc` (`table_04apsc_order_id`, `table_04apsc_product_id`, `table_04apsc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_AVG_INVENTORY INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_INBU5D_STOCK_QUANTITY, 0)
+    INTO V_CURRENT_STOCK
+    FROM TABLE_INBU5D
+    WHERE TABLE_INBU5D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_04APSC_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_04APSC
+    WHERE TABLE_04APSC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_INVENTORY = V_CURRENT_STOCK;
+
+    IF V_AVG_INVENTORY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATIO = V_TOTAL_SOLD / V_AVG_INVENTORY;
+
+    RETURN FLOOR(V_TURNOVER_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s----- */
+CREATE TABLE IF NOT EXISTS `table_emyi9r` (
+    `table_emyi9r_campaign_id` INT,
+    `table_emyi9r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_emyi9r` (`table_emyi9r_campaign_id`, `table_emyi9r_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_EMYI9R_STATUS
+    INTO V_STATUS
+    FROM TABLE_EMYI9R
+    WHERE TABLE_EMYI9R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_WARRANTY_MONTHS * 5) + (V_SECURITY_RATING * 10) - (V_COST / 100);
+
+    RETURN CAST(V_VALUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy()) - -427 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE REPEAT_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    REPEAT
+        SET I = I + 1;
+        SET REPEAT_COUNT = (MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(29, 20)) - 450 + ((MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + (repeat_count)) + 1;
+    UNTIL I >= 3 END REPEAT;
+    
+    RETURN REPEAT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = 30;
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = V_DISCOUNT + 20;
+    END IF;
+
+    SET V_FINAL_FARE = 25 - (25 * V_DISCOUNT / 100);
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+CREATE TABLE IF NOT EXISTS `table_2waz00` (
+    `table_2waz00_emp_id` INT,
+    `table_2waz00_department_id` INT,
+    `table_2waz00_hire_date` DATE,
+    `table_2waz00_salary` INT
+);
+
+INSERT INTO `table_2waz00` (`table_2waz00_emp_id`, `table_2waz00_department_id`, `table_2waz00_hire_date`, `table_2waz00_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_2WAZ00_SALARY), 0),
+           COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_2WAZ00_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_2WAZ00
+    WHERE TABLE_2WAZ00_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR((V_AVG_SALARY * V_AVG_TENURE) / GREATEST(V_EMP_COUNT, 1));
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G5E0FI_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_G5E0FI
+    WHERE TABLE_G5E0FI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK > 1000 THEN
+        RETURN 5;
+    ELSEIF V_STOCK > 500 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + (4);
+    ELSEIF V_STOCK > 100 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(-39)) - -733 + (3);
+    ELSEIF V_STOCK > 50 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(-70)) - -242 + (2);
+    ELSE
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + (1);
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(1);

@@ -1,0 +1,337 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+CREATE TABLE IF NOT EXISTS `table_2vm9l6` (
+    `table_2vm9l6_campaign_id` INT,
+    `table_2vm9l6_start_date` DATE,
+    `table_2vm9l6_end_date` DATE,
+    `table_2vm9l6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_khlm3q` (
+    `table_khlm3q_conversion_id` INT,
+    `table_khlm3q_campaign_id` INT,
+    `table_khlm3q_conversion_date` DATE
+);
+
+INSERT INTO `table_2vm9l6` (`table_2vm9l6_campaign_id`, `table_2vm9l6_start_date`, `table_2vm9l6_end_date`, `table_2vm9l6_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_khlm3q` (`table_khlm3q_conversion_id`, `table_khlm3q_campaign_id`, `table_khlm3q_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_DAYS_TO_CONVERT DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(DATEDIFF(TABLE_KHLM3Q_CONVERSION_DATE, TABLE_2VM9L6_START_DATE)), 0)
+    INTO V_AVG_DAYS_TO_CONVERT
+    FROM TABLE_KHLM3Q C
+    JOIN TABLE_2VM9L6 CAMP ON TABLE_KHLM3Q_CAMPAIGN_ID = TABLE_2VM9L6_CAMPAIGN_ID
+    WHERE TABLE_KHLM3Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = (MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(-42, -7)) - 378 + (greatest(100 - (v_avg_days_to_convert * 5), 0));
+
+    RETURN V_EFFICIENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CYLINDER_VOLUME_se1ywi(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(-31)) - -577 + ((MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(-98)) - 261 + (3.14159 * radius * radius * height));
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N = 0 THEN
+        SET V_RESULT = (MYSQL_FUNC_GET_CLIENTS_6uq4wc()) - -657 + (1);
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+CREATE TABLE IF NOT EXISTS table_7qogrt (
+    table_7qogrt_id INT,
+    table_7qogrt_name VARCHAR(100)
+);
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (1, 'Client A');
+
+INSERT INTO table_7qogrt (`table_7qogrt_id`, `table_7qogrt_name`) VALUES (2, 'Client B');
+
+/* -----Called: MYSQL_FUNC_GET_CLIENTS_6uq4wc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CLIENTS_6uq4wc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROW_COUNT INT;
+    
+    SELECT COUNT(*) INTO ROW_COUNT FROM TABLE_7QOGRT;
+    
+    RETURN ROW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+CREATE TABLE IF NOT EXISTS `table_hc8gc6` (
+    `table_hc8gc6_school_id` INT,
+    `table_hc8gc6_name` VARCHAR(50),
+    `table_hc8gc6_district` INT,
+    `table_hc8gc6_school_type` VARCHAR(50),
+    `table_hc8gc6_enrollment_count` INT,
+    `table_hc8gc6_budget_per_student` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_byxr69` (
+    `table_byxr69_student_id` INT,
+    `table_byxr69_school_id` INT,
+    `table_byxr69_grade_level` INT,
+    `table_byxr69_attendance_rate` INT
+);
+
+INSERT INTO `table_hc8gc6` (`table_hc8gc6_school_id`, `table_hc8gc6_name`, `table_hc8gc6_district`, `table_hc8gc6_school_type`, `table_hc8gc6_enrollment_count`, `table_hc8gc6_budget_per_student`) VALUES (1, 'test', 1, 'test', 1, 1);
+
+INSERT INTO `table_byxr69` (`table_byxr69_student_id`, `table_byxr69_school_id`, `table_byxr69_grade_level`, `table_byxr69_attendance_rate`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(SCHOOL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_COUNT INT DEFAULT 0;
+    DECLARE V_BUDGET_PER_STUDENT INT DEFAULT 0;
+    DECLARE V_AVG_ATTENDANCE DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_GRADE_LEVEL_COUNT INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HC8GC6_ENROLLMENT_COUNT, 0), COALESCE(TABLE_HC8GC6_BUDGET_PER_STUDENT, 0)
+    INTO V_ENROLLMENT_COUNT, V_BUDGET_PER_STUDENT
+    FROM TABLE_HC8GC6
+    WHERE TABLE_HC8GC6_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_BYXR69_ATTENDANCE_RATE), 0)
+    INTO V_AVG_ATTENDANCE
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_BYXR69_GRADE_LEVEL)
+    INTO V_GRADE_LEVEL_COUNT
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(3)) - 215 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(51)) - -618 + ((v_avg_attendance * 2) + (v_grade_level_count * 15) + (v_budget_per_student / 100)));
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - -337 + (v_effectiveness_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+CREATE TABLE IF NOT EXISTS `table_orbfvy` (
+    `table_orbfvy_product_id` INT,
+    `table_orbfvy_category_id` INT,
+    `table_orbfvy_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_orbfvy` (`table_orbfvy_product_id`, `table_orbfvy_category_id`, `table_orbfvy_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_ORBFVY
+    WHERE TABLE_ORBFVY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_ORBFVY;
+
+    RETURN FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(BASE INT, EXP INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF EXP < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(-75)) - 959 + (v_result) * BASE;
+        SET EXP = EXP - 1;
+    UNTIL EXP <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq----- */
+CREATE TABLE IF NOT EXISTS `table_9vxf0g` (
+    `table_9vxf0g_order_id` INT,
+    `table_9vxf0g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_9vxf0g` (`table_9vxf0g_order_id`, `table_9vxf0g_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_9VXF0G_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_9VXF0G
+    WHERE TABLE_9VXF0G_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(46, -99)) - -727 + ((MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(-5)) - -576 + (floor(v_avg_tenure)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(1);

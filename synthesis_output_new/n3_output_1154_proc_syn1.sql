@@ -1,0 +1,371 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1194106 (v1194107 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1193916 (v1193917 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1194266 (v1194267 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1193810 (id INT);
+CREATE TABLE IF NOT EXISTS v1193883 (v1193884 INT);
+CREATE TABLE IF NOT EXISTS v1194136 (id INT);
+CREATE TABLE IF NOT EXISTS v1194390 (v1194391 DECIMAL(6,6));
+INSERT INTO v1194106 VALUES ('thread/innodb/srv_abc'), ('thread/innodb/srv_def'), ('other_value');
+INSERT INTO v1193916 VALUES ('1'), ('2'), ('3');
+INSERT INTO v1194266 VALUES ('ger'), ('eng'), ('fra');
+INSERT INTO v1193810 VALUES (1), (2), (3);
+INSERT INTO v1193883 VALUES (1), (2), (3);
+INSERT INTO v1194136 VALUES (1), (2), (3);
+INSERT INTO v1194390 VALUES (0.000001), (0.000002), (0.000003);
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(-59)) - -979 + (p_n) < 0 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(-2, 65)) - -515 + ((MYSQL_FUNC_CALCULATE_GCD_wvu8n8(17, -56)) - 272 + (-p_n));
+    END IF;
+    RETURN P_N;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_wvu8n8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_wvu8n8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(-23)) - 351 + (a) % B;
+        SET A = V_TEMP;
+    END WHILE;
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+CREATE TABLE IF NOT EXISTS `table_js4wmr` (
+    `table_js4wmr_customer_id` INT,
+    `table_js4wmr_plan_type` VARCHAR(50),
+    `table_js4wmr_start_date` DATE,
+    `table_js4wmr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_taalq5` (
+    `table_taalq5_customer_id` INT,
+    `table_taalq5_tier_level` INT
+);
+
+INSERT INTO `table_js4wmr` (`table_js4wmr_customer_id`, `table_js4wmr_plan_type`, `table_js4wmr_start_date`, `table_js4wmr_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_taalq5` (`table_taalq5_customer_id`, `table_taalq5_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+
+    SELECT TABLE_JS4WMR_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_JS4WMR
+    WHERE TABLE_JS4WMR_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TENURE_MONTHS = (MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (timestampdiff(month, v_start_date, curdate()));
+
+    RETURN V_TENURE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+CREATE TABLE IF NOT EXISTS `table_tgavgl` (
+    `table_tgavgl_order_id` INT,
+    `table_tgavgl_customer_id` INT,
+    `table_tgavgl_order_date` DATE,
+    `table_tgavgl_total_amount` DECIMAL(10,2),
+    `table_tgavgl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d0pa5w` (
+    `table_d0pa5w_customer_id` INT,
+    `table_d0pa5w_customer_segment` INT
+);
+
+INSERT INTO `table_tgavgl` (`table_tgavgl_order_id`, `table_tgavgl_customer_id`, `table_tgavgl_order_date`, `table_tgavgl_total_amount`, `table_tgavgl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_d0pa5w` (`table_d0pa5w_customer_id`, `table_d0pa5w_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_SEGMENT_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_D0PA5W_CUSTOMER_SEGMENT
+    INTO V_SEGMENT
+    FROM TABLE_D0PA5W
+    WHERE TABLE_D0PA5W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SEGMENT_ORDER_COUNT
+    FROM TABLE_TGAVGL O
+    JOIN TABLE_D0PA5W C ON TABLE_TGAVGL_CUSTOMER_ID = TABLE_D0PA5W_CUSTOMER_ID
+    WHERE TABLE_D0PA5W_CUSTOMER_SEGMENT = V_SEGMENT
+    AND MONTH(TABLE_TGAVGL_ORDER_DATE) = MONTH(CURDATE())
+    AND YEAR(TABLE_TGAVGL_ORDER_DATE) = YEAR(CURDATE());
+
+    RETURN V_SEGMENT_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - -337 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+CREATE TABLE IF NOT EXISTS `table_uto37x` (
+    `table_uto37x_doctor_id` INT,
+    `table_uto37x_specialization` INT,
+    `table_uto37x_years_experience` INT,
+    `table_uto37x_consultation_fee` INT,
+    `table_uto37x_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jyc3v8` (
+    `table_jyc3v8_appointment_id` INT,
+    `table_jyc3v8_doctor_id` INT,
+    `table_jyc3v8_patient_id` INT,
+    `table_jyc3v8_appointment_date` DATE,
+    `table_jyc3v8_duration_minutes` INT,
+    `table_jyc3v8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_uto37x` (`table_uto37x_doctor_id`, `table_uto37x_specialization`, `table_uto37x_years_experience`, `table_uto37x_consultation_fee`, `table_uto37x_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_jyc3v8` (`table_jyc3v8_appointment_id`, `table_jyc3v8_doctor_id`, `table_jyc3v8_patient_id`, `table_jyc3v8_appointment_date`, `table_jyc3v8_duration_minutes`, `table_jyc3v8_status`) VALUES (1, 2, 3, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(DOCTOR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UTO37X_YEARS_EXPERIENCE, 0), COALESCE(TABLE_UTO37X_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM TABLE_UTO37X
+    WHERE TABLE_UTO37X_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM TABLE_JYC3V8
+    WHERE TABLE_JYC3V8_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_JYC3V8_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_JYC3V8_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + (22);
+    SET V_UTILIZATION_RATE = (V_APPOINTMENTS_THIS_MONTH * 100) / V_WORKING_DAYS;
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = V_UTILIZATION_RATE + 10;
+    END IF;
+
+    RETURN LEAST(V_UTILIZATION_RATE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1154_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_connection_id INT;
+    DECLARE v_sql_mode VARCHAR(100);
+    DECLARE v_time_val TIME;
+    DECLARE v_decimal_val DECIMAL(6,6);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1194391 FROM v1194390 WHERE v1194391 > 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Initialize result
+    SET result = 0;
+
+    -- Statement 1: Update with LIKE pattern (adapted with p1 as condition modifier)
+    UPDATE v1194106 SET v1194107 = '4.5' WHERE v1194107 LIKE 'thread/innodb/srv_%' AND p1 > 0;
+
+    -- Statement 2: Multi-table UPDATE with JOIN (adapted with p2)
+    UPDATE v1193916 AS x1
+    JOIN v1194266 AS x2 ON (x2.v1194267 = 'ger' AND x2.v1194267 = 'with ancestors as (select * from emp) select * from ancestors')
+    JOIN v1193810 AS x6 ON (x2.v1194267 = 'ger')
+    SET x1.v1193917 = 'aa1-updated'
+    WHERE x1.v1193917 = CAST(p2 AS CHAR) AND p2 > 0;
+
+    -- Statement 3: CREATE TEMPORARY TABLE (adapted to check existence first)
+    CREATE TEMPORARY TABLE IF NOT EXISTS v1194353 (v1194354 ENUM('a1', 'a2')) DEFAULT CHARACTER SET=cp932 ENGINE=MyISAM;
+    INSERT INTO v1194353 VALUES ('a1'), ('a2');
+
+    -- Statement 4: UPDATE with NATURAL JOIN and system variable (adapted)
+    SET v_connection_id = CONNECTION_ID();
+    UPDATE v1193883 AS x1
+    NATURAL JOIN v1194136 AS x6
+    SET x1.v1193884 = v_connection_id
+    WHERE @@sql_mode = 't1' AND p1 > 0;
+
+    -- Statement 5: SELECT with TIME functions (adapted to use CURSOR and loop)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_decimal_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_count = (MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(-20)) - 652 + (v_count) + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use IF/ELSE to determine result
+    IF v_count > 0 THEN
+        SET result = v_count;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Additional procedural logic with CASE
+    CASE
+        WHEN p1 > p2 THEN
+            SET result = (MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(-76)) - -82 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (result)) + 10;
+        WHEN p1 = p2 THEN
+            SET result = result + 20;
+        ELSE
+            SET result = result + 30;
+    END CASE;
+
+    -- Use WHILE loop for additional processing
+    WHILE v_count < 5 DO
+        SET v_count = v_count + 1;
+    END WHILE;
+
+    SET result = result + v_count;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1154_proc(1, 1, @out_result);
+
+SELECT @out_result;

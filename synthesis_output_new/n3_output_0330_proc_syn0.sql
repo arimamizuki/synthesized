@@ -1,0 +1,453 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1134136 (v1134137 INT, v1134138 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1134154 (v1134137 INT, v1134138 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1134307 (v1134308 INT);
+CREATE TABLE IF NOT EXISTS v1134138 (v1134139 DATE, v1134140 TIME, v1134141 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1134195 (v1134139 DATE, v1134140 TIME, v1134141 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1134343 (v1134344 INT, v1134347 INT, v1134348 INT);
+CREATE TABLE IF NOT EXISTS v1134333 (v1134334 VARCHAR(50), v1134335 INT);
+INSERT INTO v1134136 VALUES (1, 't1'), (2, 't2'), (3, 't3');
+INSERT INTO v1134154 VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO v1134307 VALUES (1), (2), (3);
+INSERT INTO v1134138 VALUES ('2024-01-01', '12:00:00', 'test1'), (NULL, NULL, 'test2');
+INSERT INTO v1134195 VALUES ('2024-01-01', '12:00:00', 'test1'), (NULL, NULL, 'test2');
+INSERT INTO v1134343 VALUES (128, 1, 128), (256, 2, 256), (512, 3, 512);
+INSERT INTO v1134333 VALUES ('aaayyy', 10), ('bbbyyy', 20), ('cccyyy', 30);
+
+/* -----Dependency for: MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd----- */
+CREATE TABLE IF NOT EXISTS `table_wzbcdn` (
+    `table_wzbcdn_product_id` INT,
+    `table_wzbcdn_name` VARCHAR(50),
+    `table_wzbcdn_category_id` INT,
+    `table_wzbcdn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zpqbn3` (
+    `table_zpqbn3_order_id` INT,
+    `table_zpqbn3_product_id` INT,
+    `table_zpqbn3_quantity` INT,
+    `table_zpqbn3_order_date` DATE
+);
+
+INSERT INTO `table_wzbcdn` (`table_wzbcdn_product_id`, `table_wzbcdn_name`, `table_wzbcdn_category_id`, `table_wzbcdn_price`) VALUES (1, 'test', 3, 1.0);
+
+INSERT INTO `table_zpqbn3` (`table_zpqbn3_order_id`, `table_zpqbn3_product_id`, `table_zpqbn3_quantity`, `table_zpqbn3_order_date`) VALUES (1, 2, 3, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_QUANTITY_PER_ORDER INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_ZPQBN3_QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_QUANTITY, V_ORDER_COUNT
+    FROM TABLE_ZPQBN3
+    WHERE TABLE_ZPQBN3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT DATEDIFF(CURDATE(), MAX(TABLE_ZPQBN3_ORDER_DATE))
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_ZPQBN3
+    WHERE TABLE_ZPQBN3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_QUANTITY_PER_ORDER = V_TOTAL_QUANTITY / V_ORDER_COUNT;
+
+    SET V_POPULARITY_SCORE = (V_ORDER_COUNT * 10) + (V_AVG_QUANTITY_PER_ORDER * 5);
+
+    IF V_DAYS_SINCE_LAST_ORDER <= 7 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER <= 30 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 10;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE - 30;
+    END IF;
+
+    RETURN V_POPULARITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_1434_proc----- */
+CREATE TABLE IF NOT EXISTS v1250124 (v1250125 VARCHAR(255), v1250126 INT);
+CREATE TABLE IF NOT EXISTS v1249891 (v1249892 INT, v1249893 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1250114 (v1249892 INT, v1249893 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1250361 (v1250362 VARCHAR(50), v1250363 INT);
+CREATE TABLE IF NOT EXISTS v1250132 (v1250133 VARCHAR(100), v1250134 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1250155 (v1250156 VARCHAR(255), v1250157 INT);
+INSERT INTO v1250124 VALUES ('Bang!', 10), ('Test', 20), ('Other', 30);
+INSERT INTO v1249891 VALUES (1000, 'autocommit'), (2000, 'test'), (3000, 'val-2');
+INSERT INTO v1250114 VALUES (1000, 'autocommit'), (2000, 'test'), (3000, NULL);
+INSERT INTO v1250361 VALUES ('val-2', 5), ('temp_table1', 10), ('2005-01-01 23:59:59.9', 15);
+INSERT INTO v1250132 VALUES ('abc', 'xy'), ('def', 'ghij'), ('ghi', 'kl');
+INSERT INTO v1250155 VALUES ('ESKA_test', 100), ('test_ESKA', 200), ('ESKA_only', 300);
+
+/* -----Called: n3_output_1434_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1434_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp VARCHAR(255);
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cursor_val VARCHAR(255);
+    DECLARE cur CURSOR FOR SELECT v1250156 FROM v1250155 WHERE v1250156 LIKE '%ESKA%' ORDER BY v1250157 DESC LIMIT 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: UPDATE with complex WHERE condition
+    UPDATE v1250124 AS x1 SET v1250125 = 'Bang!' WHERE MID(v1250125 + 0.0, 'POINT(25 243)', 5.8774717541114e-39) IN (ROW(1, 2, ROW(3, NULL))) ORDER BY AVG(v1250125) LIMIT 0;
+    SET v_row_count = ROW_COUNT();
+    SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - -792 + (v_row_count);
+
+    -- Statement 2: UPDATE with JOIN and input parameters
+    UPDATE v1249891 AS x0 INNER JOIN v1250114 AS x4 ON ((x0.v1249892 = x4.v1249892) AND (x0.v1249892 = 'autocommit' OR x4.v1249893 IS NULL)) SET x0.v1249892 = p1 WHERE x0.v1249892 > p2;
+    SET v_row_count = ROW_COUNT();
+    SET v_counter = v_counter + v_row_count;
+
+    -- Statement 3: UPDATE with ORDER BY and LIMIT using input parameter
+    IF p1 > 0 THEN
+        UPDATE v1250361 AS x0 SET x0.v1250362 = '2005-01-01 23:59:59.9' WHERE x0.v1250362 = 'val-2' AND x0.v1250362 = 'temp_table1' AND x0.v1250362 <> '-8388607' ORDER BY x0.v1250362 DESC, x0.v1250362 DESC LIMIT p2;
+        SET v_row_count = ROW_COUNT();
+        SET v_counter = v_counter + v_row_count;
+    ELSE
+        SET v_counter = v_counter + 0;
+    END IF;
+
+    -- Statement 4: UPDATE with OCTET_LENGTH condition
+    CASE 
+        WHEN p2 < 100 THEN
+            UPDATE v1250132 AS x0 SET x0.v1250133 = CAST(p1 AS CHAR) WHERE x0.v1250133 <> '' AND OCTET_LENGTH(x0.v1250134) = 2;
+            SET v_row_count = ROW_COUNT();
+            SET v_counter = v_counter + v_row_count;
+        ELSE
+            SET v_counter = v_counter + 0;
+    END CASE;
+
+    -- Statement 5: UPDATE with LIKE and CURSOR iteration
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1250155 AS x1 SET x1.v1250156 = LEFT(x1.v1250156, CHAR_LENGTH(x1.v1250156) - 1) WHERE x1.v1250156 LIKE '%ESKA%' ORDER BY x1.v1250157 DESC LIMIT 1;
+        SET v_row_count = ROW_COUNT();
+        SET v_counter = v_counter + v_row_count;
+    END LOOP;
+    CLOSE cur;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+CREATE TABLE IF NOT EXISTS `table_fove5m` (
+    `table_fove5m_country` INT
+);
+
+INSERT INTO `table_fove5m` (`table_fove5m_country`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FOVE5M
+    WHERE TABLE_FOVE5M_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(-61)) - 853 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - 168 + (v_sum + v_i));
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = 0;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_SQUARES_btf2hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk(-78, -61)) - -697 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = (MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(28)) - 602 + (v_sum) + (V_COUNTER * V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N < 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(41)) - -150 + (-n);
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+CREATE TABLE IF NOT EXISTS `table_6o33dj` (
+    `table_6o33dj_emp_id` INT,
+    `table_6o33dj_department_id` INT,
+    `table_6o33dj_salary` INT,
+    `table_6o33dj_hire_date` DATE
+);
+
+INSERT INTO `table_6o33dj` (`table_6o33dj_emp_id`, `table_6o33dj_department_id`, `table_6o33dj_salary`, `table_6o33dj_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+    DECLARE V_AVG_SALARY_INCREASE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT YEAR(TABLE_6O33DJ_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_6O33DJ
+    WHERE TABLE_6O33DJ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_AVG_SALARY_INCREASE = (YEAR(CURDATE()) - V_HIRE_YEAR) * 0.03 * 100;
+
+    RETURN FLOOR(V_AVG_SALARY_INCREASE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk(START_VAL INT, COUNT_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+    DECLARE V_SQUARED_SUM INT DEFAULT 0;
+
+    IF COUNT_VAL <= 0 OR COUNT_VAL > 1000 THEN
+        RETURN 0;
+    END IF;
+
+    LOOP_STMT: WHILE V_COUNTER < COUNT_VAL DO
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(90)) - 216 + (v_sum + (start_val + v_counter));
+        SET V_SQUARED_SUM = V_SQUARED_SUM + ((START_VAL + V_COUNTER) * (START_VAL + V_COUNTER));
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE LOOP_STMT;
+
+    RETURN V_SQUARED_SUM / NULLIF(V_SUM, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+CREATE TABLE IF NOT EXISTS `table_alvd0j` (
+    `table_alvd0j_customer_id` INT,
+    `table_alvd0j_plan_type` VARCHAR(50),
+    `table_alvd0j_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_alvd0j` (`table_alvd0j_customer_id`, `table_alvd0j_plan_type`, `table_alvd0j_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_ALVD0J_PLAN_TYPE, COALESCE(TABLE_ALVD0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_ALVD0J
+    WHERE TABLE_ALVD0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_MONTHLY_COST > 500 OR V_PLAN_TYPE = 'ENTERPRISE' THEN
+        RETURN 5;
+    ELSEIF V_MONTHLY_COST > 200 OR V_PLAN_TYPE = 'PREMIUM' THEN
+        RETURN 4;
+    ELSEIF V_MONTHLY_COST > 100 THEN
+        RETURN 3;
+    ELSEIF V_MONTHLY_COST > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0330_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_date_val DATE;
+    DECLARE v_time_val TIME;
+    DECLARE v_rank_val INT;
+    DECLARE v_innodb_timeout INT DEFAULT 3600;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1134137 FROM v1134136 WHERE v1134137 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+    END;
+
+    -- Initialize output
+    SET result = 0;
+
+    -- Statement 1: UPDATE with LEFT JOIN, adapted to use p1
+    UPDATE v1134136 AS x1 
+    LEFT JOIN v1134154 AS x6 ON x1.v1134137 = x1.v1134137 
+    SET x1.v1134137 = 0.040372670 * x1.v1134137 
+    WHERE x1.v1134137 = p1;
+
+    -- Statement 2: UPDATE with CHAR_LENGTH and SHA2, adapted with p2
+    UPDATE v1134307 AS x0 
+    SET x0.v1134308 = CHAR_LENGTH(SHA2('', 224)) / 2 * 8 
+    WHERE x0.v1134308 <> p2;
+
+    -- Statement 3: UPDATE with LEFT OUTER JOIN and DATE/TIME functions, adapted
+    UPDATE v1134138 AS x0 
+    LEFT OUTER JOIN v1134195 AS x1 ON x0.v1134139 = x0.v1134139 
+    SET x0.v1134139 = DATE_ADD(CURDATE(), INTERVAL p1 DAY)
+    WHERE x0.v1134139 = DATE(NULL) AND x0.v1134140 = TIME(NULL);
+
+    -- Statement 4: UPDATE with ORDER BY and variable, using loop for iteration
+    SET v_temp = p1;
+    WHILE v_temp > 0 DO
+        UPDATE v1134343 AS x0 
+        SET x0.v1134344 = @save_innodb_timeout 
+        WHERE x0.v1134344 = x0.v1134348 
+        AND x0.v1134348 = x0.v1134348 
+        AND x0.v1134348 = p2
+        ORDER BY x0.v1134347 ASC
+        LIMIT 1;
+        
+        SET v_temp = v_temp - 1;
+CALL n3_output_1434_proc(42, -97, @_syn_3328);
+        SET v_counter = (MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - 398 + (@_syn_3328 - @_io_result + ((MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd(94)) - -584 + (v_counter))) + 1;
+    END WHILE;
+
+    -- Statement 5: UPDATE with window function RANK(), adapted with CASE
+    CASE 
+        WHEN p1 > 0 THEN
+            UPDATE v1134333 AS x2, v1134195 AS x7 
+            SET x2.v1134335 = @m 
+            WHERE x2.v1134334 = 'aaayyy' 
+            ORDER BY 3 - x2.v1134335, 101 + RANK() OVER (ORDER BY x2.v1134334)
+            LIMIT 1;
+        ELSE
+            SET v_counter = v_counter + 10;
+    END CASE;
+
+    -- Use cursor to iterate over matching rows
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_temp;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final output
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0330_proc(1, 1, @out_result);
+
+SELECT @out_result;

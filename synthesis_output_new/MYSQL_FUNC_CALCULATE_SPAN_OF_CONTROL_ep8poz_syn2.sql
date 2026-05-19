@@ -1,0 +1,358 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+CREATE TABLE IF NOT EXISTS `table_ck40yw` (
+    `table_ck40yw_policy_id` INT,
+    `table_ck40yw_customer_id` INT,
+    `table_ck40yw_policy_type` VARCHAR(50),
+    `table_ck40yw_coverage_amount` DECIMAL(10,2),
+    `table_ck40yw_premium_annual` INT,
+    `table_ck40yw_beneficiary_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_du7xpr` (
+    `table_du7xpr_claim_id` INT,
+    `table_du7xpr_policy_id` INT,
+    `table_du7xpr_claim_date` DATE,
+    `table_du7xpr_payout_amount` DECIMAL(10,2),
+    `table_du7xpr_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ck40yw` (`table_ck40yw_policy_id`, `table_ck40yw_customer_id`, `table_ck40yw_policy_type`, `table_ck40yw_coverage_amount`, `table_ck40yw_premium_annual`, `table_ck40yw_beneficiary_id`) VALUES (1, 2, 'test', 1.0, 5, 6);
+
+INSERT INTO `table_du7xpr` (`table_du7xpr_claim_id`, `table_du7xpr_policy_id`, `table_du7xpr_claim_date`, `table_du7xpr_payout_amount`, `table_du7xpr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID_IN INT DEFAULT 0;
+    DECLARE V_POLICY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CK40YW_COVERAGE_AMOUNT, 0), COALESCE(TABLE_CK40YW_PREMIUM_ANNUAL, 0)
+    INTO V_COVERAGE_AMOUNT, V_PREMIUM_ANNUAL
+    FROM TABLE_CK40YW
+    WHERE TABLE_CK40YW_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_DU7XPR_PAYOUT_AMOUNT), 0) INTO V_TOTAL_PAID_IN
+    FROM TABLE_DU7XPR
+    WHERE TABLE_DU7XPR_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_POLICY_VALUE = V_COVERAGE_AMOUNT - V_TOTAL_PAID_IN;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj()) - -627 + (cast(v_policy_value as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_abekbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_abekbp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (v_delay_score) = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 5;
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+CREATE TABLE IF NOT EXISTS `table_8cjtte` (
+    `table_8cjtte_product_id` INT,
+    `table_8cjtte_supplier_id` INT,
+    `table_8cjtte_price` DECIMAL(10,2),
+    `table_8cjtte_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_upwhhl` (
+    `table_upwhhl_supplier_id` INT,
+    `table_upwhhl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_8cjtte` (`table_8cjtte_product_id`, `table_8cjtte_supplier_id`, `table_8cjtte_price`, `table_8cjtte_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_upwhhl` (`table_upwhhl_supplier_id`, `table_upwhhl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UPWHHL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_UPWHHL
+    WHERE TABLE_UPWHHL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_8CJTTE_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM TABLE_8CJTTE
+    WHERE TABLE_8CJTTE_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 5) + (V_AVG_PRICE / 10);
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(90)) - -10 + (v_value_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+CREATE TABLE IF NOT EXISTS `table_m5s0fu` (
+    `table_m5s0fu_product_id` INT,
+    `table_m5s0fu_price` DECIMAL(10,2),
+    `table_m5s0fu_stock_quantity` INT
+);
+
+INSERT INTO `table_m5s0fu` (`table_m5s0fu_product_id`, `table_m5s0fu_price`, `table_m5s0fu_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M5S0FU_PRICE, (MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(-72)) - 944 + ((MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(-73)) - -814 + (0))), COALESCE(TABLE_M5S0FU_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_M5S0FU
+    WHERE TABLE_M5S0FU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_PRICE / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * P_N * P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+CREATE TABLE IF NOT EXISTS `table_4dqelz` (
+    `table_4dqelz_loan_id` INT,
+    `table_4dqelz_customer_id` INT,
+    `table_4dqelz_principal_amount` DECIMAL(10,2),
+    `table_4dqelz_interest_rate` INT,
+    `table_4dqelz_term_months` INT,
+    `table_4dqelz_monthly_payment` INT,
+    `table_4dqelz_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4dqelz` (`table_4dqelz_loan_id`, `table_4dqelz_customer_id`, `table_4dqelz_principal_amount`, `table_4dqelz_interest_rate`, `table_4dqelz_term_months`, `table_4dqelz_monthly_payment`, `table_4dqelz_status`) VALUES (1, 2, 1.0, 4, 5, 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4DQELZ_PRINCIPAL_AMOUNT, 0), COALESCE(TABLE_4DQELZ_MONTHLY_PAYMENT, 0), COALESCE(TABLE_4DQELZ_TERM_MONTHS, 12)
+    INTO V_PRINCIPAL, V_MONTHLY_PAYMENT, V_TERM_MONTHS
+    FROM TABLE_4DQELZ
+    WHERE TABLE_4DQELZ_LOAN_ID = LOAN_ID_PARAM;
+
+    SET V_TOTAL_PAYMENT = V_MONTHLY_PAYMENT * V_TERM_MONTHS;
+    SET V_TOTAL_INTEREST = V_TOTAL_PAYMENT - V_PRINCIPAL;
+
+    RETURN GREATEST(V_TOTAL_INTEREST, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(-13)) - -191 + ((MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + ((MYSQL_FUNC_FUNC1_abekbp()) - 180 + ((MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(3)) - 420 + ((MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (v_direct_reports)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(1);

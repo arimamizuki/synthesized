@@ -1,0 +1,404 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_uto37x` (
+    `table_uto37x_doctor_id` INT,
+    `table_uto37x_specialization` INT,
+    `table_uto37x_years_experience` INT,
+    `table_uto37x_consultation_fee` INT,
+    `table_uto37x_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jyc3v8` (
+    `table_jyc3v8_appointment_id` INT,
+    `table_jyc3v8_doctor_id` INT,
+    `table_jyc3v8_patient_id` INT,
+    `table_jyc3v8_appointment_date` DATE,
+    `table_jyc3v8_duration_minutes` INT,
+    `table_jyc3v8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_uto37x` (`table_uto37x_doctor_id`, `table_uto37x_specialization`, `table_uto37x_years_experience`, `table_uto37x_consultation_fee`, `table_uto37x_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_jyc3v8` (`table_jyc3v8_appointment_id`, `table_jyc3v8_doctor_id`, `table_jyc3v8_patient_id`, `table_jyc3v8_appointment_date`, `table_jyc3v8_duration_minutes`, `table_jyc3v8_status`) VALUES (1, 2, 3, '2024-01-01', 5, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+CREATE TABLE IF NOT EXISTS `table_j9rj9a` (
+    `table_j9rj9a_customer_id` INT,
+    `table_j9rj9a_order_id` INT
+);
+
+INSERT INTO `table_j9rj9a` (`table_j9rj9a_customer_id`, `table_j9rj9a_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MAX(TABLE_J9RJ9A_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_J9RJ9A
+    WHERE TABLE_J9RJ9A_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ORDER_ID % 1000;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -(MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(-62)) - 208 + (1);
+    END IF;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(-22)) - 154 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(14)) - 285 + (p_a mod p_b));
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(62)) - -246 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+CREATE TABLE IF NOT EXISTS `table_o9epgx` (
+    `table_o9epgx_campaign_id` INT,
+    `table_o9epgx_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o9epgx` (`table_o9epgx_campaign_id`, `table_o9epgx_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_O9EPGX_STATUS
+    INTO V_STATUS
+    FROM TABLE_O9EPGX
+    WHERE TABLE_O9EPGX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 10;
+        WHEN 'PAUSED' THEN RETURN 5;
+        WHEN 'COMPLETED' THEN RETURN 8;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+CREATE TABLE IF NOT EXISTS `table_2qmb5t` (
+    `table_2qmb5t_customer_id` INT,
+    `table_2qmb5t_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_82xo3l` (
+    `table_82xo3l_order_id` INT,
+    `table_82xo3l_customer_id` INT,
+    `table_82xo3l_order_date` DATE,
+    `table_82xo3l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2qmb5t` (`table_2qmb5t_customer_id`, `table_2qmb5t_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_82xo3l` (`table_82xo3l_order_id`, `table_82xo3l_customer_id`, `table_82xo3l_order_date`, `table_82xo3l_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_DAYS INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_82XO3L_ORDER_DATE), MAX(TABLE_82XO3L_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_82XO3L
+    WHERE TABLE_82XO3L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(-92)) - -16 + (0);
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER_DATE, V_FIRST_ORDER_DATE);
+
+    IF V_TOTAL_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_DAYS = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN V_AVG_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq----- */
+CREATE TABLE IF NOT EXISTS `table_bmkvj4` (
+    `table_bmkvj4_campaign_id` INT,
+    `table_bmkvj4_channel` INT,
+    `table_bmkvj4_budget` INT,
+    `table_bmkvj4_start_date` DATE,
+    `table_bmkvj4_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_7dxq8p` (
+    `table_7dxq8p_conversion_id` INT,
+    `table_7dxq8p_campaign_id` INT,
+    `table_7dxq8p_conversion_value` INT
+);
+
+INSERT INTO `table_bmkvj4` (`table_bmkvj4_campaign_id`, `table_bmkvj4_channel`, `table_bmkvj4_budget`, `table_bmkvj4_start_date`, `table_bmkvj4_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_7dxq8p` (`table_7dxq8p_conversion_id`, `table_7dxq8p_campaign_id`, `table_7dxq8p_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_MIX_SCORE_laxoeq(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_MIX_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_BMKVJ4_CHANNEL, COALESCE(TABLE_BMKVJ4_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_BMKVJ4
+    WHERE TABLE_BMKVJ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_7DXQ8P_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_7DXQ8P
+    WHERE TABLE_7DXQ8P_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_SCORE = (V_REVENUE * 2) / GREATEST(V_BUDGET, 1);
+        WHEN 'ORGANIC' THEN SET V_MIX_SCORE = V_REVENUE * 3;
+        WHEN 'SOCIAL' THEN SET V_MIX_SCORE = (V_REVENUE * 150) / GREATEST(V_BUDGET, 1);
+        ELSE SET V_MIX_SCORE = V_REVENUE;
+    END CASE;
+
+    RETURN V_MIX_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+CREATE TABLE IF NOT EXISTS `table_7d705x` (
+    `table_7d705x_campaign_id` INT,
+    `table_7d705x_start_date` DATE,
+    `table_7d705x_end_date` DATE,
+    `table_7d705x_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yar712` (
+    `table_yar712_conversion_id` INT,
+    `table_yar712_campaign_id` INT,
+    `table_yar712_conversion_value` INT
+);
+
+INSERT INTO `table_7d705x` (`table_7d705x_campaign_id`, `table_7d705x_start_date`, `table_7d705x_end_date`, `table_7d705x_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_yar712` (`table_yar712_conversion_id`, `table_yar712_campaign_id`, `table_yar712_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_COST_PER_ACQ INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7D705X_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_7D705X
+    WHERE TABLE_7D705X_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_YAR712
+    WHERE TABLE_YAR712_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(38)) - -120 + (v_budget);
+    END IF;
+
+    SET V_COST_PER_ACQ = V_BUDGET / V_CONVERSIONS;
+
+    RETURN V_COST_PER_ACQ;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+CREATE TABLE IF NOT EXISTS `table_rsa7ps` (
+    `table_rsa7ps_supplier_id` INT,
+    `table_rsa7ps_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_rsa7ps` (`table_rsa7ps_supplier_id`, `table_rsa7ps_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_RSA7PS_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_RSA7PS
+    WHERE TABLE_RSA7PS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+CREATE TABLE IF NOT EXISTS `table_smasih` (
+    `table_smasih_account_id` INT,
+    `table_smasih_customer_id` INT,
+    `table_smasih_account_type` INT,
+    `table_smasih_balance` INT,
+    `table_smasih_interest_rate` INT,
+    `table_smasih_opened_date` DATE
+);
+
+INSERT INTO `table_smasih` (`table_smasih_account_id`, `table_smasih_customer_id`, `table_smasih_account_type`, `table_smasih_balance`, `table_smasih_interest_rate`, `table_smasih_opened_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_DAYS_HELD INT DEFAULT 0;
+    DECLARE V_INTEREST_EARNED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SMASIH_BALANCE, 0), COALESCE(TABLE_SMASIH_INTEREST_RATE, 0.00)
+    INTO V_BALANCE, V_INTEREST_RATE
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_SMASIH_OPENED_DATE)
+    INTO V_DAYS_HELD
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_INTEREST_EARNED = (V_BALANCE * V_INTEREST_RATE * V_DAYS_HELD) / 36500;
+
+    RETURN (MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(-61)) - 25 + ((MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - 633 + (floor(v_interest_earned)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+CREATE TABLE IF NOT EXISTS `table_bgkvze` (
+    `table_bgkvze_cdouble` INT
+);
+
+INSERT INTO `table_bgkvze` (`table_bgkvze_cdouble`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_BGKVZE_CDOUBLE) INTO RESULT FROM `TABLE_BGKVZE`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(DOCTOR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UTO37X_YEARS_EXPERIENCE, 0), COALESCE(TABLE_UTO37X_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM TABLE_UTO37X
+    WHERE TABLE_UTO37X_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM TABLE_JYC3V8
+    WHERE TABLE_JYC3V8_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_JYC3V8_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_JYC3V8_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = 22;
+    SET V_UTILIZATION_RATE = (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + ((v_appointments_this_month * 100) / v_working_days);
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = V_UTILIZATION_RATE + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(-54)) - -83 + (least(v_utilization_rate, 100));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(1);

@@ -1,0 +1,396 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+CREATE TABLE IF NOT EXISTS `table_do1xw5` (
+    `table_do1xw5_policy_id` INT,
+    `table_do1xw5_customer_id` INT,
+    `table_do1xw5_plan_type` VARCHAR(50),
+    `table_do1xw5_premium_monthly` INT,
+    `table_do1xw5_deductible_amount` DECIMAL(10,2),
+    `table_do1xw5_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0k2w6` (
+    `table_o0k2w6_claim_id` INT,
+    `table_o0k2w6_policy_id` INT,
+    `table_o0k2w6_claim_date` DATE,
+    `table_o0k2w6_claim_amount` DECIMAL(10,2),
+    `table_o0k2w6_status` VARCHAR(50)
+);
+
+INSERT INTO `table_do1xw5` (`table_do1xw5_policy_id`, `table_do1xw5_customer_id`, `table_do1xw5_plan_type`, `table_do1xw5_premium_monthly`, `table_do1xw5_deductible_amount`, `table_do1xw5_coverage_limit`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_o0k2w6` (`table_o0k2w6_claim_id`, `table_o0k2w6_policy_id`, `table_o0k2w6_claim_date`, `table_o0k2w6_claim_amount`, `table_o0k2w6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DO1XW5_PREMIUM_MONTHLY * 12), (MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(54)) - -610 + ((MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20(69)) - -836 + (0))), COALESCE(MAX(TABLE_DO1XW5_COVERAGE_LIMIT), 0)
+    INTO V_TOTAL_PREMIUMS, V_COVERAGE_LIMIT
+    FROM TABLE_DO1XW5
+    WHERE TABLE_DO1XW5_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O0K2W6_CLAIM_AMOUNT), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_O0K2W6
+    WHERE TABLE_O0K2W6_POLICY_ID = POLICY_ID_PARAM AND TABLE_O0K2W6_STATUS = 'APPROVED';
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20----- */
+CREATE TABLE IF NOT EXISTS `table_klq01t` (
+    `table_klq01t_property_id` INT,
+    `table_klq01t_address` INT,
+    `table_klq01t_property_type` VARCHAR(50),
+    `table_klq01t_area_sqft` INT,
+    `table_klq01t_bedrooms` INT,
+    `table_klq01t_bathrooms` INT,
+    `table_klq01t_list_price` DECIMAL(10,2),
+    `table_klq01t_year_built` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jqczbe` (
+    `table_jqczbe_commission_id` INT,
+    `table_jqczbe_property_id` INT,
+    `table_jqczbe_agent_id` INT,
+    `table_jqczbe_commission_rate` INT,
+    `table_jqczbe_sale_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_klq01t` (`table_klq01t_property_id`, `table_klq01t_address`, `table_klq01t_property_type`, `table_klq01t_area_sqft`, `table_klq01t_bedrooms`, `table_klq01t_bathrooms`, `table_klq01t_list_price`, `table_klq01t_year_built`) VALUES (1, 2, 'test', 4, 5, 6, 1.0, 8);
+
+INSERT INTO `table_jqczbe` (`table_jqczbe_commission_id`, `table_jqczbe_property_id`, `table_jqczbe_agent_id`, `table_jqczbe_commission_rate`, `table_jqczbe_sale_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_VALUATION_wffe20(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIST_PRICE INT DEFAULT 0;
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 0;
+    DECLARE V_AGE INT DEFAULT 0;
+    DECLARE V_PRICE_PER_SQFT INT DEFAULT 0;
+    DECLARE V_ADJUSTED_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KLQ01T_LIST_PRICE, 0), COALESCE(TABLE_KLQ01T_AREA_SQFT, 0), COALESCE(TABLE_KLQ01T_BEDROOMS, 0), COALESCE(TABLE_KLQ01T_BATHROOMS, 0), COALESCE(TABLE_KLQ01T_YEAR_BUILT, 2000)
+    INTO V_LIST_PRICE, V_AREA, V_BEDROOMS, V_BATHROOMS, V_YEAR_BUILT
+    FROM TABLE_KLQ01T
+    WHERE TABLE_KLQ01T_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_AGE = YEAR(CURDATE()) - V_YEAR_BUILT;
+    SET V_PRICE_PER_SQFT = V_LIST_PRICE / NULLIF(V_AREA, 0);
+
+    SET V_ADJUSTED_PRICE = V_LIST_PRICE;
+
+    IF V_AGE > 30 THEN
+        SET V_ADJUSTED_PRICE = V_ADJUSTED_PRICE - (V_ADJUSTED_PRICE * 10 / 100);
+    END IF;
+
+    SET V_ADJUSTED_PRICE = V_ADJUSTED_PRICE + (V_BEDROOMS * 5000) + (V_BATHROOMS * 3000);
+
+    RETURN CAST(V_ADJUSTED_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+CREATE TABLE IF NOT EXISTS `table_sq14za` (
+    `table_sq14za_emp_id` INT,
+    `table_sq14za_salary` INT
+);
+
+INSERT INTO `table_sq14za` (`table_sq14za_emp_id`, `table_sq14za_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_SQ14ZA_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_SQ14ZA
+    WHERE TABLE_SQ14ZA_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(-77)) - 361 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(76)) - 410 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(-92)) - 757 + (floor(v_salary / 100))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+CREATE TABLE IF NOT EXISTS `table_4lnfav` (
+    `table_4lnfav_product_id` INT,
+    `table_4lnfav_category_id` INT,
+    `table_4lnfav_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rrjep2` (
+    `table_rrjep2_category_id` INT,
+    `table_rrjep2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_4lnfav` (`table_4lnfav_product_id`, `table_4lnfav_category_id`, `table_4lnfav_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_rrjep2` (`table_rrjep2_category_id`, `table_rrjep2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_4LNFAV
+    WHERE TABLE_4LNFAV_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_OVERALL_AVG
+    FROM TABLE_4LNFAV;
+
+    IF V_OVERALL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_RATIO = (V_CATEGORY_AVG / V_OVERALL_AVG) * 100;
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+CREATE TABLE IF NOT EXISTS `table_hzpcez` (
+    `table_hzpcez_campaign_id` INT,
+    `table_hzpcez_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hzpcez` (`table_hzpcez_campaign_id`, `table_hzpcez_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HZPCEZ_STATUS
+    INTO V_STATUS
+    FROM TABLE_HZPCEZ
+    WHERE TABLE_HZPCEZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'COMPLETED' THEN 3
+        WHEN 'DRAFT' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = (MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(6, 86, -3, -14)) - -737 + (v_max_salary - v_min_salary);
+
+    RETURN FLOOR(V_SALARY_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C + P_D;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+CREATE TABLE IF NOT EXISTS `table_cz6psu` (
+    `table_cz6psu_product_id` INT,
+    `table_cz6psu_supplier_id` INT,
+    `table_cz6psu_category_id` INT
+);
+
+INSERT INTO `table_cz6psu` (`table_cz6psu_product_id`, `table_cz6psu_supplier_id`, `table_cz6psu_category_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_CZ6PSU_SUPPLIER_ID, TABLE_CZ6PSU_CATEGORY_ID
+    INTO V_SUPPLIER_ID, V_CATEGORY_ID
+    FROM TABLE_CZ6PSU
+    WHERE TABLE_CZ6PSU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - -890 + ((MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(-27, 79)) - 857 + ((v_supplier_id + v_category_id) % 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+CREATE TABLE IF NOT EXISTS `table_t8em8p` (
+    `table_t8em8p_emp_id` INT,
+    `table_t8em8p_salary` INT,
+    `table_t8em8p_hire_date` DATE,
+    `table_t8em8p_department_id` INT
+);
+
+INSERT INTO `table_t8em8p` (`table_t8em8p_emp_id`, `table_t8em8p_salary`, `table_t8em8p_hire_date`, `table_t8em8p_department_id`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(DEPARTMENT_ID_PARAM INT, PERFORMANCE_RATING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_BASE INT DEFAULT 1000;
+    DECLARE V_FINAL_BONUS INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_T8EM8P_SALARY), 0) INTO V_DEPT_AVG_SALARY
+    FROM TABLE_T8EM8P
+    WHERE TABLE_T8EM8P_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    CASE PERFORMANCE_RATING
+        WHEN 5 THEN SET V_FINAL_BONUS = V_BONUS_BASE * 3;
+        WHEN 4 THEN SET V_FINAL_BONUS = V_BONUS_BASE * 2;
+        WHEN 3 THEN SET V_FINAL_BONUS = V_BONUS_BASE;
+        WHEN 2 THEN SET V_FINAL_BONUS = V_BONUS_BASE / 2;
+        ELSE SET V_FINAL_BONUS = 0;
+    END CASE;
+
+    RETURN V_FINAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(-73)) - 411 + (v_quarter);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(1);

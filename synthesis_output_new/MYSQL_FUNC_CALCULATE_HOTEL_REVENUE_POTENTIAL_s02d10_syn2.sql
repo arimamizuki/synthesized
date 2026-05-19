@@ -1,0 +1,419 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_opth2r` (
+    `table_opth2r_hotel_id` INT,
+    `table_opth2r_name` VARCHAR(50),
+    `table_opth2r_city` INT,
+    `table_opth2r_star_rating` DECIMAL(3,1),
+    `table_opth2r_average_daily_rate` INT,
+    `table_opth2r_occupancy_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9q7x7u` (
+    `table_9q7x7u_booking_id` INT,
+    `table_9q7x7u_hotel_id` INT,
+    `table_9q7x7u_guest_id` INT,
+    `table_9q7x7u_check_in_date` DATE,
+    `table_9q7x7u_check_out_date` DATE,
+    `table_9q7x7u_total_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_opth2r` (`table_opth2r_hotel_id`, `table_opth2r_name`, `table_opth2r_city`, `table_opth2r_star_rating`, `table_opth2r_average_daily_rate`, `table_opth2r_occupancy_rate`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+INSERT INTO `table_9q7x7u` (`table_9q7x7u_booking_id`, `table_9q7x7u_hotel_id`, `table_9q7x7u_guest_id`, `table_9q7x7u_check_in_date`, `table_9q7x7u_check_out_date`, `table_9q7x7u_total_cost`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CHECK_0b8aug----- */
+CREATE TABLE IF NOT EXISTS `table_6yy65x` (
+    `table_6yy65x_campaign_id` INT,
+    `table_6yy65x_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6yy65x` (`table_6yy65x_campaign_id`, `table_6yy65x_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CHECK_0b8aug----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CHECK_0b8aug(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_6YY65X_STATUS
+    INTO V_STATUS
+    FROM TABLE_6YY65X
+    WHERE TABLE_6YY65X_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'COMPLETED' THEN 3
+        WHEN 'CANCELLED' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+CREATE TABLE IF NOT EXISTS `table_a19p69` (
+    `table_a19p69_order_id` INT,
+    `table_a19p69_customer_id` INT,
+    `table_a19p69_order_date` DATE,
+    `table_a19p69_status` VARCHAR(50),
+    `table_a19p69_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2a77t4` (
+    `table_2a77t4_item_id` INT,
+    `table_2a77t4_order_id` INT,
+    `table_2a77t4_product_id` INT,
+    `table_2a77t4_quantity` INT,
+    `table_2a77t4_unit_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gy4sbz` (
+    `table_gy4sbz_product_id` INT,
+    `table_gy4sbz_category_id` INT,
+    `table_gy4sbz_supplier_id` INT
+);
+
+INSERT INTO `table_a19p69` (`table_a19p69_order_id`, `table_a19p69_customer_id`, `table_a19p69_order_date`, `table_a19p69_status`, `table_a19p69_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_2a77t4` (`table_2a77t4_item_id`, `table_2a77t4_order_id`, `table_2a77t4_product_id`, `table_2a77t4_quantity`, `table_2a77t4_unit_price`) VALUES (1, 2, 3, 4, 1.0);
+
+INSERT INTO `table_gy4sbz` (`table_gy4sbz_product_id`, `table_gy4sbz_category_id`, `table_gy4sbz_supplier_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_LOOP_COUNTER INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR_ORDER_ID INT;
+
+    DECLARE ORDER_CURSOR CURSOR FOR
+        SELECT DISTINCT TABLE_A19P69_ORDER_ID FROM TABLE_A19P69 O
+        JOIN TABLE_2A77T4 OI ON TABLE_A19P69_ORDER_ID = TABLE_2A77T4_ORDER_ID
+        JOIN TABLE_GY4SBZ P ON TABLE_2A77T4_PRODUCT_ID = TABLE_GY4SBZ_PRODUCT_ID
+        WHERE TABLE_GY4SBZ_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_A19P69_STATUS = 'COMPLETED';
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+
+    OPEN ORDER_CURSOR;
+
+    ORDER_LOOP: LOOP
+        FETCH ORDER_CURSOR INTO CUR_ORDER_ID;
+        IF DONE THEN
+            LEAVE ORDER_LOOP;
+        END IF;
+
+        SELECT SUM(TABLE_2A77T4_QUANTITY * TABLE_2A77T4_UNIT_PRICE) INTO V_REVENUE
+        FROM TABLE_2A77T4 OI
+        WHERE TABLE_2A77T4_ORDER_ID = CUR_ORDER_ID;
+
+        SET V_LOOP_COUNTER = V_LOOP_COUNTER + 1;
+    END LOOP ORDER_LOOP;
+
+    CLOSE ORDER_CURSOR;
+
+    RETURN COALESCE(V_REVENUE, 0) + (V_LOOP_COUNTER * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun----- */
+CREATE TABLE IF NOT EXISTS `table_jyrr2f` (
+    `table_jyrr2f_inventory_id` INT,
+    `table_jyrr2f_product_id` INT,
+    `table_jyrr2f_warehouse_id` INT,
+    `table_jyrr2f_quantity` INT,
+    `table_jyrr2f_last_updated` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_dtagt9` (
+    `table_dtagt9_product_id` INT,
+    `table_dtagt9_name` VARCHAR(50),
+    `table_dtagt9_reorder_level` INT,
+    `table_dtagt9_unit_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_jyrr2f` (`table_jyrr2f_inventory_id`, `table_jyrr2f_product_id`, `table_jyrr2f_warehouse_id`, `table_jyrr2f_quantity`, `table_jyrr2f_last_updated`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_dtagt9` (`table_dtagt9_product_id`, `table_dtagt9_name`, `table_dtagt9_reorder_level`, `table_dtagt9_unit_cost`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun(PRODUCT_ID_PARAM INT, WAREHOUSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_QTY INT DEFAULT 0;
+    DECLARE V_REORDER_LEVEL INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_ORDER_QTY INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JYRR2F_QUANTITY, 0), COALESCE(TABLE_DTAGT9_REORDER_LEVEL, 10), COALESCE(TABLE_DTAGT9_UNIT_COST, 0)
+    INTO V_CURRENT_QTY, V_REORDER_LEVEL, V_UNIT_COST
+    FROM TABLE_JYRR2F I
+    JOIN TABLE_DTAGT9 P ON TABLE_JYRR2F_PRODUCT_ID = TABLE_DTAGT9_PRODUCT_ID
+    WHERE TABLE_JYRR2F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_JYRR2F_WAREHOUSE_ID = WAREHOUSE_ID_PARAM;
+
+    IF V_CURRENT_QTY < V_REORDER_LEVEL THEN
+        SET V_ORDER_QTY = V_REORDER_LEVEL * 2 - V_CURRENT_QTY;
+        SET V_TOTAL_VALUE = V_ORDER_QTY * V_UNIT_COST;
+        RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(12)) - -371 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1()) - 448 + (v_total_value));
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 8 UNION SELECT 27 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+CREATE TABLE IF NOT EXISTS `table_nv01cq` (
+    `table_nv01cq_customer_id` INT,
+    `table_nv01cq_country` INT
+);
+
+INSERT INTO `table_nv01cq` (`table_nv01cq_customer_id`, `table_nv01cq_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NV01CQ
+    WHERE TABLE_NV01CQ_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(-86)) - -601 + ((MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(29)) - 425 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+CREATE TABLE IF NOT EXISTS `table_qpwars` (
+    `table_qpwars_category_id` INT,
+    `table_qpwars_stock_quantity` INT
+);
+
+INSERT INTO `table_qpwars` (`table_qpwars_category_id`, `table_qpwars_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_QPWARS_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_QPWARS
+    WHERE TABLE_QPWARS_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(78)) - -864 + (v_stock);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+CREATE TABLE IF NOT EXISTS `table_jg3dpu` (
+    `table_jg3dpu_emp_id` INT,
+    `table_jg3dpu_department_id` INT,
+    `table_jg3dpu_salary` INT
+);
+
+INSERT INTO `table_jg3dpu` (`table_jg3dpu_emp_id`, `table_jg3dpu_department_id`, `table_jg3dpu_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_JG3DPU_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM TABLE_JG3DPU
+    WHERE TABLE_JG3DPU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(HOTEL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STAR_RATING INT DEFAULT 3;
+    DECLARE V_AVG_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_OCCUPANCY_RATE INT DEFAULT 70;
+    DECLARE V_TOTAL_ROOMS INT DEFAULT 50;
+    DECLARE V_DAILY_POTENTIAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_POTENTIAL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OPTH2R_STAR_RATING, 3), COALESCE(TABLE_OPTH2R_AVERAGE_DAILY_RATE, 100), COALESCE(TABLE_OPTH2R_OCCUPANCY_RATE, 70)
+    INTO V_STAR_RATING, V_AVG_DAILY_RATE, V_OCCUPANCY_RATE
+    FROM TABLE_OPTH2R
+    WHERE TABLE_OPTH2R_HOTEL_ID = HOTEL_ID_PARAM;
+
+    SET V_DAILY_POTENTIAL = (MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - 850 + (v_total_rooms * v_avg_daily_rate * v_star_rating / 3);
+    SET V_ANNUAL_POTENTIAL = (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + ((v_daily_potential * 365 * v_occupancy_rate) / 100);
+
+    RETURN (MYSQL_FUNC_CHECK_REORDER_NEEDED_trjaun(6, -7)) - 680 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CHECK_0b8aug(66)) - -823 + (floor(v_annual_potential)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(1);

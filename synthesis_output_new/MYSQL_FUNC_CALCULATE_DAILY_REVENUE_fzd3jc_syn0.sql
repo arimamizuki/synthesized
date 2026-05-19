@@ -1,0 +1,397 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORIGINAL INT DEFAULT 0;
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_ORIGINAL = (MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk(64)) - -651 + (n);
+    SET V_TEMP = ABS(N);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = -V_REVERSED;
+    END IF;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(-23)) - -91 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+CREATE TABLE IF NOT EXISTS `table_6kv6h0` (
+    `table_6kv6h0_emp_id` INT,
+    `table_6kv6h0_department_id` INT,
+    `table_6kv6h0_salary` INT,
+    `table_6kv6h0_hire_date` DATE,
+    `table_6kv6h0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6kv6h0` (`table_6kv6h0_emp_id`, `table_6kv6h0_department_id`, `table_6kv6h0_salary`, `table_6kv6h0_hire_date`, `table_6kv6h0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6KV6H0_SALARY, 0), COALESCE(TABLE_6KV6H0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_6KV6H0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_6KV6H0
+    WHERE TABLE_6KV6H0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(49)) - 320 + ((v_salary / 1000) + (v_performance * 10) + (v_tenure_years * 3));
+
+    RETURN (MYSQL_FUNC_CALCULATE_GCD_wvu8n8(17, -56)) - 272 + ((MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(-21, -81)) - 764 + (v_comp_index));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = ROUND(P_A / P_B);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+CREATE TABLE IF NOT EXISTS `table_9mgf73` (
+    `table_9mgf73_class_id` INT,
+    `table_9mgf73_instructor_id` INT,
+    `table_9mgf73_class_type` VARCHAR(50),
+    `table_9mgf73_duration_minutes` INT,
+    `table_9mgf73_max_capacity` INT,
+    `table_9mgf73_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_t7gqnp` (
+    `table_t7gqnp_booking_id` INT,
+    `table_t7gqnp_member_id` INT,
+    `table_t7gqnp_class_id` INT,
+    `table_t7gqnp_booking_date` DATE,
+    `table_t7gqnp_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9mgf73` (`table_9mgf73_class_id`, `table_9mgf73_instructor_id`, `table_9mgf73_class_type`, `table_9mgf73_duration_minutes`, `table_9mgf73_max_capacity`, `table_9mgf73_price`) VALUES (1, 2, 'test', 4, 5, 1.0);
+
+INSERT INTO `table_t7gqnp` (`table_t7gqnp_booking_id`, `table_t7gqnp_member_id`, `table_t7gqnp_class_id`, `table_t7gqnp_booking_date`, `table_t7gqnp_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_CAPACITY INT DEFAULT 20;
+    DECLARE V_BOOKED_COUNT INT DEFAULT 0;
+    DECLARE V_ACTUAL_ATTENDANCE INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_BOOKED_COUNT
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COALESCE(MAX(TABLE_9MGF73_MAX_CAPACITY), 20)
+    INTO V_MAX_CAPACITY
+    FROM TABLE_9MGF73 F
+    WHERE TABLE_9MGF73_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTUAL_ATTENDANCE
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM AND TABLE_T7GQNP_ATTENDANCE_STATUS = 'ATTENDED';
+
+    IF V_MAX_CAPACITY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(-84)) - 260 + ((v_booked_count * 100) / v_max_capacity);
+
+    IF V_OCCUPANCY_PERCENT > 100 THEN
+        SET V_OCCUPANCY_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+CREATE TABLE IF NOT EXISTS `table_sm6ixz` (
+    `table_sm6ixz_product_id` INT,
+    `table_sm6ixz_category_id` INT,
+    `table_sm6ixz_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_sm6ixz` (`table_sm6ixz_product_id`, `table_sm6ixz_category_id`, `table_sm6ixz_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_SM6IXZ_PRICE), 0), COALESCE(MIN(TABLE_SM6IXZ_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_SM6IXZ
+    WHERE TABLE_SM6IXZ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(-65)) - -617 + (v_max_price - v_min_price);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, 0) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_wvu8n8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_wvu8n8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = (MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(-76)) - -82 + (a) % B;
+        SET A = V_TEMP;
+    END WHILE;
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+CREATE TABLE IF NOT EXISTS `table_uto37x` (
+    `table_uto37x_doctor_id` INT,
+    `table_uto37x_specialization` INT,
+    `table_uto37x_years_experience` INT,
+    `table_uto37x_consultation_fee` INT,
+    `table_uto37x_hospital_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_jyc3v8` (
+    `table_jyc3v8_appointment_id` INT,
+    `table_jyc3v8_doctor_id` INT,
+    `table_jyc3v8_patient_id` INT,
+    `table_jyc3v8_appointment_date` DATE,
+    `table_jyc3v8_duration_minutes` INT,
+    `table_jyc3v8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_uto37x` (`table_uto37x_doctor_id`, `table_uto37x_specialization`, `table_uto37x_years_experience`, `table_uto37x_consultation_fee`, `table_uto37x_hospital_id`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_jyc3v8` (`table_jyc3v8_appointment_id`, `table_jyc3v8_doctor_id`, `table_jyc3v8_patient_id`, `table_jyc3v8_appointment_date`, `table_jyc3v8_duration_minutes`, `table_jyc3v8_status`) VALUES (1, 2, 3, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DOCTOR_UTILIZATION_RATE_s17iag(DOCTOR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_CONSULTATION_FEE INT DEFAULT 0;
+    DECLARE V_APPOINTMENTS_THIS_MONTH INT DEFAULT 0;
+    DECLARE V_WORKING_DAYS INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UTO37X_YEARS_EXPERIENCE, 0), COALESCE(TABLE_UTO37X_CONSULTATION_FEE, 100)
+    INTO V_YEARS_EXPERIENCE, V_CONSULTATION_FEE
+    FROM TABLE_UTO37X
+    WHERE TABLE_UTO37X_DOCTOR_ID = DOCTOR_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPOINTMENTS_THIS_MONTH
+    FROM TABLE_JYC3V8
+    WHERE TABLE_JYC3V8_DOCTOR_ID = DOCTOR_ID_PARAM
+      AND MONTH(TABLE_JYC3V8_APPOINTMENT_DATE) = MONTH(CURDATE())
+      AND TABLE_JYC3V8_STATUS = 'COMPLETED';
+
+    SET V_WORKING_DAYS = 22;
+    SET V_UTILIZATION_RATE = (V_APPOINTMENTS_THIS_MONTH * 100) / V_WORKING_DAYS;
+
+    IF V_YEARS_EXPERIENCE > 10 THEN
+        SET V_UTILIZATION_RATE = V_UTILIZATION_RATE + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(38)) - -120 + (least(v_utilization_rate, 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+CREATE TABLE IF NOT EXISTS `table_rsa7ps` (
+    `table_rsa7ps_supplier_id` INT,
+    `table_rsa7ps_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_rsa7ps` (`table_rsa7ps_supplier_id`, `table_rsa7ps_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_RSA7PS_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_RSA7PS
+    WHERE TABLE_RSA7PS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk(MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    OUTER_LABEL: WHILE V_RESULT < MAX_VAL DO
+        SET V_RESULT = V_RESULT + 1;
+        IF V_RESULT = 50 THEN
+            LEAVE OUTER_LABEL;
+        END IF;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_IS_PALINDROME_NUMBER_awsszw(-76)) - -526 + (v_total_revenue);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(1);

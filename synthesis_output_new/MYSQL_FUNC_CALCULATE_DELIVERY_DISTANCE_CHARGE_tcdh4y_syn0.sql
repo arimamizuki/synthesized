@@ -1,0 +1,454 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_k70n3e` (
+    `table_k70n3e_order_id` INT,
+    `table_k70n3e_customer_id` INT,
+    `table_k70n3e_store_id` INT,
+    `table_k70n3e_order_date` DATE,
+    `table_k70n3e_total_amount` DECIMAL(10,2),
+    `table_k70n3e_delivery_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ty3v91` (
+    `table_ty3v91_store_id` INT,
+    `table_ty3v91_name` VARCHAR(50),
+    `table_ty3v91_region` INT,
+    `table_ty3v91_delivery_radius_miles` INT
+);
+
+INSERT INTO `table_k70n3e` (`table_k70n3e_order_id`, `table_k70n3e_customer_id`, `table_k70n3e_store_id`, `table_k70n3e_order_date`, `table_k70n3e_total_amount`, `table_k70n3e_delivery_fee`) VALUES (1, 2, 3, '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_ty3v91` (`table_ty3v91_store_id`, `table_ty3v91_name`, `table_ty3v91_region`, `table_ty3v91_delivery_radius_miles`) VALUES (1, 'test', 3, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+CREATE TABLE IF NOT EXISTS `table_tbv1s6` (
+    `table_tbv1s6_order_id` INT,
+    `table_tbv1s6_customer_id` INT,
+    `table_tbv1s6_order_date` DATE,
+    `table_tbv1s6_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ceys2r` (
+    `table_ceys2r_customer_id` INT,
+    `table_ceys2r_country` INT
+);
+
+INSERT INTO `table_tbv1s6` (`table_tbv1s6_order_id`, `table_tbv1s6_customer_id`, `table_tbv1s6_order_date`, `table_tbv1s6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_ceys2r` (`table_ceys2r_customer_id`, `table_ceys2r_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM
+    GROUP BY TABLE_CEYS2R_CUSTOMER_ID
+    HAVING COUNT(TABLE_TBV1S6_ORDER_ID) > 1;
+
+    IF V_TOTAL_CUSTOMERS = (MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + ((MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(-22)) - 154 + ((MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(-66)) - 203 + (0))) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REPEAT_RATE = (V_REPEAT_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+
+    RETURN V_REPEAT_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+CREATE TABLE IF NOT EXISTS `table_lktk1v` (
+    `table_lktk1v_order_id` INT,
+    `table_lktk1v_customer_id` INT,
+    `table_lktk1v_order_date` DATE,
+    `table_lktk1v_total_amount` DECIMAL(10,2),
+    `table_lktk1v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_3wmdck` (
+    `table_3wmdck_shipment_id` INT,
+    `table_3wmdck_order_id` INT,
+    `table_3wmdck_carrier` INT,
+    `table_3wmdck_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lktk1v` (`table_lktk1v_order_id`, `table_lktk1v_customer_id`, `table_lktk1v_order_date`, `table_lktk1v_total_amount`, `table_lktk1v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_3wmdck` (`table_3wmdck_shipment_id`, `table_3wmdck_order_id`, `table_3wmdck_carrier`, `table_3wmdck_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3WMDCK_SHIPPING_COST, 0), COALESCE(TABLE_LKTK1V_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM TABLE_LKTK1V O
+    LEFT JOIN TABLE_3WMDCK S ON TABLE_LKTK1V_ORDER_ID = TABLE_3WMDCK_ORDER_ID
+    WHERE TABLE_LKTK1V_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+CREATE TABLE IF NOT EXISTS `table_2qmb5t` (
+    `table_2qmb5t_customer_id` INT,
+    `table_2qmb5t_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_82xo3l` (
+    `table_82xo3l_order_id` INT,
+    `table_82xo3l_customer_id` INT,
+    `table_82xo3l_order_date` DATE,
+    `table_82xo3l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2qmb5t` (`table_2qmb5t_customer_id`, `table_2qmb5t_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_82xo3l` (`table_82xo3l_order_id`, `table_82xo3l_customer_id`, `table_82xo3l_order_date`, `table_82xo3l_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_DAYS INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_82XO3L_ORDER_DATE), MAX(TABLE_82XO3L_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_82XO3L
+    WHERE TABLE_82XO3L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER_DATE, V_FIRST_ORDER_DATE);
+
+    IF V_TOTAL_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_DAYS = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN (MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(76)) - 728 + (v_avg_days);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(LIMIT_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_COMPOSITE INT DEFAULT 0;
+
+    IF LIMIT_NUM < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - -155 + (0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= LIMIT_NUM DO
+        SET V_IS_COMPOSITE = 0;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_COMPOSITE = 1;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_COMPOSITE = 0 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+CREATE TABLE IF NOT EXISTS `table_tpfwx5` (
+    `table_tpfwx5_campaign_id` INT,
+    `table_tpfwx5_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tpfwx5` (`table_tpfwx5_campaign_id`, `table_tpfwx5_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_TPFWX5_STATUS
+    INTO V_STATUS
+    FROM TABLE_TPFWX5
+    WHERE TABLE_TPFWX5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+CREATE TABLE IF NOT EXISTS `table_83jk04` (
+    `table_83jk04_transaction_id` INT,
+    `table_83jk04_account_id` INT,
+    `table_83jk04_transaction_date` DATE,
+    `table_83jk04_amount` DECIMAL(10,2),
+    `table_83jk04_transaction_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4xsou8` (
+    `table_4xsou8_account_id` INT,
+    `table_4xsou8_customer_id` INT,
+    `table_4xsou8_balance` INT,
+    `table_4xsou8_account_type` INT
+);
+
+INSERT INTO `table_83jk04` (`table_83jk04_transaction_id`, `table_83jk04_account_id`, `table_83jk04_transaction_date`, `table_83jk04_amount`, `table_83jk04_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4xsou8` (`table_4xsou8_account_id`, `table_4xsou8_customer_id`, `table_4xsou8_balance`, `table_4xsou8_account_type`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(ACCOUNT_ID_PARAM INT, MIN_AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_NET_CHANGE INT DEFAULT 0;
+    DECLARE V_TX_COUNT INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CREDITS, V_TX_COUNT
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'CREDIT'
+      AND TABLE_83JK04_AMOUNT >= MIN_AMOUNT;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0)
+    INTO V_TOTAL_DEBITS
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'DEBIT';
+
+    SELECT TABLE_4XSOU8_BALANCE INTO V_BALANCE FROM TABLE_4XSOU8 WHERE TABLE_4XSOU8_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_NET_CHANGE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN COALESCE(V_BALANCE, 0) + V_NET_CHANGE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(37)) - 291 + (base);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(-77)) - 833 + (base * power_recursive(base, exponent - 1));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+CREATE TABLE IF NOT EXISTS `table_9g21mv` (
+    `table_9g21mv_product_id` INT,
+    `table_9g21mv_category_id` INT,
+    `table_9g21mv_price` DECIMAL(10,2),
+    `table_9g21mv_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_knzctc` (
+    `table_knzctc_order_id` INT,
+    `table_knzctc_product_id` INT,
+    `table_knzctc_quantity` INT
+);
+
+INSERT INTO `table_9g21mv` (`table_9g21mv_product_id`, `table_9g21mv_category_id`, `table_9g21mv_price`, `table_9g21mv_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_knzctc` (`table_knzctc_order_id`, `table_knzctc_product_id`, `table_knzctc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_PRODUCT_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_KNZCTC;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_PRODUCT_ORDERS
+    FROM TABLE_KNZCTC
+    WHERE TABLE_KNZCTC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION_RATE = (V_PRODUCT_ORDERS * 100) / V_TOTAL_ORDERS;
+
+    RETURN V_PENETRATION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt----- */
+CREATE TABLE IF NOT EXISTS `table_qoro1u` (
+    `table_qoro1u_campaign_id` INT,
+    `table_qoro1u_channel` INT
+);
+
+INSERT INTO `table_qoro1u` (`table_qoro1u_campaign_id`, `table_qoro1u_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_QORO1U_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_QORO1U
+    WHERE TABLE_QORO1U_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+CREATE TABLE IF NOT EXISTS `table_lypw1w` (
+    `table_lypw1w_customer_id` INT,
+    `table_lypw1w_order_id` INT,
+    `table_lypw1w_order_date` DATE
+);
+
+INSERT INTO `table_lypw1w` (`table_lypw1w_customer_id`, `table_lypw1w_order_id`, `table_lypw1w_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+
+    SELECT MAX(TABLE_LYPW1W_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_LYPW1W
+    WHERE TABLE_LYPW1W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN MONTH(V_LAST_ORDER_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DELIVERY_FEE INT DEFAULT 5;
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_ADDITIONAL_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_DELIVERY_FEE INT DEFAULT 0;
+
+    SELECT TABLE_TY3V91_DELIVERY_RADIUS_MILES INTO V_DELIVERY_RADIUS
+    FROM TABLE_K70N3E O
+    JOIN TABLE_TY3V91 S ON TABLE_K70N3E_STORE_ID = TABLE_TY3V91_STORE_ID
+    WHERE TABLE_K70N3E_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_DELIVERY_RADIUS > 10 THEN
+        SET V_ADDITIONAL_FEE = (V_DELIVERY_RADIUS - 10) * 2;
+    END IF;
+
+    SET V_TOTAL_DELIVERY_FEE = V_BASE_DELIVERY_FEE + V_ADDITIONAL_FEE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(-41)) - 22 + (cast(v_total_delivery_fee as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(1);

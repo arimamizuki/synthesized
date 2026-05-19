@@ -1,0 +1,414 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_8nhmuw` (
+    `table_8nhmuw_campaign_id` INT,
+    `table_8nhmuw_status` VARCHAR(50),
+    `table_8nhmuw_budget` INT
+);
+
+INSERT INTO `table_8nhmuw` (`table_8nhmuw_campaign_id`, `table_8nhmuw_status`, `table_8nhmuw_budget`) VALUES (1, 'test', 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf----- */
+CREATE TABLE IF NOT EXISTS `table_dq34sb` (
+    `table_dq34sb_estimate_id` INT,
+    `table_dq34sb_customer_id` INT,
+    `table_dq34sb_mover_id` INT,
+    `table_dq34sb_inventory_items` INT,
+    `table_dq34sb_distance_miles` INT,
+    `table_dq34sb_packing_required` INT,
+    `table_dq34sb_estimated_hours` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_epurly` (
+    `table_epurly_company_id` INT,
+    `table_epurly_name` VARCHAR(50),
+    `table_epurly_hourly_rate` INT,
+    `table_epurly_deposit_percent` INT
+);
+
+INSERT INTO `table_dq34sb` (`table_dq34sb_estimate_id`, `table_dq34sb_customer_id`, `table_dq34sb_mover_id`, `table_dq34sb_inventory_items`, `table_dq34sb_distance_miles`, `table_dq34sb_packing_required`, `table_dq34sb_estimated_hours`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_epurly` (`table_epurly_company_id`, `table_epurly_name`, `table_epurly_hourly_rate`, `table_epurly_deposit_percent`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf(ESTIMATE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_ITEMS INT DEFAULT 0;
+    DECLARE V_DISTANCE_MILES INT DEFAULT 0;
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 100;
+    DECLARE V_PACKING_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DQ34SB_INVENTORY_ITEMS, 50), COALESCE(TABLE_DQ34SB_DISTANCE_MILES, 100), COALESCE(TABLE_DQ34SB_ESTIMATED_HOURS, 4)
+    INTO V_INVENTORY_ITEMS, V_DISTANCE_MILES, V_ESTIMATED_HOURS
+    FROM TABLE_DQ34SB
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_EPURLY_HOURLY_RATE, 100)
+    INTO V_HOURLY_RATE
+    FROM TABLE_DQ34SB ME
+    JOIN TABLE_EPURLY MC ON TABLE_DQ34SB_MOVER_ID = TABLE_EPURLY_COMPANY_ID
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM;
+
+    SELECT 200 INTO V_PACKING_FEE
+    FROM TABLE_DQ34SB
+    WHERE TABLE_DQ34SB_ESTIMATE_ID = ESTIMATE_ID_PARAM AND TABLE_DQ34SB_PACKING_REQUIRED = 1;
+
+    SET V_TOTAL_ESTIMATE = (V_ESTIMATED_HOURS * V_HOURLY_RATE) + V_PACKING_FEE + (V_INVENTORY_ITEMS * 2);
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+CREATE TABLE IF NOT EXISTS `table_s3jw0e` (
+    `table_s3jw0e_emp_id` INT,
+    `table_s3jw0e_department_id` INT,
+    `table_s3jw0e_salary` INT,
+    `table_s3jw0e_hire_date` DATE,
+    `table_s3jw0e_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_s3jw0e` (`table_s3jw0e_emp_id`, `table_s3jw0e_department_id`, `table_s3jw0e_salary`, `table_s3jw0e_hire_date`, `table_s3jw0e_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TALENT_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S3JW0E_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_S3JW0E_HIRE_DATE, CURDATE()), COALESCE(TABLE_S3JW0E_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_S3JW0E
+    WHERE TABLE_S3JW0E_EMP_ID = EMP_ID_PARAM;
+
+    SET V_TALENT_INDEX = (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(22)) - -619 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(59)) - 635 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(-41)) - -403 + ((v_performance * 40) + (v_tenure_years * 10) + (v_salary / 500))));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(26)) - 533 + (v_talent_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+CREATE TABLE IF NOT EXISTS `table_gkpv1s` (
+    `table_gkpv1s_department_id` INT
+);
+
+INSERT INTO `table_gkpv1s` (`table_gkpv1s_department_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_GKPV1S
+    WHERE TABLE_GKPV1S_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+CREATE TABLE IF NOT EXISTS `table_qyoum0` (
+    `table_qyoum0_supplier_id` INT,
+    `table_qyoum0_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qyoum0` (`table_qyoum0_supplier_id`, `table_qyoum0_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QYOUM0_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QYOUM0
+    WHERE TABLE_QYOUM0_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs(-80)) - -608 + ((MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(-51)) - -128 + (floor(v_rating * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs----- */
+CREATE TABLE IF NOT EXISTS `table_pgvepb` (
+    `table_pgvepb_product_id` INT,
+    `table_pgvepb_category_id` INT,
+    `table_pgvepb_price` DECIMAL(10,2),
+    `table_pgvepb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t5jyxz` (
+    `table_t5jyxz_category_id` INT,
+    `table_t5jyxz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pgvepb` (`table_pgvepb_product_id`, `table_pgvepb_category_id`, `table_pgvepb_price`, `table_pgvepb_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_t5jyxz` (`table_t5jyxz_category_id`, `table_t5jyxz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_PGVEPB_PRICE, 0), COALESCE(TABLE_PGVEPB_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_PGVEPB
+    WHERE TABLE_PGVEPB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_PGVEPB_STOCK_QUANTITY * TABLE_PGVEPB_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_PGVEPB P
+    WHERE TABLE_PGVEPB_CATEGORY_ID = (SELECT TABLE_PGVEPB_CATEGORY_ID FROM TABLE_PGVEPB WHERE TABLE_PGVEPB_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    IF V_CATEGORY_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    RETURN FLOOR((V_PRICE * V_STOCK * 100) / V_CATEGORY_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+CREATE TABLE IF NOT EXISTS `table_gvnxly` (
+    `table_gvnxly_product_id` INT,
+    `table_gvnxly_category_id` INT,
+    `table_gvnxly_price` DECIMAL(10,2),
+    `table_gvnxly_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1sfbje` (
+    `table_1sfbje_category_id` INT,
+    `table_1sfbje_name` VARCHAR(50)
+);
+
+INSERT INTO `table_gvnxly` (`table_gvnxly_product_id`, `table_gvnxly_category_id`, `table_gvnxly_price`, `table_gvnxly_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1sfbje` (`table_1sfbje_category_id`, `table_1sfbje_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_COUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_COUNT
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_GVNXLY_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_COUNT * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN V_PREMIUM_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+CREATE TABLE IF NOT EXISTS `table_bth9h0` (
+    `table_bth9h0_campaign_id` INT,
+    `table_bth9h0_start_date` DATE
+);
+
+INSERT INTO `table_bth9h0` (`table_bth9h0_campaign_id`, `table_bth9h0_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BTH9H0_START_DATE)
+    INTO V_YEAR
+    FROM TABLE_BTH9H0
+    WHERE TABLE_BTH9H0_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_RETURN_CONSTANT_koelg7()) - -454 + ((MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(-10)) - 730 + (v_year));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+CREATE TABLE IF NOT EXISTS `table_s65b9l` (
+    `table_s65b9l_policy_id` INT,
+    `table_s65b9l_customer_id` INT,
+    `table_s65b9l_destination` INT,
+    `table_s65b9l_trip_duration_days` INT,
+    `table_s65b9l_coverage_type` VARCHAR(50),
+    `table_s65b9l_premium` INT,
+    `table_s65b9l_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x76iq0` (
+    `table_x76iq0_claim_id` INT,
+    `table_x76iq0_policy_id` INT,
+    `table_x76iq0_claim_type` VARCHAR(50),
+    `table_x76iq0_claim_amount` DECIMAL(10,2),
+    `table_x76iq0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s65b9l` (`table_s65b9l_policy_id`, `table_s65b9l_customer_id`, `table_s65b9l_destination`, `table_s65b9l_trip_duration_days`, `table_s65b9l_coverage_type`, `table_s65b9l_premium`, `table_s65b9l_coverage_limit`) VALUES (1, 1, 1, 1, 'test', 1, 1);
+
+INSERT INTO `table_x76iq0` (`table_x76iq0_claim_id`, `table_x76iq0_policy_id`, `table_x76iq0_claim_type`, `table_x76iq0_claim_amount`, `table_x76iq0_status`) VALUES (1, 2, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_COUNT INT DEFAULT 0;
+    DECLARE V_RATIO_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S65B9L_COVERAGE_LIMIT, 100000)
+    INTO V_COVERAGE_LIMIT
+    FROM TABLE_S65B9L
+    WHERE TABLE_S65B9L_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_X76IQ0_CLAIM_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_COUNT
+    FROM TABLE_X76IQ0
+    WHERE TABLE_X76IQ0_POLICY_ID = POLICY_ID_PARAM AND TABLE_X76IQ0_STATUS = 'APPROVED';
+
+    IF V_COVERAGE_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RATIO_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_COVERAGE_LIMIT;
+
+    RETURN CAST(V_RATIO_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RETURN_CONSTANT_koelg7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 42;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_8NHMUW_STATUS, COALESCE(TABLE_8NHMUW_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_8NHMUW
+    WHERE TABLE_8NHMUW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(8)) - -330 + (v_budget);
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN V_BUDGET / 2;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_FINAL_7zokqf(-3)) - -241 + (v_budget * 2);
+    ELSE
+        RETURN V_BUDGET / 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1(1);

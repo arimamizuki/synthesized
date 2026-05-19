@@ -1,0 +1,418 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_83jk04` (
+    `table_83jk04_transaction_id` INT,
+    `table_83jk04_account_id` INT,
+    `table_83jk04_transaction_date` DATE,
+    `table_83jk04_amount` DECIMAL(10,2),
+    `table_83jk04_transaction_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4xsou8` (
+    `table_4xsou8_account_id` INT,
+    `table_4xsou8_customer_id` INT,
+    `table_4xsou8_balance` INT,
+    `table_4xsou8_account_type` INT
+);
+
+INSERT INTO `table_83jk04` (`table_83jk04_transaction_id`, `table_83jk04_account_id`, `table_83jk04_transaction_date`, `table_83jk04_amount`, `table_83jk04_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4xsou8` (`table_4xsou8_account_id`, `table_4xsou8_customer_id`, `table_4xsou8_balance`, `table_4xsou8_account_type`) VALUES (1, 2, 3, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, (MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(-80)) - 408 + (0)) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+CREATE TABLE IF NOT EXISTS `table_f1o54x` (
+    `table_f1o54x_ticket_id` INT,
+    `table_f1o54x_resort_id` INT,
+    `table_f1o54x_skier_id` INT,
+    `table_f1o54x_ticket_type` VARCHAR(50),
+    `table_f1o54x_num_days` INT,
+    `table_f1o54x_daily_rate` INT,
+    `table_f1o54x_total_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_22hjdu` (
+    `table_22hjdu_resort_id` INT,
+    `table_22hjdu_resort_name` VARCHAR(50),
+    `table_22hjdu_elevation` INT,
+    `table_22hjdu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_f1o54x` (`table_f1o54x_ticket_id`, `table_f1o54x_resort_id`, `table_f1o54x_skier_id`, `table_f1o54x_ticket_type`, `table_f1o54x_num_days`, `table_f1o54x_daily_rate`, `table_f1o54x_total_cost`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_22hjdu` (`table_22hjdu_resort_id`, `table_22hjdu_resort_name`, `table_22hjdu_elevation`, `table_22hjdu_base_price`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUM_DAYS INT DEFAULT 1;
+    DECLARE V_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_ELEVATION INT DEFAULT 5000;
+    DECLARE V_ELEVATION_PREMIUM INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_F1O54X_NUM_DAYS, 1), COALESCE(TABLE_F1O54X_DAILY_RATE, 100)
+    INTO V_NUM_DAYS, V_DAILY_RATE
+    FROM TABLE_F1O54X
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_22HJDU_ELEVATION, 5000)
+    INTO V_ELEVATION
+    FROM TABLE_F1O54X SLT
+    JOIN TABLE_22HJDU SR ON TABLE_F1O54X_RESORT_ID = TABLE_22HJDU_RESORT_ID
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SET V_TOTAL_COST = V_NUM_DAYS * V_DAILY_RATE;
+
+    IF V_ELEVATION > 8000 THEN
+        SET V_ELEVATION_PREMIUM = V_TOTAL_COST * 25 / 100;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_ELEVATION_PREMIUM;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns----- */
+CREATE TABLE IF NOT EXISTS `table_ldfe1a` (
+    `table_ldfe1a_customer_id` INT,
+    `table_ldfe1a_plan_type` VARCHAR(50),
+    `table_ldfe1a_monthly_cost` DECIMAL(10,2),
+    `table_ldfe1a_start_date` DATE
+);
+
+INSERT INTO `table_ldfe1a` (`table_ldfe1a_customer_id`, `table_ldfe1a_plan_type`, `table_ldfe1a_monthly_cost`, `table_ldfe1a_start_date`) VALUES (1, 'test', 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TIMESTAMPDIFF(YEAR, TABLE_LDFE1A_START_DATE, CURDATE()), 0)
+    INTO V_TENURE_YEARS
+    FROM TABLE_LDFE1A
+    WHERE TABLE_LDFE1A_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(96, -87)) - 874 + ((MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(-84, 99)) - -608 + (floor(v_tenure_years)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+CREATE TABLE IF NOT EXISTS `table_a7d4j5` (
+    `table_a7d4j5_number_id` INT,
+    `table_a7d4j5_customer_id` INT,
+    `table_a7d4j5_area_code` INT,
+    `table_a7d4j5_number_type` INT,
+    `table_a7d4j5_monthly_fee` INT,
+    `table_a7d4j5_activation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_r7szof` (
+    `table_r7szof_number_id` INT,
+    `table_r7szof_call_minutes` INT,
+    `table_r7szof_data_mb` TEXT,
+    `table_r7szof_sms_count` INT,
+    `table_r7szof_billing_month` INT
+);
+
+INSERT INTO `table_a7d4j5` (`table_a7d4j5_number_id`, `table_a7d4j5_customer_id`, `table_a7d4j5_area_code`, `table_a7d4j5_number_type`, `table_a7d4j5_monthly_fee`, `table_a7d4j5_activation_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_r7szof` (`table_r7szof_number_id`, `table_r7szof_call_minutes`, `table_r7szof_data_mb`, `table_r7szof_sms_count`, `table_r7szof_billing_month`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(NUMBER_ID_PARAM INT, BILLING_MONTH_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_CALL_MINUTES INT DEFAULT 0;
+    DECLARE V_DATA_MB INT DEFAULT 0;
+    DECLARE V_SMS_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_CALL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_A7D4J5_MONTHLY_FEE, COALESCE(TABLE_R7SZOF_CALL_MINUTES, 0), COALESCE(TABLE_R7SZOF_DATA_MB, 0), COALESCE(TABLE_R7SZOF_SMS_COUNT, 0)
+    INTO V_MONTHLY_FEE, V_CALL_MINUTES, V_DATA_MB, V_SMS_COUNT
+    FROM TABLE_A7D4J5 T
+    LEFT JOIN TABLE_R7SZOF U ON TABLE_A7D4J5_NUMBER_ID = TABLE_R7SZOF_NUMBER_ID AND TABLE_R7SZOF_BILLING_MONTH = BILLING_MONTH_PARAM
+    WHERE TABLE_A7D4J5_NUMBER_ID = NUMBER_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_MONTHLY_FEE;
+
+    IF V_CALL_MINUTES > 500 THEN
+        SET V_CALL_OVERAGE = V_CALL_MINUTES - 500;
+        SET V_TOTAL_CHARGES = V_TOTAL_CHARGES + (V_CALL_OVERAGE * 2);
+    END IF;
+
+    IF V_DATA_MB > 5000 THEN
+        SET V_TOTAL_CHARGES = V_TOTAL_CHARGES + ((V_DATA_MB - 5000) / 100) * 5;
+    END IF;
+
+    RETURN CAST(V_TOTAL_CHARGES AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A - P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+CREATE TABLE IF NOT EXISTS `table_g5rndo` (
+    `table_g5rndo_emp_id` INT,
+    `table_g5rndo_salary` INT,
+    `table_g5rndo_hire_date` DATE
+);
+
+INSERT INTO `table_g5rndo` (`table_g5rndo_emp_id`, `table_g5rndo_salary`, `table_g5rndo_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G5RNDO_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_G5RNDO
+    WHERE TABLE_G5RNDO_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(-93)) - -109 + ((MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (floor(v_salary / 12)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = (MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73()) - -790 + (abs(binary_num));
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+CREATE TABLE IF NOT EXISTS `table_y4xawp` (
+    `table_y4xawp_dept_id` INT,
+    `table_y4xawp_budget` INT,
+    `table_y4xawp_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ab2uoo` (
+    `table_ab2uoo_emp_id` INT,
+    `table_ab2uoo_dept_id` INT,
+    `table_ab2uoo_salary` INT
+);
+
+INSERT INTO `table_y4xawp` (`table_y4xawp_dept_id`, `table_y4xawp_budget`, `table_y4xawp_headcount`) VALUES (1, 1, 1);
+
+INSERT INTO `table_ab2uoo` (`table_ab2uoo_emp_id`, `table_ab2uoo_dept_id`, `table_ab2uoo_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_HEADROOM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y4XAWP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_Y4XAWP
+    WHERE TABLE_Y4XAWP_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_AB2UOO_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_AB2UOO
+    WHERE TABLE_AB2UOO_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_HEADROOM = V_BUDGET - V_TOTAL_SALARIES;
+
+    RETURN V_HEADROOM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(ACCOUNT_ID_PARAM INT, MIN_AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_NET_CHANGE INT DEFAULT 0;
+    DECLARE V_TX_COUNT INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CREDITS, V_TX_COUNT
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'CREDIT'
+      AND TABLE_83JK04_AMOUNT >= MIN_AMOUNT;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0)
+    INTO V_TOTAL_DEBITS
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'DEBIT';
+
+    SELECT TABLE_4XSOU8_BALANCE INTO V_BALANCE FROM TABLE_4XSOU8 WHERE TABLE_4XSOU8_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_NET_CHANGE = (MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me(-8, -23)) - -784 + ((MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(-65)) - -617 + (v_total_credits - v_total_debits));
+
+    RETURN (MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(56)) - 25 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_YEARS_3o8gns(8)) - 358 + (coalesce(v_balance, 0) + v_net_change));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(1, 1);

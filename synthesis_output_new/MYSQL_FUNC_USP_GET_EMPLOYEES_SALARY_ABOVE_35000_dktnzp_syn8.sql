@@ -1,0 +1,383 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_rfse4k (
+    table_rfse4k_employee_id INT,
+    table_rfse4k_first_name VARCHAR(50),
+    table_rfse4k_last_name VARCHAR(50),
+    table_rfse4k_salary INT
+);
+
+INSERT INTO table_rfse4k (`table_rfse4k_employee_id`, `table_rfse4k_first_name`, `table_rfse4k_last_name`, `table_rfse4k_salary`) VALUES (1, 'test', 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 12 UNION SELECT 24 UNION SELECT 36 UNION SELECT 48 UNION SELECT 60 UNION SELECT 72 UNION SELECT 84 UNION SELECT 96 UNION SELECT 108 UNION SELECT 120 UNION SELECT 132 UNION SELECT 144;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i(10, 26)) - 362 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i----- */
+CREATE TABLE IF NOT EXISTS `table_sv5ywz` (
+    `table_sv5ywz_job_id` INT,
+    `table_sv5ywz_customer_id` INT,
+    `table_sv5ywz_technician_id` INT,
+    `table_sv5ywz_job_type` VARCHAR(50),
+    `table_sv5ywz_property_size_sqft` INT,
+    `table_sv5ywz_labor_hours` INT,
+    `table_sv5ywz_material_cost` DECIMAL(10,2),
+    `table_sv5ywz_job_date` DATE
+);
+
+INSERT INTO `table_sv5ywz` (`table_sv5ywz_job_id`, `table_sv5ywz_customer_id`, `table_sv5ywz_technician_id`, `table_sv5ywz_job_type`, `table_sv5ywz_property_size_sqft`, `table_sv5ywz_labor_hours`, `table_sv5ywz_material_cost`, `table_sv5ywz_job_date`) VALUES (1, 2, 3, 'test', 5, 6, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i(PROPERTY_SIZE_PARAM INT, JOB_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_LABOR_RATE INT DEFAULT 50;
+    DECLARE V_JOB_TYPE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_QUOTE INT DEFAULT 0;
+
+    CASE JOB_TYPE_PARAM
+        WHEN 'LAWN_MAINTENANCE' THEN SET V_JOB_TYPE_MULTIPLIER = 1;
+        WHEN 'TREE_TRIMMING' THEN SET V_JOB_TYPE_MULTIPLIER = (MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - 913 + (2);
+        WHEN 'LANDSCAPE_DESIGN' THEN SET V_JOB_TYPE_MULTIPLIER = 3;
+        WHEN 'IRRIGATION' THEN SET V_JOB_TYPE_MULTIPLIER = 2;
+        ELSE SET V_JOB_TYPE_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_QUOTE = (MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4()) - -410 + ((property_size_param * v_base_rate * v_job_type_multiplier / 100) + v_labor_rate);
+
+    RETURN CAST(V_TOTAL_QUOTE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+CREATE TABLE IF NOT EXISTS `table_74xcmp` (
+    `table_74xcmp_airline_id` INT,
+    `table_74xcmp_name` VARCHAR(50),
+    `table_74xcmp_iata_code` INT,
+    `table_74xcmp_safety_rating` DECIMAL(3,1),
+    `table_74xcmp_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r5kuxo` (
+    `table_r5kuxo_flight_id` INT,
+    `table_r5kuxo_airline_id` INT,
+    `table_r5kuxo_origin` INT,
+    `table_r5kuxo_destination` INT,
+    `table_r5kuxo_distance_miles` INT
+);
+
+INSERT INTO `table_74xcmp` (`table_74xcmp_airline_id`, `table_74xcmp_name`, `table_74xcmp_iata_code`, `table_74xcmp_safety_rating`, `table_74xcmp_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `table_r5kuxo` (`table_r5kuxo_flight_id`, `table_r5kuxo_airline_id`, `table_r5kuxo_origin`, `table_r5kuxo_destination`, `table_r5kuxo_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_74XCMP_SAFETY_RATING, 80), COALESCE(TABLE_74XCMP_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM TABLE_74XCMP
+    WHERE TABLE_74XCMP_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN (MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + (greatest(v_environmental_score, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = V_TOTAL_HOURS * V_AVG_HOURLY_RATE;
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_REVENUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 6 UNION SELECT 12 UNION SELECT 18 UNION SELECT 24 UNION SELECT 30 UNION SELECT 36;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(79)) - -361 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+CREATE TABLE IF NOT EXISTS `table_qgf2wj` (
+    `table_qgf2wj_department_id` INT,
+    `table_qgf2wj_salary` INT
+);
+
+INSERT INTO `table_qgf2wj` (`table_qgf2wj_department_id`, `table_qgf2wj_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_QGF2WJ_SALARY), 0)
+    INTO V_AVG
+    FROM TABLE_QGF2WJ
+    WHERE TABLE_QGF2WJ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f----- */
+CREATE TABLE IF NOT EXISTS `table_30rgjj` (
+    `table_30rgjj_product_id` INT,
+    `table_30rgjj_category_id` INT,
+    `table_30rgjj_price` DECIMAL(10,2),
+    `table_30rgjj_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x7ez2h` (
+    `table_x7ez2h_category_id` INT,
+    `table_x7ez2h_name` VARCHAR(50)
+);
+
+INSERT INTO `table_30rgjj` (`table_30rgjj_product_id`, `table_30rgjj_category_id`, `table_30rgjj_price`, `table_30rgjj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_x7ez2h` (`table_x7ez2h_category_id`, `table_x7ez2h_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_STOCK DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_30RGJJ_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_30RGJJ
+    WHERE TABLE_30RGJJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_30RGJJ_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_AVG_STOCK
+    FROM TABLE_30RGJJ
+    WHERE TABLE_30RGJJ_CATEGORY_ID = (SELECT TABLE_30RGJJ_CATEGORY_ID FROM TABLE_30RGJJ WHERE TABLE_30RGJJ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    IF V_STOCK < V_CATEGORY_AVG_STOCK * 0.5 THEN
+        SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - 612 + (100);
+    ELSEIF V_STOCK > V_CATEGORY_AVG_STOCK * 1.5 THEN
+        SET V_RISK_INDEX = 50;
+    ELSE
+        SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_HIRE_MONTH_znf4y6(-65)) - -941 + (25);
+    END IF;
+
+    RETURN V_RISK_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+CREATE TABLE IF NOT EXISTS `table_kzmcio` (
+    `table_kzmcio_emp_id` INT,
+    `table_kzmcio_department_id` INT,
+    `table_kzmcio_salary` INT,
+    `table_kzmcio_hire_date` DATE
+);
+
+INSERT INTO `table_kzmcio` (`table_kzmcio_emp_id`, `table_kzmcio_department_id`, `table_kzmcio_salary`, `table_kzmcio_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_KZMCIO_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM TABLE_KZMCIO
+    WHERE TABLE_KZMCIO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (V_HEADCOUNT * 10) + (V_AVG_SALARY / 100);
+
+    RETURN V_HEADCOUNT_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_MONTH_znf4y6----- */
+CREATE TABLE IF NOT EXISTS `table_rpdm1s` (
+    `table_rpdm1s_emp_id` INT,
+    `table_rpdm1s_hire_date` DATE
+);
+
+INSERT INTO `table_rpdm1s` (`table_rpdm1s_emp_id`, `table_rpdm1s_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_MONTH_znf4y6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_MONTH_znf4y6(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_RPDM1S_HIRE_DATE)
+    INTO V_MONTH
+    FROM TABLE_RPDM1S
+    WHERE TABLE_RPDM1S_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(-32)) - 204 + (v_month);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N + 1;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_RFSE4K
+    WHERE TABLE_RFSE4K_SALARY > 35000
+    ORDER BY TABLE_RFSE4K_FIRST_NAME, TABLE_RFSE4K_LAST_NAME, TABLE_RFSE4K_EMPLOYEE_ID;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_RISK_INDEX_y6t28f(-98)) - 61 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_12_VALUES_ejdr7x()) - -996 + (result_count));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp();

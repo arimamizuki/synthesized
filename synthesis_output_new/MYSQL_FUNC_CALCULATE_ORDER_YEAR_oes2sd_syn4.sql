@@ -1,0 +1,350 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ze3ja4` (
+    `table_ze3ja4_order_id` INT,
+    `table_ze3ja4_customer_id` INT,
+    `table_ze3ja4_order_date` DATE
+);
+
+INSERT INTO `table_ze3ja4` (`table_ze3ja4_order_id`, `table_ze3ja4_customer_id`, `table_ze3ja4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+CREATE TABLE IF NOT EXISTS `table_wjhyu0` (
+    `table_wjhyu0_customer_id` INT,
+    `table_wjhyu0_registration_date` DATE
+);
+
+INSERT INTO `table_wjhyu0` (`table_wjhyu0_customer_id`, `table_wjhyu0_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REG_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_WJHYU0_REGISTRATION_DATE)
+    INTO V_REG_YEAR
+    FROM TABLE_WJHYU0
+    WHERE TABLE_WJHYU0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt(-8)) - 979 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(86)) - -556 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(70)) - 137 + ((MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(15, 0)) - 124 + (v_reg_year))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERATOR INT DEFAULT 1;
+    DECLARE V_DENOMINATOR INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    IF R < 0 OR R > N OR N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF R = 0 OR R = N THEN
+        RETURN 1;
+    END IF;
+
+    IF R > N - R THEN
+        SET R = N - R;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= R DO
+        SET V_NUMERATOR = V_NUMERATOR * (N - V_COUNTER + 1);
+        SET V_DENOMINATOR = V_DENOMINATOR * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    SET V_RESULT = V_NUMERATOR / V_DENOMINATOR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+CREATE TABLE IF NOT EXISTS `table_iqr0ap` (
+    `table_iqr0ap_campaign_id` INT,
+    `table_iqr0ap_budget` INT,
+    `table_iqr0ap_start_date` DATE,
+    `table_iqr0ap_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hnzja2` (
+    `table_hnzja2_conversion_id` INT,
+    `table_hnzja2_campaign_id` INT,
+    `table_hnzja2_conversion_value` INT
+);
+
+INSERT INTO `table_iqr0ap` (`table_iqr0ap_campaign_id`, `table_iqr0ap_budget`, `table_iqr0ap_start_date`, `table_iqr0ap_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_hnzja2` (`table_hnzja2_conversion_id`, `table_hnzja2_campaign_id`, `table_hnzja2_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IQR0AP_BUDGET, (MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5(-76)) - -372 + (0))
+    INTO V_BUDGET
+    FROM TABLE_IQR0AP
+    WHERE TABLE_IQR0AP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_HNZJA2_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_HNZJA2
+    WHERE TABLE_HNZJA2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_TOTAL_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5----- */
+CREATE TABLE IF NOT EXISTS `table_ffrdtp` (
+    `table_ffrdtp_order_id` INT,
+    `table_ffrdtp_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ffrdtp` (`table_ffrdtp_order_id`, `table_ffrdtp_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FFRDTP_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_FFRDTP
+    WHERE TABLE_FFRDTP_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL / 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+CREATE TABLE IF NOT EXISTS `table_9ay8es` (
+    `table_9ay8es_employee_id` INT,
+    `table_9ay8es_department_id` INT,
+    `table_9ay8es_manager_id` INT,
+    `table_9ay8es_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u58w25` (
+    `table_u58w25_department_id` INT,
+    `table_u58w25_parent_department_id` INT,
+    `table_u58w25_department_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9ay8es` (`table_9ay8es_employee_id`, `table_9ay8es_department_id`, `table_9ay8es_manager_id`, `table_9ay8es_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_u58w25` (`table_u58w25_department_id`, `table_u58w25_parent_department_id`, `table_u58w25_department_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_PARENT_ID INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT 0;
+
+    SET V_CURRENT_ID = (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(48)) - 14 + (department_id_param);
+
+    DEPTH_LOOP: WHILE V_CURRENT_ID IS NOT NULL AND V_CURRENT_ID != 0 DO
+        SELECT COALESCE(TABLE_U58W25_PARENT_DEPARTMENT_ID, 0)
+        INTO V_PARENT_ID
+        FROM TABLE_U58W25
+        WHERE TABLE_U58W25_DEPARTMENT_ID = V_CURRENT_ID;
+
+        IF V_PARENT_ID = 0 OR V_PARENT_ID = V_CURRENT_ID THEN
+            LEAVE DEPTH_LOOP;
+        END IF;
+
+        SET V_DEPTH = V_DEPTH + 1;
+        SET V_CURRENT_ID = V_PARENT_ID;
+    END WHILE DEPTH_LOOP;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+CREATE TABLE IF NOT EXISTS `table_3pis8d` (
+    `table_3pis8d_campaign_id` INT,
+    `table_3pis8d_start_date` DATE
+);
+
+INSERT INTO `table_3pis8d` (`table_3pis8d_campaign_id`, `table_3pis8d_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_3PIS8D_START_DATE)
+    INTO V_WEEK
+    FROM TABLE_3PIS8D
+    WHERE TABLE_3PIS8D_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt----- */
+CREATE TABLE IF NOT EXISTS `table_y799fm` (
+    `table_y799fm_product_id` INT,
+    `table_y799fm_stock_quantity` INT
+);
+
+INSERT INTO `table_y799fm` (`table_y799fm_product_id`, `table_y799fm_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y799FM_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_Y799FM
+    WHERE TABLE_Y799FM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(-72)) - 249 + ((MYSQL_FUNC_CALCULATE_PHOTOGRAPHY_PACKAGE_j7sofy(-68, -91)) - -450 + (v_stock));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PHOTOGRAPHY_PACKAGE_j7sofy----- */
+CREATE TABLE IF NOT EXISTS `table_22x39a` (
+    `table_22x39a_session_id` INT,
+    `table_22x39a_photographer_id` INT,
+    `table_22x39a_session_type` VARCHAR(50),
+    `table_22x39a_duration_hours` INT,
+    `table_22x39a_location_type` VARCHAR(50),
+    `table_22x39a_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_h88dbp` (
+    `table_h88dbp_photographer_id` INT,
+    `table_h88dbp_rating` DECIMAL(3,1),
+    `table_h88dbp_experience_years` INT
+);
+
+INSERT INTO `table_22x39a` (`table_22x39a_session_id`, `table_22x39a_photographer_id`, `table_22x39a_session_type`, `table_22x39a_duration_hours`, `table_22x39a_location_type`, `table_22x39a_base_price`) VALUES (1, 2, 'test', 4, 'test', 1.0);
+
+INSERT INTO `table_h88dbp` (`table_h88dbp_photographer_id`, `table_h88dbp_rating`, `table_h88dbp_experience_years`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PHOTOGRAPHY_PACKAGE_j7sofy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PHOTOGRAPHY_PACKAGE_j7sofy(SESSION_TYPE_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 200;
+    DECLARE V_LOCATION_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SESSION_TYPE_PARAM
+        WHEN 'WEDDING' THEN SET V_BASE_PRICE = 500;
+        WHEN 'PORTRAIT' THEN SET V_BASE_PRICE = 150;
+        WHEN 'EVENT' THEN SET V_BASE_PRICE = 300;
+        WHEN 'PRODUCT' THEN SET V_BASE_PRICE = 250;
+        ELSE SET V_BASE_PRICE = 200;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * HOURS_PARAM;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+CREATE TABLE IF NOT EXISTS `table_qx6h07` (
+    `table_qx6h07_emp_id` INT,
+    `table_qx6h07_hire_date` DATE,
+    `table_qx6h07_salary` INT
+);
+
+INSERT INTO `table_qx6h07` (`table_qx6h07_emp_id`, `table_qx6h07_hire_date`, `table_qx6h07_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_QX6H07_HIRE_DATE, CURDATE()), COALESCE(TABLE_QX6H07_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_QX6H07
+    WHERE TABLE_QX6H07_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC1_cvo8ys()) - 819 + ((v_tenure * 1000) + floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_cvo8ys----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_cvo8ys() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_ZE3JA4_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_ZE3JA4
+    WHERE TABLE_ZE3JA4_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(18)) - 116 + (v_year);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(1);

@@ -1,0 +1,407 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_hiobm5` (
+    `table_hiobm5_customer_id` INT,
+    `table_hiobm5_registration_date` DATE,
+    `table_hiobm5_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_no89uy` (
+    `table_no89uy_order_id` INT,
+    `table_no89uy_customer_id` INT,
+    `table_no89uy_order_date` DATE,
+    `table_no89uy_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hiobm5` (`table_hiobm5_customer_id`, `table_hiobm5_registration_date`, `table_hiobm5_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_no89uy` (`table_no89uy_order_id`, `table_no89uy_customer_id`, `table_no89uy_order_date`, `table_no89uy_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo----- */
+CREATE TABLE IF NOT EXISTS `table_t3i5av` (
+    `table_t3i5av_campaign_id` INT,
+    `table_t3i5av_status` VARCHAR(50)
+);
+
+INSERT INTO `table_t3i5av` (`table_t3i5av_campaign_id`, `table_t3i5av_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_T3I5AV_STATUS
+    INTO V_STATUS
+    FROM TABLE_T3I5AV
+    WHERE TABLE_T3I5AV_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 1;
+        WHEN 'PAUSED' THEN RETURN 2;
+        WHEN 'COMPLETED' THEN RETURN (MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(35)) - 176 + (3);
+        WHEN 'CANCELLED' THEN RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(25)) - -521 + (4);
+        ELSE RETURN 0;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+CREATE TABLE IF NOT EXISTS `table_t3oyhq` (
+    `table_t3oyhq_customer_id` INT,
+    `table_t3oyhq_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_e0ydbc` (
+    `table_e0ydbc_order_id` INT,
+    `table_e0ydbc_customer_id` INT,
+    `table_e0ydbc_order_date` DATE
+);
+
+INSERT INTO `table_t3oyhq` (`table_t3oyhq_customer_id`, `table_t3oyhq_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_e0ydbc` (`table_e0ydbc_order_id`, `table_e0ydbc_customer_id`, `table_e0ydbc_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MIN(TABLE_E0YDBC_ORDER_DATE), MAX(TABLE_E0YDBC_ORDER_DATE)
+    INTO V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_E0YDBC
+    WHERE TABLE_E0YDBC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(V_LAST_ORDER, V_FIRST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+CREATE TABLE IF NOT EXISTS `table_nfhkgx` (
+    `table_nfhkgx_policy_id` INT,
+    `table_nfhkgx_customer_id` INT,
+    `table_nfhkgx_policy_type` VARCHAR(50),
+    `table_nfhkgx_premium_amount` DECIMAL(10,2),
+    `table_nfhkgx_coverage_amount` DECIMAL(10,2),
+    `table_nfhkgx_start_date` DATE,
+    `table_nfhkgx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tr1zz3` (
+    `table_tr1zz3_claim_id` INT,
+    `table_tr1zz3_policy_id` INT,
+    `table_tr1zz3_claim_amount` DECIMAL(10,2),
+    `table_tr1zz3_claim_date` DATE,
+    `table_tr1zz3_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nfhkgx` (`table_nfhkgx_policy_id`, `table_nfhkgx_customer_id`, `table_nfhkgx_policy_type`, `table_nfhkgx_premium_amount`, `table_nfhkgx_coverage_amount`, `table_nfhkgx_start_date`, `table_nfhkgx_status`) VALUES (1, 2, 'test', 1.0, 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_tr1zz3` (`table_tr1zz3_claim_id`, `table_tr1zz3_policy_id`, `table_tr1zz3_claim_amount`, `table_tr1zz3_claim_date`, `table_tr1zz3_status`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM INT DEFAULT 0;
+    DECLARE V_COVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NFHKGX_PREMIUM_AMOUNT, 0), COALESCE(TABLE_NFHKGX_COVERAGE_AMOUNT, 0)
+    INTO V_PREMIUM, V_COVERAGE
+    FROM TABLE_NFHKGX
+    WHERE TABLE_NFHKGX_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_TR1ZZ3_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_AMOUNT
+    FROM TABLE_TR1ZZ3
+    WHERE TABLE_TR1ZZ3_POLICY_ID = POLICY_ID_PARAM AND TABLE_TR1ZZ3_STATUS = 'APPROVED';
+
+    SET V_SCORE = (V_COVERAGE / NULLIF(V_PREMIUM, 0)) - (V_CLAIM_AMOUNT / 100);
+
+    IF V_TOTAL_CLAIMS > 5 THEN
+        SET V_SCORE = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(90)) - 216 + (v_score - 20);
+    END IF;
+
+    RETURN CAST(V_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+CREATE TABLE IF NOT EXISTS `table_alvd0j` (
+    `table_alvd0j_customer_id` INT,
+    `table_alvd0j_plan_type` VARCHAR(50),
+    `table_alvd0j_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_alvd0j` (`table_alvd0j_customer_id`, `table_alvd0j_plan_type`, `table_alvd0j_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_ALVD0J_PLAN_TYPE, COALESCE(TABLE_ALVD0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_ALVD0J
+    WHERE TABLE_ALVD0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_MONTHLY_COST > 500 OR V_PLAN_TYPE = 'ENTERPRISE' THEN
+        RETURN 5;
+    ELSEIF V_MONTHLY_COST > 200 OR V_PLAN_TYPE = 'PREMIUM' THEN
+        RETURN 4;
+    ELSEIF V_MONTHLY_COST > 100 THEN
+        RETURN 3;
+    ELSEIF V_MONTHLY_COST > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+CREATE TABLE IF NOT EXISTS `table_rheaey` (
+    `table_rheaey_session_id` INT,
+    `table_rheaey_student_id` INT,
+    `table_rheaey_tutor_id` INT,
+    `table_rheaey_subject` INT,
+    `table_rheaey_duration_minutes` INT,
+    `table_rheaey_hourly_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fc028m` (
+    `table_fc028m_student_id` INT,
+    `table_fc028m_grade_level` INT,
+    `table_fc028m_school_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rheaey` (`table_rheaey_session_id`, `table_rheaey_student_id`, `table_rheaey_tutor_id`, `table_rheaey_subject`, `table_rheaey_duration_minutes`, `table_rheaey_hourly_rate`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_fc028m` (`table_fc028m_student_id`, `table_fc028m_grade_level`, `table_fc028m_school_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(SESSION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_GRADE_LEVEL INT DEFAULT 0;
+    DECLARE V_TOTAL_INVOICE INT DEFAULT 0;
+    DECLARE V_RUSH_FEE INT DEFAULT 0;
+
+    SELECT TABLE_RHEAEY_DURATION_MINUTES, TABLE_RHEAEY_HOURLY_RATE, COALESCE(TABLE_FC028M_GRADE_LEVEL, 9)
+    INTO V_DURATION, V_HOURLY_RATE, V_GRADE_LEVEL
+    FROM TABLE_RHEAEY T
+    JOIN TABLE_FC028M S ON TABLE_RHEAEY_STUDENT_ID = TABLE_FC028M_STUDENT_ID
+    WHERE TABLE_RHEAEY_SESSION_ID = SESSION_ID_PARAM;
+
+    SET V_TOTAL_INVOICE = (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + ((v_duration * v_hourly_rate) / 60);
+
+    IF V_DURATION > 120 THEN
+        SET V_RUSH_FEE = V_TOTAL_INVOICE * 15 / 100;
+        SET V_TOTAL_INVOICE = V_TOTAL_INVOICE + V_RUSH_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_INVOICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(7)) - 690 + (v_revenue_share);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+CREATE TABLE IF NOT EXISTS `table_ar5of1` (
+    `table_ar5of1_product_id` INT,
+    `table_ar5of1_category_id` INT,
+    `table_ar5of1_price` DECIMAL(10,2),
+    `table_ar5of1_stock_quantity` INT
+);
+
+INSERT INTO `table_ar5of1` (`table_ar5of1_product_id`, `table_ar5of1_category_id`, `table_ar5of1_price`, `table_ar5of1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_AR5OF1_PRICE * TABLE_AR5OF1_STOCK_QUANTITY), 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_AR5OF1
+    WHERE TABLE_AR5OF1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_INVENTORY_VALUE / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+CREATE TABLE IF NOT EXISTS `table_ah3i1s` (
+    `table_ah3i1s_campaign_id` INT,
+    `table_ah3i1s_budget` INT
+);
+
+INSERT INTO `table_ah3i1s` (`table_ah3i1s_campaign_id`, `table_ah3i1s_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AH3I1S_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_AH3I1S
+    WHERE TABLE_AH3I1S_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FUNC2_6cl681()) - -343 + (v_budget / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC2_6cl681----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_6cl681() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_FREQUENCY DECIMAL(6,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_NO89UY
+    WHERE TABLE_NO89UY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_HIOBM5_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_HIOBM5
+    WHERE TABLE_HIOBM5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_DAYS = (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(-55)) - -818 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_FREQUENCY = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_wyb9zo(23)) - 923 + ((v_order_count * 365.0) / v_customer_age_days);
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + ((MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(37)) - 469 + (floor(v_frequency)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a(1);

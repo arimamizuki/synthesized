@@ -1,0 +1,364 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qyoum0` (
+    `table_qyoum0_supplier_id` INT,
+    `table_qyoum0_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qyoum0` (`table_qyoum0_supplier_id`, `table_qyoum0_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIGITS_44490r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_44490r(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = (MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(-96)) - -88 + (n % 10);
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + (v_sum) + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+CREATE TABLE IF NOT EXISTS `table_90sd8x` (
+    `table_90sd8x_property_id` INT,
+    `table_90sd8x_location` INT,
+    `table_90sd8x_bedrooms` INT,
+    `table_90sd8x_bathrooms` INT,
+    `table_90sd8x_monthly_rent` INT,
+    `table_90sd8x_property_tax_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_19x1zt` (
+    `table_19x1zt_request_id` INT,
+    `table_19x1zt_property_id` INT,
+    `table_19x1zt_request_date` DATE,
+    `table_19x1zt_estimated_cost` DECIMAL(10,2),
+    `table_19x1zt_priority` INT
+);
+
+INSERT INTO `table_90sd8x` (`table_90sd8x_property_id`, `table_90sd8x_location`, `table_90sd8x_bedrooms`, `table_90sd8x_bathrooms`, `table_90sd8x_monthly_rent`, `table_90sd8x_property_tax_annual`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_19x1zt` (`table_19x1zt_request_id`, `table_19x1zt_property_id`, `table_19x1zt_request_date`, `table_19x1zt_estimated_cost`, `table_19x1zt_priority`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_ANNUAL_PROPERTY_TAX INT DEFAULT 0;
+    DECLARE V_MAINTENANCE_COST_ANNUAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_INCOME INT DEFAULT 0;
+    DECLARE V_NET_YIELD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_90SD8X_MONTHLY_RENT, 0), COALESCE(TABLE_90SD8X_PROPERTY_TAX_ANNUAL, 0)
+    INTO V_MONTHLY_RENT, V_ANNUAL_PROPERTY_TAX
+    FROM TABLE_90SD8X
+    WHERE TABLE_90SD8X_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_19X1ZT_ESTIMATED_COST), 0)
+    INTO V_MAINTENANCE_COST_ANNUAL
+    FROM TABLE_19X1ZT
+    WHERE TABLE_19X1ZT_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_ANNUAL_INCOME = (V_MONTHLY_RENT * 12) - V_ANNUAL_PROPERTY_TAX - V_MAINTENANCE_COST_ANNUAL;
+
+    RETURN V_ANNUAL_INCOME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry----- */
+CREATE TABLE IF NOT EXISTS `table_ozed85` (
+    `table_ozed85_product_id` INT,
+    `table_ozed85_category_id` INT,
+    `table_ozed85_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_sskfnd` (
+    `table_sskfnd_category_id` INT,
+    `table_sskfnd_name` VARCHAR(50),
+    `table_sskfnd_parent_category_id` INT
+);
+
+INSERT INTO `table_ozed85` (`table_ozed85_product_id`, `table_ozed85_category_id`, `table_ozed85_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_sskfnd` (`table_sskfnd_category_id`, `table_sskfnd_name`, `table_sskfnd_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOP_PRODUCTS_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONCENTRATION_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_OZED85
+    WHERE TABLE_OZED85_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OZED85_PRICE), (MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(-70, -88, -83)) - -908 + (0))
+    INTO V_TOP_PRODUCTS_VALUE
+    FROM (
+        SELECT TABLE_OZED85_PRICE FROM TABLE_OZED85
+        WHERE TABLE_OZED85_CATEGORY_ID = CATEGORY_ID_PARAM
+        ORDER BY TABLE_OZED85_PRICE DESC
+        LIMIT 3
+    ) TOP_PRODUCTS;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONCENTRATION_RATIO = (MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(-61)) - -185 + ((v_top_products_value / v_total_products) * 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(12)) - -622 + (floor(v_concentration_ratio));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN 0;
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp----- */
+CREATE TABLE IF NOT EXISTS `table_u0nmnk` (
+    `table_u0nmnk_product_id` INT,
+    `table_u0nmnk_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u0nmnk` (`table_u0nmnk_product_id`, `table_u0nmnk_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U0NMNK_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_U0NMNK
+    WHERE TABLE_U0NMNK_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(51)) - -490 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+CREATE TABLE IF NOT EXISTS `table_tqo94u` (
+    `table_tqo94u_emp_id` INT,
+    `table_tqo94u_hire_date` DATE
+);
+
+INSERT INTO `table_tqo94u` (`table_tqo94u_emp_id`, `table_tqo94u_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_TQO94U_HIRE_DATE)
+    INTO V_WEEK
+    FROM TABLE_TQO94U
+    WHERE TABLE_TQO94U_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+CREATE TABLE IF NOT EXISTS `table_7sluij` (
+    `table_7sluij_emp_id` INT,
+    `table_7sluij_manager_id` INT,
+    `table_7sluij_department_id` INT,
+    `table_7sluij_salary` INT
+);
+
+INSERT INTO `table_7sluij` (`table_7sluij_emp_id`, `table_7sluij_manager_id`, `table_7sluij_department_id`, `table_7sluij_salary`) VALUES (1, NULL, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(61)) - 152 + (null) AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT TABLE_7SLUIJ_MANAGER_ID INTO V_CURRENT_EMP FROM TABLE_7SLUIJ WHERE TABLE_7SLUIJ_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(-92)) - -488 + (v_depth + 1);
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+CREATE TABLE IF NOT EXISTS `table_8bnzgq` (
+    `table_8bnzgq_emp_id` INT,
+    `table_8bnzgq_department_id` INT
+);
+
+INSERT INTO `table_8bnzgq` (`table_8bnzgq_emp_id`, `table_8bnzgq_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8BNZGQ
+    WHERE TABLE_8BNZGQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT * 10;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+CREATE TABLE IF NOT EXISTS `table_n1vs7c` (
+    `table_n1vs7c_customer_id` INT,
+    `table_n1vs7c_start_date` DATE
+);
+
+INSERT INTO `table_n1vs7c` (`table_n1vs7c_customer_id`, `table_n1vs7c_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N1VS7C_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N1VS7C
+    WHERE TABLE_N1VS7C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QYOUM0_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QYOUM0
+    WHERE TABLE_QYOUM0_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_CONCENTRATION_RATIO_ee3vry(-30)) - 7 + ((MYSQL_FUNC_SUM_OF_DIGITS_44490r(-75)) - -5 + (floor(v_rating * 20)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(1);

@@ -1,0 +1,409 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gtn1m7` (
+    `table_gtn1m7_appt_id` INT,
+    `table_gtn1m7_client_id` INT,
+    `table_gtn1m7_stylist_id` INT,
+    `table_gtn1m7_service_id` INT,
+    `table_gtn1m7_appointment_date` DATE,
+    `table_gtn1m7_duration_minutes` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t6eu0r` (
+    `table_t6eu0r_service_id` INT,
+    `table_t6eu0r_service_name` VARCHAR(50),
+    `table_t6eu0r_base_price` DECIMAL(10,2),
+    `table_t6eu0r_category` INT
+);
+
+INSERT INTO `table_gtn1m7` (`table_gtn1m7_appt_id`, `table_gtn1m7_client_id`, `table_gtn1m7_stylist_id`, `table_gtn1m7_service_id`, `table_gtn1m7_appointment_date`, `table_gtn1m7_duration_minutes`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_t6eu0r` (`table_t6eu0r_service_id`, `table_t6eu0r_service_name`, `table_t6eu0r_base_price`, `table_t6eu0r_category`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz----- */
+CREATE TABLE IF NOT EXISTS `table_nu9urv` (
+    `table_nu9urv_customer_id` INT,
+    `table_nu9urv_order_date` DATE,
+    `table_nu9urv_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nu9urv` (`table_nu9urv_customer_id`, `table_nu9urv_order_date`, `table_nu9urv_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_NU9URV
+    WHERE TABLE_NU9URV_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_NU9URV_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt----- */
+CREATE TABLE IF NOT EXISTS `table_z3t223` (
+    `table_z3t223_product_id` INT,
+    `table_z3t223_category_id` INT
+);
+
+INSERT INTO `table_z3t223` (`table_z3t223_product_id`, `table_z3t223_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CATEGORY_PRODUCTS
+    FROM TABLE_Z3T223
+    WHERE TABLE_Z3T223_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_Z3T223;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179(-98)) - -33 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_CATEGORY_PRODUCTS * 100) / V_TOTAL_PRODUCTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179----- */
+CREATE TABLE IF NOT EXISTS `table_tic8rt` (
+    `table_tic8rt_customer_id` INT,
+    `table_tic8rt_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_v1539c` (
+    `table_v1539c_order_id` INT,
+    `table_v1539c_customer_id` INT,
+    `table_v1539c_order_date` DATE,
+    `table_v1539c_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tic8rt` (`table_tic8rt_customer_id`, `table_tic8rt_country`) VALUES (1, 1);
+
+INSERT INTO `table_v1539c` (`table_v1539c_order_id`, `table_v1539c_customer_id`, `table_v1539c_order_date`, `table_v1539c_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_V1539C_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_V1539C O
+    JOIN TABLE_TIC8RT C ON TABLE_V1539C_CUSTOMER_ID = TABLE_TIC8RT_CUSTOMER_ID
+    WHERE TABLE_TIC8RT_COUNTRY = COUNTRY_PARAM;
+
+    RETURN FLOOR(V_AVG_ORDER_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+CREATE TABLE IF NOT EXISTS `table_rfgcxf` (
+    `table_rfgcxf_customer_id` INT,
+    `table_rfgcxf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_rfgcxf` (`table_rfgcxf_customer_id`, `table_rfgcxf_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_RFGCXF
+    WHERE TABLE_RFGCXF_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_RFGCXF_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(20, 55)) - -411 + ((MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(-65)) - -767 + ((MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(-64)) - 182 + (v_count)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+CREATE TABLE IF NOT EXISTS `table_vevirx` (
+    `table_vevirx_order_id` INT,
+    `table_vevirx_customer_id` INT,
+    `table_vevirx_order_date` DATE,
+    `table_vevirx_total_amount` DECIMAL(10,2),
+    `table_vevirx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5od72a` (
+    `table_5od72a_refund_id` INT,
+    `table_5od72a_order_id` INT,
+    `table_5od72a_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vevirx` (`table_vevirx_order_id`, `table_vevirx_customer_id`, `table_vevirx_order_date`, `table_vevirx_total_amount`, `table_vevirx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_5od72a` (`table_5od72a_refund_id`, `table_5od72a_order_id`, `table_5od72a_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NPS_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEVIRX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_VEVIRX
+    WHERE TABLE_VEVIRX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5OD72A_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_5OD72A
+    WHERE TABLE_5OD72A_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NPS_CONTRIBUTION = V_ORDER_TOTAL - (V_REFUND_TOTAL * 2);
+
+    RETURN V_NPS_CONTRIBUTION;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn----- */
+CREATE TABLE IF NOT EXISTS `table_fp000x` (
+    `table_fp000x_order_id` INT,
+    `table_fp000x_customer_id` INT,
+    `table_fp000x_order_date` DATE,
+    `table_fp000x_total_amount` DECIMAL(10,2),
+    `table_fp000x_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mueyct` (
+    `table_mueyct_payment_id` INT,
+    `table_mueyct_order_id` INT,
+    `table_mueyct_payment_method` INT,
+    `table_mueyct_amount_paid` INT,
+    `table_mueyct_transaction_fee` INT
+);
+
+INSERT INTO `table_fp000x` (`table_fp000x_order_id`, `table_fp000x_customer_id`, `table_fp000x_order_date`, `table_fp000x_total_amount`, `table_fp000x_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_mueyct` (`table_mueyct_payment_id`, `table_mueyct_order_id`, `table_mueyct_payment_method`, `table_mueyct_amount_paid`, `table_mueyct_transaction_fee`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_TRANSACTION_FEE INT DEFAULT 0;
+    DECLARE V_PAYMENT_METHOD VARCHAR(20) DEFAULT 'CREDIT_CARD';
+    DECLARE V_PROCESSING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FP000X_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(48)) - -245 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_FP000X
+    WHERE TABLE_FP000X_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT TABLE_MUEYCT_PAYMENT_METHOD, COALESCE(TABLE_MUEYCT_AMOUNT_PAID, 0), COALESCE(TABLE_MUEYCT_TRANSACTION_FEE, 0)
+    INTO V_PAYMENT_METHOD, V_AMOUNT_PAID, V_TRANSACTION_FEE
+    FROM TABLE_MUEYCT
+    WHERE TABLE_MUEYCT_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROCESSING_EFFICIENCY = 100 - ((V_TRANSACTION_FEE * 100) / V_ORDER_TOTAL);
+
+    CASE V_PAYMENT_METHOD
+        WHEN 'WIRE_TRANSFER' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 10;
+        WHEN 'CREDIT_CARD' THEN SET V_PROCESSING_EFFICIENCY = (MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(-49)) - 816 + (v_processing_efficiency - 3);
+        WHEN 'CRYPTOCURRENCY' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 5;
+        ELSE SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 2;
+    END CASE;
+
+    RETURN GREATEST(V_PROCESSING_EFFICIENCY, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+CREATE TABLE IF NOT EXISTS `table_i7exsg` (
+    `table_i7exsg_campaign_id` INT,
+    `table_i7exsg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_i7exsg` (`table_i7exsg_campaign_id`, `table_i7exsg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_I7EXSG_STATUS
+    INTO V_STATUS
+    FROM TABLE_I7EXSG
+    WHERE TABLE_I7EXSG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'COMPLETED' THEN RETURN 75;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+CREATE TABLE IF NOT EXISTS `table_0uzv2f` (
+    `table_0uzv2f_order_id` INT,
+    `table_0uzv2f_customer_id` INT,
+    `table_0uzv2f_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0uzv2f` (`table_0uzv2f_order_id`, `table_0uzv2f_customer_id`, `table_0uzv2f_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_0UZV2F
+    WHERE TABLE_0UZV2F_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_0UZV2F;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CUSTOMER_REVENUE * 100) / V_TOTAL_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+CREATE TABLE IF NOT EXISTS `table_o8t87v` (
+    `table_o8t87v_order_id` INT,
+    `table_o8t87v_customer_id` INT,
+    `table_o8t87v_order_date` DATE,
+    `table_o8t87v_total_amount` DECIMAL(10,2),
+    `table_o8t87v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_satxgm` (
+    `table_satxgm_order_id` INT,
+    `table_satxgm_product_id` INT,
+    `table_satxgm_quantity` INT,
+    `table_satxgm_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o8t87v` (`table_o8t87v_order_id`, `table_o8t87v_customer_id`, `table_o8t87v_order_date`, `table_o8t87v_total_amount`, `table_o8t87v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_satxgm` (`table_satxgm_order_id`, `table_satxgm_product_id`, `table_satxgm_quantity`, `table_satxgm_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(ORDER_ID_PARAM INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT;
+    DECLARE V_DISCOUNT INT;
+    DECLARE V_FINAL_PRICE INT;
+
+    SELECT COALESCE(SUM(TABLE_SATXGM_QUANTITY * TABLE_SATXGM_UNIT_PRICE), 0) INTO V_SUBTOTAL
+    FROM TABLE_SATXGM
+    WHERE TABLE_SATXGM_ORDER_ID = ORDER_ID_PARAM;
+
+    IF DISCOUNT_PERCENT < 0 THEN
+        SET DISCOUNT_PERCENT = 0;
+    ELSEIF DISCOUNT_PERCENT > 50 THEN
+        SET DISCOUNT_PERCENT = 50;
+    END IF;
+
+    SET V_DISCOUNT = (MYSQL_FUNC_PROC2_ktdgwa()) - 741 + (v_subtotal * discount_percent / 100);
+    SET V_FINAL_PRICE = V_SUBTOTAL - V_DISCOUNT;
+
+    RETURN V_FINAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_ktdgwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_ktdgwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(APPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TIP_PERCENT INT DEFAULT 15;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T6EU0R_BASE_PRICE, 50), COALESCE(TABLE_GTN1M7_DURATION_MINUTES, 60)
+    INTO V_BASE_PRICE, V_DURATION
+    FROM TABLE_GTN1M7 A
+    JOIN TABLE_T6EU0R S ON TABLE_GTN1M7_SERVICE_ID = TABLE_T6EU0R_SERVICE_ID
+    WHERE TABLE_GTN1M7_APPT_ID = APPT_ID_PARAM;
+
+    IF V_DURATION > 90 THEN
+        SET V_TIP_PERCENT = (MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(-70)) - 405 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_RECENT_ORDER_COUNT_wy2ugz(65)) - -354 + (20));
+    END IF;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(10)) - 427 + (v_base_price + (v_base_price * v_tip_percent / 100));
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(1);

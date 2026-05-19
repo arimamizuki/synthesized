@@ -1,0 +1,297 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_FUNC2_nz67cs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_GCD_OF_NUMBERS_llwutn(8, 32)) - 396 + ((MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(38)) - 555 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(37)) - 181 + (v_age_months)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        SET V_I = V_I + 1;
+        IF V_I MOD 2 = 0 THEN
+            ITERATE MY_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+        IF V_I >= N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+CREATE TABLE IF NOT EXISTS `table_zoew3f` (
+    `table_zoew3f_campaign_id` INT,
+    `table_zoew3f_budget` INT,
+    `table_zoew3f_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qkdaim` (
+    `table_qkdaim_conversion_id` INT,
+    `table_qkdaim_campaign_id` INT,
+    `table_qkdaim_conversion_value` INT
+);
+
+INSERT INTO `table_zoew3f` (`table_zoew3f_campaign_id`, `table_zoew3f_budget`, `table_zoew3f_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_qkdaim` (`table_qkdaim_conversion_id`, `table_qkdaim_campaign_id`, `table_qkdaim_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REMAINING DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_ZOEW3F_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_ZOEW3F
+    WHERE TABLE_ZOEW3F_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QKDAIM_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_QKDAIM
+    WHERE TABLE_QKDAIM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_REMAINING = V_BUDGET - V_SPENT;
+
+    RETURN FLOOR(V_REMAINING);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GCD_OF_NUMBERS_llwutn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GCD_OF_NUMBERS_llwutn(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN SET A = -(MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(-72)) - 249 + ((MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(-9)) - 424 + (a)); END IF;
+    IF B < 0 THEN SET B = -(MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(44)) - 508 + (b); END IF;
+
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DOUBLE_muh8iu(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(36)) - 385 + (p_n * 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN LOG(X);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+CREATE TABLE IF NOT EXISTS `table_u7y4da` (
+    `table_u7y4da_album_id` INT,
+    `table_u7y4da_artist_id` INT,
+    `table_u7y4da_title` INT,
+    `table_u7y4da_release_year` INT,
+    `table_u7y4da_total_tracks` DECIMAL(10,2),
+    `table_u7y4da_duration_seconds` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8qww15` (
+    `table_8qww15_track_id` INT,
+    `table_8qww15_album_id` INT,
+    `table_8qww15_track_number` INT,
+    `table_8qww15_duration` INT,
+    `table_8qww15_play_count` INT
+);
+
+INSERT INTO `table_u7y4da` (`table_u7y4da_album_id`, `table_u7y4da_artist_id`, `table_u7y4da_title`, `table_u7y4da_release_year`, `table_u7y4da_total_tracks`, `table_u7y4da_duration_seconds`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_8qww15` (`table_8qww15_track_id`, `table_8qww15_album_id`, `table_8qww15_track_number`, `table_8qww15_duration`, `table_8qww15_play_count`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(ALBUM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PLAYS INT DEFAULT 0;
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_DURATION INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_8QWW15_PLAY_COUNT), 0), COUNT(*), COALESCE(AVG(TABLE_8QWW15_DURATION), 0)
+    INTO V_TOTAL_PLAYS, V_TRACK_COUNT, V_AVG_DURATION
+    FROM TABLE_8QWW15
+    WHERE TABLE_8QWW15_ALBUM_ID = ALBUM_ID_PARAM;
+
+    IF V_TRACK_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = (MYSQL_FUNC_PROC2_mjor62()) - -749 + (v_total_plays / v_track_count);
+
+    IF V_AVG_DURATION > 240 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 100;
+    END IF;
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_mjor62----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_mjor62() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+CREATE TABLE IF NOT EXISTS `table_qx6h07` (
+    `table_qx6h07_emp_id` INT,
+    `table_qx6h07_hire_date` DATE,
+    `table_qx6h07_salary` INT
+);
+
+INSERT INTO `table_qx6h07` (`table_qx6h07_emp_id`, `table_qx6h07_hire_date`, `table_qx6h07_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_QX6H07_HIRE_DATE, CURDATE()), COALESCE(TABLE_QX6H07_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_QX6H07
+    WHERE TABLE_QX6H07_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (V_TENURE * 1000) + FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(9)) - -923 + ((MYSQL_FUNC_FUNC2_nz67cs()) - -915 + ((v_refund_total * 100) / v_order_total));
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(1);

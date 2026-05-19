@@ -1,0 +1,339 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1240769 (v1240770 TEXT);
+CREATE TABLE IF NOT EXISTS v1240847 (v1240848 VARCHAR(255) DEFAULT NULL);
+INSERT INTO v1240769 (v1240770) VALUES ('initial'), ('test'), ('sample');
+INSERT INTO v1240847 (v1240848) VALUES ('placeholder');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(63)) - -746 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = V_MAX_SALARY - V_MIN_SALARY;
+
+    RETURN FLOOR(V_SALARY_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+CREATE TABLE IF NOT EXISTS `table_zvz13f` (
+    `table_zvz13f_employee_id` INT,
+    `table_zvz13f_department_id` INT,
+    `table_zvz13f_salary` INT,
+    `table_zvz13f_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_9qjub2` (
+    `table_9qjub2_review_id` INT,
+    `table_9qjub2_employee_id` INT,
+    `table_9qjub2_review_date` DATE,
+    `table_9qjub2_score` INT
+);
+
+INSERT INTO `table_zvz13f` (`table_zvz13f_employee_id`, `table_zvz13f_department_id`, `table_zvz13f_salary`, `table_zvz13f_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_9qjub2` (`table_9qjub2_review_id`, `table_9qjub2_employee_id`, `table_9qjub2_review_date`, `table_9qjub2_score`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE_SCORE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_ZVZ13F_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9QJUB2_SCORE), 0.00)
+    INTO V_AVG_PERFORMANCE_SCORE
+    FROM TABLE_9QJUB2
+    WHERE TABLE_9QJUB2_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT TABLE_ZVZ13F_SALARY
+    INTO V_BASE_SALARY
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_BONUS_PERCENTAGE = LEAST(V_YEARS_EMPLOYED * 2, 20);
+
+    IF V_AVG_PERFORMANCE_SCORE >= 4.5 THEN
+        SET V_BONUS_PERCENTAGE = (MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(-5)) - -815 + (v_bonus_percentage + 15);
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 4.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 10;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 3.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 5;
+    END IF;
+
+    SET V_TOTAL_BONUS = (MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + ((v_base_salary * v_bonus_percentage) / 100);
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN (MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad(-4)) - 271 + (0);
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN 1;
+    ELSE RETURN 2;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POSITIVE_CHECK_yqtoad(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE POSITIVE';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_abekbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_abekbp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + ((MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(-66)) - 203 + (0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+CREATE TABLE IF NOT EXISTS `table_lktk1v` (
+    `table_lktk1v_order_id` INT,
+    `table_lktk1v_customer_id` INT,
+    `table_lktk1v_order_date` DATE,
+    `table_lktk1v_total_amount` DECIMAL(10,2),
+    `table_lktk1v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_3wmdck` (
+    `table_3wmdck_shipment_id` INT,
+    `table_3wmdck_order_id` INT,
+    `table_3wmdck_carrier` INT,
+    `table_3wmdck_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lktk1v` (`table_lktk1v_order_id`, `table_lktk1v_customer_id`, `table_lktk1v_order_date`, `table_lktk1v_total_amount`, `table_lktk1v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_3wmdck` (`table_3wmdck_shipment_id`, `table_3wmdck_order_id`, `table_3wmdck_carrier`, `table_3wmdck_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3WMDCK_SHIPPING_COST, 0), COALESCE(TABLE_LKTK1V_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM TABLE_LKTK1V O
+    LEFT JOIN TABLE_3WMDCK S ON TABLE_LKTK1V_ORDER_ID = TABLE_3WMDCK_ORDER_ID
+    WHERE TABLE_LKTK1V_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COST_RATIO = (MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(88, -38)) - -356 + ((v_shipping_cost * 100) / v_order_total);
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A * B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1388_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_text VARCHAR(255);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1240770 FROM v1240769 WHERE v1240770 IS NOT NULL LIMIT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Create the table from the fifth statement
+    DROP TABLE IF EXISTS v1240847;
+    CREATE TABLE v1240847 (v1240848 VARCHAR(255) DEFAULT NULL) AS SELECT CAST(1000000000000 * 1000000000000 AS UNSIGNED) AS v1240848;
+
+    -- First statement: UPDATE with REPEAT
+    UPDATE v1240769 AS x0 SET v1240770 = REPEAT(LEFT(v1240770, 1), 10) WHERE v1240770 = v1240770 AND x0.v1240770 = v1240770;
+    SET v_counter = (MYSQL_FUNC_FUNC1_abekbp()) - 180 + ((MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(-46)) - -687 + (v_counter)) + (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (row_count());
+
+    -- Second statement: INSERT with geometry and values
+    INSERT INTO v1240769 (v1240770) VALUES (5), (ST_GEOMFROMTEXT('POINT(143 24)')), ('Susan');
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Third statement: UPDATE with @i variable and conditions
+    SET @i = p1;
+    UPDATE v1240769 AS x0 SET v1240770 = @i WHERE v1240770 = REPEAT('a', 4000) AND v1240770 = REPEAT('o', 4000);
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Fourth statement: UPDATE with geometry and condition using input param
+    UPDATE v1240769 AS x1 SET v1240770 = ST_GEOMFROMTEXT('POINT(202 194)') WHERE x1.v1240770 = p2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Procedural logic: Loop through cursor and apply conditional
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_text;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Use CASE to categorize based on text length
+        CASE
+            WHEN LENGTH(COALESCE(v_text, '')) > 10 THEN
+                SET v_counter = v_counter + 1;
+            WHEN LENGTH(COALESCE(v_text, '')) BETWEEN 1 AND 10 THEN
+                SET v_counter = v_counter + 2;
+            ELSE
+                SET v_counter = v_counter + 0;
+        END CASE;
+
+        -- Use WHILE loop to simulate additional processing
+        WHILE v_counter < 100 DO
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final output
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1388_proc(1, 1, @out_result);
+
+SELECT @out_result;

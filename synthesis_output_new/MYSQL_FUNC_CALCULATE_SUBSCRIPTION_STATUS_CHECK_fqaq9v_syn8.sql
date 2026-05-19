@@ -1,0 +1,396 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_rfgcxf` (
+    `table_rfgcxf_customer_id` INT,
+    `table_rfgcxf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_rfgcxf` (`table_rfgcxf_customer_id`, `table_rfgcxf_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+CREATE TABLE IF NOT EXISTS `table_opth2r` (
+    `table_opth2r_hotel_id` INT,
+    `table_opth2r_name` VARCHAR(50),
+    `table_opth2r_city` INT,
+    `table_opth2r_star_rating` DECIMAL(3,1),
+    `table_opth2r_average_daily_rate` INT,
+    `table_opth2r_occupancy_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9q7x7u` (
+    `table_9q7x7u_booking_id` INT,
+    `table_9q7x7u_hotel_id` INT,
+    `table_9q7x7u_guest_id` INT,
+    `table_9q7x7u_check_in_date` DATE,
+    `table_9q7x7u_check_out_date` DATE,
+    `table_9q7x7u_total_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_opth2r` (`table_opth2r_hotel_id`, `table_opth2r_name`, `table_opth2r_city`, `table_opth2r_star_rating`, `table_opth2r_average_daily_rate`, `table_opth2r_occupancy_rate`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+INSERT INTO `table_9q7x7u` (`table_9q7x7u_booking_id`, `table_9q7x7u_hotel_id`, `table_9q7x7u_guest_id`, `table_9q7x7u_check_in_date`, `table_9q7x7u_check_out_date`, `table_9q7x7u_total_cost`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(HOTEL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STAR_RATING INT DEFAULT 3;
+    DECLARE V_AVG_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_OCCUPANCY_RATE INT DEFAULT 70;
+    DECLARE V_TOTAL_ROOMS INT DEFAULT 50;
+    DECLARE V_DAILY_POTENTIAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_POTENTIAL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OPTH2R_STAR_RATING, 3), COALESCE(TABLE_OPTH2R_AVERAGE_DAILY_RATE, 100), COALESCE(TABLE_OPTH2R_OCCUPANCY_RATE, 70)
+    INTO V_STAR_RATING, V_AVG_DAILY_RATE, V_OCCUPANCY_RATE
+    FROM TABLE_OPTH2R
+    WHERE TABLE_OPTH2R_HOTEL_ID = HOTEL_ID_PARAM;
+
+    SET V_DAILY_POTENTIAL = V_TOTAL_ROOMS * V_AVG_DAILY_RATE * V_STAR_RATING / 3;
+    SET V_ANNUAL_POTENTIAL = (V_DAILY_POTENTIAL * 365 * V_OCCUPANCY_RATE) / 100;
+
+    RETURN FLOOR(V_ANNUAL_POTENTIAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt----- */
+CREATE TABLE IF NOT EXISTS `table_81hwap` (
+    `table_81hwap_product_id` INT,
+    `table_81hwap_category_id` INT,
+    `table_81hwap_stock_quantity` INT
+);
+
+INSERT INTO `table_81hwap` (`table_81hwap_product_id`, `table_81hwap_category_id`, `table_81hwap_stock_quantity`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_81HWAP_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM TABLE_81HWAP
+    WHERE TABLE_81HWAP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN LEAST(V_TOTAL_STOCK, 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(-9)) - 520 + ((MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + (v_result));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = 30;
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = V_DISCOUNT + 20;
+    END IF;
+
+    SET V_FINAL_FARE = 25 - (25 * V_DISCOUNT / 100);
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+CREATE TABLE IF NOT EXISTS `table_d7zjcs` (
+    `table_d7zjcs_order_id` INT,
+    `table_d7zjcs_customer_id` INT,
+    `table_d7zjcs_order_date` DATE,
+    `table_d7zjcs_shipped_date` DATE,
+    `table_d7zjcs_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d7zjcs` (`table_d7zjcs_order_id`, `table_d7zjcs_customer_id`, `table_d7zjcs_order_date`, `table_d7zjcs_shipped_date`, `table_d7zjcs_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_DATE DATE;
+    DECLARE V_SHIPPED_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_D7ZJCS_ORDER_DATE, TABLE_D7ZJCS_SHIPPED_DATE
+    INTO V_ORDER_DATE, V_SHIPPED_DATE
+    FROM TABLE_D7ZJCS
+    WHERE TABLE_D7ZJCS_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    IF V_SHIPPED_DATE IS NULL THEN
+        SET V_SHIPPED_DATE = CURDATE();
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_SHIPPED_DATE, V_ORDER_DATE);
+
+    IF V_DELAY_DAYS < (MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(58)) - -984 + (0) THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+CREATE TABLE IF NOT EXISTS `table_ycmequ` (
+    `table_ycmequ_emp_id` INT,
+    `table_ycmequ_department_id` INT
+);
+
+INSERT INTO `table_ycmequ` (`table_ycmequ_emp_id`, `table_ycmequ_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_YCMEQU_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_YCMEQU
+    WHERE TABLE_YCMEQU_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(-6)) - 200 + (v_dept_id % 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+CREATE TABLE IF NOT EXISTS `table_uem6e2` (
+    `table_uem6e2_campaign_id` INT,
+    `table_uem6e2_start_date` DATE,
+    `table_uem6e2_end_date` DATE,
+    `table_uem6e2_budget` INT,
+    `table_uem6e2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zqstr6` (
+    `table_zqstr6_conversion_id` INT,
+    `table_zqstr6_campaign_id` INT,
+    `table_zqstr6_conversion_date` DATE
+);
+
+INSERT INTO `table_uem6e2` (`table_uem6e2_campaign_id`, `table_uem6e2_start_date`, `table_uem6e2_end_date`, `table_uem6e2_budget`, `table_uem6e2_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_zqstr6` (`table_zqstr6_conversion_id`, `table_zqstr6_campaign_id`, `table_zqstr6_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT DATEDIFF(TABLE_UEM6E2_END_DATE, TABLE_UEM6E2_START_DATE)
+    INTO V_DURATION_DAYS
+    FROM TABLE_UEM6E2
+    WHERE TABLE_UEM6E2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ZQSTR6
+    WHERE TABLE_ZQSTR6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(76)) - 410 + (v_conversion_count / v_duration_days);
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+CREATE TABLE IF NOT EXISTS `table_hzpcez` (
+    `table_hzpcez_campaign_id` INT,
+    `table_hzpcez_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hzpcez` (`table_hzpcez_campaign_id`, `table_hzpcez_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HZPCEZ_STATUS
+    INTO V_STATUS
+    FROM TABLE_HZPCEZ
+    WHERE TABLE_HZPCEZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'COMPLETED' THEN 3
+        WHEN 'DRAFT' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF NUM <= (MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-9)) - -807 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    CHECK_LOOP: WHILE V_DIVISOR < NUM DO
+        IF NUM MOD V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE CHECK_LOOP;
+
+    IF V_SUM = NUM THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_RFGCXF
+    WHERE TABLE_RFGCXF_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_RFGCXF_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(-43)) - 389 + ((MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + ((MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_LEVEL_q0r6bt(64)) - -568 + ((MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(18)) - 363 + (v_count))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(1);

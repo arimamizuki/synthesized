@@ -1,0 +1,421 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gvnxly` (
+    `table_gvnxly_product_id` INT,
+    `table_gvnxly_category_id` INT,
+    `table_gvnxly_price` DECIMAL(10,2),
+    `table_gvnxly_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1sfbje` (
+    `table_1sfbje_category_id` INT,
+    `table_1sfbje_name` VARCHAR(50)
+);
+
+INSERT INTO `table_gvnxly` (`table_gvnxly_product_id`, `table_gvnxly_category_id`, `table_gvnxly_price`, `table_gvnxly_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1sfbje` (`table_1sfbje_category_id`, `table_1sfbje_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+CREATE TABLE IF NOT EXISTS `table_djtr88` (
+    `table_djtr88_campaign_id` INT,
+    `table_djtr88_budget` INT
+);
+
+INSERT INTO `table_djtr88` (`table_djtr88_campaign_id`, `table_djtr88_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DJTR88_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_DJTR88
+    WHERE TABLE_DJTR88_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+CREATE TABLE IF NOT EXISTS `table_u7y4da` (
+    `table_u7y4da_album_id` INT,
+    `table_u7y4da_artist_id` INT,
+    `table_u7y4da_title` INT,
+    `table_u7y4da_release_year` INT,
+    `table_u7y4da_total_tracks` DECIMAL(10,2),
+    `table_u7y4da_duration_seconds` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8qww15` (
+    `table_8qww15_track_id` INT,
+    `table_8qww15_album_id` INT,
+    `table_8qww15_track_number` INT,
+    `table_8qww15_duration` INT,
+    `table_8qww15_play_count` INT
+);
+
+INSERT INTO `table_u7y4da` (`table_u7y4da_album_id`, `table_u7y4da_artist_id`, `table_u7y4da_title`, `table_u7y4da_release_year`, `table_u7y4da_total_tracks`, `table_u7y4da_duration_seconds`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_8qww15` (`table_8qww15_track_id`, `table_8qww15_album_id`, `table_8qww15_track_number`, `table_8qww15_duration`, `table_8qww15_play_count`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(ALBUM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PLAYS INT DEFAULT 0;
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_DURATION INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_8QWW15_PLAY_COUNT), (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(-38)) - -411 + (0)), COUNT(*), COALESCE(AVG(TABLE_8QWW15_DURATION), 0)
+    INTO V_TOTAL_PLAYS, V_TRACK_COUNT, V_AVG_DURATION
+    FROM TABLE_8QWW15
+    WHERE TABLE_8QWW15_ALBUM_ID = ALBUM_ID_PARAM;
+
+    IF V_TRACK_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = V_TOTAL_PLAYS / V_TRACK_COUNT;
+
+    IF V_AVG_DURATION > 240 THEN
+        SET V_POPULARITY_SCORE = (MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(-78, 28)) - -527 + (v_popularity_score + 100);
+    END IF;
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+CREATE TABLE IF NOT EXISTS `table_nw3b9o` (
+    `table_nw3b9o_zone_id` INT,
+    `table_nw3b9o_hourly_rate` INT,
+    `table_nw3b9o_max_capacity` INT,
+    `table_nw3b9o_current_occupied` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8u2yi0` (
+    `table_8u2yi0_trans_id` INT,
+    `table_8u2yi0_vehicle_id` INT,
+    `table_8u2yi0_zone_id` INT,
+    `table_8u2yi0_entry_time` DATE,
+    `table_8u2yi0_exit_time` DATE,
+    `table_8u2yi0_amount_paid` INT
+);
+
+INSERT INTO `table_nw3b9o` (`table_nw3b9o_zone_id`, `table_nw3b9o_hourly_rate`, `table_nw3b9o_max_capacity`, `table_nw3b9o_current_occupied`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_8u2yi0` (`table_8u2yi0_trans_id`, `table_8u2yi0_vehicle_id`, `table_8u2yi0_zone_id`, `table_8u2yi0_entry_time`, `table_8u2yi0_exit_time`, `table_8u2yi0_amount_paid`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(ZONE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_MAX_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_OCCUPIED INT DEFAULT 0;
+    DECLARE V_BASE_FEE INT DEFAULT 0;
+    DECLARE V_SURGE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NW3B9O_HOURLY_RATE, 10), COALESCE(TABLE_NW3B9O_MAX_CAPACITY, 100)
+    INTO V_HOURLY_RATE, V_MAX_CAPACITY
+    FROM TABLE_NW3B9O
+    WHERE TABLE_NW3B9O_ZONE_ID = ZONE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_OCCUPIED
+    FROM TABLE_8U2YI0
+    WHERE TABLE_8U2YI0_ZONE_ID = ZONE_ID_PARAM AND TABLE_8U2YI0_EXIT_TIME IS NULL;
+
+    SET V_BASE_FEE = HOURS_PARAM * V_HOURLY_RATE;
+
+    IF V_CURRENT_OCCUPIED > V_MAX_CAPACITY * 80 / 100 THEN
+        SET V_SURGE_FEE = V_BASE_FEE * 25 / 100;
+    END IF;
+
+    SET V_TOTAL_FEE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(39)) - -77 + (v_base_fee + v_surge_fee);
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+CREATE TABLE IF NOT EXISTS `table_vg2w6v` (
+    `table_vg2w6v_emp_id` INT,
+    `table_vg2w6v_department_id` INT,
+    `table_vg2w6v_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1f80w1` (
+    `table_1f80w1_department_id` INT,
+    `table_1f80w1_name` VARCHAR(50),
+    `table_1f80w1_budget` INT
+);
+
+INSERT INTO `table_vg2w6v` (`table_vg2w6v_emp_id`, `table_vg2w6v_department_id`, `table_vg2w6v_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_1f80w1` (`table_1f80w1_department_id`, `table_1f80w1_name`, `table_1f80w1_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_VG2W6V_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_VG2W6V
+    WHERE TABLE_VG2W6V_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_1F80W1_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_1F80W1
+    WHERE TABLE_1F80W1_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8----- */
+CREATE TABLE IF NOT EXISTS `table_5qgm2m` (
+    `table_5qgm2m_emp_id` INT,
+    `table_5qgm2m_hire_date` DATE
+);
+
+INSERT INTO `table_5qgm2m` (`table_5qgm2m_emp_id`, `table_5qgm2m_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_5QGM2M_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_5QGM2M
+    WHERE TABLE_5QGM2M_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_DISCOUNT_rxl9cd(40)) - 357 + (v_hire_year - 2000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DISCOUNT_rxl9cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DISCOUNT_rxl9cd(AGE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+  IF AGE < 15 THEN RETURN (MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(55)) - 19 + (0);
+  ELSEIF AGE < 30 THEN RETURN 10;
+  ELSEIF AGE < 50 THEN RETURN (MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(-35, 50)) - -558 + (20);
+  ELSE RETURN 30;
+  END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+CREATE TABLE IF NOT EXISTS `table_9ywali` (
+    `table_9ywali_campaign_id` INT,
+    `table_9ywali_budget` INT,
+    `table_9ywali_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_06pwt4` (
+    `table_06pwt4_conversion_id` INT,
+    `table_06pwt4_campaign_id` INT,
+    `table_06pwt4_conversion_value` INT
+);
+
+INSERT INTO `table_9ywali` (`table_9ywali_campaign_id`, `table_9ywali_budget`, `table_9ywali_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_06pwt4` (`table_06pwt4_conversion_id`, `table_06pwt4_campaign_id`, `table_06pwt4_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_VALUE_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_06PWT4_CONVERSION_VALUE), 0), COUNT(*)
+    INTO V_TOTAL_VALUE, V_CONVERSION_COUNT
+    FROM TABLE_06PWT4
+    WHERE TABLE_06PWT4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VALUE_INDEX = V_TOTAL_VALUE / V_CONVERSION_COUNT;
+
+    RETURN FLOOR(V_VALUE_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(RADIUS INT, DISTANCE_FROM_CENTER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TANGENT_LENGTH DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SQUARED_DISTANCE INT DEFAULT 0;
+    DECLARE V_SQUARED_RADIUS INT DEFAULT 0;
+
+    IF DISTANCE_FROM_CENTER <= RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQUARED_DISTANCE = DISTANCE_FROM_CENTER * DISTANCE_FROM_CENTER;
+    SET V_SQUARED_RADIUS = RADIUS * RADIUS;
+
+    SET V_TANGENT_LENGTH = SQRT(V_SQUARED_DISTANCE - V_SQUARED_RADIUS);
+
+    RETURN FLOOR(V_TANGENT_LENGTH);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (V_SPENT / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_COUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_COUNT
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_GVNXLY_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(-9)) - 424 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_COUNT * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + ((MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(73)) - -810 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + (v_premium_ratio)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(1);

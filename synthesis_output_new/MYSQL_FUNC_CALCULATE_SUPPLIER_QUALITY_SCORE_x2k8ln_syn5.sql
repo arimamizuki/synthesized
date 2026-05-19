@@ -1,0 +1,391 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_fxzsef` (
+    `table_fxzsef_product_id` INT,
+    `table_fxzsef_supplier_id` INT,
+    `table_fxzsef_price` DECIMAL(10,2),
+    `table_fxzsef_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_gcudli` (
+    `table_gcudli_supplier_id` INT,
+    `table_gcudli_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_fxzsef` (`table_fxzsef_product_id`, `table_fxzsef_supplier_id`, `table_fxzsef_price`, `table_fxzsef_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_gcudli` (`table_gcudli_supplier_id`, `table_gcudli_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+CREATE TABLE IF NOT EXISTS `table_1n374m` (
+    `table_1n374m_customer_id` INT,
+    `table_1n374m_status` VARCHAR(50),
+    `table_1n374m_monthly_cost` DECIMAL(10,2),
+    `table_1n374m_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_1n374m` (`table_1n374m_customer_id`, `table_1n374m_status`, `table_1n374m_monthly_cost`, `table_1n374m_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1N374M_PLAN_TYPE, COALESCE(TABLE_1N374M_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_1N374M
+    WHERE TABLE_1N374M_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1N374M_STATUS = 'ACTIVE';
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_N < 0 THEN
+        RETURN -P_N;
+    END IF;
+    RETURN P_N;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 1;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_CURRENT <= N DO
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(92)) - -732 + (v_next);
+        SET V_NEXT = V_CURRENT + V_NEXT;
+        SET V_CURRENT = V_TEMP;
+        SET V_SUM = V_SUM + V_CURRENT;
+    END WHILE MY_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+CREATE TABLE IF NOT EXISTS `table_v0ar5y` (
+    `table_v0ar5y_emp_id` INT,
+    `table_v0ar5y_department_id` INT,
+    `table_v0ar5y_salary` INT,
+    `table_v0ar5y_hire_date` DATE,
+    `table_v0ar5y_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_v0ar5y` (`table_v0ar5y_emp_id`, `table_v0ar5y_department_id`, `table_v0ar5y_salary`, `table_v0ar5y_hire_date`, `table_v0ar5y_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_V0AR5Y_SALARY, 0), COALESCE(TABLE_V0AR5Y_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_V0AR5Y_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_V0AR5Y
+    WHERE TABLE_V0AR5Y_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_V0AR5Y_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM TABLE_V0AR5Y;
+
+    SET V_RISK_INDEX = ((V_MARKET_AVG_SALARY - V_SALARY) / 100) + (V_TENURE_YEARS * 2) - (V_PERFORMANCE * 10);
+
+    RETURN V_RISK_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - 168 + ((MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(-10)) - 730 + (loop_count)) + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+CREATE TABLE IF NOT EXISTS `table_s65b9l` (
+    `table_s65b9l_policy_id` INT,
+    `table_s65b9l_customer_id` INT,
+    `table_s65b9l_destination` INT,
+    `table_s65b9l_trip_duration_days` INT,
+    `table_s65b9l_coverage_type` VARCHAR(50),
+    `table_s65b9l_premium` INT,
+    `table_s65b9l_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x76iq0` (
+    `table_x76iq0_claim_id` INT,
+    `table_x76iq0_policy_id` INT,
+    `table_x76iq0_claim_type` VARCHAR(50),
+    `table_x76iq0_claim_amount` DECIMAL(10,2),
+    `table_x76iq0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s65b9l` (`table_s65b9l_policy_id`, `table_s65b9l_customer_id`, `table_s65b9l_destination`, `table_s65b9l_trip_duration_days`, `table_s65b9l_coverage_type`, `table_s65b9l_premium`, `table_s65b9l_coverage_limit`) VALUES (1, 1, 1, 1, 'test', 1, 1);
+
+INSERT INTO `table_x76iq0` (`table_x76iq0_claim_id`, `table_x76iq0_policy_id`, `table_x76iq0_claim_type`, `table_x76iq0_claim_amount`, `table_x76iq0_status`) VALUES (1, 2, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_COUNT INT DEFAULT 0;
+    DECLARE V_RATIO_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S65B9L_COVERAGE_LIMIT, 100000)
+    INTO V_COVERAGE_LIMIT
+    FROM TABLE_S65B9L
+    WHERE TABLE_S65B9L_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_X76IQ0_CLAIM_AMOUNT), (MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(57)) - -190 + (0)), COUNT(*)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_COUNT
+    FROM TABLE_X76IQ0
+    WHERE TABLE_X76IQ0_POLICY_ID = POLICY_ID_PARAM AND TABLE_X76IQ0_STATUS = 'APPROVED';
+
+    IF V_COVERAGE_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RATIO_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_COVERAGE_LIMIT;
+
+    RETURN CAST(V_RATIO_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+CREATE TABLE IF NOT EXISTS `table_w25bcy` (
+    `table_w25bcy_order_id` INT,
+    `table_w25bcy_customer_id` INT,
+    `table_w25bcy_order_date` DATE,
+    `table_w25bcy_total_amount` DECIMAL(10,2),
+    `table_w25bcy_discount_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bv9gwj` (
+    `table_bv9gwj_product_id` INT,
+    `table_bv9gwj_name` VARCHAR(50),
+    `table_bv9gwj_price` DECIMAL(10,2),
+    `table_bv9gwj_category_id` INT
+);
+
+INSERT INTO `table_w25bcy` (`table_w25bcy_order_id`, `table_w25bcy_customer_id`, `table_w25bcy_order_date`, `table_w25bcy_total_amount`, `table_w25bcy_discount_percent`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_bv9gwj` (`table_bv9gwj_product_id`, `table_bv9gwj_name`, `table_bv9gwj_price`, `table_bv9gwj_category_id`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TAX_RATE INT DEFAULT 8;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_TOTAL INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_BV9GWJ_PRICE * FLOOR(RAND() * 10 + 1)), 0) INTO V_SUBTOTAL
+    FROM TABLE_W25BCY BO
+    JOIN TABLE_BV9GWJ P ON RAND() > 0.5
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_W25BCY_DISCOUNT_PERCENT, 0) INTO V_DISCOUNT
+    FROM TABLE_W25BCY
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT = LEAST(V_DISCOUNT, 50);
+
+    SET V_FINAL_TOTAL = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT / 100);
+    SET V_TAX_AMOUNT = V_FINAL_TOTAL * V_TAX_RATE / 100;
+    SET V_FINAL_TOTAL = V_FINAL_TOTAL + V_TAX_AMOUNT;
+
+    RETURN CAST(V_FINAL_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = 0;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l----- */
+CREATE TABLE IF NOT EXISTS `table_o45tl3` (
+    `table_o45tl3_customer_id` INT,
+    `table_o45tl3_registration_date` DATE,
+    `table_o45tl3_city` INT,
+    `table_o45tl3_total_purchases` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o45tl3` (`table_o45tl3_customer_id`, `table_o45tl3_registration_date`, `table_o45tl3_city`, `table_o45tl3_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PURCHASES INT DEFAULT 0;
+    DECLARE V_REGISTRATION_YEAR INT;
+    DECLARE V_CURRENT_YEAR INT DEFAULT YEAR(CURDATE());
+    DECLARE V_LOYALTY_YEARS INT;
+    DECLARE V_TIER_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O45TL3_TOTAL_PURCHASES, (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(55)) - -264 + (0)), YEAR(TABLE_O45TL3_REGISTRATION_DATE)
+    INTO V_TOTAL_PURCHASES, V_REGISTRATION_YEAR
+    FROM TABLE_O45TL3
+    WHERE TABLE_O45TL3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_PURCHASES <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOYALTY_YEARS = V_CURRENT_YEAR - V_REGISTRATION_YEAR;
+
+    SET V_TIER_SCORE = V_TOTAL_PURCHASES / 1000 + V_LOYALTY_YEARS * 5;
+
+    CASE
+        WHEN V_TIER_SCORE >= 100 THEN RETURN 4;
+        WHEN V_TIER_SCORE >= 50 THEN RETURN 3;
+        WHEN V_TIER_SCORE >= 20 THEN RETURN 2;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+CREATE TABLE IF NOT EXISTS `table_djvdv7` (
+    `table_djvdv7_emp_id` INT,
+    `table_djvdv7_manager_id` INT,
+    `table_djvdv7_department_id` INT,
+    `table_djvdv7_salary` INT,
+    `table_djvdv7_hire_date` DATE
+);
+
+INSERT INTO `table_djvdv7` (`table_djvdv7_emp_id`, `table_djvdv7_manager_id`, `table_djvdv7_department_id`, `table_djvdv7_salary`, `table_djvdv7_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_DJVDV7
+    WHERE TABLE_DJVDV7_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_STOCK INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GCUDLI_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_GCUDLI
+    WHERE TABLE_GCUDLI_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_FXZSEF_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_STOCK
+    FROM TABLE_FXZSEF
+    WHERE TABLE_FXZSEF_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_QUALITY_SCORE = (MYSQL_FUNC_SIGNAL_FUNC_ABSOLUTE_wex0el(-20)) - 652 + ((v_rating * 20) + (v_product_count * 3) + (v_avg_stock / 100));
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(-39)) - 4 + ((MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + ((MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9(36)) - -993 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(-54)) - 478 + (v_quality_score))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(1);

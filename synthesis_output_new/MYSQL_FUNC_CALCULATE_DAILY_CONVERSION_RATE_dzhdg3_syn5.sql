@@ -1,0 +1,403 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_g2hzaq` (
+    `table_g2hzaq_campaign_id` INT,
+    `table_g2hzaq_channel` INT,
+    `table_g2hzaq_budget` INT,
+    `table_g2hzaq_start_date` DATE,
+    `table_g2hzaq_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_m35egj` (
+    `table_m35egj_conversion_id` INT,
+    `table_m35egj_campaign_id` INT,
+    `table_m35egj_conversion_date` DATE
+);
+
+INSERT INTO `table_g2hzaq` (`table_g2hzaq_campaign_id`, `table_g2hzaq_channel`, `table_g2hzaq_budget`, `table_g2hzaq_start_date`, `table_g2hzaq_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_m35egj` (`table_m35egj_conversion_id`, `table_m35egj_campaign_id`, `table_m35egj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, 0), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = V_BALANCE + V_OVERDRAFT_LIMIT;
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = 1;
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN V_CAN_WITHDRAW;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s----- */
+CREATE TABLE IF NOT EXISTS `table_m51nf9` (
+    `table_m51nf9_customer_id` INT,
+    `table_m51nf9_plan_type` VARCHAR(50),
+    `table_m51nf9_monthly_fee` INT,
+    `table_m51nf9_start_date` DATE,
+    `table_m51nf9_referral_count` INT
+);
+
+INSERT INTO `table_m51nf9` (`table_m51nf9_customer_id`, `table_m51nf9_plan_type`, `table_m51nf9_monthly_fee`, `table_m51nf9_start_date`, `table_m51nf9_referral_count`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REFERRAL_COUNT INT DEFAULT 0;
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT COALESCE(TABLE_M51NF9_REFERRAL_COUNT, 0), TABLE_M51NF9_MONTHLY_FEE
+    INTO V_REFERRAL_COUNT, V_MONTHLY_FEE
+    FROM TABLE_M51NF9
+    WHERE TABLE_M51NF9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_M51NF9_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_M51NF9
+    WHERE TABLE_M51NF9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN 4
+        WHEN 'PREMIUM' THEN 3
+        WHEN 'STANDARD' THEN 2
+        ELSE 1
+    END;
+
+    SET V_TOTAL_BONUS = (V_REFERRAL_COUNT * V_MONTHLY_FEE * V_TIER_MULTIPLIER) / 10;
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf----- */
+CREATE TABLE IF NOT EXISTS `table_wsg468` (
+    `table_wsg468_emp_id` INT,
+    `table_wsg468_department_id` INT,
+    `table_wsg468_salary` INT,
+    `table_wsg468_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_z73mh9` (
+    `table_z73mh9_department_id` INT,
+    `table_z73mh9_name` VARCHAR(50)
+);
+
+INSERT INTO `table_wsg468` (`table_wsg468_emp_id`, `table_wsg468_department_id`, `table_wsg468_salary`, `table_wsg468_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_z73mh9` (`table_z73mh9_department_id`, `table_z73mh9_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_EXPERIENCE_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_WSG468_HIRE_DATE, CURDATE()), COALESCE(TABLE_WSG468_SALARY, 0)
+    INTO V_TENURE_YEARS, V_SALARY
+    FROM TABLE_WSG468
+    WHERE TABLE_WSG468_EMP_ID = EMP_ID_PARAM;
+
+    SET V_EXPERIENCE_INDEX = (MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(-66)) - 857 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(-77)) - -824 + ((MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(-57)) - -158 + ((v_tenure_years * 15) + (v_salary / 500))));
+
+    RETURN (MYSQL_FUNC_CALCULATE_RETENTION_RISK_SCORE_b6mf8o(80)) - 705 + (v_experience_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RETENTION_RISK_SCORE_b6mf8o----- */
+CREATE TABLE IF NOT EXISTS `table_yzlvy4` (
+    `table_yzlvy4_emp_id` INT,
+    `table_yzlvy4_department_id` INT,
+    `table_yzlvy4_salary` INT,
+    `table_yzlvy4_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1a4b3h` (
+    `table_1a4b3h_department_id` INT,
+    `table_1a4b3h_name` VARCHAR(50)
+);
+
+INSERT INTO `table_yzlvy4` (`table_yzlvy4_emp_id`, `table_yzlvy4_department_id`, `table_yzlvy4_salary`, `table_yzlvy4_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1a4b3h` (`table_1a4b3h_department_id`, `table_1a4b3h_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RETENTION_RISK_SCORE_b6mf8o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_SCORE_b6mf8o(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_YZLVY4_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_YZLVY4
+    WHERE TABLE_YZLVY4_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_YZLVY4_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_YZLVY4
+    WHERE TABLE_YZLVY4_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    SET V_RISK_SCORE = 100 - (V_AVG_TENURE * 10) - (V_AVG_SALARY / 1000);
+
+    RETURN GREATEST(V_RISK_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+CREATE TABLE IF NOT EXISTS `table_i7vfnv` (
+    `table_i7vfnv_campaign_id` INT,
+    `table_i7vfnv_start_date` DATE,
+    `table_i7vfnv_end_date` DATE,
+    `table_i7vfnv_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_okzpao` (
+    `table_okzpao_conversion_id` INT,
+    `table_okzpao_campaign_id` INT,
+    `table_okzpao_conversion_date` DATE,
+    `table_okzpao_conversion_value` INT
+);
+
+INSERT INTO `table_i7vfnv` (`table_i7vfnv_campaign_id`, `table_i7vfnv_start_date`, `table_i7vfnv_end_date`, `table_i7vfnv_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_okzpao` (`table_okzpao_conversion_id`, `table_okzpao_campaign_id`, `table_okzpao_conversion_date`, `table_okzpao_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUALITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_OKZPAO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_VALUE
+    FROM TABLE_OKZPAO
+    WHERE TABLE_OKZPAO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TOTAL_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = V_TOTAL_VALUE / V_TOTAL_CONVERSIONS;
+
+    RETURN FLOOR(V_QUALITY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+CREATE TABLE IF NOT EXISTS `table_ebcxyj` (
+    `table_ebcxyj_product_id` INT,
+    `table_ebcxyj_category_id` INT,
+    `table_ebcxyj_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebcxyj` (`table_ebcxyj_product_id`, `table_ebcxyj_category_id`, `table_ebcxyj_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_EBCXYJ_PRICE), 0)
+    INTO V_AVG
+    FROM TABLE_EBCXYJ
+    WHERE TABLE_EBCXYJ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+CREATE TABLE IF NOT EXISTS `table_ib0m3v` (
+    `table_ib0m3v_product_id` INT,
+    `table_ib0m3v_stock_quantity` INT
+);
+
+INSERT INTO `table_ib0m3v` (`table_ib0m3v_product_id`, `table_ib0m3v_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IB0M3V_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_IB0M3V
+    WHERE TABLE_IB0M3V_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = LEAST(V_STOCK / 10, 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - 679 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(-52)) - 167 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(57)) - 618 + (v_score)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+CREATE TABLE IF NOT EXISTS `table_5ajvmd` (
+    `table_5ajvmd_product_id` INT,
+    `table_5ajvmd_category_id` INT,
+    `table_5ajvmd_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5ajvmd` (`table_5ajvmd_product_id`, `table_5ajvmd_category_id`, `table_5ajvmd_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_5AJVMD_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_5AJVMD
+    WHERE TABLE_5AJVMD_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+CREATE TABLE IF NOT EXISTS `table_42vfje` (
+    `table_42vfje_customer_id` INT,
+    `table_42vfje_country` INT,
+    `table_42vfje_registration_date` DATE
+);
+
+INSERT INTO `table_42vfje` (`table_42vfje_customer_id`, `table_42vfje_country`, `table_42vfje_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_42VFJE
+    WHERE TABLE_42VFJE_COUNTRY = COUNTRY_PARAM AND YEAR(TABLE_42VFJE_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+CREATE TABLE IF NOT EXISTS `table_vj4mz4` (
+    `table_vj4mz4_campaign_id` INT,
+    `table_vj4mz4_status` VARCHAR(50)
+);
+
+INSERT INTO `table_vj4mz4` (`table_vj4mz4_campaign_id`, `table_vj4mz4_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_VJ4MZ4_STATUS
+    INTO V_STATUS
+    FROM TABLE_VJ4MZ4
+    WHERE TABLE_VJ4MZ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE WHEN V_STATUS = 'ACTIVE' THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CONVERSIONS
+    FROM TABLE_M35EGJ
+    WHERE TABLE_M35EGJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_G2HZAQ_END_DATE, TABLE_G2HZAQ_START_DATE)
+    INTO V_CAMPAIGN_DAYS
+    FROM TABLE_G2HZAQ
+    WHERE TABLE_G2HZAQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_DAYS = (MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf(68)) - 502 + ((MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s(-3)) - -990 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAILY_RATE = V_TOTAL_CONVERSIONS / V_CAMPAIGN_DAYS;
+
+    RETURN (MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(-60, 67)) - 926 + (v_daily_rate);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3(1);

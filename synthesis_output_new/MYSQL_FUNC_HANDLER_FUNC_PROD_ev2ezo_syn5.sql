@@ -1,0 +1,353 @@
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(P_START_NUM INT, P_END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+
+    IF P_START_NUM > P_END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = P_START_NUM;
+
+    OUTER_LOOP: WHILE V_CURRENT <= P_END_NUM DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = (MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(37)) - 848 + (v_divisor + 2);
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+CREATE TABLE IF NOT EXISTS table_pi4u01 (
+    table_pi4u01_name VARCHAR(50)
+);
+
+INSERT INTO table_pi4u01 (`table_pi4u01_name`) VALUES ('test');
+
+/* -----Called: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(START_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE TOWN_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TOWN_COUNT 
+    FROM TABLE_PI4U01 
+    WHERE TABLE_PI4U01_NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN (MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(11)) - 319 + (town_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+CREATE TABLE IF NOT EXISTS `table_kcy5si` (
+    `table_kcy5si_meter_id` INT,
+    `table_kcy5si_customer_id` INT,
+    `table_kcy5si_meter_type` VARCHAR(50),
+    `table_kcy5si_current_reading` INT,
+    `table_kcy5si_previous_reading` INT,
+    `table_kcy5si_tariff_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c44eze` (
+    `table_c44eze_panel_id` INT,
+    `table_c44eze_meter_id` INT,
+    `table_c44eze_capacity_kw` INT,
+    `table_c44eze_installation_date` DATE,
+    `table_c44eze_efficiency_percent` INT
+);
+
+INSERT INTO `table_kcy5si` (`table_kcy5si_meter_id`, `table_kcy5si_customer_id`, `table_kcy5si_meter_type`, `table_kcy5si_current_reading`, `table_kcy5si_previous_reading`, `table_kcy5si_tariff_rate`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c44eze` (`table_c44eze_panel_id`, `table_c44eze_meter_id`, `table_c44eze_capacity_kw`, `table_c44eze_installation_date`, `table_c44eze_efficiency_percent`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY_KW INT DEFAULT 5;
+    DECLARE V_EFFICIENCY_PERCENT INT DEFAULT 80;
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_CREDIT_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C44EZE_CAPACITY_KW, 5), COALESCE(TABLE_C44EZE_EFFICIENCY_PERCENT, 80)
+    INTO V_CAPACITY_KW, V_EFFICIENCY_PERCENT
+    FROM TABLE_C44EZE
+    WHERE TABLE_C44EZE_METER_ID = METER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_KCY5SI_CURRENT_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_KCY5SI
+    WHERE TABLE_KCY5SI_METER_ID = METER_ID_PARAM;
+
+    SET V_CREDIT_AMOUNT = (V_CAPACITY_KW * V_EFFICIENCY_PERCENT * V_CURRENT_READING) / 1000;
+
+    RETURN CAST(V_CREDIT_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+CREATE TABLE IF NOT EXISTS `table_o9epgx` (
+    `table_o9epgx_campaign_id` INT,
+    `table_o9epgx_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o9epgx` (`table_o9epgx_campaign_id`, `table_o9epgx_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_O9EPGX_STATUS
+    INTO V_STATUS
+    FROM TABLE_O9EPGX
+    WHERE TABLE_O9EPGX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 10;
+        WHEN 'PAUSED' THEN RETURN 5;
+        WHEN 'COMPLETED' THEN RETURN 8;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+CREATE TABLE IF NOT EXISTS `table_g3imfa` (
+    `table_g3imfa_order_id` INT,
+    `table_g3imfa_customer_id` INT,
+    `table_g3imfa_order_date` DATE,
+    `table_g3imfa_total_amount` DECIMAL(10,2),
+    `table_g3imfa_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_koyw4b` (
+    `table_koyw4b_order_id` INT,
+    `table_koyw4b_product_id` INT,
+    `table_koyw4b_quantity` INT
+);
+
+INSERT INTO `table_g3imfa` (`table_g3imfa_order_id`, `table_g3imfa_customer_id`, `table_g3imfa_order_date`, `table_g3imfa_total_amount`, `table_g3imfa_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_koyw4b` (`table_koyw4b_order_id`, `table_koyw4b_product_id`, `table_koyw4b_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_KOYW4B_QUANTITY), 0)
+    INTO V_TOTAL_ITEMS
+    FROM TABLE_KOYW4B
+    WHERE TABLE_KOYW4B_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FOOSP_ack96d()) - 703 + (v_total_items);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FOOSP_ack96d----- */
+CREATE TABLE IF NOT EXISTS test.t1 (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.t1 (col1, col2) VALUES ('foo', 42);
+
+/* -----Called: MYSQL_FUNC_FOOSP_ack96d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP_ack96d() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    INSERT INTO TEST.T1
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m()) - 175 + ((MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4(39)) - 491 + (1));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4----- */
+CREATE TABLE IF NOT EXISTS `table_e5g1kk` (
+    `table_e5g1kk_order_id` INT,
+    `table_e5g1kk_order_date` DATE
+);
+
+INSERT INTO `table_e5g1kk` (`table_e5g1kk_order_id`, `table_e5g1kk_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_E5G1KK_ORDER_DATE)
+    INTO V_MONTH
+    FROM TABLE_E5G1KK
+    WHERE TABLE_E5G1KK_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 25 UNION SELECT 50 UNION SELECT 75 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga(-96)) - -993 + (floor((v_price * v_stock) / 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga----- */
+CREATE TABLE IF NOT EXISTS `table_xy29zz` (
+    `table_xy29zz_emp_id` INT,
+    `table_xy29zz_department_id` INT
+);
+
+INSERT INTO `table_xy29zz` (`table_xy29zz_emp_id`, `table_xy29zz_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_XY29ZZ
+    WHERE TABLE_XY29ZZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_EMP_COUNT * 2;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(-94)) - 175 + (p_a * p_b);
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(14)) - 285 + (-1));
+    END IF;
+
+    RETURN (MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(-61, -17)) - -135 + (v_result);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(1, 1);

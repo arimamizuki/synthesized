@@ -1,0 +1,387 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ahyeiu` (
+    `table_ahyeiu_policy_id` INT,
+    `table_ahyeiu_customer_id` INT,
+    `table_ahyeiu_policy_type` VARCHAR(50),
+    `table_ahyeiu_premium_monthly` INT,
+    `table_ahyeiu_coverage_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5yzb6s` (
+    `table_5yzb6s_claim_id` INT,
+    `table_5yzb6s_policy_id` INT,
+    `table_5yzb6s_claim_date` DATE,
+    `table_5yzb6s_claim_amount` DECIMAL(10,2),
+    `table_5yzb6s_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ahyeiu` (`table_ahyeiu_policy_id`, `table_ahyeiu_customer_id`, `table_ahyeiu_policy_type`, `table_ahyeiu_premium_monthly`, `table_ahyeiu_coverage_amount`) VALUES (1, 2, 'test', 4, 1.0);
+
+INSERT INTO `table_5yzb6s` (`table_5yzb6s_claim_id`, `table_5yzb6s_policy_id`, `table_5yzb6s_claim_date`, `table_5yzb6s_claim_amount`, `table_5yzb6s_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et----- */
+CREATE TABLE IF NOT EXISTS `table_698f1s` (
+    `table_698f1s_customer_id` INT,
+    `table_698f1s_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_698f1s` (`table_698f1s_customer_id`, `table_698f1s_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_698F1S_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_698F1S
+    WHERE TABLE_698F1S_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba(-25)) - 471 + (v_cost);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba----- */
+CREATE TABLE IF NOT EXISTS `table_ndpda6` (
+    `table_ndpda6_emp_id` INT,
+    `table_ndpda6_department_id` INT,
+    `table_ndpda6_salary` INT,
+    `table_ndpda6_hire_date` DATE,
+    `table_ndpda6_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_ndpda6` (`table_ndpda6_emp_id`, `table_ndpda6_department_id`, `table_ndpda6_salary`, `table_ndpda6_hire_date`, `table_ndpda6_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_NDPDA6_PERFORMANCE_RATING), 0), COALESCE(AVG(TABLE_NDPDA6_SALARY), 0)
+    INTO V_AVG_PERFORMANCE, V_AVG_SALARY
+    FROM TABLE_NDPDA6
+    WHERE TABLE_NDPDA6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_SCORE = (MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_w0nwes(15)) - -703 + ((v_avg_performance * 50) + (v_avg_salary / 200));
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(-41)) - 22 + ((MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6(31)) - 84 + (v_performance_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_w0nwes----- */
+CREATE TABLE IF NOT EXISTS `table_7zhlcv` (
+    `table_7zhlcv_customer_id` INT,
+    `table_7zhlcv_country` INT,
+    `table_7zhlcv_registration_date` DATE
+);
+
+INSERT INTO `table_7zhlcv` (`table_7zhlcv_customer_id`, `table_7zhlcv_country`, `table_7zhlcv_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_w0nwes----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_NEW_CUSTOMER_RATE_w0nwes(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(*)
+    INTO V_NEW_CUSTOMERS, V_TOTAL_CUSTOMERS
+    FROM TABLE_7ZHLCV
+    WHERE TABLE_7ZHLCV_COUNTRY = COUNTRY_PARAM
+      AND TABLE_7ZHLCV_REGISTRATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_NEW_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6(YEAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (YEAR % 4 = 0 AND YEAR % 100 != 0) OR (YEAR % 400 = 0) THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+CREATE TABLE IF NOT EXISTS `table_tbv1s6` (
+    `table_tbv1s6_order_id` INT,
+    `table_tbv1s6_customer_id` INT,
+    `table_tbv1s6_order_date` DATE,
+    `table_tbv1s6_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ceys2r` (
+    `table_ceys2r_customer_id` INT,
+    `table_ceys2r_country` INT
+);
+
+INSERT INTO `table_tbv1s6` (`table_tbv1s6_order_id`, `table_tbv1s6_customer_id`, `table_tbv1s6_order_date`, `table_tbv1s6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_ceys2r` (`table_ceys2r_customer_id`, `table_ceys2r_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REPEAT_RATE_g42jl6(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_CEYS2R_CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM TABLE_CEYS2R C
+    JOIN TABLE_TBV1S6 O ON TABLE_CEYS2R_CUSTOMER_ID = TABLE_TBV1S6_CUSTOMER_ID
+    WHERE TABLE_CEYS2R_COUNTRY = COUNTRY_PARAM
+    GROUP BY TABLE_CEYS2R_CUSTOMER_ID
+    HAVING COUNT(TABLE_TBV1S6_ORDER_ID) > 1;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REPEAT_RATE = (V_REPEAT_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(-81)) - 20 + (v_repeat_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+CREATE TABLE IF NOT EXISTS `table_069dtw` (
+    `table_069dtw_customer_id` INT,
+    `table_069dtw_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_069dtw` (`table_069dtw_customer_id`, `table_069dtw_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_069DTW_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_069DTW
+    WHERE TABLE_069DTW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(30)) - 207 + (v_monthly_cost * 12);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+CREATE TABLE IF NOT EXISTS `table_573a30` (
+    `table_573a30_campaign_id` INT,
+    `table_573a30_channel` INT,
+    `table_573a30_budget_allocated` INT,
+    `table_573a30_start_date` DATE,
+    `table_573a30_end_date` DATE,
+    `table_573a30_leads_generated` INT,
+    `table_573a30_conversions` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7rfnt` (
+    `table_i7rfnt_spend_id` INT,
+    `table_i7rfnt_campaign_id` INT,
+    `table_i7rfnt_spend_date` DATE,
+    `table_i7rfnt_amount_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_573a30` (`table_573a30_campaign_id`, `table_573a30_channel`, `table_573a30_budget_allocated`, `table_573a30_start_date`, `table_573a30_end_date`, `table_573a30_leads_generated`, `table_573a30_conversions`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_i7rfnt` (`table_i7rfnt_spend_id`, `table_i7rfnt_campaign_id`, `table_i7rfnt_spend_date`, `table_i7rfnt_amount_spent`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_LEADS_GENERATED INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPEND INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_573A30_BUDGET_ALLOCATED, 0), COALESCE(TABLE_573A30_LEADS_GENERATED, 0), COALESCE(TABLE_573A30_CONVERSIONS, 0)
+    INTO V_BUDGET, V_LEADS_GENERATED, V_CONVERSIONS
+    FROM TABLE_573A30
+    WHERE TABLE_573A30_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_I7RFNT_AMOUNT_SPENT), 0) INTO V_TOTAL_SPEND
+    FROM TABLE_I7RFNT
+    WHERE TABLE_I7RFNT_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_CONVERSIONS * 100) - V_TOTAL_SPEND) * 100 / V_BUDGET;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+CREATE TABLE IF NOT EXISTS `table_cfexjo` (
+    `table_cfexjo_campaign_id` INT,
+    `table_cfexjo_target_audience_size` INT,
+    `table_cfexjo_budget` INT,
+    `table_cfexjo_start_date` DATE,
+    `table_cfexjo_end_date` DATE,
+    `table_cfexjo_channel` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m5fef2` (
+    `table_m5fef2_conversion_id` INT,
+    `table_m5fef2_campaign_id` INT,
+    `table_m5fef2_conversion_date` DATE,
+    `table_m5fef2_conversion_value` INT
+);
+
+INSERT INTO `table_cfexjo` (`table_cfexjo_campaign_id`, `table_cfexjo_target_audience_size`, `table_cfexjo_budget`, `table_cfexjo_start_date`, `table_cfexjo_end_date`, `table_cfexjo_channel`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_m5fef2` (`table_m5fef2_conversion_id`, `table_m5fef2_campaign_id`, `table_m5fef2_conversion_date`, `table_m5fef2_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TARGET_SIZE INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CFEXJO_TARGET_AUDIENCE_SIZE, 1000)
+    INTO V_TARGET_SIZE
+    FROM TABLE_CFEXJO
+    WHERE TABLE_CFEXJO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_M5FEF2_CONVERSION_VALUE), 0)
+    INTO V_CONVERSION_COUNT, V_TOTAL_VALUE
+    FROM TABLE_M5FEF2
+    WHERE TABLE_M5FEF2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TARGET_SIZE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_CONVERSION_COUNT * 100) / V_TARGET_SIZE;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx(6)) - 189 + (p_a * p_b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx----- */
+CREATE TABLE IF NOT EXISTS `table_ka0z4x` (
+    `table_ka0z4x_customer_id` INT,
+    `table_ka0z4x_registration_date` DATE
+);
+
+INSERT INTO `table_ka0z4x` (`table_ka0z4x_customer_id`, `table_ka0z4x_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_KA0Z4X_REGISTRATION_DATE)
+    INTO V_AGE_DAYS
+    FROM TABLE_KA0Z4X
+    WHERE TABLE_KA0Z4X_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_LOSS_RATIO INT DEFAULT 0;
+    DECLARE V_MONTHS_ACTIVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AHYEIU_PREMIUM_MONTHLY, (MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(31, -21)) - -112 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(-84)) - 183 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COST_VALUE_kga1et(39)) - 663 + (0)))) * 12
+    INTO V_TOTAL_PREMIUMS
+    FROM TABLE_AHYEIU
+    WHERE TABLE_AHYEIU_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5YZB6S_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_5YZB6S
+    WHERE TABLE_5YZB6S_POLICY_ID = POLICY_ID_PARAM AND TABLE_5YZB6S_STATUS = 'APPROVED';
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_MONTHS_ACTIVE;
+
+    SET V_MONTHS_ACTIVE = 12;
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOSS_RATIO = (V_TOTAL_CLAIMS * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN V_LOSS_RATIO;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_INSURANCE_LOSS_RATIO_cpt9a9(1);

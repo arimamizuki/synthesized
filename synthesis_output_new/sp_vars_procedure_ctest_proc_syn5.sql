@@ -1,0 +1,342 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS test_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    val INT NOT NULL
+);
+INSERT INTO test_table (val) VALUES (10), (20), (30), (40), (50);
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(66)) - 121 + (log(x));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5----- */
+CREATE TABLE IF NOT EXISTS `table_dw24b3` (
+    `table_dw24b3_customer_id` INT,
+    `table_dw24b3_order_date` DATE
+);
+
+INSERT INTO `table_dw24b3` (`table_dw24b3_customer_id`, `table_dw24b3_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_DW24B3_ORDER_DATE), MAX(TABLE_DW24B3_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_DW24B3
+    WHERE TABLE_DW24B3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(62)) - 457 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(15)) - 610 + (timestampdiff(month, v_first_order, v_last_order));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+CREATE TABLE IF NOT EXISTS `table_ybsj22` (
+    `table_ybsj22_campaign_id` INT,
+    `table_ybsj22_channel` INT
+);
+
+INSERT INTO `table_ybsj22` (`table_ybsj22_campaign_id`, `table_ybsj22_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_YBSJ22_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_YBSJ22
+    WHERE TABLE_YBSJ22_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_WARNING_kajfge----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_WARNING_kajfge() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'THIS IS A WARNING MESSAGE';
+    RETURN 44;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+CREATE TABLE IF NOT EXISTS `table_ebp46e` (
+    `table_ebp46e_customer_id` INT,
+    `table_ebp46e_plan_type` VARCHAR(50),
+    `table_ebp46e_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebp46e` (`table_ebp46e_customer_id`, `table_ebp46e_plan_type`, `table_ebp46e_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_EBP46E_PLAN_TYPE, COALESCE(TABLE_EBP46E_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_EBP46E
+    WHERE TABLE_EBP46E_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST / 2;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST / 3;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST / 4;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(-3, -64)) - -71 + ((MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(14)) - -293 + (-1));
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+CREATE TABLE IF NOT EXISTS `table_fedjkb` (
+    `table_fedjkb_product_id` INT,
+    `table_fedjkb_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fedjkb` (`table_fedjkb_product_id`, `table_fedjkb_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FEDJKB_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FEDJKB
+    WHERE TABLE_FEDJKB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+CREATE TABLE IF NOT EXISTS `table_35z2sn` (
+    `table_35z2sn_restaurant_id` INT,
+    `table_35z2sn_cuisine_type` VARCHAR(50),
+    `table_35z2sn_average_price` DECIMAL(10,2),
+    `table_35z2sn_rating` DECIMAL(3,1),
+    `table_35z2sn_delivery_radius_miles` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l3g0c` (
+    `table_4l3g0c_order_id` INT,
+    `table_4l3g0c_restaurant_id` INT,
+    `table_4l3g0c_customer_id` INT,
+    `table_4l3g0c_order_total` DECIMAL(10,2),
+    `table_4l3g0c_delivery_distance` INT
+);
+
+INSERT INTO `table_35z2sn` (`table_35z2sn_restaurant_id`, `table_35z2sn_cuisine_type`, `table_35z2sn_average_price`, `table_35z2sn_rating`, `table_35z2sn_delivery_radius_miles`) VALUES (1, 'test', 1.0, 1.0, 5);
+
+INSERT INTO `table_4l3g0c` (`table_4l3g0c_order_id`, `table_4l3g0c_restaurant_id`, `table_4l3g0c_customer_id`, `table_4l3g0c_order_total`, `table_4l3g0c_delivery_distance`) VALUES (1, 2, 3, 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(RESTAURANT_ID_PARAM INT, ORDER_DISTANCE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_RESTAURANT_RATING DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+    DECLARE V_COMPATIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_35Z2SN_DELIVERY_RADIUS_MILES, 5), COALESCE(TABLE_35Z2SN_RATING, 3.(MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(29)) - -670 + (0)), COALESCE(TABLE_35Z2SN_AVERAGE_PRICE, 20)
+    INTO V_DELIVERY_RADIUS, V_RESTAURANT_RATING, V_AVG_PRICE
+    FROM TABLE_35Z2SN
+    WHERE TABLE_35Z2SN_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF ORDER_DISTANCE_PARAM > V_DELIVERY_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPATIBILITY_SCORE = (V_RESTAURANT_RATING * 20) - (V_AVG_PRICE / 5) + ((V_DELIVERY_RADIUS - ORDER_DISTANCE_PARAM) * 5);
+
+    RETURN GREATEST(V_COMPATIBILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885----- */
+CREATE TABLE IF NOT EXISTS `table_d3s224` (
+    `table_d3s224_product_id` INT,
+    `table_d3s224_supplier_id` INT,
+    `table_d3s224_price` DECIMAL(10,2),
+    `table_d3s224_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q0ynyd` (
+    `table_q0ynyd_supplier_id` INT,
+    `table_q0ynyd_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_d3s224` (`table_d3s224_product_id`, `table_d3s224_supplier_id`, `table_d3s224_price`, `table_d3s224_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_q0ynyd` (`table_q0ynyd_supplier_id`, `table_q0ynyd_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0YNYD_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_Q0YNYD
+    WHERE TABLE_Q0YNYD_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_D3S224_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM TABLE_D3S224
+    WHERE TABLE_D3S224_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = (MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(90)) - -507 + ((v_rating * 10) + (v_product_count * 3) + (v_avg_price / 50));
+
+    RETURN V_EFFICIENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL = -2147483648 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'INTEGER OVERFLOW FOR ABSOLUTE VALUE';
+    END IF;
+    RETURN ABS(VAL);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_vars_procedure_ctest_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_cur_val INT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT val FROM test_table;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -1;
+    END;
+
+    IF p1 > p2 THEN
+        SET v_sum = p1;
+    ELSEIF p1 = p2 THEN
+        SET v_sum = p1 + p2;
+    ELSE
+        SET v_sum = p2;
+    END IF;
+
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cur_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_count = v_count + 1;
+        CASE
+            WHEN (MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(36)) - 963 + ((MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(36)) - 385 + (v_cur_val) > 20) THEN
+                SET v_sum = v_sum + v_cur_val;
+            WHEN v_cur_val <= 20 THEN
+                SET v_sum = v_sum + (v_cur_val * 2);
+            ELSE
+                SET v_sum = v_sum + 5;
+        END CASE;
+    END LOOP;
+    CLOSE cur;
+
+    WHILE v_count > 0 DO
+        SET v_sum = v_sum + v_count;
+        SET v_count = v_count - 1;
+    END WHILE;
+
+    SET result = v_sum;
+END; //
+
+DELIMITER ;
+
+CALL sp_vars_procedure_ctest_proc(1, 1, @out_result);
+
+SELECT @out_result;

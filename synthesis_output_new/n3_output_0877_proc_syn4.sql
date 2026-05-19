@@ -1,0 +1,386 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1160816 (v1160817 INT, v1160818 INT, v1161305 VARCHAR(100), v1161306 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1160957 (v1160817 INT);
+CREATE TABLE IF NOT EXISTS v1161489 (v1161490 SMALLINT NOT NULL PRIMARY KEY, v1161491 SMALLINT NOT NULL, INDEX(v1161490));
+CREATE TABLE IF NOT EXISTS v1161460 (v1161462 DATETIME, v1161461 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1161304 (v1161305 VARCHAR(100), v1161306 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1160751 (v1161305 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1160760 (v1160761 DOUBLE);
+INSERT INTO v1160816 VALUES (1, 10, 'hello', 'qqqq'), (2, 20, 'world', 'aaaa');
+INSERT INTO v1160957 VALUES (1), (2);
+INSERT INTO v1161460 VALUES ('2007-08-01 12:22:59', ' \t \t +000125');
+INSERT INTO v1161304 VALUES ('hello', 'qqqq'), ('test', 'aaaa');
+INSERT INTO v1160751 VALUES ('hello'), ('world');
+INSERT INTO v1160760 VALUES (5.0), (10.0), (15.0);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_IS_PALINDROME_datj06(82)) - -422 + (p_a - p_b);
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(55)) - 821 + (-1);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(14)) - -332 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_datj06----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9----- */
+CREATE TABLE IF NOT EXISTS `table_wzk567` (
+    `table_wzk567_emp_id` INT,
+    `table_wzk567_department_id` INT,
+    `table_wzk567_salary` INT,
+    `table_wzk567_hire_date` DATE,
+    `table_wzk567_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_wzk567` (`table_wzk567_emp_id`, `table_wzk567_department_id`, `table_wzk567_salary`, `table_wzk567_hire_date`, `table_wzk567_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WZK567_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_WZK567_HIRE_DATE, CURDATE()), COALESCE(TABLE_WZK567_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_WZK567
+    WHERE TABLE_WZK567_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ENGAGEMENT_SCORE = (V_PERFORMANCE * 20) + (V_TENURE_YEARS * 5) + (V_SALARY / 1000);
+
+    RETURN V_ENGAGEMENT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(-61)) - -192 + ((MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(-60, 67)) - 926 + ((MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(3)) - 420 + ((MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(-2)) - 961 + (floor(v_price / 100)))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+CREATE TABLE IF NOT EXISTS `table_t4xtqx` (
+    `table_t4xtqx_order_id` INT,
+    `table_t4xtqx_customer_id` INT,
+    `table_t4xtqx_order_date` DATE,
+    `table_t4xtqx_total_amount` DECIMAL(10,2),
+    `table_t4xtqx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_evisnb` (
+    `table_evisnb_payment_id` INT,
+    `table_evisnb_order_id` INT,
+    `table_evisnb_payment_date` DATE,
+    `table_evisnb_amount_paid` INT
+);
+
+INSERT INTO `table_t4xtqx` (`table_t4xtqx_order_id`, `table_t4xtqx_customer_id`, `table_t4xtqx_order_date`, `table_t4xtqx_total_amount`, `table_t4xtqx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_evisnb` (`table_evisnb_payment_id`, `table_evisnb_order_id`, `table_evisnb_payment_date`, `table_evisnb_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_COMPLETION_STATUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T4XTQX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_T4XTQX
+    WHERE TABLE_T4XTQX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EVISNB_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_EVISNB
+    WHERE TABLE_EVISNB_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT_PAID >= V_ORDER_TOTAL THEN
+        RETURN 100;
+    END IF;
+
+    SET V_COMPLETION_STATUS = (V_AMOUNT_PAID * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COMPLETION_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+CREATE TABLE IF NOT EXISTS `table_ck40yw` (
+    `table_ck40yw_policy_id` INT,
+    `table_ck40yw_customer_id` INT,
+    `table_ck40yw_policy_type` VARCHAR(50),
+    `table_ck40yw_coverage_amount` DECIMAL(10,2),
+    `table_ck40yw_premium_annual` INT,
+    `table_ck40yw_beneficiary_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_du7xpr` (
+    `table_du7xpr_claim_id` INT,
+    `table_du7xpr_policy_id` INT,
+    `table_du7xpr_claim_date` DATE,
+    `table_du7xpr_payout_amount` DECIMAL(10,2),
+    `table_du7xpr_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ck40yw` (`table_ck40yw_policy_id`, `table_ck40yw_customer_id`, `table_ck40yw_policy_type`, `table_ck40yw_coverage_amount`, `table_ck40yw_premium_annual`, `table_ck40yw_beneficiary_id`) VALUES (1, 2, 'test', 1.0, 5, 6);
+
+INSERT INTO `table_du7xpr` (`table_du7xpr_claim_id`, `table_du7xpr_policy_id`, `table_du7xpr_claim_date`, `table_du7xpr_payout_amount`, `table_du7xpr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID_IN INT DEFAULT 0;
+    DECLARE V_POLICY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CK40YW_COVERAGE_AMOUNT, 0), COALESCE(TABLE_CK40YW_PREMIUM_ANNUAL, 0)
+    INTO V_COVERAGE_AMOUNT, V_PREMIUM_ANNUAL
+    FROM TABLE_CK40YW
+    WHERE TABLE_CK40YW_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_DU7XPR_PAYOUT_AMOUNT), 0) INTO V_TOTAL_PAID_IN
+    FROM TABLE_DU7XPR
+    WHERE TABLE_DU7XPR_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_POLICY_VALUE = V_COVERAGE_AMOUNT - V_TOTAL_PAID_IN;
+
+    RETURN (MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn()) - -505 + (cast(v_policy_value as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+CREATE TABLE IF NOT EXISTS `table_m3vpww` (
+    `table_m3vpww_cbit10` INT
+);
+
+INSERT INTO `table_m3vpww` (`table_m3vpww_cbit10`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_M3VPWW_CBIT10 INTO RESULT FROM `TABLE_M3VPWW` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, 0), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = V_BALANCE + V_OVERDRAFT_LIMIT;
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = 1;
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN V_CAN_WITHDRAW;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+CREATE TABLE IF NOT EXISTS `table_w4154q` (
+    `table_w4154q_campaign_id` INT,
+    `table_w4154q_start_date` DATE,
+    `table_w4154q_end_date` DATE
+);
+
+INSERT INTO `table_w4154q` (`table_w4154q_campaign_id`, `table_w4154q_start_date`, `table_w4154q_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_W4154Q_START_DATE, TABLE_W4154Q_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W4154Q
+    WHERE TABLE_W4154Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_FUNC2_65e0ab()) - 76 + (0);
+    END IF;
+
+    RETURN DATEDIFF(V_END_DATE, V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC2_65e0ab----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_65e0ab() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0877_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_char_val VARCHAR(100);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1161305 FROM v1161304 WHERE v1161306 = 'qqqq';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- First: execute the CREATE TABLE statement from input (adapted inline)
+    CREATE TABLE IF NOT EXISTS v1161489_temp AS SELECT QUOTE('a') AS v1161490;
+    INSERT INTO v1161489 (v1161490, v1161491) SELECT 1, 1 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM v1161489);
+    SET v_counter = (MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn(-48, -36)) - -714 + (v_counter) + 1;
+
+    -- Second: INSERT into v1161460 (adapted with p1/p2)
+    INSERT INTO v1161460 (v1161462, v1161461) VALUES (DATE_ADD('2007-08-01 12:22:59', INTERVAL p1 DAY), CONCAT(' \t \t +', LPAD(p2, 6, '0')));
+    SET v_counter = v_counter + 1;
+
+    -- Third: UPDATE v1160760 with division by zero handling (adapted inline)
+    UPDATE v1160760 AS x0 SET x0.v1160761 = ((x0.v1160761 + x0.v1160761) / NULLIF(1, 0)) WHERE x0.v1160761 = x0.v1160761 - 1 ORDER BY x0.v1160761 DESC;
+    SET v_counter = v_counter + 1;
+
+    -- Fourth: UPDATE v1160816 with CHAR/ASCII operation (adapted using cursor loop)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_char_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1160816 AS x0 JOIN v1160957 AS x2 ON x0.v1160817 = x0.v1160817 SET x0.v1161305 = CHAR(ASCII(v_char_val) + 32) WHERE x0.v1161306 = 'qqqq' AND x0.v1160817 = p1;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Fifth: UPDATE with JOIN and SET (adapted inline with CASE conditional)
+    CASE 
+        WHEN p2 > 0 THEN
+            UPDATE v1161304 AS x0 JOIN v1160751 AS x4 ON 1 SET x0.v1161305 = CHAR(ASCII(x0.v1161305) + 32) WHERE x0.v1161306 = 'qqqq' AND x0.v1161305 IS NOT NULL;
+            SET v_counter = v_counter + 1;
+        ELSE
+            SET v_counter = v_counter + 2;
+    END CASE;
+
+    -- Additional procedural logic using WHILE loop
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0877_proc(1, 1, @out_result);
+
+SELECT @out_result;

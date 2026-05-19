@@ -1,0 +1,574 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1133758 (v1133759 TEXT);
+CREATE TABLE IF NOT EXISTS v1133747 (v1133748 INT, v1133749 TEXT, v1133750 TEXT);
+CREATE TABLE IF NOT EXISTS test_table (id INT, data TEXT);
+CREATE TABLE IF NOT EXISTS v1133901 (v1133902 TEXT);
+CREATE TABLE IF NOT EXISTS v1133788 (id INT, dummy TEXT);
+CREATE TABLE IF NOT EXISTS x4 (id INT);
+CREATE TABLE IF NOT EXISTS v1133963 (v1133964 INT, v1133965 INT, v1133966 INT, v1133967 INT, v1133968 INT, v1133969 INT, v1133970 INT, v1133971 INT, v1133972 INT, v1133973 INT, v1133974 INT, v1133975 INT, v1133976 INT, v1133977 INT, v1133978 INT, v1133979 INT, v1133980 INT, v1133981 INT, v1133982 INT, v1133983 INT, v1133984 INT, v1133985 INT, v1133986 INT, v1133987 INT, v1133988 INT, v1133989 INT, v1133990 INT, v1133991 INT, v1133992 INT, v1133993 INT, v1133994 INT, v1133995 INT, v1133996 INT, v1133997 INT, v1133998 INT, v1133999 INT, v1134000 INT, v1134001 INT, v1134002 INT, v1134003 INT, v1134004 INT, v1134005 INT, v1134006 INT, v1134007 INT, v1134008 INT, v1134009 INT, v1134010 INT, v1134011 INT, v1134012 INT, v1134013 INT, v1134014 INT, v1134015 INT, v1134016 INT, v1134017 INT, v1134018 INT, v1134019 INT, v1134020 INT, v1134021 INT, v1134022 INT, v1134023 INT, v1134024 INT);
+INSERT INTO v1133758 VALUES ('2020-01-01'), ('invalid_date'), ('2010-04-01');
+INSERT INTO v1133747 VALUES (1, 'hello', 'xx'), (2, 'world', 'yy'), (3, 'test', 'zz');
+INSERT INTO test_table VALUES (1, 't1_1_data'), (2, 't2_data'), (3, 't1_1_more');
+INSERT INTO v1133901 VALUES ('some_value'), ('other_value');
+INSERT INTO v1133788 VALUES (1, 'dummy1'), (2, 'dummy2');
+INSERT INTO x4 VALUES (1), (2);
+INSERT INTO v1133963 (v1133964) VALUES (100), (200), (300);
+
+/* -----Dependency for: n3_output_1732_proc----- */
+CREATE TABLE IF NOT EXISTS v1339858 (v1339943 INT);
+CREATE TABLE IF NOT EXISTS v1339942 (v1339943 INT);
+CREATE TABLE IF NOT EXISTS v1339963 (v1339967 INT);
+CREATE TABLE IF NOT EXISTS v1340281 (v1340283 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v1339851 (v1339852 INT);
+INSERT INTO v1339858 VALUES (10), (20), (30);
+INSERT INTO v1339942 VALUES (1), (2), (3);
+INSERT INTO v1339963 VALUES (0);
+INSERT INTO v1340281 VALUES ('Y'), ('N'), ('Y');
+INSERT INTO v1339851 VALUES (0), (0), (0);
+
+/* -----Called: n3_output_1732_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1732_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_case_val INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val INT;
+    DECLARE cur CURSOR FOR SELECT v1339967 FROM v1339963;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Create temporary table for processing
+    CREATE TEMPORARY TABLE IF NOT EXISTS v1340260 (
+        v1340261 VARCHAR(1024) CHARACTER SET utf8mb3,
+        v1340262 DATE,
+        v1340263 INT,
+        v1340264 VARCHAR(10) CHARACTER SET utf8mb3,
+        v1340265 DATETIME,
+        v1340266 DATETIME,
+        v1340267 VARCHAR(1024) CHARACTER SET latin1,
+        v1340268 VARCHAR(1024) CHARACTER SET latin1,
+        v1340269 DATE,
+        v1340270 VARCHAR(1024) CHARACTER SET utf8mb3,
+        v1340271 VARCHAR(10) CHARACTER SET utf8mb3,
+        v1340272 VARCHAR(10) CHARACTER SET latin1,
+        v1340273 INT,
+        v1340274 VARCHAR(10) CHARACTER SET latin1,
+        v1340275 INT AUTO_INCREMENT,
+        INDEX(v1340262),
+        INDEX(v1340274),
+        INDEX(v1340266),
+        INDEX(v1340267),
+        INDEX(v1340264),
+        INDEX(v1340265),
+        INDEX(v1340273),
+        PRIMARY KEY (v1340275)
+    );
+
+    -- Insert sample data into temporary table
+    INSERT INTO v1340260 (v1340261, v1340262, v1340263, v1340264, v1340265, v1340266, v1340267, v1340268, v1340269, v1340270, v1340271, v1340272, v1340273, v1340274)
+    VALUES ('test', '2024-01-01', p1, 'A', NOW(), NOW(), 'data1', 'data2', '2024-01-02', 'info', 'X', 'Y', p2, 'Z');
+
+    -- Process first UPDATE with multi-table syntax
+    UPDATE v1339942 AS x0, v1339858 AS x4 
+    SET x0.v1339943 = p1 
+    WHERE x0.v1339943 < (x0.v1339943 & x0.v1339943) 
+    AND x0.v1339943 = -1;
+
+    -- Process INSERT with cursor
+    INSERT INTO v1339963 (v1339967) VALUES (p2);
+
+    -- Process UPDATE with IN clause using loop
+    SET v_temp = p1;
+    WHILE v_temp > 0 DO
+        UPDATE v1340281 AS x1 
+        SET x1.v1340283 = 'N' 
+        WHERE v1340283 IN (2.2e100, 5.5e100);
+        SET v_temp = v_temp - 1;
+    END WHILE;
+
+    -- Process UPDATE with CASE using IF condition
+    IF @@lower_case_table_names = 0 THEN
+        UPDATE v1339851 AS x0 
+        SET v1339852 = 6;
+    ELSE
+        UPDATE v1339851 AS x0 
+        SET v1339852 = 11;
+    END IF;
+
+    -- Use cursor to iterate and calculate result
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_cursor_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use CASE expression for final result
+    SET result = CASE 
+        WHEN v_counter > 100 THEN v_counter
+        WHEN v_counter > 50 THEN v_counter * 2
+        ELSE v_counter + p1 + p2
+    END;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_1059----- */
+CREATE TABLE IF NOT EXISTS v52547 (v52548 INT PRIMARY KEY NOT NULL) ENGINE=InnoDB ROW_FORMAT=compressed;
+CREATE TABLE IF NOT EXISTS v52074 (
+    v52075 DATE,
+    v52076 VARCHAR(50),
+    v52077 DATE,
+    v52078 VARCHAR(20)
+);
+CREATE TABLE IF NOT EXISTS v52228 (
+    v52229 INT,
+    v52230 INT,
+    v52231 INT
+);
+CREATE TABLE IF NOT EXISTS v52185 (
+    v52230 INT,
+    v52231 INT
+);
+CREATE TABLE IF NOT EXISTS v51721 (
+    v51722 DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS v52226 (
+    v51722 DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS v52046 (
+    v52048 DATE
+);
+INSERT INTO v52074 VALUES ('2010-01-01', 'chronography', '2002-01-01', '-128.5');
+INSERT INTO v52228 VALUES (101, 1, 1);
+INSERT INTO v52185 VALUES (1, 1);
+INSERT INTO v51721 VALUES (100.00);
+INSERT INTO v52226 VALUES (90.00);
+INSERT INTO v52046 VALUES ('2001-01-01');
+INSERT INTO v52547 VALUES (1), (2), (3);
+
+/* -----Called: synth_output_1059----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1059(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp_date DATE;
+    DECLARE v_temp_val VARCHAR(50);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val INT;
+    DECLARE v_loop_count INT DEFAULT 0;
+    
+    -- Cursor for iterating v52547
+    DECLARE cur CURSOR FOR SELECT v52548 FROM v52547;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: INSERT into v52074 (already done in setup, but we'll re-insert with condition)
+    IF p1 > 0 THEN
+        INSERT INTO v52074 (v52078, v52077, v52076, v52075) 
+        VALUES (CAST(p1 AS CHAR), CURDATE(), 'dynamic_insert', DATE_ADD(CURDATE(), INTERVAL p2 DAY));
+        SET v_counter = v_counter + 1;
+    END IF;
+
+    -- Statement 2: UPDATE v52228 with AES_DECRYPT and geometry
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 0;
+        SET @sql2 = 'UPDATE v52228 AS x1 LEFT JOIN v52185 AS x6 ON x1.v52231 = x1.v52231 AND x1.v52231 = x1.v52230 SET x1.v52229 = AES_DECRYPT(ST_VALIDATE(ST_GEOMFROMTEXT(''POINT(0 0)'')), ''POINT(13 13)'', NULL) WHERE v52229 = 101';
+        PREPARE stmt2 FROM @sql2;
+        EXECUTE stmt2;
+        DEALLOCATE PREPARE stmt2;
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Statement 3: UPDATE v51721 with arithmetic and string conversion
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 0;
+        SET @sql3 = 'UPDATE v51721 AS x1 LEFT JOIN v52226 AS x6 ON x1.v51722 = x1.v51722 + 10.0 SET v51722 = ''y'' WHERE x1.v51722 = x1.v51722 - 9';
+        PREPARE stmt3 FROM @sql3;
+        EXECUTE stmt3;
+        DEALLOCATE PREPARE stmt3;
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Statement 4: UPDATE v52046 with CAST
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 0;
+        SET @sql4 = 'UPDATE v52046 AS x1 SET x1.v52048 = CAST(''2009-04-03'' AS DATETIME) WHERE v52048 = ''2001''';
+        PREPARE stmt4 FROM @sql4;
+        EXECUTE stmt4;
+        DEALLOCATE PREPARE stmt4;
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Statement 5: CREATE TABLE v52547 (already done in setup) - we will use it with cursor loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_loop_count = v_loop_count + 1;
+        
+        -- Use CASE/WHEN for conditional logic
+        CASE 
+            WHEN (MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + (v_cursor_val = 1) THEN
+                SET v_counter = v_counter + 10;
+            WHEN v_cursor_val = 2 THEN
+                SET v_counter = v_counter + 20;
+            ELSE
+                SET v_counter = v_counter + 30;
+        END CASE;
+    END LOOP;
+    CLOSE cur;
+
+    -- WHILE loop for additional processing
+    WHILE v_loop_count < 5 DO
+        SET v_loop_count = v_loop_count + 1;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- Final validation using IF/ELSE
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = -1;
+    END IF;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+CREATE TABLE IF NOT EXISTS `table_k6vpgx` (
+    `table_k6vpgx_class_id` INT,
+    `table_k6vpgx_instructor_id` INT,
+    `table_k6vpgx_capacity` INT,
+    `table_k6vpgx_current_enrollment` INT,
+    `table_k6vpgx_duration_minutes` INT,
+    `table_k6vpgx_class_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvyt03` (
+    `table_vvyt03_booking_id` INT,
+    `table_vvyt03_member_id` INT,
+    `table_vvyt03_class_id` INT,
+    `table_vvyt03_booking_date` DATE,
+    `table_vvyt03_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_k6vpgx` (`table_k6vpgx_class_id`, `table_k6vpgx_instructor_id`, `table_k6vpgx_capacity`, `table_k6vpgx_current_enrollment`, `table_k6vpgx_duration_minutes`, `table_k6vpgx_class_type`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vvyt03` (`table_vvyt03_booking_id`, `table_vvyt03_member_id`, `table_vvyt03_class_id`, `table_vvyt03_booking_date`, `table_vvyt03_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_BOOKINGS INT DEFAULT 0;
+    DECLARE V_ATTENDANCE_RATE INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_K6VPGX_CAPACITY, 20), COALESCE(TABLE_K6VPGX_CURRENT_ENROLLMENT, 0), COALESCE(TABLE_K6VPGX_DURATION_MINUTES, 60)
+    INTO V_CAPACITY, V_CURRENT_ENROLLMENT, V_DURATION
+    FROM TABLE_K6VPGX
+    WHERE TABLE_K6VPGX_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(CASE TABLE_VVYT03_ATTENDANCE_STATUS WHEN 'ATTENDED' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_TOTAL_BOOKINGS, V_ATTENDANCE_RATE
+    FROM TABLE_VVYT03
+    WHERE TABLE_VVYT03_CLASS_ID = CLASS_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = ((V_CURRENT_ENROLLMENT * 100) / V_CAPACITY) + (V_TOTAL_BOOKINGS * 2) + (V_ATTENDANCE_RATE / 2);
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + (v_popularity_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = FLOOR(V_CATEGORY_AVG_PRICE * 0.2);
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = (MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73()) - -790 + (v_discount_threshold) + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(30, 84)) - 479 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+CREATE TABLE IF NOT EXISTS `table_ngw2f9` (
+    `table_ngw2f9_product_id` INT,
+    `table_ngw2f9_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ngw2f9` (`table_ngw2f9_product_id`, `table_ngw2f9_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NGW2F9_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_NGW2F9
+    WHERE TABLE_NGW2F9_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = POW(A, 3) + POW(B, 3);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = FLOOR(SQRT(V_POWER));
+    END IF;
+
+    SET V_RESULT = (A * B) + V_SQRT_VAL + (A % B);
+
+    RETURN (MYSQL_FUNC_IS_POSITIVE_kz2ysr(-67)) - -794 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_POSITIVE_kz2ysr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_POSITIVE_kz2ysr(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N > 0 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - -569 + (1);
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0311_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_id INT;
+    DECLARE v_val INT;
+    DECLARE cur CURSOR FOR SELECT v1133964 FROM v1133963 WHERE v1133964 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Use IF/ELSEIF/ELSE procedural structure
+    IF p1 > 0 THEN
+        -- Adapt UPDATE with STR_TO_DATE and invalid format (will be ignored/error handled)
+        BEGIN
+            DECLARE EXIT HANDLER FOR SQLWARNING BEGIN END;
+            UPDATE v1133758 AS x1 SET v1133759 = '18446744073709551615' WHERE v1133759 = STR_TO_DATE('4/1/2010', 'x');
+        END;
+CALL synth_output_1059(-99, -11, @_syn_3185);
+        SET v_counter = @_syn_3185 - 63 + (v_counter) + 1;
+    ELSEIF p1 = 0 THEN
+        -- Adapt UPDATE with REPEAT/LEFT and user variables
+        SET @u = p1;
+        SET @h = 'hello';
+        UPDATE v1133747 AS x1 SET x1.v1133750 = REPEAT(LEFT(v1133749, 1), 2) WHERE v1133748 = @u AND v1133749 = @h ORDER BY v1133750 DESC, v1133749 DESC LIMIT 12;
+        SET v_counter = v_counter + 2;
+    ELSE
+        -- Adapt UPDATE with @orig_max_data_length variable
+        SET @orig_max_data_length = p2;
+        UPDATE test_table AS x0 SET x0.id = @orig_max_data_length WHERE id LIKE 't1_1%' ORDER BY x0.id LIMIT 1;
+        SET v_counter = v_counter + 3;
+    END IF;
+
+    -- Use CASE/WHEN procedural structure
+    CASE
+        WHEN p2 > 0 THEN
+            -- Adapt UPDATE with NATURAL JOIN and NOT EXISTS
+            SET @d = CONCAT('value_', p2);
+            UPDATE v1133901 AS x0 NATURAL JOIN v1133788 AS x1 SET v1133902 = @d WHERE NOT EXISTS(SELECT 'x' FROM x4 WHERE x0.v1133902 = x0.v1133902) IS FALSE;
+            SET v_counter = v_counter + 10;
+        WHEN p2 = 0 THEN
+            SET v_counter = v_counter + 20;
+        ELSE
+            SET v_counter = v_counter + 30;
+    END CASE;
+
+    -- Use WHILE...DO loop with CURSOR
+    OPEN cur;
+    read_loop: WHILE NOT v_done DO
+        FETCH cur INTO v_id;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        -- Adapt CREATE TABLE usage by inserting into the existing table
+        INSERT INTO v1133963 (v1133965) VALUES (v_id * p1);
+        SET v_counter = v_counter + 1;
+    END WHILE;
+    CLOSE cur;
+
+    -- Use REPEAT...UNTIL loop
+CALL n3_output_1732_proc(-86, 77, @_syn_3195);
+    SET v_counter = v_counter + @_syn_3195 - @_io_result + (5);
+    REPEAT
+        SET v_counter = v_counter + 1;
+    UNTIL v_counter > 100 END REPEAT;
+
+    -- Set output result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0311_proc(1, 1, @out_result);
+
+SELECT @out_result;

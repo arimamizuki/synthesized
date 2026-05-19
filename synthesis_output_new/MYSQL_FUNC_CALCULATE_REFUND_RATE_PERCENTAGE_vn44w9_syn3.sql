@@ -1,0 +1,404 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_uyis6v` (
+    `table_uyis6v_order_id` INT,
+    `table_uyis6v_customer_id` INT,
+    `table_uyis6v_order_date` DATE,
+    `table_uyis6v_total_amount` DECIMAL(10,2),
+    `table_uyis6v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2nffbi` (
+    `table_2nffbi_refund_id` INT,
+    `table_2nffbi_order_id` INT,
+    `table_2nffbi_refund_amount` DECIMAL(10,2),
+    `table_2nffbi_refund_date` DATE,
+    `table_2nffbi_reason` INT
+);
+
+INSERT INTO `table_uyis6v` (`table_uyis6v_order_id`, `table_uyis6v_customer_id`, `table_uyis6v_order_date`, `table_uyis6v_total_amount`, `table_uyis6v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_2nffbi` (`table_2nffbi_refund_id`, `table_2nffbi_order_id`, `table_2nffbi_refund_amount`, `table_2nffbi_refund_date`, `table_2nffbi_reason`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+CREATE TABLE IF NOT EXISTS `table_14m53w` (
+    `table_14m53w_order_id` INT,
+    `table_14m53w_customer_id` INT,
+    `table_14m53w_order_date` DATE,
+    `table_14m53w_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_i2tsnq` (
+    `table_i2tsnq_shipment_id` INT,
+    `table_i2tsnq_order_id` INT,
+    `table_i2tsnq_shipping_cost` DECIMAL(10,2),
+    `table_i2tsnq_delivery_date` DATE
+);
+
+INSERT INTO `table_14m53w` (`table_14m53w_order_id`, `table_14m53w_customer_id`, `table_14m53w_order_date`, `table_14m53w_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_i2tsnq` (`table_i2tsnq_shipment_id`, `table_i2tsnq_order_id`, `table_i2tsnq_shipping_cost`, `table_i2tsnq_delivery_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_14M53W_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(63)) - -549 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_14M53W
+    WHERE TABLE_14M53W_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_I2TSNQ_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_I2TSNQ
+    WHERE TABLE_I2TSNQ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_vsdxc1(20)) - -8 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73()) - -790 + (v_cost_ratio));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+CREATE TABLE IF NOT EXISTS `table_viimne` (
+    `table_viimne_emp_id` INT,
+    `table_viimne_dept_id` INT,
+    `table_viimne_salary` INT,
+    `table_viimne_hire_date` DATE,
+    `table_viimne_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_cv0uu0` (
+    `table_cv0uu0_dept_id` INT,
+    `table_cv0uu0_name` VARCHAR(50),
+    `table_cv0uu0_avg_salary` INT
+);
+
+INSERT INTO `table_viimne` (`table_viimne_emp_id`, `table_viimne_dept_id`, `table_viimne_salary`, `table_viimne_hire_date`, `table_viimne_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_cv0uu0` (`table_cv0uu0_dept_id`, `table_cv0uu0_name`, `table_cv0uu0_avg_salary`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_MARKET_AVG_SALARY INT DEFAULT 50000;
+    DECLARE V_COMPETITIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VIIMNE_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CV0UU0_AVG_SALARY, 50000)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_CV0UU0 D
+    JOIN TABLE_VIIMNE E ON TABLE_CV0UU0_DEPT_ID = TABLE_VIIMNE_DEPT_ID
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_VIIMNE_PERFORMANCE_RATING, 3.0)
+    INTO V_PERFORMANCE
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMPETITIVENESS_SCORE = ((V_SALARY - V_MARKET_AVG_SALARY) * 100) / V_MARKET_AVG_SALARY;
+
+    IF V_SALARY < V_DEPT_AVG_SALARY THEN
+        SET V_COMPETITIVENESS_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(17)) - 78 + (v_competitiveness_score - 10);
+    END IF;
+
+    IF V_PERFORMANCE >= 4.5 THEN
+        SET V_COMPETITIVENESS_SCORE = V_COMPETITIVENESS_SCORE + 15;
+    END IF;
+
+    RETURN V_COMPETITIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+CREATE TABLE IF NOT EXISTS `table_gc4iyl` (
+    `table_gc4iyl_customer_id` INT,
+    `table_gc4iyl_registration_date` DATE
+);
+
+INSERT INTO `table_gc4iyl` (`table_gc4iyl_customer_id`, `table_gc4iyl_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GC4IYL_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_GC4IYL
+    WHERE TABLE_GC4IYL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(57)) - -302 + (v_age_months);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt----- */
+CREATE TABLE IF NOT EXISTS `table_klhvo2` (
+    `table_klhvo2_emp_id` INT,
+    `table_klhvo2_name` VARCHAR(50),
+    `table_klhvo2_salary` INT,
+    `table_klhvo2_hire_date` DATE,
+    `table_klhvo2_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwrb2x` (
+    `table_mwrb2x_dept_id` INT,
+    `table_mwrb2x_name` VARCHAR(50),
+    `table_mwrb2x_location` INT
+);
+
+INSERT INTO `table_klhvo2` (`table_klhvo2_emp_id`, `table_klhvo2_name`, `table_klhvo2_salary`, `table_klhvo2_hire_date`, `table_klhvo2_department_id`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_mwrb2x` (`table_mwrb2x_dept_id`, `table_mwrb2x_name`, `table_mwrb2x_location`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_KLHVO2_SALARY), 0), COALESCE(MAX(TABLE_KLHVO2_SALARY), 0), COALESCE(MIN(TABLE_KLHVO2_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_KLHVO2
+    WHERE TABLE_KLHVO2_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_MIN_SALARY > 0 THEN
+        SET V_VARIANCE = ((V_MAX_SALARY - V_MIN_SALARY) * 100.0) / V_MIN_SALARY;
+    END IF;
+
+    RETURN FLOOR(V_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_vsdxc1----- */
+CREATE TABLE IF NOT EXISTS `table_klhh2d` (
+    `table_klhh2d_customer_id` INT,
+    `table_klhh2d_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_klhh2d` (`table_klhh2d_customer_id`, `table_klhh2d_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_vsdxc1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_vsdxc1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KLHH2D_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_KLHH2D
+    WHERE TABLE_KLHH2D_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + ((MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde(87, 33, 60)) - -93 + (v_monthly_cost / 10));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_12zpde(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_S = (MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(-5)) - -576 + ((a + b + c) / 2.0);
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+CREATE TABLE IF NOT EXISTS `table_2vm9l6` (
+    `table_2vm9l6_campaign_id` INT,
+    `table_2vm9l6_start_date` DATE,
+    `table_2vm9l6_end_date` DATE,
+    `table_2vm9l6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_khlm3q` (
+    `table_khlm3q_conversion_id` INT,
+    `table_khlm3q_campaign_id` INT,
+    `table_khlm3q_conversion_date` DATE
+);
+
+INSERT INTO `table_2vm9l6` (`table_2vm9l6_campaign_id`, `table_2vm9l6_start_date`, `table_2vm9l6_end_date`, `table_2vm9l6_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_khlm3q` (`table_khlm3q_conversion_id`, `table_khlm3q_campaign_id`, `table_khlm3q_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TIME_EFFICIENCY_0vjfkd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_DAYS_TO_CONVERT DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(DATEDIFF(TABLE_KHLM3Q_CONVERSION_DATE, TABLE_2VM9L6_START_DATE)), 0)
+    INTO V_AVG_DAYS_TO_CONVERT
+    FROM TABLE_KHLM3Q C
+    JOIN TABLE_2VM9L6 CAMP ON TABLE_KHLM3Q_CAMPAIGN_ID = TABLE_2VM9L6_CAMPAIGN_ID
+    WHERE TABLE_KHLM3Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = GREATEST(100 - (V_AVG_DAYS_TO_CONVERT * 5), 0);
+
+    RETURN V_EFFICIENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(-64)) - 779 + (0);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+CREATE TABLE IF NOT EXISTS `table_udtj01` (
+    `table_udtj01_product_id` INT,
+    `table_udtj01_category_id` INT,
+    `table_udtj01_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_udtj01` (`table_udtj01_product_id`, `table_udtj01_category_id`, `table_udtj01_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_UDTJ01_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_UDTJ01
+    WHERE TABLE_UDTJ01_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UYIS6V_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_UYIS6V
+    WHERE TABLE_UYIS6V_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2NFFBI_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_2NFFBI
+    WHERE TABLE_2NFFBI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_AMOUNT * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(-38)) - 540 + (v_refund_rate);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(1);

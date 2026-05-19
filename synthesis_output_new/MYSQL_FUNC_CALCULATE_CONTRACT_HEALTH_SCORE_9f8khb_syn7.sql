@@ -1,0 +1,373 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_s8sk8e` (
+    `table_s8sk8e_contract_id` INT,
+    `table_s8sk8e_customer_id` INT,
+    `table_s8sk8e_contract_type` VARCHAR(50),
+    `table_s8sk8e_start_date` DATE,
+    `table_s8sk8e_end_date` DATE,
+    `table_s8sk8e_monthly_payment` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_d072ki` (
+    `table_d072ki_payment_id` INT,
+    `table_d072ki_contract_id` INT,
+    `table_d072ki_payment_date` DATE,
+    `table_d072ki_amount_paid` INT,
+    `table_d072ki_is_on_time` DATE
+);
+
+INSERT INTO `table_s8sk8e` (`table_s8sk8e_contract_id`, `table_s8sk8e_customer_id`, `table_s8sk8e_contract_type`, `table_s8sk8e_start_date`, `table_s8sk8e_end_date`, `table_s8sk8e_monthly_payment`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_d072ki` (`table_d072ki_payment_id`, `table_d072ki_contract_id`, `table_d072ki_payment_date`, `table_d072ki_amount_paid`, `table_d072ki_is_on_time`) VALUES (1, 2, '2024-01-01', 4, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21----- */
+CREATE TABLE IF NOT EXISTS `table_iw4rqu` (
+    `table_iw4rqu_order_id` INT,
+    `table_iw4rqu_order_date` DATE
+);
+
+INSERT INTO `table_iw4rqu` (`table_iw4rqu_order_id`, `table_iw4rqu_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_IW4RQU_ORDER_DATE)
+    INTO V_QUARTER
+    FROM TABLE_IW4RQU
+    WHERE TABLE_IW4RQU_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_QUARTER;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+CREATE TABLE IF NOT EXISTS `table_9ay8es` (
+    `table_9ay8es_employee_id` INT,
+    `table_9ay8es_department_id` INT,
+    `table_9ay8es_manager_id` INT,
+    `table_9ay8es_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u58w25` (
+    `table_u58w25_department_id` INT,
+    `table_u58w25_parent_department_id` INT,
+    `table_u58w25_department_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9ay8es` (`table_9ay8es_employee_id`, `table_9ay8es_department_id`, `table_9ay8es_manager_id`, `table_9ay8es_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_u58w25` (`table_u58w25_department_id`, `table_u58w25_parent_department_id`, `table_u58w25_department_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_PARENT_ID INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT 0;
+
+    SET V_CURRENT_ID = (MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(11)) - 630 + (department_id_param);
+
+    DEPTH_LOOP: WHILE V_CURRENT_ID IS NOT NULL AND V_CURRENT_ID != 0 DO
+        SELECT COALESCE(TABLE_U58W25_PARENT_DEPARTMENT_ID, 0)
+        INTO V_PARENT_ID
+        FROM TABLE_U58W25
+        WHERE TABLE_U58W25_DEPARTMENT_ID = V_CURRENT_ID;
+
+        IF V_PARENT_ID = 0 OR V_PARENT_ID = V_CURRENT_ID THEN
+            LEAVE DEPTH_LOOP;
+        END IF;
+
+        SET V_DEPTH = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_INDEX_8mx6v3(-31)) - -659 + (v_depth + 1);
+        SET V_CURRENT_ID = V_PARENT_ID;
+    END WHILE DEPTH_LOOP;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_INDEX_8mx6v3----- */
+CREATE TABLE IF NOT EXISTS `table_fqw98k` (
+    `table_fqw98k_customer_id` INT,
+    `table_fqw98k_status` VARCHAR(50)
+);
+
+INSERT INTO `table_fqw98k` (`table_fqw98k_customer_id`, `table_fqw98k_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_INDEX_8mx6v3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_INDEX_8mx6v3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FQW98K
+    WHERE TABLE_FQW98K_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_FQW98K_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5(-76)) - -372 + ((MYSQL_FUNC_HANDLER_FUNC_SQUARE_a34stu(-18)) - -461 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SQUARE_a34stu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SQUARE_a34stu(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(-84, 8)) - 638 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * CAP_HEIGHT * CAP_HEIGHT * (3 * RADIUS - CAP_HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5----- */
+CREATE TABLE IF NOT EXISTS `table_ffrdtp` (
+    `table_ffrdtp_order_id` INT,
+    `table_ffrdtp_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ffrdtp` (`table_ffrdtp_order_id`, `table_ffrdtp_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_NORMALIZED_2cwgv5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FFRDTP_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_FFRDTP
+    WHERE TABLE_FFRDTP_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(-16, -20)) - 290 + (floor(v_total / 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (V_SUBTOTAL * TAX_RATE_PERCENT) / 100;
+
+    RETURN V_TAX_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+CREATE TABLE IF NOT EXISTS `table_9xgqho` (
+    `table_9xgqho_product_id` INT,
+    `table_9xgqho_category_id` INT,
+    `table_9xgqho_price` DECIMAL(10,2),
+    `table_9xgqho_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_izucf1` (
+    `table_izucf1_category_id` INT,
+    `table_izucf1_category_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9xgqho` (`table_9xgqho_product_id`, `table_9xgqho_category_id`, `table_9xgqho_price`, `table_9xgqho_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_izucf1` (`table_izucf1_category_id`, `table_izucf1_category_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE INT;
+    DECLARE V_MIN_PRICE INT;
+    DECLARE V_MAX_PRICE INT;
+    DECLARE V_PRODUCT_COUNT INT;
+
+    SELECT COALESCE(AVG(TABLE_9XGQHO_PRICE), (MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(15, 0)) - 124 + (0)), MIN(TABLE_9XGQHO_PRICE), MAX(TABLE_9XGQHO_PRICE), COUNT(*)
+    INTO V_AVG_PRICE, V_MIN_PRICE, V_MAX_PRICE, V_PRODUCT_COUNT
+    FROM TABLE_9XGQHO
+    WHERE TABLE_9XGQHO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_PRODUCT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AVG_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERATOR INT DEFAULT 1;
+    DECLARE V_DENOMINATOR INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    IF R < 0 OR R > N OR N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF R = 0 OR R = N THEN
+        RETURN 1;
+    END IF;
+
+    IF R > N - R THEN
+        SET R = N - R;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= R DO
+        SET V_NUMERATOR = V_NUMERATOR * (N - V_COUNTER + 1);
+        SET V_DENOMINATOR = V_DENOMINATOR * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(35)) - -547 + (v_numerator / v_denominator);
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+CREATE TABLE IF NOT EXISTS `table_cpfd8s` (
+    `table_cpfd8s_category_id` INT,
+    `table_cpfd8s_price` DECIMAL(10,2),
+    `table_cpfd8s_stock_quantity` INT
+);
+
+INSERT INTO `table_cpfd8s` (`table_cpfd8s_category_id`, `table_cpfd8s_price`, `table_cpfd8s_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_CPFD8S_PRICE * TABLE_CPFD8S_STOCK_QUANTITY), 0)
+    INTO V_STOCK_VALUE
+    FROM TABLE_CPFD8S
+    WHERE TABLE_CPFD8S_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_STOCK_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_ON_TIME_PAYMENTS INT DEFAULT 0;
+    DECLARE V_PAYMENT_HEALTH INT DEFAULT 0;
+    DECLARE V_DAYS_UNTIL_EXPIRY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S8SK8E_MONTHLY_PAYMENT, 0)
+    INTO V_MONTHLY_PAYMENT
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_D072KI_IS_ON_TIME = 1 THEN 1 END)
+    INTO V_TOTAL_PAYMENTS, V_ON_TIME_PAYMENTS
+    FROM TABLE_D072KI
+    WHERE TABLE_D072KI_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_S8SK8E_END_DATE, CURDATE())
+    INTO V_DAYS_UNTIL_EXPIRY
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    IF V_TOTAL_PAYMENTS > 0 THEN
+        SET V_PAYMENT_HEALTH = (MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(86)) - -556 + ((MYSQL_FUNC_CALCULATE_ORDER_QUARTER_8ptt21(-78)) - 25 + ((v_on_time_payments * 100) / v_total_payments));
+    ELSE
+        SET V_PAYMENT_HEALTH = 100;
+    END IF;
+
+    IF V_DAYS_UNTIL_EXPIRY < 30 THEN
+        SET V_PAYMENT_HEALTH = V_PAYMENT_HEALTH - 20;
+    END IF;
+
+    RETURN GREATEST(V_PAYMENT_HEALTH, 0);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(1);

@@ -1,0 +1,538 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS bug12379_table (val INT);
+INSERT INTO bug12379_table VALUES (1), (2), (3), (4), (5);
+
+/* -----Dependency for: n3_output_0271_proc----- */
+CREATE TABLE IF NOT EXISTS v1133208 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133210 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v1133200 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133201 INT
+);
+CREATE TABLE IF NOT EXISTS v1133219 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133220 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1133386 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133387 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1133294 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133295 INT,
+    v1133296 INT,
+    v1133297 INT,
+    v1133298 INT
+);
+CREATE TABLE IF NOT EXISTS v1133162 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133162_col INT
+);
+CREATE TABLE IF NOT EXISTS test_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    test_col VARCHAR(50)
+);
+INSERT INTO v1133208 (v1133210) VALUES ('dep1'), ('dep2'), ('dep1'), ('no');
+INSERT INTO v1133200 (v1133201) VALUES (3), (5), (6), (8), (4);
+INSERT INTO v1133219 (v1133220) VALUES ('test'), ('.abc'), ('3'), ('xyz');
+INSERT INTO v1133386 (v1133387) VALUES (CURRENT_USER()), ('other_user');
+INSERT INTO v1133294 (v1133295, v1133296, v1133297, v1133298) VALUES (1, 5, 100, 1), (2, 6, 200, 2), (3, 4, 300, 3);
+INSERT INTO v1133162 (v1133162_col) VALUES (1), (2), (3);
+INSERT INTO test_table (test_col) VALUES ('a'), ('b');
+
+/* -----Called: n3_output_0271_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0271_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_temp_val VARCHAR(100);
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v1133220 FROM v1133219 WHERE v1133220 >= '3';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with conditional using p1
+    UPDATE v1133208 AS x0 
+    SET v1133210 = CONCAT('updated_', p1) 
+    WHERE v1133210 = 'dep1' AND v1133210 = 'no';
+    GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 2: UPDATE with LEFT JOIN and BETWEEN
+    UPDATE v1133200 AS x1 
+    LEFT JOIN test_table AS x5 ON x1.v1133201 IS NULL 
+    SET v1133201 = p2 
+    WHERE v1133201 BETWEEN 4 AND 7;
+    GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 3: UPDATE with CONCAT and TRIM (using CURSOR loop)
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_temp_val;
+        IF v_done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1133219 AS x0 
+        SET v1133220 = CONCAT('@', TRIM(LEADING '.' FROM CONCAT('.', v1133220))) 
+        WHERE v1133220 = v_temp_val AND v1133220 >= 3;
+        GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
+        SET v_update_count = v_update_count + v_affected_rows;
+    END LOOP;
+    CLOSE v_cur;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 4: UPDATE with CURRENT_USER() comparison
+    UPDATE v1133386 AS x0 
+    SET v1133387 = CONCAT('modified_', p1) 
+    WHERE v1133387 = CURRENT_USER();
+    GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 5: UPDATE with JOIN and BETWEEN
+    UPDATE v1133294 AS x0 
+    JOIN v1133162 AS x1 ON (x0.v1133298 = x0.v1133295) 
+    SET v1133297 = p2 
+    WHERE v1133296 BETWEEN 4 AND 7;
+    GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Conditional logic to determine result
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSEIF v_counter = 0 THEN
+        SET result = 0;
+    ELSE
+        SET result = -1;
+    END IF;
+
+    -- Cleanup handler if needed
+    IF result = -1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred during processing';
+    END IF;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+CREATE TABLE IF NOT EXISTS `table_viimne` (
+    `table_viimne_emp_id` INT,
+    `table_viimne_dept_id` INT,
+    `table_viimne_salary` INT,
+    `table_viimne_hire_date` DATE,
+    `table_viimne_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_cv0uu0` (
+    `table_cv0uu0_dept_id` INT,
+    `table_cv0uu0_name` VARCHAR(50),
+    `table_cv0uu0_avg_salary` INT
+);
+
+INSERT INTO `table_viimne` (`table_viimne_emp_id`, `table_viimne_dept_id`, `table_viimne_salary`, `table_viimne_hire_date`, `table_viimne_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_cv0uu0` (`table_cv0uu0_dept_id`, `table_cv0uu0_name`, `table_cv0uu0_avg_salary`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_MARKET_AVG_SALARY INT DEFAULT 50000;
+    DECLARE V_COMPETITIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VIIMNE_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CV0UU0_AVG_SALARY, 50000)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_CV0UU0 D
+    JOIN TABLE_VIIMNE E ON TABLE_CV0UU0_DEPT_ID = TABLE_VIIMNE_DEPT_ID
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_VIIMNE_PERFORMANCE_RATING, 3.0)
+    INTO V_PERFORMANCE
+    FROM TABLE_VIIMNE
+    WHERE TABLE_VIIMNE_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMPETITIVENESS_SCORE = (MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8()) - -842 + (((v_salary - v_market_avg_salary) * 100) / v_market_avg_salary);
+
+    IF V_SALARY < V_DEPT_AVG_SALARY THEN
+        SET V_COMPETITIVENESS_SCORE = V_COMPETITIVENESS_SCORE - 10;
+    END IF;
+
+    IF V_PERFORMANCE >= 4.5 THEN
+        SET V_COMPETITIVENESS_SCORE = V_COMPETITIVENESS_SCORE + 15;
+    END IF;
+
+    RETURN V_COMPETITIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 17 UNION SELECT 34 UNION SELECT 51 UNION SELECT 68 UNION SELECT 85 UNION SELECT 102 UNION SELECT 119 UNION SELECT 136 UNION SELECT 153 UNION SELECT 170 UNION SELECT 187 UNION SELECT 204 UNION SELECT 221 UNION SELECT 238 UNION SELECT 255 UNION SELECT 272 UNION SELECT 289;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(-53)) - -849 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(-57)) - 314 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+CREATE TABLE IF NOT EXISTS `table_7fkt7q` (
+    `table_7fkt7q_customer_id` INT,
+    `table_7fkt7q_registration_date` DATE,
+    `table_7fkt7q_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0kckz6` (
+    `table_0kckz6_order_id` INT,
+    `table_0kckz6_customer_id` INT,
+    `table_0kckz6_order_date` DATE,
+    `table_0kckz6_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7fkt7q` (`table_7fkt7q_customer_id`, `table_7fkt7q_registration_date`, `table_7fkt7q_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_0kckz6` (`table_0kckz6_order_id`, `table_0kckz6_customer_id`, `table_0kckz6_order_date`, `table_0kckz6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CURRENT_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEMAND_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_AVG_MONTHLY_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY YEAR(TABLE_0KCKZ6_ORDER_DATE), MONTH(TABLE_0KCKZ6_ORDER_DATE);
+
+    SELECT COALESCE(SUM(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_CURRENT_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND YEAR(TABLE_0KCKZ6_ORDER_DATE) = YEAR(CURDATE())
+    AND MONTH(TABLE_0KCKZ6_ORDER_DATE) = V_CURRENT_MONTH;
+
+    IF V_AVG_MONTHLY_SPEND = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(-12)) - 374 + (100);
+    END IF;
+
+    SET V_DEMAND_INDEX = (V_CURRENT_SPEND * 100) / V_AVG_MONTHLY_SPEND;
+
+    RETURN V_DEMAND_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+CREATE TABLE IF NOT EXISTS `table_scey55` (
+    `table_scey55_project_id` INT,
+    `table_scey55_client_id` INT,
+    `table_scey55_project_type` VARCHAR(50),
+    `table_scey55_estimated_hours` INT,
+    `table_scey55_actual_hours` INT,
+    `table_scey55_labor_rate` INT,
+    `table_scey55_material_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2tdknr` (
+    `table_2tdknr_contractor_id` INT,
+    `table_2tdknr_name` VARCHAR(50),
+    `table_2tdknr_specialty` INT,
+    `table_2tdknr_hourly_rate` INT
+);
+
+INSERT INTO `table_scey55` (`table_scey55_project_id`, `table_scey55_client_id`, `table_scey55_project_type`, `table_scey55_estimated_hours`, `table_scey55_actual_hours`, `table_scey55_labor_rate`, `table_scey55_material_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_2tdknr` (`table_2tdknr_contractor_id`, `table_2tdknr_name`, `table_2tdknr_specialty`, `table_2tdknr_hourly_rate`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_ACTUAL_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 0;
+    DECLARE V_MATERIAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SCEY55_ESTIMATED_HOURS, 0), COALESCE(TABLE_SCEY55_ACTUAL_HOURS, 0), COALESCE(TABLE_SCEY55_LABOR_RATE, 50)
+    INTO V_ESTIMATED_HOURS, V_ACTUAL_HOURS, V_LABOR_RATE
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SCEY55_MATERIAL_COST), 0) INTO V_MATERIAL_COST
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SET V_TOTAL_COST = (V_ACTUAL_HOURS * V_LABOR_RATE) + V_MATERIAL_COST;
+    SET V_BUDGET = V_ESTIMATED_HOURS * V_LABOR_RATE;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = ((V_BUDGET - V_TOTAL_COST) * 100) / V_BUDGET;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+CREATE TABLE IF NOT EXISTS `table_ngw2f9` (
+    `table_ngw2f9_product_id` INT,
+    `table_ngw2f9_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ngw2f9` (`table_ngw2f9_product_id`, `table_ngw2f9_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NGW2F9_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_NGW2F9
+    WHERE TABLE_NGW2F9_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(43)) - 259 + ((MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn()) - -837 + ((MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(26)) - 650 + (floor(v_price))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+CREATE TABLE IF NOT EXISTS `table_v5hjvn` (
+    `table_v5hjvn_order_id` INT,
+    `table_v5hjvn_customer_id` INT,
+    `table_v5hjvn_order_date` DATE,
+    `table_v5hjvn_shipping_date` DATE,
+    `table_v5hjvn_delivery_date` DATE,
+    `table_v5hjvn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_57ma1s` (
+    `table_57ma1s_order_id` INT,
+    `table_57ma1s_product_id` INT,
+    `table_57ma1s_quantity` INT,
+    `table_57ma1s_discount_percent` INT
+);
+
+INSERT INTO `table_v5hjvn` (`table_v5hjvn_order_id`, `table_v5hjvn_customer_id`, `table_v5hjvn_order_date`, `table_v5hjvn_shipping_date`, `table_v5hjvn_delivery_date`, `table_v5hjvn_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_57ma1s` (`table_57ma1s_order_id`, `table_57ma1s_product_id`, `table_57ma1s_quantity`, `table_57ma1s_discount_percent`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DELIVERY_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DELIVERY_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_57MA1S_QUANTITY * TABLE_57MA1S_DISCOUNT_PERCENT), 0)
+    INTO V_DISCOUNT_PERCENT
+    FROM TABLE_57MA1S
+    WHERE TABLE_57MA1S_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT DATEDIFF(COALESCE(TABLE_V5HJVN_DELIVERY_DATE, CURDATE()), TABLE_V5HJVN_SHIPPING_DATE)
+    INTO V_ACTUAL_DELIVERY_DAYS
+    FROM TABLE_V5HJVN
+    WHERE TABLE_V5HJVN_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DELAY_DAYS = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (v_actual_delivery_days - v_expected_delivery_days);
+
+    IF V_DELAY_DAYS <= 0 THEN
+        SET V_DELAY_SCORE = 100;
+    ELSE
+        SET V_DELAY_SCORE = 100 - (V_DELAY_DAYS * 10);
+    END IF;
+
+    RETURN GREATEST(V_DELAY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, 0), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 5 UNION SELECT 15 UNION SELECT 25 UNION SELECT 35 UNION SELECT 45 UNION SELECT 55 UNION SELECT 65;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+CREATE TABLE IF NOT EXISTS `table_c3gwib` (
+    `table_c3gwib_campaign_id` INT,
+    `table_c3gwib_budget` INT
+);
+
+INSERT INTO `table_c3gwib` (`table_c3gwib_campaign_id`, `table_c3gwib_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C3GWIB_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_C3GWIB
+    WHERE TABLE_C3GWIB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN FLOOR(V_BUDGET / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_procedure_bug12379_1_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE cur CURSOR FOR SELECT val FROM bug12379_table;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    OPEN cur;
+    
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF v_val > p1 THEN
+CALL n3_output_0271_proc(67, -73, @_syn_24446);
+            SET v_sum = @_syn_24446 - @_io_result + (v_sum) + v_val;
+        ELSE
+            SET v_sum = v_sum + (MYSQL_FUNC_CALCULATE_SALARY_COMPETITIVENESS_d7ab4q(63)) - -549 + (p2);
+        END IF;
+    END LOOP;
+    
+    CLOSE cur;
+    
+    CASE
+        WHEN v_sum > 10 THEN SET result = v_sum * 2;
+        WHEN v_sum > 5 THEN SET result = v_sum + 1;
+        ELSE SET result = v_sum;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL sp_procedure_bug12379_1_proc(1, 1, @out_result);
+
+SELECT @out_result;

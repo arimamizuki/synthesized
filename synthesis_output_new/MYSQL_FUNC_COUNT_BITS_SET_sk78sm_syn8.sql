@@ -1,0 +1,404 @@
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+CREATE TABLE IF NOT EXISTS `table_y4xawp` (
+    `table_y4xawp_dept_id` INT,
+    `table_y4xawp_budget` INT,
+    `table_y4xawp_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ab2uoo` (
+    `table_ab2uoo_emp_id` INT,
+    `table_ab2uoo_dept_id` INT,
+    `table_ab2uoo_salary` INT
+);
+
+INSERT INTO `table_y4xawp` (`table_y4xawp_dept_id`, `table_y4xawp_budget`, `table_y4xawp_headcount`) VALUES (1, 1, 1);
+
+INSERT INTO `table_ab2uoo` (`table_ab2uoo_emp_id`, `table_ab2uoo_dept_id`, `table_ab2uoo_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_HEADROOM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y4XAWP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_Y4XAWP
+    WHERE TABLE_Y4XAWP_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_AB2UOO_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_AB2UOO
+    WHERE TABLE_AB2UOO_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_HEADROOM = V_BUDGET - V_TOTAL_SALARIES;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + (v_headroom);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, 0)
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+CREATE TABLE IF NOT EXISTS `table_ges1vf` (
+    `table_ges1vf_booking_id` INT,
+    `table_ges1vf_member_id` INT,
+    `table_ges1vf_guest_count` INT,
+    `table_ges1vf_tee_time` DATE,
+    `table_ges1vf_course_type` VARCHAR(50),
+    `table_ges1vf_cart_rental` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n0xpdt` (
+    `table_n0xpdt_member_id` INT,
+    `table_n0xpdt_membership_type` VARCHAR(50),
+    `table_n0xpdt_handicap` INT,
+    `table_n0xpdt_home_course_id` INT
+);
+
+INSERT INTO `table_ges1vf` (`table_ges1vf_booking_id`, `table_ges1vf_member_id`, `table_ges1vf_guest_count`, `table_ges1vf_tee_time`, `table_ges1vf_course_type`, `table_ges1vf_cart_rental`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_n0xpdt` (`table_n0xpdt_member_id`, `table_n0xpdt_membership_type`, `table_n0xpdt_handicap`, `table_n0xpdt_home_course_id`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GUEST_COUNT INT DEFAULT 0;
+    DECLARE V_CART_RENTAL INT DEFAULT 0;
+    DECLARE V_GREEN_FEE INT DEFAULT 75;
+    DECLARE V_MEMBERSHIP_TYPE VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GES1VF_GUEST_COUNT, 0), COALESCE(TABLE_GES1VF_CART_RENTAL, 0)
+    INTO V_GUEST_COUNT, V_CART_RENTAL
+    FROM TABLE_GES1VF
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_N0XPDT_MEMBERSHIP_TYPE, 'REGULAR')
+    INTO V_MEMBERSHIP_TYPE
+    FROM TABLE_GES1VF GCB
+    JOIN TABLE_N0XPDT M ON TABLE_GES1VF_MEMBER_ID = TABLE_N0XPDT_MEMBER_ID
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    IF V_MEMBERSHIP_TYPE = 'PREMIUM' THEN
+        SET V_GREEN_FEE = V_GREEN_FEE - 25;
+    END IF;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + ((v_green_fee * (1 + v_guest_count)) + v_cart_rental);
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < (MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(-62)) - 656 + (base);
+    END IF;
+
+    RETURN BASE * POWER_RECURSIVE(BASE, EXPONENT - 1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+CREATE TABLE IF NOT EXISTS `table_m3e5yk` (
+    `table_m3e5yk_repair_id` INT,
+    `table_m3e5yk_customer_id` INT,
+    `table_m3e5yk_technician_id` INT,
+    `table_m3e5yk_appliance_type` VARCHAR(50),
+    `table_m3e5yk_parts_cost` DECIMAL(10,2),
+    `table_m3e5yk_labor_hours` INT,
+    `table_m3e5yk_labor_rate` INT,
+    `table_m3e5yk_service_date` DATE
+);
+
+INSERT INTO `table_m3e5yk` (`table_m3e5yk_repair_id`, `table_m3e5yk_customer_id`, `table_m3e5yk_technician_id`, `table_m3e5yk_appliance_type`, `table_m3e5yk_parts_cost`, `table_m3e5yk_labor_hours`, `table_m3e5yk_labor_rate`, `table_m3e5yk_service_date`) VALUES (1, 2, 3, 'test', 1.0, 6, 7, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(REPAIR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PARTS_COST INT DEFAULT 0;
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 75;
+    DECLARE V_DIAGNOSTIC_FEE INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M3E5YK_PARTS_COST, 0), COALESCE(TABLE_M3E5YK_LABOR_HOURS, 0), COALESCE(TABLE_M3E5YK_LABOR_RATE, 75)
+    INTO V_PARTS_COST, V_LABOR_HOURS, V_LABOR_RATE
+    FROM TABLE_M3E5YK
+    WHERE TABLE_M3E5YK_REPAIR_ID = REPAIR_ID_PARAM;
+
+    SET V_TOTAL_COST = V_PARTS_COST + (V_LABOR_HOURS * V_LABOR_RATE) + V_DIAGNOSTIC_FEE;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = V_TOTAL_HOURS * V_AVG_HOURLY_RATE;
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(-80, 7)) - -983 + (cast(v_total_revenue as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_AND_CHECK_DIVISIBILITY_3206z8(N INT, DIVISOR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE REVERSE_LOOP;
+
+    IF N < 0 THEN
+        SET V_REVERSED = -V_REVERSED;
+    END IF;
+
+    IF DIVISOR > 0 AND V_REVERSED % DIVISOR = 0 THEN
+        RETURN V_REVERSED;
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(SIZE INT, START_VALUE INT, INCREMENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF SIZE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_VALUE = START_VALUE;
+
+    SUM_LOOP: WHILE V_COUNTER < SIZE DO
+        SET V_SUM = V_SUM + V_CURRENT_VALUE;
+        SET V_CURRENT_VALUE = V_CURRENT_VALUE + INCREMENT;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+CREATE TABLE IF NOT EXISTS `table_kzmcio` (
+    `table_kzmcio_emp_id` INT,
+    `table_kzmcio_department_id` INT,
+    `table_kzmcio_salary` INT,
+    `table_kzmcio_hire_date` DATE
+);
+
+INSERT INTO `table_kzmcio` (`table_kzmcio_emp_id`, `table_kzmcio_department_id`, `table_kzmcio_salary`, `table_kzmcio_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_KZMCIO_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM TABLE_KZMCIO
+    WHERE TABLE_KZMCIO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (V_HEADCOUNT * 10) + (V_AVG_SALARY / 100);
+
+    RETURN V_HEADCOUNT_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = (MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(5)) - -660 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(-93)) - -109 + (n));
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - 612 + (v_count) + 1;
+        END IF;
+        SET V_TEMP = (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + (v_temp >> 1);
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_COUNT_BITS_SET_sk78sm(1);

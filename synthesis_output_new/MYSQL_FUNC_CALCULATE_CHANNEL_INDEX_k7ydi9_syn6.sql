@@ -1,0 +1,447 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ybsj22` (
+    `table_ybsj22_campaign_id` INT,
+    `table_ybsj22_channel` INT
+);
+
+INSERT INTO `table_ybsj22` (`table_ybsj22_campaign_id`, `table_ybsj22_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_EVEN_eh19o4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_EVEN_eh19o4(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t----- */
+CREATE TABLE IF NOT EXISTS `table_sn1j61` (
+    `table_sn1j61_customer_id` INT,
+    `table_sn1j61_name` VARCHAR(50),
+    `table_sn1j61_email` INT,
+    `table_sn1j61_registration_date` DATE,
+    `table_sn1j61_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m1ll2a` (
+    `table_m1ll2a_order_id` INT,
+    `table_m1ll2a_customer_id` INT,
+    `table_m1ll2a_order_date` DATE,
+    `table_m1ll2a_total_amount` DECIMAL(10,2),
+    `table_m1ll2a_shipping_country` INT
+);
+
+INSERT INTO `table_sn1j61` (`table_sn1j61_customer_id`, `table_sn1j61_name`, `table_sn1j61_email`, `table_sn1j61_registration_date`, `table_sn1j61_country`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_m1ll2a` (`table_m1ll2a_order_id`, `table_m1ll2a_customer_id`, `table_m1ll2a_order_date`, `table_m1ll2a_total_amount`, `table_m1ll2a_shipping_country`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_SN1J61_COUNTRY, COUNT(*), SUM(TABLE_M1LL2A_TOTAL_AMOUNT)
+    INTO V_COUNTRY, V_TOTAL_ORDERS, V_TOTAL_SPENT
+    FROM TABLE_SN1J61 C
+    LEFT JOIN TABLE_M1LL2A O ON TABLE_SN1J61_CUSTOMER_ID = TABLE_M1LL2A_CUSTOMER_ID
+    WHERE TABLE_SN1J61_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY TABLE_SN1J61_CUSTOMER_ID, TABLE_SN1J61_COUNTRY;
+
+    SET V_ORDER_COUNT = V_TOTAL_ORDERS;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = (MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(29)) - 332 + (v_total_spent / v_order_count);
+    END IF;
+
+    RETURN COALESCE(V_AVG_ORDER_VALUE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb----- */
+CREATE TABLE IF NOT EXISTS `table_s8sk8e` (
+    `table_s8sk8e_contract_id` INT,
+    `table_s8sk8e_customer_id` INT,
+    `table_s8sk8e_contract_type` VARCHAR(50),
+    `table_s8sk8e_start_date` DATE,
+    `table_s8sk8e_end_date` DATE,
+    `table_s8sk8e_monthly_payment` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_d072ki` (
+    `table_d072ki_payment_id` INT,
+    `table_d072ki_contract_id` INT,
+    `table_d072ki_payment_date` DATE,
+    `table_d072ki_amount_paid` INT,
+    `table_d072ki_is_on_time` DATE
+);
+
+INSERT INTO `table_s8sk8e` (`table_s8sk8e_contract_id`, `table_s8sk8e_customer_id`, `table_s8sk8e_contract_type`, `table_s8sk8e_start_date`, `table_s8sk8e_end_date`, `table_s8sk8e_monthly_payment`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_d072ki` (`table_d072ki_payment_id`, `table_d072ki_contract_id`, `table_d072ki_payment_date`, `table_d072ki_amount_paid`, `table_d072ki_is_on_time`) VALUES (1, 2, '2024-01-01', 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_ON_TIME_PAYMENTS INT DEFAULT 0;
+    DECLARE V_PAYMENT_HEALTH INT DEFAULT 0;
+    DECLARE V_DAYS_UNTIL_EXPIRY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S8SK8E_MONTHLY_PAYMENT, 0)
+    INTO V_MONTHLY_PAYMENT
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_D072KI_IS_ON_TIME = 1 THEN 1 END)
+    INTO V_TOTAL_PAYMENTS, V_ON_TIME_PAYMENTS
+    FROM TABLE_D072KI
+    WHERE TABLE_D072KI_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_S8SK8E_END_DATE, CURDATE())
+    INTO V_DAYS_UNTIL_EXPIRY
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    IF V_TOTAL_PAYMENTS > 0 THEN
+        SET V_PAYMENT_HEALTH = (V_ON_TIME_PAYMENTS * 100) / V_TOTAL_PAYMENTS;
+    ELSE
+        SET V_PAYMENT_HEALTH = 100;
+    END IF;
+
+    IF V_DAYS_UNTIL_EXPIRY < 30 THEN
+        SET V_PAYMENT_HEALTH = (MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(-73)) - -514 + (v_payment_health - 20);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + (greatest(v_payment_health, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+CREATE TABLE IF NOT EXISTS `table_iy3rb0` (
+    `table_iy3rb0_order_id` INT,
+    `table_iy3rb0_customer_id` INT,
+    `table_iy3rb0_order_date` DATE,
+    `table_iy3rb0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5xz50t` (
+    `table_5xz50t_customer_id` INT,
+    `table_5xz50t_country` INT
+);
+
+INSERT INTO `table_iy3rb0` (`table_iy3rb0_order_id`, `table_iy3rb0_customer_id`, `table_iy3rb0_order_date`, `table_iy3rb0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_5xz50t` (`table_5xz50t_customer_id`, `table_5xz50t_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_ORDERS INT DEFAULT 0;
+    DECLARE V_PRIOR_ORDERS INT DEFAULT 0;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_ORDERS - V_PRIOR_ORDERS) * 100) / V_PRIOR_ORDERS;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(89)) - 7 + (floor((v_dept_avg * 100) / v_overall_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+CREATE TABLE IF NOT EXISTS `table_m3mbja` (
+    `table_m3mbja_campaign_id` INT,
+    `table_m3mbja_channel` INT,
+    `table_m3mbja_target_conversions` INT,
+    `table_m3mbja_actual_conversions` INT,
+    `table_m3mbja_impressions` INT,
+    `table_m3mbja_clicks` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ok18np` (
+    `table_ok18np_ad_group_id` INT,
+    `table_ok18np_campaign_id` INT,
+    `table_ok18np_keyword` INT,
+    `table_ok18np_quality_score` INT
+);
+
+INSERT INTO `table_m3mbja` (`table_m3mbja_campaign_id`, `table_m3mbja_channel`, `table_m3mbja_target_conversions`, `table_m3mbja_actual_conversions`, `table_m3mbja_impressions`, `table_m3mbja_clicks`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_ok18np` (`table_ok18np_ad_group_id`, `table_ok18np_campaign_id`, `table_ok18np_keyword`, `table_ok18np_quality_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(AD_GROUP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUALITY_SCORE INT DEFAULT 5;
+    DECLARE V_CTR DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_IMPRESSIONS INT DEFAULT 0;
+    DECLARE V_CLICKS INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_AD_QUALITY INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_M3MBJA_IMPRESSIONS), 0), COALESCE(SUM(TABLE_M3MBJA_CLICKS), 0), COALESCE(SUM(TABLE_M3MBJA_ACTUAL_CONVERSIONS), 0)
+    INTO V_IMPRESSIONS, V_CLICKS, V_CONVERSIONS
+    FROM TABLE_OK18NP AG
+    JOIN TABLE_M3MBJA C ON TABLE_OK18NP_CAMPAIGN_ID = TABLE_M3MBJA_CAMPAIGN_ID
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    SELECT TABLE_OK18NP_QUALITY_SCORE
+    INTO V_QUALITY_SCORE
+    FROM TABLE_OK18NP
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    IF V_IMPRESSIONS > 0 THEN
+        SET V_CTR = (V_CLICKS * 100.0) / V_IMPRESSIONS;
+    END IF;
+
+    IF V_CLICKS > 0 THEN
+        SET V_CONVERSION_RATE = (V_CONVERSIONS * 100.0) / V_CLICKS;
+    END IF;
+
+    SET V_AD_QUALITY = V_QUALITY_SCORE + (V_CTR * 2) + V_CONVERSION_RATE;
+
+    RETURN FLOOR(V_AD_QUALITY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(PRINCIPAL INT, RATE INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_YEARLY_INTEREST INT DEFAULT 0;
+
+    IF PRINCIPAL <= (MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(-44)) - 809 + (0) OR RATE <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET_LOOP: WHILE V_COUNTER <= YEARS DO
+        SET_LOOP_INNER: WHILE V_COUNTER <= 12 DO
+            SET V_RESULT = V_RESULT + (V_RESULT * RATE / 100 / 12);
+            SET V_COUNTER = V_COUNTER + 1;
+        END WHILE SET_LOOP_INNER;
+        SET V_COUNTER = V_COUNTER - 11;
+    END WHILE SET_LOOP;
+
+    RETURN CAST(V_RESULT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+CREATE TABLE IF NOT EXISTS `table_0era44` (
+    `table_0era44_policy_id` INT,
+    `table_0era44_customer_id` INT,
+    `table_0era44_property_value` INT,
+    `table_0era44_coverage_limit` INT,
+    `table_0era44_deductible_amount` DECIMAL(10,2),
+    `table_0era44_premium_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r40gj7` (
+    `table_r40gj7_claim_id` INT,
+    `table_r40gj7_policy_id` INT,
+    `table_r40gj7_claim_date` DATE,
+    `table_r40gj7_claim_amount` DECIMAL(10,2),
+    `table_r40gj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_0era44` (`table_0era44_policy_id`, `table_0era44_customer_id`, `table_0era44_property_value`, `table_0era44_coverage_limit`, `table_0era44_deductible_amount`, `table_0era44_premium_annual`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_r40gj7` (`table_r40gj7_claim_id`, `table_r40gj7_policy_id`, `table_r40gj7_claim_date`, `table_r40gj7_claim_amount`, `table_r40gj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PROPERTY_VALUE INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_COVERAGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0ERA44_PROPERTY_VALUE, 0), COALESCE(TABLE_0ERA44_COVERAGE_LIMIT, 0), COALESCE(TABLE_0ERA44_DEDUCTIBLE_AMOUNT, 0)
+    INTO V_PROPERTY_VALUE, V_COVERAGE_LIMIT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_0ERA44
+    WHERE TABLE_0ERA44_POLICY_ID = POLICY_ID_PARAM;
+
+    IF V_PROPERTY_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COVERAGE_RATIO = (V_COVERAGE_LIMIT * (MYSQL_FUNC_FUNC2_6cl681()) - -343 + (100)) / V_PROPERTY_VALUE;
+
+    IF V_COVERAGE_RATIO >= 80 AND V_DEDUCTIBLE_AMOUNT <= 1000 THEN
+        RETURN 100;
+    ELSEIF V_COVERAGE_RATIO >= 60 THEN
+        RETURN 75;
+    ELSE
+        RETURN 50;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC2_6cl681----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_6cl681() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_YBSJ22_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_YBSJ22
+    WHERE TABLE_YBSJ22_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(1);

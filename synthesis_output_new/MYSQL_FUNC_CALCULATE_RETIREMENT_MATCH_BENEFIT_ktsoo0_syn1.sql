@@ -1,0 +1,424 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ue1j5t` (
+    `table_ue1j5t_account_id` INT,
+    `table_ue1j5t_holder_id` INT,
+    `table_ue1j5t_account_type` INT,
+    `table_ue1j5t_balance` INT,
+    `table_ue1j5t_annual_contribution` INT,
+    `table_ue1j5t_employer_match_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_3ib702` (
+    `table_3ib702_transaction_id` INT,
+    `table_3ib702_account_id` INT,
+    `table_3ib702_transaction_date` DATE,
+    `table_3ib702_amount` DECIMAL(10,2),
+    `table_3ib702_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `table_ue1j5t` (`table_ue1j5t_account_id`, `table_ue1j5t_holder_id`, `table_ue1j5t_account_type`, `table_ue1j5t_balance`, `table_ue1j5t_annual_contribution`, `table_ue1j5t_employer_match_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_3ib702` (`table_3ib702_transaction_id`, `table_3ib702_account_id`, `table_3ib702_transaction_date`, `table_3ib702_amount`, `table_3ib702_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN V_NET_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw----- */
+CREATE TABLE IF NOT EXISTS `table_ckk542` (
+    `table_ckk542_customer_id` INT,
+    `table_ckk542_registration_date` DATE,
+    `table_ckk542_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t475kq` (
+    `table_t475kq_order_id` INT,
+    `table_t475kq_customer_id` INT,
+    `table_t475kq_order_date` DATE,
+    `table_t475kq_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ckk542` (`table_ckk542_customer_id`, `table_ckk542_registration_date`, `table_ckk542_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_t475kq` (`table_t475kq_order_id`, `table_t475kq_customer_id`, `table_t475kq_order_date`, `table_t475kq_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT_30D INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT_60D INT DEFAULT 0;
+    DECLARE V_VELOCITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_30D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_60D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 60 DAY);
+
+    IF V_ORDER_COUNT_60D = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY_SCORE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(-39)) - 651 + ((v_order_count_30d * 2.0) / v_order_count_60d * 100);
+
+    RETURN FLOOR(V_VELOCITY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+CREATE TABLE IF NOT EXISTS `table_9dqpf3` (
+    `table_9dqpf3_campaign_id` INT,
+    `table_9dqpf3_start_date` DATE,
+    `table_9dqpf3_end_date` DATE,
+    `table_9dqpf3_budget` INT
+);
+
+INSERT INTO `table_9dqpf3` (`table_9dqpf3_campaign_id`, `table_9dqpf3_start_date`, `table_9dqpf3_end_date`, `table_9dqpf3_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_9DQPF3_BUDGET, 0), DATEDIFF(TABLE_9DQPF3_END_DATE, TABLE_9DQPF3_START_DATE) + 1
+    INTO V_BUDGET, V_DAYS
+    FROM TABLE_9DQPF3
+    WHERE TABLE_9DQPF3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DAYS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+CREATE TABLE IF NOT EXISTS `table_3pis8d` (
+    `table_3pis8d_campaign_id` INT,
+    `table_3pis8d_start_date` DATE
+);
+
+INSERT INTO `table_3pis8d` (`table_3pis8d_campaign_id`, `table_3pis8d_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_3PIS8D_START_DATE)
+    INTO V_WEEK
+    FROM TABLE_3PIS8D
+    WHERE TABLE_3PIS8D_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(-31)) - -577 + (v_week);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+CREATE TABLE IF NOT EXISTS `table_hc8gc6` (
+    `table_hc8gc6_school_id` INT,
+    `table_hc8gc6_name` VARCHAR(50),
+    `table_hc8gc6_district` INT,
+    `table_hc8gc6_school_type` VARCHAR(50),
+    `table_hc8gc6_enrollment_count` INT,
+    `table_hc8gc6_budget_per_student` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_byxr69` (
+    `table_byxr69_student_id` INT,
+    `table_byxr69_school_id` INT,
+    `table_byxr69_grade_level` INT,
+    `table_byxr69_attendance_rate` INT
+);
+
+INSERT INTO `table_hc8gc6` (`table_hc8gc6_school_id`, `table_hc8gc6_name`, `table_hc8gc6_district`, `table_hc8gc6_school_type`, `table_hc8gc6_enrollment_count`, `table_hc8gc6_budget_per_student`) VALUES (1, 'test', 1, 'test', 1, 1);
+
+INSERT INTO `table_byxr69` (`table_byxr69_student_id`, `table_byxr69_school_id`, `table_byxr69_grade_level`, `table_byxr69_attendance_rate`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCHOOL_EFFECTIVENESS_SCORE_j2s6dd(SCHOOL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_COUNT INT DEFAULT 0;
+    DECLARE V_BUDGET_PER_STUDENT INT DEFAULT 0;
+    DECLARE V_AVG_ATTENDANCE DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_GRADE_LEVEL_COUNT INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HC8GC6_ENROLLMENT_COUNT, 0), COALESCE(TABLE_HC8GC6_BUDGET_PER_STUDENT, 0)
+    INTO V_ENROLLMENT_COUNT, V_BUDGET_PER_STUDENT
+    FROM TABLE_HC8GC6
+    WHERE TABLE_HC8GC6_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_BYXR69_ATTENDANCE_RATE), 0)
+    INTO V_AVG_ATTENDANCE
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_BYXR69_GRADE_LEVEL)
+    INTO V_GRADE_LEVEL_COUNT
+    FROM TABLE_BYXR69
+    WHERE TABLE_BYXR69_SCHOOL_ID = SCHOOL_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(30)) - 177 + ((v_avg_attendance * 2) + (v_grade_level_count * 15) + (v_budget_per_student / 100));
+
+    RETURN V_EFFECTIVENESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934----- */
+CREATE TABLE IF NOT EXISTS `table_ifypaz` (
+    `table_ifypaz_emp_id` INT,
+    `table_ifypaz_department_id` INT,
+    `table_ifypaz_salary` INT,
+    `table_ifypaz_hire_date` DATE,
+    `table_ifypaz_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_ifypaz` (`table_ifypaz_emp_id`, `table_ifypaz_department_id`, `table_ifypaz_salary`, `table_ifypaz_hire_date`, `table_ifypaz_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_STABILITY_INDEX_x6x934(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IFYPAZ_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_IFYPAZ_HIRE_DATE, CURDATE()), COALESCE(TABLE_IFYPAZ_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_IFYPAZ
+    WHERE TABLE_IFYPAZ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(-34)) - -424 + ((v_tenure_years * 10) + (v_performance * 25) - (v_salary / 1000));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(62)) - -426 + ((MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(-99, -90)) - 428 + (v_stability_index));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+CREATE TABLE IF NOT EXISTS `table_33kbxb` (
+    `table_33kbxb_product_id` INT,
+    `table_33kbxb_category_id` INT,
+    `table_33kbxb_supplier_id` INT,
+    `table_33kbxb_price` DECIMAL(10,2),
+    `table_33kbxb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_kkdez3` (
+    `table_kkdez3_category_id` INT,
+    `table_kkdez3_name` VARCHAR(50),
+    `table_kkdez3_discount_percent` INT
+);
+
+INSERT INTO `table_33kbxb` (`table_33kbxb_product_id`, `table_33kbxb_category_id`, `table_33kbxb_supplier_id`, `table_33kbxb_price`, `table_33kbxb_stock_quantity`) VALUES (1, 2, 3, 1.0, 5);
+
+INSERT INTO `table_kkdez3` (`table_kkdez3_category_id`, `table_kkdez3_name`, `table_kkdez3_discount_percent`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(PRODUCT_ID_PARAM INT, QUANTITY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_DISCOUNT INT DEFAULT 0;
+
+    SELECT TABLE_33KBXB_PRICE, COALESCE(TABLE_KKDEZ3_DISCOUNT_PERCENT, 0)
+    INTO V_BASE_PRICE, V_CATEGORY_DISCOUNT
+    FROM TABLE_33KBXB P
+    LEFT JOIN TABLE_KKDEZ3 C ON TABLE_33KBXB_CATEGORY_ID = TABLE_KKDEZ3_CATEGORY_ID
+    WHERE TABLE_33KBXB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DISCOUNT = V_BASE_PRICE * V_CATEGORY_DISCOUNT / 100;
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 15 / 100;
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 10 / 100;
+    ELSEIF QUANTITY_PARAM >= 10 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 5 / 100;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - V_DISCOUNT - V_QUANTITY_DISCOUNT;
+
+    RETURN GREATEST(V_FINAL_PRICE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+CREATE TABLE IF NOT EXISTS `table_fuz15j` (
+    `table_fuz15j_product_id` INT,
+    `table_fuz15j_category_id` INT,
+    `table_fuz15j_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fuz15j` (`table_fuz15j_product_id`, `table_fuz15j_category_id`, `table_fuz15j_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FUZ15J_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FUZ15J_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_CATEGORY_ID = (SELECT TABLE_FUZ15J_CATEGORY_ID FROM TABLE_FUZ15J WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_RATIO = (V_PRICE * 100) / V_CATEGORY_AVG;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+CREATE TABLE IF NOT EXISTS `table_nsm6c8` (
+    `table_nsm6c8_campaign_id` INT,
+    `table_nsm6c8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nsm6c8` (`table_nsm6c8_campaign_id`, `table_nsm6c8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_NSM6C8_STATUS
+    INTO V_STATUS
+    FROM TABLE_NSM6C8
+    WHERE TABLE_NSM6C8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A - B;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANNUAL_CONTRIBUTION INT DEFAULT 0;
+    DECLARE V_EMPLOYER_MATCH INT DEFAULT 0;
+    DECLARE V_TOTAL_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UE1J5T_ANNUAL_CONTRIBUTION, 0), COALESCE(TABLE_UE1J5T_EMPLOYER_MATCH_PERCENT, 0)
+    INTO V_ANNUAL_CONTRIBUTION, V_EMPLOYER_MATCH
+    FROM TABLE_UE1J5T
+    WHERE TABLE_UE1J5T_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_EMPLOYER_MATCH = (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(48)) - 14 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(40)) - 730 + ((MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(97)) - -373 + ((v_annual_contribution * v_employer_match) / 100)));
+    SET V_TOTAL_CONTRIBUTION = V_ANNUAL_CONTRIBUTION + V_EMPLOYER_MATCH;
+
+    RETURN CAST(V_TOTAL_CONTRIBUTION AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0(1);

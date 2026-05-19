@@ -1,0 +1,380 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1oa1v7` (
+    `table_1oa1v7_product_id` INT,
+    `table_1oa1v7_category_id` INT,
+    `table_1oa1v7_price` DECIMAL(10,2),
+    `table_1oa1v7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_axebhx` (
+    `table_axebhx_category_id` INT,
+    `table_axebhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_1oa1v7` (`table_1oa1v7_product_id`, `table_1oa1v7_category_id`, `table_1oa1v7_price`, `table_1oa1v7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_axebhx` (`table_axebhx_category_id`, `table_axebhx_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+CREATE TABLE IF NOT EXISTS `table_w6hk65` (
+    `table_w6hk65_cbigint` BIGINT
+);
+
+INSERT INTO `table_w6hk65` (`table_w6hk65_cbigint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT TABLE_W6HK65_CBIGINT FROM `TABLE_W6HK65`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = (MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(88)) - -995 + (result) + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+CREATE TABLE IF NOT EXISTS `table_zvz13f` (
+    `table_zvz13f_employee_id` INT,
+    `table_zvz13f_department_id` INT,
+    `table_zvz13f_salary` INT,
+    `table_zvz13f_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_9qjub2` (
+    `table_9qjub2_review_id` INT,
+    `table_9qjub2_employee_id` INT,
+    `table_9qjub2_review_date` DATE,
+    `table_9qjub2_score` INT
+);
+
+INSERT INTO `table_zvz13f` (`table_zvz13f_employee_id`, `table_zvz13f_department_id`, `table_zvz13f_salary`, `table_zvz13f_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_9qjub2` (`table_9qjub2_review_id`, `table_9qjub2_employee_id`, `table_9qjub2_review_date`, `table_9qjub2_score`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE_SCORE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_ZVZ13F_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9QJUB2_SCORE), 0.00)
+    INTO V_AVG_PERFORMANCE_SCORE
+    FROM TABLE_9QJUB2
+    WHERE TABLE_9QJUB2_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT TABLE_ZVZ13F_SALARY
+    INTO V_BASE_SALARY
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_BONUS_PERCENTAGE = LEAST(V_YEARS_EMPLOYED * 2, 20);
+
+    IF V_AVG_PERFORMANCE_SCORE >= 4.5 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 15;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 4.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 10;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 3.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 5;
+    END IF;
+
+    SET V_TOTAL_BONUS = (V_BASE_SALARY * V_BONUS_PERCENTAGE) / 100;
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(-73)) - 411 + ((MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(-39)) - -436 + (floor(v_price)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+CREATE TABLE IF NOT EXISTS `table_82n5hb` (
+    `table_82n5hb_customer_id` INT,
+    `table_82n5hb_country` INT
+);
+
+INSERT INTO `table_82n5hb` (`table_82n5hb_customer_id`, `table_82n5hb_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_82N5HB
+    WHERE TABLE_82N5HB_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+CREATE TABLE IF NOT EXISTS `table_do1xw5` (
+    `table_do1xw5_policy_id` INT,
+    `table_do1xw5_customer_id` INT,
+    `table_do1xw5_plan_type` VARCHAR(50),
+    `table_do1xw5_premium_monthly` INT,
+    `table_do1xw5_deductible_amount` DECIMAL(10,2),
+    `table_do1xw5_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0k2w6` (
+    `table_o0k2w6_claim_id` INT,
+    `table_o0k2w6_policy_id` INT,
+    `table_o0k2w6_claim_date` DATE,
+    `table_o0k2w6_claim_amount` DECIMAL(10,2),
+    `table_o0k2w6_status` VARCHAR(50)
+);
+
+INSERT INTO `table_do1xw5` (`table_do1xw5_policy_id`, `table_do1xw5_customer_id`, `table_do1xw5_plan_type`, `table_do1xw5_premium_monthly`, `table_do1xw5_deductible_amount`, `table_do1xw5_coverage_limit`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_o0k2w6` (`table_o0k2w6_claim_id`, `table_o0k2w6_policy_id`, `table_o0k2w6_claim_date`, `table_o0k2w6_claim_amount`, `table_o0k2w6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DO1XW5_PREMIUM_MONTHLY * 12), 0), COALESCE(MAX(TABLE_DO1XW5_COVERAGE_LIMIT), 0)
+    INTO V_TOTAL_PREMIUMS, V_COVERAGE_LIMIT
+    FROM TABLE_DO1XW5
+    WHERE TABLE_DO1XW5_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O0K2W6_CLAIM_AMOUNT), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_O0K2W6
+    WHERE TABLE_O0K2W6_POLICY_ID = POLICY_ID_PARAM AND TABLE_O0K2W6_STATUS = 'APPROVED';
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+CREATE TABLE IF NOT EXISTS `table_k6cijp` (
+    `table_k6cijp_course_id` INT,
+    `table_k6cijp_course_name` VARCHAR(50),
+    `table_k6cijp_credits` INT,
+    `table_k6cijp_department_id` INT,
+    `table_k6cijp_max_students` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rhsiv6` (
+    `table_rhsiv6_enrollment_id` INT,
+    `table_rhsiv6_student_id` INT,
+    `table_rhsiv6_course_id` INT,
+    `table_rhsiv6_grade` INT,
+    `table_rhsiv6_enrollment_date` DATE
+);
+
+INSERT INTO `table_k6cijp` (`table_k6cijp_course_id`, `table_k6cijp_course_name`, `table_k6cijp_credits`, `table_k6cijp_department_id`, `table_k6cijp_max_students`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_rhsiv6` (`table_rhsiv6_enrollment_id`, `table_rhsiv6_student_id`, `table_rhsiv6_course_id`, `table_rhsiv6_grade`, `table_rhsiv6_enrollment_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ENROLLED INT DEFAULT 0;
+    DECLARE V_PASSING_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_SUCCESS_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_RHSIV6_GRADE >= 60 THEN 1 END), COALESCE(AVG(TABLE_RHSIV6_GRADE), (MYSQL_FUNC_NEGATE_VALUE_1ykrf9(1)) - 423 + ((MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (0)))
+    INTO V_TOTAL_ENROLLED, V_PASSING_COUNT, V_AVG_GRADE
+    FROM TABLE_RHSIV6
+    WHERE TABLE_RHSIV6_COURSE_ID = COURSE_ID_PARAM;
+
+    IF V_TOTAL_ENROLLED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUCCESS_RATE = (V_PASSING_COUNT * 100) / V_TOTAL_ENROLLED;
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_SUCCESS_RATE = V_SUCCESS_RATE + 5;
+    END IF;
+
+    RETURN CAST(V_SUCCESS_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_VALUE_1ykrf9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_VALUE_1ykrf9(X INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_RECURSIVE_SUM_pkwdud(86, 70)) - -171 + (-x);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RECURSIVE_SUM_pkwdud----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RECURSIVE_SUM_pkwdud(N INT, DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF DEPTH <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    IF DEPTH > 1 THEN
+        SET V_RESULT = V_RESULT + RECURSIVE_SUM(N - 1, DEPTH - 1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_1OA1V7_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(-5)) - 75 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (MYSQL_FUNC_PROC_BIGINT_elxddt()) - 293 + ((v_premium_products * 100) / v_total_products);
+
+    RETURN (MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(-46)) - -687 + (v_premium_ratio);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(1);

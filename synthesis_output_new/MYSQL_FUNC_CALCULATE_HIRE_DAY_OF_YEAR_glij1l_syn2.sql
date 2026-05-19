@@ -1,0 +1,353 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_2vrwu4` (
+    `table_2vrwu4_emp_id` INT,
+    `table_2vrwu4_hire_date` DATE
+);
+
+INSERT INTO `table_2vrwu4` (`table_2vrwu4_emp_id`, `table_2vrwu4_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+CREATE TABLE IF NOT EXISTS `table_xfpd87` (
+    `table_xfpd87_id` INT PRIMARY KEY,
+    `table_xfpd87_age` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ci4h3f` (
+    `table_ci4h3f_user_id` INT,
+    `table_ci4h3f_address` VARCHAR(30),
+    `table_ci4h3f_town` VARCHAR(30)
+);
+
+INSERT INTO `table_xfpd87` (`table_xfpd87_id`, `table_xfpd87_age`) VALUES (1, 2);
+
+INSERT INTO `table_ci4h3f` (`table_ci4h3f_user_id`, `table_ci4h3f_address`, `table_ci4h3f_town`) VALUES (1, 'test', 'test');
+
+/* -----Called: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(P_ADDRESS INT, V_TOWN INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROWS_UPDATED INT DEFAULT 0;
+    
+    UPDATE `TABLE_XFPD87` AS U
+    JOIN `TABLE_CI4H3F` AS A
+    ON U.`TABLE_XFPD87_ID` = A.`TABLE_CI4H3F_USER_ID`
+    SET `TABLE_XFPD87_AGE` = `TABLE_XFPD87_AGE` + 10
+    WHERE A.`TABLE_CI4H3F_ADDRESS` = CAST(P_ADDRESS AS CHAR) AND A.`TABLE_CI4H3F_TOWN` = CAST(V_TOWN AS CHAR);
+    
+    SET ROWS_UPDATED = ROW_COUNT();
+    
+    RETURN (MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(90)) - -75 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(57)) - 618 + ((MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(30)) - -72 + (rows_updated))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+CREATE TABLE IF NOT EXISTS `table_isab02` (
+    `table_isab02_order_id` INT,
+    `table_isab02_order_date` DATE
+);
+
+INSERT INTO `table_isab02` (`table_isab02_order_id`, `table_isab02_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_ISAB02_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_ISAB02
+    WHERE TABLE_ISAB02_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+CREATE TABLE IF NOT EXISTS `table_5ajvmd` (
+    `table_5ajvmd_product_id` INT,
+    `table_5ajvmd_category_id` INT,
+    `table_5ajvmd_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5ajvmd` (`table_5ajvmd_product_id`, `table_5ajvmd_category_id`, `table_5ajvmd_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_5AJVMD_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_5AJVMD
+    WHERE TABLE_5AJVMD_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+CREATE TABLE IF NOT EXISTS `table_nr5gub` (
+    `table_nr5gub_customer_id` INT,
+    `table_nr5gub_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nr5gub` (`table_nr5gub_customer_id`, `table_nr5gub_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVE_SUBSCRIPTION_COUNT_r0rxm7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NR5GUB
+    WHERE TABLE_NR5GUB_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_NR5GUB_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(-73)) - -814 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(95)) - 779 + (p_n * p_n * p_n);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+CREATE TABLE IF NOT EXISTS table_i88pr4 (
+    table_i88pr4_id INT,
+    table_i88pr4_preco INT
+);
+
+INSERT INTO table_i88pr4 (`table_i88pr4_id`, `table_i88pr4_preco`) VALUES (2, 100);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(VAR_PRODUTO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    
+    SELECT TABLE_I88PR4_PRECO INTO RESULT
+    FROM TABLE_I88PR4
+    WHERE TABLE_I88PR4.TABLE_I88PR4_ID = VAR_PRODUTO;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = LOOP_COUNT + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN 5;
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(-97)) - -942 + (4);
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN 3;
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+CREATE TABLE IF NOT EXISTS `table_r42k1u` (
+    `table_r42k1u_product_id` INT,
+    `table_r42k1u_sku` INT,
+    `table_r42k1u_name` VARCHAR(50),
+    `table_r42k1u_category_id` INT,
+    `table_r42k1u_price` DECIMAL(10,2),
+    `table_r42k1u_cost` DECIMAL(10,2),
+    `table_r42k1u_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_032md1` (
+    `table_032md1_transaction_id` INT,
+    `table_032md1_product_id` INT,
+    `table_032md1_quantity` INT,
+    `table_032md1_transaction_date` DATE
+);
+
+INSERT INTO `table_r42k1u` (`table_r42k1u_product_id`, `table_r42k1u_sku`, `table_r42k1u_name`, `table_r42k1u_category_id`, `table_r42k1u_price`, `table_r42k1u_cost`, `table_r42k1u_stock_quantity`) VALUES (1, 2, 'test', 4, 1.0, 1.0, 7);
+
+INSERT INTO `table_032md1` (`table_032md1_transaction_id`, `table_032md1_product_id`, `table_032md1_quantity`, `table_032md1_transaction_date`) VALUES (1, 2, 3, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_RECENT_SALES_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R42K1U_PRICE, 0), COALESCE(TABLE_R42K1U_COST, 0)
+    INTO V_PRICE, V_COST
+    FROM TABLE_R42K1U
+    WHERE TABLE_R42K1U_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RECENT_SALES_COUNT
+    FROM TABLE_032MD1
+    WHERE TABLE_032MD1_PRODUCT_ID = PRODUCT_ID_PARAM
+      AND TABLE_032MD1_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_PRICE - V_COST) * 100) / V_PRICE;
+
+    IF V_RECENT_SALES_COUNT < 5 THEN
+        SET V_PROFIT_MARGIN = (MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(11)) - 630 + (v_profit_margin - 10);
+    END IF;
+
+    RETURN CAST(V_PROFIT_MARGIN AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+CREATE TABLE IF NOT EXISTS `table_9xgqho` (
+    `table_9xgqho_product_id` INT,
+    `table_9xgqho_category_id` INT,
+    `table_9xgqho_price` DECIMAL(10,2),
+    `table_9xgqho_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_izucf1` (
+    `table_izucf1_category_id` INT,
+    `table_izucf1_category_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9xgqho` (`table_9xgqho_product_id`, `table_9xgqho_category_id`, `table_9xgqho_price`, `table_9xgqho_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_izucf1` (`table_izucf1_category_id`, `table_izucf1_category_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE INT;
+    DECLARE V_MIN_PRICE INT;
+    DECLARE V_MAX_PRICE INT;
+    DECLARE V_PRODUCT_COUNT INT;
+
+    SELECT COALESCE(AVG(TABLE_9XGQHO_PRICE), 0), MIN(TABLE_9XGQHO_PRICE), MAX(TABLE_9XGQHO_PRICE), COUNT(*)
+    INTO V_AVG_PRICE, V_MIN_PRICE, V_MAX_PRICE, V_PRODUCT_COUNT
+    FROM TABLE_9XGQHO
+    WHERE TABLE_9XGQHO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_PRODUCT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AVG_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_2VRWU4_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_2VRWU4
+    WHERE TABLE_2VRWU4_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(2)) - 487 + ((MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(1, -98)) - 240 + (dayofyear(v_hire_date)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(1);

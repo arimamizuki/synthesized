@@ -1,0 +1,347 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+CREATE TABLE IF NOT EXISTS `table_21q6aw` (
+    `table_21q6aw_rental_id` INT,
+    `table_21q6aw_customer_id` INT,
+    `table_21q6aw_bicycle_id` INT,
+    `table_21q6aw_rental_date` DATE,
+    `table_21q6aw_rental_hours` INT,
+    `table_21q6aw_hourly_rate` INT,
+    `table_21q6aw_return_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cb6kwj` (
+    `table_cb6kwj_bicycle_id` INT,
+    `table_cb6kwj_bicycle_type` VARCHAR(50),
+    `table_cb6kwj_condition` INT,
+    `table_cb6kwj_value` INT
+);
+
+INSERT INTO `table_21q6aw` (`table_21q6aw_rental_id`, `table_21q6aw_customer_id`, `table_21q6aw_bicycle_id`, `table_21q6aw_rental_date`, `table_21q6aw_rental_hours`, `table_21q6aw_hourly_rate`, `table_21q6aw_return_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_cb6kwj` (`table_cb6kwj_bicycle_id`, `table_cb6kwj_bicycle_type`, `table_cb6kwj_condition`, `table_cb6kwj_value`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 10;
+    DECLARE V_BICYCLE_VALUE INT DEFAULT 500;
+    DECLARE V_INSURANCE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_21Q6AW_RENTAL_HOURS, 1), COALESCE(TABLE_21Q6AW_HOURLY_RATE, 10)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE
+    FROM TABLE_21Q6AW
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CB6KWJ_VALUE, 500) INTO V_BICYCLE_VALUE
+    FROM TABLE_21Q6AW BR
+    JOIN TABLE_CB6KWJ B ON TABLE_21Q6AW_BICYCLE_ID = TABLE_CB6KWJ_BICYCLE_ID
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE;
+
+    IF V_BICYCLE_VALUE > 1000 THEN
+        SET V_INSURANCE_FEE = (MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(-95)) - -934 + (v_rental_hours * 5);
+        SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(36)) - 837 + (v_total_cost + v_insurance_fee);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+CREATE TABLE IF NOT EXISTS `table_an7207` (
+    `table_an7207_emp_id` INT,
+    `table_an7207_manager_id` INT,
+    `table_an7207_department_id` INT,
+    `table_an7207_salary` INT,
+    `table_an7207_hire_date` DATE
+);
+
+INSERT INTO `table_an7207` (`table_an7207_emp_id`, `table_an7207_manager_id`, `table_an7207_department_id`, `table_an7207_salary`, `table_an7207_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_AN7207_SALARY, TIMESTAMPDIFF(YEAR, TABLE_AN7207_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_AN7207
+    WHERE TABLE_AN7207_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = (MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(30, 84)) - 479 + ((MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn()) - -837 + (v_salary * (1 + v_tenure_years * 0.02)));
+
+    RETURN (MYSQL_FUNC_PROC1_cvo8ys()) - 819 + (floor(v_adjusted_salary));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 5 UNION SELECT 15 UNION SELECT 25 UNION SELECT 35 UNION SELECT 45 UNION SELECT 55 UNION SELECT 65;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = POW(A, 3) + POW(B, 3);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = FLOOR(SQRT(V_POWER));
+    END IF;
+
+    SET V_RESULT = (A * B) + V_SQRT_VAL + (A % B);
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+CREATE TABLE IF NOT EXISTS `table_lbmp6b` (
+    `table_lbmp6b_emp_id` INT,
+    `table_lbmp6b_department_id` INT,
+    `table_lbmp6b_salary` INT
+);
+
+INSERT INTO `table_lbmp6b` (`table_lbmp6b_emp_id`, `table_lbmp6b_department_id`, `table_lbmp6b_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_LBMP6B_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_LBMP6B_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_DEPARTMENT_ID = (SELECT TABLE_LBMP6B_DEPARTMENT_ID FROM TABLE_LBMP6B WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM);
+
+    RETURN FLOOR((V_SALARY * 100) / V_DEPT_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARK_OCCUPANCY_sw9cx7----- */
+CREATE TABLE IF NOT EXISTS `table_butway` (
+    `table_butway_ticket_id` INT,
+    `table_butway_visitor_id` INT,
+    `table_butway_park_id` INT,
+    `table_butway_ticket_type` VARCHAR(50),
+    `table_butway_purchase_date` DATE,
+    `table_butway_visit_date` DATE,
+    `table_butway_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mt0az5` (
+    `table_mt0az5_park_id` INT,
+    `table_mt0az5_name` VARCHAR(50),
+    `table_mt0az5_operating_hours` DECIMAL(3,1),
+    `table_mt0az5_capacity` INT
+);
+
+INSERT INTO `table_butway` (`table_butway_ticket_id`, `table_butway_visitor_id`, `table_butway_park_id`, `table_butway_ticket_type`, `table_butway_purchase_date`, `table_butway_visit_date`, `table_butway_price`) VALUES (1, 2, 3, 'test', '2024-01-01', '2024-01-01', 1.0);
+
+INSERT INTO `table_mt0az5` (`table_mt0az5_park_id`, `table_mt0az5_name`, `table_mt0az5_operating_hours`, `table_mt0az5_capacity`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARK_OCCUPANCY_sw9cx7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARK_OCCUPANCY_sw9cx7(PARK_ID_PARAM INT, TARGET_DATE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TICKETS_SOLD INT DEFAULT 0;
+    DECLARE V_PARK_CAPACITY INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_BUTWAY_VISITOR_ID) INTO V_TICKETS_SOLD
+    FROM TABLE_BUTWAY
+    WHERE TABLE_BUTWAY_PARK_ID = PARK_ID_PARAM
+      AND YEAR(TABLE_BUTWAY_VISIT_DATE) = TARGET_DATE_PARAM;
+
+    SELECT COALESCE(TABLE_MT0AZ5_CAPACITY, 1000) INTO V_PARK_CAPACITY
+    FROM TABLE_MT0AZ5
+    WHERE TABLE_MT0AZ5_PARK_ID = PARK_ID_PARAM;
+
+    IF V_PARK_CAPACITY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_TICKETS_SOLD * 100) / V_PARK_CAPACITY;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7()) - -552 + (cast(v_occupancy_percent as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 4 UNION SELECT 9 UNION SELECT 16 UNION SELECT 25;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(-78, 28)) - -527 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+CREATE TABLE IF NOT EXISTS `table_nw3b9o` (
+    `table_nw3b9o_zone_id` INT,
+    `table_nw3b9o_hourly_rate` INT,
+    `table_nw3b9o_max_capacity` INT,
+    `table_nw3b9o_current_occupied` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8u2yi0` (
+    `table_8u2yi0_trans_id` INT,
+    `table_8u2yi0_vehicle_id` INT,
+    `table_8u2yi0_zone_id` INT,
+    `table_8u2yi0_entry_time` DATE,
+    `table_8u2yi0_exit_time` DATE,
+    `table_8u2yi0_amount_paid` INT
+);
+
+INSERT INTO `table_nw3b9o` (`table_nw3b9o_zone_id`, `table_nw3b9o_hourly_rate`, `table_nw3b9o_max_capacity`, `table_nw3b9o_current_occupied`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_8u2yi0` (`table_8u2yi0_trans_id`, `table_8u2yi0_vehicle_id`, `table_8u2yi0_zone_id`, `table_8u2yi0_entry_time`, `table_8u2yi0_exit_time`, `table_8u2yi0_amount_paid`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(ZONE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_MAX_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_OCCUPIED INT DEFAULT 0;
+    DECLARE V_BASE_FEE INT DEFAULT 0;
+    DECLARE V_SURGE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NW3B9O_HOURLY_RATE, 10), COALESCE(TABLE_NW3B9O_MAX_CAPACITY, 100)
+    INTO V_HOURLY_RATE, V_MAX_CAPACITY
+    FROM TABLE_NW3B9O
+    WHERE TABLE_NW3B9O_ZONE_ID = ZONE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_OCCUPIED
+    FROM TABLE_8U2YI0
+    WHERE TABLE_8U2YI0_ZONE_ID = ZONE_ID_PARAM AND TABLE_8U2YI0_EXIT_TIME IS NULL;
+
+    SET V_BASE_FEE = HOURS_PARAM * V_HOURLY_RATE;
+
+    IF V_CURRENT_OCCUPIED > V_MAX_CAPACITY * 80 / 100 THEN
+        SET V_SURGE_FEE = V_BASE_FEE * 25 / 100;
+    END IF;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + V_SURGE_FEE;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_cvo8ys() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PROC1_cvo8ys();

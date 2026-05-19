@@ -1,0 +1,408 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_r4s3gm` (
+    `table_r4s3gm_customer_id` INT,
+    `table_r4s3gm_registration_date` DATE
+);
+
+INSERT INTO `table_r4s3gm` (`table_r4s3gm_customer_id`, `table_r4s3gm_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(-20)) - 877 + (v_total_cost + 30);
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(64)) - 180 + (v_total_cost + (v_pet_weight - 50));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(36)) - 837 + (cast(v_total_cost as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+CREATE TABLE IF NOT EXISTS `table_yrlxl9` (
+    `table_yrlxl9_customer_id` INT,
+    `table_yrlxl9_country` INT
+);
+
+INSERT INTO `table_yrlxl9` (`table_yrlxl9_customer_id`, `table_yrlxl9_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_CUSTOMERS
+    FROM TABLE_YRLXL9
+    WHERE TABLE_YRLXL9_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_YRLXL9;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_COUNTRY_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+CREATE TABLE IF NOT EXISTS `table_qx7ezz` (
+    `table_qx7ezz_customer_id` INT,
+    `table_qx7ezz_registration_date` DATE,
+    `table_qx7ezz_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l1v2g` (
+    `table_4l1v2g_order_id` INT,
+    `table_4l1v2g_customer_id` INT,
+    `table_4l1v2g_order_date` DATE,
+    `table_4l1v2g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_qx7ezz` (`table_qx7ezz_customer_id`, `table_qx7ezz_registration_date`, `table_qx7ezz_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_4l1v2g` (`table_4l1v2g_order_id`, `table_4l1v2g_customer_id`, `table_4l1v2g_order_date`, `table_4l1v2g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HISTORICAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TREND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_HISTORICAL_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE < DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_HISTORICAL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_TREND_SCORE = ((V_RECENT_AVG - V_HISTORICAL_AVG) * 100) / V_HISTORICAL_AVG;
+
+    RETURN V_TREND_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+CREATE TABLE IF NOT EXISTS `table_lbmp6b` (
+    `table_lbmp6b_emp_id` INT,
+    `table_lbmp6b_department_id` INT,
+    `table_lbmp6b_salary` INT
+);
+
+INSERT INTO `table_lbmp6b` (`table_lbmp6b_emp_id`, `table_lbmp6b_department_id`, `table_lbmp6b_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_LBMP6B_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_LBMP6B_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_DEPARTMENT_ID = (SELECT TABLE_LBMP6B_DEPARTMENT_ID FROM TABLE_LBMP6B WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM);
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + ((MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(76)) - -958 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - 168 + (floor((v_salary * 100) / v_dept_avg))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = 0;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN FLOOR(V_COMPETITIVENESS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - 913 + ((MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(-2, 65)) - -515 + (floor(v_price)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(-43)) - 389 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_x9rso1(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF NUM <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CHECK_LOOP: WHILE V_DIVISOR < NUM DO
+        IF NUM MOD V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE CHECK_LOOP;
+
+    IF V_SUM = NUM THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+CREATE TABLE IF NOT EXISTS `table_74xcmp` (
+    `table_74xcmp_airline_id` INT,
+    `table_74xcmp_name` VARCHAR(50),
+    `table_74xcmp_iata_code` INT,
+    `table_74xcmp_safety_rating` DECIMAL(3,1),
+    `table_74xcmp_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r5kuxo` (
+    `table_r5kuxo_flight_id` INT,
+    `table_r5kuxo_airline_id` INT,
+    `table_r5kuxo_origin` INT,
+    `table_r5kuxo_destination` INT,
+    `table_r5kuxo_distance_miles` INT
+);
+
+INSERT INTO `table_74xcmp` (`table_74xcmp_airline_id`, `table_74xcmp_name`, `table_74xcmp_iata_code`, `table_74xcmp_safety_rating`, `table_74xcmp_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `table_r5kuxo` (`table_r5kuxo_flight_id`, `table_r5kuxo_airline_id`, `table_r5kuxo_origin`, `table_r5kuxo_destination`, `table_r5kuxo_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_74XCMP_SAFETY_RATING, 80), COALESCE(TABLE_74XCMP_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM TABLE_74XCMP
+    WHERE TABLE_74XCMP_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN GREATEST(V_ENVIRONMENTAL_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_R4S3GM_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_R4S3GM
+    WHERE TABLE_R4S3GM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + (v_age_years);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(1);

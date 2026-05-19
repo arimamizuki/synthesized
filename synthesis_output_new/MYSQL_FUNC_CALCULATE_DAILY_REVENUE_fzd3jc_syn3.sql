@@ -1,0 +1,395 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc(ARR_SIZE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF ARR_SIZE <= 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(-94)) - -509 + (0);
+    END IF;
+
+    SET V_I = 1;
+    OUTER_WHILE: WHILE V_I < ARR_SIZE DO
+        SET V_J = V_I;
+        INNER_WHILE: WHILE V_J > 0 DO
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa(83)) - -708 + (v_count + 1);
+            SET V_J = V_J - 1;
+        END WHILE INNER_WHILE;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+CREATE TABLE IF NOT EXISTS `table_4ua3im` (
+    `table_4ua3im_rental_id` INT,
+    `table_4ua3im_equipment_id` INT,
+    `table_4ua3im_customer_id` INT,
+    `table_4ua3im_rental_date` DATE,
+    `table_4ua3im_return_date` DATE,
+    `table_4ua3im_daily_rate` INT,
+    `table_4ua3im_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_n9ijgh` (
+    `table_n9ijgh_equipment_id` INT,
+    `table_n9ijgh_name` VARCHAR(50),
+    `table_n9ijgh_category` INT,
+    `table_n9ijgh_replacement_value` INT,
+    `table_n9ijgh_is_insured` INT
+);
+
+INSERT INTO `table_4ua3im` (`table_4ua3im_rental_id`, `table_4ua3im_equipment_id`, `table_4ua3im_customer_id`, `table_4ua3im_rental_date`, `table_4ua3im_return_date`, `table_4ua3im_daily_rate`, `table_4ua3im_deposit_amount`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_n9ijgh` (`table_n9ijgh_equipment_id`, `table_n9ijgh_name`, `table_n9ijgh_category`, `table_n9ijgh_replacement_value`, `table_n9ijgh_is_insured`) VALUES (1, 'test', 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_DATE DATE;
+    DECLARE V_RETURN_DATE DATE;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+    DECLARE V_DEPOSIT INT DEFAULT 0;
+    DECLARE V_RENTAL_DAYS INT DEFAULT 0;
+    DECLARE V_REPLACEMENT_VALUE INT DEFAULT 0;
+    DECLARE V_INSURANCE_COST INT DEFAULT 0;
+
+    SELECT TABLE_4UA3IM_RENTAL_DATE, TABLE_4UA3IM_RETURN_DATE, TABLE_4UA3IM_DAILY_RATE, TABLE_4UA3IM_DEPOSIT_AMOUNT, TABLE_N9IJGH_REPLACEMENT_VALUE
+    INTO V_RENTAL_DATE, V_RETURN_DATE, V_DAILY_RATE, V_DEPOSIT, V_REPLACEMENT_VALUE
+    FROM TABLE_4UA3IM R
+    JOIN TABLE_N9IJGH E ON TABLE_4UA3IM_EQUIPMENT_ID = TABLE_N9IJGH_EQUIPMENT_ID
+    WHERE TABLE_4UA3IM_RENTAL_ID = RENTAL_ID_PARAM;
+
+    IF V_RETURN_DATE IS NULL THEN
+        SET V_RETURN_DATE = CURDATE();
+    END IF;
+
+    SET V_RENTAL_DAYS = DATEDIFF(V_RETURN_DATE, V_RENTAL_DATE);
+    IF V_RENTAL_DAYS <= 0 THEN
+        SET V_RENTAL_DAYS = 1;
+    END IF;
+
+    SET V_INSURANCE_COST = (V_REPLACEMENT_VALUE * V_RENTAL_DAYS) / 1000;
+
+    IF V_DEPOSIT < V_INSURANCE_COST THEN
+        SET V_INSURANCE_COST = V_INSURANCE_COST + 50;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(36)) - 717 + (cast(v_insurance_cost as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc----- */
+CREATE TABLE IF NOT EXISTS `table_ioy17i` (
+    `table_ioy17i_product_id` INT,
+    `table_ioy17i_category_id` INT
+);
+
+INSERT INTO `table_ioy17i` (`table_ioy17i_product_id`, `table_ioy17i_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_INDEX_5oedfc(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_IOY17I
+    WHERE TABLE_IOY17I_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT * 3;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa----- */
+CREATE TABLE IF NOT EXISTS `table_aye21j` (
+    `table_aye21j_employee_id` INT,
+    `table_aye21j_department_id` INT,
+    `table_aye21j_salary` INT,
+    `table_aye21j_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1x2rb1` (
+    `table_1x2rb1_department_id` INT,
+    `table_1x2rb1_name` VARCHAR(50),
+    `table_1x2rb1_manager_id` INT
+);
+
+INSERT INTO `table_aye21j` (`table_aye21j_employee_id`, `table_aye21j_department_id`, `table_aye21j_salary`, `table_aye21j_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1x2rb1` (`table_1x2rb1_department_id`, `table_1x2rb1_name`, `table_1x2rb1_manager_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa(DEPT_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_BAND_RANGE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_AYE21J_SALARY), 0), COALESCE(MAX(TABLE_AYE21J_SALARY), 0), COALESCE(MIN(TABLE_AYE21J_SALARY), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_AYE21J
+    WHERE TABLE_AYE21J_DEPARTMENT_ID = DEPT_ID;
+
+    SET V_BAND_RANGE = V_MAX_SALARY - V_MIN_SALARY;
+
+    CASE
+        WHEN V_EMP_COUNT = 0 THEN RETURN 0;
+        WHEN V_AVG_SALARY < 3000 THEN SET V_BAND_RANGE = V_BAND_RANGE * 8 / 10;
+        WHEN V_AVG_SALARY > 10000 THEN SET V_BAND_RANGE = V_BAND_RANGE * 12 / 10;
+        ELSE SET V_BAND_RANGE = V_BAND_RANGE * 10 / 10;
+    END CASE;
+
+    RETURN V_BAND_RANGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba----- */
+CREATE TABLE IF NOT EXISTS `table_ndpda6` (
+    `table_ndpda6_emp_id` INT,
+    `table_ndpda6_department_id` INT,
+    `table_ndpda6_salary` INT,
+    `table_ndpda6_hire_date` DATE,
+    `table_ndpda6_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_ndpda6` (`table_ndpda6_emp_id`, `table_ndpda6_department_id`, `table_ndpda6_salary`, `table_ndpda6_hire_date`, `table_ndpda6_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_NDPDA6_PERFORMANCE_RATING), 0), COALESCE(AVG(TABLE_NDPDA6_SALARY), 0)
+    INTO V_AVG_PERFORMANCE, V_AVG_SALARY
+    FROM TABLE_NDPDA6
+    WHERE TABLE_NDPDA6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_SCORE = (V_AVG_PERFORMANCE * 50) + (V_AVG_SALARY / 200);
+
+    RETURN V_PERFORMANCE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(-13)) - -4 + ((MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(-57)) - 588 + (v_direct_reports));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+CREATE TABLE IF NOT EXISTS `table_h2mz5q` (
+    `table_h2mz5q_emp_id` INT,
+    `table_h2mz5q_salary` INT,
+    `table_h2mz5q_dept_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u90ptn` (
+    `table_u90ptn_dept_id` INT,
+    `table_u90ptn_dept_name` VARCHAR(50),
+    `table_u90ptn_budget` INT
+);
+
+INSERT INTO `table_h2mz5q` (`table_h2mz5q_emp_id`, `table_h2mz5q_salary`, `table_h2mz5q_dept_id`) VALUES (1, 1, 1);
+
+INSERT INTO `table_u90ptn` (`table_u90ptn_dept_id`, `table_u90ptn_dept_name`, `table_u90ptn_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_SALARY INT;
+
+    DECLARE SALARY_CURSOR CURSOR FOR
+        SELECT TABLE_H2MZ5Q_SALARY FROM TABLE_H2MZ5Q WHERE TABLE_H2MZ5Q_DEPT_ID = DEPT_ID_PARAM;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_TOTAL_SALARY = -1;
+
+    OPEN SALARY_CURSOR;
+
+    SALARY_LOOP: WHILE V_DONE = 0 DO
+        FETCH SALARY_CURSOR INTO V_SALARY;
+        IF V_DONE = 0 THEN
+            SET V_TOTAL_SALARY = V_TOTAL_SALARY + V_SALARY;
+        END IF;
+    END WHILE SALARY_LOOP;
+
+    CLOSE SALARY_CURSOR;
+
+    RETURN COALESCE(V_TOTAL_SALARY, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+CREATE TABLE IF NOT EXISTS `table_lho0kf` (
+    `table_lho0kf_campaign_id` INT,
+    `table_lho0kf_start_date` DATE,
+    `table_lho0kf_end_date` DATE
+);
+
+INSERT INTO `table_lho0kf` (`table_lho0kf_campaign_id`, `table_lho0kf_start_date`, `table_lho0kf_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_LHO0KF_START_DATE, TABLE_LHO0KF_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_LHO0KF
+    WHERE TABLE_LHO0KF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_DATA_CONTRATO_exzmo9(86)) - 783 + (timestampdiff(month, v_start_date, v_end_date));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DATA_CONTRATO_exzmo9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_CONTRATO_exzmo9(DATA_INICIO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE DATA_ATUAL DATE;
+    SET DATA_ATUAL = CURDATE();
+    RETURN YEAR(DATA_ATUAL) - DATA_INICIO;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), (MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(3)) - 215 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_AVG_i04eba(-25)) - 471 + ((MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc(14)) - 689 + ((MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(37, 83)) - 348 + (0))))), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(1);

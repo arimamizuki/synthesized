@@ -1,0 +1,351 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+CREATE TABLE IF NOT EXISTS `table_u6vck3` (
+    `table_u6vck3_product_id` INT,
+    `table_u6vck3_category_id` INT,
+    `table_u6vck3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u6vck3` (`table_u6vck3_product_id`, `table_u6vck3_category_id`, `table_u6vck3_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_U6VCK3_PRICE), 0), COALESCE(AVG(TABLE_U6VCK3_PRICE), 1)
+    INTO V_CATEGORY_AVG, V_OVERALL_AVG
+    FROM TABLE_U6VCK3
+    WHERE TABLE_U6VCK3_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+CREATE TABLE IF NOT EXISTS `table_q6el64` (
+    `table_q6el64_emp_id` INT
+);
+
+INSERT INTO `table_q6el64` (`table_q6el64_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 7) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+CREATE TABLE IF NOT EXISTS `table_9g21mv` (
+    `table_9g21mv_product_id` INT,
+    `table_9g21mv_category_id` INT,
+    `table_9g21mv_price` DECIMAL(10,2),
+    `table_9g21mv_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_knzctc` (
+    `table_knzctc_order_id` INT,
+    `table_knzctc_product_id` INT,
+    `table_knzctc_quantity` INT
+);
+
+INSERT INTO `table_9g21mv` (`table_9g21mv_product_id`, `table_9g21mv_category_id`, `table_9g21mv_price`, `table_9g21mv_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_knzctc` (`table_knzctc_order_id`, `table_knzctc_product_id`, `table_knzctc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_PRODUCT_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_KNZCTC;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_PRODUCT_ORDERS
+    FROM TABLE_KNZCTC
+    WHERE TABLE_KNZCTC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION_RATE = (MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(-73)) - -814 + ((v_product_orders * 100) / v_total_orders);
+
+    RETURN V_PENETRATION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * P_N * P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m(18, -74, -60)) - -25 + ((MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(-8)) - -955 + (v_result));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN SIDE * 4;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CLAMP_sygk7m(P_N INT, P_MIN INT, P_MAX INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < P_MIN THEN
+        SET V_RESULT = P_MIN;
+    ELSEIF P_N > P_MAX THEN
+        SET V_RESULT = P_MAX;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+CREATE TABLE IF NOT EXISTS `table_fxzsef` (
+    `table_fxzsef_product_id` INT,
+    `table_fxzsef_supplier_id` INT,
+    `table_fxzsef_price` DECIMAL(10,2),
+    `table_fxzsef_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_gcudli` (
+    `table_gcudli_supplier_id` INT,
+    `table_gcudli_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_fxzsef` (`table_fxzsef_product_id`, `table_fxzsef_supplier_id`, `table_fxzsef_price`, `table_fxzsef_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_gcudli` (`table_gcudli_supplier_id`, `table_gcudli_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_STOCK INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GCUDLI_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_GCUDLI
+    WHERE TABLE_GCUDLI_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_FXZSEF_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_STOCK
+    FROM TABLE_FXZSEF
+    WHERE TABLE_FXZSEF_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_QUALITY_SCORE = (MYSQL_FUNC_PROC_DATE_dkn391()) - -713 + ((MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(-90)) - -321 + ((v_rating * 20) + (v_product_count * 3) + (v_avg_stock / 100)));
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (v_quality_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g----- */
+CREATE TABLE IF NOT EXISTS `table_imgrn8` (
+    `table_imgrn8_dept_id` INT,
+    `table_imgrn8_name` VARCHAR(50),
+    `table_imgrn8_budget` INT,
+    `table_imgrn8_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_3b91qv` (
+    `table_3b91qv_emp_id` INT,
+    `table_3b91qv_dept_id` INT,
+    `table_3b91qv_salary` INT
+);
+
+INSERT INTO `table_imgrn8` (`table_imgrn8_dept_id`, `table_imgrn8_name`, `table_imgrn8_budget`, `table_imgrn8_headcount`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_3b91qv` (`table_3b91qv_emp_id`, `table_3b91qv_dept_id`, `table_3b91qv_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_BUDGET INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PER_EMPLOYEE_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IMGRN8_BUDGET, 0)
+    INTO V_DEPT_BUDGET
+    FROM TABLE_IMGRN8
+    WHERE TABLE_IMGRN8_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_3B91QV
+    WHERE TABLE_3B91QV_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_EMPLOYEE_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PER_EMPLOYEE_BUDGET = V_DEPT_BUDGET / V_EMPLOYEE_COUNT;
+
+    RETURN V_PER_EMPLOYEE_BUDGET;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATE_dkn391----- */
+CREATE TABLE IF NOT EXISTS `table_ilnliq` (
+    `table_ilnliq_cdate` DATE
+);
+
+INSERT INTO `table_ilnliq` (`table_ilnliq_cdate`) VALUES ('2024-01-01');
+
+/* -----Called: MYSQL_FUNC_PROC_DATE_dkn391----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATE_dkn391() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_ILNLIQ`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(61)) - 544 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(53)) - -464 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(-77)) - -853 + (0))))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_TOTAL * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(-77)) - 833 + (v_refund_rate);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(1);

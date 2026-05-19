@@ -1,0 +1,355 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1269119 (v1269120 VARCHAR(256));
+CREATE TABLE IF NOT EXISTS v1268823 (id INT AUTO_INCREMENT PRIMARY KEY, v1268825 BIGINT);
+CREATE TABLE IF NOT EXISTS v1268602 (id INT AUTO_INCREMENT PRIMARY KEY, v1268603 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1269015 (id INT AUTO_INCREMENT PRIMARY KEY, v1269016 DATETIME);
+CREATE TABLE IF NOT EXISTS v1269161 (id INT AUTO_INCREMENT PRIMARY KEY, v1269162 INT);
+INSERT INTO v1268823 (v1268825) VALUES (100), (200), (300), (4294967296), (500);
+INSERT INTO v1268602 (v1268603) VALUES ('aaa'), ('mmm test'), ('bbb'), ('mmm another'), ('ccc');
+INSERT INTO v1269015 (v1269016) VALUES (NOW()), (NOW() + INTERVAL 2 DAY), (NOW() + INTERVAL 3 DAY), (NOW() - INTERVAL 1 DAY);
+INSERT INTO v1269161 (v1269162) VALUES (10), (15), (20), (25), (30);
+INSERT INTO v1269119 (v1269120) VALUES (ST_ASWKT(ST_INTERSECTS(ST_INTERSECTION(ST_GEOMFROMTEXT('point(1 1)'), ST_GEOMFROMTEXT('multipoint(2 2, 3 3)')), ST_INTERSECTION(ST_GEOMFROMTEXT('point(0 0)'), ST_GEOMFROMTEXT('point(1 1)')))));
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+CREATE TABLE IF NOT EXISTS `table_gc4iyl` (
+    `table_gc4iyl_customer_id` INT,
+    `table_gc4iyl_registration_date` DATE
+);
+
+INSERT INTO `table_gc4iyl` (`table_gc4iyl_customer_id`, `table_gc4iyl_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GC4IYL_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_GC4IYL
+    WHERE TABLE_GC4IYL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek----- */
+CREATE TABLE IF NOT EXISTS `table_pc0wb8` (
+    `table_pc0wb8_order_id` INT,
+    `table_pc0wb8_customer_id` INT
+);
+
+INSERT INTO `table_pc0wb8` (`table_pc0wb8_order_id`, `table_pc0wb8_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_PC0WB8
+    WHERE TABLE_PC0WB8_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr(12)) - 43 + ((MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(-73)) - -814 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(-73)) - -343 + ((MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - -813 + ((MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(-2, 73)) - -787 + (v_count)))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A < P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy(84)) - 395 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy----- */
+CREATE TABLE IF NOT EXISTS `table_6e0geg` (
+    `table_6e0geg_product_id` INT,
+    `table_6e0geg_category_id` INT,
+    `table_6e0geg_price` DECIMAL(10,2),
+    `table_6e0geg_stock_quantity` INT
+);
+
+INSERT INTO `table_6e0geg` (`table_6e0geg_product_id`, `table_6e0geg_category_id`, `table_6e0geg_price`, `table_6e0geg_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6E0GEG_PRICE, 0), COALESCE(TABLE_6E0GEG_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_6E0GEG
+    WHERE TABLE_6E0GEG_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+CREATE TABLE IF NOT EXISTS `table_82h4u6` (
+    `table_82h4u6_product_id` INT,
+    `table_82h4u6_category_id` INT
+);
+
+INSERT INTO `table_82h4u6` (`table_82h4u6_product_id`, `table_82h4u6_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CATEGORY_ID_PARAM % 50;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+CREATE TABLE IF NOT EXISTS `table_0itd65` (
+    `table_0itd65_customer_id` INT,
+    `table_0itd65_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_09nz76` (
+    `table_09nz76_order_id` INT,
+    `table_09nz76_customer_id` INT,
+    `table_09nz76_order_date` DATE,
+    `table_09nz76_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0itd65` (`table_0itd65_customer_id`, `table_0itd65_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_09nz76` (`table_09nz76_order_id`, `table_09nz76_customer_id`, `table_09nz76_order_date`, `table_09nz76_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_0ITD65_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM TABLE_0ITD65
+    WHERE TABLE_0ITD65_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_09NZ76
+    WHERE TABLE_09NZ76_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_TOTAL_ORDERS * 100) / V_TOTAL_VISITS;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_CUBE_tjpmsa(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * P_N * P_N;
+
+    IF V_ERROR = (MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(-38)) - 455 + (1) THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+CREATE TABLE IF NOT EXISTS `table_ejio0q` (
+    `table_ejio0q_campaign_id` INT,
+    `table_ejio0q_start_date` DATE
+);
+
+INSERT INTO `table_ejio0q` (`table_ejio0q_campaign_id`, `table_ejio0q_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_EJIO0Q_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_EJIO0Q
+    WHERE TABLE_EJIO0Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(-6)) - 570 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN 'FIZZBUZZ';
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN CAST(N AS CHAR);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1504_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom_result VARCHAR(256);
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_geom_val VARCHAR(256);
+    DECLARE cur CURSOR FOR SELECT v1269120 FROM v1269119;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Step 1: Use geometry result from first statement
+    SELECT v1269120 INTO v_geom_result FROM v1269119 LIMIT 1;
+
+    -- Step 2: Process the CTE-based update (adapted inline)
+    IF v_geom_result IS NOT NULL THEN
+        UPDATE v1268823 AS x0 
+        SET v1268825 = 4294967296 
+        WHERE v1268825 LIKE 'aaa%' 
+        AND (SELECT COUNT(*) FROM v1268823) > p1;
+        SET v_counter = (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(17)) - 78 + (v_counter) + ROW_COUNT();
+    END IF;
+
+    -- Step 3: Process second update (adapted inline)
+    IF p2 > (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_COUNT_ou3gek(36)) - -691 + (0) THEN
+        UPDATE v1268602 AS x0 
+        SET v1268603 = 'b ' 
+        WHERE v1268603 LIKE 'mmm%' 
+        AND id <= p2;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Step 4: Process third update with ADDTIME (adapted inline)
+    CASE 
+        WHEN p1 > 0 THEN
+            UPDATE v1269015 AS x0 
+            SET v1269016 = @global_open_cache_hits 
+            WHERE v1269016 >= ADDTIME(NOW(), '2 02:01:01') 
+            ORDER BY v1269016 DESC 
+            LIMIT p1;
+            SET v_counter = v_counter + ROW_COUNT();
+        ELSE
+            SET v_counter = v_counter + 0;
+    END CASE;
+
+    -- Step 5: Process INSERT (adapted inline with loop)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_geom_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        INSERT INTO v1269161 (v1269162) VALUES (20 + p2);
+        SET v_counter = v_counter + 1;
+
+        -- Use WHILE loop to add extra inserts based on p1
+        WHILE p1 > 0 AND v_counter < p1 DO
+            INSERT INTO v1269161 (v1269162) VALUES (20 + p2 + v_counter);
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Set final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1504_proc(1, 1, @out_result);
+
+SELECT @out_result;

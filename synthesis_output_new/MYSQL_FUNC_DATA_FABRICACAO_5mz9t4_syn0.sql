@@ -1,0 +1,355 @@
+/* -----Called: MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_BUG9056_PROC1_uaqsvs(52, -78)) - -412 + (0) OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = (MYSQL_FUNC_IS_PRIME_6e9lky(-55)) - 951 + (v_sum) + CALCULATE_TREE_DEPTH_SUM(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(-12)) - 899 + (a + b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ah7ot` (
+    `table_4ah7ot_student_id` INT,
+    `table_4ah7ot_name` VARCHAR(50),
+    `table_4ah7ot_class_id` INT,
+    `table_4ah7ot_score` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hqvgbn` (
+    `table_hqvgbn_class_id` INT,
+    `table_hqvgbn_teacher_id` INT,
+    `table_hqvgbn_average_score` INT
+);
+
+INSERT INTO `table_4ah7ot` (`table_4ah7ot_student_id`, `table_4ah7ot_name`, `table_4ah7ot_class_id`, `table_4ah7ot_score`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_hqvgbn` (`table_hqvgbn_class_id`, `table_hqvgbn_teacher_id`, `table_hqvgbn_average_score`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLASS_AVG INT DEFAULT 0;
+    DECLARE V_STUDENT_COUNT INT DEFAULT 0;
+    DECLARE V_BELOW_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_CURVE_FACTOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HQVGBN_AVERAGE_SCORE, 0)
+    INTO V_CLASS_AVG
+    FROM TABLE_HQVGBN
+    WHERE TABLE_HQVGBN_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_STUDENT_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_BELOW_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE < V_CLASS_AVG;
+
+    SELECT COUNT(*)
+    INTO V_ABOVE_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE >= V_CLASS_AVG;
+
+    IF V_STUDENT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_BELOW_AVG_COUNT > V_ABOVE_AVG_COUNT THEN
+        SET V_CURVE_FACTOR = -((V_BELOW_AVG_COUNT - V_ABOVE_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    ELSE
+        SET V_CURVE_FACTOR = ((V_ABOVE_AVG_COUNT - V_BELOW_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    END IF;
+
+    RETURN V_CURVE_FACTOR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_6e9lky----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_6e9lky(P_VALUE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_LIMIT INT;
+    DECLARE V_IS_PRIME_FLAG INT DEFAULT 1;
+    IF P_VALUE <= (MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(-84, 8)) - 638 + (1) THEN
+        RETURN 0;
+    END IF;
+    IF P_VALUE = 2 THEN
+        RETURN 1;
+    END IF;
+    IF P_VALUE % 2 = 0 THEN
+        RETURN 0;
+    END IF;
+    SET V_LIMIT = CAST(SQRT(P_VALUE) AS UNSIGNED);
+    SET V_DIVISOR = 3;
+    WHILE V_DIVISOR <= V_LIMIT DO
+        IF P_VALUE % V_DIVISOR = 0 THEN
+            SET V_IS_PRIME_FLAG = 0;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 2;
+    END WHILE;
+    RETURN V_IS_PRIME_FLAG;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * CAP_HEIGHT * CAP_HEIGHT * (3 * RADIUS - CAP_HEIGHT) / 3;
+    RETURN (MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(-49)) - -683 + (floor(v_volume));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+CREATE TABLE IF NOT EXISTS `table_8mbpj1` (
+    `table_8mbpj1_screening_id` INT,
+    `table_8mbpj1_movie_id` INT,
+    `table_8mbpj1_theater_id` INT,
+    `table_8mbpj1_show_time` DATE,
+    `table_8mbpj1_available_seats` INT,
+    `table_8mbpj1_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ma3ua6` (
+    `table_ma3ua6_booking_id` INT,
+    `table_ma3ua6_screening_id` INT,
+    `table_ma3ua6_customer_id` INT,
+    `table_ma3ua6_seats_booked` INT,
+    `table_ma3ua6_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8mbpj1` (`table_8mbpj1_screening_id`, `table_8mbpj1_movie_id`, `table_8mbpj1_theater_id`, `table_8mbpj1_show_time`, `table_8mbpj1_available_seats`, `table_8mbpj1_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_ma3ua6` (`table_ma3ua6_booking_id`, `table_ma3ua6_screening_id`, `table_ma3ua6_customer_id`, `table_ma3ua6_seats_booked`, `table_ma3ua6_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8MBPJ1_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM TABLE_8MBPJ1
+    WHERE TABLE_8MBPJ1_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MA3UA6_SEATS_BOOKED), 0) INTO V_BOOKED_SEATS
+    FROM TABLE_MA3UA6
+    WHERE TABLE_MA3UA6_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_SEATS * 100) / V_AVAILABLE_SEATS;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 1;
+    DECLARE COUNTER INT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(-72)) - 4 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SIMPLE_LOOP: WHILE COUNTER <= N DO
+        SET RESULT = RESULT * COUNTER;
+        SET COUNTER = COUNTER + 1;
+    END WHILE SIMPLE_LOOP;
+
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+CREATE TABLE IF NOT EXISTS `table_ukztpb` (
+    `table_ukztpb_donation_id` INT,
+    `table_ukztpb_donor_id` INT,
+    `table_ukztpb_campaign_id` INT,
+    `table_ukztpb_amount` DECIMAL(10,2),
+    `table_ukztpb_donation_date` DATE,
+    `table_ukztpb_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4jtf78` (
+    `table_4jtf78_campaign_id` INT,
+    `table_4jtf78_name` VARCHAR(50),
+    `table_4jtf78_goal_amount` DECIMAL(10,2),
+    `table_4jtf78_raised_amount` DECIMAL(10,2),
+    `table_4jtf78_start_date` DATE
+);
+
+INSERT INTO `table_ukztpb` (`table_ukztpb_donation_id`, `table_ukztpb_donor_id`, `table_ukztpb_campaign_id`, `table_ukztpb_amount`, `table_ukztpb_donation_date`, `table_ukztpb_payment_method`) VALUES (1, 2, 3, 1.0, '2024-01-01', 6);
+
+INSERT INTO `table_4jtf78` (`table_4jtf78_campaign_id`, `table_4jtf78_name`, `table_4jtf78_goal_amount`, `table_4jtf78_raised_amount`, `table_4jtf78_start_date`) VALUES (1, 'test', 1.0, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4JTF78_GOAL_AMOUNT, 1000), COALESCE(TABLE_4JTF78_RAISED_AMOUNT, (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(35)) - -547 + (0))
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM TABLE_4JTF78
+    WHERE TABLE_4JTF78_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_UKZTPB_AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM TABLE_UKZTPB
+    WHERE TABLE_UKZTPB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * 100) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_PROGRESS_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+CREATE TABLE IF NOT EXISTS `table_cpfd8s` (
+    `table_cpfd8s_category_id` INT,
+    `table_cpfd8s_price` DECIMAL(10,2),
+    `table_cpfd8s_stock_quantity` INT
+);
+
+INSERT INTO `table_cpfd8s` (`table_cpfd8s_category_id`, `table_cpfd8s_price`, `table_cpfd8s_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_CPFD8S_PRICE * TABLE_CPFD8S_STOCK_QUANTITY), 0)
+    INTO V_STOCK_VALUE
+    FROM TABLE_CPFD8S
+    WHERE TABLE_CPFD8S_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(-62)) - 656 + (floor(v_stock_value));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+CREATE TABLE IF NOT EXISTS `table_m3e5yk` (
+    `table_m3e5yk_repair_id` INT,
+    `table_m3e5yk_customer_id` INT,
+    `table_m3e5yk_technician_id` INT,
+    `table_m3e5yk_appliance_type` VARCHAR(50),
+    `table_m3e5yk_parts_cost` DECIMAL(10,2),
+    `table_m3e5yk_labor_hours` INT,
+    `table_m3e5yk_labor_rate` INT,
+    `table_m3e5yk_service_date` DATE
+);
+
+INSERT INTO `table_m3e5yk` (`table_m3e5yk_repair_id`, `table_m3e5yk_customer_id`, `table_m3e5yk_technician_id`, `table_m3e5yk_appliance_type`, `table_m3e5yk_parts_cost`, `table_m3e5yk_labor_hours`, `table_m3e5yk_labor_rate`, `table_m3e5yk_service_date`) VALUES (1, 2, 3, 'test', 1.0, 6, 7, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(REPAIR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PARTS_COST INT DEFAULT 0;
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 75;
+    DECLARE V_DIAGNOSTIC_FEE INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M3E5YK_PARTS_COST, 0), COALESCE(TABLE_M3E5YK_LABOR_HOURS, 0), COALESCE(TABLE_M3E5YK_LABOR_RATE, 75)
+    INTO V_PARTS_COST, V_LABOR_HOURS, V_LABOR_RATE
+    FROM TABLE_M3E5YK
+    WHERE TABLE_M3E5YK_REPAIR_ID = REPAIR_ID_PARAM;
+
+    SET V_TOTAL_COST = V_PARTS_COST + (V_LABOR_HOURS * V_LABOR_RATE) + V_DIAGNOSTIC_FEE;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN (MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(85)) - 701 + ((MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(93, -26)) - 288 + (current_year - data_first));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(1);

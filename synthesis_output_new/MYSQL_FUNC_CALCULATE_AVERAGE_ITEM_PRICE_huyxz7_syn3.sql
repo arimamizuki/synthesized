@@ -1,0 +1,377 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_kvnaj6` (
+    `table_kvnaj6_order_id` INT,
+    `table_kvnaj6_customer_id` INT,
+    `table_kvnaj6_order_date` DATE,
+    `table_kvnaj6_total_amount` DECIMAL(10,2),
+    `table_kvnaj6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4rmv6c` (
+    `table_4rmv6c_order_id` INT,
+    `table_4rmv6c_product_id` INT,
+    `table_4rmv6c_quantity` INT,
+    `table_4rmv6c_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kvnaj6` (`table_kvnaj6_order_id`, `table_kvnaj6_customer_id`, `table_kvnaj6_order_date`, `table_kvnaj6_total_amount`, `table_kvnaj6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4rmv6c` (`table_4rmv6c_order_id`, `table_4rmv6c_product_id`, `table_4rmv6c_quantity`, `table_4rmv6c_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+CREATE TABLE IF NOT EXISTS table_i88pr4 (
+    table_i88pr4_id INT,
+    table_i88pr4_preco INT
+);
+
+INSERT INTO table_i88pr4 (`table_i88pr4_id`, `table_i88pr4_preco`) VALUES (2, 100);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(VAR_PRODUTO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    
+    SELECT TABLE_I88PR4_PRECO INTO RESULT
+    FROM TABLE_I88PR4
+    WHERE TABLE_I88PR4.TABLE_I88PR4_ID = VAR_PRODUTO;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_WARRANTY_MONTHS * 5) + (V_SECURITY_RATING * 10) - (V_COST / 100);
+
+    RETURN CAST(V_VALUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+CREATE TABLE IF NOT EXISTS `table_a19p69` (
+    `table_a19p69_order_id` INT,
+    `table_a19p69_customer_id` INT,
+    `table_a19p69_order_date` DATE,
+    `table_a19p69_status` VARCHAR(50),
+    `table_a19p69_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2a77t4` (
+    `table_2a77t4_item_id` INT,
+    `table_2a77t4_order_id` INT,
+    `table_2a77t4_product_id` INT,
+    `table_2a77t4_quantity` INT,
+    `table_2a77t4_unit_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gy4sbz` (
+    `table_gy4sbz_product_id` INT,
+    `table_gy4sbz_category_id` INT,
+    `table_gy4sbz_supplier_id` INT
+);
+
+INSERT INTO `table_a19p69` (`table_a19p69_order_id`, `table_a19p69_customer_id`, `table_a19p69_order_date`, `table_a19p69_status`, `table_a19p69_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_2a77t4` (`table_2a77t4_item_id`, `table_2a77t4_order_id`, `table_2a77t4_product_id`, `table_2a77t4_quantity`, `table_2a77t4_unit_price`) VALUES (1, 2, 3, 4, 1.0);
+
+INSERT INTO `table_gy4sbz` (`table_gy4sbz_product_id`, `table_gy4sbz_category_id`, `table_gy4sbz_supplier_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_LOOP_COUNTER INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR_ORDER_ID INT;
+
+    DECLARE ORDER_CURSOR CURSOR FOR
+        SELECT DISTINCT TABLE_A19P69_ORDER_ID FROM TABLE_A19P69 O
+        JOIN TABLE_2A77T4 OI ON TABLE_A19P69_ORDER_ID = TABLE_2A77T4_ORDER_ID
+        JOIN TABLE_GY4SBZ P ON TABLE_2A77T4_PRODUCT_ID = TABLE_GY4SBZ_PRODUCT_ID
+        WHERE TABLE_GY4SBZ_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_A19P69_STATUS = 'COMPLETED';
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+
+    OPEN ORDER_CURSOR;
+
+    ORDER_LOOP: LOOP
+        FETCH ORDER_CURSOR INTO CUR_ORDER_ID;
+        IF DONE THEN
+            LEAVE ORDER_LOOP;
+        END IF;
+
+        SELECT SUM(TABLE_2A77T4_QUANTITY * TABLE_2A77T4_UNIT_PRICE) INTO V_REVENUE
+        FROM TABLE_2A77T4 OI
+        WHERE TABLE_2A77T4_ORDER_ID = CUR_ORDER_ID;
+
+        SET V_LOOP_COUNTER = V_LOOP_COUNTER + 1;
+    END LOOP ORDER_LOOP;
+
+    CLOSE ORDER_CURSOR;
+
+    RETURN COALESCE(V_REVENUE, 0) + (V_LOOP_COUNTER * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd----- */
+CREATE TABLE IF NOT EXISTS `table_a8cori` (
+    `table_a8cori_order_id` INT,
+    `table_a8cori_customer_id` INT,
+    `table_a8cori_order_date` DATE,
+    `table_a8cori_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wabw7c` (
+    `table_wabw7c_customer_id` INT,
+    `table_wabw7c_country` INT
+);
+
+INSERT INTO `table_a8cori` (`table_a8cori_order_id`, `table_a8cori_customer_id`, `table_a8cori_order_date`, `table_a8cori_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wabw7c` (`table_wabw7c_customer_id`, `table_wabw7c_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_VOLUME INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_VOLUME
+    FROM TABLE_A8CORI O
+    JOIN TABLE_WABW7C C ON TABLE_A8CORI_CUSTOMER_ID = TABLE_WABW7C_CUSTOMER_ID
+    WHERE TABLE_WABW7C_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + ((MYSQL_FUNC_FILM_IN_STOCK_eky5dj(-19, -15)) - 794 + (v_order_volume));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+CREATE TABLE IF NOT EXISTS table_8j3nma (
+    table_8j3nma_inventory_id INT PRIMARY KEY,
+    table_8j3nma_film_id INT,
+    table_8j3nma_store_id INT
+);
+
+INSERT INTO table_8j3nma (`table_8j3nma_inventory_id`, `table_8j3nma_film_id`, `table_8j3nma_store_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_IN_STOCK_eky5dj(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE P_FILM_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    FROM TABLE_8J3NMA
+    WHERE TABLE_8J3NMA_FILM_ID = P_FILM_ID
+    AND TABLE_8J3NMA_STORE_ID = P_STORE_ID
+    AND TABLE_8J3NMA_INVENTORY_ID > 0
+    INTO P_FILM_COUNT;
+
+    RETURN (MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(62, 82)) - -855 + (p_film_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = 0 - V_NUMERIC_VAL;
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - -813 + (0);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+CREATE TABLE IF NOT EXISTS `table_82h4u6` (
+    `table_82h4u6_product_id` INT,
+    `table_82h4u6_category_id` INT
+);
+
+INSERT INTO `table_82h4u6` (`table_82h4u6_product_id`, `table_82h4u6_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CATEGORY_ID_PARAM % 50;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp(BASE INT, EXP INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF BASE < 0 AND EXP != FLOOR(EXP) THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'CANNOT RAISE NEGATIVE BASE TO FRACTIONAL EXPONENT';
+    END IF;
+    IF BASE = 0 AND EXP < 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'CANNOT RAISE ZERO TO NEGATIVE POWER';
+    END IF;
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl()) - 788 + (pow(base, exp));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 11 UNION SELECT 22 UNION SELECT 33 UNION SELECT 44 UNION SELECT 55 UNION SELECT 66 UNION SELECT 77 UNION SELECT 88 UNION SELECT 99 UNION SELECT 110 UNION SELECT 121;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_4RMV6C_QUANTITY * TABLE_4RMV6C_UNIT_PRICE), (MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(28)) - -974 + ((MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(-50)) - -203 + (0))), COALESCE(SUM(TABLE_4RMV6C_QUANTITY), 0)
+    INTO V_TOTAL_AMOUNT, V_TOTAL_ITEMS
+    FROM TABLE_4RMV6C
+    WHERE TABLE_4RMV6C_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_PRICE = (MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp(-15, -77)) - 107 + ((MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(95)) - 779 + (v_total_amount / v_total_items));
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd(-53)) - 348 + (v_avg_price);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_AVERAGE_ITEM_PRICE_huyxz7(1);

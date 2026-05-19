@@ -1,0 +1,434 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_emyi9r` (
+    `table_emyi9r_campaign_id` INT,
+    `table_emyi9r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_emyi9r` (`table_emyi9r_campaign_id`, `table_emyi9r_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl----- */
+CREATE TABLE IF NOT EXISTS `table_mar3zz` (
+    `table_mar3zz_order_id` INT,
+    `table_mar3zz_customer_id` INT,
+    `table_mar3zz_order_date` DATE,
+    `table_mar3zz_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kutvu5` (
+    `table_kutvu5_customer_id` INT,
+    `table_kutvu5_tier_level` INT
+);
+
+INSERT INTO `table_mar3zz` (`table_mar3zz_order_id`, `table_mar3zz_customer_id`, `table_mar3zz_order_date`, `table_mar3zz_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_kutvu5` (`table_kutvu5_customer_id`, `table_kutvu5_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_BASED_DISCOUNT_otx2pl(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+
+    SELECT TABLE_KUTVU5_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_MAR3ZZ O
+    JOIN TABLE_KUTVU5 C ON TABLE_MAR3ZZ_CUSTOMER_ID = TABLE_KUTVU5_CUSTOMER_ID
+    WHERE TABLE_MAR3ZZ_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN SET V_DISCOUNT_PERCENTAGE = 20;
+        WHEN 'GOLD' THEN SET V_DISCOUNT_PERCENTAGE = 15;
+        WHEN 'SILVER' THEN SET V_DISCOUNT_PERCENTAGE = 10;
+        ELSE SET V_DISCOUNT_PERCENTAGE = 0;
+    END CASE;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+CREATE TABLE IF NOT EXISTS `table_pdl5fs` (
+    `table_pdl5fs_product_id` INT,
+    `table_pdl5fs_name` VARCHAR(50),
+    `table_pdl5fs_sku` INT,
+    `table_pdl5fs_stock_quantity` INT,
+    `table_pdl5fs_reorder_point` INT,
+    `table_pdl5fs_unit_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tlwljf` (
+    `table_tlwljf_order_id` INT,
+    `table_tlwljf_supplier_id` INT,
+    `table_tlwljf_order_date` DATE,
+    `table_tlwljf_expected_delivery` INT,
+    `table_tlwljf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pdl5fs` (`table_pdl5fs_product_id`, `table_pdl5fs_name`, `table_pdl5fs_sku`, `table_pdl5fs_stock_quantity`, `table_pdl5fs_reorder_point`, `table_pdl5fs_unit_cost`) VALUES (1, 'test', 3, 4, 5, 1.0);
+
+INSERT INTO `table_tlwljf` (`table_tlwljf_order_id`, `table_tlwljf_supplier_id`, `table_tlwljf_order_date`, `table_tlwljf_expected_delivery`, `table_tlwljf_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_PRIORITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PDL5FS_STOCK_QUANTITY, 0), COALESCE(TABLE_PDL5FS_REORDER_POINT, 10), COALESCE(TABLE_PDL5FS_UNIT_COST, 0)
+    INTO V_STOCK_QUANTITY, V_REORDER_POINT, V_UNIT_COST
+    FROM TABLE_PDL5FS
+    WHERE TABLE_PDL5FS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_PRIORITY_SCORE = V_REORDER_POINT - V_STOCK_QUANTITY;
+
+    IF V_UNIT_COST > 100 THEN
+        SET V_PRIORITY_SCORE = V_PRIORITY_SCORE + 5;
+    END IF;
+
+    RETURN CAST(V_PRIORITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+CREATE TABLE IF NOT EXISTS `table_m3vpww` (
+    `table_m3vpww_cbit10` INT
+);
+
+INSERT INTO `table_m3vpww` (`table_m3vpww_cbit10`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_M3VPWW_CBIT10 INTO RESULT FROM `TABLE_M3VPWW` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(0)) - 519 + ((MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + (result));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+CREATE TABLE IF NOT EXISTS `table_ebd300` (
+    `table_ebd300_meter_id` INT,
+    `table_ebd300_customer_id` INT,
+    `table_ebd300_meter_reading` INT,
+    `table_ebd300_reading_date` DATE,
+    `table_ebd300_consumption_kwh` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7mak4e` (
+    `table_7mak4e_tariff_id` INT,
+    `table_7mak4e_tier_name` VARCHAR(50),
+    `table_7mak4e_min_kwh` INT,
+    `table_7mak4e_max_kwh` INT,
+    `table_7mak4e_rate_per_kwh` INT
+);
+
+INSERT INTO `table_ebd300` (`table_ebd300_meter_id`, `table_ebd300_customer_id`, `table_ebd300_meter_reading`, `table_ebd300_reading_date`, `table_ebd300_consumption_kwh`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_7mak4e` (`table_7mak4e_tariff_id`, `table_7mak4e_tier_name`, `table_7mak4e_min_kwh`, `table_7mak4e_max_kwh`, `table_7mak4e_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 10;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+    DECLARE V_PEAK_CONSUMPTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(78)) - -864 + (0)) INTO V_CURRENT_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_PREVIOUS_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1 OFFSET 1;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 15);
+
+    IF V_CONSUMPTION > 500 THEN
+        SET V_PEAK_CONSUMPTION = V_CONSUMPTION - 500;
+        SET V_TOTAL_BILL = (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6()) - 505 + (v_total_bill + (v_peak_consumption * 25));
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT (MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(-14)) - 486 + (1) UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(9)) - 250 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+CREATE TABLE IF NOT EXISTS `table_6i0q6l` (
+    `table_6i0q6l_ad_id` INT,
+    `table_6i0q6l_company_id` INT,
+    `table_6i0q6l_location_id` INT,
+    `table_6i0q6l_billboard_size` INT,
+    `table_6i0q6l_monthly_rent` INT,
+    `table_6i0q6l_duration_months` INT,
+    `table_6i0q6l_impressions_expected` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8fquy9` (
+    `table_8fquy9_location_id` INT,
+    `table_8fquy9_city` INT,
+    `table_8fquy9_traffic_count` INT,
+    `table_8fquy9_visibility_score` INT
+);
+
+INSERT INTO `table_6i0q6l` (`table_6i0q6l_ad_id`, `table_6i0q6l_company_id`, `table_6i0q6l_location_id`, `table_6i0q6l_billboard_size`, `table_6i0q6l_monthly_rent`, `table_6i0q6l_duration_months`, `table_6i0q6l_impressions_expected`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_8fquy9` (`table_8fquy9_location_id`, `table_8fquy9_city`, `table_8fquy9_traffic_count`, `table_8fquy9_visibility_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(AD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 5000;
+    DECLARE V_IMPRESSIONS_EXPECTED INT DEFAULT 0;
+    DECLARE V_TRAFFIC_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6I0Q6L_MONTHLY_RENT, 5000), COALESCE(TABLE_6I0Q6L_IMPRESSIONS_EXPECTED, 100000)
+    INTO V_MONTHLY_RENT, V_IMPRESSIONS_EXPECTED
+    FROM TABLE_6I0Q6L
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8FQUY9_TRAFFIC_COUNT, 50000)
+    INTO V_TRAFFIC_COUNT
+    FROM TABLE_6I0Q6L BA
+    JOIN TABLE_8FQUY9 BL ON TABLE_6I0Q6L_LOCATION_ID = TABLE_8FQUY9_LOCATION_ID
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SET V_ROI_SCORE = (V_IMPRESSIONS_EXPECTED * V_TRAFFIC_COUNT) / V_MONTHLY_RENT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (cast(v_roi_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_HIRE_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+CREATE TABLE IF NOT EXISTS `table_k3sawa` (
+    `table_k3sawa_order_id` INT,
+    `table_k3sawa_order_date` DATE
+);
+
+INSERT INTO `table_k3sawa` (`table_k3sawa_order_id`, `table_k3sawa_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEEK_OF_YEAR_49bkx0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_K3SAWA_ORDER_DATE)
+    INTO V_WEEK
+    FROM TABLE_K3SAWA
+    WHERE TABLE_K3SAWA_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+CREATE TABLE IF NOT EXISTS `table_jg3dpu` (
+    `table_jg3dpu_emp_id` INT,
+    `table_jg3dpu_department_id` INT,
+    `table_jg3dpu_salary` INT
+);
+
+INSERT INTO `table_jg3dpu` (`table_jg3dpu_emp_id`, `table_jg3dpu_department_id`, `table_jg3dpu_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_JG3DPU_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM TABLE_JG3DPU
+    WHERE TABLE_JG3DPU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY_SUM);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_EMYI9R_STATUS
+    INTO V_STATUS
+    FROM TABLE_EMYI9R
+    WHERE TABLE_EMYI9R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(1);

@@ -1,0 +1,374 @@
+/* -----Called: MYSQL_FUNC_MODULO_t8sg35----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MODULO_t8sg35(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A % B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RECURSIVE_SUM_pkwdud----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RECURSIVE_SUM_pkwdud(N INT, DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF DEPTH <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(76)) - -860 + (v_result + v_counter);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    IF DEPTH > 1 THEN
+        SET V_RESULT = (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (v_result + recursive_sum(n - 1, depth - 1));
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk(38)) - 785 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = ((V_ORDER_TOTAL - V_SHIPPING_COST) * 100) / V_ORDER_TOTAL;
+
+    RETURN V_SHIPPING_MARGIN;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk----- */
+CREATE TABLE IF NOT EXISTS `table_dc4eg5` (
+    `table_dc4eg5_customer_id` INT,
+    `table_dc4eg5_country` INT,
+    `table_dc4eg5_registration_date` DATE
+);
+
+INSERT INTO `table_dc4eg5` (`table_dc4eg5_customer_id`, `table_dc4eg5_country`, `table_dc4eg5_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_DC4EG5
+    WHERE TABLE_DC4EG5_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+CREATE TABLE IF NOT EXISTS `table_33kbxb` (
+    `table_33kbxb_product_id` INT,
+    `table_33kbxb_category_id` INT,
+    `table_33kbxb_supplier_id` INT,
+    `table_33kbxb_price` DECIMAL(10,2),
+    `table_33kbxb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_kkdez3` (
+    `table_kkdez3_category_id` INT,
+    `table_kkdez3_name` VARCHAR(50),
+    `table_kkdez3_discount_percent` INT
+);
+
+INSERT INTO `table_33kbxb` (`table_33kbxb_product_id`, `table_33kbxb_category_id`, `table_33kbxb_supplier_id`, `table_33kbxb_price`, `table_33kbxb_stock_quantity`) VALUES (1, 2, 3, 1.0, 5);
+
+INSERT INTO `table_kkdez3` (`table_kkdez3_category_id`, `table_kkdez3_name`, `table_kkdez3_discount_percent`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(PRODUCT_ID_PARAM INT, QUANTITY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_DISCOUNT INT DEFAULT 0;
+
+    SELECT TABLE_33KBXB_PRICE, COALESCE(TABLE_KKDEZ3_DISCOUNT_PERCENT, 0)
+    INTO V_BASE_PRICE, V_CATEGORY_DISCOUNT
+    FROM TABLE_33KBXB P
+    LEFT JOIN TABLE_KKDEZ3 C ON TABLE_33KBXB_CATEGORY_ID = TABLE_KKDEZ3_CATEGORY_ID
+    WHERE TABLE_33KBXB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DISCOUNT = V_BASE_PRICE * V_CATEGORY_DISCOUNT / 100;
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 15 / 100;
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 10 / 100;
+    ELSEIF QUANTITY_PARAM >= 10 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 5 / 100;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - V_DISCOUNT - V_QUANTITY_DISCOUNT;
+
+    RETURN GREATEST(V_FINAL_PRICE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_56cpec----- */
+CREATE TABLE IF NOT EXISTS `table_iuujg9` (
+    `table_iuujg9_customer_id` INT,
+    `table_iuujg9_country` INT,
+    `table_iuujg9_registration_date` DATE
+);
+
+INSERT INTO `table_iuujg9` (`table_iuujg9_customer_id`, `table_iuujg9_country`, `table_iuujg9_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_56cpec----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_56cpec(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_IUUJG9
+    WHERE TABLE_IUUJG9_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(-10)) - 730 + ((MYSQL_FUNC_CALCULATE_REFUND_IMPACT_SCORE_tv1zky(-96)) - -350 + (v_customer_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_IMPACT_SCORE_tv1zky----- */
+CREATE TABLE IF NOT EXISTS `table_0eevmu` (
+    `table_0eevmu_order_id` INT,
+    `table_0eevmu_customer_id` INT,
+    `table_0eevmu_order_date` DATE,
+    `table_0eevmu_total_amount` DECIMAL(10,2),
+    `table_0eevmu_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_9aqg8l` (
+    `table_9aqg8l_refund_id` INT,
+    `table_9aqg8l_order_id` INT,
+    `table_9aqg8l_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0eevmu` (`table_0eevmu_order_id`, `table_0eevmu_customer_id`, `table_0eevmu_order_date`, `table_0eevmu_total_amount`, `table_0eevmu_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_9aqg8l` (`table_9aqg8l_refund_id`, `table_9aqg8l_order_id`, `table_9aqg8l_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_IMPACT_SCORE_tv1zky----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_IMPACT_SCORE_tv1zky(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_IMPACT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0EEVMU_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_0EEVMU
+    WHERE TABLE_0EEVMU_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_9AQG8L_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_9AQG8L
+    WHERE TABLE_9AQG8L_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_IMPACT_SCORE = (V_REFUND_AMOUNT * 100) / GREATEST(V_ORDER_TOTAL, 1) + V_REFUND_AMOUNT / 10;
+
+    RETURN V_IMPACT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+CREATE TABLE IF NOT EXISTS `table_s65b9l` (
+    `table_s65b9l_policy_id` INT,
+    `table_s65b9l_customer_id` INT,
+    `table_s65b9l_destination` INT,
+    `table_s65b9l_trip_duration_days` INT,
+    `table_s65b9l_coverage_type` VARCHAR(50),
+    `table_s65b9l_premium` INT,
+    `table_s65b9l_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x76iq0` (
+    `table_x76iq0_claim_id` INT,
+    `table_x76iq0_policy_id` INT,
+    `table_x76iq0_claim_type` VARCHAR(50),
+    `table_x76iq0_claim_amount` DECIMAL(10,2),
+    `table_x76iq0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s65b9l` (`table_s65b9l_policy_id`, `table_s65b9l_customer_id`, `table_s65b9l_destination`, `table_s65b9l_trip_duration_days`, `table_s65b9l_coverage_type`, `table_s65b9l_premium`, `table_s65b9l_coverage_limit`) VALUES (1, 1, 1, 1, 'test', 1, 1);
+
+INSERT INTO `table_x76iq0` (`table_x76iq0_claim_id`, `table_x76iq0_policy_id`, `table_x76iq0_claim_type`, `table_x76iq0_claim_amount`, `table_x76iq0_status`) VALUES (1, 2, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRAVEL_INSURANCE_CLAIM_RATIO_hv0lyo(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_COUNT INT DEFAULT 0;
+    DECLARE V_RATIO_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S65B9L_COVERAGE_LIMIT, 100000)
+    INTO V_COVERAGE_LIMIT
+    FROM TABLE_S65B9L
+    WHERE TABLE_S65B9L_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_X76IQ0_CLAIM_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_COUNT
+    FROM TABLE_X76IQ0
+    WHERE TABLE_X76IQ0_POLICY_ID = POLICY_ID_PARAM AND TABLE_X76IQ0_STATUS = 'APPROVED';
+
+    IF V_COVERAGE_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RATIO_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_COVERAGE_LIMIT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(91)) - -565 + (cast(v_ratio_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+CREATE TABLE IF NOT EXISTS `table_uhn84w` (
+    `table_uhn84w_emp_id` INT,
+    `table_uhn84w_salary` INT
+);
+
+INSERT INTO `table_uhn84w` (`table_uhn84w_emp_id`, `table_uhn84w_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_UHN84W_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_UHN84W
+    WHERE TABLE_UHN84W_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_20_jgmmg4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 3 UNION SELECT 5 UNION SELECT 7 UNION SELECT 9 UNION SELECT 11 UNION SELECT 13 UNION SELECT 15 UNION SELECT 17 UNION SELECT 19;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_RECURSIVE_SUM_pkwdud(86, 70)) - -171 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_56cpec(15)) - 779 + ((MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(-99, -90)) - 428 + ((MYSQL_FUNC_MODULO_t8sg35(83, 64)) - 350 + (v_sum)) + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_20_jgmmg4();

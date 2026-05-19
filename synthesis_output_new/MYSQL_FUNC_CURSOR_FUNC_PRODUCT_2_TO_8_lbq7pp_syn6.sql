@@ -1,0 +1,442 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_POOL_SERVICE_CONTRACT_r6op2t----- */
+CREATE TABLE IF NOT EXISTS `table_g0f3f1` (
+    `table_g0f3f1_service_id` INT,
+    `table_g0f3f1_customer_id` INT,
+    `table_g0f3f1_pool_volume_gallons` INT,
+    `table_g0f3f1_service_type` VARCHAR(50),
+    `table_g0f3f1_service_date` DATE,
+    `table_g0f3f1_labor_hours` INT,
+    `table_g0f3f1_chemical_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gor9xk` (
+    `table_gor9xk_equipment_id` INT,
+    `table_gor9xk_service_id` INT,
+    `table_gor9xk_equipment_type` VARCHAR(50),
+    `table_gor9xk_lifespan_months` INT,
+    `table_gor9xk_replacement_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_g0f3f1` (`table_g0f3f1_service_id`, `table_g0f3f1_customer_id`, `table_g0f3f1_pool_volume_gallons`, `table_g0f3f1_service_type`, `table_g0f3f1_service_date`, `table_g0f3f1_labor_hours`, `table_g0f3f1_chemical_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_gor9xk` (`table_gor9xk_equipment_id`, `table_gor9xk_service_id`, `table_gor9xk_equipment_type`, `table_gor9xk_lifespan_months`, `table_gor9xk_replacement_cost`) VALUES (1, 2, 'test', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POOL_SERVICE_CONTRACT_r6op2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POOL_SERVICE_CONTRACT_r6op2t(SERVICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_POOL_VOLUME INT DEFAULT 15000;
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_CHEMICAL_COST INT DEFAULT 0;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_CONTRACT_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G0F3F1_POOL_VOLUME_GALLONS, 15000), COALESCE(TABLE_G0F3F1_LABOR_HOURS, 2), COALESCE(TABLE_G0F3F1_CHEMICAL_COST, 50)
+    INTO V_POOL_VOLUME, V_LABOR_HOURS, V_CHEMICAL_COST
+    FROM TABLE_G0F3F1
+    WHERE TABLE_G0F3F1_SERVICE_ID = SERVICE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_GOR9XK_REPLACEMENT_COST), 0) INTO V_EQUIPMENT_COST
+    FROM TABLE_G0F3F1 SS
+    JOIN TABLE_GOR9XK PE ON TABLE_G0F3F1_SERVICE_ID = TABLE_GOR9XK_SERVICE_ID
+    WHERE TABLE_G0F3F1_SERVICE_ID = SERVICE_ID_PARAM;
+
+    SET V_TOTAL_CONTRACT_COST = (V_LABOR_HOURS * 65) + V_CHEMICAL_COST + (V_EQUIPMENT_COST / 12);
+
+    IF V_POOL_VOLUME > 30000 THEN
+        SET V_TOTAL_CONTRACT_COST = (MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(-35)) - -709 + (v_total_contract_cost + 50);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(-67)) - 580 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(-39)) - 651 + (cast(v_total_contract_cost as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+CREATE TABLE IF NOT EXISTS `table_9dqpf3` (
+    `table_9dqpf3_campaign_id` INT,
+    `table_9dqpf3_start_date` DATE,
+    `table_9dqpf3_end_date` DATE,
+    `table_9dqpf3_budget` INT
+);
+
+INSERT INTO `table_9dqpf3` (`table_9dqpf3_campaign_id`, `table_9dqpf3_start_date`, `table_9dqpf3_end_date`, `table_9dqpf3_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_9DQPF3_BUDGET, 0), DATEDIFF(TABLE_9DQPF3_END_DATE, TABLE_9DQPF3_START_DATE) + 1
+    INTO V_BUDGET, V_DAYS
+    FROM TABLE_9DQPF3
+    WHERE TABLE_9DQPF3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DAYS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5----- */
+CREATE TABLE IF NOT EXISTS `table_7n5fk6` (
+    `table_7n5fk6_customer_id` INT,
+    `table_7n5fk6_start_date` DATE
+);
+
+INSERT INTO `table_7n5fk6` (`table_7n5fk6_customer_id`, `table_7n5fk6_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_7N5FK6_START_DATE)
+    INTO V_START_MONTH
+    FROM TABLE_7N5FK6
+    WHERE TABLE_7N5FK6_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_START_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+CREATE TABLE IF NOT EXISTS `table_iihmej` (
+    `table_iihmej_student_id` INT,
+    `table_iihmej_name` VARCHAR(50),
+    `table_iihmej_age` INT,
+    `table_iihmej_gpa` INT,
+    `table_iihmej_enrollment_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqu8tq` (
+    `table_oqu8tq_course_id` INT,
+    `table_oqu8tq_name` VARCHAR(50),
+    `table_oqu8tq_credits` INT,
+    `table_oqu8tq_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8mt6l6` (
+    `table_8mt6l6_student_id` INT,
+    `table_8mt6l6_course_id` INT,
+    `table_8mt6l6_grade` INT
+);
+
+INSERT INTO `table_iihmej` (`table_iihmej_student_id`, `table_iihmej_name`, `table_iihmej_age`, `table_iihmej_gpa`, `table_iihmej_enrollment_year`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_oqu8tq` (`table_oqu8tq_course_id`, `table_oqu8tq_name`, `table_oqu8tq_credits`, `table_oqu8tq_department_id`) VALUES (1, 'test', 3, 4);
+
+INSERT INTO `table_8mt6l6` (`table_8mt6l6_student_id`, `table_8mt6l6_course_id`, `table_8mt6l6_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDIT_COUNT INT DEFAULT 0;
+    DECLARE V_HONORS_COURSES INT DEFAULT 0;
+    DECLARE V_HONORS_RATING INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IIHMEJ_GPA, 0.00)
+    INTO V_GPA
+    FROM TABLE_IIHMEJ
+    WHERE TABLE_IIHMEJ_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*), SUM(TABLE_OQU8TQ_CREDITS)
+    INTO V_HONORS_COURSES, V_CREDIT_COUNT
+    FROM TABLE_8MT6L6 E
+    JOIN TABLE_OQU8TQ C ON TABLE_8MT6L6_COURSE_ID = TABLE_OQU8TQ_COURSE_ID
+    WHERE TABLE_8MT6L6_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_8MT6L6_GRADE IN ('A', 'A+', 'A-');
+
+    SET V_HONORS_RATING = (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(49)) - 149 + ((v_gpa * 40) + (v_honors_courses * 10) + (v_credit_count / 10));
+
+    RETURN (MYSQL_FUNC_ADD_NUMBERS_rriimw(94, 67)) - -404 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(80)) - -781 + ((MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(30)) - -72 + (v_honors_rating)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+CREATE TABLE IF NOT EXISTS `table_isab02` (
+    `table_isab02_order_id` INT,
+    `table_isab02_order_date` DATE
+);
+
+INSERT INTO `table_isab02` (`table_isab02_order_id`, `table_isab02_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_MONTH_mwceoz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_ISAB02_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_ISAB02
+    WHERE TABLE_ISAB02_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+CREATE TABLE IF NOT EXISTS `table_3honbg` (
+    `table_3honbg_product_id` INT,
+    `table_3honbg_category_id` INT,
+    `table_3honbg_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_oj1tlr` (
+    `table_oj1tlr_category_id` INT,
+    `table_oj1tlr_name` VARCHAR(50)
+);
+
+INSERT INTO `table_3honbg` (`table_3honbg_product_id`, `table_3honbg_category_id`, `table_3honbg_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_oj1tlr` (`table_oj1tlr_category_id`, `table_oj1tlr_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_3HONBG_PRICE), 0), COALESCE(MAX(TABLE_3HONBG_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM TABLE_3HONBG
+    WHERE TABLE_3HONBG_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = (V_AVG_PRICE * 100) / V_MAX_PRICE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+CREATE TABLE IF NOT EXISTS `table_iptn6x` (
+    `table_iptn6x_emp_id` INT,
+    `table_iptn6x_name` VARCHAR(50),
+    `table_iptn6x_salary` INT,
+    `table_iptn6x_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2qf3w0` (
+    `table_2qf3w0_emp_id` INT,
+    `table_2qf3w0_effective_date` DATE,
+    `table_2qf3w0_new_salary` INT,
+    `table_2qf3w0_change_reason` INT
+);
+
+INSERT INTO `table_iptn6x` (`table_iptn6x_emp_id`, `table_iptn6x_name`, `table_iptn6x_salary`, `table_iptn6x_hire_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_2qf3w0` (`table_2qf3w0_emp_id`, `table_2qf3w0_effective_date`, `table_2qf3w0_new_salary`, `table_2qf3w0_change_reason`) VALUES (1, '2024-01-01', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IPTN6X_SALARY, 0)
+    INTO V_INITIAL_SALARY
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_2QF3W0_NEW_SALARY, V_INITIAL_SALARY)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_2QF3W0
+    WHERE TABLE_2QF3W0_EMP_ID = EMP_ID_PARAM
+    ORDER BY TABLE_2QF3W0_EFFECTIVE_DATE DESC
+    LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_IPTN6X_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_PERCENTAGE = (((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / V_INITIAL_SALARY) / V_YEARS_EMPLOYED;
+
+    RETURN V_GROWTH_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ADD_NUMBERS_rriimw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD_NUMBERS_rriimw(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    SET V_RESULT = A + B;
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(28)) - -974 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+CREATE TABLE IF NOT EXISTS `table_a19p69` (
+    `table_a19p69_order_id` INT,
+    `table_a19p69_customer_id` INT,
+    `table_a19p69_order_date` DATE,
+    `table_a19p69_status` VARCHAR(50),
+    `table_a19p69_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2a77t4` (
+    `table_2a77t4_item_id` INT,
+    `table_2a77t4_order_id` INT,
+    `table_2a77t4_product_id` INT,
+    `table_2a77t4_quantity` INT,
+    `table_2a77t4_unit_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gy4sbz` (
+    `table_gy4sbz_product_id` INT,
+    `table_gy4sbz_category_id` INT,
+    `table_gy4sbz_supplier_id` INT
+);
+
+INSERT INTO `table_a19p69` (`table_a19p69_order_id`, `table_a19p69_customer_id`, `table_a19p69_order_date`, `table_a19p69_status`, `table_a19p69_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_2a77t4` (`table_2a77t4_item_id`, `table_2a77t4_order_id`, `table_2a77t4_product_id`, `table_2a77t4_quantity`, `table_2a77t4_unit_price`) VALUES (1, 2, 3, 4, 1.0);
+
+INSERT INTO `table_gy4sbz` (`table_gy4sbz_product_id`, `table_gy4sbz_category_id`, `table_gy4sbz_supplier_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_LOOP_COUNTER INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR_ORDER_ID INT;
+
+    DECLARE ORDER_CURSOR CURSOR FOR
+        SELECT DISTINCT TABLE_A19P69_ORDER_ID FROM TABLE_A19P69 O
+        JOIN TABLE_2A77T4 OI ON TABLE_A19P69_ORDER_ID = TABLE_2A77T4_ORDER_ID
+        JOIN TABLE_GY4SBZ P ON TABLE_2A77T4_PRODUCT_ID = TABLE_GY4SBZ_PRODUCT_ID
+        WHERE TABLE_GY4SBZ_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_A19P69_STATUS = 'COMPLETED';
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+
+    OPEN ORDER_CURSOR;
+
+    ORDER_LOOP: LOOP
+        FETCH ORDER_CURSOR INTO CUR_ORDER_ID;
+        IF DONE THEN
+            LEAVE ORDER_LOOP;
+        END IF;
+
+        SELECT SUM(TABLE_2A77T4_QUANTITY * TABLE_2A77T4_UNIT_PRICE) INTO V_REVENUE
+        FROM TABLE_2A77T4 OI
+        WHERE TABLE_2A77T4_ORDER_ID = CUR_ORDER_ID;
+
+        SET V_LOOP_COUNTER = (MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + (v_loop_counter + 1);
+    END LOOP ORDER_LOOP;
+
+    CLOSE ORDER_CURSOR;
+
+    RETURN COALESCE(V_REVENUE, 0) + (V_LOOP_COUNTER * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 2;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_POOL_SERVICE_CONTRACT_r6op2t(-72)) - 519 + (v_result * v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp();

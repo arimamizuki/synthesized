@@ -1,0 +1,384 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_8t1b7g` (
+    `table_8t1b7g_zone_id` INT,
+    `table_8t1b7g_weight_min` INT,
+    `table_8t1b7g_weight_max` INT,
+    `table_8t1b7g_base_rate` INT,
+    `table_8t1b7g_per_kg_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_tik0vj` (
+    `table_tik0vj_order_id` INT,
+    `table_tik0vj_destination_zone` INT,
+    `table_tik0vj_package_weight` INT
+);
+
+INSERT INTO `table_8t1b7g` (`table_8t1b7g_zone_id`, `table_8t1b7g_weight_min`, `table_8t1b7g_weight_max`, `table_8t1b7g_base_rate`, `table_8t1b7g_per_kg_rate`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_tik0vj` (`table_tik0vj_order_id`, `table_tik0vj_destination_zone`, `table_tik0vj_package_weight`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 1;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_CURRENT <= N DO
+        SET V_TEMP = V_NEXT;
+        SET V_NEXT = V_CURRENT + V_NEXT;
+        SET V_CURRENT = V_TEMP;
+        SET V_SUM = (MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(31, -21)) - -112 + (v_sum + v_current);
+    END WHILE MY_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_PROC_DATE_dkn391()) - -713 + (p_a * p_b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATE_dkn391----- */
+CREATE TABLE IF NOT EXISTS `table_ilnliq` (
+    `table_ilnliq_cdate` DATE
+);
+
+INSERT INTO `table_ilnliq` (`table_ilnliq_cdate`) VALUES ('2024-01-01');
+
+/* -----Called: MYSQL_FUNC_PROC_DATE_dkn391----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATE_dkn391() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_ILNLIQ`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+CREATE TABLE IF NOT EXISTS `table_s3jw0e` (
+    `table_s3jw0e_emp_id` INT,
+    `table_s3jw0e_department_id` INT,
+    `table_s3jw0e_salary` INT,
+    `table_s3jw0e_hire_date` DATE,
+    `table_s3jw0e_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_s3jw0e` (`table_s3jw0e_emp_id`, `table_s3jw0e_department_id`, `table_s3jw0e_salary`, `table_s3jw0e_hire_date`, `table_s3jw0e_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TALENT_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S3JW0E_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_S3JW0E_HIRE_DATE, CURDATE()), COALESCE(TABLE_S3JW0E_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_S3JW0E
+    WHERE TABLE_S3JW0E_EMP_ID = EMP_ID_PARAM;
+
+    SET V_TALENT_INDEX = (V_PERFORMANCE * 40) + (V_TENURE_YEARS * 10) + (V_SALARY / 500);
+
+    RETURN (MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(29)) - 425 + (v_talent_index);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z----- */
+CREATE TABLE IF NOT EXISTS `table_3mm8zj` (
+    `table_3mm8zj_product_id` INT,
+    `table_3mm8zj_price` DECIMAL(10,2),
+    `table_3mm8zj_stock_quantity` INT,
+    `table_3mm8zj_category_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ulj08q` (
+    `table_ulj08q_order_id` INT,
+    `table_ulj08q_product_id` INT,
+    `table_ulj08q_quantity` INT
+);
+
+INSERT INTO `table_3mm8zj` (`table_3mm8zj_product_id`, `table_3mm8zj_price`, `table_3mm8zj_stock_quantity`, `table_3mm8zj_category_id`) VALUES (1, 1.0, 3, 4);
+
+INSERT INTO `table_ulj08q` (`table_ulj08q_order_id`, `table_ulj08q_product_id`, `table_ulj08q_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(PRODUCT_ID_PARAM INT, REQUESTED_QTY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_STOCK INT DEFAULT 0;
+    DECLARE V_RESERVED_QTY INT DEFAULT 0;
+    DECLARE V_CAN_RESERVE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3MM8ZJ_STOCK_QUANTITY, (MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(-32)) - -480 + ((MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j(51)) - 292 + (0))) INTO V_AVAILABLE_STOCK
+    FROM TABLE_3MM8ZJ
+    WHERE TABLE_3MM8ZJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_ULJ08Q_QUANTITY), 0) INTO V_RESERVED_QTY
+    FROM TABLE_ULJ08Q
+    WHERE TABLE_ULJ08Q_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVAILABLE_STOCK = (MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(83, 87, -62)) - -255 + ((MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(-50)) - 241 + (v_available_stock - v_reserved_qty));
+
+    IF V_AVAILABLE_STOCK >= REQUESTED_QTY THEN
+        SET V_CAN_RESERVE = 1;
+    ELSE
+        SET V_CAN_RESERVE = 0;
+    END IF;
+
+    RETURN V_CAN_RESERVE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+CREATE TABLE IF NOT EXISTS `table_153cac` (
+    `table_153cac_order_id` INT,
+    `table_153cac_customer_id` INT,
+    `table_153cac_order_date` DATE,
+    `table_153cac_total_amount` DECIMAL(10,2),
+    `table_153cac_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4wgu3o` (
+    `table_4wgu3o_order_id` INT,
+    `table_4wgu3o_product_id` INT,
+    `table_4wgu3o_quantity` INT
+);
+
+INSERT INTO `table_153cac` (`table_153cac_order_id`, `table_153cac_customer_id`, `table_153cac_order_date`, `table_153cac_total_amount`, `table_153cac_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4wgu3o` (`table_4wgu3o_order_id`, `table_4wgu3o_product_id`, `table_4wgu3o_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_COMPLEXITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_4WGU3O_PRODUCT_ID), COALESCE(SUM(TABLE_4WGU3O_QUANTITY), 0)
+    INTO V_ITEM_COUNT, V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_4WGU3O
+    WHERE TABLE_4WGU3O_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COMPLEXITY_SCORE = (V_ITEM_COUNT * 2) + (V_UNIQUE_PRODUCTS * 3) + (V_TOTAL_QUANTITY / 5);
+
+    RETURN V_COMPLEXITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(SIZE INT, START_VALUE INT, INCREMENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF SIZE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_VALUE = START_VALUE;
+
+    SUM_LOOP: WHILE V_COUNTER < SIZE DO
+        SET V_SUM = V_SUM + V_CURRENT_VALUE;
+        SET V_CURRENT_VALUE = V_CURRENT_VALUE + INCREMENT;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+CREATE TABLE IF NOT EXISTS `table_pdl5fs` (
+    `table_pdl5fs_product_id` INT,
+    `table_pdl5fs_name` VARCHAR(50),
+    `table_pdl5fs_sku` INT,
+    `table_pdl5fs_stock_quantity` INT,
+    `table_pdl5fs_reorder_point` INT,
+    `table_pdl5fs_unit_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tlwljf` (
+    `table_tlwljf_order_id` INT,
+    `table_tlwljf_supplier_id` INT,
+    `table_tlwljf_order_date` DATE,
+    `table_tlwljf_expected_delivery` INT,
+    `table_tlwljf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pdl5fs` (`table_pdl5fs_product_id`, `table_pdl5fs_name`, `table_pdl5fs_sku`, `table_pdl5fs_stock_quantity`, `table_pdl5fs_reorder_point`, `table_pdl5fs_unit_cost`) VALUES (1, 'test', 3, 4, 5, 1.0);
+
+INSERT INTO `table_tlwljf` (`table_tlwljf_order_id`, `table_tlwljf_supplier_id`, `table_tlwljf_order_date`, `table_tlwljf_expected_delivery`, `table_tlwljf_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_PRIORITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PDL5FS_STOCK_QUANTITY, 0), COALESCE(TABLE_PDL5FS_REORDER_POINT, 10), COALESCE(TABLE_PDL5FS_UNIT_COST, 0)
+    INTO V_STOCK_QUANTITY, V_REORDER_POINT, V_UNIT_COST
+    FROM TABLE_PDL5FS
+    WHERE TABLE_PDL5FS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_PRIORITY_SCORE = V_REORDER_POINT - V_STOCK_QUANTITY;
+
+    IF V_UNIT_COST > 100 THEN
+        SET V_PRIORITY_SCORE = V_PRIORITY_SCORE + 5;
+    END IF;
+
+    RETURN CAST(V_PRIORITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+CREATE TABLE IF NOT EXISTS `table_6x50qw` (
+    `table_6x50qw_product_id` INT,
+    `table_6x50qw_category_id` INT,
+    `table_6x50qw_price` DECIMAL(10,2),
+    `table_6x50qw_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dg2mja` (
+    `table_dg2mja_category_id` INT,
+    `table_dg2mja_name` VARCHAR(50)
+);
+
+INSERT INTO `table_6x50qw` (`table_6x50qw_product_id`, `table_6x50qw_category_id`, `table_6x50qw_price`, `table_6x50qw_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_dg2mja` (`table_dg2mja_category_id`, `table_dg2mja_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_THRESHOLD INT DEFAULT 500;
+    DECLARE V_BULK_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_BULK_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_6X50QW_STOCK_QUANTITY > V_BULK_THRESHOLD;
+
+    IF V_TOTAL_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_BULK_RATIO = (V_BULK_STOCK * 100) / V_TOTAL_STOCK;
+
+    RETURN V_BULK_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_BY_WEIGHT_ob2v4u(ZONE_ID_PARAM INT, WEIGHT_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 0;
+    DECLARE V_PER_KG_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_WEIGHT_KG INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8T1B7G_BASE_RATE, 10), COALESCE(TABLE_8T1B7G_PER_KG_RATE, 5)
+    INTO V_BASE_RATE, V_PER_KG_RATE
+    FROM TABLE_8T1B7G
+    WHERE TABLE_8T1B7G_ZONE_ID = ZONE_ID_PARAM
+      AND TABLE_8T1B7G_WEIGHT_MIN <= WEIGHT_PARAM
+      AND TABLE_8T1B7G_WEIGHT_MAX >= WEIGHT_PARAM;
+
+    SET V_WEIGHT_KG = (MYSQL_FUNC_CALCULATE_CRITICAL_TALENT_INDEX_ey4b2w(8)) - -330 + (ceil(weight_param / 1000));
+    SET V_TOTAL_COST = (MYSQL_FUNC_CHECK_STOCK_AND_RESERVE_ikvf4z(-33, 70)) - -577 + (v_base_rate + (v_weight_kg * v_per_kg_rate));
+
+    RETURN (MYSQL_FUNC_CALCULATE_LINKED_LIST_SUM_7darv9(36)) - -993 + (v_total_cost);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SHIPPING_COST_BY_WEIGHT_ob2v4u(1, 1);

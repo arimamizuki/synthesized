@@ -1,0 +1,366 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_emyi9r` (
+    `table_emyi9r_campaign_id` INT,
+    `table_emyi9r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_emyi9r` (`table_emyi9r_campaign_id`, `table_emyi9r_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+CREATE TABLE IF NOT EXISTS `table_1yd99c` (
+    `table_1yd99c_policy_id` INT,
+    `table_1yd99c_customer_id` INT,
+    `table_1yd99c_monthly_benefit` INT,
+    `table_1yd99c_elimination_period_days` INT,
+    `table_1yd99c_benefit_duration_months` INT,
+    `table_1yd99c_premium_monthly` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5qb4ll` (
+    `table_5qb4ll_claim_id` INT,
+    `table_5qb4ll_policy_id` INT,
+    `table_5qb4ll_claim_start_date` DATE,
+    `table_5qb4ll_claim_end_date` DATE,
+    `table_5qb4ll_total_benefits_paid` INT
+);
+
+INSERT INTO `table_1yd99c` (`table_1yd99c_policy_id`, `table_1yd99c_customer_id`, `table_1yd99c_monthly_benefit`, `table_1yd99c_elimination_period_days`, `table_1yd99c_benefit_duration_months`, `table_1yd99c_premium_monthly`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_5qb4ll` (`table_5qb4ll_claim_id`, `table_5qb4ll_policy_id`, `table_5qb4ll_claim_start_date`, `table_5qb4ll_claim_end_date`, `table_5qb4ll_total_benefits_paid`) VALUES (1, 2, '2024-01-01', '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BENEFIT_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_MONTHLY_BENEFIT INT DEFAULT 0;
+    DECLARE V_REMAINING_MONTHS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1YD99C_BENEFIT_DURATION_MONTHS, 12), COALESCE(TABLE_1YD99C_MONTHLY_BENEFIT, 2000)
+    INTO V_BENEFIT_DURATION, V_MONTHLY_BENEFIT
+    FROM TABLE_1YD99C
+    WHERE TABLE_1YD99C_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5QB4LL_TOTAL_BENEFITS_PAID), 0) INTO V_TOTAL_PAID
+    FROM TABLE_5QB4LL
+    WHERE TABLE_5QB4LL_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_REMAINING_MONTHS = (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(-93)) - 706 + (v_benefit_duration - (v_total_paid / v_monthly_benefit));
+
+    RETURN (MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(-77)) - 460 + (cast(v_remaining_months as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(-16, -20)) - 290 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= N / 2 DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    SET V_SUM = V_SUM + N;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (V_SUBTOTAL * TAX_RATE_PERCENT) / 100;
+
+    RETURN V_TAX_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+CREATE TABLE IF NOT EXISTS `table_rgkml5` (
+    `table_rgkml5_campaign_id` INT,
+    `table_rgkml5_status` VARCHAR(50),
+    `table_rgkml5_budget` INT
+);
+
+INSERT INTO `table_rgkml5` (`table_rgkml5_campaign_id`, `table_rgkml5_status`, `table_rgkml5_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_RGKML5_STATUS, COALESCE(TABLE_RGKML5_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_RGKML5
+    WHERE TABLE_RGKML5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN V_BUDGET
+        WHEN 'PAUSED' THEN V_BUDGET / 2
+        WHEN 'COMPLETED' THEN V_BUDGET * 2
+        ELSE V_BUDGET / 4
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+CREATE TABLE IF NOT EXISTS `table_bzkg88` (
+    `table_bzkg88_customer_id` INT,
+    `table_bzkg88_registration_date` DATE
+);
+
+INSERT INTO `table_bzkg88` (`table_bzkg88_customer_id`, `table_bzkg88_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACQUISITION_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BZKG88_REGISTRATION_DATE)
+    INTO V_ACQUISITION_YEAR
+    FROM TABLE_BZKG88
+    WHERE TABLE_BZKG88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc(4)) - 47 + (v_acquisition_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc----- */
+CREATE TABLE IF NOT EXISTS `table_9pcwja` (
+    `table_9pcwja_customer_id` INT,
+    `table_9pcwja_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_9pcwja` (`table_9pcwja_customer_id`, `table_9pcwja_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TYPE_INDEX_g6y7mc(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_9PCWJA_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_9PCWJA
+    WHERE TABLE_9PCWJA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN 3
+        WHEN 'PREMIUM' THEN 2
+        WHEN 'BASIC' THEN 1
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+CREATE TABLE IF NOT EXISTS `table_lrokng` (
+    `table_lrokng_customer_id` INT,
+    `table_lrokng_order_date` DATE,
+    `table_lrokng_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lrokng` (`table_lrokng_customer_id`, `table_lrokng_order_date`, `table_lrokng_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_LROKNG_CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM TABLE_LROKNG
+    WHERE TABLE_LROKNG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = (MYSQL_FUNC_PROC_ENUM_yio23w()) - 703 + (-p_n);
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(-59)) - -500 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_ENUM_yio23w----- */
+CREATE TABLE IF NOT EXISTS `table_bbx5m1` (
+    `table_bbx5m1_cenum` ENUM('value1', 'value2', 'value3')
+);
+
+INSERT INTO `table_bbx5m1` (`table_bbx5m1_cenum`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_ENUM_yio23w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_ENUM_yio23w() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_BBX5M1`;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+CREATE TABLE IF NOT EXISTS `table_3xzodd` (
+    `table_3xzodd_sale_id` INT,
+    `table_3xzodd_product_id` INT,
+    `table_3xzodd_salesperson_id` INT,
+    `table_3xzodd_sale_date` DATE,
+    `table_3xzodd_quantity` INT,
+    `table_3xzodd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_3xzodd` (`table_3xzodd_sale_id`, `table_3xzodd_product_id`, `table_3xzodd_salesperson_id`, `table_3xzodd_sale_date`, `table_3xzodd_quantity`, `table_3xzodd_unit_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(SALESPERSON_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALES INT DEFAULT 0;
+    DECLARE V_TRANSACTION_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALE_VALUE INT DEFAULT 0;
+    DECLARE V_BONUS_RATE INT DEFAULT 5;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), SUM(TABLE_3XZODD_QUANTITY * TABLE_3XZODD_UNIT_PRICE)
+    INTO V_TRANSACTION_COUNT, V_TOTAL_SALES
+    FROM TABLE_3XZODD
+    WHERE TABLE_3XZODD_SALESPERSON_ID = SALESPERSON_ID_PARAM
+      AND TABLE_3XZODD_SALE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
+
+    IF V_TRANSACTION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_SALE_VALUE = V_TOTAL_SALES / V_TRANSACTION_COUNT;
+
+    CASE
+        WHEN V_AVG_SALE_VALUE > 5000 THEN SET V_BONUS_RATE = 12;
+        WHEN V_AVG_SALE_VALUE > 2000 THEN SET V_BONUS_RATE = 8;
+        WHEN V_AVG_SALE_VALUE > 1000 THEN SET V_BONUS_RATE = 6;
+        ELSE SET V_BONUS_RATE = 4;
+    END CASE;
+
+    SET V_BONUS_AMOUNT = V_TOTAL_SALES * V_BONUS_RATE / 100;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_EMYI9R_STATUS
+    INTO V_STATUS
+    FROM TABLE_EMYI9R
+    WHERE TABLE_EMYI9R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_V2_aijl6s(1);

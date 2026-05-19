@@ -1,0 +1,425 @@
+/* -----Called: MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(JSON_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_LEN INT DEFAULT CHAR_LENGTH(JSON_STR);
+    DECLARE V_CHAR CHAR(1);
+    DECLARE V_BRACKET_COUNT INT DEFAULT 0;
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+
+    IF JSON_STR IS NULL OR JSON_STR = '' THEN
+        RETURN 0;
+    END IF;
+
+    PARSE_LOOP: WHILE V_POS <= V_LEN DO
+        SET V_CHAR = SUBSTRING(JSON_STR, V_POS, 1);
+
+        IF V_CHAR = '{' OR V_CHAR = '[' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT + 1;
+            IF V_BRACKET_COUNT > V_MAX_DEPTH THEN
+                SET V_MAX_DEPTH = V_BRACKET_COUNT;
+            END IF;
+        ELSEIF V_CHAR = '}' OR V_CHAR = ']' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT - 1;
+        END IF;
+
+        SET V_POS = V_POS + 1;
+    END WHILE PARSE_LOOP;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B * P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+CREATE TABLE IF NOT EXISTS `table_8dni6g` (
+    `table_8dni6g_customer_id` INT,
+    `table_8dni6g_country` INT
+);
+
+INSERT INTO `table_8dni6g` (`table_8dni6g_customer_id`, `table_8dni6g_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8DNI6G
+    WHERE TABLE_8DNI6G_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(-70)) - -682 + ((MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(-52)) - 808 + ((MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(2)) - 125 + (v_count)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ts7o4` (
+    `table_4ts7o4_order_id` INT,
+    `table_4ts7o4_customer_id` INT,
+    `table_4ts7o4_order_date` DATE,
+    `table_4ts7o4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_y3npq4` (
+    `table_y3npq4_order_id` INT,
+    `table_y3npq4_product_id` INT,
+    `table_y3npq4_quantity` INT,
+    `table_y3npq4_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4ts7o4` (`table_4ts7o4_order_id`, `table_4ts7o4_customer_id`, `table_4ts7o4_order_date`, `table_4ts7o4_status`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_y3npq4` (`table_y3npq4_order_id`, `table_y3npq4_product_id`, `table_y3npq4_quantity`, `table_y3npq4_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_ITEM_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_FRAUD_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_Y3NPQ4_QUANTITY * TABLE_Y3NPQ4_UNIT_PRICE), 0), COUNT(*)
+    INTO V_ORDER_TOTAL, V_ITEM_COUNT
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_Y3NPQ4_PRODUCT_ID)
+    INTO V_UNIQUE_PRODUCTS
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ITEM_COUNT > 0 THEN
+        SET V_AVG_ITEM_PRICE = (MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(-97)) - -942 + (v_order_total / v_item_count);
+    END IF;
+
+    IF V_ORDER_TOTAL > 10000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 30;
+    END IF;
+
+    IF V_UNIQUE_PRODUCTS < V_ITEM_COUNT / 2 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 20;
+    END IF;
+
+    IF V_AVG_ITEM_PRICE > 5000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 25;
+    END IF;
+
+    RETURN LEAST(V_FRAUD_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+CREATE TABLE IF NOT EXISTS `table_r42k1u` (
+    `table_r42k1u_product_id` INT,
+    `table_r42k1u_sku` INT,
+    `table_r42k1u_name` VARCHAR(50),
+    `table_r42k1u_category_id` INT,
+    `table_r42k1u_price` DECIMAL(10,2),
+    `table_r42k1u_cost` DECIMAL(10,2),
+    `table_r42k1u_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_032md1` (
+    `table_032md1_transaction_id` INT,
+    `table_032md1_product_id` INT,
+    `table_032md1_quantity` INT,
+    `table_032md1_transaction_date` DATE
+);
+
+INSERT INTO `table_r42k1u` (`table_r42k1u_product_id`, `table_r42k1u_sku`, `table_r42k1u_name`, `table_r42k1u_category_id`, `table_r42k1u_price`, `table_r42k1u_cost`, `table_r42k1u_stock_quantity`) VALUES (1, 2, 'test', 4, 1.0, 1.0, 7);
+
+INSERT INTO `table_032md1` (`table_032md1_transaction_id`, `table_032md1_product_id`, `table_032md1_quantity`, `table_032md1_transaction_date`) VALUES (1, 2, 3, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFIT_MARGIN_dv6268(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_RECENT_SALES_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R42K1U_PRICE, 0), COALESCE(TABLE_R42K1U_COST, 0)
+    INTO V_PRICE, V_COST
+    FROM TABLE_R42K1U
+    WHERE TABLE_R42K1U_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RECENT_SALES_COUNT
+    FROM TABLE_032MD1
+    WHERE TABLE_032MD1_PRODUCT_ID = PRODUCT_ID_PARAM
+      AND TABLE_032MD1_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_PRICE - V_COST) * 100) / V_PRICE;
+
+    IF V_RECENT_SALES_COUNT < 5 THEN
+        SET V_PROFIT_MARGIN = V_PROFIT_MARGIN - 10;
+    END IF;
+
+    RETURN CAST(V_PROFIT_MARGIN AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+CREATE TABLE IF NOT EXISTS `table_75ig4z` (
+    `table_75ig4z_flight_id` INT,
+    `table_75ig4z_origin` INT,
+    `table_75ig4z_destination` INT,
+    `table_75ig4z_departure_time` DATE,
+    `table_75ig4z_arrival_time` DATE,
+    `table_75ig4z_aircraft_type` VARCHAR(50),
+    `table_75ig4z_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ch532i` (
+    `table_ch532i_leg_id` INT,
+    `table_ch532i_booking_id` INT,
+    `table_ch532i_flight_id` INT,
+    `table_ch532i_seat_class` INT,
+    `table_ch532i_seat_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_75ig4z` (`table_75ig4z_flight_id`, `table_75ig4z_origin`, `table_75ig4z_destination`, `table_75ig4z_departure_time`, `table_75ig4z_arrival_time`, `table_75ig4z_aircraft_type`, `table_75ig4z_base_price`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_ch532i` (`table_ch532i_leg_id`, `table_ch532i_booking_id`, `table_ch532i_flight_id`, `table_ch532i_seat_class`, `table_ch532i_seat_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPARTURE TIME;
+    DECLARE V_ARRIVAL TIME;
+    DECLARE V_DURATION_MINS INT DEFAULT 0;
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_DELAY_RISK INT DEFAULT 0;
+
+    SELECT TABLE_75IG4Z_DEPARTURE_TIME, TABLE_75IG4Z_ARRIVAL_TIME, TABLE_75IG4Z_BASE_PRICE
+    INTO V_DEPARTURE, V_ARRIVAL, V_PRICE
+    FROM TABLE_75IG4Z
+    WHERE TABLE_75IG4Z_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    IF V_DEPARTURE IS NULL OR V_ARRIVAL IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_MINS = TIME_TO_SEC(TIMEDIFF(V_ARRIVAL, V_DEPARTURE)) / 60;
+
+    IF V_DURATION_MINS < 0 THEN
+        SET V_DURATION_MINS = V_DURATION_MINS + 1440;
+    END IF;
+
+    IF V_DURATION_MINS > 480 THEN
+        SET V_DELAY_RISK = V_DURATION_MINS / 60;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(-70)) - 186 + (cast(v_duration_mins + v_delay_risk as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1----- */
+CREATE TABLE IF NOT EXISTS `table_wv7ee6` (
+    `table_wv7ee6_emp_id` INT,
+    `table_wv7ee6_department_id` INT,
+    `table_wv7ee6_salary` INT,
+    `table_wv7ee6_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_aqveda` (
+    `table_aqveda_department_id` INT,
+    `table_aqveda_name` VARCHAR(50)
+);
+
+INSERT INTO `table_wv7ee6` (`table_wv7ee6_emp_id`, `table_wv7ee6_department_id`, `table_wv7ee6_salary`, `table_wv7ee6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_aqveda` (`table_aqveda_department_id`, `table_aqveda_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_QUALITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_WV7EE6_SALARY), 0), COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_WV7EE6_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_WV7EE6
+    WHERE TABLE_WV7EE6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_QUALITY_INDEX = (V_AVG_SALARY / 100) + (V_AVG_TENURE * 5);
+
+    RETURN V_QUALITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+CREATE TABLE IF NOT EXISTS `table_o7b1hn` (
+    `table_o7b1hn_case_id` INT,
+    `table_o7b1hn_client_id` INT,
+    `table_o7b1hn_attorney_id` INT,
+    `table_o7b1hn_case_type` VARCHAR(50),
+    `table_o7b1hn_filing_date` DATE,
+    `table_o7b1hn_status` VARCHAR(50),
+    `table_o7b1hn_estimated_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sn0pid` (
+    `table_sn0pid_task_id` INT,
+    `table_sn0pid_case_id` INT,
+    `table_sn0pid_task_name` VARCHAR(50),
+    `table_sn0pid_hours_billed` INT,
+    `table_sn0pid_hourly_rate` INT
+);
+
+INSERT INTO `table_o7b1hn` (`table_o7b1hn_case_id`, `table_o7b1hn_client_id`, `table_o7b1hn_attorney_id`, `table_o7b1hn_case_type`, `table_o7b1hn_filing_date`, `table_o7b1hn_status`, `table_o7b1hn_estimated_value`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_sn0pid` (`table_sn0pid_task_id`, `table_sn0pid_case_id`, `table_sn0pid_task_name`, `table_sn0pid_hours_billed`, `table_sn0pid_hourly_rate`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_BILLING INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O7B1HN_ESTIMATED_VALUE, 0)
+    INTO V_ESTIMATED_VALUE
+    FROM TABLE_O7B1HN
+    WHERE TABLE_O7B1HN_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED * TABLE_SN0PID_HOURLY_RATE), 0), COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED), 0)
+    INTO V_TOTAL_BILLING, V_TOTAL_HOURS
+    FROM TABLE_SN0PID
+    WHERE TABLE_SN0PID_CASE_ID = CASE_ID_PARAM;
+
+    IF V_ESTIMATED_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = V_ESTIMATED_VALUE - V_TOTAL_BILLING;
+
+    IF V_TOTAL_HOURS > 100 THEN
+        SET V_PROFITABILITY = V_PROFITABILITY - (V_TOTAL_HOURS - 100) * 10;
+    END IF;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC2_nz67cs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - -337 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A & P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(-52)) - -744 + ((MYSQL_FUNC_HANDLER_FUNC_MULT_THREE_35xbrx(-43, -96, 81)) - 622 + ((MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(47)) - -624 + (-1)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_FUNC2_nz67cs()) - -915 + (v_result);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(1, 1);

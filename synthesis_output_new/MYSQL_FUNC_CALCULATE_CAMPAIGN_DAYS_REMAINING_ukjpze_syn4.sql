@@ -1,0 +1,382 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_6ac5k9` (
+    `table_6ac5k9_campaign_id` INT,
+    `table_6ac5k9_start_date` DATE,
+    `table_6ac5k9_end_date` DATE
+);
+
+INSERT INTO `table_6ac5k9` (`table_6ac5k9_campaign_id`, `table_6ac5k9_start_date`, `table_6ac5k9_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f----- */
+CREATE TABLE IF NOT EXISTS `table_30nzh1` (
+    `table_30nzh1_supplier_id` INT,
+    `table_30nzh1_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_30nzh1` (`table_30nzh1_supplier_id`, `table_30nzh1_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_30NZH1_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_30NZH1
+    WHERE TABLE_30NZH1_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe(-9)) - 409 + (floor(v_rating * 20));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe----- */
+CREATE TABLE IF NOT EXISTS `table_quvwhn` (
+    `table_quvwhn_order_id` INT,
+    `table_quvwhn_customer_id` INT,
+    `table_quvwhn_order_date` DATE,
+    `table_quvwhn_total_amount` DECIMAL(10,2),
+    `table_quvwhn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1ci25p` (
+    `table_1ci25p_order_id` INT,
+    `table_1ci25p_product_id` INT,
+    `table_1ci25p_quantity` INT
+);
+
+INSERT INTO `table_quvwhn` (`table_quvwhn_order_id`, `table_quvwhn_customer_id`, `table_quvwhn_order_date`, `table_quvwhn_total_amount`, `table_quvwhn_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_1ci25p` (`table_1ci25p_order_id`, `table_1ci25p_product_id`, `table_1ci25p_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_PROCESSING_TIME INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_1CI25P_QUANTITY), 0)
+    INTO V_ORDER_ITEM_COUNT, V_TOTAL_QUANTITY
+    FROM TABLE_1CI25P
+    WHERE TABLE_1CI25P_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_PROCESSING_TIME = V_ORDER_ITEM_COUNT * 5 + V_TOTAL_QUANTITY * 2;
+
+    RETURN V_PROCESSING_TIME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+CREATE TABLE IF NOT EXISTS `table_do1xw5` (
+    `table_do1xw5_policy_id` INT,
+    `table_do1xw5_customer_id` INT,
+    `table_do1xw5_plan_type` VARCHAR(50),
+    `table_do1xw5_premium_monthly` INT,
+    `table_do1xw5_deductible_amount` DECIMAL(10,2),
+    `table_do1xw5_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0k2w6` (
+    `table_o0k2w6_claim_id` INT,
+    `table_o0k2w6_policy_id` INT,
+    `table_o0k2w6_claim_date` DATE,
+    `table_o0k2w6_claim_amount` DECIMAL(10,2),
+    `table_o0k2w6_status` VARCHAR(50)
+);
+
+INSERT INTO `table_do1xw5` (`table_do1xw5_policy_id`, `table_do1xw5_customer_id`, `table_do1xw5_plan_type`, `table_do1xw5_premium_monthly`, `table_do1xw5_deductible_amount`, `table_do1xw5_coverage_limit`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_o0k2w6` (`table_o0k2w6_claim_id`, `table_o0k2w6_policy_id`, `table_o0k2w6_claim_date`, `table_o0k2w6_claim_amount`, `table_o0k2w6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DO1XW5_PREMIUM_MONTHLY * 12), 0), COALESCE(MAX(TABLE_DO1XW5_COVERAGE_LIMIT), 0)
+    INTO V_TOTAL_PREMIUMS, V_COVERAGE_LIMIT
+    FROM TABLE_DO1XW5
+    WHERE TABLE_DO1XW5_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O0K2W6_CLAIM_AMOUNT), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_O0K2W6
+    WHERE TABLE_O0K2W6_POLICY_ID = POLICY_ID_PARAM AND TABLE_O0K2W6_STATUS = 'APPROVED';
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(X INT, Y INT, A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE DECIMAL(10,4) DEFAULT 0.00;
+    SET V_DISTANCE = (MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(-76)) - 142 + ((MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(74)) - -684 + (abs(a * x + b * y + c) / sqrt(a * a + b * b)));
+    RETURN (MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(-10)) - -619 + (floor(v_distance));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(14)) - 678 + ((v_bedrooms * 20) + (v_bathrooms * 15) + (v_square_feet / 100) + ((2024 - v_year_built) * 2) + (v_feature_count * 10));
+
+    RETURN V_PROPERTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+CREATE TABLE IF NOT EXISTS `table_xyocnl` (
+    `table_xyocnl_order_id` INT,
+    `table_xyocnl_customer_id` INT
+);
+
+INSERT INTO `table_xyocnl` (`table_xyocnl_order_id`, `table_xyocnl_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_XYOCNL_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_XYOCNL
+    WHERE TABLE_XYOCNL_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+CREATE TABLE IF NOT EXISTS `table_62ah0r` (
+    `table_62ah0r_customer_id` INT,
+    `table_62ah0r_plan_type` VARCHAR(50),
+    `table_62ah0r_monthly_cost` DECIMAL(10,2),
+    `table_62ah0r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_62ah0r` (`table_62ah0r_customer_id`, `table_62ah0r_plan_type`, `table_62ah0r_monthly_cost`, `table_62ah0r_status`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_UPGRADE_PROB INT DEFAULT 0;
+
+    SELECT TABLE_62AH0R_PLAN_TYPE, COALESCE(TABLE_62AH0R_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_62AH0R
+    WHERE TABLE_62AH0R_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'BASIC' THEN SET V_UPGRADE_PROB = (MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(-36)) - 134 + (70);
+        WHEN 'PREMIUM' THEN SET V_UPGRADE_PROB = 40;
+        WHEN 'ENTERPRISE' THEN SET V_UPGRADE_PROB = 10;
+        ELSE SET V_UPGRADE_PROB = 50;
+    END CASE;
+
+    SET V_UPGRADE_PROB = V_UPGRADE_PROB - (V_MONTHLY_COST / 20);
+
+    RETURN GREATEST(V_UPGRADE_PROB, 5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+CREATE TABLE IF NOT EXISTS `table_lk5a67` (
+    `table_lk5a67_product_id` INT,
+    `table_lk5a67_stock_quantity` INT
+);
+
+INSERT INTO `table_lk5a67` (`table_lk5a67_product_id`, `table_lk5a67_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_LK5A67_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_LK5A67
+    WHERE TABLE_LK5A67_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN LEAST(V_STOCK, 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+CREATE TABLE IF NOT EXISTS `table_1do798` (
+    `table_1do798_device_id` INT,
+    `table_1do798_location` INT,
+    `table_1do798_device_type` VARCHAR(50),
+    `table_1do798_last_maintenance_date` DATE,
+    `table_1do798_operating_hours` DECIMAL(3,1),
+    `table_1do798_failure_probability` INT
+);
+
+INSERT INTO `table_1do798` (`table_1do798_device_id`, `table_1do798_location`, `table_1do798_device_type`, `table_1do798_last_maintenance_date`, `table_1do798_operating_hours`, `table_1do798_failure_probability`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 6);
+
+/* -----Called: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(DEVICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_OPERATING_HOURS INT DEFAULT 0;
+    DECLARE V_FAILURE_PROB DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DAYS_SINCE_MAINTENANCE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1DO798_OPERATING_HOURS, 0), COALESCE(TABLE_1DO798_FAILURE_PROBABILITY, 0.00)
+    INTO V_OPERATING_HOURS, V_FAILURE_PROB
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_1DO798_LAST_MAINTENANCE_DATE)
+    INTO V_DAYS_SINCE_MAINTENANCE
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SET V_RISK_SCORE = (V_OPERATING_HOURS / 100) + (V_FAILURE_PROB * 100) + (V_DAYS_SINCE_MAINTENANCE / 10);
+
+    IF V_RISK_SCORE > 80 THEN
+        RETURN 1;
+    ELSEIF V_RISK_SCORE > 50 THEN
+        RETURN 7;
+    ELSEIF V_RISK_SCORE > 30 THEN
+        RETURN 30;
+    ELSE
+        RETURN 90;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_6AC5K9_END_DATE
+    INTO V_END_DATE
+    FROM TABLE_6AC5K9
+    WHERE TABLE_6AC5K9_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_POINT_LINE_DISTANCE_cdz0sg(16, 13, 1, 50, 69)) - 522 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(-24)) - -500 + ((MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + (0)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(-73)) - 411 + (greatest(datediff(v_end_date, curdate()), 0));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(1);

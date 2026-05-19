@@ -1,0 +1,385 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_nfhkgx` (
+    `table_nfhkgx_policy_id` INT,
+    `table_nfhkgx_customer_id` INT,
+    `table_nfhkgx_policy_type` VARCHAR(50),
+    `table_nfhkgx_premium_amount` DECIMAL(10,2),
+    `table_nfhkgx_coverage_amount` DECIMAL(10,2),
+    `table_nfhkgx_start_date` DATE,
+    `table_nfhkgx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tr1zz3` (
+    `table_tr1zz3_claim_id` INT,
+    `table_tr1zz3_policy_id` INT,
+    `table_tr1zz3_claim_amount` DECIMAL(10,2),
+    `table_tr1zz3_claim_date` DATE,
+    `table_tr1zz3_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nfhkgx` (`table_nfhkgx_policy_id`, `table_nfhkgx_customer_id`, `table_nfhkgx_policy_type`, `table_nfhkgx_premium_amount`, `table_nfhkgx_coverage_amount`, `table_nfhkgx_start_date`, `table_nfhkgx_status`) VALUES (1, 2, 'test', 1.0, 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_tr1zz3` (`table_tr1zz3_claim_id`, `table_tr1zz3_policy_id`, `table_tr1zz3_claim_amount`, `table_tr1zz3_claim_date`, `table_tr1zz3_status`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y----- */
+CREATE TABLE IF NOT EXISTS `table_ctrmc9` (
+    `table_ctrmc9_emp_id` INT,
+    `table_ctrmc9_salary` INT,
+    `table_ctrmc9_department_id` INT,
+    `table_ctrmc9_hire_date` DATE
+);
+
+INSERT INTO `table_ctrmc9` (`table_ctrmc9_emp_id`, `table_ctrmc9_salary`, `table_ctrmc9_department_id`, `table_ctrmc9_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE INT DEFAULT 0;
+    DECLARE V_BONUS INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT_YEAR INT;
+    DECLARE V_HIRE_YEAR INT;
+
+    SET V_CURRENT_YEAR = YEAR(CURDATE());
+
+    SELECT COUNT(*), COALESCE(AVG(V_CURRENT_YEAR - YEAR(TABLE_CTRMC9_HIRE_DATE)), 0)
+    INTO V_EMP_COUNT, V_AVG_TENURE
+    FROM TABLE_CTRMC9
+    WHERE TABLE_CTRMC9_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_BONUS = CAST(V_AVG_TENURE * 100 AS UNSIGNED);
+
+    RETURN V_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_SQUARES_btf2hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = (MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(-59)) - 840 + (v_sum) + (V_COUNTER * V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+CREATE TABLE IF NOT EXISTS `table_0rmlv2` (
+    `table_0rmlv2_id` INT,
+    `table_0rmlv2_username` VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6aha2u` (
+    `table_6aha2u_user_id` INT
+);
+
+INSERT INTO `table_0rmlv2` (`table_0rmlv2_id`, `table_0rmlv2_username`) VALUES (1, 'test');
+
+INSERT INTO `table_6aha2u` (`table_6aha2u_user_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(P_USERNAME_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE USERNAME_VAL VARCHAR(30);
+    DECLARE PHOTO_COUNT INT;
+    
+    SELECT `TABLE_0RMLV2_USERNAME` INTO USERNAME_VAL FROM `TABLE_0RMLV2` WHERE `TABLE_0RMLV2_ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF USERNAME_VAL IS NULL THEN
+        RETURN (MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(90)) - -507 + (0);
+    END IF;
+    
+    SELECT COUNT(UP.`TABLE_6AHA2U_USER_ID`) INTO PHOTO_COUNT
+    FROM `TABLE_6AHA2U` AS UP
+    LEFT JOIN `TABLE_0RMLV2` AS U ON U.`TABLE_0RMLV2_ID` = UP.`TABLE_6AHA2U_USER_ID`
+    WHERE U.`TABLE_0RMLV2_USERNAME` = USERNAME_VAL;
+    
+    RETURN COALESCE(PHOTO_COUNT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ABS_CHECK_o1n4t1(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL = -2147483648 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'INTEGER OVERFLOW FOR ABSOLUTE VALUE';
+    END IF;
+    RETURN ABS(VAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + ((MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(12, -60)) - -907 + (0))), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_LCM INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+    DECLARE V_REMAINDER INT DEFAULT 0;
+
+    SET V_TEMP_A = A;
+    SET V_TEMP_B = B;
+
+    GCD_LOOP: WHILE V_TEMP_B != 0 DO
+        SET V_REMAINDER = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_TEMP_B;
+        SET V_TEMP_B = V_REMAINDER;
+    END WHILE GCD_LOOP;
+
+    SET V_GCD = V_TEMP_A;
+
+    IF V_GCD = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LCM = (A / V_GCD) * B;
+
+    RETURN V_LCM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = (MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(-5)) - -815 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = (MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(85, 70)) - -149 + (((v_current_count - v_prior_count) * 100) / v_prior_count);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN 0;
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN 1;
+    ELSE RETURN 2;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+CREATE TABLE IF NOT EXISTS `table_8el8bx` (
+    `table_8el8bx_reg_id` INT,
+    `table_8el8bx_attendee_id` INT,
+    `table_8el8bx_conference_id` INT,
+    `table_8el8bx_registration_date` DATE,
+    `table_8el8bx_ticket_type` VARCHAR(50),
+    `table_8el8bx_total_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_29ijnu` (
+    `table_29ijnu_conference_id` INT,
+    `table_29ijnu_name` VARCHAR(50),
+    `table_29ijnu_start_date` DATE,
+    `table_29ijnu_venue_id` INT,
+    `table_29ijnu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8el8bx` (`table_8el8bx_reg_id`, `table_8el8bx_attendee_id`, `table_8el8bx_conference_id`, `table_8el8bx_registration_date`, `table_8el8bx_ticket_type`, `table_8el8bx_total_paid`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_29ijnu` (`table_29ijnu_conference_id`, `table_29ijnu_name`, `table_29ijnu_start_date`, `table_29ijnu_venue_id`, `table_29ijnu_base_price`) VALUES (1, 'test', '2024-01-01', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(CONFERENCE_ID_PARAM INT, DAYS_BEFORE_EVENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_29IJNU_BASE_PRICE, 100) INTO V_BASE_PRICE
+    FROM TABLE_29IJNU
+    WHERE TABLE_29IJNU_CONFERENCE_ID = CONFERENCE_ID_PARAM;
+
+    IF DAYS_BEFORE_EVENT >= 30 THEN
+        SET V_DISCOUNT_PERCENT = 25;
+    ELSEIF DAYS_BEFORE_EVENT >= 14 THEN
+        SET V_DISCOUNT_PERCENT = (MYSQL_FUNC_TEST_4080c6()) - -185 + (15);
+    ELSEIF DAYS_BEFORE_EVENT >= 7 THEN
+        SET V_DISCOUNT_PERCENT = 10;
+    ELSE
+        SET V_DISCOUNT_PERCENT = 0;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - (V_BASE_PRICE * V_DISCOUNT_PERCENT / 100);
+
+    RETURN CAST(V_FINAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_TEST_4080c6----- */
+CREATE TABLE IF NOT EXISTS table_k80otc (
+    table_k80otc_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_k80otc_name VARCHAR(100)
+);
+
+INSERT INTO table_k80otc (`table_k80otc_name`) VALUES 
+    ('Product A'),
+    ('Product B'),
+    ('Product C'),
+    ('Product D'),
+    ('Product E'),
+    ('Product F'),
+    ('Product G');
+
+/* -----Called: MYSQL_FUNC_TEST_4080c6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_4080c6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE COUNT_PRODUCTS_VAR INT;
+    DECLARE RESULT INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO COUNT_PRODUCTS_VAR FROM TABLE_K80OTC;
+
+    IF COUNT_PRODUCTS_VAR >= 7 THEN
+        SET RESULT = 1;
+    ELSE
+        SET RESULT = 0;
+    END IF;
+
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM INT DEFAULT 0;
+    DECLARE V_COVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NFHKGX_PREMIUM_AMOUNT, 0), COALESCE(TABLE_NFHKGX_COVERAGE_AMOUNT, 0)
+    INTO V_PREMIUM, V_COVERAGE
+    FROM TABLE_NFHKGX
+    WHERE TABLE_NFHKGX_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_TR1ZZ3_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_AMOUNT
+    FROM TABLE_TR1ZZ3
+    WHERE TABLE_TR1ZZ3_POLICY_ID = POLICY_ID_PARAM AND TABLE_TR1ZZ3_STATUS = 'APPROVED';
+
+    SET V_SCORE = (MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y(-41)) - -920 + ((v_coverage / nullif(v_premium, 0)) - (v_claim_amount / 100));
+
+    IF V_TOTAL_CLAIMS > 5 THEN
+        SET V_SCORE = (MYSQL_FUNC_SUM_OF_SQUARES_btf2hu(-61)) - 853 + (v_score - 20);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (cast(v_score as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(1);

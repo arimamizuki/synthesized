@@ -1,0 +1,378 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(-66)) - 203 + (a * b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+CREATE TABLE IF NOT EXISTS `table_lktk1v` (
+    `table_lktk1v_order_id` INT,
+    `table_lktk1v_customer_id` INT,
+    `table_lktk1v_order_date` DATE,
+    `table_lktk1v_total_amount` DECIMAL(10,2),
+    `table_lktk1v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_3wmdck` (
+    `table_3wmdck_shipment_id` INT,
+    `table_3wmdck_order_id` INT,
+    `table_3wmdck_carrier` INT,
+    `table_3wmdck_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lktk1v` (`table_lktk1v_order_id`, `table_lktk1v_customer_id`, `table_lktk1v_order_date`, `table_lktk1v_total_amount`, `table_lktk1v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_3wmdck` (`table_3wmdck_shipment_id`, `table_3wmdck_order_id`, `table_3wmdck_carrier`, `table_3wmdck_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_tuauq9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3WMDCK_SHIPPING_COST, 0), COALESCE(TABLE_LKTK1V_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM TABLE_LKTK1V O
+    LEFT JOIN TABLE_3WMDCK S ON TABLE_LKTK1V_ORDER_ID = TABLE_3WMDCK_ORDER_ID
+    WHERE TABLE_LKTK1V_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COST_RATIO = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503(-57)) - -466 + ((MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(60)) - -138 + ((v_shipping_cost * 100) / v_order_total));
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= (MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(2)) - 487 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    IF N = (MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(80)) - -338 + (1) OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+CREATE TABLE IF NOT EXISTS table_hdmev5 (
+    table_hdmev5_rental_id INT,
+    table_hdmev5_inventory_id INT,
+    table_hdmev5_return_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS table_1hevtl (
+    table_1hevtl_inventory_id INT
+);
+
+INSERT INTO table_hdmev5 (`table_hdmev5_rental_id`, `table_hdmev5_inventory_id`, `table_hdmev5_return_date`) VALUES (1, 2, '2024-01-01');
+
+INSERT INTO table_1hevtl (`table_1hevtl_inventory_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(P_INVENTORY_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTALS INT;
+    DECLARE V_OUT INT;
+
+    SELECT COUNT(*) INTO V_RENTALS
+    FROM TABLE_HDMEV5
+    WHERE TABLE_HDMEV5_INVENTORY_ID = P_INVENTORY_ID;
+
+    IF V_RENTALS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(-22)) - 154 + (1);
+    END IF;
+
+    SELECT COUNT(TABLE_HDMEV5_RENTAL_ID) INTO V_OUT
+    FROM TABLE_1HEVTL LEFT JOIN TABLE_HDMEV5 USING(TABLE_1HEVTL_INVENTORY_ID)
+    WHERE TABLE_1HEVTL.TABLE_1HEVTL_INVENTORY_ID = P_INVENTORY_ID
+    AND TABLE_HDMEV5.TABLE_HDMEV5_RETURN_DATE IS NULL;
+
+    IF V_OUT > 0 THEN
+        RETURN 0;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+CREATE TABLE IF NOT EXISTS `table_2qmb5t` (
+    `table_2qmb5t_customer_id` INT,
+    `table_2qmb5t_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_82xo3l` (
+    `table_82xo3l_order_id` INT,
+    `table_82xo3l_customer_id` INT,
+    `table_82xo3l_order_date` DATE,
+    `table_82xo3l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2qmb5t` (`table_2qmb5t_customer_id`, `table_2qmb5t_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_82xo3l` (`table_82xo3l_order_id`, `table_82xo3l_customer_id`, `table_82xo3l_order_date`, `table_82xo3l_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_DAYS INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_82XO3L_ORDER_DATE), MAX(TABLE_82XO3L_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_82XO3L
+    WHERE TABLE_82XO3L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER_DATE, V_FIRST_ORDER_DATE);
+
+    IF V_TOTAL_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_DAYS = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN V_AVG_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN 5;
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN 4;
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl()) - 788 + (3);
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 11 UNION SELECT 22 UNION SELECT 33 UNION SELECT 44 UNION SELECT 55 UNION SELECT 66 UNION SELECT 77 UNION SELECT 88 UNION SELECT 99 UNION SELECT 110 UNION SELECT 121;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503----- */
+CREATE TABLE IF NOT EXISTS `table_yeopj7` (
+    `table_yeopj7_customer_id` INT,
+    `table_yeopj7_start_date` DATE,
+    `table_yeopj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_yeopj7` (`table_yeopj7_customer_id`, `table_yeopj7_start_date`, `table_yeopj7_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_YEOPJ7_START_DATE, TABLE_YEOPJ7_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_YEOPJ7
+    WHERE TABLE_YEOPJ7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_FILM_IN_STOCK_eky5dj(-19, -15)) - 794 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(79, 89)) - -529 + (timestampdiff(month, v_start_date, curdate()));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+CREATE TABLE IF NOT EXISTS `table_uhea2z` (
+    `table_uhea2z_ship_id` INT,
+    `table_uhea2z_order_id` INT,
+    `table_uhea2z_weight` INT,
+    `table_uhea2z_shipping_cost` DECIMAL(10,2),
+    `table_uhea2z_zone` INT,
+    `table_uhea2z_delivery_days` INT
+);
+
+INSERT INTO `table_uhea2z` (`table_uhea2z_ship_id`, `table_uhea2z_order_id`, `table_uhea2z_weight`, `table_uhea2z_shipping_cost`, `table_uhea2z_zone`, `table_uhea2z_delivery_days`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(ORDER_ID_PARAM INT, ZONE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 500;
+    DECLARE V_ZONE_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UHEA2Z_WEIGHT, 0) INTO V_WEIGHT
+    FROM TABLE_UHEA2Z
+    WHERE TABLE_UHEA2Z_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE ZONE_PARAM
+        WHEN 1 THEN SET V_ZONE_COST = 0;
+        WHEN 2 THEN SET V_ZONE_COST = 100;
+        WHEN 3 THEN SET V_ZONE_COST = 200;
+        WHEN 4 THEN SET V_ZONE_COST = 300;
+        ELSE SET V_ZONE_COST = 500;
+    END CASE;
+
+    SET V_TOTAL_COST = V_BASE_COST + (V_WEIGHT * 10) + V_ZONE_COST;
+
+    RETURN V_TOTAL_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+CREATE TABLE IF NOT EXISTS table_8j3nma (
+    table_8j3nma_inventory_id INT PRIMARY KEY,
+    table_8j3nma_film_id INT,
+    table_8j3nma_store_id INT
+);
+
+INSERT INTO table_8j3nma (`table_8j3nma_inventory_id`, `table_8j3nma_film_id`, `table_8j3nma_store_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_IN_STOCK_eky5dj(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE P_FILM_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    FROM TABLE_8J3NMA
+    WHERE TABLE_8J3NMA_FILM_ID = P_FILM_ID
+    AND TABLE_8J3NMA_STORE_ID = P_STORE_ID
+    AND TABLE_8J3NMA_INVENTORY_ID > 0
+    INTO P_FILM_COUNT;
+
+    RETURN P_FILM_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (V_SUBTOTAL * TAX_RATE_PERCENT) / 100;
+
+    RETURN (MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(88, -38)) - -356 + (v_tax_amount);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(1, 1);

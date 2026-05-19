@@ -1,0 +1,385 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_92c0a8` (
+    `table_92c0a8_booking_id` INT,
+    `table_92c0a8_customer_id` INT,
+    `table_92c0a8_destination` INT,
+    `table_92c0a8_booking_date` DATE,
+    `table_92c0a8_travel_type` VARCHAR(50),
+    `table_92c0a8_total_cost` DECIMAL(10,2),
+    `table_92c0a8_discount_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6jfk4w` (
+    `table_6jfk4w_package_id` INT,
+    `table_6jfk4w_destination` INT,
+    `table_6jfk4w_base_price` DECIMAL(10,2),
+    `table_6jfk4w_season_multiplier` INT
+);
+
+INSERT INTO `table_92c0a8` (`table_92c0a8_booking_id`, `table_92c0a8_customer_id`, `table_92c0a8_destination`, `table_92c0a8_booking_date`, `table_92c0a8_travel_type`, `table_92c0a8_total_cost`, `table_92c0a8_discount_percent`) VALUES (1, 2, 3, '2024-01-01', 'test', 1.0, 7);
+
+INSERT INTO `table_6jfk4w` (`table_6jfk4w_package_id`, `table_6jfk4w_destination`, `table_6jfk4w_base_price`, `table_6jfk4w_season_multiplier`) VALUES (1, 2, 1.0, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+CREATE TABLE IF NOT EXISTS `table_gc4iyl` (
+    `table_gc4iyl_customer_id` INT,
+    `table_gc4iyl_registration_date` DATE
+);
+
+INSERT INTO `table_gc4iyl` (`table_gc4iyl_customer_id`, `table_gc4iyl_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GC4IYL_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_GC4IYL
+    WHERE TABLE_GC4IYL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF (MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01(63)) - -568 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(46, -99)) - -727 + (n)) <= 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + (0);
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = (MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(74)) - -684 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(-49)) - 936 + (v_factor_count) + 1);
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(BASE INT, EXP INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF EXP < (MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * BASE;
+        SET EXP = EXP - 1;
+    UNTIL EXP <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (V_SHIPPING_COST * 100) / V_ORDER_VALUE;
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01----- */
+CREATE TABLE IF NOT EXISTS `table_0rbc87` (
+    `table_0rbc87_product_id` INT,
+    `table_0rbc87_price` DECIMAL(10,2),
+    `table_0rbc87_stock_quantity` INT
+);
+
+INSERT INTO `table_0rbc87` (`table_0rbc87_product_id`, `table_0rbc87_price`, `table_0rbc87_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARGIN_INDEX_okga01(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0RBC87_PRICE, 0), COALESCE(TABLE_0RBC87_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_0RBC87
+    WHERE TABLE_0RBC87_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(-98, 26)) - 600 + (floor(v_price / greatest(v_stock, 1)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_AREA / 100) * 10;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_ROOMS * 15);
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 150 / 100;
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+CREATE TABLE IF NOT EXISTS `table_zdhyse` (
+    `table_zdhyse_customer_id` INT,
+    `table_zdhyse_registration_date` DATE
+);
+
+INSERT INTO `table_zdhyse` (`table_zdhyse_customer_id`, `table_zdhyse_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_ZDHYSE_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM TABLE_ZDHYSE
+    WHERE TABLE_ZDHYSE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+CREATE TABLE IF NOT EXISTS `table_62ah0r` (
+    `table_62ah0r_customer_id` INT,
+    `table_62ah0r_plan_type` VARCHAR(50),
+    `table_62ah0r_monthly_cost` DECIMAL(10,2),
+    `table_62ah0r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_62ah0r` (`table_62ah0r_customer_id`, `table_62ah0r_plan_type`, `table_62ah0r_monthly_cost`, `table_62ah0r_status`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_UPGRADE_PROB INT DEFAULT 0;
+
+    SELECT TABLE_62AH0R_PLAN_TYPE, COALESCE(TABLE_62AH0R_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_62AH0R
+    WHERE TABLE_62AH0R_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'BASIC' THEN SET V_UPGRADE_PROB = 70;
+        WHEN 'PREMIUM' THEN SET V_UPGRADE_PROB = 40;
+        WHEN 'ENTERPRISE' THEN SET V_UPGRADE_PROB = 10;
+        ELSE SET V_UPGRADE_PROB = 50;
+    END CASE;
+
+    SET V_UPGRADE_PROB = V_UPGRADE_PROB - (V_MONTHLY_COST / 20);
+
+    RETURN (MYSQL_FUNC_EMP_AVG_SALARY_5keii4(-89)) - -964 + (greatest(v_upgrade_prob, 5));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+CREATE TABLE IF NOT EXISTS table_4rpywt (
+    table_4rpywt_emp_no INT,
+    table_4rpywt_first_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS table_qtgf21 (
+    table_qtgf21_emp_no INT,
+    table_qtgf21_salary DECIMAL(10,2)
+);
+
+INSERT INTO table_4rpywt (`table_4rpywt_emp_no`, `table_4rpywt_first_name`) VALUES (10001, 'Georgi');
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 60117);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 62102);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 66074);
+
+/* -----Called: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_AVG_SALARY_5keii4(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE AVG_SALARY INT;
+    
+    SELECT CAST(AVG(TABLE_QTGF21_SALARY) AS UNSIGNED) INTO AVG_SALARY
+    FROM TABLE_4RPYWT E 
+    JOIN TABLE_QTGF21 S ON TABLE_4RPYWT_EMP_NO = TABLE_QTGF21_EMP_NO
+    WHERE TABLE_4RPYWT_EMP_NO = P_EMP_NO;
+    
+    RETURN AVG_SALARY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRAVEL_BOOKING_FINAL_lqggaq(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_SEASON_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FINAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_92C0A8_TOTAL_COST, 0), COALESCE(TABLE_92C0A8_DISCOUNT_PERCENT, 0)
+    INTO V_TOTAL_COST, V_DISCOUNT_PERCENT
+    FROM TABLE_92C0A8
+    WHERE TABLE_92C0A8_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6JFK4W_SEASON_MULTIPLIER, 1) INTO V_SEASON_MULTIPLIER
+    FROM TABLE_6JFK4W TP
+    JOIN TABLE_92C0A8 TB ON TABLE_6JFK4W_DESTINATION = TABLE_92C0A8_DESTINATION
+    WHERE TABLE_92C0A8_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + (v_total_cost * v_season_multiplier);
+    SET V_TOTAL_COST = V_TOTAL_COST - (V_TOTAL_COST * V_DISCOUNT_PERCENT / 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(17)) - 78 + (cast(v_total_cost as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TRAVEL_BOOKING_FINAL_lqggaq(1);

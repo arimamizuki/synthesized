@@ -1,0 +1,422 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+CREATE TABLE IF NOT EXISTS `table_hdcz7z` (
+    `table_hdcz7z_order_id` INT,
+    `table_hdcz7z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hdcz7z` (`table_hdcz7z_order_id`, `table_hdcz7z_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_HDCZ7Z_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_HDCZ7Z
+    WHERE TABLE_HDCZ7Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(100)) - 766 + ((MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(0)) - -639 + (floor(v_total * 0.1)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+CREATE TABLE IF NOT EXISTS `table_ik0x1s` (
+    `table_ik0x1s_campaign_id` INT,
+    `table_ik0x1s_start_date` DATE,
+    `table_ik0x1s_end_date` DATE,
+    `table_ik0x1s_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_np8rkj` (
+    `table_np8rkj_conversion_id` INT,
+    `table_np8rkj_campaign_id` INT,
+    `table_np8rkj_conversion_date` DATE
+);
+
+INSERT INTO `table_ik0x1s` (`table_ik0x1s_campaign_id`, `table_ik0x1s_start_date`, `table_ik0x1s_end_date`, `table_ik0x1s_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_np8rkj` (`table_np8rkj_conversion_id`, `table_np8rkj_campaign_id`, `table_np8rkj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_OLDER_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TREND INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_RECENT_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    SELECT COUNT(*)
+    INTO V_OLDER_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    AND TABLE_NP8RKJ_CONVERSION_DATE < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    IF V_OLDER_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TREND = ((V_RECENT_CONVERSIONS - V_OLDER_CONVERSIONS) * 100) / V_OLDER_CONVERSIONS;
+
+    RETURN V_TREND;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+CREATE TABLE IF NOT EXISTS `table_6ac5k9` (
+    `table_6ac5k9_campaign_id` INT,
+    `table_6ac5k9_start_date` DATE,
+    `table_6ac5k9_end_date` DATE
+);
+
+INSERT INTO `table_6ac5k9` (`table_6ac5k9_campaign_id`, `table_6ac5k9_start_date`, `table_6ac5k9_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_6AC5K9_END_DATE
+    INTO V_END_DATE
+    FROM TABLE_6AC5K9
+    WHERE TABLE_6AC5K9_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(28)) - 620 + (greatest(datediff(v_end_date, curdate()), 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+CREATE TABLE IF NOT EXISTS `table_3c891b` (
+    `table_3c891b_customer_id` INT,
+    `table_3c891b_country` INT
+);
+
+INSERT INTO `table_3c891b` (`table_3c891b_customer_id`, `table_3c891b_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_3C891B
+    WHERE TABLE_3C891B_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN (MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(99)) - 614 + ((MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(-60, 7)) - 100 + (null));
+    END IF;
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET V_I = V_I + 1;
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+CREATE TABLE IF NOT EXISTS `table_5jb34m` (
+    `table_5jb34m_room_id` INT,
+    `table_5jb34m_room_type` VARCHAR(50),
+    `table_5jb34m_floor` INT,
+    `table_5jb34m_is_occupied` INT,
+    `table_5jb34m_daily_rate` INT,
+    `table_5jb34m_max_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nvdwjr` (
+    `table_nvdwjr_res_id` INT,
+    `table_nvdwjr_room_id` INT,
+    `table_nvdwjr_guest_id` INT,
+    `table_nvdwjr_check_in` INT,
+    `table_nvdwjr_check_out` INT,
+    `table_nvdwjr_guests_count` INT,
+    `table_nvdwjr_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5jb34m` (`table_5jb34m_room_id`, `table_5jb34m_room_type`, `table_5jb34m_floor`, `table_5jb34m_is_occupied`, `table_5jb34m_daily_rate`, `table_5jb34m_max_occupancy`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_nvdwjr` (`table_nvdwjr_res_id`, `table_nvdwjr_room_id`, `table_nvdwjr_guest_id`, `table_nvdwjr_check_in`, `table_nvdwjr_check_out`, `table_nvdwjr_guests_count`, `table_nvdwjr_total_price`) VALUES (1, 2, 3, 4, 5, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(ROOM_ID_PARAM INT, YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_OCCUPIED_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_NVDWJR_TOTAL_PRICE), 0) INTO V_TOTAL_REVENUE
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    SELECT COALESCE(TABLE_5JB34M_DAILY_RATE, 0) INTO V_DAILY_RATE
+    FROM TABLE_5JB34M
+    WHERE TABLE_5JB34M_ROOM_ID = ROOM_ID_PARAM;
+
+    SELECT COALESCE(SUM(DATEDIFF(TABLE_NVDWJR_CHECK_OUT, TABLE_NVDWJR_CHECK_IN)), 0) INTO V_OCCUPIED_DAYS
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    RETURN V_TOTAL_REVENUE + (V_OCCUPIED_DAYS * V_DAILY_RATE / 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(P_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+    DECLARE V_MAX_SEARCH INT DEFAULT 1000;
+
+    SET V_CURRENT = P_NUM + (MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv(15)) - -98 + (1);
+
+    SEARCH_LOOP: WHILE V_CURRENT <= P_NUM + V_MAX_SEARCH DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            RETURN V_CURRENT;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE SEARCH_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv----- */
+CREATE TABLE IF NOT EXISTS `table_3qayd9` (
+    `table_3qayd9_order_id` INT,
+    `table_3qayd9_order_date` DATE
+);
+
+INSERT INTO `table_3qayd9` (`table_3qayd9_order_id`, `table_3qayd9_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_DAY_OF_WEEK_emtllv(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAYOFWEEK(TABLE_3QAYD9_ORDER_DATE)
+    INTO V_DAY
+    FROM TABLE_3QAYD9
+    WHERE TABLE_3QAYD9_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(86)) - -457 + ((MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + (v_day));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = FLOOR(V_CATEGORY_AVG_PRICE * 0.2);
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = V_DISCOUNT_THRESHOLD + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+CREATE TABLE IF NOT EXISTS `table_s5c2sb` (
+    `table_s5c2sb_listing_id` INT,
+    `table_s5c2sb_employer_id` INT,
+    `table_s5c2sb_title` INT,
+    `table_s5c2sb_salary_min` INT,
+    `table_s5c2sb_salary_max` INT,
+    `table_s5c2sb_posted_date` DATE,
+    `table_s5c2sb_application_deadline` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_w5l6s0` (
+    `table_w5l6s0_application_id` INT,
+    `table_w5l6s0_listing_id` INT,
+    `table_w5l6s0_applicant_id` INT,
+    `table_w5l6s0_applied_date` DATE,
+    `table_w5l6s0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s5c2sb` (`table_s5c2sb_listing_id`, `table_s5c2sb_employer_id`, `table_s5c2sb_title`, `table_s5c2sb_salary_min`, `table_s5c2sb_salary_max`, `table_s5c2sb_posted_date`, `table_s5c2sb_application_deadline`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_w5l6s0` (`table_w5l6s0_application_id`, `table_w5l6s0_listing_id`, `table_w5l6s0_applicant_id`, `table_w5l6s0_applied_date`, `table_w5l6s0_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(LISTING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_MIN INT DEFAULT 0;
+    DECLARE V_SALARY_MAX INT DEFAULT 0;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_POSTED INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_S5C2SB_SALARY_MIN), 0), COALESCE(MAX(TABLE_S5C2SB_SALARY_MAX), 0), COUNT(*)
+    INTO V_SALARY_MIN, V_SALARY_MAX, V_APPLICATION_COUNT
+    FROM TABLE_S5C2SB L
+    LEFT JOIN TABLE_W5L6S0 A ON TABLE_S5C2SB_LISTING_ID = TABLE_W5L6S0_LISTING_ID
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM
+    GROUP BY TABLE_S5C2SB_LISTING_ID;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_S5C2SB_POSTED_DATE) INTO V_DAYS_SINCE_POSTED
+    FROM TABLE_S5C2SB
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM;
+
+    IF V_DAYS_SINCE_POSTED = 0 THEN
+        SET V_DAYS_SINCE_POSTED = 1;
+    END IF;
+
+    SET V_ENGAGEMENT_SCORE = (V_APPLICATION_COUNT * 100) / V_DAYS_SINCE_POSTED;
+
+    IF V_SALARY_MAX > 100000 THEN
+        SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_ENGAGEMENT_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_DIGITS_pqsn4s(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    IF V_TEMP = 0 THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + ((MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(-59)) - -480 + (1));
+    END IF;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_COUNT = V_COUNT + 1;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_COUNT_DIGITS_pqsn4s(1);

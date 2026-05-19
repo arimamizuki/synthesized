@@ -1,0 +1,376 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+CREATE TABLE IF NOT EXISTS `table_573a30` (
+    `table_573a30_campaign_id` INT,
+    `table_573a30_channel` INT,
+    `table_573a30_budget_allocated` INT,
+    `table_573a30_start_date` DATE,
+    `table_573a30_end_date` DATE,
+    `table_573a30_leads_generated` INT,
+    `table_573a30_conversions` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7rfnt` (
+    `table_i7rfnt_spend_id` INT,
+    `table_i7rfnt_campaign_id` INT,
+    `table_i7rfnt_spend_date` DATE,
+    `table_i7rfnt_amount_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_573a30` (`table_573a30_campaign_id`, `table_573a30_channel`, `table_573a30_budget_allocated`, `table_573a30_start_date`, `table_573a30_end_date`, `table_573a30_leads_generated`, `table_573a30_conversions`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_i7rfnt` (`table_i7rfnt_spend_id`, `table_i7rfnt_campaign_id`, `table_i7rfnt_spend_date`, `table_i7rfnt_amount_spent`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_LEADS_GENERATED INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPEND INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_573A30_BUDGET_ALLOCATED, 0), COALESCE(TABLE_573A30_LEADS_GENERATED, 0), COALESCE(TABLE_573A30_CONVERSIONS, 0)
+    INTO V_BUDGET, V_LEADS_GENERATED, V_CONVERSIONS
+    FROM TABLE_573A30
+    WHERE TABLE_573A30_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_I7RFNT_AMOUNT_SPENT), 0) INTO V_TOTAL_SPEND
+    FROM TABLE_I7RFNT
+    WHERE TABLE_I7RFNT_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_CONVERSIONS * 100) - V_TOTAL_SPEND) * 100 / V_BUDGET;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RECENCY_SCORE_eo1ibn----- */
+CREATE TABLE IF NOT EXISTS `table_m5io92` (
+    `table_m5io92_customer_id` INT,
+    `table_m5io92_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cz3q9h` (
+    `table_cz3q9h_order_id` INT,
+    `table_cz3q9h_customer_id` INT,
+    `table_cz3q9h_order_date` DATE
+);
+
+INSERT INTO `table_m5io92` (`table_m5io92_customer_id`, `table_m5io92_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_cz3q9h` (`table_cz3q9h_order_id`, `table_cz3q9h_customer_id`, `table_cz3q9h_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECENCY_SCORE_eo1ibn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECENCY_SCORE_eo1ibn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_SINCE_ORDER INT DEFAULT 0;
+    DECLARE V_RECENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(DATEDIFF(CURDATE(), MAX(TABLE_CZ3Q9H_ORDER_DATE)), 999)
+    INTO V_DAYS_SINCE_ORDER
+    FROM TABLE_CZ3Q9H
+    WHERE TABLE_CZ3Q9H_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RECENCY_SCORE = (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(41)) - -150 + (100 - least(v_days_since_order, 100));
+
+    RETURN V_RECENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+CREATE TABLE IF NOT EXISTS `table_6o33dj` (
+    `table_6o33dj_emp_id` INT,
+    `table_6o33dj_department_id` INT,
+    `table_6o33dj_salary` INT,
+    `table_6o33dj_hire_date` DATE
+);
+
+INSERT INTO `table_6o33dj` (`table_6o33dj_emp_id`, `table_6o33dj_department_id`, `table_6o33dj_salary`, `table_6o33dj_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+    DECLARE V_AVG_SALARY_INCREASE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT YEAR(TABLE_6O33DJ_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_6O33DJ
+    WHERE TABLE_6O33DJ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_AVG_SALARY_INCREASE = (YEAR(CURDATE()) - V_HIRE_YEAR) * 0.03 * 100;
+
+    RETURN FLOOR(V_AVG_SALARY_INCREASE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(-19)) - 396 + ((v_warranty_months * 5) + (v_security_rating * 10) - (v_cost / 100));
+
+    RETURN (MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + (cast(v_value_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+CREATE TABLE IF NOT EXISTS `table_m40ho1` (
+    `table_m40ho1_product_id` INT,
+    `table_m40ho1_category_id` INT,
+    `table_m40ho1_price` DECIMAL(10,2),
+    `table_m40ho1_is_active` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_42moy1` (
+    `table_42moy1_category_id` INT,
+    `table_42moy1_parent_id` INT,
+    `table_42moy1_category_level` INT
+);
+
+INSERT INTO `table_m40ho1` (`table_m40ho1_product_id`, `table_m40ho1_category_id`, `table_m40ho1_price`, `table_m40ho1_is_active`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_42moy1` (`table_42moy1_category_id`, `table_42moy1_parent_id`, `table_42moy1_category_level`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_LEVEL INT DEFAULT 0;
+    DECLARE V_CURRENT_CAT INT;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_MAX_LEVEL INT DEFAULT 10;
+    DECLARE V_LEVEL INT DEFAULT 0;
+
+    DECLARE CAT_CURSOR CURSOR FOR
+        SELECT TABLE_42MOY1_CATEGORY_ID FROM TABLE_42MOY1 WHERE TABLE_42MOY1_PARENT_ID = V_CURRENT_CAT;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    SELECT COALESCE(TABLE_42MOY1_CATEGORY_LEVEL, 0) INTO V_CATEGORY_LEVEL
+    FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga(-96)) - -993 + (category_id_param);
+
+    SET V_CURRENT_CAT = CATEGORY_ID_PARAM;
+
+    LEVEL_LOOP: WHILE V_LEVEL < V_MAX_LEVEL AND V_DONE = 0 DO
+        SELECT COALESCE(SUM(TABLE_M40HO1_PRICE), 0) INTO V_TOTAL_PRICE
+        FROM TABLE_M40HO1
+        WHERE TABLE_M40HO1_CATEGORY_ID = V_CURRENT_CAT AND TABLE_M40HO1_IS_ACTIVE = 1;
+
+        SELECT TABLE_42MOY1_PARENT_ID INTO V_CURRENT_CAT
+        FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = V_CURRENT_CAT;
+
+        IF V_CURRENT_CAT IS NULL OR V_CURRENT_CAT = 0 THEN
+            SET V_DONE = 1;
+        END IF;
+
+        SET V_LEVEL = V_LEVEL + 1;
+    END WHILE LEVEL_LOOP;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(-64)) - 947 + (v_total_price);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga----- */
+CREATE TABLE IF NOT EXISTS `table_xy29zz` (
+    `table_xy29zz_emp_id` INT,
+    `table_xy29zz_department_id` INT
+);
+
+INSERT INTO `table_xy29zz` (`table_xy29zz_emp_id`, `table_xy29zz_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_htnoga(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_XY29ZZ
+    WHERE TABLE_XY29ZZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FUNC1_abekbp()) - 180 + (v_emp_count * 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_abekbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_abekbp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+CREATE TABLE IF NOT EXISTS `table_7jm36x` (
+    `table_7jm36x_order_id` INT,
+    `table_7jm36x_order_date` DATE
+);
+
+INSERT INTO `table_7jm36x` (`table_7jm36x_order_id`, `table_7jm36x_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_7JM36X_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_7JM36X
+    WHERE TABLE_7JM36X_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(-72)) - -876 + (v_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+CREATE TABLE IF NOT EXISTS `table_whrfd8` (
+    `table_whrfd8_product_id` INT,
+    `table_whrfd8_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_whrfd8` (`table_whrfd8_product_id`, `table_whrfd8_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_WHRFD8_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_WHRFD8
+    WHERE TABLE_WHRFD8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= (MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(-50)) - -203 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(30)) - 207 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = (MYSQL_FUNC_CALCULATE_RECENCY_SCORE_eo1ibn(23)) - 247 + (first_term + (num_terms - 1) * common_diff);
+    SET V_SUM = (NUM_TERMS * (FIRST_TERM + V_LAST_TERM)) / 2;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(1, 1, 1);

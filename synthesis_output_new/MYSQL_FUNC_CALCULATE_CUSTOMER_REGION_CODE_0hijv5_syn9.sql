@@ -1,0 +1,426 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ch02g9` (
+    `table_ch02g9_customer_id` INT,
+    `table_ch02g9_country` INT
+);
+
+INSERT INTO `table_ch02g9` (`table_ch02g9_customer_id`, `table_ch02g9_country`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_SCORE_4ho9gm----- */
+CREATE TABLE IF NOT EXISTS `table_rc35mk` (
+    `table_rc35mk_customer_id` INT,
+    `table_rc35mk_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_rc35mk` (`table_rc35mk_customer_id`, `table_rc35mk_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_SCORE_4ho9gm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_SCORE_4ho9gm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_RC35MK_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_RC35MK
+    WHERE TABLE_RC35MK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 100;
+        WHEN 'PREMIUM' THEN RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (50);
+        WHEN 'BASIC' THEN RETURN (MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(18)) - 363 + (20);
+        ELSE RETURN 5;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+CREATE TABLE IF NOT EXISTS `table_l9v62y` (
+    `table_l9v62y_student_id` INT,
+    `table_l9v62y_school_id` INT,
+    `table_l9v62y_grade_level` INT,
+    `table_l9v62y_subjects_needed` INT,
+    `table_l9v62y_session_rate` INT,
+    `table_l9v62y_scholarship_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o7ya9e` (
+    `table_o7ya9e_session_id` INT,
+    `table_o7ya9e_student_id` INT,
+    `table_o7ya9e_tutor_id` INT,
+    `table_o7ya9e_session_date` DATE,
+    `table_o7ya9e_duration_minutes` INT,
+    `table_o7ya9e_subjects_covered` INT
+);
+
+INSERT INTO `table_l9v62y` (`table_l9v62y_student_id`, `table_l9v62y_school_id`, `table_l9v62y_grade_level`, `table_l9v62y_subjects_needed`, `table_l9v62y_session_rate`, `table_l9v62y_scholarship_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_o7ya9e` (`table_o7ya9e_session_id`, `table_o7ya9e_student_id`, `table_o7ya9e_tutor_id`, `table_o7ya9e_session_date`, `table_o7ya9e_duration_minutes`, `table_o7ya9e_subjects_covered`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SESSION_RATE INT DEFAULT 40;
+    DECLARE V_SCHOLARSHIP_PERCENT INT DEFAULT 0;
+    DECLARE V_TOTAL_SESSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_BALANCE_OWED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L9V62Y_SESSION_RATE, 40), COALESCE(TABLE_L9V62Y_SCHOLARSHIP_PERCENT, 0)
+    INTO V_SESSION_RATE, V_SCHOLARSHIP_PERCENT
+    FROM TABLE_L9V62Y
+    WHERE TABLE_L9V62Y_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_SESSIONS
+    FROM TABLE_O7YA9E
+    WHERE TABLE_O7YA9E_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_TOTAL_SESSIONS * V_SESSION_RATE;
+    SET V_BALANCE_OWED = V_TOTAL_CHARGES - (V_TOTAL_CHARGES * V_SCHOLARSHIP_PERCENT / 100);
+
+    RETURN CAST(V_BALANCE_OWED AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+CREATE TABLE IF NOT EXISTS `table_opth2r` (
+    `table_opth2r_hotel_id` INT,
+    `table_opth2r_name` VARCHAR(50),
+    `table_opth2r_city` INT,
+    `table_opth2r_star_rating` DECIMAL(3,1),
+    `table_opth2r_average_daily_rate` INT,
+    `table_opth2r_occupancy_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9q7x7u` (
+    `table_9q7x7u_booking_id` INT,
+    `table_9q7x7u_hotel_id` INT,
+    `table_9q7x7u_guest_id` INT,
+    `table_9q7x7u_check_in_date` DATE,
+    `table_9q7x7u_check_out_date` DATE,
+    `table_9q7x7u_total_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_opth2r` (`table_opth2r_hotel_id`, `table_opth2r_name`, `table_opth2r_city`, `table_opth2r_star_rating`, `table_opth2r_average_daily_rate`, `table_opth2r_occupancy_rate`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+INSERT INTO `table_9q7x7u` (`table_9q7x7u_booking_id`, `table_9q7x7u_hotel_id`, `table_9q7x7u_guest_id`, `table_9q7x7u_check_in_date`, `table_9q7x7u_check_out_date`, `table_9q7x7u_total_cost`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(HOTEL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STAR_RATING INT DEFAULT 3;
+    DECLARE V_AVG_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_OCCUPANCY_RATE INT DEFAULT 70;
+    DECLARE V_TOTAL_ROOMS INT DEFAULT 50;
+    DECLARE V_DAILY_POTENTIAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_POTENTIAL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OPTH2R_STAR_RATING, 3), COALESCE(TABLE_OPTH2R_AVERAGE_DAILY_RATE, 100), COALESCE(TABLE_OPTH2R_OCCUPANCY_RATE, 70)
+    INTO V_STAR_RATING, V_AVG_DAILY_RATE, V_OCCUPANCY_RATE
+    FROM TABLE_OPTH2R
+    WHERE TABLE_OPTH2R_HOTEL_ID = HOTEL_ID_PARAM;
+
+    SET V_DAILY_POTENTIAL = (MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(-38)) - -908 + (v_total_rooms * v_avg_daily_rate * v_star_rating / 3);
+    SET V_ANNUAL_POTENTIAL = (V_DAILY_POTENTIAL * 365 * V_OCCUPANCY_RATE) / 100;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy(-41)) - -172 + (floor(v_annual_potential));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(LENGTH_PARAM INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PASSWORD VARCHAR(100) DEFAULT '';
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR_CODE INT DEFAULT 0;
+    DECLARE V_USE_SPECIAL INT DEFAULT 0;
+
+    IF LENGTH_PARAM <= 0 THEN
+        RETURN '';
+    END IF;
+
+    SET V_I = 1;
+
+    PASSWORD_LOOP: WHILE V_I <= LENGTH_PARAM DO
+        SET V_USE_SPECIAL = RAND() * 10;
+
+        IF V_USE_SPECIAL < 3 AND V_I < LENGTH_PARAM THEN
+            SET V_CHAR_CODE = RAND() * 10 + 33;
+        ELSEIF V_USE_SPECIAL < 6 THEN
+            SET V_CHAR_CODE = RAND() * 26 + 65;
+        ELSE
+            SET V_CHAR_CODE = RAND() * 26 + 97;
+        END IF;
+
+        SET V_PASSWORD = CONCAT(V_PASSWORD, CHAR(V_CHAR_CODE));
+        SET V_I = V_I + 1;
+    END WHILE PASSWORD_LOOP;
+
+    RETURN V_PASSWORD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+CREATE TABLE IF NOT EXISTS `table_n2l8kn` (
+    `table_n2l8kn_campaign_id` INT,
+    `table_n2l8kn_start_date` DATE
+);
+
+INSERT INTO `table_n2l8kn` (`table_n2l8kn_campaign_id`, `table_n2l8kn_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N2L8KN_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N2L8KN
+    WHERE TABLE_N2L8KN_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, (MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(-94)) - -509 + (0))
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+CREATE TABLE IF NOT EXISTS `table_4ua3im` (
+    `table_4ua3im_rental_id` INT,
+    `table_4ua3im_equipment_id` INT,
+    `table_4ua3im_customer_id` INT,
+    `table_4ua3im_rental_date` DATE,
+    `table_4ua3im_return_date` DATE,
+    `table_4ua3im_daily_rate` INT,
+    `table_4ua3im_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_n9ijgh` (
+    `table_n9ijgh_equipment_id` INT,
+    `table_n9ijgh_name` VARCHAR(50),
+    `table_n9ijgh_category` INT,
+    `table_n9ijgh_replacement_value` INT,
+    `table_n9ijgh_is_insured` INT
+);
+
+INSERT INTO `table_4ua3im` (`table_4ua3im_rental_id`, `table_4ua3im_equipment_id`, `table_4ua3im_customer_id`, `table_4ua3im_rental_date`, `table_4ua3im_return_date`, `table_4ua3im_daily_rate`, `table_4ua3im_deposit_amount`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_n9ijgh` (`table_n9ijgh_equipment_id`, `table_n9ijgh_name`, `table_n9ijgh_category`, `table_n9ijgh_replacement_value`, `table_n9ijgh_is_insured`) VALUES (1, 'test', 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_DATE DATE;
+    DECLARE V_RETURN_DATE DATE;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+    DECLARE V_DEPOSIT INT DEFAULT 0;
+    DECLARE V_RENTAL_DAYS INT DEFAULT 0;
+    DECLARE V_REPLACEMENT_VALUE INT DEFAULT 0;
+    DECLARE V_INSURANCE_COST INT DEFAULT 0;
+
+    SELECT TABLE_4UA3IM_RENTAL_DATE, TABLE_4UA3IM_RETURN_DATE, TABLE_4UA3IM_DAILY_RATE, TABLE_4UA3IM_DEPOSIT_AMOUNT, TABLE_N9IJGH_REPLACEMENT_VALUE
+    INTO V_RENTAL_DATE, V_RETURN_DATE, V_DAILY_RATE, V_DEPOSIT, V_REPLACEMENT_VALUE
+    FROM TABLE_4UA3IM R
+    JOIN TABLE_N9IJGH E ON TABLE_4UA3IM_EQUIPMENT_ID = TABLE_N9IJGH_EQUIPMENT_ID
+    WHERE TABLE_4UA3IM_RENTAL_ID = RENTAL_ID_PARAM;
+
+    IF V_RETURN_DATE IS NULL THEN
+        SET V_RETURN_DATE = CURDATE();
+    END IF;
+
+    SET V_RENTAL_DAYS = DATEDIFF(V_RETURN_DATE, V_RENTAL_DATE);
+    IF V_RENTAL_DAYS <= 0 THEN
+        SET V_RENTAL_DAYS = 1;
+    END IF;
+
+    SET V_INSURANCE_COST = (V_REPLACEMENT_VALUE * V_RENTAL_DAYS) / 1000;
+
+    IF V_DEPOSIT < V_INSURANCE_COST THEN
+        SET V_INSURANCE_COST = V_INSURANCE_COST + 50;
+    END IF;
+
+    RETURN CAST(V_INSURANCE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8(ITERATIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INSIDE_CIRCLE INT DEFAULT 0;
+    DECLARE V_X DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_Y DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_COUNTER INT DEFAULT 0;
+    DECLARE V_DISTANCE DECIMAL(10,6) DEFAULT 0.00;
+
+    IF ITERATIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COUNTER = 0;
+
+    PI_LOOP: WHILE V_COUNTER < ITERATIONS DO
+        SET V_X = RAND() * 2 - 1;
+        SET V_Y = RAND() * 2 - 1;
+        SET V_DISTANCE = SQRT(V_X * V_X + V_Y * V_Y);
+
+        IF V_DISTANCE <= 1 THEN
+            SET V_INSIDE_CIRCLE = V_INSIDE_CIRCLE + 1;
+        END IF;
+
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE PI_LOOP;
+
+    RETURN (V_INSIDE_CIRCLE * 4) / ITERATIONS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+CREATE TABLE IF NOT EXISTS `table_6jyzbz` (
+    `table_6jyzbz_supplier_id` INT,
+    `table_6jyzbz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6jyzbz` (`table_6jyzbz_supplier_id`, `table_6jyzbz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_6JYZBZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_6JYZBZ
+    WHERE TABLE_6JYZBZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_CH02G9_COUNTRY
+    INTO V_COUNTRY
+    FROM TABLE_CH02G9
+    WHERE TABLE_CH02G9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_COUNTRY
+        WHEN 'USA' THEN 1
+        WHEN 'UK' THEN 2
+        WHEN 'CN' THEN 3
+        WHEN 'JP' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(1);

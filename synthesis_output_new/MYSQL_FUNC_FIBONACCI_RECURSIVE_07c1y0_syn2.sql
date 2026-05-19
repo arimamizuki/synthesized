@@ -1,0 +1,384 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+CREATE TABLE IF NOT EXISTS `table_zwipgx` (
+    `table_zwipgx_emp_id` INT,
+    `table_zwipgx_department_id` INT,
+    `table_zwipgx_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rorogt` (
+    `table_rorogt_department_id` INT,
+    `table_rorogt_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zwipgx` (`table_zwipgx_emp_id`, `table_zwipgx_department_id`, `table_zwipgx_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_rorogt` (`table_rorogt_department_id`, `table_rorogt_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_ZWIPGX_SALARY, TABLE_ZWIPGX_DEPARTMENT_ID
+    INTO V_SALARY, V_DEPT_ID
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) + 1
+    INTO V_RANK
+    FROM TABLE_ZWIPGX
+    WHERE TABLE_ZWIPGX_DEPARTMENT_ID = V_DEPT_ID AND TABLE_ZWIPGX_SALARY > V_SALARY;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + ((MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(14)) - 678 + (v_rank));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+CREATE TABLE IF NOT EXISTS `table_xyocnl` (
+    `table_xyocnl_order_id` INT,
+    `table_xyocnl_customer_id` INT
+);
+
+INSERT INTO `table_xyocnl` (`table_xyocnl_order_id`, `table_xyocnl_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_XYOCNL_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_XYOCNL
+    WHERE TABLE_XYOCNL_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(71)) - -181 + ((MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(20)) - 219 + (floor((v_price * v_stock) / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+CREATE TABLE IF NOT EXISTS `table_wq63dn` (
+    `table_wq63dn_invoice_id` INT,
+    `table_wq63dn_customer_id` INT,
+    `table_wq63dn_issue_date` DATE,
+    `table_wq63dn_due_date` DATE,
+    `table_wq63dn_total_amount` DECIMAL(10,2),
+    `table_wq63dn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_a5vkrv` (
+    `table_a5vkrv_payment_id` INT,
+    `table_a5vkrv_invoice_id` INT,
+    `table_a5vkrv_payment_date` DATE,
+    `table_a5vkrv_amount_paid` INT
+);
+
+INSERT INTO `table_wq63dn` (`table_wq63dn_invoice_id`, `table_wq63dn_customer_id`, `table_wq63dn_issue_date`, `table_wq63dn_due_date`, `table_wq63dn_total_amount`, `table_wq63dn_status`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_a5vkrv` (`table_a5vkrv_payment_id`, `table_a5vkrv_invoice_id`, `table_a5vkrv_payment_date`, `table_a5vkrv_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_AGING_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WQ63DN_TOTAL_AMOUNT, 0), TABLE_WQ63DN_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_DUE_DATE
+    FROM TABLE_WQ63DN
+    WHERE TABLE_WQ63DN_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_A5VKRV_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_A5VKRV
+    WHERE TABLE_A5VKRV_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_AMOUNT_PAID;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AGING_DAYS = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_AGING_DAYS < 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AGING_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy----- */
+CREATE TABLE IF NOT EXISTS `table_g6ufyg` (
+    `table_g6ufyg_emp_id` INT,
+    `table_g6ufyg_department_id` INT,
+    `table_g6ufyg_salary` INT
+);
+
+INSERT INTO `table_g6ufyg` (`table_g6ufyg_emp_id`, `table_g6ufyg_department_id`, `table_g6ufyg_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MAX(TABLE_G6UFYG_SALARY), 0)
+    INTO V_MAX_SALARY
+    FROM TABLE_G6UFYG
+    WHERE TABLE_G6UFYG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_MAX_SALARY / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww----- */
+CREATE TABLE IF NOT EXISTS `table_tpxpnn` (
+    `table_tpxpnn_emp_id` INT,
+    `table_tpxpnn_salary` INT
+);
+
+INSERT INTO `table_tpxpnn` (`table_tpxpnn_emp_id`, `table_tpxpnn_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TPXPNN_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_TPXPNN
+    WHERE TABLE_TPXPNN_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(PRINCIPAL INT, RATE INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_YEARLY_INTEREST INT DEFAULT 0;
+
+    IF PRINCIPAL <= 0 OR RATE <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET_LOOP: WHILE V_COUNTER <= YEARS DO
+        SET_LOOP_INNER: WHILE V_COUNTER <= 12 DO
+            SET V_RESULT = V_RESULT + (V_RESULT * RATE / 100 / 12);
+            SET V_COUNTER = V_COUNTER + 1;
+        END WHILE SET_LOOP_INNER;
+        SET V_COUNTER = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(-6)) - 200 + (v_counter - 11);
+    END WHILE SET_LOOP;
+
+    RETURN CAST(V_RESULT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+CREATE TABLE IF NOT EXISTS `table_uem6e2` (
+    `table_uem6e2_campaign_id` INT,
+    `table_uem6e2_start_date` DATE,
+    `table_uem6e2_end_date` DATE,
+    `table_uem6e2_budget` INT,
+    `table_uem6e2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zqstr6` (
+    `table_zqstr6_conversion_id` INT,
+    `table_zqstr6_campaign_id` INT,
+    `table_zqstr6_conversion_date` DATE
+);
+
+INSERT INTO `table_uem6e2` (`table_uem6e2_campaign_id`, `table_uem6e2_start_date`, `table_uem6e2_end_date`, `table_uem6e2_budget`, `table_uem6e2_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_zqstr6` (`table_zqstr6_conversion_id`, `table_zqstr6_campaign_id`, `table_zqstr6_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT DATEDIFF(TABLE_UEM6E2_END_DATE, TABLE_UEM6E2_START_DATE)
+    INTO V_DURATION_DAYS
+    FROM TABLE_UEM6E2
+    WHERE TABLE_UEM6E2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ZQSTR6
+    WHERE TABLE_ZQSTR6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY = V_CONVERSION_COUNT / V_DURATION_DAYS;
+
+    RETURN (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(29)) - -945 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN (MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(37)) - 469 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+CREATE TABLE IF NOT EXISTS `table_rheaey` (
+    `table_rheaey_session_id` INT,
+    `table_rheaey_student_id` INT,
+    `table_rheaey_tutor_id` INT,
+    `table_rheaey_subject` INT,
+    `table_rheaey_duration_minutes` INT,
+    `table_rheaey_hourly_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fc028m` (
+    `table_fc028m_student_id` INT,
+    `table_fc028m_grade_level` INT,
+    `table_fc028m_school_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rheaey` (`table_rheaey_session_id`, `table_rheaey_student_id`, `table_rheaey_tutor_id`, `table_rheaey_subject`, `table_rheaey_duration_minutes`, `table_rheaey_hourly_rate`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_fc028m` (`table_fc028m_student_id`, `table_fc028m_grade_level`, `table_fc028m_school_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_INVOICE_zb8ael(SESSION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_GRADE_LEVEL INT DEFAULT 0;
+    DECLARE V_TOTAL_INVOICE INT DEFAULT 0;
+    DECLARE V_RUSH_FEE INT DEFAULT 0;
+
+    SELECT TABLE_RHEAEY_DURATION_MINUTES, TABLE_RHEAEY_HOURLY_RATE, COALESCE(TABLE_FC028M_GRADE_LEVEL, 9)
+    INTO V_DURATION, V_HOURLY_RATE, V_GRADE_LEVEL
+    FROM TABLE_RHEAEY T
+    JOIN TABLE_FC028M S ON TABLE_RHEAEY_STUDENT_ID = TABLE_FC028M_STUDENT_ID
+    WHERE TABLE_RHEAEY_SESSION_ID = SESSION_ID_PARAM;
+
+    SET V_TOTAL_INVOICE = (V_DURATION * V_HOURLY_RATE) / 60;
+
+    IF V_DURATION > 120 THEN
+        SET V_RUSH_FEE = V_TOTAL_INVOICE * 15 / 100;
+        SET V_TOTAL_INVOICE = V_TOTAL_INVOICE + V_RUSH_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_INVOICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= (MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(32, -65, -96)) - 158 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(73)) - -110 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    IF N = (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RANK_tyhoe5(-65)) - 18 + (1) OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(1);

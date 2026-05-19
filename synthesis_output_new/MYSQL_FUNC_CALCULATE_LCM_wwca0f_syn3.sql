@@ -1,0 +1,401 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+CREATE TABLE IF NOT EXISTS `table_scey55` (
+    `table_scey55_project_id` INT,
+    `table_scey55_client_id` INT,
+    `table_scey55_project_type` VARCHAR(50),
+    `table_scey55_estimated_hours` INT,
+    `table_scey55_actual_hours` INT,
+    `table_scey55_labor_rate` INT,
+    `table_scey55_material_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2tdknr` (
+    `table_2tdknr_contractor_id` INT,
+    `table_2tdknr_name` VARCHAR(50),
+    `table_2tdknr_specialty` INT,
+    `table_2tdknr_hourly_rate` INT
+);
+
+INSERT INTO `table_scey55` (`table_scey55_project_id`, `table_scey55_client_id`, `table_scey55_project_type`, `table_scey55_estimated_hours`, `table_scey55_actual_hours`, `table_scey55_labor_rate`, `table_scey55_material_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_2tdknr` (`table_2tdknr_contractor_id`, `table_2tdknr_name`, `table_2tdknr_specialty`, `table_2tdknr_hourly_rate`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_ACTUAL_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 0;
+    DECLARE V_MATERIAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SCEY55_ESTIMATED_HOURS, 0), COALESCE(TABLE_SCEY55_ACTUAL_HOURS, 0), COALESCE(TABLE_SCEY55_LABOR_RATE, 50)
+    INTO V_ESTIMATED_HOURS, V_ACTUAL_HOURS, V_LABOR_RATE
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SCEY55_MATERIAL_COST), 0) INTO V_MATERIAL_COST
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SET V_TOTAL_COST = (V_ACTUAL_HOURS * V_LABOR_RATE) + V_MATERIAL_COST;
+    SET V_BUDGET = (MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(-79)) - -721 + (v_estimated_hours * v_labor_rate);
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = ((V_BUDGET - V_TOTAL_COST) * 100) / V_BUDGET;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+CREATE TABLE IF NOT EXISTS `table_19h5rl` (
+    `table_19h5rl_campaign_id` INT,
+    `table_19h5rl_budget` INT,
+    `table_19h5rl_start_date` DATE,
+    `table_19h5rl_end_date` DATE,
+    `table_19h5rl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qizrpx` (
+    `table_qizrpx_conversion_id` INT,
+    `table_qizrpx_campaign_id` INT,
+    `table_qizrpx_conversion_value` INT
+);
+
+INSERT INTO `table_19h5rl` (`table_19h5rl_campaign_id`, `table_19h5rl_budget`, `table_19h5rl_start_date`, `table_19h5rl_end_date`, `table_19h5rl_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_qizrpx` (`table_qizrpx_conversion_id`, `table_qizrpx_campaign_id`, `table_qizrpx_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_ROI_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_19H5RL_BUDGET, 1), DATEDIFF(TABLE_19H5RL_END_DATE, TABLE_19H5RL_START_DATE)
+    INTO V_BUDGET, V_DURATION_DAYS
+    FROM TABLE_19H5RL
+    WHERE TABLE_19H5RL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QIZRPX_CONVERSION_VALUE), (MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk()) - 716 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - 959 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(70)) - 137 + (0))))
+    INTO V_REVENUE
+    FROM TABLE_QIZRPX
+    WHERE TABLE_QIZRPX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100.0) / V_BUDGET / V_DURATION_DAYS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(-66)) - -296 + (floor(v_roi_index));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+CREATE TABLE IF NOT EXISTS `table_bl5369` (
+    `table_bl5369_emp_id` INT,
+    `table_bl5369_department_id` INT
+);
+
+INSERT INTO `table_bl5369` (`table_bl5369_emp_id`, `table_bl5369_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_BL5369_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN V_EMP_COUNT / 10;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+CREATE TABLE IF NOT EXISTS `table_iqr0ap` (
+    `table_iqr0ap_campaign_id` INT,
+    `table_iqr0ap_budget` INT,
+    `table_iqr0ap_start_date` DATE,
+    `table_iqr0ap_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hnzja2` (
+    `table_hnzja2_conversion_id` INT,
+    `table_hnzja2_campaign_id` INT,
+    `table_hnzja2_conversion_value` INT
+);
+
+INSERT INTO `table_iqr0ap` (`table_iqr0ap_campaign_id`, `table_iqr0ap_budget`, `table_iqr0ap_start_date`, `table_iqr0ap_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_hnzja2` (`table_hnzja2_conversion_id`, `table_hnzja2_campaign_id`, `table_hnzja2_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_aprbvt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IQR0AP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_IQR0AP
+    WHERE TABLE_IQR0AP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_HNZJA2_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_HNZJA2
+    WHERE TABLE_HNZJA2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_TOTAL_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC_VECTOR_nlaylc()) - -362 + (floor((v_rating / 5.0) * 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+CREATE TABLE IF NOT EXISTS `table_95d2jl` (
+    `table_95d2jl_vec` INT
+);
+
+INSERT INTO `table_95d2jl` (`table_95d2jl_vec`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_95D2JL_VEC INTO RESULT FROM `TABLE_95D2JL` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(35)) - 176 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+CREATE TABLE IF NOT EXISTS `table_nfhkgx` (
+    `table_nfhkgx_policy_id` INT,
+    `table_nfhkgx_customer_id` INT,
+    `table_nfhkgx_policy_type` VARCHAR(50),
+    `table_nfhkgx_premium_amount` DECIMAL(10,2),
+    `table_nfhkgx_coverage_amount` DECIMAL(10,2),
+    `table_nfhkgx_start_date` DATE,
+    `table_nfhkgx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tr1zz3` (
+    `table_tr1zz3_claim_id` INT,
+    `table_tr1zz3_policy_id` INT,
+    `table_tr1zz3_claim_amount` DECIMAL(10,2),
+    `table_tr1zz3_claim_date` DATE,
+    `table_tr1zz3_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nfhkgx` (`table_nfhkgx_policy_id`, `table_nfhkgx_customer_id`, `table_nfhkgx_policy_type`, `table_nfhkgx_premium_amount`, `table_nfhkgx_coverage_amount`, `table_nfhkgx_start_date`, `table_nfhkgx_status`) VALUES (1, 2, 'test', 1.0, 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_tr1zz3` (`table_tr1zz3_claim_id`, `table_tr1zz3_policy_id`, `table_tr1zz3_claim_amount`, `table_tr1zz3_claim_date`, `table_tr1zz3_status`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM INT DEFAULT 0;
+    DECLARE V_COVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NFHKGX_PREMIUM_AMOUNT, 0), COALESCE(TABLE_NFHKGX_COVERAGE_AMOUNT, 0)
+    INTO V_PREMIUM, V_COVERAGE
+    FROM TABLE_NFHKGX
+    WHERE TABLE_NFHKGX_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_TR1ZZ3_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_AMOUNT
+    FROM TABLE_TR1ZZ3
+    WHERE TABLE_TR1ZZ3_POLICY_ID = POLICY_ID_PARAM AND TABLE_TR1ZZ3_STATUS = 'APPROVED';
+
+    SET V_SCORE = (V_COVERAGE / NULLIF(V_PREMIUM, 0)) - (V_CLAIM_AMOUNT / 100);
+
+    IF V_TOTAL_CLAIMS > 5 THEN
+        SET V_SCORE = V_SCORE - 20;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(-78)) - 452 + (cast(v_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+CREATE TABLE IF NOT EXISTS `table_dc8xhv` (
+    `table_dc8xhv_customer_id` INT,
+    `table_dc8xhv_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_dc8xhv` (`table_dc8xhv_customer_id`, `table_dc8xhv_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_DC8XHV_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_DC8XHV
+    WHERE TABLE_DC8XHV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 100;
+        WHEN 'PREMIUM' THEN RETURN 50;
+        WHEN 'BASIC' THEN RETURN 20;
+        ELSE RETURN 5;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_50_100_150_200_tubjfk() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 50 UNION SELECT 100 UNION SELECT 150 UNION SELECT 200;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b(-76)) - -442 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b----- */
+CREATE TABLE IF NOT EXISTS `table_87irfc` (
+    `table_87irfc_order_id` INT,
+    `table_87irfc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_87irfc` (`table_87irfc_order_id`, `table_87irfc_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_87IRFC_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_87IRFC
+    WHERE TABLE_87IRFC_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL / 50);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_wwca0f(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_A INT DEFAULT A;
+    DECLARE V_B INT DEFAULT B;
+
+    WHILE V_B != 0 DO
+        SET V_TEMP = V_B;
+        SET V_B = (MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(-12)) - 374 + (v_a % v_b);
+        SET V_A = V_TEMP;
+    END WHILE;
+
+    SET V_GCD = V_A;
+    RETURN (A / V_GCD) * B;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_LCM_wwca0f(1, 1);

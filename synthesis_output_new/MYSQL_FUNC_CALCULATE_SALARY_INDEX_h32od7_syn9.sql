@@ -1,0 +1,398 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_yyt47f` (
+    `table_yyt47f_emp_id` INT,
+    `table_yyt47f_salary` INT
+);
+
+INSERT INTO `table_yyt47f` (`table_yyt47f_emp_id`, `table_yyt47f_salary`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f----- */
+CREATE TABLE IF NOT EXISTS `table_30nzh1` (
+    `table_30nzh1_supplier_id` INT,
+    `table_30nzh1_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_30nzh1` (`table_30nzh1_supplier_id`, `table_30nzh1_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_30NZH1_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_30NZH1
+    WHERE TABLE_30NZH1_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(-5)) - -815 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(57)) - 618 + (floor(v_rating * 20)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+CREATE TABLE IF NOT EXISTS `table_5ajvmd` (
+    `table_5ajvmd_product_id` INT,
+    `table_5ajvmd_category_id` INT,
+    `table_5ajvmd_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5ajvmd` (`table_5ajvmd_product_id`, `table_5ajvmd_category_id`, `table_5ajvmd_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_5AJVMD_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_5AJVMD
+    WHERE TABLE_5AJVMD_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(-2)) - 961 + (floor(v_avg_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+CREATE TABLE IF NOT EXISTS `table_t4xtqx` (
+    `table_t4xtqx_order_id` INT,
+    `table_t4xtqx_customer_id` INT,
+    `table_t4xtqx_order_date` DATE,
+    `table_t4xtqx_total_amount` DECIMAL(10,2),
+    `table_t4xtqx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_evisnb` (
+    `table_evisnb_payment_id` INT,
+    `table_evisnb_order_id` INT,
+    `table_evisnb_payment_date` DATE,
+    `table_evisnb_amount_paid` INT
+);
+
+INSERT INTO `table_t4xtqx` (`table_t4xtqx_order_id`, `table_t4xtqx_customer_id`, `table_t4xtqx_order_date`, `table_t4xtqx_total_amount`, `table_t4xtqx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_evisnb` (`table_evisnb_payment_id`, `table_evisnb_order_id`, `table_evisnb_payment_date`, `table_evisnb_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_COMPLETION_STATUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T4XTQX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_T4XTQX
+    WHERE TABLE_T4XTQX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EVISNB_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_EVISNB
+    WHERE TABLE_EVISNB_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT_PAID >= V_ORDER_TOTAL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(-71)) - 879 + ((MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(5)) - -660 + ((MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(40)) - -799 + (100)));
+    END IF;
+
+    SET V_COMPLETION_STATUS = (V_AMOUNT_PAID * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COMPLETION_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+CREATE TABLE IF NOT EXISTS `table_rqpbfb` (
+    `table_rqpbfb_emp_id` INT,
+    `table_rqpbfb_salary` INT
+);
+
+INSERT INTO `table_rqpbfb` (`table_rqpbfb_emp_id`, `table_rqpbfb_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_RQPBFB_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_RQPBFB
+    WHERE TABLE_RQPBFB_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 500);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+CREATE TABLE IF NOT EXISTS `table_ges1vf` (
+    `table_ges1vf_booking_id` INT,
+    `table_ges1vf_member_id` INT,
+    `table_ges1vf_guest_count` INT,
+    `table_ges1vf_tee_time` DATE,
+    `table_ges1vf_course_type` VARCHAR(50),
+    `table_ges1vf_cart_rental` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n0xpdt` (
+    `table_n0xpdt_member_id` INT,
+    `table_n0xpdt_membership_type` VARCHAR(50),
+    `table_n0xpdt_handicap` INT,
+    `table_n0xpdt_home_course_id` INT
+);
+
+INSERT INTO `table_ges1vf` (`table_ges1vf_booking_id`, `table_ges1vf_member_id`, `table_ges1vf_guest_count`, `table_ges1vf_tee_time`, `table_ges1vf_course_type`, `table_ges1vf_cart_rental`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_n0xpdt` (`table_n0xpdt_member_id`, `table_n0xpdt_membership_type`, `table_n0xpdt_handicap`, `table_n0xpdt_home_course_id`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GUEST_COUNT INT DEFAULT 0;
+    DECLARE V_CART_RENTAL INT DEFAULT 0;
+    DECLARE V_GREEN_FEE INT DEFAULT 75;
+    DECLARE V_MEMBERSHIP_TYPE VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GES1VF_GUEST_COUNT, 0), COALESCE(TABLE_GES1VF_CART_RENTAL, 0)
+    INTO V_GUEST_COUNT, V_CART_RENTAL
+    FROM TABLE_GES1VF
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_N0XPDT_MEMBERSHIP_TYPE, 'REGULAR')
+    INTO V_MEMBERSHIP_TYPE
+    FROM TABLE_GES1VF GCB
+    JOIN TABLE_N0XPDT M ON TABLE_GES1VF_MEMBER_ID = TABLE_N0XPDT_MEMBER_ID
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    IF V_MEMBERSHIP_TYPE = 'PREMIUM' THEN
+        SET V_GREEN_FEE = V_GREEN_FEE - 25;
+    END IF;
+
+    SET V_TOTAL_COST = (V_GREEN_FEE * (1 + V_GUEST_COUNT)) + V_CART_RENTAL;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai----- */
+CREATE TABLE IF NOT EXISTS `table_qanhi7` (
+    `table_qanhi7_student_id` INT,
+    `table_qanhi7_name` VARCHAR(50),
+    `table_qanhi7_enrollment_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2h1ofb` (
+    `table_2h1ofb_course_id` INT,
+    `table_2h1ofb_credits` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ud2jrb` (
+    `table_ud2jrb_student_id` INT,
+    `table_ud2jrb_course_id` INT,
+    `table_ud2jrb_grade` INT
+);
+
+INSERT INTO `table_qanhi7` (`table_qanhi7_student_id`, `table_qanhi7_name`, `table_qanhi7_enrollment_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_2h1ofb` (`table_2h1ofb_course_id`, `table_2h1ofb_credits`) VALUES (1, 1);
+
+INSERT INTO `table_ud2jrb` (`table_ud2jrb_student_id`, `table_ud2jrb_course_id`, `table_ud2jrb_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ATTEMPTED INT DEFAULT 0;
+    DECLARE V_COMPLETION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), 0)
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_UD2JRB_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), 0)
+    INTO V_TOTAL_ATTEMPTED
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM;
+
+    IF V_TOTAL_ATTEMPTED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPLETION_RATE = (V_COMPLETED_CREDITS * 100) / V_TOTAL_ATTEMPTED;
+
+    RETURN V_COMPLETION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4()) - -410 + (0);
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN (MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(-49)) - -683 + (1);
+    ELSE RETURN 2;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+CREATE TABLE IF NOT EXISTS `table_8mbpj1` (
+    `table_8mbpj1_screening_id` INT,
+    `table_8mbpj1_movie_id` INT,
+    `table_8mbpj1_theater_id` INT,
+    `table_8mbpj1_show_time` DATE,
+    `table_8mbpj1_available_seats` INT,
+    `table_8mbpj1_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ma3ua6` (
+    `table_ma3ua6_booking_id` INT,
+    `table_ma3ua6_screening_id` INT,
+    `table_ma3ua6_customer_id` INT,
+    `table_ma3ua6_seats_booked` INT,
+    `table_ma3ua6_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8mbpj1` (`table_8mbpj1_screening_id`, `table_8mbpj1_movie_id`, `table_8mbpj1_theater_id`, `table_8mbpj1_show_time`, `table_8mbpj1_available_seats`, `table_8mbpj1_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_ma3ua6` (`table_ma3ua6_booking_id`, `table_ma3ua6_screening_id`, `table_ma3ua6_customer_id`, `table_ma3ua6_seats_booked`, `table_ma3ua6_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8MBPJ1_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM TABLE_8MBPJ1
+    WHERE TABLE_8MBPJ1_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MA3UA6_SEATS_BOOKED), 0) INTO V_BOOKED_SEATS
+    FROM TABLE_MA3UA6
+    WHERE TABLE_MA3UA6_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_SEATS * 100) / V_AVAILABLE_SEATS;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_6_VALUES_uzert4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 6 UNION SELECT 12 UNION SELECT 18 UNION SELECT 24 UNION SELECT 30 UNION SELECT 36;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(4)) - 419 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+CREATE TABLE IF NOT EXISTS `table_7dht4m` (
+    `table_7dht4m_campaign_id` INT,
+    `table_7dht4m_status` VARCHAR(50),
+    `table_7dht4m_budget` INT
+);
+
+INSERT INTO `table_7dht4m` (`table_7dht4m_campaign_id`, `table_7dht4m_status`, `table_7dht4m_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_7DHT4M_STATUS, COALESCE(TABLE_7DHT4M_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_7DHT4M
+    WHERE TABLE_7DHT4M_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN V_BUDGET;
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN V_BUDGET / 2;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN V_BUDGET * 2;
+    ELSE
+        RETURN V_BUDGET / 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_YYT47F_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_YYT47F
+    WHERE TABLE_YYT47F_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_p2610f(-24)) - -500 + (floor(v_salary / 100));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(1);

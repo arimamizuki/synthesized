@@ -1,0 +1,380 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+CREATE TABLE IF NOT EXISTS `table_9ywali` (
+    `table_9ywali_campaign_id` INT,
+    `table_9ywali_budget` INT,
+    `table_9ywali_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_06pwt4` (
+    `table_06pwt4_conversion_id` INT,
+    `table_06pwt4_campaign_id` INT,
+    `table_06pwt4_conversion_value` INT
+);
+
+INSERT INTO `table_9ywali` (`table_9ywali_campaign_id`, `table_9ywali_budget`, `table_9ywali_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_06pwt4` (`table_06pwt4_conversion_id`, `table_06pwt4_campaign_id`, `table_06pwt4_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_VALUE_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_06PWT4_CONVERSION_VALUE), 0), COUNT(*)
+    INTO V_TOTAL_VALUE, V_CONVERSION_COUNT
+    FROM TABLE_06PWT4
+    WHERE TABLE_06PWT4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VALUE_INDEX = V_TOTAL_VALUE / V_CONVERSION_COUNT;
+
+    RETURN FLOOR(V_VALUE_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(-19)) - -552 + ((MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1(-92)) - -763 + (v_count + 1));
+        END IF;
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(-93)) - 583 + (v_temp >> 1);
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2----- */
+CREATE TABLE IF NOT EXISTS `table_5dc0yt` (
+    `table_5dc0yt_order_id` INT,
+    `table_5dc0yt_customer_id` INT
+);
+
+INSERT INTO `table_5dc0yt` (`table_5dc0yt_order_id`, `table_5dc0yt_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_5DC0YT_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_5DC0YT
+    WHERE TABLE_5DC0YT_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + ((MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(-62)) - 208 + ((MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(-10)) - -619 + (v_customer_id % 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (V_BEDROOMS * 20) + (V_BATHROOMS * 15) + (V_SQUARE_FEET / 100) + ((2024 - V_YEAR_BUILT) * 2) + (V_FEATURE_COUNT * 10);
+
+    RETURN V_PROPERTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+CREATE TABLE IF NOT EXISTS `table_7d705x` (
+    `table_7d705x_campaign_id` INT,
+    `table_7d705x_start_date` DATE,
+    `table_7d705x_end_date` DATE,
+    `table_7d705x_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yar712` (
+    `table_yar712_conversion_id` INT,
+    `table_yar712_campaign_id` INT,
+    `table_yar712_conversion_value` INT
+);
+
+INSERT INTO `table_7d705x` (`table_7d705x_campaign_id`, `table_7d705x_start_date`, `table_7d705x_end_date`, `table_7d705x_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_yar712` (`table_yar712_conversion_id`, `table_yar712_campaign_id`, `table_yar712_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_COST_PER_ACQ INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7D705X_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_7D705X
+    WHERE TABLE_7D705X_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_YAR712
+    WHERE TABLE_YAR712_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN V_BUDGET;
+    END IF;
+
+    SET V_COST_PER_ACQ = V_BUDGET / V_CONVERSIONS;
+
+    RETURN V_COST_PER_ACQ;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_N * 3;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk----- */
+CREATE TABLE IF NOT EXISTS `table_1oa1v7` (
+    `table_1oa1v7_product_id` INT,
+    `table_1oa1v7_category_id` INT,
+    `table_1oa1v7_price` DECIMAL(10,2),
+    `table_1oa1v7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_axebhx` (
+    `table_axebhx_category_id` INT,
+    `table_axebhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_1oa1v7` (`table_1oa1v7_product_id`, `table_1oa1v7_category_id`, `table_1oa1v7_price`, `table_1oa1v7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_axebhx` (`table_axebhx_category_id`, `table_axebhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_1OA1V7_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_PRODUCTS * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN V_PREMIUM_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(2)) - 577 + (quarter(v_hire_date));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        IF V_TEMP MOD 2 = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = V_TEMP DIV 2;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = (MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(55)) - 19 + (v_reversed * 10 + v_digit);
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN (MYSQL_FUNC_COUNT_BITS_SET_sk78sm(-82)) - 39 + (1);
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_IS_PALINDROME_datj06(1);

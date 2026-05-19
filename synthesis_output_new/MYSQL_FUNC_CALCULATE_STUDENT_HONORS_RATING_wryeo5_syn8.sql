@@ -1,0 +1,426 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_iihmej` (
+    `table_iihmej_student_id` INT,
+    `table_iihmej_name` VARCHAR(50),
+    `table_iihmej_age` INT,
+    `table_iihmej_gpa` INT,
+    `table_iihmej_enrollment_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqu8tq` (
+    `table_oqu8tq_course_id` INT,
+    `table_oqu8tq_name` VARCHAR(50),
+    `table_oqu8tq_credits` INT,
+    `table_oqu8tq_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8mt6l6` (
+    `table_8mt6l6_student_id` INT,
+    `table_8mt6l6_course_id` INT,
+    `table_8mt6l6_grade` INT
+);
+
+INSERT INTO `table_iihmej` (`table_iihmej_student_id`, `table_iihmej_name`, `table_iihmej_age`, `table_iihmej_gpa`, `table_iihmej_enrollment_year`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_oqu8tq` (`table_oqu8tq_course_id`, `table_oqu8tq_name`, `table_oqu8tq_credits`, `table_oqu8tq_department_id`) VALUES (1, 'test', 3, 4);
+
+INSERT INTO `table_8mt6l6` (`table_8mt6l6_student_id`, `table_8mt6l6_course_id`, `table_8mt6l6_grade`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+CREATE TABLE IF NOT EXISTS `table_2qmb5t` (
+    `table_2qmb5t_customer_id` INT,
+    `table_2qmb5t_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_82xo3l` (
+    `table_82xo3l_order_id` INT,
+    `table_82xo3l_customer_id` INT,
+    `table_82xo3l_order_date` DATE,
+    `table_82xo3l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2qmb5t` (`table_2qmb5t_customer_id`, `table_2qmb5t_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_82xo3l` (`table_82xo3l_order_id`, `table_82xo3l_customer_id`, `table_82xo3l_order_date`, `table_82xo3l_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_DAYS INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_82XO3L_ORDER_DATE), MAX(TABLE_82XO3L_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_82XO3L
+    WHERE TABLE_82XO3L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER_DATE, V_FIRST_ORDER_DATE);
+
+    IF V_TOTAL_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_DAYS = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN V_AVG_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+CREATE TABLE IF NOT EXISTS `table_vj4mz4` (
+    `table_vj4mz4_campaign_id` INT,
+    `table_vj4mz4_status` VARCHAR(50)
+);
+
+INSERT INTO `table_vj4mz4` (`table_vj4mz4_campaign_id`, `table_vj4mz4_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_VJ4MZ4_STATUS
+    INTO V_STATUS
+    FROM TABLE_VJ4MZ4
+    WHERE TABLE_VJ4MZ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra(41)) - -853 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h()) - -820 + (case when v_status = 'active' then 1 else 0 end));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT (MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(-49)) - 816 + (1) UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - 913 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+CREATE TABLE IF NOT EXISTS `table_0uzv2f` (
+    `table_0uzv2f_order_id` INT,
+    `table_0uzv2f_customer_id` INT,
+    `table_0uzv2f_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0uzv2f` (`table_0uzv2f_order_id`, `table_0uzv2f_customer_id`, `table_0uzv2f_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_0UZV2F
+    WHERE TABLE_0UZV2F_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_0UZV2F;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CUSTOMER_REVENUE * 100) / V_TOTAL_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+CREATE TABLE IF NOT EXISTS `table_74xcmp` (
+    `table_74xcmp_airline_id` INT,
+    `table_74xcmp_name` VARCHAR(50),
+    `table_74xcmp_iata_code` INT,
+    `table_74xcmp_safety_rating` DECIMAL(3,1),
+    `table_74xcmp_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r5kuxo` (
+    `table_r5kuxo_flight_id` INT,
+    `table_r5kuxo_airline_id` INT,
+    `table_r5kuxo_origin` INT,
+    `table_r5kuxo_destination` INT,
+    `table_r5kuxo_distance_miles` INT
+);
+
+INSERT INTO `table_74xcmp` (`table_74xcmp_airline_id`, `table_74xcmp_name`, `table_74xcmp_iata_code`, `table_74xcmp_safety_rating`, `table_74xcmp_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `table_r5kuxo` (`table_r5kuxo_flight_id`, `table_r5kuxo_airline_id`, `table_r5kuxo_origin`, `table_r5kuxo_destination`, `table_r5kuxo_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_74XCMP_SAFETY_RATING, 80), COALESCE(TABLE_74XCMP_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM TABLE_74XCMP
+    WHERE TABLE_74XCMP_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN GREATEST(V_ENVIRONMENTAL_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra----- */
+CREATE TABLE IF NOT EXISTS `table_s6toj9` (
+    `table_s6toj9_product_id` INT,
+    `table_s6toj9_category_id` INT
+);
+
+INSERT INTO `table_s6toj9` (`table_s6toj9_product_id`, `table_s6toj9_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM TABLE_S6TOJ9
+    WHERE TABLE_S6TOJ9_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(-61, -17)) - -135 + ((MYSQL_FUNC_CALCULATE_ORDER_FREQUENCY_SCORE_1y4jp9(-42)) - 324 + (v_product_count * 5));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FREQUENCY_SCORE_1y4jp9----- */
+CREATE TABLE IF NOT EXISTS `table_t0nz8k` (
+    `table_t0nz8k_customer_id` INT,
+    `table_t0nz8k_order_date` DATE,
+    `table_t0nz8k_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_t0nz8k` (`table_t0nz8k_customer_id`, `table_t0nz8k_order_date`, `table_t0nz8k_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FREQUENCY_SCORE_1y4jp9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FREQUENCY_SCORE_1y4jp9(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_ACTIVE INT DEFAULT 1;
+
+    SELECT COUNT(*), GREATEST(TIMESTAMPDIFF(DAY, MIN(TABLE_T0NZ8K_ORDER_DATE), CURDATE()), 1)
+    INTO V_ORDER_COUNT, V_DAYS_ACTIVE
+    FROM TABLE_T0NZ8K
+    WHERE TABLE_T0NZ8K_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + ((MYSQL_FUNC_IS_PALINDROME_datj06(82)) - -422 + ((v_order_count * 100) / v_days_active));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_datj06----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(P_START_NUM INT, P_END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+
+    IF P_START_NUM > P_END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = P_START_NUM;
+
+    OUTER_LOOP: WHILE V_CURRENT <= P_END_NUM DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDIT_COUNT INT DEFAULT 0;
+    DECLARE V_HONORS_COURSES INT DEFAULT 0;
+    DECLARE V_HONORS_RATING INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IIHMEJ_GPA, 0.00)
+    INTO V_GPA
+    FROM TABLE_IIHMEJ
+    WHERE TABLE_IIHMEJ_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*), SUM(TABLE_OQU8TQ_CREDITS)
+    INTO V_HONORS_COURSES, V_CREDIT_COUNT
+    FROM TABLE_8MT6L6 E
+    JOIN TABLE_OQU8TQ C ON TABLE_8MT6L6_COURSE_ID = TABLE_OQU8TQ_COURSE_ID
+    WHERE TABLE_8MT6L6_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_8MT6L6_GRADE IN ('A', 'A+', 'A-');
+
+    SET V_HONORS_RATING = (MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - 679 + ((v_gpa * 40) + (v_honors_courses * 10) + (v_credit_count / 10));
+
+    RETURN (MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(-22)) - 154 + (v_honors_rating);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(1);

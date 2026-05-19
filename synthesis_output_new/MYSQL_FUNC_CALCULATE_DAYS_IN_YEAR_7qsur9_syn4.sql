@@ -1,0 +1,337 @@
+/* -----Called: MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    SET V_SUM = N * (N + 1) / 2;
+    RETURN (MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp()) - -504 + (v_sum);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+CREATE TABLE IF NOT EXISTS table_rfse4k (
+    table_rfse4k_employee_id INT,
+    table_rfse4k_first_name VARCHAR(50),
+    table_rfse4k_last_name VARCHAR(50),
+    table_rfse4k_salary INT
+);
+
+INSERT INTO table_rfse4k (`table_rfse4k_employee_id`, `table_rfse4k_first_name`, `table_rfse4k_last_name`, `table_rfse4k_salary`) VALUES (1, 'test', 'test', 4);
+
+/* -----Called: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_RFSE4K
+    WHERE TABLE_RFSE4K_SALARY > 35000
+    ORDER BY TABLE_RFSE4K_FIRST_NAME, TABLE_RFSE4K_LAST_NAME, TABLE_RFSE4K_EMPLOYEE_ID;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(17)) - -679 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof(52)) - 216 + (result_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+CREATE TABLE IF NOT EXISTS `table_2iqm3m` (
+    `table_2iqm3m_emp_id` INT,
+    `table_2iqm3m_dept_id` INT,
+    `table_2iqm3m_salary` INT,
+    `table_2iqm3m_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_lbgcfs` (
+    `table_lbgcfs_dept_id` INT,
+    `table_lbgcfs_name` VARCHAR(50),
+    `table_lbgcfs_manager_id` INT,
+    `table_lbgcfs_salary_budget` INT
+);
+
+INSERT INTO `table_2iqm3m` (`table_2iqm3m_emp_id`, `table_2iqm3m_dept_id`, `table_2iqm3m_salary`, `table_2iqm3m_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_lbgcfs` (`table_lbgcfs_dept_id`, `table_lbgcfs_name`, `table_lbgcfs_manager_id`, `table_lbgcfs_salary_budget`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_SALARY_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2IQM3M_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_2IQM3M
+    WHERE TABLE_2IQM3M_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LBGCFS_SALARY_BUDGET, 1000000)
+    INTO V_SALARY_BUDGET
+    FROM TABLE_LBGCFS
+    WHERE TABLE_LBGCFS_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_SALARY_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_PERCENTAGE = (V_TOTAL_SALARIES * 100) / V_SALARY_BUDGET;
+
+    RETURN (MYSQL_FUNC_PROC_ENUM_yio23w()) - 703 + (v_utilization_percentage);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_ENUM_yio23w----- */
+CREATE TABLE IF NOT EXISTS `table_bbx5m1` (
+    `table_bbx5m1_cenum` ENUM('value1', 'value2', 'value3')
+);
+
+INSERT INTO `table_bbx5m1` (`table_bbx5m1_cenum`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_ENUM_yio23w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_ENUM_yio23w() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_BBX5M1`;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+CREATE TABLE IF NOT EXISTS `table_98hbly` (
+    `table_98hbly_category_id` INT,
+    `table_98hbly_stock_quantity` INT
+);
+
+INSERT INTO `table_98hbly` (`table_98hbly_category_id`, `table_98hbly_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_98HBLY
+    WHERE TABLE_98HBLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_98HBLY_STOCK_QUANTITY < 20;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN 10;
+    ELSE
+        RETURN (MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl(72)) - 948 + (5);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+CREATE TABLE IF NOT EXISTS `table_k6vpgx` (
+    `table_k6vpgx_class_id` INT,
+    `table_k6vpgx_instructor_id` INT,
+    `table_k6vpgx_capacity` INT,
+    `table_k6vpgx_current_enrollment` INT,
+    `table_k6vpgx_duration_minutes` INT,
+    `table_k6vpgx_class_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvyt03` (
+    `table_vvyt03_booking_id` INT,
+    `table_vvyt03_member_id` INT,
+    `table_vvyt03_class_id` INT,
+    `table_vvyt03_booking_date` DATE,
+    `table_vvyt03_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_k6vpgx` (`table_k6vpgx_class_id`, `table_k6vpgx_instructor_id`, `table_k6vpgx_capacity`, `table_k6vpgx_current_enrollment`, `table_k6vpgx_duration_minutes`, `table_k6vpgx_class_type`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vvyt03` (`table_vvyt03_booking_id`, `table_vvyt03_member_id`, `table_vvyt03_class_id`, `table_vvyt03_booking_date`, `table_vvyt03_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_BOOKINGS INT DEFAULT 0;
+    DECLARE V_ATTENDANCE_RATE INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_K6VPGX_CAPACITY, 20), COALESCE(TABLE_K6VPGX_CURRENT_ENROLLMENT, 0), COALESCE(TABLE_K6VPGX_DURATION_MINUTES, 60)
+    INTO V_CAPACITY, V_CURRENT_ENROLLMENT, V_DURATION
+    FROM TABLE_K6VPGX
+    WHERE TABLE_K6VPGX_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(CASE TABLE_VVYT03_ATTENDANCE_STATUS WHEN 'ATTENDED' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_TOTAL_BOOKINGS, V_ATTENDANCE_RATE
+    FROM TABLE_VVYT03
+    WHERE TABLE_VVYT03_CLASS_ID = CLASS_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = ((V_CURRENT_ENROLLMENT * 100) / V_CAPACITY) + (V_TOTAL_BOOKINGS * 2) + (V_ATTENDANCE_RATE / 2);
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(-57)) - -158 + (v_popularity_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+CREATE TABLE IF NOT EXISTS `table_i7vfnv` (
+    `table_i7vfnv_campaign_id` INT,
+    `table_i7vfnv_start_date` DATE,
+    `table_i7vfnv_end_date` DATE,
+    `table_i7vfnv_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_okzpao` (
+    `table_okzpao_conversion_id` INT,
+    `table_okzpao_campaign_id` INT,
+    `table_okzpao_conversion_date` DATE,
+    `table_okzpao_conversion_value` INT
+);
+
+INSERT INTO `table_i7vfnv` (`table_i7vfnv_campaign_id`, `table_i7vfnv_start_date`, `table_i7vfnv_end_date`, `table_i7vfnv_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_okzpao` (`table_okzpao_conversion_id`, `table_okzpao_campaign_id`, `table_okzpao_conversion_date`, `table_okzpao_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUALITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_OKZPAO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_VALUE
+    FROM TABLE_OKZPAO
+    WHERE TABLE_OKZPAO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TOTAL_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = V_TOTAL_VALUE / V_TOTAL_CONVERSIONS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(62)) - 457 + (floor(v_quality_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+CREATE TABLE IF NOT EXISTS `table_ebp46e` (
+    `table_ebp46e_customer_id` INT,
+    `table_ebp46e_plan_type` VARCHAR(50),
+    `table_ebp46e_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebp46e` (`table_ebp46e_customer_id`, `table_ebp46e_plan_type`, `table_ebp46e_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_EBP46E_PLAN_TYPE, COALESCE(TABLE_EBP46E_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_EBP46E
+    WHERE TABLE_EBP46E_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST / 2;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST / 3;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST / 4;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_LEAP_YEAR INT DEFAULT 0;
+
+    IF (YEAR_PARAM % 4 = 0 AND YEAR_PARAM % 100 != 0) OR (YEAR_PARAM % 400 = 0) THEN
+        SET V_IS_LEAP_YEAR = 1;
+    END IF;
+
+    IF V_IS_LEAP_YEAR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + ((MYSQL_FUNC_CALCULATE_SERIES_SUM_sd4ozp(68)) - -841 + (366));
+    END IF;
+
+    RETURN 365;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DAYS_IN_YEAR_7qsur9(1);

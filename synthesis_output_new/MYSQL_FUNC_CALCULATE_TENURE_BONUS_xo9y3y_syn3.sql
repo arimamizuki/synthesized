@@ -1,0 +1,335 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ctrmc9` (
+    `table_ctrmc9_emp_id` INT,
+    `table_ctrmc9_salary` INT,
+    `table_ctrmc9_department_id` INT,
+    `table_ctrmc9_hire_date` DATE
+);
+
+INSERT INTO `table_ctrmc9` (`table_ctrmc9_emp_id`, `table_ctrmc9_salary`, `table_ctrmc9_department_id`, `table_ctrmc9_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g----- */
+CREATE TABLE IF NOT EXISTS `table_imgrn8` (
+    `table_imgrn8_dept_id` INT,
+    `table_imgrn8_name` VARCHAR(50),
+    `table_imgrn8_budget` INT,
+    `table_imgrn8_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_3b91qv` (
+    `table_3b91qv_emp_id` INT,
+    `table_3b91qv_dept_id` INT,
+    `table_3b91qv_salary` INT
+);
+
+INSERT INTO `table_imgrn8` (`table_imgrn8_dept_id`, `table_imgrn8_name`, `table_imgrn8_budget`, `table_imgrn8_headcount`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_3b91qv` (`table_3b91qv_emp_id`, `table_3b91qv_dept_id`, `table_3b91qv_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_BUDGET INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PER_EMPLOYEE_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IMGRN8_BUDGET, 0)
+    INTO V_DEPT_BUDGET
+    FROM TABLE_IMGRN8
+    WHERE TABLE_IMGRN8_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_3B91QV
+    WHERE TABLE_3B91QV_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_EMPLOYEE_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PER_EMPLOYEE_BUDGET = V_DEPT_BUDGET / V_EMPLOYEE_COUNT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(76)) - -523 + (v_per_employee_budget);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+CREATE TABLE IF NOT EXISTS `table_1e6l3o` (
+    `table_1e6l3o_supplier_id` INT,
+    `table_1e6l3o_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1e6l3o` (`table_1e6l3o_supplier_id`, `table_1e6l3o_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_1E6L3O_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_1E6L3O
+    WHERE TABLE_1E6L3O_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5(-84)) - 944 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s(-63, 85)) - -405 + ((p_a + p_b + p_c + p_d) / 4));
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_NESTED_CASE_3id74s(A INT, B INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN A > B THEN
+            CASE
+                WHEN A > 0 THEN RETURN 'A_POSITIVE_LARGER';
+                ELSE RETURN 'A_NEGATIVE_LARGER';
+            END CASE;
+        WHEN A < B THEN
+            CASE
+                WHEN B > 0 THEN RETURN 'B_POSITIVE_LARGER';
+                ELSE RETURN 'B_NEGATIVE_LARGER';
+            END CASE;
+        ELSE RETURN 'EQUAL';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5----- */
+CREATE TABLE IF NOT EXISTS `table_wz941v` (
+    `table_wz941v_customer_id` INT,
+    `table_wz941v_status` VARCHAR(50),
+    `table_wz941v_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wz941v` (`table_wz941v_customer_id`, `table_wz941v_status`, `table_wz941v_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_WZ941V_STATUS, COALESCE(TABLE_WZ941V_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(55)) - -264 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + (0)))
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_WZ941V
+    WHERE TABLE_WZ941V_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_SUM_1_TO_N_qv6wf6(-93)) - 656 + (v_monthly_cost * 5);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN NULL;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET V_I = V_I + 1;
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+CREATE TABLE IF NOT EXISTS `table_djvdv7` (
+    `table_djvdv7_emp_id` INT,
+    `table_djvdv7_manager_id` INT,
+    `table_djvdv7_department_id` INT,
+    `table_djvdv7_salary` INT,
+    `table_djvdv7_hire_date` DATE
+);
+
+INSERT INTO `table_djvdv7` (`table_djvdv7_emp_id`, `table_djvdv7_manager_id`, `table_djvdv7_department_id`, `table_djvdv7_salary`, `table_djvdv7_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_DJVDV7
+    WHERE TABLE_DJVDV7_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(-70)) - -682 + (v_direct_reports);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+CREATE TABLE IF NOT EXISTS `table_o7b1hn` (
+    `table_o7b1hn_case_id` INT,
+    `table_o7b1hn_client_id` INT,
+    `table_o7b1hn_attorney_id` INT,
+    `table_o7b1hn_case_type` VARCHAR(50),
+    `table_o7b1hn_filing_date` DATE,
+    `table_o7b1hn_status` VARCHAR(50),
+    `table_o7b1hn_estimated_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sn0pid` (
+    `table_sn0pid_task_id` INT,
+    `table_sn0pid_case_id` INT,
+    `table_sn0pid_task_name` VARCHAR(50),
+    `table_sn0pid_hours_billed` INT,
+    `table_sn0pid_hourly_rate` INT
+);
+
+INSERT INTO `table_o7b1hn` (`table_o7b1hn_case_id`, `table_o7b1hn_client_id`, `table_o7b1hn_attorney_id`, `table_o7b1hn_case_type`, `table_o7b1hn_filing_date`, `table_o7b1hn_status`, `table_o7b1hn_estimated_value`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_sn0pid` (`table_sn0pid_task_id`, `table_sn0pid_case_id`, `table_sn0pid_task_name`, `table_sn0pid_hours_billed`, `table_sn0pid_hourly_rate`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_BILLING INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O7B1HN_ESTIMATED_VALUE, 0)
+    INTO V_ESTIMATED_VALUE
+    FROM TABLE_O7B1HN
+    WHERE TABLE_O7B1HN_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED * TABLE_SN0PID_HOURLY_RATE), 0), COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED), 0)
+    INTO V_TOTAL_BILLING, V_TOTAL_HOURS
+    FROM TABLE_SN0PID
+    WHERE TABLE_SN0PID_CASE_ID = CASE_ID_PARAM;
+
+    IF V_ESTIMATED_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = V_ESTIMATED_VALUE - V_TOTAL_BILLING;
+
+    IF V_TOTAL_HOURS > 100 THEN
+        SET V_PROFITABILITY = V_PROFITABILITY - (V_TOTAL_HOURS - 100) * 10;
+    END IF;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE INT DEFAULT 0;
+    DECLARE V_BONUS INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT_YEAR INT;
+    DECLARE V_HIRE_YEAR INT;
+
+    SET V_CURRENT_YEAR = YEAR(CURDATE());
+
+    SELECT COUNT(*), COALESCE(AVG(V_CURRENT_YEAR - YEAR(TABLE_CTRMC9_HIRE_DATE)), (MYSQL_FUNC_CALCULATE_PER_EMPLOYEE_BUDGET_yapq1g(-90)) - -321 + (0))
+    INTO V_EMP_COUNT, V_AVG_TENURE
+    FROM TABLE_CTRMC9
+    WHERE TABLE_CTRMC9_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_BONUS = (MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(88)) - -995 + (cast(v_avg_tenure * 100 as unsigned));
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (v_bonus);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TENURE_BONUS_xo9y3y(1);

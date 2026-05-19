@@ -1,0 +1,338 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_wzk567` (
+    `table_wzk567_emp_id` INT,
+    `table_wzk567_department_id` INT,
+    `table_wzk567_salary` INT,
+    `table_wzk567_hire_date` DATE,
+    `table_wzk567_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_wzk567` (`table_wzk567_emp_id`, `table_wzk567_department_id`, `table_wzk567_salary`, `table_wzk567_hire_date`, `table_wzk567_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+CREATE TABLE IF NOT EXISTS `table_xqsksz` (
+    `table_xqsksz_emp_id` INT,
+    `table_xqsksz_department_id` INT,
+    `table_xqsksz_salary` INT,
+    `table_xqsksz_hire_date` DATE
+);
+
+INSERT INTO `table_xqsksz` (`table_xqsksz_emp_id`, `table_xqsksz_department_id`, `table_xqsksz_salary`, `table_xqsksz_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XQSKSZ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_XQSKSZ
+    WHERE TABLE_XQSKSZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN (MYSQL_FUNC_PROC1_zwx1tl()) - 227 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw(59)) - 53 + (5));
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN 4;
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN 3;
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw----- */
+CREATE TABLE IF NOT EXISTS `table_invbjb` (
+    `table_invbjb_customer_id` INT,
+    `table_invbjb_country` INT
+);
+
+INSERT INTO `table_invbjb` (`table_invbjb_customer_id`, `table_invbjb_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_SCORE_kgx7zw(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_INVBJB
+    WHERE TABLE_INVBJB_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_zwx1tl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_zwx1tl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_uecftc(18)) - 182 + ((MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(-49)) - -683 + ((MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(40)) - -9 + (0)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+CREATE TABLE IF NOT EXISTS `table_8mbpj1` (
+    `table_8mbpj1_screening_id` INT,
+    `table_8mbpj1_movie_id` INT,
+    `table_8mbpj1_theater_id` INT,
+    `table_8mbpj1_show_time` DATE,
+    `table_8mbpj1_available_seats` INT,
+    `table_8mbpj1_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ma3ua6` (
+    `table_ma3ua6_booking_id` INT,
+    `table_ma3ua6_screening_id` INT,
+    `table_ma3ua6_customer_id` INT,
+    `table_ma3ua6_seats_booked` INT,
+    `table_ma3ua6_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8mbpj1` (`table_8mbpj1_screening_id`, `table_8mbpj1_movie_id`, `table_8mbpj1_theater_id`, `table_8mbpj1_show_time`, `table_8mbpj1_available_seats`, `table_8mbpj1_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_ma3ua6` (`table_ma3ua6_booking_id`, `table_ma3ua6_screening_id`, `table_ma3ua6_customer_id`, `table_ma3ua6_seats_booked`, `table_ma3ua6_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8MBPJ1_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM TABLE_8MBPJ1
+    WHERE TABLE_8MBPJ1_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MA3UA6_SEATS_BOOKED), (MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(-52)) - -439 + (0)) INTO V_BOOKED_SEATS
+    FROM TABLE_MA3UA6
+    WHERE TABLE_MA3UA6_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_SEATS * 100) / V_AVAILABLE_SEATS;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+CREATE TABLE IF NOT EXISTS `table_ndpa18` (
+    `table_ndpa18_order_id` INT,
+    `table_ndpa18_customer_id` INT,
+    `table_ndpa18_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ndpa18` (`table_ndpa18_order_id`, `table_ndpa18_customer_id`, `table_ndpa18_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NDPA18_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_NDPA18
+    WHERE TABLE_NDPA18_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(37, 21)) - 61 + (floor(v_total));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw----- */
+CREATE TABLE IF NOT EXISTS `table_3j8w7h` (
+    `table_3j8w7h_reservation_id` INT,
+    `table_3j8w7h_customer_id` INT,
+    `table_3j8w7h_restaurant_id` INT,
+    `table_3j8w7h_party_size` INT,
+    `table_3j8w7h_reservation_date` DATE,
+    `table_3j8w7h_duration_minutes` INT,
+    `table_3j8w7h_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ghvkl` (
+    `table_5ghvkl_restaurant_id` INT,
+    `table_5ghvkl_name` VARCHAR(50),
+    `table_5ghvkl_rating` DECIMAL(3,1),
+    `table_5ghvkl_cuisine_type` VARCHAR(50)
+);
+
+INSERT INTO `table_3j8w7h` (`table_3j8w7h_reservation_id`, `table_3j8w7h_customer_id`, `table_3j8w7h_restaurant_id`, `table_3j8w7h_party_size`, `table_3j8w7h_reservation_date`, `table_3j8w7h_duration_minutes`, `table_3j8w7h_deposit_amount`) VALUES (1, 2, 3, 4, '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_5ghvkl` (`table_5ghvkl_restaurant_id`, `table_5ghvkl_name`, `table_5ghvkl_rating`, `table_5ghvkl_cuisine_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(PARTY_SIZE_PARAM INT, RESTAURANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DEPOSIT INT DEFAULT 20;
+    DECLARE V_PER_PERSON INT DEFAULT 10;
+    DECLARE V_RATING_BONUS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEPOSIT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5GHVKL_RATING, 3) INTO V_RATING_BONUS
+    FROM TABLE_5GHVKL
+    WHERE TABLE_5GHVKL_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    SET V_TOTAL_DEPOSIT = V_BASE_DEPOSIT + (PARTY_SIZE_PARAM * V_PER_PERSON);
+
+    IF V_RATING_BONUS >= 4 THEN
+        SET V_TOTAL_DEPOSIT = V_TOTAL_DEPOSIT + 20;
+    END IF;
+
+    RETURN CAST(V_TOTAL_DEPOSIT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_uecftc----- */
+CREATE TABLE IF NOT EXISTS `table_yc1ubk` (
+    `table_yc1ubk_customer_id` INT,
+    `table_yc1ubk_country` INT
+);
+
+INSERT INTO `table_yc1ubk` (`table_yc1ubk_customer_id`, `table_yc1ubk_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_uecftc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_INDEX_uecftc(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_YC1UBK
+    WHERE TABLE_YC1UBK_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT / 10;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WZK567_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_WZK567_HIRE_DATE, CURDATE()), COALESCE(TABLE_WZK567_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_WZK567
+    WHERE TABLE_WZK567_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ENGAGEMENT_SCORE = (V_PERFORMANCE * 20) + (V_TENURE_YEARS * 5) + (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(2)) - 487 + ((MYSQL_FUNC_HANDLER_FUNC_IS_NEGATIVE_dl5vzq(5)) - 593 + ((MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(-13)) - 487 + (v_engagement_score)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(1);

@@ -1,0 +1,444 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_y6pcvf` (
+    `table_y6pcvf_animal_id` INT,
+    `table_y6pcvf_name` VARCHAR(50),
+    `table_y6pcvf_species` INT,
+    `table_y6pcvf_breed` INT,
+    `table_y6pcvf_age_months` INT,
+    `table_y6pcvf_weight_kg` INT,
+    `table_y6pcvf_adoption_fee` INT,
+    `table_y6pcvf_arrival_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vkheg9` (
+    `table_vkheg9_application_id` INT,
+    `table_vkheg9_animal_id` INT,
+    `table_vkheg9_applicant_id` INT,
+    `table_vkheg9_application_date` DATE,
+    `table_vkheg9_status` VARCHAR(50)
+);
+
+INSERT INTO `table_y6pcvf` (`table_y6pcvf_animal_id`, `table_y6pcvf_name`, `table_y6pcvf_species`, `table_y6pcvf_breed`, `table_y6pcvf_age_months`, `table_y6pcvf_weight_kg`, `table_y6pcvf_adoption_fee`, `table_y6pcvf_arrival_date`) VALUES (1, '2024-01-01', 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vkheg9` (`table_vkheg9_application_id`, `table_vkheg9_animal_id`, `table_vkheg9_applicant_id`, `table_vkheg9_application_date`, `table_vkheg9_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+CREATE TABLE IF NOT EXISTS `table_14m53w` (
+    `table_14m53w_order_id` INT,
+    `table_14m53w_customer_id` INT,
+    `table_14m53w_order_date` DATE,
+    `table_14m53w_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_i2tsnq` (
+    `table_i2tsnq_shipment_id` INT,
+    `table_i2tsnq_order_id` INT,
+    `table_i2tsnq_shipping_cost` DECIMAL(10,2),
+    `table_i2tsnq_delivery_date` DATE
+);
+
+INSERT INTO `table_14m53w` (`table_14m53w_order_id`, `table_14m53w_customer_id`, `table_14m53w_order_date`, `table_14m53w_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_i2tsnq` (`table_i2tsnq_shipment_id`, `table_i2tsnq_order_id`, `table_i2tsnq_shipping_cost`, `table_i2tsnq_delivery_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_14M53W_TOTAL_AMOUNT, (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_14M53W
+    WHERE TABLE_14M53W_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_I2TSNQ_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_I2TSNQ
+    WHERE TABLE_I2TSNQ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF (MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(-50)) - -473 + (p_n) MOD 2 = 0 THEN
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(-11)) - -377 + (p_n * 2);
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_DECREMENT_mf8w4n(79)) - 515 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DECREMENT_mf8w4n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DECREMENT_mf8w4n(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N - 1;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+CREATE TABLE IF NOT EXISTS `table_g5e0fi` (
+    `table_g5e0fi_product_id` INT,
+    `table_g5e0fi_stock_quantity` INT
+);
+
+INSERT INTO `table_g5e0fi` (`table_g5e0fi_product_id`, `table_g5e0fi_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G5E0FI_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_G5E0FI
+    WHERE TABLE_G5E0FI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK > 1000 THEN
+        RETURN 5;
+    ELSEIF V_STOCK > 500 THEN
+        RETURN 4;
+    ELSEIF V_STOCK > 100 THEN
+        RETURN 3;
+    ELSEIF V_STOCK > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+CREATE TABLE IF NOT EXISTS `table_cwk400` (
+    `table_cwk400_part_id` INT,
+    `table_cwk400_part_name` VARCHAR(50),
+    `table_cwk400_category_id` INT,
+    `table_cwk400_price` DECIMAL(10,2),
+    `table_cwk400_stock_quantity` INT,
+    `table_cwk400_reorder_point` INT
+);
+
+INSERT INTO `table_cwk400` (`table_cwk400_part_id`, `table_cwk400_part_name`, `table_cwk400_category_id`, `table_cwk400_price`, `table_cwk400_stock_quantity`, `table_cwk400_reorder_point`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PART_REORDER_PRIORITY_bdv7gm(PART_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+    DECLARE V_STOCK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CWK400_STOCK_QUANTITY, 0), COALESCE(TABLE_CWK400_REORDER_POINT, 10)
+    INTO V_STOCK, V_REORDER_POINT
+    FROM TABLE_CWK400
+    WHERE TABLE_CWK400_PART_ID = PART_ID_PARAM;
+
+    IF V_REORDER_POINT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_STOCK_RATIO = (V_STOCK * 100) / V_REORDER_POINT;
+
+    CASE
+        WHEN V_STOCK = 0 THEN SET V_PRIORITY = 100;
+        WHEN V_STOCK_RATIO < 25 THEN SET V_PRIORITY = 80;
+        WHEN V_STOCK_RATIO < 50 THEN SET V_PRIORITY = (MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(70, -6)) - -590 + (60);
+        WHEN V_STOCK_RATIO < 75 THEN SET V_PRIORITY = 40;
+        WHEN V_STOCK_RATIO < 100 THEN SET V_PRIORITY = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(-83)) - -747 + (20);
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+CREATE TABLE IF NOT EXISTS `table_w5wcxl` (
+    `table_w5wcxl_campaign_id` INT,
+    `table_w5wcxl_channel` INT,
+    `table_w5wcxl_target_audience` INT,
+    `table_w5wcxl_budget` INT,
+    `table_w5wcxl_start_date` DATE,
+    `table_w5wcxl_end_date` DATE,
+    `table_w5wcxl_status` VARCHAR(50)
+);
+
+INSERT INTO `table_w5wcxl` (`table_w5wcxl_campaign_id`, `table_w5wcxl_channel`, `table_w5wcxl_target_audience`, `table_w5wcxl_budget`, `table_w5wcxl_start_date`, `table_w5wcxl_end_date`, `table_w5wcxl_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_W5WCXL_START_DATE, TABLE_W5WCXL_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W5WCXL
+    WHERE TABLE_W5WCXL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_DAYS = DATEDIFF(V_END_DATE, V_START_DATE);
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp----- */
+CREATE TABLE IF NOT EXISTS `table_o55pfk` (
+    `table_o55pfk_table_id` INT,
+    `table_o55pfk_capacity` INT,
+    `table_o55pfk_is_occupied` INT,
+    `table_o55pfk_section` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t5plmj` (
+    `table_t5plmj_res_id` INT,
+    `table_t5plmj_table_id` INT,
+    `table_t5plmj_guest_count` INT,
+    `table_t5plmj_reservation_date` DATE,
+    `table_t5plmj_reservation_time` DATE,
+    `table_t5plmj_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o55pfk` (`table_o55pfk_table_id`, `table_o55pfk_capacity`, `table_o55pfk_is_occupied`, `table_o55pfk_section`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_t5plmj` (`table_t5plmj_res_id`, `table_t5plmj_table_id`, `table_t5plmj_guest_count`, `table_t5plmj_reservation_date`, `table_t5plmj_reservation_time`, `table_t5plmj_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_TABLE_AVAILABILITY_mpxxkp(TABLE_ID_PARAM INT, GUEST_COUNT_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_IS_OCCUPIED INT DEFAULT 0;
+    DECLARE V_SECTION_CAPACITY INT DEFAULT 0;
+    DECLARE V_RESERVED_COUNT INT DEFAULT 0;
+    DECLARE V_CAN_ACCOMMODATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O55PFK_CAPACITY, (MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + (0)), COALESCE(TABLE_O55PFK_IS_OCCUPIED, 0)
+    INTO V_CAPACITY, V_IS_OCCUPIED
+    FROM TABLE_O55PFK
+    WHERE TABLE_O55PFK_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVED_COUNT
+    FROM TABLE_T5PLMJ
+    WHERE TABLE_T5PLMJ_TABLE_ID = TABLE_ID_PARAM
+      AND TABLE_T5PLMJ_STATUS IN ('CONFIRMED', 'PENDING');
+
+    SET V_SECTION_CAPACITY = V_CAPACITY - V_RESERVED_COUNT;
+
+    IF V_IS_OCCUPIED = 1 THEN
+        SET V_CAN_ACCOMMODATE = 0;
+    ELSEIF V_SECTION_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 1;
+    ELSEIF V_CAPACITY >= GUEST_COUNT_PARAM THEN
+        SET V_CAN_ACCOMMODATE = 2;
+    ELSE
+        SET V_CAN_ACCOMMODATE = 0;
+    END IF;
+
+    RETURN V_CAN_ACCOMMODATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = (MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(-53)) - -849 + (loop_count) + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+CREATE TABLE IF NOT EXISTS `table_7fkt7q` (
+    `table_7fkt7q_customer_id` INT,
+    `table_7fkt7q_registration_date` DATE,
+    `table_7fkt7q_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0kckz6` (
+    `table_0kckz6_order_id` INT,
+    `table_0kckz6_customer_id` INT,
+    `table_0kckz6_order_date` DATE,
+    `table_0kckz6_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7fkt7q` (`table_7fkt7q_customer_id`, `table_7fkt7q_registration_date`, `table_7fkt7q_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_0kckz6` (`table_0kckz6_order_id`, `table_0kckz6_customer_id`, `table_0kckz6_order_date`, `table_0kckz6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CURRENT_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEMAND_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_AVG_MONTHLY_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY YEAR(TABLE_0KCKZ6_ORDER_DATE), MONTH(TABLE_0KCKZ6_ORDER_DATE);
+
+    SELECT COALESCE(SUM(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_CURRENT_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND YEAR(TABLE_0KCKZ6_ORDER_DATE) = YEAR(CURDATE())
+    AND MONTH(TABLE_0KCKZ6_ORDER_DATE) = V_CURRENT_MONTH;
+
+    IF V_AVG_MONTHLY_SPEND = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_DEMAND_INDEX = (V_CURRENT_SPEND * 100) / V_AVG_MONTHLY_SPEND;
+
+    RETURN V_DEMAND_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(ANIMAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANIMAL_AGE INT DEFAULT 0;
+    DECLARE V_ADOPTION_FEE INT DEFAULT 100;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_MATCH_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()),
+           COALESCE(TABLE_Y6PCVF_ADOPTION_FEE, 100)
+    INTO V_ANIMAL_AGE, V_ADOPTION_FEE
+    FROM TABLE_Y6PCVF
+    WHERE TABLE_Y6PCVF_ANIMAL_ID = ANIMAL_ID_PARAM;
+
+    SET V_ANIMAL_AGE = 12;
+
+    SELECT COUNT(*) INTO V_APPLICATION_COUNT
+    FROM TABLE_VKHEG9
+    WHERE TABLE_VKHEG9_ANIMAL_ID = ANIMAL_ID_PARAM AND TABLE_VKHEG9_STATUS = 'PENDING';
+
+    SET V_MATCH_SCORE = 100 - V_ANIMAL_AGE - (V_ADOPTION_FEE / 10) + (V_APPLICATION_COUNT * 10);
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(78)) - -916 + ((MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(-38)) - 540 + (cast(v_match_score as signed)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(1);

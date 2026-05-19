@@ -1,0 +1,406 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_81gamz` (
+    `table_81gamz_store_id` INT,
+    `table_81gamz_region` INT,
+    `table_81gamz_store_type` VARCHAR(50),
+    `table_81gamz_monthly_rent` INT,
+    `table_81gamz_sales_target` INT,
+    `table_81gamz_sales_actual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c3mq9y` (
+    `table_c3mq9y_employee_id` INT,
+    `table_c3mq9y_store_id` INT,
+    `table_c3mq9y_role` INT,
+    `table_c3mq9y_salary` INT,
+    `table_c3mq9y_hire_date` DATE
+);
+
+INSERT INTO `table_81gamz` (`table_81gamz_store_id`, `table_81gamz_region`, `table_81gamz_store_type`, `table_81gamz_monthly_rent`, `table_81gamz_sales_target`, `table_81gamz_sales_actual`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c3mq9y` (`table_c3mq9y_employee_id`, `table_c3mq9y_store_id`, `table_c3mq9y_role`, `table_c3mq9y_salary`, `table_c3mq9y_hire_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+CREATE TABLE IF NOT EXISTS `table_ke34d4` (
+    `table_ke34d4_member_id` INT,
+    `table_ke34d4_tier_level` INT,
+    `table_ke34d4_total_miles` DECIMAL(10,2),
+    `table_ke34d4_miles_expired` INT,
+    `table_ke34d4_last_activity_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_y90k4n` (
+    `table_y90k4n_redemption_id` INT,
+    `table_y90k4n_member_id` INT,
+    `table_y90k4n_flight_id` INT,
+    `table_y90k4n_miles_used` INT,
+    `table_y90k4n_booking_date` DATE
+);
+
+INSERT INTO `table_ke34d4` (`table_ke34d4_member_id`, `table_ke34d4_tier_level`, `table_ke34d4_total_miles`, `table_ke34d4_miles_expired`, `table_ke34d4_last_activity_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+INSERT INTO `table_y90k4n` (`table_y90k4n_redemption_id`, `table_y90k4n_member_id`, `table_y90k4n_flight_id`, `table_y90k4n_miles_used`, `table_y90k4n_booking_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(MEMBER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_MILES INT DEFAULT 0;
+    DECLARE V_MILES_EXPIRED INT DEFAULT 0;
+    DECLARE V_CURRENT_TIER INT DEFAULT 1;
+    DECLARE V_UPGRADE_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KE34D4_TOTAL_MILES, 0), COALESCE(TABLE_KE34D4_MILES_EXPIRED, 0), TABLE_KE34D4_TIER_LEVEL
+    INTO V_TOTAL_MILES, V_MILES_EXPIRED, V_CURRENT_TIER
+    FROM TABLE_KE34D4
+    WHERE TABLE_KE34D4_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SET V_UPGRADE_POINTS = V_TOTAL_MILES - V_MILES_EXPIRED;
+
+    CASE V_CURRENT_TIER
+        WHEN 1 THEN
+            IF V_UPGRADE_POINTS >= 50000 THEN SET V_UPGRADE_POINTS = V_UPGRADE_POINTS + 1000;
+            END IF;
+        WHEN 2 THEN
+            IF V_UPGRADE_POINTS >= 100000 THEN SET V_UPGRADE_POINTS = V_UPGRADE_POINTS + 2000;
+            END IF;
+        ELSE SET V_UPGRADE_POINTS = V_UPGRADE_POINTS;
+    END CASE;
+
+    RETURN CAST(V_UPGRADE_POINTS AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+CREATE TABLE IF NOT EXISTS `table_wjhyu0` (
+    `table_wjhyu0_customer_id` INT,
+    `table_wjhyu0_registration_date` DATE
+);
+
+INSERT INTO `table_wjhyu0` (`table_wjhyu0_customer_id`, `table_wjhyu0_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REG_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_WJHYU0_REGISTRATION_DATE)
+    INTO V_REG_YEAR
+    FROM TABLE_WJHYU0
+    WHERE TABLE_WJHYU0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_REG_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_NATURAL_u2kao3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_NATURAL_u2kao3(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(-58)) - -294 + (v_result + v_i);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+CREATE TABLE IF NOT EXISTS `table_crekql` (
+    `table_crekql_campaign_id` INT,
+    `table_crekql_channel` INT,
+    `table_crekql_budget` INT,
+    `table_crekql_start_date` DATE,
+    `table_crekql_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6yunz` (
+    `table_f6yunz_conversion_id` INT,
+    `table_f6yunz_campaign_id` INT,
+    `table_f6yunz_conversion_value` INT
+);
+
+INSERT INTO `table_crekql` (`table_crekql_campaign_id`, `table_crekql_channel`, `table_crekql_budget`, `table_crekql_start_date`, `table_crekql_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_f6yunz` (`table_f6yunz_conversion_id`, `table_f6yunz_campaign_id`, `table_f6yunz_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT TABLE_CREKQL_CHANNEL, COALESCE(TABLE_CREKQL_BUDGET, (MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(15)) - 83 + ((MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(-3)) - 516 + (0)))
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_CREKQL
+    WHERE TABLE_CREKQL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6YUNZ_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_F6YUNZ
+    WHERE TABLE_F6YUNZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(78)) - -916 + ((MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra(41)) - -853 + (v_roi));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL MOD 2 = 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE ODD';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra----- */
+CREATE TABLE IF NOT EXISTS `table_s6toj9` (
+    `table_s6toj9_product_id` INT,
+    `table_s6toj9_category_id` INT
+);
+
+INSERT INTO `table_s6toj9` (`table_s6toj9_product_id`, `table_s6toj9_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_SCORE_tllvra(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_PRODUCT_COUNT
+    FROM TABLE_S6TOJ9
+    WHERE TABLE_S6TOJ9_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(-18)) - 945 + (v_product_count * 5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+CREATE TABLE IF NOT EXISTS `table_kelao0` (
+    `table_kelao0_customer_id` INT,
+    `table_kelao0_tier_level` INT,
+    `table_kelao0_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_rcenak` (
+    `table_rcenak_order_id` INT,
+    `table_rcenak_customer_id` INT,
+    `table_rcenak_order_date` DATE,
+    `table_rcenak_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kelao0` (`table_kelao0_customer_id`, `table_kelao0_tier_level`, `table_kelao0_registration_date`) VALUES (1, 1, '2024-01-01');
+
+INSERT INTO `table_rcenak` (`table_rcenak_order_id`, `table_rcenak_customer_id`, `table_rcenak_order_date`, `table_rcenak_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_UPGRADE_ELIGIBLE INT DEFAULT 0;
+
+    SELECT TABLE_KELAO0_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_RCENAK_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_RCENAK
+    WHERE TABLE_RCENAK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_KELAO0_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TIER_LEVEL = 'BRONZE' AND V_TOTAL_SPENT >= 1000 AND V_CUSTOMER_AGE_DAYS >= 90 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    ELSEIF V_TIER_LEVEL = 'SILVER' AND V_TOTAL_SPENT >= 5000 AND V_CUSTOMER_AGE_DAYS >= 180 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    ELSEIF V_TIER_LEVEL = 'GOLD' AND V_TOTAL_SPENT >= 10000 AND V_CUSTOMER_AGE_DAYS >= 365 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_UPGRADE_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 = 0 THEN
+        SET V_RESULT = P_N * 2;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+CREATE TABLE IF NOT EXISTS `table_pjlwth` (
+    `table_pjlwth_emp_id` INT,
+    `table_pjlwth_department_id` INT,
+    `table_pjlwth_salary` INT,
+    `table_pjlwth_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcp73a` (
+    `table_hcp73a_department_id` INT,
+    `table_hcp73a_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pjlwth` (`table_pjlwth_emp_id`, `table_pjlwth_department_id`, `table_pjlwth_salary`, `table_pjlwth_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_hcp73a` (`table_hcp73a_department_id`, `table_hcp73a_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_STABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_PJLWTH_HIRE_DATE, CURDATE())), 0), COUNT(*)
+    INTO V_AVG_TENURE, V_EMPLOYEE_COUNT
+    FROM TABLE_PJLWTH
+    WHERE TABLE_PJLWTH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_SCORE = (MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww(-56, 98)) - 55 + ((v_avg_tenure * 10) + (v_employee_count * 2));
+
+    RETURN V_STABILITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww(ROW_NUM INT, COL_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COL_NUM = 0 OR COL_NUM = ROW_NUM THEN
+        RETURN 1;
+    END IF;
+
+    IF COL_NUM > ROW_NUM OR COL_NUM < 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_I = 0;
+    WHILE V_I < COL_NUM DO
+        SET V_RESULT = V_RESULT * (ROW_NUM - V_I);
+        SET V_RESULT = V_RESULT / (V_I + 1);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(STORE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALES_TARGET INT DEFAULT 0;
+    DECLARE V_SALES_ACTUAL INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_81GAMZ_SALES_TARGET, (MYSQL_FUNC_HANDLER_FUNC_SUM_NATURAL_u2kao3(-96)) - -285 + ((MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(14)) - 414 + (0))), COALESCE(TABLE_81GAMZ_SALES_ACTUAL, 0)
+    INTO V_SALES_TARGET, V_SALES_ACTUAL
+    FROM TABLE_81GAMZ
+    WHERE TABLE_81GAMZ_STORE_ID = STORE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_EMPLOYEE_COUNT
+    FROM TABLE_C3MQ9Y
+    WHERE TABLE_C3MQ9Y_STORE_ID = STORE_ID_PARAM;
+
+    IF V_SALES_TARGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERFORMANCE_SCORE = ((V_SALES_ACTUAL - V_SALES_TARGET) * 100) / V_SALES_TARGET;
+
+    IF V_EMPLOYEE_COUNT > 10 THEN
+        SET V_PERFORMANCE_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_YEAR_lkrfhr(18)) - 116 + (v_performance_score - 5);
+    END IF;
+
+    RETURN CAST(V_PERFORMANCE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(1);

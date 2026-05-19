@@ -1,0 +1,448 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_2sxoyp` (
+    `table_2sxoyp_inventory_id` INT,
+    `table_2sxoyp_product_id` INT,
+    `table_2sxoyp_warehouse_id` INT,
+    `table_2sxoyp_quantity` INT,
+    `table_2sxoyp_min_stock_level` INT
+);
+
+INSERT INTO `table_2sxoyp` (`table_2sxoyp_inventory_id`, `table_2sxoyp_product_id`, `table_2sxoyp_warehouse_id`, `table_2sxoyp_quantity`, `table_2sxoyp_min_stock_level`) VALUES (1, 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        RETURN -1;
+    END IF;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+CREATE TABLE IF NOT EXISTS `table_33kbxb` (
+    `table_33kbxb_product_id` INT,
+    `table_33kbxb_category_id` INT,
+    `table_33kbxb_supplier_id` INT,
+    `table_33kbxb_price` DECIMAL(10,2),
+    `table_33kbxb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_kkdez3` (
+    `table_kkdez3_category_id` INT,
+    `table_kkdez3_name` VARCHAR(50),
+    `table_kkdez3_discount_percent` INT
+);
+
+INSERT INTO `table_33kbxb` (`table_33kbxb_product_id`, `table_33kbxb_category_id`, `table_33kbxb_supplier_id`, `table_33kbxb_price`, `table_33kbxb_stock_quantity`) VALUES (1, 2, 3, 1.0, 5);
+
+INSERT INTO `table_kkdez3` (`table_kkdez3_category_id`, `table_kkdez3_name`, `table_kkdez3_discount_percent`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(PRODUCT_ID_PARAM INT, QUANTITY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_DISCOUNT INT DEFAULT 0;
+
+    SELECT TABLE_33KBXB_PRICE, COALESCE(TABLE_KKDEZ3_DISCOUNT_PERCENT, 0)
+    INTO V_BASE_PRICE, V_CATEGORY_DISCOUNT
+    FROM TABLE_33KBXB P
+    LEFT JOIN TABLE_KKDEZ3 C ON TABLE_33KBXB_CATEGORY_ID = TABLE_KKDEZ3_CATEGORY_ID
+    WHERE TABLE_33KBXB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DISCOUNT = (MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv(55)) - -231 + ((MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(-32)) - -105 + (v_base_price * v_category_discount / 100));
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + (v_base_price * 15 / 100);
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 10 / 100;
+    ELSEIF QUANTITY_PARAM >= 10 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 5 / 100;
+    END IF;
+
+    SET V_FINAL_PRICE = (MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv(55)) - -231 + (v_base_price - v_discount - v_quantity_discount);
+
+    RETURN GREATEST(V_FINAL_PRICE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+CREATE TABLE IF NOT EXISTS `table_6j2qnu` (
+    `table_6j2qnu_employee_id` INT,
+    `table_6j2qnu_department_id` INT,
+    `table_6j2qnu_salary` INT,
+    `table_6j2qnu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_qesw7k` (
+    `table_qesw7k_employee_id` INT,
+    `table_qesw7k_effective_date` DATE,
+    `table_qesw7k_salary_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6j2qnu` (`table_6j2qnu_employee_id`, `table_6j2qnu_department_id`, `table_6j2qnu_salary`, `table_6j2qnu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_qesw7k` (`table_qesw7k_employee_id`, `table_qesw7k_effective_date`, `table_qesw7k_salary_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, (MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(-95)) - -803 + (0))
+    INTO V_INITIAL_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE ASC LIMIT 1;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, 0)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE DESC LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_6J2QNU_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_6J2QNU
+    WHERE TABLE_6J2QNU_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / (V_INITIAL_SALARY * V_YEARS_EMPLOYED);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+CREATE TABLE IF NOT EXISTS `table_3o46m6` (
+    `table_3o46m6_campaign_id` INT,
+    `table_3o46m6_budget` INT,
+    `table_3o46m6_start_date` DATE,
+    `table_3o46m6_end_date` DATE,
+    `table_3o46m6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_olefgc` (
+    `table_olefgc_conversion_id` INT,
+    `table_olefgc_campaign_id` INT,
+    `table_olefgc_conversion_value` INT
+);
+
+INSERT INTO `table_3o46m6` (`table_3o46m6_campaign_id`, `table_3o46m6_budget`, `table_3o46m6_start_date`, `table_3o46m6_end_date`, `table_3o46m6_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_olefgc` (`table_olefgc_conversion_id`, `table_olefgc_campaign_id`, `table_olefgc_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3O46M6_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_3O46M6
+    WHERE TABLE_3O46M6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OLEFGC_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_OLEFGC
+    WHERE TABLE_OLEFGC_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = (MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(29)) - -302 + (v_temp / v_divisor);
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+CREATE TABLE IF NOT EXISTS `table_maha9n` (
+    `table_maha9n_campaign_id` INT,
+    `table_maha9n_channel` INT,
+    `table_maha9n_budget` INT,
+    `table_maha9n_start_date` DATE,
+    `table_maha9n_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_isannf` (
+    `table_isannf_conversion_id` INT,
+    `table_isannf_campaign_id` INT,
+    `table_isannf_conversion_date` DATE
+);
+
+INSERT INTO `table_maha9n` (`table_maha9n_campaign_id`, `table_maha9n_channel`, `table_maha9n_budget`, `table_maha9n_start_date`, `table_maha9n_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_isannf` (`table_isannf_conversion_id`, `table_isannf_campaign_id`, `table_isannf_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CAMPAIGN_DURATION INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_MIX_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_MAHA9N_CHANNEL, DATEDIFF(TABLE_MAHA9N_END_DATE, TABLE_MAHA9N_START_DATE)
+    INTO V_CHANNEL, V_CAMPAIGN_DURATION
+    FROM TABLE_MAHA9N
+    WHERE TABLE_MAHA9N_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ISANNF
+    WHERE TABLE_ISANNF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 5;
+        WHEN 'ORGANIC' THEN SET V_MIX_INDEX = (MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(-6)) - -566 + (v_conversion_count * 8);
+        WHEN 'SOCIAL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 6;
+        WHEN 'EMAIL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 7;
+        ELSE SET V_MIX_INDEX = V_CONVERSION_COUNT * 4;
+    END CASE;
+
+    RETURN V_MIX_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+CREATE TABLE IF NOT EXISTS `table_80vavx` (
+    `table_80vavx_lease_id` INT,
+    `table_80vavx_tenant_id` INT,
+    `table_80vavx_space_sqft` INT,
+    `table_80vavx_monthly_rate` INT,
+    `table_80vavx_start_date` DATE,
+    `table_80vavx_lease_term_months` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n274ub` (
+    `table_n274ub_tenant_id` INT,
+    `table_n274ub_company_name` VARCHAR(50),
+    `table_n274ub_industry` INT
+);
+
+INSERT INTO `table_80vavx` (`table_80vavx_lease_id`, `table_80vavx_tenant_id`, `table_80vavx_space_sqft`, `table_80vavx_monthly_rate`, `table_80vavx_start_date`, `table_80vavx_lease_term_months`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_n274ub` (`table_n274ub_tenant_id`, `table_n274ub_company_name`, `table_n274ub_industry`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(LEASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SPACE_SQFT INT DEFAULT 0;
+    DECLARE V_MONTHLY_RATE INT DEFAULT 50;
+    DECLARE V_LEASE_TERM INT DEFAULT 12;
+    DECLARE V_TOTAL_LEASE_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_80VAVX_SPACE_SQFT, 100), COALESCE(TABLE_80VAVX_MONTHLY_RATE, 50), COALESCE(TABLE_80VAVX_LEASE_TERM_MONTHS, 12)
+    INTO V_SPACE_SQFT, V_MONTHLY_RATE, V_LEASE_TERM
+    FROM TABLE_80VAVX
+    WHERE TABLE_80VAVX_LEASE_ID = LEASE_ID_PARAM;
+
+    SET V_TOTAL_LEASE_COST = V_SPACE_SQFT * V_MONTHLY_RATE * V_LEASE_TERM;
+
+    IF V_SPACE_SQFT > 5000 THEN
+        SET V_TOTAL_LEASE_COST = V_TOTAL_LEASE_COST - (V_TOTAL_LEASE_COST * 5 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_LEASE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv----- */
+CREATE TABLE IF NOT EXISTS `table_81q8gq` (
+    `table_81q8gq_meter_id` INT,
+    `table_81q8gq_customer_id` INT,
+    `table_81q8gq_meter_type` VARCHAR(50),
+    `table_81q8gq_current_reading` INT,
+    `table_81q8gq_previous_reading` INT,
+    `table_81q8gq_reading_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_94fi8f` (
+    `table_94fi8f_tariff_id` INT,
+    `table_94fi8f_tier_name` VARCHAR(50),
+    `table_94fi8f_min_units` INT,
+    `table_94fi8f_rate_per_unit` INT
+);
+
+INSERT INTO `table_81q8gq` (`table_81q8gq_meter_id`, `table_81q8gq_customer_id`, `table_81q8gq_meter_type`, `table_81q8gq_current_reading`, `table_81q8gq_previous_reading`, `table_81q8gq_reading_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_94fi8f` (`table_94fi8f_tariff_id`, `table_94fi8f_tier_name`, `table_94fi8f_min_units`, `table_94fi8f_rate_per_unit`) VALUES (1, '2024-01-01', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WATER_BILL_wguccv(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 25;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_81Q8GQ_CURRENT_READING, 0), COALESCE(TABLE_81Q8GQ_PREVIOUS_READING, 0)
+    INTO V_CURRENT_READING, V_PREVIOUS_READING
+    FROM TABLE_81Q8GQ
+    WHERE TABLE_81Q8GQ_METER_ID = METER_ID_PARAM;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 3);
+
+    IF V_CONSUMPTION > 100 THEN
+        SET V_TOTAL_BILL = V_TOTAL_BILL + ((V_CONSUMPTION - 100) * 5);
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+CREATE TABLE IF NOT EXISTS `table_djtr88` (
+    `table_djtr88_campaign_id` INT,
+    `table_djtr88_budget` INT
+);
+
+INSERT INTO `table_djtr88` (`table_djtr88_campaign_id`, `table_djtr88_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DJTR88_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_DJTR88
+    WHERE TABLE_DJTR88_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_MIN_LEVEL INT DEFAULT 0;
+    DECLARE V_NEEDS_REORDER INT DEFAULT 0;
+    DECLARE V_WAREHOUSE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2SXOYP_QUANTITY), 0), COUNT(DISTINCT TABLE_2SXOYP_WAREHOUSE_ID)
+    INTO V_TOTAL_STOCK, V_WAREHOUSE_COUNT
+    FROM TABLE_2SXOYP
+    WHERE TABLE_2SXOYP_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_WAREHOUSE_COUNT = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(73)) - -810 + ((MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(-99, -90)) - 428 + ((MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(-53)) - -673 + (1)));
+    END IF;
+
+    SET V_MIN_LEVEL = V_WAREHOUSE_COUNT * 100;
+
+    IF V_TOTAL_STOCK < V_MIN_LEVEL THEN
+        SET V_NEEDS_REORDER = 1;
+    ELSE
+        SET V_NEEDS_REORDER = 0;
+    END IF;
+
+    RETURN V_NEEDS_REORDER;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(1);

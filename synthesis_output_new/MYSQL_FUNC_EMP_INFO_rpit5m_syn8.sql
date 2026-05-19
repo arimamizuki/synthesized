@@ -1,0 +1,392 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_k95o9w (
+    table_k95o9w_emp_no INT,
+    table_k95o9w_first_name VARCHAR(50)
+);
+
+INSERT INTO table_k95o9w (`table_k95o9w_emp_no`, `table_k95o9w_first_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+CREATE TABLE IF NOT EXISTS `table_ejio0q` (
+    `table_ejio0q_campaign_id` INT,
+    `table_ejio0q_start_date` DATE
+);
+
+INSERT INTO `table_ejio0q` (`table_ejio0q_campaign_id`, `table_ejio0q_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_EJIO0Q_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_EJIO0Q
+    WHERE TABLE_EJIO0Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + (0);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), (MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(12)) - -622 + (0))
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+CREATE TABLE IF NOT EXISTS `table_7sluij` (
+    `table_7sluij_emp_id` INT,
+    `table_7sluij_manager_id` INT,
+    `table_7sluij_department_id` INT,
+    `table_7sluij_salary` INT
+);
+
+INSERT INTO `table_7sluij` (`table_7sluij_emp_id`, `table_7sluij_manager_id`, `table_7sluij_department_id`, `table_7sluij_salary`) VALUES (1, NULL, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT NULL AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT TABLE_7SLUIJ_MANAGER_ID INTO V_CURRENT_EMP FROM TABLE_7SLUIJ WHERE TABLE_7SLUIJ_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = V_DEPTH + 1;
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = (MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(28)) - 602 + (v_result * base);
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N < 0 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(6, 86, -3, -14)) - -737 + (-n);
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C + P_D;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+CREATE TABLE IF NOT EXISTS `table_ke34d4` (
+    `table_ke34d4_member_id` INT,
+    `table_ke34d4_tier_level` INT,
+    `table_ke34d4_total_miles` DECIMAL(10,2),
+    `table_ke34d4_miles_expired` INT,
+    `table_ke34d4_last_activity_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_y90k4n` (
+    `table_y90k4n_redemption_id` INT,
+    `table_y90k4n_member_id` INT,
+    `table_y90k4n_flight_id` INT,
+    `table_y90k4n_miles_used` INT,
+    `table_y90k4n_booking_date` DATE
+);
+
+INSERT INTO `table_ke34d4` (`table_ke34d4_member_id`, `table_ke34d4_tier_level`, `table_ke34d4_total_miles`, `table_ke34d4_miles_expired`, `table_ke34d4_last_activity_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+INSERT INTO `table_y90k4n` (`table_y90k4n_redemption_id`, `table_y90k4n_member_id`, `table_y90k4n_flight_id`, `table_y90k4n_miles_used`, `table_y90k4n_booking_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(MEMBER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_MILES INT DEFAULT 0;
+    DECLARE V_MILES_EXPIRED INT DEFAULT 0;
+    DECLARE V_CURRENT_TIER INT DEFAULT 1;
+    DECLARE V_UPGRADE_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KE34D4_TOTAL_MILES, 0), COALESCE(TABLE_KE34D4_MILES_EXPIRED, 0), TABLE_KE34D4_TIER_LEVEL
+    INTO V_TOTAL_MILES, V_MILES_EXPIRED, V_CURRENT_TIER
+    FROM TABLE_KE34D4
+    WHERE TABLE_KE34D4_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SET V_UPGRADE_POINTS = V_TOTAL_MILES - V_MILES_EXPIRED;
+
+    CASE V_CURRENT_TIER
+        WHEN 1 THEN
+            IF V_UPGRADE_POINTS >= 50000 THEN SET (MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + (v_upgrade_points) = V_UPGRADE_POINTS + 1000;
+            END IF;
+        WHEN 2 THEN
+            IF V_UPGRADE_POINTS >= 100000 THEN SET V_UPGRADE_POINTS = V_UPGRADE_POINTS + 2000;
+            END IF;
+        ELSE SET V_UPGRADE_POINTS = V_UPGRADE_POINTS;
+    END CASE;
+
+    RETURN CAST(V_UPGRADE_POINTS AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, 0), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_PAID_AMOUNT;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = (MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(-16, -20)) - 290 + (15);
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = (MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(-96)) - -484 + (10);
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (V_BALANCE_DUE * V_PENALTY_RATE) / 100;
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (V_SUBTOTAL * TAX_RATE_PERCENT) / 100;
+
+    RETURN V_TAX_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+CREATE TABLE IF NOT EXISTS `table_npdkhs` (
+    `table_npdkhs_emp_id` INT,
+    `table_npdkhs_department_id` INT,
+    `table_npdkhs_salary` INT,
+    `table_npdkhs_hire_date` DATE,
+    `table_npdkhs_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_npdkhs` (`table_npdkhs_emp_id`, `table_npdkhs_department_id`, `table_npdkhs_salary`, `table_npdkhs_hire_date`, `table_npdkhs_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NPDKHS_PERFORMANCE_RATING, 0), COALESCE(TABLE_NPDKHS_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_NPDKHS_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM TABLE_NPDKHS
+    WHERE TABLE_NPDKHS_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERF_RATIO = (V_PERFORMANCE * V_SALARY) / V_TENURE_YEARS;
+
+    RETURN FLOOR(V_PERF_RATIO / 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_INFO_rpit5m(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_K95O9W E 
+    WHERE TABLE_K95O9W_EMP_NO = P_EMP_NO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(14)) - 414 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(-6, 95)) - 952 + ((MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(-38)) - 455 + (result_count)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_EMP_INFO_rpit5m(1);

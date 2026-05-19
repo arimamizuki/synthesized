@@ -1,0 +1,465 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1140087 (v1140088 INT);
+CREATE TABLE IF NOT EXISTS v1140042 (v1140043 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1140307 (v1140308 INT NULL, v1140309 INT NULL, v1140310 VARCHAR(255) NULL, v1140311 VARCHAR(255) NULL) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf32;
+CREATE TABLE IF NOT EXISTS v1140336 (v1140337 DATETIME, CHECK (CAST(TIMESTAMP('2010-01-01 10:00:00') AS DATETIME) = v1140337));
+CREATE TABLE IF NOT EXISTS v1140123 (v1140124 DECIMAL(10,2), v1140125 INT);
+CREATE TABLE IF NOT EXISTS v1140322 (v1140324 INT);
+INSERT INTO v1140087 VALUES (0), (1), (2);
+INSERT INTO v1140042 VALUES ('memory/performance_schema/abc'), ('stage/innodb/xyz'), ('statement/com/def'), ('idle'), ('custom_value');
+INSERT INTO v1140307 VALUES (NULL, NULL, 'test', 'example');
+INSERT INTO v1140336 VALUES ('2010-01-01 10:00:00');
+INSERT INTO v1140123 VALUES (0.5, 10), (0.3, 20), (0.8, 30);
+INSERT INTO v1140322 VALUES (1), (2);
+
+/* -----Called: MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(LENGTH_PARAM INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PASSWORD VARCHAR(100) DEFAULT '';
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR_CODE INT DEFAULT 0;
+    DECLARE V_USE_SPECIAL INT DEFAULT 0;
+
+    IF LENGTH_PARAM <= 0 THEN
+        RETURN '';
+    END IF;
+
+    SET V_I = 1;
+
+    PASSWORD_LOOP: WHILE V_I <= LENGTH_PARAM DO
+        SET V_USE_SPECIAL = RAND() * 10;
+
+        IF V_USE_SPECIAL < 3 AND V_I < LENGTH_PARAM THEN
+            SET V_CHAR_CODE = RAND() * 10 + 33;
+        ELSEIF V_USE_SPECIAL < 6 THEN
+            SET V_CHAR_CODE = RAND() * 26 + 65;
+        ELSE
+            SET V_CHAR_CODE = RAND() * 26 + 97;
+        END IF;
+
+        SET V_PASSWORD = CONCAT(V_PASSWORD, CHAR(V_CHAR_CODE));
+        SET V_I = V_I + 1;
+    END WHILE PASSWORD_LOOP;
+
+    RETURN V_PASSWORD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+CREATE TABLE IF NOT EXISTS `table_o8t87v` (
+    `table_o8t87v_order_id` INT,
+    `table_o8t87v_customer_id` INT,
+    `table_o8t87v_order_date` DATE,
+    `table_o8t87v_total_amount` DECIMAL(10,2),
+    `table_o8t87v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_satxgm` (
+    `table_satxgm_order_id` INT,
+    `table_satxgm_product_id` INT,
+    `table_satxgm_quantity` INT,
+    `table_satxgm_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o8t87v` (`table_o8t87v_order_id`, `table_o8t87v_customer_id`, `table_o8t87v_order_date`, `table_o8t87v_total_amount`, `table_o8t87v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_satxgm` (`table_satxgm_order_id`, `table_satxgm_product_id`, `table_satxgm_quantity`, `table_satxgm_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(ORDER_ID_PARAM INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT;
+    DECLARE V_DISCOUNT INT;
+    DECLARE V_FINAL_PRICE INT;
+
+    SELECT COALESCE(SUM(TABLE_SATXGM_QUANTITY * TABLE_SATXGM_UNIT_PRICE), 0) INTO V_SUBTOTAL
+    FROM TABLE_SATXGM
+    WHERE TABLE_SATXGM_ORDER_ID = ORDER_ID_PARAM;
+
+    IF DISCOUNT_PERCENT < 0 THEN
+        SET DISCOUNT_PERCENT = 0;
+    ELSEIF DISCOUNT_PERCENT > 50 THEN
+        SET DISCOUNT_PERCENT = 50;
+    END IF;
+
+    SET V_DISCOUNT = V_SUBTOTAL * DISCOUNT_PERCENT / 100;
+    SET V_FINAL_PRICE = V_SUBTOTAL - V_DISCOUNT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(83)) - -929 + ((MYSQL_FUNC_MODULO_t8sg35(83, 64)) - 350 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(-90)) - 679 + ((MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(0)) - -639 + (v_final_price))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+CREATE TABLE IF NOT EXISTS `table_ik0x1s` (
+    `table_ik0x1s_campaign_id` INT,
+    `table_ik0x1s_start_date` DATE,
+    `table_ik0x1s_end_date` DATE,
+    `table_ik0x1s_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_np8rkj` (
+    `table_np8rkj_conversion_id` INT,
+    `table_np8rkj_campaign_id` INT,
+    `table_np8rkj_conversion_date` DATE
+);
+
+INSERT INTO `table_ik0x1s` (`table_ik0x1s_campaign_id`, `table_ik0x1s_start_date`, `table_ik0x1s_end_date`, `table_ik0x1s_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_np8rkj` (`table_np8rkj_conversion_id`, `table_np8rkj_campaign_id`, `table_np8rkj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_OLDER_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TREND INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_RECENT_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    SELECT COUNT(*)
+    INTO V_OLDER_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    AND TABLE_NP8RKJ_CONVERSION_DATE < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    IF V_OLDER_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TREND = ((V_RECENT_CONVERSIONS - V_OLDER_CONVERSIONS) * 100) / V_OLDER_CONVERSIONS;
+
+    RETURN V_TREND;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+CREATE TABLE IF NOT EXISTS `table_vj4mz4` (
+    `table_vj4mz4_campaign_id` INT,
+    `table_vj4mz4_status` VARCHAR(50)
+);
+
+INSERT INTO `table_vj4mz4` (`table_vj4mz4_campaign_id`, `table_vj4mz4_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ACTIVE_CHECK_tsxej9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_VJ4MZ4_STATUS
+    INTO V_STATUS
+    FROM TABLE_VJ4MZ4
+    WHERE TABLE_VJ4MZ4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE WHEN V_STATUS = 'ACTIVE' THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MODULO_t8sg35----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MODULO_t8sg35(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = (MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(-5)) - 893 + (0) THEN
+        RETURN 0;
+    END IF;
+    RETURN A % B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye----- */
+CREATE TABLE IF NOT EXISTS `table_xsp4oe` (
+    `table_xsp4oe_order_id` INT,
+    `table_xsp4oe_customer_id` INT,
+    `table_xsp4oe_order_status` VARCHAR(50),
+    `table_xsp4oe_total_amount` DECIMAL(10,2),
+    `table_xsp4oe_order_date` DATE
+);
+
+INSERT INTO `table_xsp4oe` (`table_xsp4oe_order_id`, `table_xsp4oe_customer_id`, `table_xsp4oe_order_status`, `table_xsp4oe_total_amount`, `table_xsp4oe_order_date`) VALUES (1, 2, 'test', 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PENDING_COUNT INT DEFAULT 0;
+    DECLARE V_PROCESSING_COUNT INT DEFAULT 0;
+    DECLARE V_SHIPPED_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_PENDING INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_PENDING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PENDING';
+
+    SELECT COUNT(*) INTO V_PROCESSING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PROCESSING';
+
+    SELECT COUNT(*) INTO V_SHIPPED_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'SHIPPED';
+
+    SET V_TOTAL_PENDING = (MYSQL_FUNC_CALCULATE_TOTAL_ORDER_VALUE_livx78(-51)) - -484 + (v_pending_count + v_processing_count);
+
+    RETURN V_TOTAL_PENDING;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_ORDER_VALUE_livx78----- */
+CREATE TABLE IF NOT EXISTS `table_a6pgkc` (
+    `table_a6pgkc_order_id` INT,
+    `table_a6pgkc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_a6pgkc` (`table_a6pgkc_order_id`, `table_a6pgkc_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_ORDER_VALUE_livx78----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_ORDER_VALUE_livx78(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_A6PGKC_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_A6PGKC
+    WHERE TABLE_A6PGKC_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(-63)) - -776 + (floor(v_total));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh----- */
+CREATE TABLE IF NOT EXISTS `table_vijb9n` (
+    `table_vijb9n_transaction_id` INT,
+    `table_vijb9n_account_id` INT,
+    `table_vijb9n_amount` DECIMAL(10,2),
+    `table_vijb9n_transaction_date` DATE,
+    `table_vijb9n_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vijb9n` (`table_vijb9n_transaction_id`, `table_vijb9n_account_id`, `table_vijb9n_amount`, `table_vijb9n_transaction_date`, `table_vijb9n_transaction_type`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_BALANCE_3l6fkh(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_VIJB9N_AMOUNT), 0) INTO V_TOTAL_CREDITS
+    FROM TABLE_VIJB9N
+    WHERE TABLE_VIJB9N_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_VIJB9N_TRANSACTION_TYPE = 'CREDIT';
+
+    SELECT COALESCE(SUM(TABLE_VIJB9N_AMOUNT), 0) INTO V_TOTAL_DEBITS
+    FROM TABLE_VIJB9N
+    WHERE TABLE_VIJB9N_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_VIJB9N_TRANSACTION_TYPE = 'DEBIT';
+
+    SET V_BALANCE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN V_BALANCE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+CREATE TABLE IF NOT EXISTS `table_ffie3d` (
+    `table_ffie3d_product_id` INT,
+    `table_ffie3d_category_id` INT,
+    `table_ffie3d_supplier_id` INT,
+    `table_ffie3d_unit_cost` DECIMAL(10,2),
+    `table_ffie3d_unit_price` DECIMAL(10,2),
+    `table_ffie3d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wl2lrm` (
+    `table_wl2lrm_order_id` INT,
+    `table_wl2lrm_product_id` INT,
+    `table_wl2lrm_quantity` INT
+);
+
+INSERT INTO `table_ffie3d` (`table_ffie3d_product_id`, `table_ffie3d_category_id`, `table_ffie3d_supplier_id`, `table_ffie3d_unit_cost`, `table_ffie3d_unit_price`, `table_ffie3d_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `table_wl2lrm` (`table_wl2lrm_order_id`, `table_wl2lrm_product_id`, `table_wl2lrm_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FFIE3D_UNIT_COST, (MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(2)) - 577 + (0)), COALESCE(TABLE_FFIE3D_UNIT_PRICE, 0), COALESCE(TABLE_FFIE3D_STOCK_QUANTITY, 0)
+    INTO V_UNIT_COST, V_UNIT_PRICE, V_STOCK_QUANTITY
+    FROM TABLE_FFIE3D
+    WHERE TABLE_FFIE3D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WL2LRM_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_WL2LRM
+    WHERE TABLE_WL2LRM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_UNIT_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_UNIT_PRICE - V_UNIT_COST) * 100) / V_UNIT_PRICE;
+
+    SET V_PROFITABILITY_INDEX = (V_PROFIT_MARGIN * V_SALES_VOLUME) / GREATEST(V_STOCK_QUANTITY, 1);
+
+    RETURN V_PROFITABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        IF V_TEMP MOD 2 = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = V_TEMP DIV 2;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0511_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_open_cache_hits INT DEFAULT 0;
+    DECLARE v_k INT DEFAULT 0;
+    DECLARE v_after INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE v_datetime_val DATETIME;
+    
+    DECLARE cur CURSOR FOR SELECT v1140308 FROM v1140307 WHERE v1140308 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    SET @open_cache_hits = p1;
+    SET @after = p2;
+    SET @k = p1 + p2;
+
+    -- First UPDATE statement (adapted with variables)
+    UPDATE v1140087 AS x1 SET v1140088 = @after WHERE @open_cache_hits + 1 = x1.v1140088;
+    
+    -- Check if update affected rows using ROW_COUNT()
+    IF ROW_COUNT() > 0 THEN
+        SET v_counter = (MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(-38)) - -908 + (v_counter) + 1;
+    END IF;
+
+    -- Second UPDATE statement (adapted with variables and conditions)
+    UPDATE v1140042 AS x0 SET v1140043 = @k 
+    WHERE NOT v1140043 LIKE 'memory/performance_schema/%' 
+      AND NOT v1140043 LIKE 'stage/innodb/%' 
+      AND NOT v1140043 LIKE 'statement/com/%' 
+      AND v1140043 <> 'idle';
+
+    -- Third statement: CREATE TABLE v1140307 (already exists, so we insert data with loop)
+    SET v_k = 0;
+    WHILE v_k < 3 DO
+        INSERT INTO v1140307 (v1140308, v1140309, v1140310, v1140311) 
+        VALUES (v_k, v_k + p1, CONCAT('value_', v_k), CONCAT('desc_', v_k));
+        SET v_k = v_k + 1;
+    END WHILE;
+
+    -- Fourth statement: Check constraint on v1140336 using CASE
+    SELECT v1140337 INTO v_datetime_val FROM v1140336 LIMIT 1;
+    
+    CASE 
+        WHEN v_datetime_val = CAST(TIMESTAMP('2010-01-01 10:00:00') AS DATETIME) THEN
+            SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(20, 55)) - -411 + (10);
+        ELSE
+            SET v_counter = v_counter - 10;
+    END CASE;
+
+    -- Fifth UPDATE statement with JOIN (adapted)
+    UPDATE v1140123 AS x1 
+    JOIN v1140322 AS x5 ON x1.v1140124 = x1.v1140125 
+    SET x1.v1140125 = 50 
+    WHERE x1.v1140124 BETWEEN 0.2 AND 0.9;
+
+    -- Use cursor to iterate over v1140307 and update v1140042
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1140042 SET v1140043 = CONCAT(v1140043, '_', v_val) 
+        WHERE v1140043 LIKE 'custom%';
+        
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0511_proc(1, 1, @out_result);
+
+SELECT @out_result;

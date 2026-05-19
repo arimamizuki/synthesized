@@ -1,0 +1,459 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_taeluc` (
+    `table_taeluc_customer_id` INT,
+    `table_taeluc_registration_date` DATE,
+    `table_taeluc_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nlsd5g` (
+    `table_nlsd5g_order_id` INT,
+    `table_nlsd5g_customer_id` INT,
+    `table_nlsd5g_order_date` DATE,
+    `table_nlsd5g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_taeluc` (`table_taeluc_customer_id`, `table_taeluc_registration_date`, `table_taeluc_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_nlsd5g` (`table_nlsd5g_order_id`, `table_nlsd5g_customer_id`, `table_nlsd5g_order_date`, `table_nlsd5g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_ozixtx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_ozixtx(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_ORIGINAL = (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(91)) - -565 + (num);
+    SET V_TEMP = ABS(NUM);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE REVERSE_LOOP;
+
+    IF V_ORIGINAL < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - -155 + (1);
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+CREATE TABLE IF NOT EXISTS `table_tpfwx5` (
+    `table_tpfwx5_campaign_id` INT,
+    `table_tpfwx5_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tpfwx5` (`table_tpfwx5_campaign_id`, `table_tpfwx5_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_TPFWX5_STATUS
+    INTO V_STATUS
+    FROM TABLE_TPFWX5
+    WHERE TABLE_TPFWX5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+CREATE TABLE IF NOT EXISTS `table_uhn84w` (
+    `table_uhn84w_emp_id` INT,
+    `table_uhn84w_salary` INT
+);
+
+INSERT INTO `table_uhn84w` (`table_uhn84w_emp_id`, `table_uhn84w_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_UHN84W_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_UHN84W
+    WHERE TABLE_UHN84W_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+CREATE TABLE IF NOT EXISTS `table_nw3b9o` (
+    `table_nw3b9o_zone_id` INT,
+    `table_nw3b9o_hourly_rate` INT,
+    `table_nw3b9o_max_capacity` INT,
+    `table_nw3b9o_current_occupied` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8u2yi0` (
+    `table_8u2yi0_trans_id` INT,
+    `table_8u2yi0_vehicle_id` INT,
+    `table_8u2yi0_zone_id` INT,
+    `table_8u2yi0_entry_time` DATE,
+    `table_8u2yi0_exit_time` DATE,
+    `table_8u2yi0_amount_paid` INT
+);
+
+INSERT INTO `table_nw3b9o` (`table_nw3b9o_zone_id`, `table_nw3b9o_hourly_rate`, `table_nw3b9o_max_capacity`, `table_nw3b9o_current_occupied`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_8u2yi0` (`table_8u2yi0_trans_id`, `table_8u2yi0_vehicle_id`, `table_8u2yi0_zone_id`, `table_8u2yi0_entry_time`, `table_8u2yi0_exit_time`, `table_8u2yi0_amount_paid`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(ZONE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_MAX_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_OCCUPIED INT DEFAULT 0;
+    DECLARE V_BASE_FEE INT DEFAULT 0;
+    DECLARE V_SURGE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NW3B9O_HOURLY_RATE, 10), COALESCE(TABLE_NW3B9O_MAX_CAPACITY, 100)
+    INTO V_HOURLY_RATE, V_MAX_CAPACITY
+    FROM TABLE_NW3B9O
+    WHERE TABLE_NW3B9O_ZONE_ID = ZONE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_OCCUPIED
+    FROM TABLE_8U2YI0
+    WHERE TABLE_8U2YI0_ZONE_ID = ZONE_ID_PARAM AND TABLE_8U2YI0_EXIT_TIME IS NULL;
+
+    SET V_BASE_FEE = (MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(25)) - -521 + (hours_param * v_hourly_rate);
+
+    IF V_CURRENT_OCCUPIED > V_MAX_CAPACITY * 80 / 100 THEN
+        SET V_SURGE_FEE = V_BASE_FEE * 25 / 100;
+    END IF;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + V_SURGE_FEE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(-23)) - -91 + (cast(v_total_fee as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+CREATE TABLE IF NOT EXISTS `table_t3oyhq` (
+    `table_t3oyhq_customer_id` INT,
+    `table_t3oyhq_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_e0ydbc` (
+    `table_e0ydbc_order_id` INT,
+    `table_e0ydbc_customer_id` INT,
+    `table_e0ydbc_order_date` DATE
+);
+
+INSERT INTO `table_t3oyhq` (`table_t3oyhq_customer_id`, `table_t3oyhq_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_e0ydbc` (`table_e0ydbc_order_id`, `table_e0ydbc_customer_id`, `table_e0ydbc_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MIN(TABLE_E0YDBC_ORDER_DATE), MAX(TABLE_E0YDBC_ORDER_DATE)
+    INTO V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_E0YDBC
+    WHERE TABLE_E0YDBC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(V_LAST_ORDER, V_FIRST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+CREATE TABLE IF NOT EXISTS `table_6kv6h0` (
+    `table_6kv6h0_emp_id` INT,
+    `table_6kv6h0_department_id` INT,
+    `table_6kv6h0_salary` INT,
+    `table_6kv6h0_hire_date` DATE,
+    `table_6kv6h0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6kv6h0` (`table_6kv6h0_emp_id`, `table_6kv6h0_department_id`, `table_6kv6h0_salary`, `table_6kv6h0_hire_date`, `table_6kv6h0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6KV6H0_SALARY, 0), COALESCE(TABLE_6KV6H0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_6KV6H0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_6KV6H0
+    WHERE TABLE_6KV6H0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf(-6)) - -769 + ((v_salary / 1000) + (v_performance * 10) + (v_tenure_years * 3));
+
+    RETURN V_COMP_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+CREATE TABLE IF NOT EXISTS `table_fxzaop` (
+    `table_fxzaop_emp_id` INT,
+    `table_fxzaop_hire_date` DATE
+);
+
+INSERT INTO `table_fxzaop` (`table_fxzaop_emp_id`, `table_fxzaop_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_FXZAOP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_FXZAOP
+    WHERE TABLE_FXZAOP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_TENURE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+CREATE TABLE IF NOT EXISTS `table_8jt2fd` (
+    `table_8jt2fd_contract_id` INT,
+    `table_8jt2fd_client_id` INT,
+    `table_8jt2fd_guard_id` INT,
+    `table_8jt2fd_contract_type` VARCHAR(50),
+    `table_8jt2fd_monthly_cost` DECIMAL(10,2),
+    `table_8jt2fd_num_guards` INT,
+    `table_8jt2fd_patrol_area_sqft` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yt4y9e` (
+    `table_yt4y9e_guard_id` INT,
+    `table_yt4y9e_name` VARCHAR(50),
+    `table_yt4y9e_experience_years` INT,
+    `table_yt4y9e_hourly_rate` INT
+);
+
+INSERT INTO `table_8jt2fd` (`table_8jt2fd_contract_id`, `table_8jt2fd_client_id`, `table_8jt2fd_guard_id`, `table_8jt2fd_contract_type`, `table_8jt2fd_monthly_cost`, `table_8jt2fd_num_guards`, `table_8jt2fd_patrol_area_sqft`) VALUES (1, 2, 3, 'test', 1.0, 6, 7);
+
+INSERT INTO `table_yt4y9e` (`table_yt4y9e_guard_id`, `table_yt4y9e_name`, `table_yt4y9e_experience_years`, `table_yt4y9e_hourly_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 5000;
+    DECLARE V_NUM_GUARDS INT DEFAULT 2;
+    DECLARE V_PATROL_AREA INT DEFAULT 10000;
+    DECLARE V_AREA_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8JT2FD_MONTHLY_COST, 5000), COALESCE(TABLE_8JT2FD_NUM_GUARDS, 2), COALESCE(TABLE_8JT2FD_PATROL_AREA_SQFT, 10000)
+    INTO V_MONTHLY_COST, V_NUM_GUARDS, V_PATROL_AREA
+    FROM TABLE_8JT2FD
+    WHERE TABLE_8JT2FD_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_TOTAL_VALUE = (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(-32)) - -105 + (v_monthly_cost * v_num_guards);
+
+    IF V_PATROL_AREA > 50000 THEN
+        SET V_AREA_SURCHARGE = V_TOTAL_VALUE * 20 / 100;
+        SET V_TOTAL_VALUE = V_TOTAL_VALUE + V_AREA_SURCHARGE;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(49)) - 149 + (cast(v_total_value as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+CREATE TABLE IF NOT EXISTS `table_iptn6x` (
+    `table_iptn6x_emp_id` INT,
+    `table_iptn6x_name` VARCHAR(50),
+    `table_iptn6x_salary` INT,
+    `table_iptn6x_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2qf3w0` (
+    `table_2qf3w0_emp_id` INT,
+    `table_2qf3w0_effective_date` DATE,
+    `table_2qf3w0_new_salary` INT,
+    `table_2qf3w0_change_reason` INT
+);
+
+INSERT INTO `table_iptn6x` (`table_iptn6x_emp_id`, `table_iptn6x_name`, `table_iptn6x_salary`, `table_iptn6x_hire_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_2qf3w0` (`table_2qf3w0_emp_id`, `table_2qf3w0_effective_date`, `table_2qf3w0_new_salary`, `table_2qf3w0_change_reason`) VALUES (1, '2024-01-01', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IPTN6X_SALARY, 0)
+    INTO V_INITIAL_SALARY
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_2QF3W0_NEW_SALARY, V_INITIAL_SALARY)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_2QF3W0
+    WHERE TABLE_2QF3W0_EMP_ID = EMP_ID_PARAM
+    ORDER BY TABLE_2QF3W0_EFFECTIVE_DATE DESC
+    LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_IPTN6X_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_PERCENTAGE = (((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / V_INITIAL_SALARY) / V_YEARS_EMPLOYED;
+
+    RETURN V_GROWTH_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+CREATE TABLE IF NOT EXISTS `table_6j2qnu` (
+    `table_6j2qnu_employee_id` INT,
+    `table_6j2qnu_department_id` INT,
+    `table_6j2qnu_salary` INT,
+    `table_6j2qnu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_qesw7k` (
+    `table_qesw7k_employee_id` INT,
+    `table_qesw7k_effective_date` DATE,
+    `table_qesw7k_salary_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6j2qnu` (`table_6j2qnu_employee_id`, `table_6j2qnu_department_id`, `table_6j2qnu_salary`, `table_6j2qnu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_qesw7k` (`table_qesw7k_employee_id`, `table_qesw7k_effective_date`, `table_qesw7k_salary_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, 0)
+    INTO V_INITIAL_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE ASC LIMIT 1;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, 0)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE DESC LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_6J2QNU_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_6J2QNU
+    WHERE TABLE_6J2QNU_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / (V_INITIAL_SALARY * V_YEARS_EMPLOYED);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_INACTIVE INT DEFAULT 0;
+    DECLARE V_REACTIVATION_COST INT DEFAULT 0;
+
+    SELECT MAX(TABLE_NLSD5G_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_NLSD5G
+    WHERE TABLE_NLSD5G_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(54)) - -121 + (0);
+    END IF;
+
+    SET V_DAYS_INACTIVE = DATEDIFF(CURDATE(), V_LAST_ORDER_DATE);
+
+    SET V_REACTIVATION_COST = (MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(-78, 28)) - -527 + ((MYSQL_FUNC_IS_PALINDROME_ozixtx(-53)) - 885 + (10 + (v_days_inactive / 30) * 5));
+
+    RETURN V_REACTIVATION_COST;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REACTIVATION_COST_r8ywjh(1);

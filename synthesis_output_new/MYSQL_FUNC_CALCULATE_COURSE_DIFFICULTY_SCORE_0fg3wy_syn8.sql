@@ -1,0 +1,392 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_5g7p83` (
+    `table_5g7p83_course_id` INT,
+    `table_5g7p83_department_id` INT,
+    `table_5g7p83_credits` INT,
+    `table_5g7p83_difficulty_level` INT,
+    `table_5g7p83_enrollment_capacity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q25s0v` (
+    `table_q25s0v_student_id` INT,
+    `table_q25s0v_course_id` INT,
+    `table_q25s0v_grade` INT,
+    `table_q25s0v_semester` INT
+);
+
+INSERT INTO `table_5g7p83` (`table_5g7p83_course_id`, `table_5g7p83_department_id`, `table_5g7p83_credits`, `table_5g7p83_difficulty_level`, `table_5g7p83_enrollment_capacity`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_q25s0v` (`table_q25s0v_student_id`, `table_q25s0v_course_id`, `table_q25s0v_grade`, `table_q25s0v_semester`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+CREATE TABLE IF NOT EXISTS `table_a3kxxw` (
+    `table_a3kxxw_campaign_id` INT,
+    `table_a3kxxw_status` VARCHAR(50),
+    `table_a3kxxw_start_date` DATE,
+    `table_a3kxxw_end_date` DATE
+);
+
+INSERT INTO `table_a3kxxw` (`table_a3kxxw_campaign_id`, `table_a3kxxw_status`, `table_a3kxxw_start_date`, `table_a3kxxw_end_date`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START DATE;
+    DECLARE V_END DATE;
+
+    SELECT TABLE_A3KXXW_START_DATE, TABLE_A3KXXW_END_DATE
+    INTO V_START, V_END
+    FROM TABLE_A3KXXW
+    WHERE TABLE_A3KXXW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END IS NULL OR V_START IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_PROC_VARCHAR_88hohl()) - -136 + (datediff(v_end, v_start));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VARCHAR_88hohl----- */
+CREATE TABLE IF NOT EXISTS `table_8mzigo` (
+    `table_8mzigo_cvarchar` VARCHAR(255)
+);
+
+INSERT INTO `table_8mzigo` (`table_8mzigo_cvarchar`) VALUES ('test');
+
+/* -----Called: MYSQL_FUNC_PROC_VARCHAR_88hohl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VARCHAR_88hohl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_8MZIGO`;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(71)) - 801 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz----- */
+CREATE TABLE IF NOT EXISTS `table_l7idkt` (
+    `table_l7idkt_supplier_id` INT,
+    `table_l7idkt_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_l7idkt` (`table_l7idkt_supplier_id`, `table_l7idkt_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_L7IDKT_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_L7IDKT
+    WHERE TABLE_L7IDKT_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 15);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+CREATE TABLE IF NOT EXISTS `table_uhea2z` (
+    `table_uhea2z_ship_id` INT,
+    `table_uhea2z_order_id` INT,
+    `table_uhea2z_weight` INT,
+    `table_uhea2z_shipping_cost` DECIMAL(10,2),
+    `table_uhea2z_zone` INT,
+    `table_uhea2z_delivery_days` INT
+);
+
+INSERT INTO `table_uhea2z` (`table_uhea2z_ship_id`, `table_uhea2z_order_id`, `table_uhea2z_weight`, `table_uhea2z_shipping_cost`, `table_uhea2z_zone`, `table_uhea2z_delivery_days`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(ORDER_ID_PARAM INT, ZONE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 500;
+    DECLARE V_ZONE_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UHEA2Z_WEIGHT, 0) INTO V_WEIGHT
+    FROM TABLE_UHEA2Z
+    WHERE TABLE_UHEA2Z_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE ZONE_PARAM
+        WHEN 1 THEN SET V_ZONE_COST = 0;
+        WHEN 2 THEN SET V_ZONE_COST = 100;
+        WHEN 3 THEN SET V_ZONE_COST = 200;
+        WHEN 4 THEN SET V_ZONE_COST = (MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(98)) - 179 + (300);
+        ELSE SET V_ZONE_COST = (MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u(69)) - 975 + (500);
+    END CASE;
+
+    SET V_TOTAL_COST = V_BASE_COST + (V_WEIGHT * 10) + V_ZONE_COST;
+
+    RETURN V_TOTAL_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u----- */
+CREATE TABLE IF NOT EXISTS `table_vnh9l5` (
+    `table_vnh9l5_customer_id` INT,
+    `table_vnh9l5_registration_date` DATE,
+    `table_vnh9l5_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vf1don` (
+    `table_vf1don_order_id` INT,
+    `table_vf1don_customer_id` INT,
+    `table_vf1don_order_date` DATE,
+    `table_vf1don_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vnh9l5` (`table_vnh9l5_customer_id`, `table_vnh9l5_registration_date`, `table_vnh9l5_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_vf1don` (`table_vf1don_order_id`, `table_vf1don_customer_id`, `table_vf1don_order_date`, `table_vf1don_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_RECENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(DATEDIFF(CURDATE(), MAX(TABLE_VF1DON_ORDER_DATE)), 999)
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_VF1DON
+    WHERE TABLE_VF1DON_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RECENCY_SCORE = 100 - LEAST(V_DAYS_SINCE_LAST_ORDER, 100);
+
+    RETURN V_RECENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF (MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi(48)) - 746 + (n) <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN 2;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_FACTOR = 3;
+
+    WHILE (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(6)) - -165 + (v_factor) <= V_SQRT_N DO
+        IF N % V_FACTOR = 0 THEN
+            RETURN V_FACTOR;
+        END IF;
+        SET V_FACTOR = V_FACTOR + 2;
+    END WHILE;
+
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi----- */
+CREATE TABLE IF NOT EXISTS `table_rv3do3` (
+    `table_rv3do3_customer_id` INT
+);
+
+INSERT INTO `table_rv3do3` (`table_rv3do3_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_BUCKET_fh4ymi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (CUSTOMER_ID_PARAM % 10) + 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn----- */
+CREATE TABLE IF NOT EXISTS `table_qy5ldq` (
+    `table_qy5ldq_order_id` INT,
+    `table_qy5ldq_customer_id` INT
+);
+
+INSERT INTO `table_qy5ldq` (`table_qy5ldq_order_id`, `table_qy5ldq_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_RATIO_rvx0gn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_QY5LDQ
+    WHERE TABLE_QY5LDQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_QY5LDQ;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(-32)) - 561 + ((v_order_count * 100) / v_total_orders);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+CREATE TABLE IF NOT EXISTS `table_btero6` (
+    `table_btero6_product_id` INT,
+    `table_btero6_category_id` INT,
+    `table_btero6_price` DECIMAL(10,2),
+    `table_btero6_stock_quantity` INT,
+    `table_btero6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_aomfn6` (
+    `table_aomfn6_supplier_id` INT,
+    `table_aomfn6_supplier_rating` DECIMAL(3,1),
+    `table_aomfn6_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_md6z0a` (
+    `table_md6z0a_order_id` INT,
+    `table_md6z0a_product_id` INT,
+    `table_md6z0a_quantity` INT
+);
+
+INSERT INTO `table_btero6` (`table_btero6_product_id`, `table_btero6_category_id`, `table_btero6_price`, `table_btero6_stock_quantity`, `table_btero6_supplier_id`) VALUES (1, 2, 1.0, 4, 5);
+
+INSERT INTO `table_aomfn6` (`table_aomfn6_supplier_id`, `table_aomfn6_supplier_rating`, `table_aomfn6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `table_md6z0a` (`table_md6z0a_order_id`, `table_md6z0a_product_id`, `table_md6z0a_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BTERO6_PRICE, 0), COALESCE(TABLE_BTERO6_STOCK_QUANTITY, 0), COALESCE(TABLE_AOMFN6_SUPPLIER_RATING, 3.0), COALESCE(TABLE_AOMFN6_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM TABLE_BTERO6 P
+    LEFT JOIN TABLE_AOMFN6 S ON TABLE_BTERO6_SUPPLIER_ID = TABLE_AOMFN6_SUPPLIER_ID
+    WHERE TABLE_BTERO6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MD6Z0A_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_MD6Z0A
+    WHERE TABLE_MD6Z0A_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (V_SUPPLIER_RATING * 20) - (V_LEAD_TIME * 2) + (V_SALES_VOLUME / 10);
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIFFICULTY_LEVEL INT DEFAULT 1;
+    DECLARE V_ENROLLMENT_CAPACITY INT DEFAULT 30;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_FAIL_RATE DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DIFFICULTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5G7P83_DIFFICULTY_LEVEL, 1), COALESCE(TABLE_5G7P83_ENROLLMENT_CAPACITY, 30)
+    INTO V_DIFFICULTY_LEVEL, V_ENROLLMENT_CAPACITY
+    FROM TABLE_5G7P83
+    WHERE TABLE_5G7P83_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_ENROLLMENT
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COALESCE(AVG(CASE TABLE_Q25S0V_GRADE WHEN 'F' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_FAIL_RATE
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SET V_DIFFICULTY_SCORE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(63)) - -880 + ((v_difficulty_level * 20) + ((v_current_enrollment * 100) / v_enrollment_capacity) + v_fail_rate);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(79, 89)) - -529 + ((MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7()) - 578 + (floor(v_difficulty_score)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(1);

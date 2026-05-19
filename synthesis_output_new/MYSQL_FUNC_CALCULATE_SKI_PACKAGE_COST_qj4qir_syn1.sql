@@ -1,0 +1,379 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_f1o54x` (
+    `table_f1o54x_ticket_id` INT,
+    `table_f1o54x_resort_id` INT,
+    `table_f1o54x_skier_id` INT,
+    `table_f1o54x_ticket_type` VARCHAR(50),
+    `table_f1o54x_num_days` INT,
+    `table_f1o54x_daily_rate` INT,
+    `table_f1o54x_total_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_22hjdu` (
+    `table_22hjdu_resort_id` INT,
+    `table_22hjdu_resort_name` VARCHAR(50),
+    `table_22hjdu_elevation` INT,
+    `table_22hjdu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_f1o54x` (`table_f1o54x_ticket_id`, `table_f1o54x_resort_id`, `table_f1o54x_skier_id`, `table_f1o54x_ticket_type`, `table_f1o54x_num_days`, `table_f1o54x_daily_rate`, `table_f1o54x_total_cost`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_22hjdu` (`table_22hjdu_resort_id`, `table_22hjdu_resort_name`, `table_22hjdu_elevation`, `table_22hjdu_base_price`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+CREATE TABLE IF NOT EXISTS `table_z79t7b` (
+    `table_z79t7b_sale_id` INT,
+    `table_z79t7b_property_id` INT,
+    `table_z79t7b_agent_id` INT,
+    `table_z79t7b_sale_price` DECIMAL(10,2),
+    `table_z79t7b_commission_rate` INT,
+    `table_z79t7b_agent_split_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vmfcd8` (
+    `table_vmfcd8_agent_id` INT,
+    `table_vmfcd8_name` VARCHAR(50),
+    `table_vmfcd8_years_experience` INT,
+    `table_vmfcd8_commission_rate` INT
+);
+
+INSERT INTO `table_z79t7b` (`table_z79t7b_sale_id`, `table_z79t7b_property_id`, `table_z79t7b_agent_id`, `table_z79t7b_sale_price`, `table_z79t7b_commission_rate`, `table_z79t7b_agent_split_percent`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+INSERT INTO `table_vmfcd8` (`table_vmfcd8_agent_id`, `table_vmfcd8_name`, `table_vmfcd8_years_experience`, `table_vmfcd8_commission_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(SALE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALE_PRICE INT DEFAULT 0;
+    DECLARE V_COMMISSION_RATE INT DEFAULT 3;
+    DECLARE V_AGENT_SPLIT INT DEFAULT 60;
+    DECLARE V_TOTAL_COMMISSION INT DEFAULT 0;
+    DECLARE V_AGENT_COMMISSION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Z79T7B_SALE_PRICE, 0), COALESCE(TABLE_Z79T7B_COMMISSION_RATE, 3)
+    INTO V_SALE_PRICE, V_COMMISSION_RATE
+    FROM TABLE_Z79T7B
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_Z79T7B_AGENT_SPLIT_PERCENT, 60) INTO V_AGENT_SPLIT
+    FROM TABLE_Z79T7B RC
+    JOIN TABLE_VMFCD8 A ON TABLE_Z79T7B_AGENT_ID = TABLE_VMFCD8_AGENT_ID
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SET V_TOTAL_COMMISSION = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(-36)) - -379 + (v_sale_price * v_commission_rate / 100);
+    SET V_AGENT_COMMISSION = (MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(83, 87, -62)) - -255 + (v_total_commission * v_agent_split / 100);
+
+    RETURN CAST(V_AGENT_COMMISSION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(SIZE INT, START_VALUE INT, INCREMENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF SIZE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_VALUE = START_VALUE;
+
+    SUM_LOOP: WHILE V_COUNTER < SIZE DO
+        SET V_SUM = V_SUM + V_CURRENT_VALUE;
+        SET V_CURRENT_VALUE = V_CURRENT_VALUE + INCREMENT;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+CREATE TABLE IF NOT EXISTS `table_eivnkn` (
+    `table_eivnkn_emp_id` INT,
+    `table_eivnkn_department_id` INT,
+    `table_eivnkn_salary` INT,
+    `table_eivnkn_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1bu658` (
+    `table_1bu658_department_id` INT,
+    `table_1bu658_name` VARCHAR(50)
+);
+
+INSERT INTO `table_eivnkn` (`table_eivnkn_emp_id`, `table_eivnkn_department_id`, `table_eivnkn_salary`, `table_eivnkn_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1bu658` (`table_1bu658_department_id`, `table_1bu658_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_SENIOR_COUNT INT DEFAULT 0;
+    DECLARE V_SENIORITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SENIOR_COUNT
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE()) >= 5;
+
+    SET V_SENIORITY_INDEX = (V_AVG_TENURE * 10) + (V_SENIOR_COUNT * 15);
+
+    RETURN V_SENIORITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx(-95)) - -133 + ((v_shipping_cost * 100) / v_order_value);
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_MULTIPLY_fu9vcy(80, -47)) - 613 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx----- */
+CREATE TABLE IF NOT EXISTS `table_nf5rcp` (
+    `table_nf5rcp_emp_id` INT,
+    `table_nf5rcp_department_id` INT,
+    `table_nf5rcp_salary` INT
+);
+
+INSERT INTO `table_nf5rcp` (`table_nf5rcp_emp_id`, `table_nf5rcp_department_id`, `table_nf5rcp_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_VALUE_INDEX_1tyolx(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_NF5RCP_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_NF5RCP
+    WHERE TABLE_NF5RCP_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_MULTIPLY_fu9vcy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_MULTIPLY_fu9vcy(N INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * MULTIPLIER;
+        SET N = N - 1;
+    UNTIL N <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+CREATE TABLE IF NOT EXISTS `table_qx6h07` (
+    `table_qx6h07_emp_id` INT,
+    `table_qx6h07_hire_date` DATE,
+    `table_qx6h07_salary` INT
+);
+
+INSERT INTO `table_qx6h07` (`table_qx6h07_emp_id`, `table_qx6h07_hire_date`, `table_qx6h07_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_QX6H07_HIRE_DATE, CURDATE()), COALESCE(TABLE_QX6H07_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_QX6H07
+    WHERE TABLE_QX6H07_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(21)) - 80 + ((MYSQL_FUNC_SUM_1_TO_N_qv6wf6(-93)) - 656 + ((v_tenure * 1000) + floor(v_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h()) - -820 + (floor(v_avg_tenure));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_10_4j2n5h() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUM_DAYS INT DEFAULT 1;
+    DECLARE V_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_ELEVATION INT DEFAULT 5000;
+    DECLARE V_ELEVATION_PREMIUM INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_F1O54X_NUM_DAYS, 1), COALESCE(TABLE_F1O54X_DAILY_RATE, 100)
+    INTO V_NUM_DAYS, V_DAILY_RATE
+    FROM TABLE_F1O54X
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_22HJDU_ELEVATION, 5000)
+    INTO V_ELEVATION
+    FROM TABLE_F1O54X SLT
+    JOIN TABLE_22HJDU SR ON TABLE_F1O54X_RESORT_ID = TABLE_22HJDU_RESORT_ID
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(52)) - 333 + (v_num_days * v_daily_rate);
+
+    IF V_ELEVATION > 8000 THEN
+        SET V_ELEVATION_PREMIUM = (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_SALARY_INDEX_wu4ieg(-72)) - 249 + ((MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (v_total_cost * 25 / 100));
+        SET V_TOTAL_COST = V_TOTAL_COST + V_ELEVATION_PREMIUM;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(1);

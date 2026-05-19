@@ -1,0 +1,387 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+CREATE TABLE IF NOT EXISTS `table_i7exsg` (
+    `table_i7exsg_campaign_id` INT,
+    `table_i7exsg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_i7exsg` (`table_i7exsg_campaign_id`, `table_i7exsg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_I7EXSG_STATUS
+    INTO V_STATUS
+    FROM TABLE_I7EXSG
+    WHERE TABLE_I7EXSG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'COMPLETED' THEN RETURN 75;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_ITEM_TOTAL_x6544h----- */
+CREATE TABLE IF NOT EXISTS table_imxics (
+    table_imxics_item_id INT,
+    table_imxics_quantity INT
+);
+
+INSERT INTO table_imxics (`table_imxics_item_id`, `table_imxics_quantity`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_ITEM_TOTAL_x6544h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ITEM_TOTAL_x6544h(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE TOTAL_AMOUNT_VAR INT;
+    
+    SELECT TABLE_IMXICS_QUANTITY * ITEM_ID_PARAM INTO TOTAL_AMOUNT_VAR
+    FROM TABLE_IMXICS
+    WHERE TABLE_IMXICS_ITEM_ID = ITEM_ID_PARAM;
+    
+    RETURN TOTAL_AMOUNT_VAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+CREATE TABLE IF NOT EXISTS `table_cejk8t` (
+    `table_cejk8t_campaign_id` INT,
+    `table_cejk8t_channel` INT,
+    `table_cejk8t_budget` INT,
+    `table_cejk8t_status` VARCHAR(50)
+);
+
+INSERT INTO `table_cejk8t` (`table_cejk8t_campaign_id`, `table_cejk8t_channel`, `table_cejk8t_budget`, `table_cejk8t_status`) VALUES (1, 1, 1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_CEJK8T_CHANNEL, COALESCE(TABLE_CEJK8T_BUDGET, (MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_20_jgmmg4()) - -162 + ((MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(-32)) - 204 + (0))), TABLE_CEJK8T_STATUS
+    INTO V_CHANNEL, V_BUDGET, V_STATUS
+    FROM TABLE_CEJK8T
+    WHERE TABLE_CEJK8T_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_BUDGET / 100
+        WHEN 'ORGANIC' THEN V_BUDGET / 50
+        WHEN 'SOCIAL' THEN V_BUDGET / 75
+        ELSE V_BUDGET / 100
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_INCREMENT_i2tr8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N + 1;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_20_jgmmg4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_20_jgmmg4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 3 UNION SELECT 5 UNION SELECT 7 UNION SELECT 9 UNION SELECT 11 UNION SELECT 13 UNION SELECT 15 UNION SELECT 17 UNION SELECT 19;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(-23)) - -91 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+CREATE TABLE IF NOT EXISTS `table_6kv6h0` (
+    `table_6kv6h0_emp_id` INT,
+    `table_6kv6h0_department_id` INT,
+    `table_6kv6h0_salary` INT,
+    `table_6kv6h0_hire_date` DATE,
+    `table_6kv6h0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6kv6h0` (`table_6kv6h0_emp_id`, `table_6kv6h0_department_id`, `table_6kv6h0_salary`, `table_6kv6h0_hire_date`, `table_6kv6h0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6KV6H0_SALARY, 0), COALESCE(TABLE_6KV6H0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_6KV6H0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_6KV6H0
+    WHERE TABLE_6KV6H0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (V_SALARY / 1000) + (V_PERFORMANCE * 10) + (V_TENURE_YEARS * 3);
+
+    RETURN V_COMP_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+CREATE TABLE IF NOT EXISTS `table_wq63dn` (
+    `table_wq63dn_invoice_id` INT,
+    `table_wq63dn_customer_id` INT,
+    `table_wq63dn_issue_date` DATE,
+    `table_wq63dn_due_date` DATE,
+    `table_wq63dn_total_amount` DECIMAL(10,2),
+    `table_wq63dn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_a5vkrv` (
+    `table_a5vkrv_payment_id` INT,
+    `table_a5vkrv_invoice_id` INT,
+    `table_a5vkrv_payment_date` DATE,
+    `table_a5vkrv_amount_paid` INT
+);
+
+INSERT INTO `table_wq63dn` (`table_wq63dn_invoice_id`, `table_wq63dn_customer_id`, `table_wq63dn_issue_date`, `table_wq63dn_due_date`, `table_wq63dn_total_amount`, `table_wq63dn_status`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_a5vkrv` (`table_a5vkrv_payment_id`, `table_a5vkrv_invoice_id`, `table_a5vkrv_payment_date`, `table_a5vkrv_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_AGING_DAYS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WQ63DN_TOTAL_AMOUNT, (MYSQL_FUNC_INSERT_CATEGORY_14nmvh(11)) - 549 + (0)), TABLE_WQ63DN_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_DUE_DATE
+    FROM TABLE_WQ63DN
+    WHERE TABLE_WQ63DN_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_A5VKRV_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_A5VKRV
+    WHERE TABLE_A5VKRV_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_AMOUNT_PAID;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AGING_DAYS = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF (MYSQL_FUNC_CALCULATE_GYM_MEMBER_SATISFACTION_iy03m4(0)) - 713 + (v_aging_days) < 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AGING_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INSERT_CATEGORY_14nmvh----- */
+CREATE TABLE IF NOT EXISTS table_idt4cg (
+    table_idt4cg_category_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_idt4cg_category_name VARCHAR(255)
+);
+
+INSERT INTO table_idt4cg (`table_idt4cg_category_id`, `table_idt4cg_category_name`) VALUES (1, 'TestCategory');
+
+/* -----Called: MYSQL_FUNC_INSERT_CATEGORY_14nmvh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INSERT_CATEGORY_14nmvh(CATEGORY_NAME_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE NEW_ID INT;
+    
+    INSERT INTO TABLE_IDT4CG (`TABLE_IDT4CG_CATEGORY_ID`, `TABLE_IDT4CG_CATEGORY_NAME`)
+    VALUES (DEFAULT, CAST(CATEGORY_NAME_PARAM AS CHAR));
+    
+    SET NEW_ID = LAST_INSERT_ID();
+    
+    RETURN NEW_ID;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GYM_MEMBER_SATISFACTION_iy03m4----- */
+CREATE TABLE IF NOT EXISTS `table_y1qd9j` (
+    `table_y1qd9j_gym_id` INT,
+    `table_y1qd9j_name` VARCHAR(50),
+    `table_y1qd9j_city` INT,
+    `table_y1qd9j_monthly_fee` INT,
+    `table_y1qd9j_equipment_count` INT,
+    `table_y1qd9j_member_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_idwxki` (
+    `table_idwxki_membership_id` INT,
+    `table_idwxki_gym_id` INT,
+    `table_idwxki_member_id` INT,
+    `table_idwxki_start_date` DATE,
+    `table_idwxki_end_date` DATE,
+    `table_idwxki_status` VARCHAR(50)
+);
+
+INSERT INTO `table_y1qd9j` (`table_y1qd9j_gym_id`, `table_y1qd9j_name`, `table_y1qd9j_city`, `table_y1qd9j_monthly_fee`, `table_y1qd9j_equipment_count`, `table_y1qd9j_member_count`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_idwxki` (`table_idwxki_membership_id`, `table_idwxki_gym_id`, `table_idwxki_member_id`, `table_idwxki_start_date`, `table_idwxki_end_date`, `table_idwxki_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GYM_MEMBER_SATISFACTION_iy03m4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GYM_MEMBER_SATISFACTION_iy03m4(GYM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_EQUIPMENT_COUNT INT DEFAULT 0;
+    DECLARE V_ACTIVE_MEMBERS INT DEFAULT 0;
+    DECLARE V_SATISFACTION_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y1QD9J_MONTHLY_FEE, 50), COALESCE(TABLE_Y1QD9J_EQUIPMENT_COUNT, 50)
+    INTO V_MONTHLY_FEE, V_EQUIPMENT_COUNT
+    FROM TABLE_Y1QD9J
+    WHERE TABLE_Y1QD9J_GYM_ID = GYM_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_ACTIVE_MEMBERS
+    FROM TABLE_IDWXKI
+    WHERE TABLE_IDWXKI_GYM_ID = GYM_ID_PARAM AND TABLE_IDWXKI_STATUS = 'ACTIVE';
+
+    SET V_SATISFACTION_SCORE = (MYSQL_FUNC_FILM_IN_STOCK_eky5dj(-19, -15)) - 794 + ((v_equipment_count / 5) + (v_active_members / 10) - (v_monthly_fee / 10));
+
+    RETURN V_SATISFACTION_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+CREATE TABLE IF NOT EXISTS table_8j3nma (
+    table_8j3nma_inventory_id INT PRIMARY KEY,
+    table_8j3nma_film_id INT,
+    table_8j3nma_store_id INT
+);
+
+INSERT INTO table_8j3nma (`table_8j3nma_inventory_id`, `table_8j3nma_film_id`, `table_8j3nma_store_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_IN_STOCK_eky5dj(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE P_FILM_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    FROM TABLE_8J3NMA
+    WHERE TABLE_8J3NMA_FILM_ID = P_FILM_ID
+    AND TABLE_8J3NMA_STORE_ID = P_STORE_ID
+    AND TABLE_8J3NMA_INVENTORY_ID > 0
+    INTO P_FILM_COUNT;
+
+    RETURN P_FILM_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, (MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(31)) - -295 + (0)), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(48)) - -245 + (v_balance + v_overdraft_limit);
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = (MYSQL_FUNC_CALCULATE_INVOICE_AGING_DAYS_7ifthi(20)) - 219 + ((MYSQL_FUNC_ITEM_TOTAL_x6544h(90)) - 240 + (1));
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN V_CAN_WITHDRAW;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(1, 1);

@@ -1,0 +1,372 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_o5invk` (
+    `table_o5invk_supplier_id` INT,
+    `table_o5invk_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_o5invk` (`table_o5invk_supplier_id`, `table_o5invk_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_CALC_o7geaq(-8)) - -303 + (v_result * v_i);
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_CALC_o7geaq----- */
+CREATE TABLE IF NOT EXISTS `table_lbqv5m` (
+    `table_lbqv5m_supplier_id` INT,
+    `table_lbqv5m_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_lbqv5m` (`table_lbqv5m_supplier_id`, `table_lbqv5m_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_CALC_o7geaq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_CALC_o7geaq(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_LBQV5M_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_LBQV5M
+    WHERE TABLE_LBQV5M_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+CREATE TABLE IF NOT EXISTS `table_q6xalv` (
+    `table_q6xalv_customer_id` INT,
+    `table_q6xalv_registration_date` DATE
+);
+
+INSERT INTO `table_q6xalv` (`table_q6xalv_customer_id`, `table_q6xalv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_Q6XALV_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_Q6XALV
+    WHERE TABLE_Q6XALV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(83, 87, -62)) - -255 + ((MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(49)) - -348 + (v_week));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+CREATE TABLE IF NOT EXISTS `table_0lv4pt` (
+    `table_0lv4pt_case_id` INT,
+    `table_0lv4pt_attorney_id` INT,
+    `table_0lv4pt_case_type` VARCHAR(50),
+    `table_0lv4pt_filing_date` DATE,
+    `table_0lv4pt_settlement_amount` DECIMAL(10,2),
+    `table_0lv4pt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ljafqt` (
+    `table_ljafqt_attorney_id` INT,
+    `table_ljafqt_name` VARCHAR(50),
+    `table_ljafqt_hourly_rate` INT,
+    `table_ljafqt_experience_years` INT
+);
+
+INSERT INTO `table_0lv4pt` (`table_0lv4pt_case_id`, `table_0lv4pt_attorney_id`, `table_0lv4pt_case_type`, `table_0lv4pt_filing_date`, `table_0lv4pt_settlement_amount`, `table_0lv4pt_status`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ljafqt` (`table_ljafqt_attorney_id`, `table_ljafqt_name`, `table_ljafqt_hourly_rate`, `table_ljafqt_experience_years`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SETTLEMENT_AMOUNT INT DEFAULT 0;
+    DECLARE V_ATTORNEY_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CASE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0LV4PT_SETTLEMENT_AMOUNT, 0)
+    INTO V_SETTLEMENT_AMOUNT
+    FROM TABLE_0LV4PT
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LJAFQT_HOURLY_RATE, 200)
+    INTO V_HOURLY_RATE
+    FROM TABLE_0LV4PT LC
+    JOIN TABLE_LJAFQT A ON TABLE_0LV4PT_ATTORNEY_ID = TABLE_LJAFQT_ATTORNEY_ID
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SET V_CASE_VALUE = V_SETTLEMENT_AMOUNT;
+
+    IF V_CASE_VALUE > 100000 THEN
+        SET V_CASE_VALUE = V_CASE_VALUE - (V_CASE_VALUE * 10 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(-100)) - 942 + (cast(v_case_value as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+CREATE TABLE IF NOT EXISTS `table_siem0e` (
+    `table_siem0e_order_id` INT,
+    `table_siem0e_customer_id` INT,
+    `table_siem0e_order_date` DATE,
+    `table_siem0e_total_amount` DECIMAL(10,2),
+    `table_siem0e_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ivbzho` (
+    `table_ivbzho_order_id` INT,
+    `table_ivbzho_product_id` INT,
+    `table_ivbzho_quantity` INT
+);
+
+INSERT INTO `table_siem0e` (`table_siem0e_order_id`, `table_siem0e_customer_id`, `table_siem0e_order_date`, `table_siem0e_total_amount`, `table_siem0e_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ivbzho` (`table_ivbzho_order_id`, `table_ivbzho_product_id`, `table_ivbzho_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_AFFINITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_IVBZHO_PRODUCT_ID), COALESCE(SUM(TABLE_IVBZHO_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_IVBZHO
+    WHERE TABLE_IVBZHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_AFFINITY_SCORE = V_UNIQUE_PRODUCTS * 10 + V_TOTAL_QUANTITY * 2;
+
+    RETURN V_AFFINITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_ARRAY_ELEMENTS_09look(SIZE INT, START_VALUE INT, INCREMENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF SIZE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_VALUE = START_VALUE;
+
+    SUM_LOOP: WHILE V_COUNTER < SIZE DO
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + (v_sum) + V_CURRENT_VALUE;
+        SET V_CURRENT_VALUE = (MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(54)) - -121 + (v_current_value + increment);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+CREATE TABLE IF NOT EXISTS `table_8jt2fd` (
+    `table_8jt2fd_contract_id` INT,
+    `table_8jt2fd_client_id` INT,
+    `table_8jt2fd_guard_id` INT,
+    `table_8jt2fd_contract_type` VARCHAR(50),
+    `table_8jt2fd_monthly_cost` DECIMAL(10,2),
+    `table_8jt2fd_num_guards` INT,
+    `table_8jt2fd_patrol_area_sqft` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yt4y9e` (
+    `table_yt4y9e_guard_id` INT,
+    `table_yt4y9e_name` VARCHAR(50),
+    `table_yt4y9e_experience_years` INT,
+    `table_yt4y9e_hourly_rate` INT
+);
+
+INSERT INTO `table_8jt2fd` (`table_8jt2fd_contract_id`, `table_8jt2fd_client_id`, `table_8jt2fd_guard_id`, `table_8jt2fd_contract_type`, `table_8jt2fd_monthly_cost`, `table_8jt2fd_num_guards`, `table_8jt2fd_patrol_area_sqft`) VALUES (1, 2, 3, 'test', 1.0, 6, 7);
+
+INSERT INTO `table_yt4y9e` (`table_yt4y9e_guard_id`, `table_yt4y9e_name`, `table_yt4y9e_experience_years`, `table_yt4y9e_hourly_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 5000;
+    DECLARE V_NUM_GUARDS INT DEFAULT 2;
+    DECLARE V_PATROL_AREA INT DEFAULT 10000;
+    DECLARE V_AREA_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8JT2FD_MONTHLY_COST, 5000), COALESCE(TABLE_8JT2FD_NUM_GUARDS, 2), COALESCE(TABLE_8JT2FD_PATROL_AREA_SQFT, 10000)
+    INTO V_MONTHLY_COST, V_NUM_GUARDS, V_PATROL_AREA
+    FROM TABLE_8JT2FD
+    WHERE TABLE_8JT2FD_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_MONTHLY_COST * V_NUM_GUARDS;
+
+    IF V_PATROL_AREA > 50000 THEN
+        SET V_AREA_SURCHARGE = V_TOTAL_VALUE * 20 / 100;
+        SET V_TOTAL_VALUE = V_TOTAL_VALUE + V_AREA_SURCHARGE;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(88, -30)) - -568 + (cast(v_total_value as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(-37, 16)) - 432 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+CREATE TABLE IF NOT EXISTS table_4tkghb (
+    table_4tkghb_inventory_id INT PRIMARY KEY,
+    table_4tkghb_film_id INT,
+    table_4tkghb_store_id INT
+);
+
+CREATE TABLE IF NOT EXISTS table_qb1ggy (
+    table_qb1ggy_rental_id INT PRIMARY KEY,
+    table_qb1ggy_inventory_id INT,
+    table_qb1ggy_return_date DATE
+);
+
+INSERT INTO table_4tkghb (`table_4tkghb_inventory_id`, `table_4tkghb_film_id`, `table_4tkghb_store_id`) VALUES (1, 2, 3);
+
+INSERT INTO table_qb1ggy (`table_qb1ggy_rental_id`, `table_qb1ggy_inventory_id`, `table_qb1ggy_return_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE FILM_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*)
+    INTO FILM_COUNT
+    FROM TABLE_4TKGHB
+    WHERE TABLE_4TKGHB_FILM_ID = P_FILM_ID
+    AND TABLE_4TKGHB_STORE_ID = P_STORE_ID
+    AND NOT EXISTS (
+        SELECT 1 FROM TABLE_QB1GGY 
+        WHERE TABLE_QB1GGY.TABLE_QB1GGY_INVENTORY_ID = TABLE_4TKGHB.TABLE_4TKGHB_INVENTORY_ID 
+        AND TABLE_QB1GGY.TABLE_QB1GGY_RETURN_DATE IS NULL
+    );
+    
+    RETURN FILM_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN 10;
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_55vl8b(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_O5INVK_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_O5INVK
+    WHERE TABLE_O5INVK_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_WEEK_OF_YEAR_j64v6s(62)) - -411 + ((MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(40)) - -9 + (floor(v_rating * 15)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_55vl8b(1);

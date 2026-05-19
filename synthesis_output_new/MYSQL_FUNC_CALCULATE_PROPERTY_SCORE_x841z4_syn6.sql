@@ -1,0 +1,361 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+CREATE TABLE IF NOT EXISTS `table_6vqrgc` (
+    `table_6vqrgc_emp_id` INT,
+    `table_6vqrgc_salary` INT
+);
+
+INSERT INTO `table_6vqrgc` (`table_6vqrgc_emp_id`, `table_6vqrgc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_6VQRGC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_6VQRGC
+    WHERE TABLE_6VQRGC_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(-61)) - 169 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(-77)) - 833 + (floor(v_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+CREATE TABLE IF NOT EXISTS `table_9g21mv` (
+    `table_9g21mv_product_id` INT,
+    `table_9g21mv_category_id` INT,
+    `table_9g21mv_price` DECIMAL(10,2),
+    `table_9g21mv_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_knzctc` (
+    `table_knzctc_order_id` INT,
+    `table_knzctc_product_id` INT,
+    `table_knzctc_quantity` INT
+);
+
+INSERT INTO `table_9g21mv` (`table_9g21mv_product_id`, `table_9g21mv_category_id`, `table_9g21mv_price`, `table_9g21mv_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_knzctc` (`table_knzctc_order_id`, `table_knzctc_product_id`, `table_knzctc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_PRODUCT_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_KNZCTC;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_PRODUCT_ORDERS
+    FROM TABLE_KNZCTC
+    WHERE TABLE_KNZCTC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_ORDERS = (MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-22, -100)) - 716 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION_RATE = (V_PRODUCT_ORDERS * 100) / V_TOTAL_ORDERS;
+
+    RETURN V_PENETRATION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(SET_OF_LETTERS INT, WORD INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SET_OF_LETTERS_STR VARCHAR(50);
+    DECLARE WORD_STR VARCHAR(50);
+    
+    SET SET_OF_LETTERS_STR = CAST(SET_OF_LETTERS AS CHAR);
+    SET WORD_STR = CAST(WORD AS CHAR);
+    
+    RETURN (SELECT WORD_STR REGEXP SET_OF_LETTERS_STR);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(START_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE START_VAL > 0 DO
+        SET V_RESULT = V_RESULT + START_VAL;
+        SET START_VAL = START_VAL - 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+CREATE TABLE IF NOT EXISTS `table_btero6` (
+    `table_btero6_product_id` INT,
+    `table_btero6_category_id` INT,
+    `table_btero6_price` DECIMAL(10,2),
+    `table_btero6_stock_quantity` INT,
+    `table_btero6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_aomfn6` (
+    `table_aomfn6_supplier_id` INT,
+    `table_aomfn6_supplier_rating` DECIMAL(3,1),
+    `table_aomfn6_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_md6z0a` (
+    `table_md6z0a_order_id` INT,
+    `table_md6z0a_product_id` INT,
+    `table_md6z0a_quantity` INT
+);
+
+INSERT INTO `table_btero6` (`table_btero6_product_id`, `table_btero6_category_id`, `table_btero6_price`, `table_btero6_stock_quantity`, `table_btero6_supplier_id`) VALUES (1, 2, 1.0, 4, 5);
+
+INSERT INTO `table_aomfn6` (`table_aomfn6_supplier_id`, `table_aomfn6_supplier_rating`, `table_aomfn6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `table_md6z0a` (`table_md6z0a_order_id`, `table_md6z0a_product_id`, `table_md6z0a_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BTERO6_PRICE, 0), COALESCE(TABLE_BTERO6_STOCK_QUANTITY, 0), COALESCE(TABLE_AOMFN6_SUPPLIER_RATING, 3.0), COALESCE(TABLE_AOMFN6_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM TABLE_BTERO6 P
+    LEFT JOIN TABLE_AOMFN6 S ON TABLE_BTERO6_SUPPLIER_ID = TABLE_AOMFN6_SUPPLIER_ID
+    WHERE TABLE_BTERO6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MD6Z0A_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_MD6Z0A
+    WHERE TABLE_MD6Z0A_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (V_SUPPLIER_RATING * 20) - (V_LEAD_TIME * 2) + (V_SALES_VOLUME / 10);
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn----- */
+CREATE TABLE IF NOT EXISTS `table_bkf1vk` (
+    `table_bkf1vk_department_id` INT,
+    `table_bkf1vk_salary` INT
+);
+
+INSERT INTO `table_bkf1vk` (`table_bkf1vk_department_id`, `table_bkf1vk_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_BKF1VK_SALARY), 0)
+    INTO V_AVG
+    FROM TABLE_BKF1VK
+    WHERE TABLE_BKF1VK_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(88, -38)) - -356 + (floor(v_avg / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(95)) - 488 + ((MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(-72)) - -876 + (a * b)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+CREATE TABLE IF NOT EXISTS `table_whrfd8` (
+    `table_whrfd8_product_id` INT,
+    `table_whrfd8_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_whrfd8` (`table_whrfd8_product_id`, `table_whrfd8_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_WHRFD8_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_WHRFD8
+    WHERE TABLE_WHRFD8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+CREATE TABLE IF NOT EXISTS `table_6dotge` (
+    `table_6dotge_customer_id` INT,
+    `table_6dotge_order_date` DATE
+);
+
+INSERT INTO `table_6dotge` (`table_6dotge_customer_id`, `table_6dotge_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(MAX(TABLE_6DOTGE_ORDER_DATE))
+    INTO V_MONTH
+    FROM TABLE_6DOTGE
+    WHERE TABLE_6DOTGE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SCORE_bz7yxn(-47)) - -358 + ((MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(-32)) - 561 + ((MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(-41)) - 417 + ((v_bedrooms * 20) + (v_bathrooms * 15) + (v_square_feet / 100) + ((2024 - v_year_built) * 2) + (v_feature_count * 10))));
+
+    RETURN V_PROPERTY_SCORE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(1);

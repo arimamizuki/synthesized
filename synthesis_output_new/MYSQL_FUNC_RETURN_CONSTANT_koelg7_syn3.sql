@@ -1,0 +1,326 @@
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(TAXABLE INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX DECIMAL(10,2);
+
+    CASE
+        WHEN TAXABLE <= 10000 THEN SET V_TAX = TAXABLE * 0.10;
+        WHEN TAXABLE <= 50000 THEN SET V_TAX = 1000 + (TAXABLE - 10000) * 0.20;
+        WHEN TAXABLE <= 100000 THEN SET V_TAX = (MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy()) - -427 + (9000 + (taxable - 50000) * 0.30);
+        ELSE SET V_TAX = 24000 + (TAXABLE - 100000) * 0.40;
+    END CASE;
+
+    RETURN V_TAX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_196_REPEAT_tuj3hy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE REPEAT_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    REPEAT
+        SET I = I + 1;
+        SET REPEAT_COUNT = (MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(-31)) - 915 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(-80)) - 507 + ((MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(-98, 26)) - 600 + (repeat_count))) + 1;
+    UNTIL I >= 3 END REPEAT;
+    
+    RETURN REPEAT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_AREA / 100) * 10;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_ROOMS * 15);
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 150 / 100;
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+CREATE TABLE IF NOT EXISTS `table_bzkg88` (
+    `table_bzkg88_customer_id` INT,
+    `table_bzkg88_registration_date` DATE
+);
+
+INSERT INTO `table_bzkg88` (`table_bzkg88_customer_id`, `table_bzkg88_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACQUISITION_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BZKG88_REGISTRATION_DATE)
+    INTO V_ACQUISITION_YEAR
+    FROM TABLE_BZKG88
+    WHERE TABLE_BZKG88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ACQUISITION_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+CREATE TABLE IF NOT EXISTS `table_38k1vq` (
+    `table_38k1vq_table_id` INT,
+    `table_38k1vq_restaurant_id` INT,
+    `table_38k1vq_capacity` INT,
+    `table_38k1vq_is_outdoor` INT,
+    `table_38k1vq_view_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4e93b8` (
+    `table_4e93b8_reservation_id` INT,
+    `table_4e93b8_table_id` INT,
+    `table_4e93b8_customer_id` INT,
+    `table_4e93b8_party_size` INT,
+    `table_4e93b8_reservation_date` DATE,
+    `table_4e93b8_duration_minutes` INT
+);
+
+INSERT INTO `table_38k1vq` (`table_38k1vq_table_id`, `table_38k1vq_restaurant_id`, `table_38k1vq_capacity`, `table_38k1vq_is_outdoor`, `table_38k1vq_view_type`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_4e93b8` (`table_4e93b8_reservation_id`, `table_4e93b8_table_id`, `table_4e93b8_customer_id`, `table_4e93b8_party_size`, `table_4e93b8_reservation_date`, `table_4e93b8_duration_minutes`) VALUES (1, 2, 3, 4, '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(TABLE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 4;
+    DECLARE V_IS_OUTDOOR INT DEFAULT 0;
+    DECLARE V_RESERVATION_COUNT INT DEFAULT 0;
+    DECLARE V_REVENUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_38K1VQ_CAPACITY, 4), COALESCE(TABLE_38K1VQ_IS_OUTDOOR, 0)
+    INTO V_CAPACITY, V_IS_OUTDOOR
+    FROM TABLE_38K1VQ
+    WHERE TABLE_38K1VQ_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVATION_COUNT
+    FROM TABLE_4E93B8
+    WHERE TABLE_4E93B8_TABLE_ID = TABLE_ID_PARAM
+      AND TABLE_4E93B8_RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_REVENUE_SCORE = (MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - 797 + (v_capacity * v_reservation_count);
+
+    IF V_IS_OUTDOOR = 1 THEN
+        SET V_REVENUE_SCORE = V_REVENUE_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_REVENUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusterset_members (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusters (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusterset_members (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusters (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERS C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GCD_OF_NUMBERS_llwutn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GCD_OF_NUMBERS_llwutn(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN SET A = -A; END IF;
+    IF B < 0 THEN SET B = -(MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + (b); END IF;
+
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_EMP_INFO_rpit5m(-29)) - 978 + ((MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(-81, -74, 100)) - 813 + (floor((v_price * v_stock) / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C) / 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+CREATE TABLE IF NOT EXISTS table_k95o9w (
+    table_k95o9w_emp_no INT,
+    table_k95o9w_first_name VARCHAR(50)
+);
+
+INSERT INTO table_k95o9w (`table_k95o9w_emp_no`, `table_k95o9w_first_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_INFO_rpit5m(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_K95O9W E 
+    WHERE TABLE_K95O9W_EMP_NO = P_EMP_NO;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_GCD_OF_NUMBERS_llwutn(8, 32)) - 396 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(55)) - -95 + (42));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_RETURN_CONSTANT_koelg7();

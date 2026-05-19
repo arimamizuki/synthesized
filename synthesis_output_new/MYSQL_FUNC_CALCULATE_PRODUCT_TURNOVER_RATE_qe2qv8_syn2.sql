@@ -1,0 +1,425 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = 30;
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = V_DISCOUNT + 20;
+    END IF;
+
+    SET V_FINAL_FARE = (MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(60)) - -138 + ((MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(94, 16)) - 161 + (25 - (25 * v_discount / 100)));
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(P_N INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_D = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(-62)) - 862 + (-(MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - -792 + (1));
+    END IF;
+
+    IF P_N MOD P_D = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+CREATE TABLE IF NOT EXISTS `table_fove5m` (
+    `table_fove5m_country` INT
+);
+
+INSERT INTO `table_fove5m` (`table_fove5m_country`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FOVE5M
+    WHERE TABLE_FOVE5M_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+CREATE TABLE IF NOT EXISTS `table_54mt9z` (
+    `table_54mt9z_emp_id` INT,
+    `table_54mt9z_department_id` INT,
+    `table_54mt9z_salary` INT,
+    `table_54mt9z_hire_date` DATE,
+    `table_54mt9z_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_54mt9z` (`table_54mt9z_emp_id`, `table_54mt9z_department_id`, `table_54mt9z_salary`, `table_54mt9z_hire_date`, `table_54mt9z_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_54MT9Z_HIRE_DATE, CURDATE()), COALESCE(TABLE_54MT9Z_PERFORMANCE_RATING, 0), COALESCE(TABLE_54MT9Z_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_54MT9Z
+    WHERE TABLE_54MT9Z_EMP_ID = EMP_ID_PARAM;
+
+    SET V_LOYALTY_SCORE = (MYSQL_FUNC_REVERSE_NUMBER_jcfo74(84)) - -975 + ((v_tenure_years * 15) + (v_performance * 20) + (v_salary / 1000));
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(-92)) - 757 + (v_loyalty_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+CREATE TABLE IF NOT EXISTS `table_4lnfav` (
+    `table_4lnfav_product_id` INT,
+    `table_4lnfav_category_id` INT,
+    `table_4lnfav_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rrjep2` (
+    `table_rrjep2_category_id` INT,
+    `table_rrjep2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_4lnfav` (`table_4lnfav_product_id`, `table_4lnfav_category_id`, `table_4lnfav_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_rrjep2` (`table_rrjep2_category_id`, `table_rrjep2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_4LNFAV
+    WHERE TABLE_4LNFAV_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_OVERALL_AVG
+    FROM TABLE_4LNFAV;
+
+    IF V_OVERALL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_RATIO = (MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(22)) - -456 + ((v_category_avg / v_overall_avg) * 100);
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+CREATE TABLE IF NOT EXISTS `table_9ug538` (
+    `table_9ug538_campaign_id` INT,
+    `table_9ug538_start_date` DATE,
+    `table_9ug538_end_date` DATE,
+    `table_9ug538_budget` INT,
+    `table_9ug538_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_me64fy` (
+    `table_me64fy_conversion_id` INT,
+    `table_me64fy_campaign_id` INT,
+    `table_me64fy_conversion_date` DATE
+);
+
+INSERT INTO `table_9ug538` (`table_9ug538_campaign_id`, `table_9ug538_start_date`, `table_9ug538_end_date`, `table_9ug538_budget`, `table_9ug538_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_me64fy` (`table_me64fy_conversion_id`, `table_me64fy_campaign_id`, `table_me64fy_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VELOCITY_zpi56c(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAMPAIGN_DAYS INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_VELOCITY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT DATEDIFF(TABLE_9UG538_END_DATE, TABLE_9UG538_START_DATE)
+    INTO V_CAMPAIGN_DAYS
+    FROM TABLE_9UG538
+    WHERE TABLE_9UG538_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CONVERSIONS
+    FROM TABLE_ME64FY
+    WHERE TABLE_ME64FY_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY = V_TOTAL_CONVERSIONS / V_CAMPAIGN_DAYS;
+
+    RETURN FLOOR(V_VELOCITY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_REVERSE_NUMBER_jcfo74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_NUMBER_jcfo74(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+
+    IF NUM < 0 THEN
+        SET V_IS_NEGATIVE = 1;
+        SET NUM = -NUM;
+    END IF;
+
+    REVERSE_LOOP: WHILE NUM > 0 DO
+        SET V_DIGIT = (MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(-54)) - -932 + (num mod 10);
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET NUM = NUM DIV 10;
+    END WHILE REVERSE_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        RETURN -V_REVERSED;
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+CREATE TABLE IF NOT EXISTS `table_k70n3e` (
+    `table_k70n3e_order_id` INT,
+    `table_k70n3e_customer_id` INT,
+    `table_k70n3e_store_id` INT,
+    `table_k70n3e_order_date` DATE,
+    `table_k70n3e_total_amount` DECIMAL(10,2),
+    `table_k70n3e_delivery_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ty3v91` (
+    `table_ty3v91_store_id` INT,
+    `table_ty3v91_name` VARCHAR(50),
+    `table_ty3v91_region` INT,
+    `table_ty3v91_delivery_radius_miles` INT
+);
+
+INSERT INTO `table_k70n3e` (`table_k70n3e_order_id`, `table_k70n3e_customer_id`, `table_k70n3e_store_id`, `table_k70n3e_order_date`, `table_k70n3e_total_amount`, `table_k70n3e_delivery_fee`) VALUES (1, 2, 3, '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_ty3v91` (`table_ty3v91_store_id`, `table_ty3v91_name`, `table_ty3v91_region`, `table_ty3v91_delivery_radius_miles`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_DISTANCE_CHARGE_tcdh4y(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DELIVERY_FEE INT DEFAULT 5;
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_ADDITIONAL_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_DELIVERY_FEE INT DEFAULT 0;
+
+    SELECT TABLE_TY3V91_DELIVERY_RADIUS_MILES INTO V_DELIVERY_RADIUS
+    FROM TABLE_K70N3E O
+    JOIN TABLE_TY3V91 S ON TABLE_K70N3E_STORE_ID = TABLE_TY3V91_STORE_ID
+    WHERE TABLE_K70N3E_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_DELIVERY_RADIUS > 10 THEN
+        SET V_ADDITIONAL_FEE = (V_DELIVERY_RADIUS - 10) * 2;
+    END IF;
+
+    SET V_TOTAL_DELIVERY_FEE = V_BASE_DELIVERY_FEE + V_ADDITIONAL_FEE;
+
+    RETURN CAST(V_TOTAL_DELIVERY_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, (MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (0))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + (v_turnover_rate);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(1);

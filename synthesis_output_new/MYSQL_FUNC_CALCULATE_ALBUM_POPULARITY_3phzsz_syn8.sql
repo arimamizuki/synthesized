@@ -1,0 +1,434 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_u7y4da` (
+    `table_u7y4da_album_id` INT,
+    `table_u7y4da_artist_id` INT,
+    `table_u7y4da_title` INT,
+    `table_u7y4da_release_year` INT,
+    `table_u7y4da_total_tracks` DECIMAL(10,2),
+    `table_u7y4da_duration_seconds` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8qww15` (
+    `table_8qww15_track_id` INT,
+    `table_8qww15_album_id` INT,
+    `table_8qww15_track_number` INT,
+    `table_8qww15_duration` INT,
+    `table_8qww15_play_count` INT
+);
+
+INSERT INTO `table_u7y4da` (`table_u7y4da_album_id`, `table_u7y4da_artist_id`, `table_u7y4da_title`, `table_u7y4da_release_year`, `table_u7y4da_total_tracks`, `table_u7y4da_duration_seconds`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_8qww15` (`table_8qww15_track_id`, `table_8qww15_album_id`, `table_8qww15_track_number`, `table_8qww15_duration`, `table_8qww15_play_count`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz----- */
+CREATE TABLE IF NOT EXISTS `table_7qjl7o` (
+    `table_7qjl7o_customer_id` INT,
+    `table_7qjl7o_status` VARCHAR(50),
+    `table_7qjl7o_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7qjl7o` (`table_7qjl7o_customer_id`, `table_7qjl7o_status`, `table_7qjl7o_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_7QJL7O_STATUS, COALESCE(TABLE_7QJL7O_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_7QJL7O
+    WHERE TABLE_7QJL7O_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+CREATE TABLE IF NOT EXISTS `table_9duxm5` (
+    `table_9duxm5_emp_id` INT,
+    `table_9duxm5_department_id` INT,
+    `table_9duxm5_salary` INT
+);
+
+INSERT INTO `table_9duxm5` (`table_9duxm5_emp_id`, `table_9duxm5_department_id`, `table_9duxm5_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9DUXM5
+    WHERE TABLE_9DUXM5_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1(-92)) - -763 + ((MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx(56)) - -967 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx----- */
+CREATE TABLE IF NOT EXISTS `table_fwmz6s` (
+    `table_fwmz6s_product_id` INT,
+    `table_fwmz6s_category_id` INT,
+    `table_fwmz6s_brand_id` INT,
+    `table_fwmz6s_price` DECIMAL(10,2),
+    `table_fwmz6s_cost` DECIMAL(10,2),
+    `table_fwmz6s_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_itdide` (
+    `table_itdide_supplier_id` INT,
+    `table_itdide_brand_id` INT,
+    `table_itdide_lead_time_days` DATE,
+    `table_itdide_reliability_score` INT
+);
+
+INSERT INTO `table_fwmz6s` (`table_fwmz6s_product_id`, `table_fwmz6s_category_id`, `table_fwmz6s_brand_id`, `table_fwmz6s_price`, `table_fwmz6s_cost`, `table_fwmz6s_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `table_itdide` (`table_itdide_supplier_id`, `table_itdide_brand_id`, `table_itdide_lead_time_days`, `table_itdide_reliability_score`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLY_CHAIN_RISK_u6f6tx(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 90;
+    DECLARE V_DAILY_DEMAND INT DEFAULT 10;
+    DECLARE V_STOCKOUT_RISK_DAYS INT DEFAULT 0;
+    DECLARE V_SUPPLY_RISK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FWMZ6S_STOCK_QUANTITY, 100)
+    INTO V_STOCK_QUANTITY
+    FROM TABLE_FWMZ6S
+    WHERE TABLE_FWMZ6S_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_ITDIDE_LEAD_TIME_DAYS, 7), COALESCE(TABLE_ITDIDE_RELIABILITY_SCORE, 90)
+    INTO V_LEAD_TIME, V_RELIABILITY_SCORE
+    FROM TABLE_ITDIDE S
+    JOIN TABLE_FWMZ6S P ON TABLE_ITDIDE_BRAND_ID = TABLE_FWMZ6S_BRAND_ID
+    WHERE TABLE_FWMZ6S_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DAILY_DEMAND = 10;
+    SET V_STOCKOUT_RISK_DAYS = V_STOCK_QUANTITY / V_DAILY_DEMAND;
+
+    IF V_STOCKOUT_RISK_DAYS < V_LEAD_TIME THEN
+        SET V_SUPPLY_RISK = 50 + ((V_LEAD_TIME - V_STOCKOUT_RISK_DAYS) * 5);
+    ELSE
+        SET V_SUPPLY_RISK = 100 - V_RELIABILITY_SCORE;
+    END IF;
+
+    RETURN V_SUPPLY_RISK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_TRIPLE_l5ezx1(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_N * 3;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+CREATE TABLE IF NOT EXISTS `table_98hbly` (
+    `table_98hbly_category_id` INT,
+    `table_98hbly_stock_quantity` INT
+);
+
+INSERT INTO `table_98hbly` (`table_98hbly_category_id`, `table_98hbly_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_98HBLY
+    WHERE TABLE_98HBLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_98HBLY_STOCK_QUANTITY < 20;
+
+    RETURN (MYSQL_FUNC_DROPVIEWS_m4b55o(45)) - -722 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+CREATE TABLE IF NOT EXISTS table_ojycmm (
+    table_ojycmm_table_schema VARCHAR(64),
+    table_ojycmm_table_name VARCHAR(64)
+);
+
+INSERT INTO table_ojycmm (`table_ojycmm_table_schema`, `table_ojycmm_table_name`) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DROPVIEWS_m4b55o(PV_DATABASE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LV_STMT VARCHAR(1024);
+    DECLARE LV_VIEW_NAME VARCHAR(64);
+    DECLARE FETCHED INT DEFAULT 0;
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT 0;
+    
+    DECLARE VIEW_CURSOR CURSOR FOR
+        SELECT TABLE_OJYCMM_TABLE_NAME 
+        FROM TABLE_OJYCMM 
+        WHERE TABLE_OJYCMM_TABLE_SCHEMA = IFNULL(CONVERT(PV_DATABASE USING UTF8), DATABASE())
+        ORDER BY TABLE_OJYCMM_TABLE_NAME;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+    
+    OPEN VIEW_CURSOR;
+    
+    CURSOR_LOOP: LOOP
+        FETCH VIEW_CURSOR INTO LV_VIEW_NAME;
+        IF DONE = 1 THEN
+            LEAVE CURSOR_LOOP;
+        END IF;
+        
+        SET @SQL := CONCAT('DROP VIEW ', LV_VIEW_NAME);
+        SET VIEW_COUNT = VIEW_COUNT + 1;
+        
+        SET LV_STMT = @SQL;
+    END LOOP CURSOR_LOOP;
+    
+    CLOSE VIEW_CURSOR;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusterset_members (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusters (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusterset_members (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusters (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERS C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(-52)) - -744 + (1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+CREATE TABLE IF NOT EXISTS `table_8dni6g` (
+    `table_8dni6g_customer_id` INT,
+    `table_8dni6g_country` INT
+);
+
+INSERT INTO `table_8dni6g` (`table_8dni6g_customer_id`, `table_8dni6g_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8DNI6G
+    WHERE TABLE_8DNI6G_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(-19)) - 396 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+CREATE TABLE IF NOT EXISTS `table_m40ho1` (
+    `table_m40ho1_product_id` INT,
+    `table_m40ho1_category_id` INT,
+    `table_m40ho1_price` DECIMAL(10,2),
+    `table_m40ho1_is_active` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_42moy1` (
+    `table_42moy1_category_id` INT,
+    `table_42moy1_parent_id` INT,
+    `table_42moy1_category_level` INT
+);
+
+INSERT INTO `table_m40ho1` (`table_m40ho1_product_id`, `table_m40ho1_category_id`, `table_m40ho1_price`, `table_m40ho1_is_active`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_42moy1` (`table_42moy1_category_id`, `table_42moy1_parent_id`, `table_42moy1_category_level`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_LEVEL INT DEFAULT 0;
+    DECLARE V_CURRENT_CAT INT;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_MAX_LEVEL INT DEFAULT 10;
+    DECLARE V_LEVEL INT DEFAULT 0;
+
+    DECLARE CAT_CURSOR CURSOR FOR
+        SELECT TABLE_42MOY1_CATEGORY_ID FROM TABLE_42MOY1 WHERE TABLE_42MOY1_PARENT_ID = V_CURRENT_CAT;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    SELECT COALESCE(TABLE_42MOY1_CATEGORY_LEVEL, 0) INTO V_CATEGORY_LEVEL
+    FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_CURRENT_CAT = CATEGORY_ID_PARAM;
+
+    LEVEL_LOOP: WHILE V_LEVEL < V_MAX_LEVEL AND V_DONE = 0 DO
+        SELECT COALESCE(SUM(TABLE_M40HO1_PRICE), 0) INTO V_TOTAL_PRICE
+        FROM TABLE_M40HO1
+        WHERE TABLE_M40HO1_CATEGORY_ID = V_CURRENT_CAT AND TABLE_M40HO1_IS_ACTIVE = 1;
+
+        SELECT TABLE_42MOY1_PARENT_ID INTO V_CURRENT_CAT
+        FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = V_CURRENT_CAT;
+
+        IF V_CURRENT_CAT IS NULL OR V_CURRENT_CAT = 0 THEN
+            SET V_DONE = 1;
+        END IF;
+
+        SET V_LEVEL = V_LEVEL + 1;
+    END WHILE LEVEL_LOOP;
+
+    RETURN V_TOTAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+CREATE TABLE IF NOT EXISTS `table_vevirx` (
+    `table_vevirx_order_id` INT,
+    `table_vevirx_customer_id` INT,
+    `table_vevirx_order_date` DATE,
+    `table_vevirx_total_amount` DECIMAL(10,2),
+    `table_vevirx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5od72a` (
+    `table_5od72a_refund_id` INT,
+    `table_5od72a_order_id` INT,
+    `table_5od72a_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vevirx` (`table_vevirx_order_id`, `table_vevirx_customer_id`, `table_vevirx_order_date`, `table_vevirx_total_amount`, `table_vevirx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_5od72a` (`table_5od72a_refund_id`, `table_5od72a_order_id`, `table_5od72a_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NPS_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEVIRX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_VEVIRX
+    WHERE TABLE_VEVIRX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5OD72A_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_5OD72A
+    WHERE TABLE_5OD72A_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NPS_CONTRIBUTION = V_ORDER_TOTAL - (V_REFUND_TOTAL * 2);
+
+    RETURN V_NPS_CONTRIBUTION;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(ALBUM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PLAYS INT DEFAULT 0;
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_DURATION INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_8QWW15_PLAY_COUNT), (MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(-64)) - 182 + ((MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(17)) - -679 + (0))), COUNT(*), COALESCE(AVG(TABLE_8QWW15_DURATION), 0)
+    INTO V_TOTAL_PLAYS, V_TRACK_COUNT, V_AVG_DURATION
+    FROM TABLE_8QWW15
+    WHERE TABLE_8QWW15_ALBUM_ID = ALBUM_ID_PARAM;
+
+    IF V_TRACK_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = V_TOTAL_PLAYS / V_TRACK_COUNT;
+
+    IF V_AVG_DURATION > 240 THEN
+        SET V_POPULARITY_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-6)) - 990 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_INDEX_ea7dyz(-70)) - 594 + (v_popularity_score + 100));
+    END IF;
+
+    RETURN (MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - 797 + (cast(v_popularity_score as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ALBUM_POPULARITY_3phzsz(1);

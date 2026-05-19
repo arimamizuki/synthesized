@@ -1,0 +1,412 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qoro1u` (
+    `table_qoro1u_campaign_id` INT,
+    `table_qoro1u_channel` INT
+);
+
+INSERT INTO `table_qoro1u` (`table_qoro1u_campaign_id`, `table_qoro1u_channel`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+CREATE TABLE IF NOT EXISTS `table_trsfbl` (
+    `table_trsfbl_emp_id` INT,
+    `table_trsfbl_manager_id` INT,
+    `table_trsfbl_department_id` INT
+);
+
+INSERT INTO `table_trsfbl` (`table_trsfbl_emp_id`, `table_trsfbl_manager_id`, `table_trsfbl_department_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RANK_3g5c6a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_TRSFBL_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_TRSFBL
+    WHERE TABLE_TRSFBL_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(-37)) - 439 + (v_dept_id);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+CREATE TABLE IF NOT EXISTS `table_gg067m` (
+    `table_gg067m_rental_id` INT,
+    `table_gg067m_customer_id` INT,
+    `table_gg067m_boat_id` INT,
+    `table_gg067m_rental_hours` INT,
+    `table_gg067m_hourly_rate` INT,
+    `table_gg067m_fuel_included` INT,
+    `table_gg067m_captain_required` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1tuyv7` (
+    `table_1tuyv7_boat_id` INT,
+    `table_1tuyv7_boat_type` VARCHAR(50),
+    `table_1tuyv7_make` INT,
+    `table_1tuyv7_model` INT,
+    `table_1tuyv7_length_feet` INT,
+    `table_1tuyv7_capacity` INT
+);
+
+INSERT INTO `table_gg067m` (`table_gg067m_rental_id`, `table_gg067m_customer_id`, `table_gg067m_boat_id`, `table_gg067m_rental_hours`, `table_gg067m_hourly_rate`, `table_gg067m_fuel_included`, `table_gg067m_captain_required`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_1tuyv7` (`table_1tuyv7_boat_id`, `table_1tuyv7_boat_type`, `table_1tuyv7_make`, `table_1tuyv7_model`, `table_1tuyv7_length_feet`, `table_1tuyv7_capacity`) VALUES (1, 'test', 3, 4, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 4;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CAPTAIN_FEE INT DEFAULT 150;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GG067M_RENTAL_HOURS, 4), COALESCE(TABLE_GG067M_HOURLY_RATE, 200), COALESCE(TABLE_GG067M_CAPTAIN_REQUIRED, 0)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE, V_CAPTAIN_FEE
+    FROM TABLE_GG067M
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT TABLE_1TUYV7_LENGTH_FEET * 5 INTO V_FUEL_SURCHARGE
+    FROM TABLE_GG067M BR
+    JOIN TABLE_1TUYV7 B ON TABLE_GG067M_BOAT_ID = TABLE_1TUYV7_BOAT_ID
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM AND TABLE_GG067M_FUEL_INCLUDED = 0;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(-2)) - -429 + (v_rental_hours * v_hourly_rate + v_fuel_surcharge);
+
+    IF V_CAPTAIN_FEE > 0 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + V_CAPTAIN_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+CREATE TABLE IF NOT EXISTS `table_ot2tv9` (
+    `table_ot2tv9_system_id` INT,
+    `table_ot2tv9_customer_id` INT,
+    `table_ot2tv9_system_type` VARCHAR(50),
+    `table_ot2tv9_monitoring_monthly` INT,
+    `table_ot2tv9_equipment_cost` DECIMAL(10,2),
+    `table_ot2tv9_installation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ysvqnk` (
+    `table_ysvqnk_alert_id` INT,
+    `table_ysvqnk_system_id` INT,
+    `table_ysvqnk_alert_date` DATE,
+    `table_ysvqnk_alert_type` VARCHAR(50),
+    `table_ysvqnk_response_time_minutes` DATE
+);
+
+INSERT INTO `table_ot2tv9` (`table_ot2tv9_system_id`, `table_ot2tv9_customer_id`, `table_ot2tv9_system_type`, `table_ot2tv9_monitoring_monthly`, `table_ot2tv9_equipment_cost`, `table_ot2tv9_installation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ysvqnk` (`table_ysvqnk_alert_id`, `table_ysvqnk_system_id`, `table_ysvqnk_alert_date`, `table_ysvqnk_alert_type`, `table_ysvqnk_response_time_minutes`) VALUES (1, 2, '2024-01-01', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(SYSTEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONITORING_MONTHLY INT DEFAULT 30;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_ALERT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_RESPONSE_TIME INT DEFAULT 0;
+    DECLARE V_SECURITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OT2TV9_MONITORING_MONTHLY, 30), COALESCE(TABLE_OT2TV9_EQUIPMENT_COST, 500)
+    INTO V_MONITORING_MONTHLY, V_EQUIPMENT_COST
+    FROM TABLE_OT2TV9
+    WHERE TABLE_OT2TV9_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_YSVQNK_RESPONSE_TIME_MINUTES), 0)
+    INTO V_ALERT_COUNT, V_AVG_RESPONSE_TIME
+    FROM TABLE_YSVQNK
+    WHERE TABLE_YSVQNK_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SET V_SECURITY_SCORE = (MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(57)) - -190 + (100 - (v_alert_count * 5) - (v_avg_response_time / 2));
+
+    RETURN CAST(V_SECURITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+CREATE TABLE IF NOT EXISTS `table_w25bcy` (
+    `table_w25bcy_order_id` INT,
+    `table_w25bcy_customer_id` INT,
+    `table_w25bcy_order_date` DATE,
+    `table_w25bcy_total_amount` DECIMAL(10,2),
+    `table_w25bcy_discount_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bv9gwj` (
+    `table_bv9gwj_product_id` INT,
+    `table_bv9gwj_name` VARCHAR(50),
+    `table_bv9gwj_price` DECIMAL(10,2),
+    `table_bv9gwj_category_id` INT
+);
+
+INSERT INTO `table_w25bcy` (`table_w25bcy_order_id`, `table_w25bcy_customer_id`, `table_w25bcy_order_date`, `table_w25bcy_total_amount`, `table_w25bcy_discount_percent`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_bv9gwj` (`table_bv9gwj_product_id`, `table_bv9gwj_name`, `table_bv9gwj_price`, `table_bv9gwj_category_id`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TAX_RATE INT DEFAULT 8;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_TOTAL INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_BV9GWJ_PRICE * FLOOR(RAND() * 10 + 1)), 0) INTO V_SUBTOTAL
+    FROM TABLE_W25BCY BO
+    JOIN TABLE_BV9GWJ P ON RAND() > 0.5
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_W25BCY_DISCOUNT_PERCENT, 0) INTO V_DISCOUNT
+    FROM TABLE_W25BCY
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT = LEAST(V_DISCOUNT, 50);
+
+    SET V_FINAL_TOTAL = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT / 100);
+    SET V_TAX_AMOUNT = V_FINAL_TOTAL * V_TAX_RATE / 100;
+    SET V_FINAL_TOTAL = V_FINAL_TOTAL + V_TAX_AMOUNT;
+
+    RETURN CAST(V_FINAL_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+CREATE TABLE IF NOT EXISTS `table_g5e0fi` (
+    `table_g5e0fi_product_id` INT,
+    `table_g5e0fi_stock_quantity` INT
+);
+
+INSERT INTO `table_g5e0fi` (`table_g5e0fi_product_id`, `table_g5e0fi_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_LEVEL_TIER_tx7zqi(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G5E0FI_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_G5E0FI
+    WHERE TABLE_G5E0FI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK > 1000 THEN
+        RETURN 5;
+    ELSEIF V_STOCK > 500 THEN
+        RETURN (MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(-58)) - 1000 + (4);
+    ELSEIF V_STOCK > 100 THEN
+        RETURN 3;
+    ELSEIF V_STOCK > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT_POSITION INT DEFAULT 1;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    IF V_TEMP = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 2;
+        SET V_RESULT = V_RESULT + (V_DIGIT * V_DIGIT_POSITION);
+        SET V_TEMP = V_TEMP DIV 2;
+        SET V_DIGIT_POSITION = V_DIGIT_POSITION * 10;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, (MYSQL_FUNC_SAFE_DIVIDE_5yo93a(93, -83)) - 250 + ((MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(62)) - 457 + (0))), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+CREATE TABLE IF NOT EXISTS `table_ebp46e` (
+    `table_ebp46e_customer_id` INT,
+    `table_ebp46e_plan_type` VARCHAR(50),
+    `table_ebp46e_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebp46e` (`table_ebp46e_customer_id`, `table_ebp46e_plan_type`, `table_ebp46e_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_DISCOUNT_INDEX_ck9tqb(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_EBP46E_PLAN_TYPE, COALESCE(TABLE_EBP46E_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_EBP46E
+    WHERE TABLE_EBP46E_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST / 2;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST / 3;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST / 4;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_DIVIDE_5yo93a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_DIVIDE_5yo93a(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012' BEGIN SET V_RESULT = 0; END;
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '2201I' BEGIN SET V_RESULT = 0; END;
+
+    IF B = (MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - 850 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = A / B;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_QORO1U_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_QORO1U
+    WHERE TABLE_QORO1U_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CHANNEL_TYPE_INDEX_wo5lbt(1);

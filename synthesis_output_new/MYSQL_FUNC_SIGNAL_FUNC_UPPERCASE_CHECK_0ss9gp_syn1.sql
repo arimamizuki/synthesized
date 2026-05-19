@@ -1,0 +1,342 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+CREATE TABLE IF NOT EXISTS `table_btero6` (
+    `table_btero6_product_id` INT,
+    `table_btero6_category_id` INT,
+    `table_btero6_price` DECIMAL(10,2),
+    `table_btero6_stock_quantity` INT,
+    `table_btero6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_aomfn6` (
+    `table_aomfn6_supplier_id` INT,
+    `table_aomfn6_supplier_rating` DECIMAL(3,1),
+    `table_aomfn6_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_md6z0a` (
+    `table_md6z0a_order_id` INT,
+    `table_md6z0a_product_id` INT,
+    `table_md6z0a_quantity` INT
+);
+
+INSERT INTO `table_btero6` (`table_btero6_product_id`, `table_btero6_category_id`, `table_btero6_price`, `table_btero6_stock_quantity`, `table_btero6_supplier_id`) VALUES (1, 2, 1.0, 4, 5);
+
+INSERT INTO `table_aomfn6` (`table_aomfn6_supplier_id`, `table_aomfn6_supplier_rating`, `table_aomfn6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `table_md6z0a` (`table_md6z0a_order_id`, `table_md6z0a_product_id`, `table_md6z0a_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BTERO6_PRICE, 0), COALESCE(TABLE_BTERO6_STOCK_QUANTITY, 0), COALESCE(TABLE_AOMFN6_SUPPLIER_RATING, 3.0), COALESCE(TABLE_AOMFN6_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM TABLE_BTERO6 P
+    LEFT JOIN TABLE_AOMFN6 S ON TABLE_BTERO6_SUPPLIER_ID = TABLE_AOMFN6_SUPPLIER_ID
+    WHERE TABLE_BTERO6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MD6Z0A_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_MD6Z0A
+    WHERE TABLE_MD6Z0A_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(65, 43)) - -240 + ((v_supplier_rating * 20) - (v_lead_time * 2) + (v_sales_volume / 10));
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+CREATE TABLE IF NOT EXISTS `table_dnotdk` (
+    `table_dnotdk_job_id` INT,
+    `table_dnotdk_customer_id` INT,
+    `table_dnotdk_mover_id` INT,
+    `table_dnotdk_origin_zip` INT,
+    `table_dnotdk_dest_zip` INT,
+    `table_dnotdk_distance_miles` INT,
+    `table_dnotdk_truck_size` INT,
+    `table_dnotdk_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kr203y` (
+    `table_kr203y_zip_code` INT,
+    `table_kr203y_zone` INT,
+    `table_kr203y_base_rate_per_mile` INT
+);
+
+INSERT INTO `table_dnotdk` (`table_dnotdk_job_id`, `table_dnotdk_customer_id`, `table_dnotdk_mover_id`, `table_dnotdk_origin_zip`, `table_dnotdk_dest_zip`, `table_dnotdk_distance_miles`, `table_dnotdk_truck_size`, `table_dnotdk_base_price`) VALUES (1, 2, 3, 4, 5, 6, 7, 1.0);
+
+INSERT INTO `table_kr203y` (`table_kr203y_zip_code`, `table_kr203y_zone`, `table_kr203y_base_rate_per_mile`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(DISTANCE_MILES_PARAM INT, TRUCK_SIZE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_TRUCK_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 50;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    CASE TRUCK_SIZE_PARAM
+        WHEN 'SMALL' THEN SET V_TRUCK_MULTIPLIER = 1;
+        WHEN 'MEDIUM' THEN SET V_TRUCK_MULTIPLIER = 2;
+        WHEN 'LARGE' THEN SET V_TRUCK_MULTIPLIER = 3;
+        WHEN 'EXTRA_LARGE' THEN SET V_TRUCK_MULTIPLIER = 4;
+        ELSE SET V_TRUCK_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_ESTIMATE = (DISTANCE_MILES_PARAM * V_BASE_RATE * V_TRUCK_MULTIPLIER) + V_FUEL_SURCHARGE;
+
+    IF DISTANCE_MILES_PARAM > 500 THEN
+        SET V_TOTAL_ESTIMATE = (MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(-2)) - -429 + (v_total_estimate - (v_total_estimate * 10 / 100));
+    END IF;
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+CREATE TABLE IF NOT EXISTS `table_ot2tv9` (
+    `table_ot2tv9_system_id` INT,
+    `table_ot2tv9_customer_id` INT,
+    `table_ot2tv9_system_type` VARCHAR(50),
+    `table_ot2tv9_monitoring_monthly` INT,
+    `table_ot2tv9_equipment_cost` DECIMAL(10,2),
+    `table_ot2tv9_installation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ysvqnk` (
+    `table_ysvqnk_alert_id` INT,
+    `table_ysvqnk_system_id` INT,
+    `table_ysvqnk_alert_date` DATE,
+    `table_ysvqnk_alert_type` VARCHAR(50),
+    `table_ysvqnk_response_time_minutes` DATE
+);
+
+INSERT INTO `table_ot2tv9` (`table_ot2tv9_system_id`, `table_ot2tv9_customer_id`, `table_ot2tv9_system_type`, `table_ot2tv9_monitoring_monthly`, `table_ot2tv9_equipment_cost`, `table_ot2tv9_installation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ysvqnk` (`table_ysvqnk_alert_id`, `table_ysvqnk_system_id`, `table_ysvqnk_alert_date`, `table_ysvqnk_alert_type`, `table_ysvqnk_response_time_minutes`) VALUES (1, 2, '2024-01-01', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_SYSTEM_SCORE_lyxclx(SYSTEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONITORING_MONTHLY INT DEFAULT 30;
+    DECLARE V_EQUIPMENT_COST INT DEFAULT 0;
+    DECLARE V_ALERT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_RESPONSE_TIME INT DEFAULT 0;
+    DECLARE V_SECURITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OT2TV9_MONITORING_MONTHLY, 30), COALESCE(TABLE_OT2TV9_EQUIPMENT_COST, 500)
+    INTO V_MONITORING_MONTHLY, V_EQUIPMENT_COST
+    FROM TABLE_OT2TV9
+    WHERE TABLE_OT2TV9_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_YSVQNK_RESPONSE_TIME_MINUTES), 0)
+    INTO V_ALERT_COUNT, V_AVG_RESPONSE_TIME
+    FROM TABLE_YSVQNK
+    WHERE TABLE_YSVQNK_SYSTEM_ID = SYSTEM_ID_PARAM;
+
+    SET V_SECURITY_SCORE = 100 - (V_ALERT_COUNT * 5) - (V_AVG_RESPONSE_TIME / 2);
+
+    RETURN CAST(V_SECURITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_cvo8ys----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_cvo8ys() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(-54, 7, 35)) - -988 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = FIRST_TERM + (NUM_TERMS - 1) * COMMON_DIFF;
+    SET V_SUM = (MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(-97, -60)) - 545 + ((num_terms * (first_term + v_last_term)) / 2);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(-39, -48)) - 175 + (v_sum);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A | P_B;
+
+    IF V_ERROR = (MYSQL_FUNC_PROC_YEAR_pmoygo()) - 253 + (1) THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho(-62)) - -127 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+CREATE TABLE IF NOT EXISTS `table_qkugmq` (
+    `table_qkugmq_cyear` INT
+);
+
+INSERT INTO `table_qkugmq` (`table_qkugmq_cyear`) VALUES (2024);
+
+/* -----Called: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_YEAR_pmoygo() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT TABLE_QKUGMQ_CYEAR INTO RESULT FROM `TABLE_QKUGMQ` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+CREATE TABLE IF NOT EXISTS `table_s2zydq` (
+    `table_s2zydq_customer_id` INT,
+    `table_s2zydq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s2zydq` (`table_s2zydq_customer_id`, `table_s2zydq_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_S2ZYDQ_STATUS
+    INTO V_STATUS
+    FROM TABLE_S2ZYDQ
+    WHERE TABLE_S2ZYDQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'PENDING' THEN RETURN 25;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+CREATE TABLE IF NOT EXISTS `table_42hbdg` (
+    `table_42hbdg_emp_id` INT,
+    `table_42hbdg_department_id` INT,
+    `table_42hbdg_salary` INT,
+    `table_42hbdg_hire_date` DATE,
+    `table_42hbdg_performance_score` INT
+);
+
+INSERT INTO `table_42hbdg` (`table_42hbdg_emp_id`, `table_42hbdg_department_id`, `table_42hbdg_salary`, `table_42hbdg_hire_date`, `table_42hbdg_performance_score`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(DEPARTMENT_ID_PARAM INT, EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_42HBDG_SALARY, 0) INTO V_EMP_SALARY
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BELOW_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY < V_EMP_SALARY;
+
+    SELECT COUNT(*) INTO V_ABOVE_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY > V_EMP_SALARY;
+
+    SET V_RANK = (MYSQL_FUNC_SQUARE_4pyj0b(87)) - -668 + (v_below_count + 1);
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SQUARE_4pyj0b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SQUARE_4pyj0b(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN N * N;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER((MYSQL_FUNC_PROC1_cvo8ys()) - 819 + (input_str));
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(1);

@@ -1,0 +1,429 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_34qlyp` (
+    `table_34qlyp_emp_id` INT,
+    `table_34qlyp_hire_date` DATE
+);
+
+INSERT INTO `table_34qlyp` (`table_34qlyp_emp_id`, `table_34qlyp_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+CREATE TABLE IF NOT EXISTS `table_ik0x1s` (
+    `table_ik0x1s_campaign_id` INT,
+    `table_ik0x1s_start_date` DATE,
+    `table_ik0x1s_end_date` DATE,
+    `table_ik0x1s_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_np8rkj` (
+    `table_np8rkj_conversion_id` INT,
+    `table_np8rkj_campaign_id` INT,
+    `table_np8rkj_conversion_date` DATE
+);
+
+INSERT INTO `table_ik0x1s` (`table_ik0x1s_campaign_id`, `table_ik0x1s_start_date`, `table_ik0x1s_end_date`, `table_ik0x1s_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_np8rkj` (`table_np8rkj_conversion_id`, `table_np8rkj_campaign_id`, `table_np8rkj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_OLDER_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TREND INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_RECENT_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    SELECT COUNT(*)
+    INTO V_OLDER_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    AND TABLE_NP8RKJ_CONVERSION_DATE < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    IF V_OLDER_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TREND = (MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(-85)) - 855 + (((v_recent_conversions - v_older_conversions) * 100) / v_older_conversions);
+
+    RETURN V_TREND;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+CREATE TABLE IF NOT EXISTS `table_uyis6v` (
+    `table_uyis6v_order_id` INT,
+    `table_uyis6v_customer_id` INT,
+    `table_uyis6v_order_date` DATE,
+    `table_uyis6v_total_amount` DECIMAL(10,2),
+    `table_uyis6v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2nffbi` (
+    `table_2nffbi_refund_id` INT,
+    `table_2nffbi_order_id` INT,
+    `table_2nffbi_refund_amount` DECIMAL(10,2),
+    `table_2nffbi_refund_date` DATE,
+    `table_2nffbi_reason` INT
+);
+
+INSERT INTO `table_uyis6v` (`table_uyis6v_order_id`, `table_uyis6v_customer_id`, `table_uyis6v_order_date`, `table_uyis6v_total_amount`, `table_uyis6v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_2nffbi` (`table_2nffbi_refund_id`, `table_2nffbi_order_id`, `table_2nffbi_refund_amount`, `table_2nffbi_refund_date`, `table_2nffbi_reason`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UYIS6V_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_UYIS6V
+    WHERE TABLE_UYIS6V_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2NFFBI_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_2NFFBI
+    WHERE TABLE_2NFFBI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_AMOUNT * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+CREATE TABLE IF NOT EXISTS `table_9o63nl` (
+    `table_9o63nl_transaction_id` INT,
+    `table_9o63nl_account_id` INT,
+    `table_9o63nl_transaction_date` DATE,
+    `table_9o63nl_transaction_type` VARCHAR(50),
+    `table_9o63nl_amount` DECIMAL(10,2),
+    `table_9o63nl_balance_after` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7t580` (
+    `table_i7t580_account_id` INT,
+    `table_i7t580_customer_id` INT,
+    `table_i7t580_account_type` INT,
+    `table_i7t580_credit_limit` INT
+);
+
+INSERT INTO `table_9o63nl` (`table_9o63nl_transaction_id`, `table_9o63nl_account_id`, `table_9o63nl_transaction_date`, `table_9o63nl_transaction_type`, `table_9o63nl_amount`, `table_9o63nl_balance_after`) VALUES (1, 2, '2024-01-01', 'test', 1.0, 6);
+
+INSERT INTO `table_i7t580` (`table_i7t580_account_id`, `table_i7t580_customer_id`, `table_i7t580_account_type`, `table_i7t580_credit_limit`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(TRANSACTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AMOUNT INT DEFAULT 0;
+    DECLARE V_ACCOUNT_AVG DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_ACCOUNT_STDDEV DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_Z_SCORE DECIMAL(6,2) DEFAULT 0.00;
+    DECLARE V_DEVIATION_COUNT INT DEFAULT 0;
+    DECLARE V_IS_SUSPICIOUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9O63NL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9O63NL_AMOUNT), 0), COUNT(*)
+    INTO V_ACCOUNT_AVG, V_DEVIATION_COUNT
+    FROM TABLE_9O63NL T
+    JOIN TABLE_I7T580 A ON TABLE_9O63NL_ACCOUNT_ID = TABLE_I7T580_ACCOUNT_ID
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_DEVIATION_COUNT < 10 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT STDDEV(TABLE_9O63NL_AMOUNT)
+    INTO V_ACCOUNT_STDDEV
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_ACCOUNT_STDDEV > 0 THEN
+        SET V_Z_SCORE = (V_AMOUNT - V_ACCOUNT_AVG) / V_ACCOUNT_STDDEV;
+    END IF;
+
+    IF ABS(V_Z_SCORE) > 3 THEN
+        SET V_IS_SUSPICIOUS = 1;
+    END IF;
+
+    RETURN V_IS_SUSPICIOUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+CREATE TABLE IF NOT EXISTS `table_qpwars` (
+    `table_qpwars_category_id` INT,
+    `table_qpwars_stock_quantity` INT
+);
+
+INSERT INTO `table_qpwars` (`table_qpwars_category_id`, `table_qpwars_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_QPWARS_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_QPWARS
+    WHERE TABLE_QPWARS_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(-35)) - -207 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(55)) - -95 + ((MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + (v_stock)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(TAXABLE INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX DECIMAL(10,2);
+
+    CASE
+        WHEN TAXABLE <= 10000 THEN SET (MYSQL_FUNC_PROCESS_REFUND_o1fbz5(-97, -81)) - -314 + (v_tax) = TAXABLE * 0.10;
+        WHEN TAXABLE <= 50000 THEN SET V_TAX = (MYSQL_FUNC_GET_MAX_077bna(93, 43)) - 268 + (1000 + (taxable - 10000) * 0.20);
+        WHEN TAXABLE <= 100000 THEN SET V_TAX = 9000 + (TAXABLE - 50000) * 0.30;
+        ELSE SET V_TAX = 24000 + (TAXABLE - 100000) * 0.40;
+    END CASE;
+
+    RETURN V_TAX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MAX_077bna----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MAX_077bna(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF A > B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+CREATE TABLE IF NOT EXISTS `table_ce0xds` (
+    `table_ce0xds_payment_id` INT,
+    `table_ce0xds_order_id` INT,
+    `table_ce0xds_amount` DECIMAL(10,2),
+    `table_ce0xds_payment_date` DATE,
+    `table_ce0xds_payment_method` INT,
+    `table_ce0xds_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ce0xds` (`table_ce0xds_payment_id`, `table_ce0xds_order_id`, `table_ce0xds_amount`, `table_ce0xds_payment_date`, `table_ce0xds_payment_method`, `table_ce0xds_status`) VALUES (1, 2, 1.0, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_REFUND_o1fbz5(ORDER_ID_PARAM INT, REFUND_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAYMENT_STATUS INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(SUM(TABLE_CE0XDS_AMOUNT), 0) INTO V_TOTAL_PAID
+    FROM TABLE_CE0XDS
+    WHERE TABLE_CE0XDS_ORDER_ID = ORDER_ID_PARAM AND TABLE_CE0XDS_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_PAID = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF REFUND_PERCENT < 0 THEN
+        SET REFUND_PERCENT = 0;
+    END IF;
+
+    IF REFUND_PERCENT > 100 THEN
+        SET REFUND_PERCENT = 100;
+    END IF;
+
+    SET V_REFUND_AMOUNT = V_TOTAL_PAID * REFUND_PERCENT / 100;
+
+    RETURN V_REFUND_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+CREATE TABLE IF NOT EXISTS `table_b4dc8l` (
+    `table_b4dc8l_card_id` INT,
+    `table_b4dc8l_customer_id` INT,
+    `table_b4dc8l_card_type` VARCHAR(50),
+    `table_b4dc8l_credit_limit` INT,
+    `table_b4dc8l_current_balance` INT,
+    `table_b4dc8l_interest_rate` INT,
+    `table_b4dc8l_min_payment_rate` INT
+);
+
+INSERT INTO `table_b4dc8l` (`table_b4dc8l_card_id`, `table_b4dc8l_customer_id`, `table_b4dc8l_card_type`, `table_b4dc8l_credit_limit`, `table_b4dc8l_current_balance`, `table_b4dc8l_interest_rate`, `table_b4dc8l_min_payment_rate`) VALUES (1, 1, 'test', 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CREDIT_LIMIT INT DEFAULT 0;
+    DECLARE V_CURRENT_BALANCE INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+    DECLARE V_MIN_PAYMENT INT DEFAULT 0;
+    DECLARE V_INTEREST_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_B4DC8L_CREDIT_LIMIT, 1000), COALESCE(TABLE_B4DC8L_CURRENT_BALANCE, (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + (0))
+    INTO V_CREDIT_LIMIT, V_CURRENT_BALANCE
+    FROM TABLE_B4DC8L
+    WHERE TABLE_B4DC8L_CARD_ID = CARD_ID_PARAM;
+
+    IF V_CREDIT_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_CURRENT_BALANCE * 100) / V_CREDIT_LIMIT;
+
+    IF V_UTILIZATION > 80 THEN
+        SET V_UTILIZATION = V_UTILIZATION + 10;
+    END IF;
+
+    RETURN CAST(V_UTILIZATION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_34QLYP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_34QLYP
+    WHERE TABLE_34QLYP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(-86)) - -601 + ((MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(81)) - 194 + ((MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(0)) - -639 + (v_tenure)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(1);

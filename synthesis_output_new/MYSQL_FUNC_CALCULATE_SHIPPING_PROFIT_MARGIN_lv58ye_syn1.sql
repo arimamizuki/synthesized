@@ -1,0 +1,395 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy----- */
+CREATE TABLE IF NOT EXISTS `table_6e0geg` (
+    `table_6e0geg_product_id` INT,
+    `table_6e0geg_category_id` INT,
+    `table_6e0geg_price` DECIMAL(10,2),
+    `table_6e0geg_stock_quantity` INT
+);
+
+INSERT INTO `table_6e0geg` (`table_6e0geg_product_id`, `table_6e0geg_category_id`, `table_6e0geg_price`, `table_6e0geg_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6E0GEG_PRICE, 0), COALESCE(TABLE_6E0GEG_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_6E0GEG
+    WHERE TABLE_6E0GEG_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(-58)) - -294 + (floor((v_price * v_stock) / 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+CREATE TABLE IF NOT EXISTS `table_crekql` (
+    `table_crekql_campaign_id` INT,
+    `table_crekql_channel` INT,
+    `table_crekql_budget` INT,
+    `table_crekql_start_date` DATE,
+    `table_crekql_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6yunz` (
+    `table_f6yunz_conversion_id` INT,
+    `table_f6yunz_campaign_id` INT,
+    `table_f6yunz_conversion_value` INT
+);
+
+INSERT INTO `table_crekql` (`table_crekql_campaign_id`, `table_crekql_channel`, `table_crekql_budget`, `table_crekql_start_date`, `table_crekql_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_f6yunz` (`table_f6yunz_conversion_id`, `table_f6yunz_campaign_id`, `table_f6yunz_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT TABLE_CREKQL_CHANNEL, COALESCE(TABLE_CREKQL_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_CREKQL
+    WHERE TABLE_CREKQL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6YUNZ_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_F6YUNZ
+    WHERE TABLE_F6YUNZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = ((V_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt----- */
+CREATE TABLE IF NOT EXISTS `table_z3t223` (
+    `table_z3t223_product_id` INT,
+    `table_z3t223_category_id` INT
+);
+
+INSERT INTO `table_z3t223` (`table_z3t223_product_id`, `table_z3t223_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CATEGORY_PRODUCTS
+    FROM TABLE_Z3T223
+    WHERE TABLE_Z3T223_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_Z3T223;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(49)) - 149 + ((v_category_products * 100) / v_total_products);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+CREATE TABLE IF NOT EXISTS `table_iptn6x` (
+    `table_iptn6x_emp_id` INT,
+    `table_iptn6x_name` VARCHAR(50),
+    `table_iptn6x_salary` INT,
+    `table_iptn6x_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2qf3w0` (
+    `table_2qf3w0_emp_id` INT,
+    `table_2qf3w0_effective_date` DATE,
+    `table_2qf3w0_new_salary` INT,
+    `table_2qf3w0_change_reason` INT
+);
+
+INSERT INTO `table_iptn6x` (`table_iptn6x_emp_id`, `table_iptn6x_name`, `table_iptn6x_salary`, `table_iptn6x_hire_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_2qf3w0` (`table_2qf3w0_emp_id`, `table_2qf3w0_effective_date`, `table_2qf3w0_new_salary`, `table_2qf3w0_change_reason`) VALUES (1, '2024-01-01', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_PERCENTAGE_bcedrt(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IPTN6X_SALARY, 0)
+    INTO V_INITIAL_SALARY
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_2QF3W0_NEW_SALARY, V_INITIAL_SALARY)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_2QF3W0
+    WHERE TABLE_2QF3W0_EMP_ID = EMP_ID_PARAM
+    ORDER BY TABLE_2QF3W0_EFFECTIVE_DATE DESC
+    LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_IPTN6X_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_IPTN6X
+    WHERE TABLE_IPTN6X_EMP_ID = EMP_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_PERCENTAGE = (((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / V_INITIAL_SALARY) / V_YEARS_EMPLOYED;
+
+    RETURN V_GROWTH_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+CREATE TABLE IF NOT EXISTS `table_6kv6h0` (
+    `table_6kv6h0_emp_id` INT,
+    `table_6kv6h0_department_id` INT,
+    `table_6kv6h0_salary` INT,
+    `table_6kv6h0_hire_date` DATE,
+    `table_6kv6h0_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6kv6h0` (`table_6kv6h0_emp_id`, `table_6kv6h0_department_id`, `table_6kv6h0_salary`, `table_6kv6h0_hire_date`, `table_6kv6h0_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_COMP_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6KV6H0_SALARY, 0), COALESCE(TABLE_6KV6H0_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_6KV6H0_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_6KV6H0
+    WHERE TABLE_6KV6H0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_COMP_INDEX = (MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(53)) - -464 + ((v_salary / 1000) + (v_performance * 10) + (v_tenure_years * 3));
+
+    RETURN (MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(57)) - -919 + (v_comp_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+CREATE TABLE IF NOT EXISTS `table_2vrwu4` (
+    `table_2vrwu4_emp_id` INT,
+    `table_2vrwu4_hire_date` DATE
+);
+
+INSERT INTO `table_2vrwu4` (`table_2vrwu4_emp_id`, `table_2vrwu4_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_2VRWU4_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_2VRWU4
+    WHERE TABLE_2VRWU4_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_YEAR_z0r2ih(-60)) - 531 + (dayofyear(v_hire_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_YEAR_z0r2ih----- */
+CREATE TABLE IF NOT EXISTS `table_b2sfr4` (
+    `table_b2sfr4_customer_id` INT,
+    `table_b2sfr4_order_id` INT,
+    `table_b2sfr4_order_date` DATE
+);
+
+INSERT INTO `table_b2sfr4` (`table_b2sfr4_customer_id`, `table_b2sfr4_order_id`, `table_b2sfr4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_YEAR_z0r2ih----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_YEAR_z0r2ih(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(MIN(TABLE_B2SFR4_ORDER_DATE))
+    INTO V_YEAR
+    FROM TABLE_B2SFR4
+    WHERE TABLE_B2SFR4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+CREATE TABLE IF NOT EXISTS `table_q6el64` (
+    `table_q6el64_emp_id` INT
+);
+
+INSERT INTO `table_q6el64` (`table_q6el64_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(-81)) - 20 + ((emp_id_param * 7) % 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+CREATE TABLE IF NOT EXISTS `table_069dtw` (
+    `table_069dtw_customer_id` INT,
+    `table_069dtw_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_069dtw` (`table_069dtw_customer_id`, `table_069dtw_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_SUBSCRIPTION_VALUE_op04fz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_069DTW_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_069DTW
+    WHERE TABLE_069DTW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(15, 0)) - 124 + (v_monthly_cost * 12);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERATOR INT DEFAULT 1;
+    DECLARE V_DENOMINATOR INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    IF R < 0 OR R > N OR N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF R = 0 OR R = N THEN
+        RETURN 1;
+    END IF;
+
+    IF R > N - R THEN
+        SET R = N - R;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= R DO
+        SET V_NUMERATOR = V_NUMERATOR * (N - V_COUNTER + 1);
+        SET V_DENOMINATOR = V_DENOMINATOR * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    SET V_RESULT = V_NUMERATOR / V_DENOMINATOR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_COMPENSATION_INDEX_vq2xnq(-23)) - -91 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_RATIO_83feyt(-70)) - 405 + (0)))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = ((V_ORDER_TOTAL - V_SHIPPING_COST) * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_1bo6qy(84)) - 395 + (v_shipping_margin);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(1);

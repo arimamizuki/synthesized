@@ -1,0 +1,397 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_tic8rt` (
+    `table_tic8rt_customer_id` INT,
+    `table_tic8rt_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_v1539c` (
+    `table_v1539c_order_id` INT,
+    `table_v1539c_customer_id` INT,
+    `table_v1539c_order_date` DATE,
+    `table_v1539c_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tic8rt` (`table_tic8rt_customer_id`, `table_tic8rt_country`) VALUES (1, 1);
+
+INSERT INTO `table_v1539c` (`table_v1539c_order_id`, `table_v1539c_customer_id`, `table_v1539c_order_date`, `table_v1539c_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_PERMUTATION_COUNT_wbblpk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF R > N OR N < 0 OR R < 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COUNTER = 0;
+
+    PERM_LOOP: WHILE V_COUNTER < R DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + (v_result) * (N - V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE PERM_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+CREATE TABLE IF NOT EXISTS `table_7jm36x` (
+    `table_7jm36x_order_id` INT,
+    `table_7jm36x_order_date` DATE
+);
+
+INSERT INTO `table_7jm36x` (`table_7jm36x_order_id`, `table_7jm36x_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_7JM36X_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_7JM36X
+    WHERE TABLE_7JM36X_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + (v_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(61)) - 544 + (0))
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(58)) - 401 + ((v_spent / v_budget) * 100);
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+CREATE TABLE IF NOT EXISTS `table_fxzsef` (
+    `table_fxzsef_product_id` INT,
+    `table_fxzsef_supplier_id` INT,
+    `table_fxzsef_price` DECIMAL(10,2),
+    `table_fxzsef_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_gcudli` (
+    `table_gcudli_supplier_id` INT,
+    `table_gcudli_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_fxzsef` (`table_fxzsef_product_id`, `table_fxzsef_supplier_id`, `table_fxzsef_price`, `table_fxzsef_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_gcudli` (`table_gcudli_supplier_id`, `table_gcudli_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_STOCK INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GCUDLI_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_GCUDLI
+    WHERE TABLE_GCUDLI_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_FXZSEF_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_STOCK
+    FROM TABLE_FXZSEF
+    WHERE TABLE_FXZSEF_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_QUALITY_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 3) + (V_AVG_STOCK / 100);
+
+    RETURN V_QUALITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+CREATE TABLE IF NOT EXISTS `table_toccpm` (
+    `table_toccpm_emp_id` INT,
+    `table_toccpm_department_id` INT,
+    `table_toccpm_salary` INT
+);
+
+INSERT INTO `table_toccpm` (`table_toccpm_emp_id`, `table_toccpm_department_id`, `table_toccpm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TOCCPM_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_TOCCPM_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_DEPARTMENT_ID = (SELECT TABLE_TOCCPM_DEPARTMENT_ID FROM TABLE_TOCCPM WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_RATIO = (V_SALARY * 100) / V_DEPT_AVG;
+
+    RETURN (MYSQL_FUNC_FUNC_194_ITERATE_7cimib()) - -942 + (v_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_194_ITERATE_7cimib----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_194_ITERATE_7cimib() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ITER_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        IF I < 3 THEN
+            ITERATE LABEL1;
+        END IF;
+        SET ITER_COUNT = ITER_COUNT + 1;
+        IF I >= 5 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN ITER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A <= 0 OR P_B <= 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(-32)) - 561 + (-1);
+    END IF;
+
+    WHILE P_B <> 0 DO
+        SET V_TEMP = P_B;
+        SET P_B = P_A MOD P_B;
+        SET P_A = V_TEMP;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN P_A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+CREATE TABLE IF NOT EXISTS `table_btero6` (
+    `table_btero6_product_id` INT,
+    `table_btero6_category_id` INT,
+    `table_btero6_price` DECIMAL(10,2),
+    `table_btero6_stock_quantity` INT,
+    `table_btero6_supplier_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_aomfn6` (
+    `table_aomfn6_supplier_id` INT,
+    `table_aomfn6_supplier_rating` DECIMAL(3,1),
+    `table_aomfn6_lead_time_days` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_md6z0a` (
+    `table_md6z0a_order_id` INT,
+    `table_md6z0a_product_id` INT,
+    `table_md6z0a_quantity` INT
+);
+
+INSERT INTO `table_btero6` (`table_btero6_product_id`, `table_btero6_category_id`, `table_btero6_price`, `table_btero6_stock_quantity`, `table_btero6_supplier_id`) VALUES (1, 2, 1.0, 4, 5);
+
+INSERT INTO `table_aomfn6` (`table_aomfn6_supplier_id`, `table_aomfn6_supplier_rating`, `table_aomfn6_lead_time_days`) VALUES (1, 1.0, '2024-01-01');
+
+INSERT INTO `table_md6z0a` (`table_md6z0a_order_id`, `table_md6z0a_product_id`, `table_md6z0a_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_MARKET_SCORE_6vfr84(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SUPPLIER_RATING DECIMAL(3,1) DEFAULT 3.0;
+    DECLARE V_LEAD_TIME INT DEFAULT 7;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_MARKET_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BTERO6_PRICE, 0), COALESCE(TABLE_BTERO6_STOCK_QUANTITY, 0), COALESCE(TABLE_AOMFN6_SUPPLIER_RATING, 3.0), COALESCE(TABLE_AOMFN6_LEAD_TIME_DAYS, 7)
+    INTO V_PRICE, V_STOCK, V_SUPPLIER_RATING, V_LEAD_TIME
+    FROM TABLE_BTERO6 P
+    LEFT JOIN TABLE_AOMFN6 S ON TABLE_BTERO6_SUPPLIER_ID = TABLE_AOMFN6_SUPPLIER_ID
+    WHERE TABLE_BTERO6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MD6Z0A_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_MD6Z0A
+    WHERE TABLE_MD6Z0A_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_MARKET_SCORE = (MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - 850 + ((v_supplier_rating * 20) - (v_lead_time * 2) + (v_sales_volume / 10));
+
+    IF V_STOCK < 10 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE - 20;
+    ELSEIF V_STOCK > 100 THEN
+        SET V_MARKET_SCORE = V_MARKET_SCORE + 10;
+    END IF;
+
+    RETURN V_MARKET_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_V1539C_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_V1539C O
+    JOIN TABLE_TIC8RT C ON TABLE_V1539C_CUSTOMER_ID = TABLE_TIC8RT_CUSTOMER_ID
+    WHERE TABLE_TIC8RT_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif(-82, -87)) - 87 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(-64)) - 947 + ((MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(11, 3)) - 870 + (floor(v_avg_order_value))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_AVG_ORDER_VALUE_i5l179(1);

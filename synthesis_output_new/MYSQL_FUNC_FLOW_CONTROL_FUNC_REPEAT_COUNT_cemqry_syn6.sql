@@ -1,0 +1,353 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(-49)) - 936 + (floor(v_price / 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+CREATE TABLE IF NOT EXISTS `table_zdhyse` (
+    `table_zdhyse_customer_id` INT,
+    `table_zdhyse_registration_date` DATE
+);
+
+INSERT INTO `table_zdhyse` (`table_zdhyse_customer_id`, `table_zdhyse_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_ZDHYSE_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM TABLE_ZDHYSE
+    WHERE TABLE_ZDHYSE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+CREATE TABLE IF NOT EXISTS table_wz9osw (
+    table_wz9osw_produto_id INT,
+    table_wz9osw_Quantidade_produto INT
+);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (3, 0);
+
+/* -----Called: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM TABLE_WZ9OSW WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE TABLE_WZ9OSW SET TABLE_WZ9OSW_QUANTIDADE_PRODUTO = TABLE_WZ9OSW_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_WZ9OSW (`TABLE_WZ9OSW_PRODUTO_ID`, `TABLE_WZ9OSW_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(-20)) - 225 + ((MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(-60)) - -225 + ((MYSQL_FUNC_ADD2NUMS_l7c47k(20, -11)) - 487 + (rows_affected)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ADD2NUMS_l7c47k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD2NUMS_l7c47k(NUM1 INT, NUM2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN NUM1 + NUM2;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+CREATE TABLE IF NOT EXISTS `table_bzoodp` (
+    `table_bzoodp_property_id` INT,
+    `table_bzoodp_landlord_id` INT,
+    `table_bzoodp_property_type` VARCHAR(50),
+    `table_bzoodp_monthly_rent` INT,
+    `table_bzoodp_deposit_amount` DECIMAL(10,2),
+    `table_bzoodp_num_units` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_s3k6c0` (
+    `table_s3k6c0_lease_id` INT,
+    `table_s3k6c0_property_id` INT,
+    `table_s3k6c0_tenant_id` INT,
+    `table_s3k6c0_start_date` DATE,
+    `table_s3k6c0_end_date` DATE,
+    `table_s3k6c0_monthly_payment` INT
+);
+
+INSERT INTO `table_bzoodp` (`table_bzoodp_property_id`, `table_bzoodp_landlord_id`, `table_bzoodp_property_type`, `table_bzoodp_monthly_rent`, `table_bzoodp_deposit_amount`, `table_bzoodp_num_units`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_s3k6c0` (`table_s3k6c0_lease_id`, `table_s3k6c0_property_id`, `table_s3k6c0_tenant_id`, `table_s3k6c0_start_date`, `table_s3k6c0_end_date`, `table_s3k6c0_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_NUM_UNITS INT DEFAULT 0;
+    DECLARE V_OCCUPIED_UNITS INT DEFAULT 0;
+    DECLARE V_VACANCY_RATE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BZOODP_MONTHLY_RENT, 0), COALESCE(TABLE_BZOODP_NUM_UNITS, 1)
+    INTO V_MONTHLY_RENT, V_NUM_UNITS
+    FROM TABLE_BZOODP
+    WHERE TABLE_BZOODP_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_OCCUPIED_UNITS
+    FROM TABLE_S3K6C0
+    WHERE TABLE_S3K6C0_PROPERTY_ID = PROPERTY_ID_PARAM
+      AND TABLE_S3K6C0_END_DATE > CURDATE();
+
+    IF V_NUM_UNITS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_VACANCY_RATE = ((V_NUM_UNITS - V_OCCUPIED_UNITS) * 100) / V_NUM_UNITS;
+    SET V_RISK_SCORE = V_VACANCY_RATE;
+
+    IF V_MONTHLY_RENT > 5000 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_RISK_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+CREATE TABLE IF NOT EXISTS `table_lypw1w` (
+    `table_lypw1w_customer_id` INT,
+    `table_lypw1w_order_id` INT,
+    `table_lypw1w_order_date` DATE
+);
+
+INSERT INTO `table_lypw1w` (`table_lypw1w_customer_id`, `table_lypw1w_order_id`, `table_lypw1w_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+
+    SELECT MAX(TABLE_LYPW1W_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_LYPW1W
+    WHERE TABLE_LYPW1W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(-66)) - 848 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(3, 84, -40)) - 945 + (month(v_last_order_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+CREATE TABLE IF NOT EXISTS `table_9adjz6` (
+    `table_9adjz6_student_id` INT,
+    `table_9adjz6_name` VARCHAR(50),
+    `table_9adjz6_enrollment_date` DATE,
+    `table_9adjz6_graduation_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9uabjr` (
+    `table_9uabjr_course_id` INT,
+    `table_9uabjr_credits` INT,
+    `table_9uabjr_difficulty_level` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sz2t2v` (
+    `table_sz2t2v_student_id` INT,
+    `table_sz2t2v_course_id` INT,
+    `table_sz2t2v_grade` INT
+);
+
+INSERT INTO `table_9adjz6` (`table_9adjz6_student_id`, `table_9adjz6_name`, `table_9adjz6_enrollment_date`, `table_9adjz6_graduation_year`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_9uabjr` (`table_9uabjr_course_id`, `table_9uabjr_credits`, `table_9uabjr_difficulty_level`) VALUES (1, 1, 1);
+
+INSERT INTO `table_sz2t2v` (`table_sz2t2v_student_id`, `table_sz2t2v_course_id`, `table_sz2t2v_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_YEAR INT DEFAULT 0;
+    DECLARE V_GRADUATION_YEAR INT DEFAULT 0;
+    DECLARE V_YEARS_REMAINING INT DEFAULT 0;
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_REQUIRED_CREDITS INT DEFAULT 120;
+    DECLARE V_GRADE_POINT_AVG DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PROGRESS_SCORE INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_9ADJZ6_ENROLLMENT_DATE), TABLE_9ADJZ6_GRADUATION_YEAR
+    INTO V_ENROLLMENT_YEAR, V_GRADUATION_YEAR
+    FROM TABLE_9ADJZ6
+    WHERE TABLE_9ADJZ6_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_YEARS_REMAINING = V_GRADUATION_YEAR - YEAR(CURDATE());
+
+    SELECT COALESCE(SUM(TABLE_9UABJR_CREDITS), 0)
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_SZ2T2V E
+    JOIN TABLE_9UABJR C ON TABLE_SZ2T2V_COURSE_ID = TABLE_9UABJR_COURSE_ID
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_SZ2T2V_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(AVG(CASE TABLE_SZ2T2V_GRADE
+        WHEN 'A' THEN 4.0 WHEN 'B' THEN 3.0 WHEN 'C' THEN 2.0 WHEN 'D' THEN 1.0 ELSE 0.0 END), 0.00)
+    INTO V_GRADE_POINT_AVG
+    FROM TABLE_SZ2T2V
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_PROGRESS_SCORE = ((V_COMPLETED_CREDITS * 100) / V_REQUIRED_CREDITS) + (V_GRADE_POINT_AVG * 15) - (V_YEARS_REMAINING * 5);
+
+    RETURN GREATEST(V_PROGRESS_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(SUM INT, INTEREST INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(-44)) - 809 + ((MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(6, 81)) - 242 + (cast(sum * pow(1 + interest / 100.0, years) as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A + P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+CREATE TABLE IF NOT EXISTS `table_0era44` (
+    `table_0era44_policy_id` INT,
+    `table_0era44_customer_id` INT,
+    `table_0era44_property_value` INT,
+    `table_0era44_coverage_limit` INT,
+    `table_0era44_deductible_amount` DECIMAL(10,2),
+    `table_0era44_premium_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r40gj7` (
+    `table_r40gj7_claim_id` INT,
+    `table_r40gj7_policy_id` INT,
+    `table_r40gj7_claim_date` DATE,
+    `table_r40gj7_claim_amount` DECIMAL(10,2),
+    `table_r40gj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_0era44` (`table_0era44_policy_id`, `table_0era44_customer_id`, `table_0era44_property_value`, `table_0era44_coverage_limit`, `table_0era44_deductible_amount`, `table_0era44_premium_annual`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_r40gj7` (`table_r40gj7_claim_id`, `table_r40gj7_policy_id`, `table_r40gj7_claim_date`, `table_r40gj7_claim_amount`, `table_r40gj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PROPERTY_VALUE INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_COVERAGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0ERA44_PROPERTY_VALUE, 0), COALESCE(TABLE_0ERA44_COVERAGE_LIMIT, 0), COALESCE(TABLE_0ERA44_DEDUCTIBLE_AMOUNT, 0)
+    INTO V_PROPERTY_VALUE, V_COVERAGE_LIMIT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_0ERA44
+    WHERE TABLE_0ERA44_POLICY_ID = POLICY_ID_PARAM;
+
+    IF V_PROPERTY_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COVERAGE_RATIO = (V_COVERAGE_LIMIT * 100) / V_PROPERTY_VALUE;
+
+    IF V_COVERAGE_RATIO >= 80 AND V_DEDUCTIBLE_AMOUNT <= 1000 THEN
+        RETURN 100;
+    ELSEIF V_COVERAGE_RATIO >= 60 THEN
+        RETURN 75;
+    ELSE
+        RETURN 50;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = (MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(17, 37)) - -647 + (v_count) + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(1);

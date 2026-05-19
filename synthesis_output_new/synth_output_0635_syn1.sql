@@ -1,0 +1,494 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v15121 (v15122 GEOMETRY, v15123 INT);
+CREATE TABLE IF NOT EXISTS v15069 (v15070 INT, v15071 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v15159 (v15124 INT, v15125 INT);
+CREATE TABLE IF NOT EXISTS v15162 (v15163 INT, v15164 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15045 (v15046 VARCHAR(255), v15047 VARCHAR(255), v15048 INT);
+CREATE TABLE IF NOT EXISTS v15114 (v15115 INT, v15116 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15052 (v15055 VARCHAR(255), v15056 INT);
+CREATE TABLE IF NOT EXISTS v15130 (v15131 INT, v15132 INT);
+CREATE TABLE IF NOT EXISTS v15082 (v15085 JSON, v15086 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15058 (v15059 INT, v15060 INT);
+CREATE TABLE IF NOT EXISTS x9 (x10 INT, x11 INT);
+CREATE TABLE IF NOT EXISTS x14 (x15 INT, x16 INT);
+CREATE TABLE IF NOT EXISTS x18 (x19 INT, x20 INT);
+CREATE TABLE IF NOT EXISTS x25 (x24 INT, x26 INT);
+CREATE TABLE IF NOT EXISTS x20 (x19 INT, x21 INT);
+CREATE TABLE IF NOT EXISTS x29 (x28 INT, x30 INT);
+CREATE TABLE IF NOT EXISTS x31 (x30 INT, x31 INT);
+CREATE TABLE IF NOT EXISTS x33 (x32 INT, x33 INT);
+CREATE TABLE IF NOT EXISTS x35 (x34 INT, x36 INT);
+CREATE TABLE IF NOT EXISTS x37 (x36 INT, x37 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS x39 (x38 VARCHAR(255), x39 INT);
+CREATE TABLE IF NOT EXISTS x41 (x40 INT, x42 INT);
+CREATE TABLE IF NOT EXISTS x43 (x42 INT, x43 INT);
+CREATE TABLE IF NOT EXISTS x45 (x44 INT, x45 INT);
+CREATE TABLE IF NOT EXISTS x47 (x46 INT, x48 INT);
+CREATE TABLE IF NOT EXISTS x49 (x48 INT, x49 INT);
+CREATE TABLE IF NOT EXISTS x51 (x50 INT, x51 INT);
+INSERT INTO v15121 VALUES (ST_GeomFromText('POINT(0 0)'), 1);
+INSERT INTO v15069 VALUES (1, ST_GeomFromText('POINT(0 0)'));
+INSERT INTO v15159 VALUES (100, 1);
+INSERT INTO v15162 VALUES (1, 'test');
+INSERT INTO v15045 VALUES ('hello', 'world123', 32);
+INSERT INTO v15114 VALUES (1, 'data');
+INSERT INTO v15052 VALUES ('a ', 1);
+INSERT INTO v15130 VALUES (1, 1);
+INSERT INTO v15082 VALUES ('{"key": "value"}', 'fixme');
+INSERT INTO v15058 VALUES (1, 1);
+INSERT INTO x9 VALUES (1, 1);
+INSERT INTO x14 VALUES (1, 1);
+INSERT INTO x18 VALUES (1, 1);
+INSERT INTO x25 VALUES (1, 1);
+INSERT INTO x20 VALUES (1, 1);
+INSERT INTO x29 VALUES (1, 1);
+INSERT INTO x31 VALUES (1, 1);
+INSERT INTO x33 VALUES (1, NULL);
+INSERT INTO x35 VALUES (1, 1);
+INSERT INTO x37 VALUES (1, 'ustralia');
+INSERT INTO x39 VALUES ('ustralia', 1);
+INSERT INTO x41 VALUES (1, 1);
+INSERT INTO x43 VALUES (1, 1);
+INSERT INTO x45 VALUES (2, 1);
+INSERT INTO x47 VALUES (1, 1);
+INSERT INTO x49 VALUES (1, 1);
+INSERT INTO x51 VALUES (2, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+CREATE TABLE IF NOT EXISTS `table_ar5of1` (
+    `table_ar5of1_product_id` INT,
+    `table_ar5of1_category_id` INT,
+    `table_ar5of1_price` DECIMAL(10,2),
+    `table_ar5of1_stock_quantity` INT
+);
+
+INSERT INTO `table_ar5of1` (`table_ar5of1_product_id`, `table_ar5of1_category_id`, `table_ar5of1_price`, `table_ar5of1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_AR5OF1_PRICE * TABLE_AR5OF1_STOCK_QUANTITY), 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_AR5OF1
+    WHERE TABLE_AR5OF1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_INVENTORY_VALUE / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_GET_SALARY_LEVEL_x6medc(EMPLOYEE_SALARY INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (EMPLOYEE_SALARY < 30000) THEN RETURN (MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + (0);
+    ELSEIF (EMPLOYEE_SALARY >= 30000 AND EMPLOYEE_SALARY <= 50000) THEN RETURN 1;
+    ELSE RETURN (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + ((MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (2));
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = V_SUM + V_I;
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = (MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(-39)) - -733 + ((MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(49)) - -348 + (v_i + 1));
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+CREATE TABLE IF NOT EXISTS `table_0lv4pt` (
+    `table_0lv4pt_case_id` INT,
+    `table_0lv4pt_attorney_id` INT,
+    `table_0lv4pt_case_type` VARCHAR(50),
+    `table_0lv4pt_filing_date` DATE,
+    `table_0lv4pt_settlement_amount` DECIMAL(10,2),
+    `table_0lv4pt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ljafqt` (
+    `table_ljafqt_attorney_id` INT,
+    `table_ljafqt_name` VARCHAR(50),
+    `table_ljafqt_hourly_rate` INT,
+    `table_ljafqt_experience_years` INT
+);
+
+INSERT INTO `table_0lv4pt` (`table_0lv4pt_case_id`, `table_0lv4pt_attorney_id`, `table_0lv4pt_case_type`, `table_0lv4pt_filing_date`, `table_0lv4pt_settlement_amount`, `table_0lv4pt_status`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ljafqt` (`table_ljafqt_attorney_id`, `table_ljafqt_name`, `table_ljafqt_hourly_rate`, `table_ljafqt_experience_years`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SETTLEMENT_AMOUNT INT DEFAULT 0;
+    DECLARE V_ATTORNEY_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CASE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0LV4PT_SETTLEMENT_AMOUNT, 0)
+    INTO V_SETTLEMENT_AMOUNT
+    FROM TABLE_0LV4PT
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LJAFQT_HOURLY_RATE, 200)
+    INTO V_HOURLY_RATE
+    FROM TABLE_0LV4PT LC
+    JOIN TABLE_LJAFQT A ON TABLE_0LV4PT_ATTORNEY_ID = TABLE_LJAFQT_ATTORNEY_ID
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SET V_CASE_VALUE = V_SETTLEMENT_AMOUNT;
+
+    IF V_CASE_VALUE > 100000 THEN
+        SET V_CASE_VALUE = (MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(-91, 78)) - -501 + (v_case_value - (v_case_value * 10 / 100));
+    END IF;
+
+    RETURN CAST(V_CASE_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+CREATE TABLE IF NOT EXISTS table_wpq3qd (
+    table_wpq3qd_emp_no INT,
+    table_wpq3qd_salary INT
+);
+
+INSERT INTO table_wpq3qd (`table_wpq3qd_emp_no`, `table_wpq3qd_salary`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(TABLE_WPQ3QD_SALARY) - MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN IFNULL(SALARY_CALC, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+CREATE TABLE IF NOT EXISTS `table_apsp1p` (
+    `table_apsp1p_customer_id` INT,
+    `table_apsp1p_registration_date` DATE,
+    `table_apsp1p_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j667hh` (
+    `table_j667hh_order_id` INT,
+    `table_j667hh_customer_id` INT,
+    `table_j667hh_order_date` DATE,
+    `table_j667hh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_apsp1p` (`table_apsp1p_customer_id`, `table_apsp1p_registration_date`, `table_apsp1p_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_j667hh` (`table_j667hh_order_id`, `table_j667hh_customer_id`, `table_j667hh_order_date`, `table_j667hh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM TABLE_J667HH
+        WHERE TABLE_J667HH_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(TABLE_J667HH_ORDER_DATE), MONTH(TABLE_J667HH_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 1.5;
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN (MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(-29)) - 918 + (floor(v_pattern_score));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(62)) - -141 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+
+    UGLY_LOOP: WHILE V_TEMP % 2 = 0 DO
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    UGLY_LOOP2: WHILE V_TEMP % 3 = 0 DO
+        SET V_TEMP = V_TEMP / 3;
+    END WHILE;
+
+    UGLY_LOOP3: WHILE V_TEMP % 5 = 0 DO
+        SET V_TEMP = V_TEMP / 5;
+    END WHILE;
+
+    IF V_TEMP = 1 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+CREATE TABLE IF NOT EXISTS `table_yyt47f` (
+    `table_yyt47f_emp_id` INT,
+    `table_yyt47f_salary` INT
+);
+
+INSERT INTO `table_yyt47f` (`table_yyt47f_emp_id`, `table_yyt47f_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_YYT47F_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_YYT47F
+    WHERE TABLE_YYT47F_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0635(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_json JSON;
+    DECLARE v_str VARCHAR(255);
+    DECLARE cur1 CURSOR FOR SELECT v15122 FROM v15121 WHERE ST_IsValid(v15122);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+
+    -- Statement 1: UPDATE with spatial join
+    SET @sql1 = 'UPDATE v15121 AS x0 RIGHT OUTER JOIN v15069 AS x1 ON ST_CONTAINS(x0.v15122, x0.v15122) SET x0.v15122 = ST_GeomFromText(? ) WHERE v15122 = ADDTIME(v15122, ? )';
+    SET @param1 = 'POINT(1 1)';
+    SET @param2 = '10:00:00';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1 USING @param1, @param2;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(7)) - 690 + (1);
+
+    -- Statement 2: Simple UPDATE with increment
+    SET @sql2 = 'UPDATE v15159 AS x1 SET v15124 = v15124 + 100';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with COERCIBILITY and condition
+    SET @sql3 = 'UPDATE v15162 AS x1 SET v15164 = COERCIBILITY(x1.v15164) WHERE v15163 IN (1, 1)';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with NATURAL JOIN and string functions
+    SET @sql4 = 'UPDATE v15045 AS x1 NATURAL JOIN v15114 AS x2 SET v15046 = LEFT(v15047, CHAR_LENGTH(v15047) - 6) WHERE v15048 IN (32, 23, 5)';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: Complex multi-table UPDATE with spatial, JSON, and arithmetic
+    BEGIN
+        DECLARE v_sha VARCHAR(64);
+        DECLARE v_json_val JSON;
+        DECLARE v_result DECIMAL(10,5);
+        
+        SET v_sha = SHA('fixme');
+        SET v_json_val = CAST(v_sha AS JSON);
+        
+        SET @sql5 = 'UPDATE v15052 AS x1, v15130 AS x8 JOIN v15082 AS x3 LEFT JOIN x9 AS x13 LEFT JOIN x14 AS x17 LEFT JOIN x18 AS x23 ON x25.x24 = x27.x26 ON x20.x19 = x22.x21 ON (((x29.x28 = x31.x30 AND x33.x32 IS NULL) OR (x35.x34 = x37.x36 AND x39.x38 = ? )) AND ((x41.x40 = x43.x42 AND x45.x44 = 2) OR (x47.x46 = x49.x48 AND x51.x50 = 2))) ON 1 RIGHT JOIN v15058 AS x10 ON CAST(SHA(x3.v15086) AS JSON) = x3.v15085 SET x1.v15055 = X(?) / NULLIF(1, 0) WHERE v15055 LIKE ? ';
+        SET @param5a = 'ustralia';
+        SET @param5b = '78';
+        SET @param5c = 'a ';
+        PREPARE stmt5 FROM @sql5;
+        EXECUTE stmt5 USING @param5a, @param5b, @param5c;
+        DEALLOCATE PREPARE stmt5;
+        
+        -- Loop with cursor to check results
+        OPEN cur1;
+        read_loop: LOOP
+            FETCH cur1 INTO v_geo;
+            IF v_done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur1;
+    END;
+
+    -- Conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Additional procedural structures
+    CASE 
+        WHEN v_counter > 10 THEN SET result = 10;
+        WHEN v_counter > 5 THEN SET result = 5;
+        ELSE SET result = v_counter;
+    END CASE;
+
+    -- While loop for demonstration
+    WHILE v_counter > 0 DO
+        SET v_counter = v_counter - 1;
+    END WHILE;
+
+    SET result = v_counter + p1 + p2;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0635(1, 1, @out_result);
+
+SELECT @out_result;

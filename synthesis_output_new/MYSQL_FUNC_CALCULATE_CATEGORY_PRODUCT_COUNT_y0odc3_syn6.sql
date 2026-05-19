@@ -1,0 +1,442 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1hsdg0` (
+    `table_1hsdg0_category_id` INT
+);
+
+INSERT INTO `table_1hsdg0` (`table_1hsdg0_category_id`) VALUES (1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+CREATE TABLE IF NOT EXISTS `table_wp8tiy` (
+    `table_wp8tiy_order_id` INT,
+    `table_wp8tiy_customer_id` INT,
+    `table_wp8tiy_order_date` DATE,
+    `table_wp8tiy_status` VARCHAR(50),
+    `table_wp8tiy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d83unb` (
+    `table_d83unb_order_id` INT,
+    `table_d83unb_product_id` INT,
+    `table_d83unb_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7n22ut` (
+    `table_7n22ut_product_id` INT,
+    `table_7n22ut_category_id` INT,
+    `table_7n22ut_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wp8tiy` (`table_wp8tiy_order_id`, `table_wp8tiy_customer_id`, `table_wp8tiy_order_date`, `table_wp8tiy_status`, `table_wp8tiy_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_d83unb` (`table_d83unb_order_id`, `table_d83unb_product_id`, `table_d83unb_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_7n22ut` (`table_7n22ut_product_id`, `table_7n22ut_category_id`, `table_7n22ut_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(CUSTOMER_ID_PARAM INT, CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CATEGORY_REVENUE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PREFERENCE_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_D83UNB_QUANTITY * TABLE_7N22UT_PRICE), 0)
+    INTO V_CATEGORY_ORDER_COUNT, V_CATEGORY_REVENUE
+    FROM TABLE_WP8TIY O
+    JOIN TABLE_D83UNB OI ON TABLE_WP8TIY_ORDER_ID = TABLE_D83UNB_ORDER_ID
+    JOIN TABLE_7N22UT P ON TABLE_D83UNB_PRODUCT_ID = TABLE_7N22UT_PRODUCT_ID
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_7N22UT_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WP8TIY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_WP8TIY
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREFERENCE_SCORE = ((V_CATEGORY_ORDER_COUNT * 1.0) / V_TOTAL_ORDER_COUNT * 50) +
+                             ((V_CATEGORY_REVENUE * 1.0) / V_TOTAL_REVENUE * 50);
+
+    RETURN FLOOR(V_PREFERENCE_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+CREATE TABLE IF NOT EXISTS `table_jg3dpu` (
+    `table_jg3dpu_emp_id` INT,
+    `table_jg3dpu_department_id` INT,
+    `table_jg3dpu_salary` INT
+);
+
+INSERT INTO `table_jg3dpu` (`table_jg3dpu_emp_id`, `table_jg3dpu_department_id`, `table_jg3dpu_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_SUM DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_JG3DPU_SALARY), 0)
+    INTO V_SALARY_SUM
+    FROM TABLE_JG3DPU
+    WHERE TABLE_JG3DPU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(88)) - -995 + ((MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(-12)) - 374 + (floor(v_salary_sum)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+CREATE TABLE IF NOT EXISTS `table_scey55` (
+    `table_scey55_project_id` INT,
+    `table_scey55_client_id` INT,
+    `table_scey55_project_type` VARCHAR(50),
+    `table_scey55_estimated_hours` INT,
+    `table_scey55_actual_hours` INT,
+    `table_scey55_labor_rate` INT,
+    `table_scey55_material_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2tdknr` (
+    `table_2tdknr_contractor_id` INT,
+    `table_2tdknr_name` VARCHAR(50),
+    `table_2tdknr_specialty` INT,
+    `table_2tdknr_hourly_rate` INT
+);
+
+INSERT INTO `table_scey55` (`table_scey55_project_id`, `table_scey55_client_id`, `table_scey55_project_type`, `table_scey55_estimated_hours`, `table_scey55_actual_hours`, `table_scey55_labor_rate`, `table_scey55_material_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_2tdknr` (`table_2tdknr_contractor_id`, `table_2tdknr_name`, `table_2tdknr_specialty`, `table_2tdknr_hourly_rate`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_ACTUAL_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 0;
+    DECLARE V_MATERIAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SCEY55_ESTIMATED_HOURS, 0), COALESCE(TABLE_SCEY55_ACTUAL_HOURS, 0), COALESCE(TABLE_SCEY55_LABOR_RATE, 50)
+    INTO V_ESTIMATED_HOURS, V_ACTUAL_HOURS, V_LABOR_RATE
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SCEY55_MATERIAL_COST), 0) INTO V_MATERIAL_COST
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SET V_TOTAL_COST = (V_ACTUAL_HOURS * V_LABOR_RATE) + V_MATERIAL_COST;
+    SET V_BUDGET = V_ESTIMATED_HOURS * V_LABOR_RATE;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = ((V_BUDGET - V_TOTAL_COST) * 100) / V_BUDGET;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN -P_N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+CREATE TABLE IF NOT EXISTS `table_62ah0r` (
+    `table_62ah0r_customer_id` INT,
+    `table_62ah0r_plan_type` VARCHAR(50),
+    `table_62ah0r_monthly_cost` DECIMAL(10,2),
+    `table_62ah0r_status` VARCHAR(50)
+);
+
+INSERT INTO `table_62ah0r` (`table_62ah0r_customer_id`, `table_62ah0r_plan_type`, `table_62ah0r_monthly_cost`, `table_62ah0r_status`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_UPGRADE_PROB INT DEFAULT 0;
+
+    SELECT TABLE_62AH0R_PLAN_TYPE, COALESCE(TABLE_62AH0R_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_62AH0R
+    WHERE TABLE_62AH0R_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'BASIC' THEN SET V_UPGRADE_PROB = 70;
+        WHEN 'PREMIUM' THEN SET V_UPGRADE_PROB = 40;
+        WHEN 'ENTERPRISE' THEN SET V_UPGRADE_PROB = (MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(25)) - -521 + (10);
+        ELSE SET V_UPGRADE_PROB = 50;
+    END CASE;
+
+    SET V_UPGRADE_PROB = (MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(56)) - 25 + ((MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(-15)) - 118 + ((MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(29)) - 425 + (v_upgrade_prob - (v_monthly_cost / 20))));
+
+    RETURN GREATEST(V_UPGRADE_PROB, 5);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIBONACCI_8u5f1y(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_NEXT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN
+        RETURN 0;
+    END IF;
+    IF N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+CREATE TABLE IF NOT EXISTS `table_z9tv6r` (
+    `table_z9tv6r_shipment_id` INT,
+    `table_z9tv6r_order_id` INT,
+    `table_z9tv6r_carrier_id` INT,
+    `table_z9tv6r_shipping_cost` DECIMAL(10,2),
+    `table_z9tv6r_weight_kg` INT,
+    `table_z9tv6r_shipping_date` DATE,
+    `table_z9tv6r_delivery_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1odmhx` (
+    `table_1odmhx_carrier_id` INT,
+    `table_1odmhx_name` VARCHAR(50),
+    `table_1odmhx_base_rate` INT,
+    `table_1odmhx_weight_rate` INT
+);
+
+INSERT INTO `table_z9tv6r` (`table_z9tv6r_shipment_id`, `table_z9tv6r_order_id`, `table_z9tv6r_carrier_id`, `table_z9tv6r_shipping_cost`, `table_z9tv6r_weight_kg`, `table_z9tv6r_shipping_date`, `table_z9tv6r_delivery_date`) VALUES (1, 2, 3, 1.0, 5, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_1odmhx` (`table_1odmhx_carrier_id`, `table_1odmhx_name`, `table_1odmhx_base_rate`, `table_1odmhx_weight_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(SHIPMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_DATE DATE;
+    DECLARE V_EXPECTED_DELIVERY DATE;
+    DECLARE V_ACTUAL_DELIVERY DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_Z9TV6R_SHIPPING_DATE, TABLE_Z9TV6R_DELIVERY_DATE
+    INTO V_SHIPPING_DATE, V_ACTUAL_DELIVERY
+    FROM TABLE_Z9TV6R
+    WHERE TABLE_Z9TV6R_SHIPMENT_ID = SHIPMENT_ID_PARAM;
+
+    IF V_SHIPPING_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_DELIVERY = DATE_ADD(V_SHIPPING_DATE, INTERVAL 7 DAY);
+
+    IF V_ACTUAL_DELIVERY IS NULL THEN
+        SET V_DELAY_DAYS = DATEDIFF(CURDATE(), V_EXPECTED_DELIVERY);
+    ELSE
+        SET V_DELAY_DAYS = DATEDIFF(V_ACTUAL_DELIVERY, V_EXPECTED_DELIVERY);
+    END IF;
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+CREATE TABLE IF NOT EXISTS `table_g5rndo` (
+    `table_g5rndo_emp_id` INT,
+    `table_g5rndo_salary` INT,
+    `table_g5rndo_hire_date` DATE
+);
+
+INSERT INTO `table_g5rndo` (`table_g5rndo_emp_id`, `table_g5rndo_salary`, `table_g5rndo_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ANNUAL_COMPENSATION_INDEX_4dy6lg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G5RNDO_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_G5RNDO
+    WHERE TABLE_G5RNDO_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 12);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+CREATE TABLE IF NOT EXISTS `table_t3oyhq` (
+    `table_t3oyhq_customer_id` INT,
+    `table_t3oyhq_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_e0ydbc` (
+    `table_e0ydbc_order_id` INT,
+    `table_e0ydbc_customer_id` INT,
+    `table_e0ydbc_order_date` DATE
+);
+
+INSERT INTO `table_t3oyhq` (`table_t3oyhq_customer_id`, `table_t3oyhq_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_e0ydbc` (`table_e0ydbc_order_id`, `table_e0ydbc_customer_id`, `table_e0ydbc_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MIN(TABLE_E0YDBC_ORDER_DATE), MAX(TABLE_E0YDBC_ORDER_DATE)
+    INTO V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_E0YDBC
+    WHERE TABLE_E0YDBC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_REFERRAL_PROGRAM_ROI_fsv59s(-35)) - 357 + (0);
+    END IF;
+
+    RETURN DATEDIFF(V_LAST_ORDER, V_FIRST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFERRAL_PROGRAM_ROI_fsv59s----- */
+CREATE TABLE IF NOT EXISTS `table_d5pezn` (
+    `table_d5pezn_order_id` INT,
+    `table_d5pezn_customer_id` INT,
+    `table_d5pezn_order_date` DATE,
+    `table_d5pezn_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_svk7vy` (
+    `table_svk7vy_customer_id` INT,
+    `table_svk7vy_referral_code` INT,
+    `table_svk7vy_referred_by` INT
+);
+
+INSERT INTO `table_d5pezn` (`table_d5pezn_order_id`, `table_d5pezn_customer_id`, `table_d5pezn_order_date`, `table_d5pezn_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_svk7vy` (`table_svk7vy_customer_id`, `table_svk7vy_referral_code`, `table_svk7vy_referred_by`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFERRAL_PROGRAM_ROI_fsv59s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFERRAL_PROGRAM_ROI_fsv59s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REFERRAL_COUNT INT DEFAULT 0;
+    DECLARE V_REFERRAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_REFERRAL_CODE VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_SVK7VY_REFERRAL_CODE
+    INTO V_REFERRAL_CODE
+    FROM TABLE_SVK7VY
+    WHERE TABLE_SVK7VY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_REFERRAL_COUNT
+    FROM TABLE_SVK7VY
+    WHERE TABLE_SVK7VY_REFERRED_BY = V_REFERRAL_CODE;
+
+    SELECT COALESCE(SUM(TABLE_D5PEZN_TOTAL_AMOUNT), 0)
+    INTO V_REFERRAL_REVENUE
+    FROM TABLE_D5PEZN O
+    JOIN TABLE_SVK7VY C ON TABLE_D5PEZN_CUSTOMER_ID = TABLE_SVK7VY_CUSTOMER_ID
+    WHERE TABLE_SVK7VY_REFERRED_BY = V_REFERRAL_CODE;
+
+    SELECT COALESCE(SUM(TABLE_D5PEZN_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_D5PEZN
+    WHERE TABLE_D5PEZN_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_PERCENTAGE = ((V_REFERRAL_REVENUE - V_CUSTOMER_REVENUE) * 100) / V_CUSTOMER_REVENUE;
+
+    RETURN V_ROI_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_1HSDG0
+    WHERE TABLE_1HSDG0_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_UPGRADE_PROBABILITY_pycc3b(74)) - -684 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_SUM_agkaow(78)) - -864 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(-23, -81)) - 130 + (v_count)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_y0odc3(1);

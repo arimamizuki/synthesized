@@ -1,0 +1,423 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1131409 (v1131410 VARCHAR(4000));
+CREATE TABLE IF NOT EXISTS v1131565 (v1131567 TIME);
+CREATE TABLE IF NOT EXISTS v1131379 (v1131380 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1131562 (v1131563 VARCHAR(20), v1131564 VARCHAR(20));
+CREATE TABLE IF NOT EXISTS v1131510 (v1131511 GEOMETRY, v1131513 INT);
+INSERT INTO v1131409 VALUES (REPEAT('a', 4000)), (REPEAT('o', 4000));
+INSERT INTO v1131565 VALUES (NULL);
+INSERT INTO v1131379 VALUES (ST_GEOMFROMTEXT('POINT(0 0)')), (ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO v1131562 VALUES (REPEAT('b', 20), 'test'), (REPEAT('c', 20), '%25411%');
+INSERT INTO v1131510 VALUES (ST_GEOMFROMTEXT('POLYGON((1 2, 2 2, 2 3, 1 2))'), 0);
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(MAX_ITER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE V_I < MAX_ITER AND V_RESULT < 1000 DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(92)) - -566 + ((MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(-97, -60)) - 545 + (v_result + v_i));
+        SET V_I = (MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(0)) - -328 + (v_i + 1);
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A | P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by()) - 204 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_073_DIAGNOSTICS_pvu4by() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE DIAG_COUNT INT DEFAULT 0;
+    DECLARE MYSQL_ERRNO INT;
+    DECLARE SQLSTATE_VAL VARCHAR(5);
+    DECLARE MSG TEXT;
+    
+    GET DIAGNOSTICS CONDITION 1 MYSQL_ERRNO = MYSQL_ERRNO, SQLSTATE_VAL = RETURNED_SQLSTATE, MSG = MESSAGE_TEXT;
+    SET DIAG_COUNT = (MYSQL_FUNC_PROC_TIME_wu095y()) - 777 + (diag_count) + 1;
+    
+    RETURN DIAG_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TIME_wu095y----- */
+CREATE TABLE IF NOT EXISTS `table_z2mr2n` (
+    `table_z2mr2n_ctime` INT
+);
+
+INSERT INTO `table_z2mr2n` (`table_z2mr2n_ctime`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TIME_wu095y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIME_wu095y() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT `TABLE_Z2MR2N_CTIME` INTO RESULT FROM `TABLE_Z2MR2N`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+CREATE TABLE IF NOT EXISTS `table_2vjwnh` (
+    `table_2vjwnh_subscription_id` INT,
+    `table_2vjwnh_customer_id` INT,
+    `table_2vjwnh_plan_type` VARCHAR(50),
+    `table_2vjwnh_start_date` DATE,
+    `table_2vjwnh_monthly_fee` INT,
+    `table_2vjwnh_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_es5g0e` (
+    `table_es5g0e_record_id` INT,
+    `table_es5g0e_subscription_id` INT,
+    `table_es5g0e_usage_date` DATE,
+    `table_es5g0e_mb_used` INT,
+    `table_es5g0e_call_minutes` INT
+);
+
+INSERT INTO `table_2vjwnh` (`table_2vjwnh_subscription_id`, `table_2vjwnh_customer_id`, `table_2vjwnh_plan_type`, `table_2vjwnh_start_date`, `table_2vjwnh_monthly_fee`, `table_2vjwnh_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_es5g0e` (`table_es5g0e_record_id`, `table_es5g0e_subscription_id`, `table_es5g0e_usage_date`, `table_es5g0e_mb_used`, `table_es5g0e_call_minutes`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(SUBSCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_FEE INT DEFAULT 30;
+    DECLARE V_DATA_LIMIT INT DEFAULT 5;
+    DECLARE V_CALL_LIMIT INT DEFAULT 500;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_CALLS_USED INT DEFAULT 0;
+    DECLARE V_OVERAGE_CHARGES INT DEFAULT 0;
+
+    SELECT TABLE_2VJWNH_PLAN_TYPE, TABLE_2VJWNH_MONTHLY_FEE
+    INTO V_PLAN_TYPE, V_MONTHLY_FEE
+    FROM TABLE_2VJWNH
+    WHERE TABLE_2VJWNH_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM;
+
+    SET V_DATA_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 50
+        WHEN 'GOLD' THEN 20
+        WHEN 'SILVER' THEN 10
+        ELSE 5
+    END;
+
+    SET V_CALL_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 2000
+        WHEN 'GOLD' THEN 1000
+        WHEN 'SILVER' THEN 500
+        ELSE 200
+    END;
+
+    SELECT COALESCE(SUM(TABLE_ES5G0E_MB_USED), 0), COALESCE(SUM(TABLE_ES5G0E_CALL_MINUTES), 0)
+    INTO V_DATA_USED, V_CALLS_USED
+    FROM TABLE_ES5G0E
+    WHERE TABLE_ES5G0E_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM
+      AND TABLE_ES5G0E_USAGE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
+
+    IF V_DATA_USED > V_DATA_LIMIT * 1024 THEN
+        SET V_OVERAGE_CHARGES = (MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(67)) - -705 + (v_overage_charges + ((v_data_used - v_data_limit * 1024) / 1024) * 10);
+    END IF;
+
+    IF V_CALLS_USED > V_CALL_LIMIT THEN
+        SET V_OVERAGE_CHARGES = V_OVERAGE_CHARGES + ((V_CALLS_USED - V_CALL_LIMIT) / 100) * 5;
+    END IF;
+
+    RETURN V_OVERAGE_CHARGES;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow----- */
+CREATE TABLE IF NOT EXISTS `table_24zccf` (
+    `table_24zccf_customer_id` INT,
+    `table_24zccf_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ehvt7w` (
+    `table_ehvt7w_order_id` INT,
+    `table_ehvt7w_customer_id` INT,
+    `table_ehvt7w_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_24zccf` (`table_24zccf_customer_id`, `table_24zccf_country`) VALUES (1, 1);
+
+INSERT INTO `table_ehvt7w` (`table_ehvt7w_order_id`, `table_ehvt7w_customer_id`, `table_ehvt7w_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SHARE_2vhzow(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_EHVT7W O
+    JOIN TABLE_24ZCCF C ON TABLE_EHVT7W_CUSTOMER_ID = TABLE_24ZCCF_CUSTOMER_ID
+    WHERE TABLE_24ZCCF_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EHVT7W_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_EHVT7W;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(-21)) - -698 + ((v_country_revenue * 100) / v_total_revenue);
+
+    RETURN V_MARKET_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+CREATE TABLE IF NOT EXISTS `table_u9789c` (
+    `table_u9789c_investment_id` INT,
+    `table_u9789c_customer_id` INT,
+    `table_u9789c_portfolio_id` INT,
+    `table_u9789c_investment_type` VARCHAR(50),
+    `table_u9789c_current_value` INT,
+    `table_u9789c_initial_investment` INT,
+    `table_u9789c_risk_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ctio69` (
+    `table_ctio69_portfolio_id` INT,
+    `table_ctio69_manager_id` INT,
+    `table_ctio69_total_value` DECIMAL(10,2),
+    `table_ctio69_performance_score` INT
+);
+
+INSERT INTO `table_u9789c` (`table_u9789c_investment_id`, `table_u9789c_customer_id`, `table_u9789c_portfolio_id`, `table_u9789c_investment_type`, `table_u9789c_current_value`, `table_u9789c_initial_investment`, `table_u9789c_risk_rating`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_ctio69` (`table_ctio69_portfolio_id`, `table_ctio69_manager_id`, `table_ctio69_total_value`, `table_ctio69_performance_score`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(PORTFOLIO_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_VALUE INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_RETURN_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_AVG_RISK_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_RISK_ADJUSTED_RETURN INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U9789C_INITIAL_INVESTMENT), (MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv(-89)) - 26 + ((MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q()) - -816 + (0))), COALESCE(SUM(TABLE_U9789C_CURRENT_VALUE), 0)
+    INTO V_INITIAL_VALUE, V_CURRENT_VALUE
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_U9789C_RISK_RATING), 3.0)
+    INTO V_AVG_RISK_RATING
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    IF V_INITIAL_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RETURN_PERCENTAGE = ((V_CURRENT_VALUE - V_INITIAL_VALUE) * 100) / V_INITIAL_VALUE;
+
+    SET V_RISK_ADJUSTED_RETURN = V_RETURN_PERCENTAGE - (V_AVG_RISK_RATING * 5);
+
+    RETURN V_RISK_ADJUSTED_RETURN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LEAVE_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LEAVE_COUNT = LEAVE_COUNT + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LEAVE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv----- */
+CREATE TABLE IF NOT EXISTS `table_rpis3d` (
+    `table_rpis3d_student_id` INT,
+    `table_rpis3d_name` VARCHAR(50),
+    `table_rpis3d_exam_score` INT,
+    `table_rpis3d_assignment_score` INT,
+    `table_rpis3d_participation_score` INT
+);
+
+INSERT INTO `table_rpis3d` (`table_rpis3d_student_id`, `table_rpis3d_name`, `table_rpis3d_exam_score`, `table_rpis3d_assignment_score`, `table_rpis3d_participation_score`) VALUES (1, 'test', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_GRADE_ou57iv(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXAM_SCORE INT DEFAULT 0;
+    DECLARE V_ASSIGNMENT_SCORE INT DEFAULT 0;
+    DECLARE V_PARTICIPATION INT DEFAULT 0;
+    DECLARE V_FINAL_GRADE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RPIS3D_EXAM_SCORE, 0), COALESCE(TABLE_RPIS3D_ASSIGNMENT_SCORE, 0), COALESCE(TABLE_RPIS3D_PARTICIPATION_SCORE, 0)
+    INTO V_EXAM_SCORE, V_ASSIGNMENT_SCORE, V_PARTICIPATION
+    FROM TABLE_RPIS3D
+    WHERE TABLE_RPIS3D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_FINAL_GRADE = (V_EXAM_SCORE * 50 / 100) + (V_ASSIGNMENT_SCORE * 40 / 100) + (V_PARTICIPATION * 10 / 100);
+
+    RETURN CAST(V_FINAL_GRADE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0145_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom1 GEOMETRY;
+    DECLARE v_geom2 GEOMETRY;
+    DECLARE v_time_val TIME;
+    DECLARE v_string_val VARCHAR(20);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1131567 FROM v1131565 WHERE v1131567 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Use IF/ELSEIF/ELSE structure (structure 1)
+    IF p1 > 0 THEN
+        -- Adapt UPDATE statement 1: use p1 in condition
+        UPDATE v1131409 AS x1 SET v1131410 = CONCAT('modified_', p1) WHERE v1131410 = REPEAT('a', 4000) AND v1131410 = REPEAT('o', 4000);
+        SET v_counter = v_counter + 1;
+    ELSEIF p1 = 0 THEN
+        -- Adapt UPDATE statement 2: use geometry comparison with variables
+        SET v_geom1 = ST_GEOMFROMTEXT('POINT(0 0)');
+        SET v_geom2 = ST_GEOMFROMTEXT('POINT(1 1)');
+        UPDATE v1131379 AS x1 SET v1131380 = ST_GEOMFROMTEXT(CONCAT('POINT(', p2, ' ', p2, ')')) WHERE MBREQUALS(x1.v1131380, v_geom1) AND MBREQUALS(x1.v1131380, v_geom2);
+        SET v_counter = v_counter + 2;
+    ELSE
+        -- Adapt UPDATE statement 3: use string matching
+        UPDATE v1131562 AS x0 SET v1131564 = CONCAT('%', p1, '%') WHERE v1131563 = REPEAT('b', 20);
+        SET v_counter = v_counter + 3;
+    END IF;
+
+    -- Use LOOP...LEAVE structure (structure 2)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_time_val;
+        IF (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(-41)) - -247 + (v_done) THEN
+            LEAVE read_loop;
+        END IF;
+        -- Adapt INSERT statement: use fetched time value and p2
+        INSERT INTO v1131565 (v1131567) VALUES (ADDTIME(v_time_val, p2));
+        SET v_counter = v_counter + 10;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use REPEAT...UNTIL structure (structure 3)
+    SET v_counter = v_counter + p1;
+    REPEAT
+        -- Adapt UPDATE statement 4: use geometry containment check
+        UPDATE v1131510 AS x1 SET v1131513 = p2 WHERE MBRCONTAINS(ST_GEOMFROMTEXT('POLYGON((1 2, 2 2, 2 3, 1 2))'), v1131511) AND IS_FREE_LOCK('test2');
+        SET v_counter = v_counter + 1;
+    UNTIL v_counter >= 100
+    END REPEAT;
+
+    -- Use CASE/WHEN structure (structure 4)
+    CASE
+        WHEN v_counter > 50 THEN
+            SET result = v_counter * 2;
+        WHEN v_counter BETWEEN 20 AND 50 THEN
+            SET result = v_counter * 3;
+        ELSE
+            SET result = v_counter + p1 + p2;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0145_proc(1, 1, @out_result);
+
+SELECT @out_result;

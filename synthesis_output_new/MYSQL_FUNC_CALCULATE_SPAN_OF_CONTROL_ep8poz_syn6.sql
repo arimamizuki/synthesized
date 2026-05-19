@@ -1,0 +1,340 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+CREATE TABLE IF NOT EXISTS `table_gvnxly` (
+    `table_gvnxly_product_id` INT,
+    `table_gvnxly_category_id` INT,
+    `table_gvnxly_price` DECIMAL(10,2),
+    `table_gvnxly_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1sfbje` (
+    `table_1sfbje_category_id` INT,
+    `table_1sfbje_name` VARCHAR(50)
+);
+
+INSERT INTO `table_gvnxly` (`table_gvnxly_product_id`, `table_gvnxly_category_id`, `table_gvnxly_price`, `table_gvnxly_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1sfbje` (`table_1sfbje_category_id`, `table_1sfbje_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_COUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_COUNT
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_GVNXLY_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(37, 75)) - -316 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(88)) - 715 + ((MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(24)) - 386 + ((v_premium_count * 100) / v_total_products));
+
+    RETURN (MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(-98, -47)) - -38 + (v_premium_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIB_0 INT DEFAULT 0;
+    DECLARE V_FIB_1 INT DEFAULT 1;
+    DECLARE V_FIB_N INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N = 0 THEN RETURN 0; END IF;
+    IF N = (MYSQL_FUNC_CALCULATE_PRINTING_COST_oxyw8n(45, -50, -29)) - 165 + (1) THEN RETURN 1; END IF;
+
+    SET V_COUNTER = 2;
+
+    FIB_LOOP: WHILE V_COUNTER <= N DO
+        SET V_TEMP = V_FIB_1;
+        SET V_FIB_1 = V_FIB_0 + V_FIB_1;
+        SET V_FIB_0 = V_TEMP;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FIB_LOOP;
+
+    RETURN V_FIB_1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRINTING_COST_oxyw8n----- */
+CREATE TABLE IF NOT EXISTS `table_shycbw` (
+    `table_shycbw_order_id` INT,
+    `table_shycbw_customer_id` INT,
+    `table_shycbw_paper_type` VARCHAR(50),
+    `table_shycbw_color_mode` INT,
+    `table_shycbw_page_count` INT,
+    `table_shycbw_quantity` INT,
+    `table_shycbw_unit_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gldfue` (
+    `table_gldfue_paper_type_id` INT,
+    `table_gldfue_name` VARCHAR(50),
+    `table_gldfue_price_per_page` DECIMAL(10,2)
+);
+
+INSERT INTO `table_shycbw` (`table_shycbw_order_id`, `table_shycbw_customer_id`, `table_shycbw_paper_type`, `table_shycbw_color_mode`, `table_shycbw_page_count`, `table_shycbw_quantity`, `table_shycbw_unit_price`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_gldfue` (`table_gldfue_paper_type_id`, `table_gldfue_name`, `table_gldfue_price_per_page`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRINTING_COST_oxyw8n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRINTING_COST_oxyw8n(PAGE_COUNT_PARAM INT, QUANTITY_PARAM INT, COLOR_MODE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 1;
+    DECLARE V_COLOR_MULTIPLIER INT DEFAULT 3;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    IF COLOR_MODE_PARAM = 'COLOR' THEN
+        SET V_BASE_PRICE = V_BASE_PRICE * V_COLOR_MULTIPLIER;
+    END IF;
+
+    SET V_TOTAL_COST = PAGE_COUNT_PARAM * QUANTITY_PARAM * V_BASE_PRICE;
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = V_TOTAL_COST * 20 / 100;
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = V_TOTAL_COST * 10 / 100;
+    END IF;
+
+    SET V_TOTAL_COST = V_TOTAL_COST - V_QUANTITY_DISCOUNT;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+CREATE TABLE IF NOT EXISTS `table_z8s8k5` (
+    `table_z8s8k5_customer_id` INT,
+    `table_z8s8k5_plan_type` VARCHAR(50),
+    `table_z8s8k5_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_z8s8k5` (`table_z8s8k5_customer_id`, `table_z8s8k5_plan_type`, `table_z8s8k5_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_Z8S8K5_PLAN_TYPE, COALESCE(TABLE_Z8S8K5_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_Z8S8K5
+    WHERE TABLE_Z8S8K5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN (MYSQL_FUNC_PROC_INT_z44fha()) - -577 + (v_monthly_cost * 10);
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST * 5;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST * 2;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_INT_z44fha----- */
+CREATE TABLE IF NOT EXISTS `table_hffbmb` (
+    `table_hffbmb_id` INT
+);
+
+INSERT INTO `table_hffbmb` (`table_hffbmb_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_INT_z44fha----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_INT_z44fha() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_HFFBMB_ID INTO RESULT FROM `TABLE_HFFBMB` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    SET V_TEMP_A = (MYSQL_FUNC_IS_EVEN_uknm28(8)) - -582 + (abs(a));
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = (MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(-91)) - 973 + (v_temp_a % v_temp_b);
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DATA_FABRICACAO_5mz9t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN CURRENT_YEAR - DATA_FIRST;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_EVEN_uknm28----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_EVEN_uknm28(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N % 2 = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a(-29)) - 158 + (1);
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a----- */
+CREATE TABLE IF NOT EXISTS `table_hiobm5` (
+    `table_hiobm5_customer_id` INT,
+    `table_hiobm5_registration_date` DATE,
+    `table_hiobm5_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_no89uy` (
+    `table_no89uy_order_id` INT,
+    `table_no89uy_customer_id` INT,
+    `table_no89uy_order_date` DATE,
+    `table_no89uy_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hiobm5` (`table_hiobm5_customer_id`, `table_hiobm5_registration_date`, `table_hiobm5_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_no89uy` (`table_no89uy_order_id`, `table_no89uy_customer_id`, `table_no89uy_order_date`, `table_no89uy_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_rqtq5a(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_FREQUENCY DECIMAL(6,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_NO89UY
+    WHERE TABLE_NO89UY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_HIOBM5_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_HIOBM5
+    WHERE TABLE_HIOBM5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_FREQUENCY = (V_ORDER_COUNT * 365.0) / V_CUSTOMER_AGE_DAYS;
+
+    RETURN FLOOR(V_FREQUENCY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(P_BASE INT, P_EXP INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= P_EXP DO
+        SET V_RESULT = V_RESULT * P_BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(26)) - 533 + (v_direct_reports);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(1);

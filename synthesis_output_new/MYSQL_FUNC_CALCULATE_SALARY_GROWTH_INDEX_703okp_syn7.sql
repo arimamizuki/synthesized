@@ -1,0 +1,430 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ufhrdo` (
+    `table_ufhrdo_emp_id` INT,
+    `table_ufhrdo_department_id` INT,
+    `table_ufhrdo_salary` INT,
+    `table_ufhrdo_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mhmpip` (
+    `table_mhmpip_department_id` INT,
+    `table_mhmpip_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ufhrdo` (`table_ufhrdo_emp_id`, `table_ufhrdo_department_id`, `table_ufhrdo_salary`, `table_ufhrdo_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_mhmpip` (`table_mhmpip_department_id`, `table_mhmpip_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+CREATE TABLE IF NOT EXISTS `table_0rmlv2` (
+    `table_0rmlv2_id` INT,
+    `table_0rmlv2_username` VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6aha2u` (
+    `table_6aha2u_user_id` INT
+);
+
+INSERT INTO `table_0rmlv2` (`table_0rmlv2_id`, `table_0rmlv2_username`) VALUES (1, 'test');
+
+INSERT INTO `table_6aha2u` (`table_6aha2u_user_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(P_USERNAME_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE USERNAME_VAL VARCHAR(30);
+    DECLARE PHOTO_COUNT INT;
+    
+    SELECT `TABLE_0RMLV2_USERNAME` INTO USERNAME_VAL FROM `TABLE_0RMLV2` WHERE `TABLE_0RMLV2_ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF USERNAME_VAL IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(20)) - 70 + (0);
+    END IF;
+    
+    SELECT COUNT(UP.`TABLE_6AHA2U_USER_ID`) INTO PHOTO_COUNT
+    FROM `TABLE_6AHA2U` AS UP
+    LEFT JOIN `TABLE_0RMLV2` AS U ON U.`TABLE_0RMLV2_ID` = UP.`TABLE_6AHA2U_USER_ID`
+    WHERE U.`TABLE_0RMLV2_USERNAME` = USERNAME_VAL;
+    
+    RETURN COALESCE(PHOTO_COUNT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht----- */
+CREATE TABLE IF NOT EXISTS `table_kforn5` (
+    `table_kforn5_customer_id` INT,
+    `table_kforn5_order_id` INT,
+    `table_kforn5_order_date` DATE
+);
+
+INSERT INTO `table_kforn5` (`table_kforn5_customer_id`, `table_kforn5_order_id`, `table_kforn5_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER_DATE DATE;
+
+    SELECT MIN(TABLE_KFORN5_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM TABLE_KFORN5
+    WHERE TABLE_KFORN5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - -155 + ((MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(-38)) - 540 + (month(v_first_order_date)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+CREATE TABLE IF NOT EXISTS `table_14m53w` (
+    `table_14m53w_order_id` INT,
+    `table_14m53w_customer_id` INT,
+    `table_14m53w_order_date` DATE,
+    `table_14m53w_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_i2tsnq` (
+    `table_i2tsnq_shipment_id` INT,
+    `table_i2tsnq_order_id` INT,
+    `table_i2tsnq_shipping_cost` DECIMAL(10,2),
+    `table_i2tsnq_delivery_date` DATE
+);
+
+INSERT INTO `table_14m53w` (`table_14m53w_order_id`, `table_14m53w_customer_id`, `table_14m53w_order_date`, `table_14m53w_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_i2tsnq` (`table_i2tsnq_shipment_id`, `table_i2tsnq_order_id`, `table_i2tsnq_shipping_cost`, `table_i2tsnq_delivery_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOGISTICS_COST_RATIO_oltcci(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_14M53W_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_14M53W
+    WHERE TABLE_14M53W_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_I2TSNQ_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_I2TSNQ
+    WHERE TABLE_I2TSNQ_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+CREATE TABLE IF NOT EXISTS `table_tpfwx5` (
+    `table_tpfwx5_campaign_id` INT,
+    `table_tpfwx5_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tpfwx5` (`table_tpfwx5_campaign_id`, `table_tpfwx5_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_TPFWX5_STATUS
+    INTO V_STATUS
+    FROM TABLE_TPFWX5
+    WHERE TABLE_TPFWX5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+CREATE TABLE IF NOT EXISTS `table_7d705x` (
+    `table_7d705x_campaign_id` INT,
+    `table_7d705x_start_date` DATE,
+    `table_7d705x_end_date` DATE,
+    `table_7d705x_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yar712` (
+    `table_yar712_conversion_id` INT,
+    `table_yar712_campaign_id` INT,
+    `table_yar712_conversion_value` INT
+);
+
+INSERT INTO `table_7d705x` (`table_7d705x_campaign_id`, `table_7d705x_start_date`, `table_7d705x_end_date`, `table_7d705x_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_yar712` (`table_yar712_conversion_id`, `table_yar712_campaign_id`, `table_yar712_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_ACQUISITION_9fnnx9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_COST_PER_ACQ INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7D705X_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_7D705X
+    WHERE TABLE_7D705X_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_YAR712
+    WHERE TABLE_YAR712_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSIONS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(-12)) - 899 + (v_budget);
+    END IF;
+
+    SET V_COST_PER_ACQ = V_BUDGET / V_CONVERSIONS;
+
+    RETURN V_COST_PER_ACQ;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ah7ot` (
+    `table_4ah7ot_student_id` INT,
+    `table_4ah7ot_name` VARCHAR(50),
+    `table_4ah7ot_class_id` INT,
+    `table_4ah7ot_score` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hqvgbn` (
+    `table_hqvgbn_class_id` INT,
+    `table_hqvgbn_teacher_id` INT,
+    `table_hqvgbn_average_score` INT
+);
+
+INSERT INTO `table_4ah7ot` (`table_4ah7ot_student_id`, `table_4ah7ot_name`, `table_4ah7ot_class_id`, `table_4ah7ot_score`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_hqvgbn` (`table_hqvgbn_class_id`, `table_hqvgbn_teacher_id`, `table_hqvgbn_average_score`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLASS_AVG INT DEFAULT 0;
+    DECLARE V_STUDENT_COUNT INT DEFAULT 0;
+    DECLARE V_BELOW_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_CURVE_FACTOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HQVGBN_AVERAGE_SCORE, 0)
+    INTO V_CLASS_AVG
+    FROM TABLE_HQVGBN
+    WHERE TABLE_HQVGBN_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_STUDENT_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_BELOW_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE < V_CLASS_AVG;
+
+    SELECT COUNT(*)
+    INTO V_ABOVE_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE >= V_CLASS_AVG;
+
+    IF V_STUDENT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_BELOW_AVG_COUNT > V_ABOVE_AVG_COUNT THEN
+        SET V_CURVE_FACTOR = -((V_BELOW_AVG_COUNT - V_ABOVE_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    ELSE
+        SET V_CURVE_FACTOR = ((V_ABOVE_AVG_COUNT - V_BELOW_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    END IF;
+
+    RETURN V_CURVE_FACTOR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+CREATE TABLE IF NOT EXISTS `table_ngw2f9` (
+    `table_ngw2f9_product_id` INT,
+    `table_ngw2f9_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ngw2f9` (`table_ngw2f9_product_id`, `table_ngw2f9_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_INDEX_6j9vay(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NGW2F9_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_NGW2F9
+    WHERE TABLE_NGW2F9_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(70, 34)) - -400 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(SIZE INT, POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF SIZE <= 0 OR POSITIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET POSITIONS = POSITIONS % SIZE;
+    IF POSITIONS = 0 THEN
+        RETURN (SIZE * (SIZE - 1)) / 2;
+    END IF;
+
+    SET V_I = 1;
+    WHILE V_I <= POSITIONS DO
+        SET V_J = SIZE;
+        WHILE V_J > 1 DO
+            SET V_RESULT = V_RESULT + 1;
+            SET V_J = V_J - 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_thtmlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_thtmlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRIOR_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_UFHRDO_SALARY), 0)
+    INTO V_CURRENT_AVG
+    FROM TABLE_UFHRDO
+    WHERE TABLE_UFHRDO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = (MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(-59)) - 840 + (((v_current_avg - v_prior_avg) * 100) / v_prior_avg);
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(1);

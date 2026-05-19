@@ -1,0 +1,430 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_npdkhs` (
+    `table_npdkhs_emp_id` INT,
+    `table_npdkhs_department_id` INT,
+    `table_npdkhs_salary` INT,
+    `table_npdkhs_hire_date` DATE,
+    `table_npdkhs_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_npdkhs` (`table_npdkhs_emp_id`, `table_npdkhs_department_id`, `table_npdkhs_salary`, `table_npdkhs_hire_date`, `table_npdkhs_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+CREATE TABLE IF NOT EXISTS `table_b4dc8l` (
+    `table_b4dc8l_card_id` INT,
+    `table_b4dc8l_customer_id` INT,
+    `table_b4dc8l_card_type` VARCHAR(50),
+    `table_b4dc8l_credit_limit` INT,
+    `table_b4dc8l_current_balance` INT,
+    `table_b4dc8l_interest_rate` INT,
+    `table_b4dc8l_min_payment_rate` INT
+);
+
+INSERT INTO `table_b4dc8l` (`table_b4dc8l_card_id`, `table_b4dc8l_customer_id`, `table_b4dc8l_card_type`, `table_b4dc8l_credit_limit`, `table_b4dc8l_current_balance`, `table_b4dc8l_interest_rate`, `table_b4dc8l_min_payment_rate`) VALUES (1, 1, 'test', 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CREDIT_LIMIT INT DEFAULT 0;
+    DECLARE V_CURRENT_BALANCE INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+    DECLARE V_MIN_PAYMENT INT DEFAULT 0;
+    DECLARE V_INTEREST_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_B4DC8L_CREDIT_LIMIT, 1000), COALESCE(TABLE_B4DC8L_CURRENT_BALANCE, 0)
+    INTO V_CREDIT_LIMIT, V_CURRENT_BALANCE
+    FROM TABLE_B4DC8L
+    WHERE TABLE_B4DC8L_CARD_ID = CARD_ID_PARAM;
+
+    IF V_CREDIT_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_CURRENT_BALANCE * 100) / V_CREDIT_LIMIT;
+
+    IF V_UTILIZATION > 80 THEN
+        SET V_UTILIZATION = V_UTILIZATION + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7()) - 578 + (cast(v_utilization as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+CREATE TABLE IF NOT EXISTS `table_m5l6r9` (
+    `table_m5l6r9_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `table_m5l6r9` (`table_m5l6r9_cdecimal`) VALUES (42);
+
+/* -----Called: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(TABLE_M5L6R9_CDECIMAL AS SIGNED) INTO RESULT FROM `TABLE_M5L6R9` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es(16)) - -216 + ((MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + (coalesce(result, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, 0), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = V_QUALITY_SCORE - 10;
+    END IF;
+
+    RETURN CAST(V_QUALITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es----- */
+CREATE TABLE IF NOT EXISTS `table_3h6spx` (
+    `table_3h6spx_customer_id` INT,
+    `table_3h6spx_registration_date` DATE,
+    `table_3h6spx_country` INT,
+    `table_3h6spx_customer_tier` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_577zj7` (
+    `table_577zj7_order_id` INT,
+    `table_577zj7_customer_id` INT,
+    `table_577zj7_order_date` DATE,
+    `table_577zj7_total_amount` DECIMAL(10,2),
+    `table_577zj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_3h6spx` (`table_3h6spx_customer_id`, `table_3h6spx_registration_date`, `table_3h6spx_country`, `table_3h6spx_customer_tier`) VALUES (1, '2024-01-01', 1, 1);
+
+INSERT INTO `table_577zj7` (`table_577zj7_order_id`, `table_577zj7_customer_id`, `table_577zj7_order_date`, `table_577zj7_total_amount`, `table_577zj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_gwq6es(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_TIER VARCHAR(20) DEFAULT 'BRONZE';
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LIFETIME_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(COUNT(*), 0), COALESCE(SUM(TABLE_577ZJ7_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_577ZJ7
+    WHERE TABLE_577ZJ7_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_577ZJ7_STATUS = 'COMPLETED';
+
+    SELECT TABLE_3H6SPX_CUSTOMER_TIER INTO V_CUSTOMER_TIER
+    FROM TABLE_3H6SPX
+    WHERE TABLE_3H6SPX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_CUSTOMER_TIER
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = V_TOTAL_REVENUE / V_ORDER_COUNT;
+        SET V_LIFETIME_VALUE = V_AVG_ORDER_VALUE * V_ORDER_COUNT * V_TIER_MULTIPLIER;
+    END IF;
+
+    RETURN V_LIFETIME_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(LIMIT_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_COMPOSITE INT DEFAULT 0;
+
+    IF LIMIT_NUM < 2 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(-10)) - -301 + (0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= LIMIT_NUM DO
+        SET V_IS_COMPOSITE = 0;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_COMPOSITE = 1;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_COMPOSITE = 0 THEN
+            SET V_COUNT = (MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(98)) - 179 + (v_count) + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+CREATE TABLE IF NOT EXISTS `table_7gncdo` (
+    `table_7gncdo_product_id` INT,
+    `table_7gncdo_category_id` INT
+);
+
+INSERT INTO `table_7gncdo` (`table_7gncdo_product_id`, `table_7gncdo_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_7GNCDO
+    WHERE TABLE_7GNCDO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(2)) - 125 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ts7o4` (
+    `table_4ts7o4_order_id` INT,
+    `table_4ts7o4_customer_id` INT,
+    `table_4ts7o4_order_date` DATE,
+    `table_4ts7o4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_y3npq4` (
+    `table_y3npq4_order_id` INT,
+    `table_y3npq4_product_id` INT,
+    `table_y3npq4_quantity` INT,
+    `table_y3npq4_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4ts7o4` (`table_4ts7o4_order_id`, `table_4ts7o4_customer_id`, `table_4ts7o4_order_date`, `table_4ts7o4_status`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_y3npq4` (`table_y3npq4_order_id`, `table_y3npq4_product_id`, `table_y3npq4_quantity`, `table_y3npq4_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_ITEM_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_FRAUD_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_Y3NPQ4_QUANTITY * TABLE_Y3NPQ4_UNIT_PRICE), 0), COUNT(*)
+    INTO V_ORDER_TOTAL, V_ITEM_COUNT
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_Y3NPQ4_PRODUCT_ID)
+    INTO V_UNIQUE_PRODUCTS
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ITEM_COUNT > 0 THEN
+        SET V_AVG_ITEM_PRICE = V_ORDER_TOTAL / V_ITEM_COUNT;
+    END IF;
+
+    IF V_ORDER_TOTAL > 10000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 30;
+    END IF;
+
+    IF V_UNIQUE_PRODUCTS < V_ITEM_COUNT / 2 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 20;
+    END IF;
+
+    IF V_AVG_ITEM_PRICE > 5000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 25;
+    END IF;
+
+    RETURN LEAST(V_FRAUD_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_SMALLEST_FACTOR_ibo2sz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    IF N % 2 = 0 THEN
+        RETURN 2;
+    END IF;
+
+    SET V_SQRT_N = (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(-72)) - 326 + (floor(sqrt(n)));
+    SET V_FACTOR = 3;
+
+    WHILE V_FACTOR <= V_SQRT_N DO
+        IF N % V_FACTOR = 0 THEN
+            RETURN V_FACTOR;
+        END IF;
+        SET V_FACTOR = V_FACTOR + 2;
+    END WHILE;
+
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+CREATE TABLE IF NOT EXISTS `table_07mi7x` (
+    `table_07mi7x_emp_id` INT,
+    `table_07mi7x_hire_date` DATE,
+    `table_07mi7x_salary` INT
+);
+
+INSERT INTO `table_07mi7x` (`table_07mi7x_emp_id`, `table_07mi7x_hire_date`, `table_07mi7x_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_07MI7X_HIRE_DATE, CURDATE()), COALESCE(TABLE_07MI7X_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_07MI7X
+    WHERE TABLE_07MI7X_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (V_TENURE * 1000) + FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NPDKHS_PERFORMANCE_RATING, (MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(76)) - 728 + ((MYSQL_FUNC_PROC_DECIMAL_zozmya()) - 940 + ((MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(-35)) - -207 + (0)))), COALESCE(TABLE_NPDKHS_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_NPDKHS_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM TABLE_NPDKHS
+    WHERE TABLE_NPDKHS_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERF_RATIO = (V_PERFORMANCE * V_SALARY) / V_TENURE_YEARS;
+
+    RETURN FLOOR(V_PERF_RATIO / 100);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(1);

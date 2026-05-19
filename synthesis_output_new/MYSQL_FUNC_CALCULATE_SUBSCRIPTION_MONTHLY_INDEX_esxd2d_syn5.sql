@@ -1,0 +1,366 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_der9s6` (
+    `table_der9s6_customer_id` INT,
+    `table_der9s6_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_der9s6` (`table_der9s6_customer_id`, `table_der9s6_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+CREATE TABLE IF NOT EXISTS `table_u7cano` (
+    `table_u7cano_campaign_id` INT,
+    `table_u7cano_budget` INT,
+    `table_u7cano_start_date` DATE,
+    `table_u7cano_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ume4dp` (
+    `table_ume4dp_conversion_id` INT,
+    `table_ume4dp_campaign_id` INT,
+    `table_ume4dp_conversion_value` INT
+);
+
+INSERT INTO `table_u7cano` (`table_u7cano_campaign_id`, `table_u7cano_budget`, `table_u7cano_start_date`, `table_u7cano_end_date`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ume4dp` (`table_ume4dp_conversion_id`, `table_ume4dp_campaign_id`, `table_ume4dp_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION_RATE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U7CANO_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_U7CANO
+    WHERE TABLE_U7CANO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_UME4DP_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_UME4DP
+    WHERE TABLE_UME4DP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_RATE = (V_SPENT / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION_RATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+CREATE TABLE IF NOT EXISTS `table_siem0e` (
+    `table_siem0e_order_id` INT,
+    `table_siem0e_customer_id` INT,
+    `table_siem0e_order_date` DATE,
+    `table_siem0e_total_amount` DECIMAL(10,2),
+    `table_siem0e_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ivbzho` (
+    `table_ivbzho_order_id` INT,
+    `table_ivbzho_product_id` INT,
+    `table_ivbzho_quantity` INT
+);
+
+INSERT INTO `table_siem0e` (`table_siem0e_order_id`, `table_siem0e_customer_id`, `table_siem0e_order_date`, `table_siem0e_total_amount`, `table_siem0e_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ivbzho` (`table_ivbzho_order_id`, `table_ivbzho_product_id`, `table_ivbzho_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_AFFINITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_IVBZHO_PRODUCT_ID), COALESCE(SUM(TABLE_IVBZHO_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_IVBZHO
+    WHERE TABLE_IVBZHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_AFFINITY_SCORE = V_UNIQUE_PRODUCTS * 10 + V_TOTAL_QUANTITY * 2;
+
+    RETURN (MYSQL_FUNC_PROC_INT_z44fha()) - -577 + (v_affinity_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_INT_z44fha----- */
+CREATE TABLE IF NOT EXISTS `table_hffbmb` (
+    `table_hffbmb_id` INT
+);
+
+INSERT INTO `table_hffbmb` (`table_hffbmb_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_INT_z44fha----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_INT_z44fha() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_HFFBMB_ID INTO RESULT FROM `TABLE_HFFBMB` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = (MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(-3, -64)) - -71 + (upper((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(46, -99)) - -727 + (input_str)));
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(BASE INT, EXP INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF EXP < (MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-9)) - -807 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * BASE;
+        SET EXP = EXP - 1;
+    UNTIL EXP <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(-66)) - 857 + (v_result) * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+CREATE TABLE IF NOT EXISTS `table_ib0m3v` (
+    `table_ib0m3v_product_id` INT,
+    `table_ib0m3v_stock_quantity` INT
+);
+
+INSERT INTO `table_ib0m3v` (`table_ib0m3v_product_id`, `table_ib0m3v_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IB0M3V_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_IB0M3V
+    WHERE TABLE_IB0M3V_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = LEAST(V_STOCK / 10, 100);
+
+    RETURN V_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+CREATE TABLE IF NOT EXISTS `table_35z2sn` (
+    `table_35z2sn_restaurant_id` INT,
+    `table_35z2sn_cuisine_type` VARCHAR(50),
+    `table_35z2sn_average_price` DECIMAL(10,2),
+    `table_35z2sn_rating` DECIMAL(3,1),
+    `table_35z2sn_delivery_radius_miles` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l3g0c` (
+    `table_4l3g0c_order_id` INT,
+    `table_4l3g0c_restaurant_id` INT,
+    `table_4l3g0c_customer_id` INT,
+    `table_4l3g0c_order_total` DECIMAL(10,2),
+    `table_4l3g0c_delivery_distance` INT
+);
+
+INSERT INTO `table_35z2sn` (`table_35z2sn_restaurant_id`, `table_35z2sn_cuisine_type`, `table_35z2sn_average_price`, `table_35z2sn_rating`, `table_35z2sn_delivery_radius_miles`) VALUES (1, 'test', 1.0, 1.0, 5);
+
+INSERT INTO `table_4l3g0c` (`table_4l3g0c_order_id`, `table_4l3g0c_restaurant_id`, `table_4l3g0c_customer_id`, `table_4l3g0c_order_total`, `table_4l3g0c_delivery_distance`) VALUES (1, 2, 3, 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(RESTAURANT_ID_PARAM INT, ORDER_DISTANCE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_RESTAURANT_RATING DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+    DECLARE V_COMPATIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_35Z2SN_DELIVERY_RADIUS_MILES, 5), COALESCE(TABLE_35Z2SN_RATING, 3.(MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(-37)) - 464 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(76)) - -523 + (0))), COALESCE(TABLE_35Z2SN_AVERAGE_PRICE, 20)
+    INTO V_DELIVERY_RADIUS, V_RESTAURANT_RATING, V_AVG_PRICE
+    FROM TABLE_35Z2SN
+    WHERE TABLE_35Z2SN_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF ORDER_DISTANCE_PARAM > V_DELIVERY_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPATIBILITY_SCORE = (V_RESTAURANT_RATING * 20) - (V_AVG_PRICE / 5) + ((V_DELIVERY_RADIUS - ORDER_DISTANCE_PARAM) * 5);
+
+    RETURN GREATEST(V_COMPATIBILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+CREATE TABLE IF NOT EXISTS `table_1e6l3o` (
+    `table_1e6l3o_supplier_id` INT,
+    `table_1e6l3o_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1e6l3o` (`table_1e6l3o_supplier_id`, `table_1e6l3o_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_1E6L3O_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_1E6L3O
+    WHERE TABLE_1E6L3O_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+CREATE TABLE IF NOT EXISTS `table_aw8lqb` (
+    `table_aw8lqb_patient_id` INT,
+    `table_aw8lqb_name` VARCHAR(50),
+    `table_aw8lqb_date_of_birth` DATE,
+    `table_aw8lqb_blood_type` VARCHAR(50),
+    `table_aw8lqb_insurance_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ev6fi` (
+    `table_5ev6fi_appt_id` INT,
+    `table_5ev6fi_patient_id` INT,
+    `table_5ev6fi_doctor_id` INT,
+    `table_5ev6fi_appt_date` DATE,
+    `table_5ev6fi_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_u95tmt` (
+    `table_u95tmt_bill_id` INT,
+    `table_u95tmt_patient_id` INT,
+    `table_u95tmt_total_amount` DECIMAL(10,2),
+    `table_u95tmt_paid_amount` INT
+);
+
+INSERT INTO `table_aw8lqb` (`table_aw8lqb_patient_id`, `table_aw8lqb_name`, `table_aw8lqb_date_of_birth`, `table_aw8lqb_blood_type`, `table_aw8lqb_insurance_id`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_5ev6fi` (`table_5ev6fi_appt_id`, `table_5ev6fi_patient_id`, `table_5ev6fi_doctor_id`, `table_5ev6fi_appt_date`, `table_5ev6fi_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+INSERT INTO `table_u95tmt` (`table_u95tmt_bill_id`, `table_u95tmt_patient_id`, `table_u95tmt_total_amount`, `table_u95tmt_paid_amount`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(PATIENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_BILLS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_PENDING_APPOINTMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U95TMT_TOTAL_AMOUNT), 0), COALESCE(SUM(TABLE_U95TMT_PAID_AMOUNT), 0)
+    INTO V_TOTAL_BILLS, V_TOTAL_PAID
+    FROM TABLE_U95TMT
+    WHERE TABLE_U95TMT_PATIENT_ID = PATIENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_PENDING_APPOINTMENTS
+    FROM TABLE_5EV6FI
+    WHERE TABLE_5EV6FI_PATIENT_ID = PATIENT_ID_PARAM AND TABLE_5EV6FI_STATUS = 'PENDING';
+
+    SET V_BALANCE = V_TOTAL_BILLS - V_TOTAL_PAID;
+
+    IF V_BALANCE < 0 THEN
+        SET V_BALANCE = 0;
+    END IF;
+
+    RETURN V_BALANCE + (V_PENDING_APPOINTMENTS * 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DER9S6_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_DER9S6
+    WHERE TABLE_DER9S6_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(-100)) - 942 + ((MYSQL_FUNC_CALCULATE_BUDGET_UTILIZATION_RATE_ej25b8(-100)) - 443 + (v_monthly_cost)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_esxd2d(1);

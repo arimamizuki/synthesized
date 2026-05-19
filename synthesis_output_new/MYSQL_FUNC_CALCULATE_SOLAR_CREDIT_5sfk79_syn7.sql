@@ -1,0 +1,363 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_kcy5si` (
+    `table_kcy5si_meter_id` INT,
+    `table_kcy5si_customer_id` INT,
+    `table_kcy5si_meter_type` VARCHAR(50),
+    `table_kcy5si_current_reading` INT,
+    `table_kcy5si_previous_reading` INT,
+    `table_kcy5si_tariff_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c44eze` (
+    `table_c44eze_panel_id` INT,
+    `table_c44eze_meter_id` INT,
+    `table_c44eze_capacity_kw` INT,
+    `table_c44eze_installation_date` DATE,
+    `table_c44eze_efficiency_percent` INT
+);
+
+INSERT INTO `table_kcy5si` (`table_kcy5si_meter_id`, `table_kcy5si_customer_id`, `table_kcy5si_meter_type`, `table_kcy5si_current_reading`, `table_kcy5si_previous_reading`, `table_kcy5si_tariff_rate`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c44eze` (`table_c44eze_panel_id`, `table_c44eze_meter_id`, `table_c44eze_capacity_kw`, `table_c44eze_installation_date`, `table_c44eze_efficiency_percent`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(LIMIT_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_COMPOSITE INT DEFAULT 0;
+
+    IF LIMIT_NUM < 2 THEN
+        RETURN (MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(-3)) - 516 + (0);
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= LIMIT_NUM DO
+        SET V_IS_COMPOSITE = 0;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_COMPOSITE = 1;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_COMPOSITE = 0 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm(11)) - -883 + (v_count + 1);
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(-77)) - -824 + (val) MOD 2 = 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE ODD';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+CREATE TABLE IF NOT EXISTS `table_ebcxyj` (
+    `table_ebcxyj_product_id` INT,
+    `table_ebcxyj_category_id` INT,
+    `table_ebcxyj_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebcxyj` (`table_ebcxyj_product_id`, `table_ebcxyj_category_id`, `table_ebcxyj_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_EBCXYJ_PRICE), 0)
+    INTO V_AVG
+    FROM TABLE_EBCXYJ
+    WHERE TABLE_EBCXYJ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm----- */
+CREATE TABLE IF NOT EXISTS `table_eej8k8` (
+    `table_eej8k8_customer_id` INT,
+    `table_eej8k8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_eej8k8` (`table_eej8k8_customer_id`, `table_eej8k8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACTIVE_SUBSCRIPTION_FLAG_jmhswm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_EEJ8K8
+    WHERE TABLE_EEJ8K8_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_EEJ8K8_STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= (MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(46, -96)) - 615 + (1) THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = (MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(62)) - -246 + (v_sum + v_i);
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_AND_h85f7j(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A & P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+CREATE TABLE IF NOT EXISTS `table_smasih` (
+    `table_smasih_account_id` INT,
+    `table_smasih_customer_id` INT,
+    `table_smasih_account_type` INT,
+    `table_smasih_balance` INT,
+    `table_smasih_interest_rate` INT,
+    `table_smasih_opened_date` DATE
+);
+
+INSERT INTO `table_smasih` (`table_smasih_account_id`, `table_smasih_customer_id`, `table_smasih_account_type`, `table_smasih_balance`, `table_smasih_interest_rate`, `table_smasih_opened_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_DAYS_HELD INT DEFAULT 0;
+    DECLARE V_INTEREST_EARNED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SMASIH_BALANCE, 0), COALESCE(TABLE_SMASIH_INTEREST_RATE, 0.00)
+    INTO V_BALANCE, V_INTEREST_RATE
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_SMASIH_OPENED_DATE)
+    INTO V_DAYS_HELD
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_INTEREST_EARNED = (V_BALANCE * V_INTEREST_RATE * V_DAYS_HELD) / 36500;
+
+    RETURN FLOOR(V_INTEREST_EARNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+CREATE TABLE IF NOT EXISTS `table_r8spts` (
+    `table_r8spts_product_id` INT,
+    `table_r8spts_customer_id` INT,
+    `table_r8spts_product_type` VARCHAR(50),
+    `table_r8spts_warranty_years` INT,
+    `table_r8spts_coverage_amount` DECIMAL(10,2),
+    `table_r8spts_premium_annual` INT,
+    `table_r8spts_deductible` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oabm0f` (
+    `table_oabm0f_claim_id` INT,
+    `table_oabm0f_product_id` INT,
+    `table_oabm0f_claim_date` DATE,
+    `table_oabm0f_repair_cost` DECIMAL(10,2),
+    `table_oabm0f_status` VARCHAR(50)
+);
+
+INSERT INTO `table_r8spts` (`table_r8spts_product_id`, `table_r8spts_customer_id`, `table_r8spts_product_type`, `table_r8spts_warranty_years`, `table_r8spts_coverage_amount`, `table_r8spts_premium_annual`, `table_r8spts_deductible`) VALUES (1, 2, 'test', 4, 1.0, 6, 7);
+
+INSERT INTO `table_oabm0f` (`table_oabm0f_claim_id`, `table_oabm0f_product_id`, `table_oabm0f_claim_date`, `table_oabm0f_repair_cost`, `table_oabm0f_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WARRANTY_YEARS INT DEFAULT 2;
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R8SPTS_WARRANTY_YEARS, 2), COALESCE(TABLE_R8SPTS_COVERAGE_AMOUNT, 1000), COALESCE(TABLE_R8SPTS_DEDUCTIBLE, 100)
+    INTO V_WARRANTY_YEARS, V_COVERAGE_AMOUNT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_R8SPTS
+    WHERE TABLE_R8SPTS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OABM0F_REPAIR_COST), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_OABM0F
+    WHERE TABLE_OABM0F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_OABM0F_STATUS = 'APPROVED';
+
+    SET V_COVERAGE_SCORE = (V_WARRANTY_YEARS * 20) + (V_COVERAGE_AMOUNT / 100) - (V_DEDUCTIBLE_AMOUNT / 10);
+
+    IF V_TOTAL_CLAIMS > 500 THEN
+        SET V_COVERAGE_SCORE = (MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(49)) - -401 + (v_coverage_score - 30);
+    END IF;
+
+    RETURN CAST(V_COVERAGE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MOVES INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_COUNTER <= N DO
+        SET V_MOVES = V_MOVES * 2;
+        SET V_MOVES = V_MOVES + 1;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE MY_LOOP;
+
+    RETURN V_MOVES;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+CREATE TABLE IF NOT EXISTS `table_pwijne` (
+    `table_pwijne_sale_id` INT,
+    `table_pwijne_product_id` INT,
+    `table_pwijne_quantity` INT,
+    `table_pwijne_sale_date` DATE,
+    `table_pwijne_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_pwijne` (`table_pwijne_sale_id`, `table_pwijne_product_id`, `table_pwijne_quantity`, `table_pwijne_sale_date`, `table_pwijne_unit_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(TARGET_DATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_RECORD_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_PWIJNE_QUANTITY * TABLE_PWIJNE_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_RECORD_COUNT
+    FROM TABLE_PWIJNE
+    WHERE YEAR(TABLE_PWIJNE_SALE_DATE) = TARGET_DATE;
+
+    IF V_RECORD_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY_KW INT DEFAULT 5;
+    DECLARE V_EFFICIENCY_PERCENT INT DEFAULT 80;
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_CREDIT_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C44EZE_CAPACITY_KW, 5), COALESCE(TABLE_C44EZE_EFFICIENCY_PERCENT, 80)
+    INTO V_CAPACITY_KW, V_EFFICIENCY_PERCENT
+    FROM TABLE_C44EZE
+    WHERE TABLE_C44EZE_METER_ID = METER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_KCY5SI_CURRENT_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_KCY5SI
+    WHERE TABLE_KCY5SI_METER_ID = METER_ID_PARAM;
+
+    SET V_CREDIT_AMOUNT = (V_CAPACITY_KW * V_EFFICIENCY_PERCENT * V_CURRENT_READING) / 1000;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DAILY_REVENUE_fzd3jc(-68)) - 850 + ((MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(65)) - -397 + ((MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + ((MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(76)) - 728 + (cast(v_credit_amount as signed)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(1);

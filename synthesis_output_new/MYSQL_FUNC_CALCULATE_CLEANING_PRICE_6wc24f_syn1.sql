@@ -1,0 +1,388 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIMS_TO_PREMIUM_RATIO_w631xl----- */
+CREATE TABLE IF NOT EXISTS `table_3o0672` (
+    `table_3o0672_policy_id` INT,
+    `table_3o0672_customer_id` INT,
+    `table_3o0672_policy_type` VARCHAR(50),
+    `table_3o0672_premium_annual` INT,
+    `table_3o0672_coverage_amount` DECIMAL(10,2),
+    `table_3o0672_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_c0jd0l` (
+    `table_c0jd0l_claim_id` INT,
+    `table_c0jd0l_policy_id` INT,
+    `table_c0jd0l_claim_date` DATE,
+    `table_c0jd0l_claim_amount` DECIMAL(10,2),
+    `table_c0jd0l_status` VARCHAR(50)
+);
+
+INSERT INTO `table_3o0672` (`table_3o0672_policy_id`, `table_3o0672_customer_id`, `table_3o0672_policy_type`, `table_3o0672_premium_annual`, `table_3o0672_coverage_amount`, `table_3o0672_status`) VALUES (1, 2, 'test', 4, 1.0, 'test');
+
+INSERT INTO `table_c0jd0l` (`table_c0jd0l_claim_id`, `table_c0jd0l_policy_id`, `table_c0jd0l_claim_date`, `table_c0jd0l_claim_amount`, `table_c0jd0l_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIMS_TO_PREMIUM_RATIO_w631xl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_TO_PREMIUM_RATIO_w631xl(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3O0672_PREMIUM_ANNUAL, (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(-54)) - -83 + ((MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(74)) - 53 + (0)))
+    INTO V_PREMIUM_ANNUAL
+    FROM TABLE_3O0672
+    WHERE TABLE_3O0672_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_C0JD0L_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS
+    FROM TABLE_C0JD0L
+    WHERE TABLE_C0JD0L_POLICY_ID = POLICY_ID_PARAM AND TABLE_C0JD0L_STATUS = 'APPROVED';
+
+    IF V_PREMIUM_ANNUAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RATIO = (V_TOTAL_CLAIMS * 100) / V_PREMIUM_ANNUAL;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+CREATE TABLE IF NOT EXISTS `table_1ac6i8` (
+    `table_1ac6i8_category_id` INT,
+    `table_1ac6i8_stock_quantity` INT
+);
+
+INSERT INTO `table_1ac6i8` (`table_1ac6i8_category_id`, `table_1ac6i8_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_1AC6I8_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_1AC6I8
+    WHERE TABLE_1AC6I8_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+CREATE TABLE IF NOT EXISTS `table_j9rj9a` (
+    `table_j9rj9a_customer_id` INT,
+    `table_j9rj9a_order_id` INT
+);
+
+INSERT INTO `table_j9rj9a` (`table_j9rj9a_customer_id`, `table_j9rj9a_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MAX(TABLE_J9RJ9A_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_J9RJ9A
+    WHERE TABLE_J9RJ9A_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(-93)) - 583 + (v_order_id % 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2----- */
+CREATE TABLE IF NOT EXISTS `table_5dc0yt` (
+    `table_5dc0yt_order_id` INT,
+    `table_5dc0yt_customer_id` INT
+);
+
+INSERT INTO `table_5dc0yt` (`table_5dc0yt_order_id`, `table_5dc0yt_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_INDEX_b56nl2(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_5DC0YT_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_5DC0YT
+    WHERE TABLE_5DC0YT_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(75)) - 897 + (v_customer_id % 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe----- */
+CREATE TABLE IF NOT EXISTS `table_34qlyp` (
+    `table_34qlyp_emp_id` INT,
+    `table_34qlyp_hire_date` DATE
+);
+
+INSERT INTO `table_34qlyp` (`table_34qlyp_emp_id`, `table_34qlyp_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_YEARS_cs4ffe(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_34QLYP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_34QLYP
+    WHERE TABLE_34QLYP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_TENURE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_zzsrc1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_zzsrc1(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF (MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(54)) - -121 + (a) < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF (MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(-3)) - 516 + ((MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(-35)) - -709 + (b)) < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+CREATE TABLE IF NOT EXISTS `table_iihmej` (
+    `table_iihmej_student_id` INT,
+    `table_iihmej_name` VARCHAR(50),
+    `table_iihmej_age` INT,
+    `table_iihmej_gpa` INT,
+    `table_iihmej_enrollment_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqu8tq` (
+    `table_oqu8tq_course_id` INT,
+    `table_oqu8tq_name` VARCHAR(50),
+    `table_oqu8tq_credits` INT,
+    `table_oqu8tq_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8mt6l6` (
+    `table_8mt6l6_student_id` INT,
+    `table_8mt6l6_course_id` INT,
+    `table_8mt6l6_grade` INT
+);
+
+INSERT INTO `table_iihmej` (`table_iihmej_student_id`, `table_iihmej_name`, `table_iihmej_age`, `table_iihmej_gpa`, `table_iihmej_enrollment_year`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_oqu8tq` (`table_oqu8tq_course_id`, `table_oqu8tq_name`, `table_oqu8tq_credits`, `table_oqu8tq_department_id`) VALUES (1, 'test', 3, 4);
+
+INSERT INTO `table_8mt6l6` (`table_8mt6l6_student_id`, `table_8mt6l6_course_id`, `table_8mt6l6_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDIT_COUNT INT DEFAULT 0;
+    DECLARE V_HONORS_COURSES INT DEFAULT 0;
+    DECLARE V_HONORS_RATING INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IIHMEJ_GPA, 0.00)
+    INTO V_GPA
+    FROM TABLE_IIHMEJ
+    WHERE TABLE_IIHMEJ_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*), SUM(TABLE_OQU8TQ_CREDITS)
+    INTO V_HONORS_COURSES, V_CREDIT_COUNT
+    FROM TABLE_8MT6L6 E
+    JOIN TABLE_OQU8TQ C ON TABLE_8MT6L6_COURSE_ID = TABLE_OQU8TQ_COURSE_ID
+    WHERE TABLE_8MT6L6_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_8MT6L6_GRADE IN ('A', 'A+', 'A-');
+
+    SET V_HONORS_RATING = (V_GPA * 40) + (V_HONORS_COURSES * 10) + (V_CREDIT_COUNT / 10);
+
+    RETURN V_HONORS_RATING;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - 398 + (val) MOD 2 = 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE ODD';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+CREATE TABLE IF NOT EXISTS `table_8jt2fd` (
+    `table_8jt2fd_contract_id` INT,
+    `table_8jt2fd_client_id` INT,
+    `table_8jt2fd_guard_id` INT,
+    `table_8jt2fd_contract_type` VARCHAR(50),
+    `table_8jt2fd_monthly_cost` DECIMAL(10,2),
+    `table_8jt2fd_num_guards` INT,
+    `table_8jt2fd_patrol_area_sqft` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_yt4y9e` (
+    `table_yt4y9e_guard_id` INT,
+    `table_yt4y9e_name` VARCHAR(50),
+    `table_yt4y9e_experience_years` INT,
+    `table_yt4y9e_hourly_rate` INT
+);
+
+INSERT INTO `table_8jt2fd` (`table_8jt2fd_contract_id`, `table_8jt2fd_client_id`, `table_8jt2fd_guard_id`, `table_8jt2fd_contract_type`, `table_8jt2fd_monthly_cost`, `table_8jt2fd_num_guards`, `table_8jt2fd_patrol_area_sqft`) VALUES (1, 2, 3, 'test', 1.0, 6, 7);
+
+INSERT INTO `table_yt4y9e` (`table_yt4y9e_guard_id`, `table_yt4y9e_name`, `table_yt4y9e_experience_years`, `table_yt4y9e_hourly_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECURITY_CONTRACT_VALUE_4c1cuc(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 5000;
+    DECLARE V_NUM_GUARDS INT DEFAULT 2;
+    DECLARE V_PATROL_AREA INT DEFAULT 10000;
+    DECLARE V_AREA_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8JT2FD_MONTHLY_COST, 5000), COALESCE(TABLE_8JT2FD_NUM_GUARDS, 2), COALESCE(TABLE_8JT2FD_PATROL_AREA_SQFT, 10000)
+    INTO V_MONTHLY_COST, V_NUM_GUARDS, V_PATROL_AREA
+    FROM TABLE_8JT2FD
+    WHERE TABLE_8JT2FD_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_MONTHLY_COST * V_NUM_GUARDS;
+
+    IF V_PATROL_AREA > 50000 THEN
+        SET V_AREA_SURCHARGE = V_TOTAL_VALUE * 20 / 100;
+        SET V_TOTAL_VALUE = V_TOTAL_VALUE + V_AREA_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_AREA / 100) * 10;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_ROOMS * 15);
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = (MYSQL_FUNC_CALCULATE_GCD_zzsrc1(30, 90)) - -820 + ((MYSQL_FUNC_CALCULATE_CLAIMS_TO_PREMIUM_RATIO_w631xl(-62)) - -181 + (v_total_price * 150 / 100));
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(1, 1);

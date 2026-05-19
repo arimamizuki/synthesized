@@ -1,0 +1,346 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_x92ggb` (
+    `table_x92ggb_order_id` INT,
+    `table_x92ggb_customer_id` INT,
+    `table_x92ggb_order_date` DATE,
+    `table_x92ggb_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrtan3` (
+    `table_wrtan3_customer_id` INT,
+    `table_wrtan3_registration_date` DATE
+);
+
+INSERT INTO `table_x92ggb` (`table_x92ggb_order_id`, `table_x92ggb_customer_id`, `table_x92ggb_order_date`, `table_x92ggb_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wrtan3` (`table_wrtan3_customer_id`, `table_wrtan3_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+CREATE TABLE IF NOT EXISTS `table_82h4u6` (
+    `table_82h4u6_product_id` INT,
+    `table_82h4u6_category_id` INT
+);
+
+INSERT INTO `table_82h4u6` (`table_82h4u6_product_id`, `table_82h4u6_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CATEGORY_ID_PARAM % 50;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_INDEX_pjhhhn----- */
+CREATE TABLE IF NOT EXISTS `table_ufdyq4` (
+    `table_ufdyq4_customer_id` INT,
+    `table_ufdyq4_start_date` DATE
+);
+
+INSERT INTO `table_ufdyq4` (`table_ufdyq4_customer_id`, `table_ufdyq4_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_INDEX_pjhhhn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_INDEX_pjhhhn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_UFDYQ4_START_DATE, CURDATE())
+    INTO V_TENURE_MONTHS
+    FROM TABLE_UFDYQ4
+    WHERE TABLE_UFDYQ4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(89)) - -869 + (v_tenure_months);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1----- */
+CREATE TABLE IF NOT EXISTS `table_jk1f0u` (
+    `table_jk1f0u_res_id` INT,
+    `table_jk1f0u_room_id` INT,
+    `table_jk1f0u_guest_id` INT,
+    `table_jk1f0u_check_in_date` DATE,
+    `table_jk1f0u_check_out_date` DATE,
+    `table_jk1f0u_total_price` DECIMAL(10,2),
+    `table_jk1f0u_status` VARCHAR(50)
+);
+
+INSERT INTO `table_jk1f0u` (`table_jk1f0u_res_id`, `table_jk1f0u_room_id`, `table_jk1f0u_guest_id`, `table_jk1f0u_check_in_date`, `table_jk1f0u_check_out_date`, `table_jk1f0u_total_price`, `table_jk1f0u_status`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STAY_NIGHTS_l1f3h1(RES_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+
+    SELECT TABLE_JK1F0U_CHECK_IN_DATE, TABLE_JK1F0U_CHECK_OUT_DATE
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM TABLE_JK1F0U
+    WHERE TABLE_JK1F0U_RES_ID = RES_ID_PARAM;
+
+    IF V_CHECK_IN IS NULL OR V_CHECK_OUT IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS < 0 THEN
+        SET V_NIGHTS = 0;
+    END IF;
+
+    RETURN V_NIGHTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FOOSP_ack96d----- */
+CREATE TABLE IF NOT EXISTS test.t1 (
+    col1 VARCHAR(255),
+    col2 INT
+);
+
+INSERT INTO test.t1 (col1, col2) VALUES ('foo', 42);
+
+/* -----Called: MYSQL_FUNC_FOOSP_ack96d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FOOSP_ack96d() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    INSERT INTO TEST.T1
+## THESE COMMENTS ARE PART OF THE PROCEDURE BODY, AND SHOULD BE KEPT.
+# COMMENT 2A
+
+  
+
+  
+    VALUES ('FOO', 42); # COMMENT 3, STILL PART OF THE BODY
+    RETURN (MYSQL_FUNC_PROC_DATE_dkn391()) - -713 + ((MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(89, 68, 86)) - -753 + (1));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho(-62)) - -127 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > 1000 THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+CREATE TABLE IF NOT EXISTS `table_s2zydq` (
+    `table_s2zydq_customer_id` INT,
+    `table_s2zydq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s2zydq` (`table_s2zydq_customer_id`, `table_s2zydq_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_S2ZYDQ_STATUS
+    INTO V_STATUS
+    FROM TABLE_S2ZYDQ
+    WHERE TABLE_S2ZYDQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + ((MYSQL_FUNC_PROC_SET_pl5j0s()) - -674 + (100));
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'PENDING' THEN RETURN 25;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+CREATE TABLE IF NOT EXISTS `table_4wesx0` (
+    `table_4wesx0_cset_col` INT
+);
+
+INSERT INTO `table_4wesx0` (`table_4wesx0_cset_col`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SET_pl5j0s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_4WESX0_CSET_COL INTO RESULT FROM `TABLE_4WESX0` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = V_QUANTITY * V_UNIT_PRICE;
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = V_TOTAL + (V_TOTAL * V_REFILLS * 80 / 100);
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = V_TOTAL + 25;
+    END IF;
+
+    RETURN CAST(V_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATE_dkn391----- */
+CREATE TABLE IF NOT EXISTS `table_ilnliq` (
+    `table_ilnliq_cdate` DATE
+);
+
+INSERT INTO `table_ilnliq` (`table_ilnliq_cdate`) VALUES ('2024-01-01');
+
+/* -----Called: MYSQL_FUNC_PROC_DATE_dkn391----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATE_dkn391() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_ILNLIQ`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPECTED_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_X92GGB
+    WHERE TABLE_X92GGB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_WRTAN3_REGISTRATION_DATE) / 30
+    INTO V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_WRTAN3
+    WHERE TABLE_WRTAN3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS = (MYSQL_FUNC_FOOSP_ack96d()) - 703 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_ORDERS = V_CUSTOMER_AGE_MONTHS * 0.5;
+    SET V_REPEAT_RATE = FLOOR((V_ORDER_COUNT / V_EXPECTED_ORDERS) * 100);
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_INDEX_pjhhhn(-61)) - -543 + ((MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - -813 + (v_repeat_rate)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(1);

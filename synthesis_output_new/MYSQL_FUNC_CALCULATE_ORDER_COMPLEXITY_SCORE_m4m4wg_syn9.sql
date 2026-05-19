@@ -1,0 +1,387 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_153cac` (
+    `table_153cac_order_id` INT,
+    `table_153cac_customer_id` INT,
+    `table_153cac_order_date` DATE,
+    `table_153cac_total_amount` DECIMAL(10,2),
+    `table_153cac_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4wgu3o` (
+    `table_4wgu3o_order_id` INT,
+    `table_4wgu3o_product_id` INT,
+    `table_4wgu3o_quantity` INT
+);
+
+INSERT INTO `table_153cac` (`table_153cac_order_id`, `table_153cac_customer_id`, `table_153cac_order_date`, `table_153cac_total_amount`, `table_153cac_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4wgu3o` (`table_4wgu3o_order_id`, `table_4wgu3o_product_id`, `table_4wgu3o_quantity`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = V_MAX_SALARY - V_MIN_SALARY;
+
+    RETURN FLOOR(V_SALARY_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE INT DEFAULT 0;
+    SET V_DISTANCE = ABS(X1 - X2) + ABS(Y1 - Y2);
+    RETURN V_DISTANCE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549----- */
+CREATE TABLE IF NOT EXISTS `table_99htxi` (
+    `table_99htxi_emp_id` INT,
+    `table_99htxi_department_id` INT,
+    `table_99htxi_salary` INT,
+    `table_99htxi_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_9r4x7o` (
+    `table_9r4x7o_department_id` INT,
+    `table_9r4x7o_name` VARCHAR(50)
+);
+
+INSERT INTO `table_99htxi` (`table_99htxi_emp_id`, `table_99htxi_department_id`, `table_99htxi_salary`, `table_99htxi_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_9r4x7o` (`table_9r4x7o_department_id`, `table_9r4x7o_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_99HTXI_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(STDDEV(TABLE_99HTXI_SALARY), 0)
+    INTO V_TURNOVER_RATE
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(-61)) - 854 + ((v_employee_count * 5) + (v_avg_tenure * 10) - (v_turnover_rate / 1000));
+
+    RETURN (MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf()) - 463 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(-36)) - -831 + (v_retention_index));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3----- */
+CREATE TABLE IF NOT EXISTS `table_2990of` (
+    `table_2990of_emp_id` INT,
+    `table_2990of_department_id` INT,
+    `table_2990of_salary` INT
+);
+
+INSERT INTO `table_2990of` (`table_2990of_emp_id`, `table_2990of_department_id`, `table_2990of_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_2990OF_SALARY), 0), COALESCE(MIN(TABLE_2990OF_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_2990OF
+    WHERE TABLE_2990OF_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(-59)) - -979 + (v_max_salary - v_min_salary);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+CREATE TABLE IF NOT EXISTS `table_tgavgl` (
+    `table_tgavgl_order_id` INT,
+    `table_tgavgl_customer_id` INT,
+    `table_tgavgl_order_date` DATE,
+    `table_tgavgl_total_amount` DECIMAL(10,2),
+    `table_tgavgl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d0pa5w` (
+    `table_d0pa5w_customer_id` INT,
+    `table_d0pa5w_customer_segment` INT
+);
+
+INSERT INTO `table_tgavgl` (`table_tgavgl_order_id`, `table_tgavgl_customer_id`, `table_tgavgl_order_date`, `table_tgavgl_total_amount`, `table_tgavgl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_d0pa5w` (`table_d0pa5w_customer_id`, `table_d0pa5w_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_SEGMENT_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_D0PA5W_CUSTOMER_SEGMENT
+    INTO V_SEGMENT
+    FROM TABLE_D0PA5W
+    WHERE TABLE_D0PA5W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SEGMENT_ORDER_COUNT
+    FROM TABLE_TGAVGL O
+    JOIN TABLE_D0PA5W C ON TABLE_TGAVGL_CUSTOMER_ID = TABLE_D0PA5W_CUSTOMER_ID
+    WHERE TABLE_D0PA5W_CUSTOMER_SEGMENT = V_SEGMENT
+    AND MONTH(TABLE_TGAVGL_ORDER_DATE) = MONTH(CURDATE())
+    AND YEAR(TABLE_TGAVGL_ORDER_DATE) = YEAR(CURDATE());
+
+    RETURN V_SEGMENT_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+CREATE TABLE IF NOT EXISTS `table_narka3` (
+    `table_narka3_dept_id` INT,
+    `table_narka3_name` VARCHAR(50),
+    `table_narka3_manager_id` INT,
+    `table_narka3_headcount` INT,
+    `table_narka3_annual_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mbm03z` (
+    `table_mbm03z_emp_id` INT,
+    `table_mbm03z_dept_id` INT,
+    `table_mbm03z_salary` INT,
+    `table_mbm03z_hire_date` DATE,
+    `table_mbm03z_performance_score` INT
+);
+
+INSERT INTO `table_narka3` (`table_narka3_dept_id`, `table_narka3_name`, `table_narka3_manager_id`, `table_narka3_headcount`, `table_narka3_annual_budget`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_mbm03z` (`table_mbm03z_emp_id`, `table_mbm03z_dept_id`, `table_mbm03z_salary`, `table_mbm03z_hire_date`, `table_mbm03z_performance_score`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE_YEARS DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BUDGET_PER_EMPLOYEE INT DEFAULT 0;
+    DECLARE V_RETENTION_RISK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NARKA3_HEADCOUNT, 10), COALESCE(TABLE_NARKA3_ANNUAL_BUDGET, 0)
+    INTO V_HEADCOUNT, V_BUDGET_PER_EMPLOYEE
+    FROM TABLE_NARKA3
+    WHERE TABLE_NARKA3_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_MBM03Z_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE_YEARS
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_MBM03Z_PERFORMANCE_SCORE), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_RETENTION_RISK = (MYSQL_FUNC_PROC_YEAR_pmoygo()) - 253 + (50 - (v_avg_tenure_years * 5) + ((5 - v_avg_performance) * 10));
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + (v_retention_risk);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+CREATE TABLE IF NOT EXISTS `table_qkugmq` (
+    `table_qkugmq_cyear` INT
+);
+
+INSERT INTO `table_qkugmq` (`table_qkugmq_cyear`) VALUES (2024);
+
+/* -----Called: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_YEAR_pmoygo() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT TABLE_QKUGMQ_CYEAR INTO RESULT FROM `TABLE_QKUGMQ` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET V_DELAY_SCORE = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 5;
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CASE_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 2;
+    
+    CASE VAL
+        WHEN 1 THEN SET CASE_COUNT = 10;
+        WHEN 2 THEN SET CASE_COUNT = 20;
+        WHEN 3 THEN SET CASE_COUNT = 30;
+        ELSE SET CASE_COUNT = 0;
+    END CASE;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88)) - 635 + (case_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_COMPLEXITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_4WGU3O_PRODUCT_ID), COALESCE(SUM(TABLE_4WGU3O_QUANTITY), 0)
+    INTO V_ITEM_COUNT, V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_4WGU3O
+    WHERE TABLE_4WGU3O_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COMPLEXITY_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(63)) - -746 + ((v_item_count * 2) + (v_unique_products * 3) + (v_total_quantity / 5));
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549(-62)) - -259 + ((MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(-16, -81, -94, 91)) - -433 + (v_complexity_score));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(1);

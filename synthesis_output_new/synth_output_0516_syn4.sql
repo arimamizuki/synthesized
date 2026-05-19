@@ -1,0 +1,499 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v9162 (v9164 INT, v9163 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v9383 (v9231 VARCHAR(100), v9232 INT);
+CREATE TABLE IF NOT EXISTS v9142 (v9231 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v8892 (v8893 INT, v8894 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v9187 (v9188 INT, v9189 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS x6 (x_id INT PRIMARY KEY AUTO_INCREMENT, x_val INT);
+CREATE TABLE IF NOT EXISTS x10 (x_id INT PRIMARY KEY AUTO_INCREMENT, x_val INT);
+INSERT INTO v9162 VALUES (1, 'test1'), (2, 'test2'), (3, 'test3');
+INSERT INTO v9383 VALUES ('ggg', 10), ('dris%', 20), ('y', 30);
+INSERT INTO v9142 VALUES ('ggg'), ('dris%'), ('z');
+INSERT INTO v8892 VALUES (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'), (5, 'e');
+INSERT INTO v9187 VALUES (1, 'yes'), (0, 'no'), (1, 'maybe');
+INSERT INTO x6 (x_val) VALUES (0), (1), (2);
+INSERT INTO x10 (x_val) VALUES (0), (1), (2), (3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+CREATE TABLE IF NOT EXISTS `table_82n5hb` (
+    `table_82n5hb_customer_id` INT,
+    `table_82n5hb_country` INT
+);
+
+INSERT INTO `table_82n5hb` (`table_82n5hb_customer_id`, `table_82n5hb_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_82N5HB
+    WHERE TABLE_82N5HB_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(-36)) - 134 + (v_customer_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+CREATE TABLE IF NOT EXISTS `table_lk5a67` (
+    `table_lk5a67_product_id` INT,
+    `table_lk5a67_stock_quantity` INT
+);
+
+INSERT INTO `table_lk5a67` (`table_lk5a67_product_id`, `table_lk5a67_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_LK5A67_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_LK5A67
+    WHERE TABLE_LK5A67_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(44)) - -206 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(-10)) - -301 + (least(v_stock, 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+CREATE TABLE IF NOT EXISTS `table_7gncdo` (
+    `table_7gncdo_product_id` INT,
+    `table_7gncdo_category_id` INT
+);
+
+INSERT INTO `table_7gncdo` (`table_7gncdo_product_id`, `table_7gncdo_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_7GNCDO
+    WHERE TABLE_7GNCDO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+CREATE TABLE IF NOT EXISTS `table_khmak7` (
+    `table_khmak7_order_id` INT,
+    `table_khmak7_customer_id` INT,
+    `table_khmak7_order_date` DATE,
+    `table_khmak7_total_amount` DECIMAL(10,2),
+    `table_khmak7_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_7res4i` (
+    `table_7res4i_order_id` INT,
+    `table_7res4i_product_id` INT,
+    `table_7res4i_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0dame` (
+    `table_l0dame_product_id` INT,
+    `table_l0dame_category_id` INT,
+    `table_l0dame_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_khmak7` (`table_khmak7_order_id`, `table_khmak7_customer_id`, `table_khmak7_order_date`, `table_khmak7_total_amount`, `table_khmak7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_7res4i` (`table_7res4i_order_id`, `table_7res4i_product_id`, `table_7res4i_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_l0dame` (`table_l0dame_product_id`, `table_l0dame_category_id`, `table_l0dame_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_HIGH_VALUE_ITEMS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_7RES4I_QUANTITY * TABLE_L0DAME_PRICE), 0), COUNT(*)
+    INTO V_SUBTOTAL, V_TOTAL_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_HIGH_VALUE_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM AND TABLE_L0DAME_PRICE > 100;
+
+    IF V_TOTAL_ITEMS > 0 AND (V_HIGH_VALUE_ITEMS * 100 / V_TOTAL_ITEMS) > 50 THEN
+        SET V_DISCOUNT_PERCENTAGE = (MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(92)) - -566 + ((MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(-5)) - 75 + (15));
+    ELSEIF V_SUBTOTAL > 1000 THEN
+        SET V_DISCOUNT_PERCENTAGE = (MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(-97, -60)) - 545 + (10);
+    ELSEIF V_SUBTOTAL > 500 THEN
+        SET V_DISCOUNT_PERCENTAGE = 5;
+    ELSE
+        SET V_DISCOUNT_PERCENTAGE = 0;
+    END IF;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+CREATE TABLE IF NOT EXISTS `table_k6cijp` (
+    `table_k6cijp_course_id` INT,
+    `table_k6cijp_course_name` VARCHAR(50),
+    `table_k6cijp_credits` INT,
+    `table_k6cijp_department_id` INT,
+    `table_k6cijp_max_students` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rhsiv6` (
+    `table_rhsiv6_enrollment_id` INT,
+    `table_rhsiv6_student_id` INT,
+    `table_rhsiv6_course_id` INT,
+    `table_rhsiv6_grade` INT,
+    `table_rhsiv6_enrollment_date` DATE
+);
+
+INSERT INTO `table_k6cijp` (`table_k6cijp_course_id`, `table_k6cijp_course_name`, `table_k6cijp_credits`, `table_k6cijp_department_id`, `table_k6cijp_max_students`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_rhsiv6` (`table_rhsiv6_enrollment_id`, `table_rhsiv6_student_id`, `table_rhsiv6_course_id`, `table_rhsiv6_grade`, `table_rhsiv6_enrollment_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ENROLLED INT DEFAULT 0;
+    DECLARE V_PASSING_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_SUCCESS_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_RHSIV6_GRADE >= 60 THEN 1 END), COALESCE(AVG(TABLE_RHSIV6_GRADE), 0)
+    INTO V_TOTAL_ENROLLED, V_PASSING_COUNT, V_AVG_GRADE
+    FROM TABLE_RHSIV6
+    WHERE TABLE_RHSIV6_COURSE_ID = COURSE_ID_PARAM;
+
+    IF V_TOTAL_ENROLLED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUCCESS_RATE = (V_PASSING_COUNT * 100) / V_TOTAL_ENROLLED;
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_SUCCESS_RATE = V_SUCCESS_RATE + 5;
+    END IF;
+
+    RETURN CAST(V_SUCCESS_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+CREATE TABLE IF NOT EXISTS `table_2vjwnh` (
+    `table_2vjwnh_subscription_id` INT,
+    `table_2vjwnh_customer_id` INT,
+    `table_2vjwnh_plan_type` VARCHAR(50),
+    `table_2vjwnh_start_date` DATE,
+    `table_2vjwnh_monthly_fee` INT,
+    `table_2vjwnh_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_es5g0e` (
+    `table_es5g0e_record_id` INT,
+    `table_es5g0e_subscription_id` INT,
+    `table_es5g0e_usage_date` DATE,
+    `table_es5g0e_mb_used` INT,
+    `table_es5g0e_call_minutes` INT
+);
+
+INSERT INTO `table_2vjwnh` (`table_2vjwnh_subscription_id`, `table_2vjwnh_customer_id`, `table_2vjwnh_plan_type`, `table_2vjwnh_start_date`, `table_2vjwnh_monthly_fee`, `table_2vjwnh_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_es5g0e` (`table_es5g0e_record_id`, `table_es5g0e_subscription_id`, `table_es5g0e_usage_date`, `table_es5g0e_mb_used`, `table_es5g0e_call_minutes`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(SUBSCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_FEE INT DEFAULT 30;
+    DECLARE V_DATA_LIMIT INT DEFAULT 5;
+    DECLARE V_CALL_LIMIT INT DEFAULT 500;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_CALLS_USED INT DEFAULT 0;
+    DECLARE V_OVERAGE_CHARGES INT DEFAULT 0;
+
+    SELECT TABLE_2VJWNH_PLAN_TYPE, TABLE_2VJWNH_MONTHLY_FEE
+    INTO V_PLAN_TYPE, V_MONTHLY_FEE
+    FROM TABLE_2VJWNH
+    WHERE TABLE_2VJWNH_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM;
+
+    SET V_DATA_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 50
+        WHEN 'GOLD' THEN 20
+        WHEN 'SILVER' THEN 10
+        ELSE 5
+    END;
+
+    SET V_CALL_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 2000
+        WHEN 'GOLD' THEN 1000
+        WHEN 'SILVER' THEN 500
+        ELSE 200
+    END;
+
+    SELECT COALESCE(SUM(TABLE_ES5G0E_MB_USED), 0), COALESCE(SUM(TABLE_ES5G0E_CALL_MINUTES), 0)
+    INTO V_DATA_USED, V_CALLS_USED
+    FROM TABLE_ES5G0E
+    WHERE TABLE_ES5G0E_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM
+      AND TABLE_ES5G0E_USAGE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
+
+    IF V_DATA_USED > V_DATA_LIMIT * 1024 THEN
+        SET V_OVERAGE_CHARGES = V_OVERAGE_CHARGES + ((V_DATA_USED - V_DATA_LIMIT * 1024) / 1024) * 10;
+    END IF;
+
+    IF V_CALLS_USED > V_CALL_LIMIT THEN
+        SET V_OVERAGE_CHARGES = (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem()) - 362 + (v_overage_charges + ((v_calls_used - v_call_limit) / 100) * 5);
+    END IF;
+
+    RETURN V_OVERAGE_CHARGES;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_6_68ikem() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6()) - 505 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_OR_080mvw(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(14, 88)) - -213 + (p_a | p_b);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(INCOME INT, TAX_YEAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_TAXABLE_INCOME INT DEFAULT 0;
+
+    SET V_TAXABLE_INCOME = INCOME;
+
+    IF INCOME <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF INCOME <= 10000 THEN
+        SET V_TAX_AMOUNT = INCOME * 10 / 100;
+    ELSEIF INCOME <= 40000 THEN
+        SET V_TAX_AMOUNT = 1000 + ((INCOME - 10000) * 20 / 100);
+    ELSEIF INCOME <= 85000 THEN
+        SET V_TAX_AMOUNT = 1000 + 6000 + ((INCOME - 40000) * 30 / 100);
+    ELSE
+        SET V_TAX_AMOUNT = 1000 + 6000 + 13500 + ((INCOME - 85000) * 35 / 100);
+    END IF;
+
+    RETURN CAST(V_TAX_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0516(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_var1 INT DEFAULT 0;
+    DECLARE v_var2 INT DEFAULT 0;
+    DECLARE v_lead_val INT DEFAULT 0;
+    DECLARE v_lead_val2 INT DEFAULT 0;
+    DECLARE v_datediff_val INT DEFAULT 0;
+    DECLARE v_temp_val INT DEFAULT 0;
+    DECLARE v_loop_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val INT DEFAULT 0;
+    
+    DECLARE cur1 CURSOR FOR 
+        WITH RECURSIVE x6 AS (SELECT 0 UNION ALL SELECT x5.v8893 + 1 FROM x10 WHERE x5.v8893 < 10000) 
+        SELECT x5.v8893 + 1 FROM v8892 AS x5 WHERE x5.v8893 + 4 > 5;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: CTE with window function, extract lead value
+    WITH RECURSIVE x4 AS (SELECT 2) 
+    SELECT LEAD(x1.v9163) OVER (ORDER BY x1.v9164 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
+    INTO v_lead_val 
+    FROM v9162 AS x1 
+    WHERE EXISTS(SELECT 1 FROM x6 AS x8 WHERE x1.v9164 = 0)
+    LIMIT 1;
+
+    -- Statement 2: Dynamic UPDATE with NATURAL JOIN
+    SET @sql = 'UPDATE v9383 AS x0 NATURAL JOIN v9142 AS x1 SET v9231 = ? WHERE v9231 LIKE CONCAT(?, ?)';
+    SET @val1 = 'ggg';
+    SET @val2 = '\\';
+    SET @val3 = 'dris%';
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt USING @val1, @val2, @val3;
+    DEALLOCATE PREPARE stmt;
+
+    -- Statement 3: CTE with window function and DATEDIFF
+    SET @TMP = '2024-01-01';
+    WITH RECURSIVE x6 AS (SELECT 0 UNION ALL SELECT x5.v8893 + 1 FROM x10 WHERE x5.v8893 < 10000) 
+    SELECT LEAD(x5.v8893, 1, 3) OVER (ORDER BY x5.v8893 * 4294967295, x5.v8893 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
+    INTO v_lead_val2
+    FROM v8892 AS x5 WHERE x5.v8893 + 4 > 5
+    LIMIT 1;
+
+    -- Statement 4: Use the view v9405 in a cursor
+    BEGIN
+        DECLARE v_view_val1 INT;
+        DECLARE v_view_val2 VARCHAR(100);
+        DECLARE cur2 CURSOR FOR SELECT x1 FROM v9405;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+        
+        OPEN cur2;
+        read_loop: LOOP
+            FETCH cur2 INTO v_view_val1;
+            IF v_loop_done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur2;
+    END;
+
+    -- Statement 5: Dynamic UPDATE with STRAIGHT_JOIN and LIMIT
+    SET @sql2 = 'UPDATE v9383 AS x1 STRAIGHT_JOIN v9187 AS x2 ON TRUE SET v9231 = ? WHERE LOCATE(?, NULL) IS NULL LIMIT 3';
+    SET @val4 = 'y';
+    SET @val5 = 'foo';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2 USING @val4, @val5;
+    DEALLOCATE PREPARE stmt2;
+
+    -- Cursor for statement 1/3 CTE results
+    OPEN cur1;
+    fetch_loop: WHILE NOT v_loop_done DO
+        FETCH cur1 INTO v_cursor_val;
+        IF NOT v_loop_done THEN
+            IF v_cursor_val > 5 THEN
+                SET v_counter = v_counter + 1;
+            ELSE
+                SET v_counter = v_counter - 1;
+            END IF;
+        END IF;
+    END WHILE;
+    CLOSE cur1;
+
+    -- Final conditional logic
+    IF (MYSQL_FUNC_CALCULATE_COUNTRY_INDEX_hg06m2(-39)) - -436 + (v_lead_val is not null) THEN
+        SET v_counter = v_counter + 100;
+    ELSE
+        SET v_counter = v_counter - 50;
+    END IF;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0516(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,370 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_g6ufyg` (
+    `table_g6ufyg_emp_id` INT,
+    `table_g6ufyg_department_id` INT,
+    `table_g6ufyg_salary` INT
+);
+
+INSERT INTO `table_g6ufyg` (`table_g6ufyg_emp_id`, `table_g6ufyg_department_id`, `table_g6ufyg_salary`) VALUES (1, 1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+CREATE TABLE IF NOT EXISTS `table_tqo94u` (
+    `table_tqo94u_emp_id` INT,
+    `table_tqo94u_hire_date` DATE
+);
+
+INSERT INTO `table_tqo94u` (`table_tqo94u_emp_id`, `table_tqo94u_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_TQO94U_HIRE_DATE)
+    INTO V_WEEK
+    FROM TABLE_TQO94U
+    WHERE TABLE_TQO94U_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(85)) - -325 + (v_week);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+CREATE TABLE IF NOT EXISTS `table_77c9lm` (
+    `table_77c9lm_emp_id` INT,
+    `table_77c9lm_dept_id` INT,
+    `table_77c9lm_manager_id` INT,
+    `table_77c9lm_salary` INT,
+    `table_77c9lm_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0zp2ks` (
+    `table_0zp2ks_dept_id` INT,
+    `table_0zp2ks_name` VARCHAR(50)
+);
+
+INSERT INTO `table_77c9lm` (`table_77c9lm_emp_id`, `table_77c9lm_dept_id`, `table_77c9lm_manager_id`, `table_77c9lm_salary`, `table_77c9lm_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0zp2ks` (`table_0zp2ks_dept_id`, `table_0zp2ks_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_SIZE INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_77C9LM_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_77C9LM_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_SIZE
+    FROM TABLE_77C9LM E
+    JOIN TABLE_0ZP2KS D ON TABLE_77C9LM_DEPT_ID = TABLE_0ZP2KS_DEPT_ID
+    WHERE TABLE_0ZP2KS_DEPT_ID = (SELECT TABLE_77C9LM_DEPT_ID FROM TABLE_77C9LM WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_READINESS_SCORE = (V_YEARS_EMPLOYED * 10) + (V_DIRECT_REPORTS * 15) + ((V_DEPT_SIZE * 100) / 1000);
+
+    IF V_SALARY > 100000 THEN
+        SET V_READINESS_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(11)) - -43 + (v_readiness_score + 20);
+    END IF;
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr----- */
+CREATE TABLE IF NOT EXISTS `table_r4s3gm` (
+    `table_r4s3gm_customer_id` INT,
+    `table_r4s3gm_registration_date` DATE
+);
+
+INSERT INTO `table_r4s3gm` (`table_r4s3gm_customer_id`, `table_r4s3gm_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_q1embr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_R4S3GM_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_R4S3GM
+    WHERE TABLE_R4S3GM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+CREATE TABLE IF NOT EXISTS `table_h9b2gz` (
+    `table_h9b2gz_campaign_id` INT,
+    `table_h9b2gz_channel` INT,
+    `table_h9b2gz_budget` INT,
+    `table_h9b2gz_start_date` DATE,
+    `table_h9b2gz_end_date` DATE,
+    `table_h9b2gz_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ettoso` (
+    `table_ettoso_conversion_id` INT,
+    `table_ettoso_campaign_id` INT,
+    `table_ettoso_conversion_value` INT
+);
+
+INSERT INTO `table_h9b2gz` (`table_h9b2gz_campaign_id`, `table_h9b2gz_channel`, `table_h9b2gz_budget`, `table_h9b2gz_start_date`, `table_h9b2gz_end_date`, `table_h9b2gz_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ettoso` (`table_ettoso_conversion_id`, `table_ettoso_campaign_id`, `table_ettoso_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_ETTOSO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM TABLE_ETTOSO
+    WHERE TABLE_ETTOSO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(TABLE_H9B2GZ_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_H9B2GZ
+    WHERE TABLE_H9B2GZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = (MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(28)) - -974 + ((MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(-39, -48)) - 175 + (((v_total_revenue - v_campaign_budget) * 100) / v_campaign_budget));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(65)) - 650 + (v_roi);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(INPUT_STRING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LENGTH INT DEFAULT 0;
+    SET V_LENGTH = CHAR_LENGTH(INPUT_STRING);
+    RETURN V_LENGTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+CREATE TABLE IF NOT EXISTS `table_42hbdg` (
+    `table_42hbdg_emp_id` INT,
+    `table_42hbdg_department_id` INT,
+    `table_42hbdg_salary` INT,
+    `table_42hbdg_hire_date` DATE,
+    `table_42hbdg_performance_score` INT
+);
+
+INSERT INTO `table_42hbdg` (`table_42hbdg_emp_id`, `table_42hbdg_department_id`, `table_42hbdg_salary`, `table_42hbdg_hire_date`, `table_42hbdg_performance_score`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(DEPARTMENT_ID_PARAM INT, EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_42HBDG_SALARY, 0) INTO V_EMP_SALARY
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BELOW_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY < V_EMP_SALARY;
+
+    SELECT COUNT(*) INTO V_ABOVE_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY > V_EMP_SALARY;
+
+    SET V_RANK = (MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(-6)) - -566 + (v_below_count + 1);
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+CREATE TABLE IF NOT EXISTS `table_a19p69` (
+    `table_a19p69_order_id` INT,
+    `table_a19p69_customer_id` INT,
+    `table_a19p69_order_date` DATE,
+    `table_a19p69_status` VARCHAR(50),
+    `table_a19p69_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2a77t4` (
+    `table_2a77t4_item_id` INT,
+    `table_2a77t4_order_id` INT,
+    `table_2a77t4_product_id` INT,
+    `table_2a77t4_quantity` INT,
+    `table_2a77t4_unit_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gy4sbz` (
+    `table_gy4sbz_product_id` INT,
+    `table_gy4sbz_category_id` INT,
+    `table_gy4sbz_supplier_id` INT
+);
+
+INSERT INTO `table_a19p69` (`table_a19p69_order_id`, `table_a19p69_customer_id`, `table_a19p69_order_date`, `table_a19p69_status`, `table_a19p69_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_2a77t4` (`table_2a77t4_item_id`, `table_2a77t4_order_id`, `table_2a77t4_product_id`, `table_2a77t4_quantity`, `table_2a77t4_unit_price`) VALUES (1, 2, 3, 4, 1.0);
+
+INSERT INTO `table_gy4sbz` (`table_gy4sbz_product_id`, `table_gy4sbz_category_id`, `table_gy4sbz_supplier_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_REVENUE_fzk7z2(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_LOOP_COUNTER INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR_ORDER_ID INT;
+
+    DECLARE ORDER_CURSOR CURSOR FOR
+        SELECT DISTINCT TABLE_A19P69_ORDER_ID FROM TABLE_A19P69 O
+        JOIN TABLE_2A77T4 OI ON TABLE_A19P69_ORDER_ID = TABLE_2A77T4_ORDER_ID
+        JOIN TABLE_GY4SBZ P ON TABLE_2A77T4_PRODUCT_ID = TABLE_GY4SBZ_PRODUCT_ID
+        WHERE TABLE_GY4SBZ_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_A19P69_STATUS = 'COMPLETED';
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+
+    OPEN ORDER_CURSOR;
+
+    ORDER_LOOP: LOOP
+        FETCH ORDER_CURSOR INTO CUR_ORDER_ID;
+        IF DONE THEN
+            LEAVE ORDER_LOOP;
+        END IF;
+
+        SELECT SUM(TABLE_2A77T4_QUANTITY * TABLE_2A77T4_UNIT_PRICE) INTO V_REVENUE
+        FROM TABLE_2A77T4 OI
+        WHERE TABLE_2A77T4_ORDER_ID = CUR_ORDER_ID;
+
+        SET V_LOOP_COUNTER = (MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(-6)) - -566 + (v_loop_counter + 1);
+    END LOOP ORDER_LOOP;
+
+    CLOSE ORDER_CURSOR;
+
+    RETURN (MYSQL_FUNC_BUG9056_PROC1_uaqsvs(52, -78)) - -412 + (coalesce(v_revenue, 0) + (v_loop_counter * 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+CREATE TABLE IF NOT EXISTS `table_80vavx` (
+    `table_80vavx_lease_id` INT,
+    `table_80vavx_tenant_id` INT,
+    `table_80vavx_space_sqft` INT,
+    `table_80vavx_monthly_rate` INT,
+    `table_80vavx_start_date` DATE,
+    `table_80vavx_lease_term_months` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n274ub` (
+    `table_n274ub_tenant_id` INT,
+    `table_n274ub_company_name` VARCHAR(50),
+    `table_n274ub_industry` INT
+);
+
+INSERT INTO `table_80vavx` (`table_80vavx_lease_id`, `table_80vavx_tenant_id`, `table_80vavx_space_sqft`, `table_80vavx_monthly_rate`, `table_80vavx_start_date`, `table_80vavx_lease_term_months`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_n274ub` (`table_n274ub_tenant_id`, `table_n274ub_company_name`, `table_n274ub_industry`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OFFICE_LEASE_TOTAL_h7brcr(LEASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SPACE_SQFT INT DEFAULT 0;
+    DECLARE V_MONTHLY_RATE INT DEFAULT 50;
+    DECLARE V_LEASE_TERM INT DEFAULT 12;
+    DECLARE V_TOTAL_LEASE_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_80VAVX_SPACE_SQFT, 100), COALESCE(TABLE_80VAVX_MONTHLY_RATE, 50), COALESCE(TABLE_80VAVX_LEASE_TERM_MONTHS, 12)
+    INTO V_SPACE_SQFT, V_MONTHLY_RATE, V_LEASE_TERM
+    FROM TABLE_80VAVX
+    WHERE TABLE_80VAVX_LEASE_ID = LEASE_ID_PARAM;
+
+    SET V_TOTAL_LEASE_COST = V_SPACE_SQFT * V_MONTHLY_RATE * V_LEASE_TERM;
+
+    IF V_SPACE_SQFT > 5000 THEN
+        SET V_TOTAL_LEASE_COST = V_TOTAL_LEASE_COST - (V_TOTAL_LEASE_COST * 5 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_LEASE_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MAX(TABLE_G6UFYG_SALARY), 0)
+    INTO V_MAX_SALARY
+    FROM TABLE_G6UFYG
+    WHERE TABLE_G6UFYG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(34)) - -560 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(51)) - -490 + (floor(v_max_salary / 10000)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(1);

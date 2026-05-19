@@ -1,0 +1,374 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi(ARR_SIZE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_VALUE INT DEFAULT 0;
+
+    IF ARR_SIZE <= 0 OR ARR_SIZE > 10000 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_INDEX <= ARR_SIZE DO
+        SET V_VALUE = V_INDEX * 2;
+        SET V_SUM = V_SUM + V_VALUE;
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE CALC_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+CREATE TABLE IF NOT EXISTS `table_n2l8kn` (
+    `table_n2l8kn_campaign_id` INT,
+    `table_n2l8kn_start_date` DATE
+);
+
+INSERT INTO `table_n2l8kn` (`table_n2l8kn_campaign_id`, `table_n2l8kn_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N2L8KN_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N2L8KN
+    WHERE TABLE_N2L8KN_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok(-63)) - 64 + (0);
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok----- */
+CREATE TABLE IF NOT EXISTS `table_lbqo3b` (
+    `table_lbqo3b_product_id` INT,
+    `table_lbqo3b_supplier_id` INT
+);
+
+INSERT INTO `table_lbqo3b` (`table_lbqo3b_product_id`, `table_lbqo3b_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+
+    SELECT TABLE_LBQO3B_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_LBQO3B
+    WHERE TABLE_LBQO3B_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC_DATETIME_otj76p()) - -433 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(89)) - 916 + (v_supplier_id % 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+CREATE TABLE IF NOT EXISTS `table_m6at5n` (
+    `table_m6at5n_customer_id` INT,
+    `table_m6at5n_registration_date` DATE
+);
+
+INSERT INTO `table_m6at5n` (`table_m6at5n_customer_id`, `table_m6at5n_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_a6f897(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(DAY, TABLE_M6AT5N_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_DAYS
+    FROM TABLE_M6AT5N
+    WHERE TABLE_M6AT5N_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+CREATE TABLE IF NOT EXISTS `table_3na05m` (
+    `table_3na05m_cdatetime` DATETIME
+);
+
+INSERT INTO `table_3na05m` (`table_3na05m_cdatetime`) VALUES ('2024-01-01 10:00:00');
+
+/* -----Called: MYSQL_FUNC_PROC_DATETIME_otj76p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATETIME_otj76p() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_3NA05M`;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(29)) - -302 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+CREATE TABLE IF NOT EXISTS `table_maha9n` (
+    `table_maha9n_campaign_id` INT,
+    `table_maha9n_channel` INT,
+    `table_maha9n_budget` INT,
+    `table_maha9n_start_date` DATE,
+    `table_maha9n_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_isannf` (
+    `table_isannf_conversion_id` INT,
+    `table_isannf_campaign_id` INT,
+    `table_isannf_conversion_date` DATE
+);
+
+INSERT INTO `table_maha9n` (`table_maha9n_campaign_id`, `table_maha9n_channel`, `table_maha9n_budget`, `table_maha9n_start_date`, `table_maha9n_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_isannf` (`table_isannf_conversion_id`, `table_isannf_campaign_id`, `table_isannf_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CAMPAIGN_DURATION INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_MIX_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_MAHA9N_CHANNEL, DATEDIFF(TABLE_MAHA9N_END_DATE, TABLE_MAHA9N_START_DATE)
+    INTO V_CHANNEL, V_CAMPAIGN_DURATION
+    FROM TABLE_MAHA9N
+    WHERE TABLE_MAHA9N_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ISANNF
+    WHERE TABLE_ISANNF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 5;
+        WHEN 'ORGANIC' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 8;
+        WHEN 'SOCIAL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 6;
+        WHEN 'EMAIL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 7;
+        ELSE SET V_MIX_INDEX = V_CONVERSION_COUNT * 4;
+    END CASE;
+
+    RETURN V_MIX_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+CREATE TABLE IF NOT EXISTS `table_t4xtqx` (
+    `table_t4xtqx_order_id` INT,
+    `table_t4xtqx_customer_id` INT,
+    `table_t4xtqx_order_date` DATE,
+    `table_t4xtqx_total_amount` DECIMAL(10,2),
+    `table_t4xtqx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_evisnb` (
+    `table_evisnb_payment_id` INT,
+    `table_evisnb_order_id` INT,
+    `table_evisnb_payment_date` DATE,
+    `table_evisnb_amount_paid` INT
+);
+
+INSERT INTO `table_t4xtqx` (`table_t4xtqx_order_id`, `table_t4xtqx_customer_id`, `table_t4xtqx_order_date`, `table_t4xtqx_total_amount`, `table_t4xtqx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_evisnb` (`table_evisnb_payment_id`, `table_evisnb_order_id`, `table_evisnb_payment_date`, `table_evisnb_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_COMPLETION_STATUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T4XTQX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_T4XTQX
+    WHERE TABLE_T4XTQX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EVISNB_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_EVISNB
+    WHERE TABLE_EVISNB_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT_PAID >= V_ORDER_TOTAL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_GCD_zzsrc1(30, 90)) - -820 + (100);
+    END IF;
+
+    SET V_COMPLETION_STATUS = (V_AMOUNT_PAID * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(-40)) - -477 + (v_completion_status);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_zzsrc1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_zzsrc1(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B != 0 DO
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+CREATE TABLE IF NOT EXISTS `table_woaa62` (
+    `table_woaa62_customer_id` INT,
+    `table_woaa62_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_woaa62` (`table_woaa62_customer_id`, `table_woaa62_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WOAA62_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_WOAA62
+    WHERE TABLE_WOAA62_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(-62)) - 656 + (v_cost);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+CREATE TABLE IF NOT EXISTS `table_m3e5yk` (
+    `table_m3e5yk_repair_id` INT,
+    `table_m3e5yk_customer_id` INT,
+    `table_m3e5yk_technician_id` INT,
+    `table_m3e5yk_appliance_type` VARCHAR(50),
+    `table_m3e5yk_parts_cost` DECIMAL(10,2),
+    `table_m3e5yk_labor_hours` INT,
+    `table_m3e5yk_labor_rate` INT,
+    `table_m3e5yk_service_date` DATE
+);
+
+INSERT INTO `table_m3e5yk` (`table_m3e5yk_repair_id`, `table_m3e5yk_customer_id`, `table_m3e5yk_technician_id`, `table_m3e5yk_appliance_type`, `table_m3e5yk_parts_cost`, `table_m3e5yk_labor_hours`, `table_m3e5yk_labor_rate`, `table_m3e5yk_service_date`) VALUES (1, 2, 3, 'test', 1.0, 6, 7, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPAIR_FINAL_COST_okdjw2(REPAIR_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PARTS_COST INT DEFAULT 0;
+    DECLARE V_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 75;
+    DECLARE V_DIAGNOSTIC_FEE INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M3E5YK_PARTS_COST, 0), COALESCE(TABLE_M3E5YK_LABOR_HOURS, 0), COALESCE(TABLE_M3E5YK_LABOR_RATE, 75)
+    INTO V_PARTS_COST, V_LABOR_HOURS, V_LABOR_RATE
+    FROM TABLE_M3E5YK
+    WHERE TABLE_M3E5YK_REPAIR_ID = REPAIR_ID_PARAM;
+
+    SET V_TOTAL_COST = V_PARTS_COST + (V_LABOR_HOURS * V_LABOR_RATE) + V_DIAGNOSTIC_FEE;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = (MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(-2)) - 961 + ((MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi(-23)) - -393 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy(-41)) - -172 + (v_hiring_efficiency);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(1);

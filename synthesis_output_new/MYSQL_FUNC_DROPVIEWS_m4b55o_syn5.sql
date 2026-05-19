@@ -1,0 +1,448 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_ojycmm (
+    table_ojycmm_table_schema VARCHAR(64),
+    table_ojycmm_table_name VARCHAR(64)
+);
+
+INSERT INTO table_ojycmm (`table_ojycmm_table_schema`, `table_ojycmm_table_name`) VALUES ('test', 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_FREQUENCY_rh1hzx----- */
+CREATE TABLE IF NOT EXISTS `table_l4jc48` (
+    `table_l4jc48_customer_id` INT,
+    `table_l4jc48_registration_date` DATE,
+    `table_l4jc48_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wj63ky` (
+    `table_wj63ky_order_id` INT,
+    `table_wj63ky_customer_id` INT,
+    `table_wj63ky_order_date` DATE
+);
+
+INSERT INTO `table_l4jc48` (`table_l4jc48_customer_id`, `table_l4jc48_registration_date`, `table_l4jc48_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_wj63ky` (`table_wj63ky_order_id`, `table_wj63ky_customer_id`, `table_wj63ky_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_FREQUENCY_rh1hzx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_FREQUENCY_rh1hzx(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_FREQUENCY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_WJ63KY
+    WHERE TABLE_WJ63KY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_L4JC48_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_L4JC48
+    WHERE TABLE_L4JC48_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_DAYS = (MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ENGAGEMENT_FREQUENCY = (V_ORDER_COUNT * 365.0) / V_CUSTOMER_AGE_DAYS;
+
+    RETURN FLOOR(V_ENGAGEMENT_FREQUENCY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = 30;
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = V_DISCOUNT + 20;
+    END IF;
+
+    SET V_FINAL_FARE = 25 - (25 * V_DISCOUNT / 100);
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+CREATE TABLE IF NOT EXISTS `table_h2mz5q` (
+    `table_h2mz5q_emp_id` INT,
+    `table_h2mz5q_salary` INT,
+    `table_h2mz5q_dept_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u90ptn` (
+    `table_u90ptn_dept_id` INT,
+    `table_u90ptn_dept_name` VARCHAR(50),
+    `table_u90ptn_budget` INT
+);
+
+INSERT INTO `table_h2mz5q` (`table_h2mz5q_emp_id`, `table_h2mz5q_salary`, `table_h2mz5q_dept_id`) VALUES (1, 1, 1);
+
+INSERT INTO `table_u90ptn` (`table_u90ptn_dept_id`, `table_u90ptn_dept_name`, `table_u90ptn_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_SALARY INT;
+
+    DECLARE SALARY_CURSOR CURSOR FOR
+        SELECT TABLE_H2MZ5Q_SALARY FROM TABLE_H2MZ5Q WHERE TABLE_H2MZ5Q_DEPT_ID = DEPT_ID_PARAM;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_TOTAL_SALARY = -1;
+
+    OPEN SALARY_CURSOR;
+
+    SALARY_LOOP: WHILE V_DONE = 0 DO
+        FETCH SALARY_CURSOR INTO V_SALARY;
+        IF V_DONE = 0 THEN
+            SET V_TOTAL_SALARY = V_TOTAL_SALARY + V_SALARY;
+        END IF;
+    END WHILE SALARY_LOOP;
+
+    CLOSE SALARY_CURSOR;
+
+    RETURN (MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(76)) - -656 + (coalesce(v_total_salary, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(CARD_NUMBER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    IF CARD_NUMBER IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(-57)) - -158 + (0);
+    END IF;
+
+    WHILE V_INDEX <= CHAR_LENGTH(CARD_NUMBER) DO
+        SET V_CHAR = SUBSTRING(CARD_NUMBER, V_INDEX, 1);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        END IF;
+
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE;
+
+    IF V_DIGIT_COUNT >= 13 AND V_DIGIT_COUNT <= 19 THEN
+        SET V_RESULT = 1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+CREATE TABLE IF NOT EXISTS `table_i7vfnv` (
+    `table_i7vfnv_campaign_id` INT,
+    `table_i7vfnv_start_date` DATE,
+    `table_i7vfnv_end_date` DATE,
+    `table_i7vfnv_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_okzpao` (
+    `table_okzpao_conversion_id` INT,
+    `table_okzpao_campaign_id` INT,
+    `table_okzpao_conversion_date` DATE,
+    `table_okzpao_conversion_value` INT
+);
+
+INSERT INTO `table_i7vfnv` (`table_i7vfnv_campaign_id`, `table_i7vfnv_start_date`, `table_i7vfnv_end_date`, `table_i7vfnv_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_okzpao` (`table_okzpao_conversion_id`, `table_okzpao_campaign_id`, `table_okzpao_conversion_date`, `table_okzpao_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_QUALITY_SCORE_bk8af8(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUALITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_OKZPAO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_VALUE
+    FROM TABLE_OKZPAO
+    WHERE TABLE_OKZPAO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TOTAL_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = V_TOTAL_VALUE / V_TOTAL_CONVERSIONS;
+
+    RETURN FLOOR(V_QUALITY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs(68)) - -471 + (n) < 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(-100)) - 53 + ((MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(17, 37)) - -647 + (-n));
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+CREATE TABLE IF NOT EXISTS table_wz9osw (
+    table_wz9osw_produto_id INT,
+    table_wz9osw_Quantidade_produto INT
+);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (3, 0);
+
+/* -----Called: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM TABLE_WZ9OSW WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE TABLE_WZ9OSW SET TABLE_WZ9OSW_QUANTIDADE_PRODUTO = TABLE_WZ9OSW_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_WZ9OSW (`TABLE_WZ9OSW_PRODUTO_ID`, `TABLE_WZ9OSW_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(-100)) - 950 + (rows_affected);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2----- */
+CREATE TABLE IF NOT EXISTS `table_2sxoyp` (
+    `table_2sxoyp_inventory_id` INT,
+    `table_2sxoyp_product_id` INT,
+    `table_2sxoyp_warehouse_id` INT,
+    `table_2sxoyp_quantity` INT,
+    `table_2sxoyp_min_stock_level` INT
+);
+
+INSERT INTO `table_2sxoyp` (`table_2sxoyp_inventory_id`, `table_2sxoyp_product_id`, `table_2sxoyp_warehouse_id`, `table_2sxoyp_quantity`, `table_2sxoyp_min_stock_level`) VALUES (1, 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_MIN_LEVEL INT DEFAULT 0;
+    DECLARE V_NEEDS_REORDER INT DEFAULT 0;
+    DECLARE V_WAREHOUSE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2SXOYP_QUANTITY), 0), COUNT(DISTINCT TABLE_2SXOYP_WAREHOUSE_ID)
+    INTO V_TOTAL_STOCK, V_WAREHOUSE_COUNT
+    FROM TABLE_2SXOYP
+    WHERE TABLE_2SXOYP_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_WAREHOUSE_COUNT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    SET V_MIN_LEVEL = V_WAREHOUSE_COUNT * 100;
+
+    IF V_TOTAL_STOCK < V_MIN_LEVEL THEN
+        SET V_NEEDS_REORDER = 1;
+    ELSE
+        SET V_NEEDS_REORDER = 0;
+    END IF;
+
+    RETURN V_NEEDS_REORDER;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya----- */
+CREATE TABLE IF NOT EXISTS `table_ioows3` (
+    `table_ioows3_product_id` INT,
+    `table_ioows3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ioows3` (`table_ioows3_product_id`, `table_ioows3_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_IOOWS3_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_IOOWS3
+    WHERE TABLE_IOOWS3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * 0.3) / 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs----- */
+CREATE TABLE IF NOT EXISTS `table_ey63si` (
+    `table_ey63si_order_id` INT,
+    `table_ey63si_customer_id` INT,
+    `table_ey63si_order_date` DATE,
+    `table_ey63si_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_gelcxf` (
+    `table_gelcxf_customer_id` INT,
+    `table_gelcxf_tier_level` INT
+);
+
+INSERT INTO `table_ey63si` (`table_ey63si_order_id`, `table_ey63si_customer_id`, `table_ey63si_order_date`, `table_ey63si_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_gelcxf` (`table_gelcxf_customer_id`, `table_gelcxf_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIGH_VALUE_CUSTOMER_THRESHOLD_vmomrs(TIER_LEVEL_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_EY63SI_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_EY63SI O
+    JOIN TABLE_GELCXF C ON TABLE_EY63SI_CUSTOMER_ID = TABLE_GELCXF_CUSTOMER_ID
+    WHERE TABLE_GELCXF_TIER_LEVEL = TIER_LEVEL_PARAM;
+
+    SET V_THRESHOLD = FLOOR(V_AVG_ORDER_VALUE * 1.5);
+
+    RETURN V_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DROPVIEWS_m4b55o(PV_DATABASE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LV_STMT VARCHAR(1024);
+    DECLARE LV_VIEW_NAME VARCHAR(64);
+    DECLARE FETCHED INT DEFAULT 0;
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT 0;
+    
+    DECLARE VIEW_CURSOR CURSOR FOR
+        SELECT TABLE_OJYCMM_TABLE_NAME 
+        FROM TABLE_OJYCMM 
+        WHERE TABLE_OJYCMM_TABLE_SCHEMA = IFNULL(CONVERT(PV_DATABASE USING UTF8), DATABASE())
+        ORDER BY TABLE_OJYCMM_TABLE_NAME;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+    
+    OPEN VIEW_CURSOR;
+    
+    CURSOR_LOOP: LOOP
+        FETCH VIEW_CURSOR INTO LV_VIEW_NAME;
+        IF DONE = 1 THEN
+            LEAVE CURSOR_LOOP;
+        END IF;
+        
+        SET @SQL := CONCAT('DROP VIEW ', LV_VIEW_NAME);
+        SET VIEW_COUNT = (MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(-57)) - 588 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ENGAGEMENT_FREQUENCY_rh1hzx(15)) - -66 + (view_count)) + 1;
+        
+        SET LV_STMT = @SQL;
+    END LOOP CURSOR_LOOP;
+    
+    CLOSE VIEW_CURSOR;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_DROPVIEWS_m4b55o(1);

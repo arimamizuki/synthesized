@@ -1,0 +1,406 @@
+/* -----Called: MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERATOR INT DEFAULT 1;
+    DECLARE V_DENOMINATOR INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    IF R < (MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(49)) - 320 + (0) OR R > N OR N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF R = 0 OR R = N THEN
+        RETURN (MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(-35)) - -709 + (1);
+    END IF;
+
+    IF R > N - R THEN
+        SET R = N - R;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= R DO
+        SET V_NUMERATOR = (MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(-37)) - 439 + (v_numerator * (n - v_counter + 1));
+        SET V_DENOMINATOR = V_DENOMINATOR * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    SET V_RESULT = V_NUMERATOR / V_DENOMINATOR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+CREATE TABLE IF NOT EXISTS `table_iihmej` (
+    `table_iihmej_student_id` INT,
+    `table_iihmej_name` VARCHAR(50),
+    `table_iihmej_age` INT,
+    `table_iihmej_gpa` INT,
+    `table_iihmej_enrollment_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqu8tq` (
+    `table_oqu8tq_course_id` INT,
+    `table_oqu8tq_name` VARCHAR(50),
+    `table_oqu8tq_credits` INT,
+    `table_oqu8tq_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8mt6l6` (
+    `table_8mt6l6_student_id` INT,
+    `table_8mt6l6_course_id` INT,
+    `table_8mt6l6_grade` INT
+);
+
+INSERT INTO `table_iihmej` (`table_iihmej_student_id`, `table_iihmej_name`, `table_iihmej_age`, `table_iihmej_gpa`, `table_iihmej_enrollment_year`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_oqu8tq` (`table_oqu8tq_course_id`, `table_oqu8tq_name`, `table_oqu8tq_credits`, `table_oqu8tq_department_id`) VALUES (1, 'test', 3, 4);
+
+INSERT INTO `table_8mt6l6` (`table_8mt6l6_student_id`, `table_8mt6l6_course_id`, `table_8mt6l6_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STUDENT_HONORS_RATING_wryeo5(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDIT_COUNT INT DEFAULT 0;
+    DECLARE V_HONORS_COURSES INT DEFAULT 0;
+    DECLARE V_HONORS_RATING INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IIHMEJ_GPA, 0.00)
+    INTO V_GPA
+    FROM TABLE_IIHMEJ
+    WHERE TABLE_IIHMEJ_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*), SUM(TABLE_OQU8TQ_CREDITS)
+    INTO V_HONORS_COURSES, V_CREDIT_COUNT
+    FROM TABLE_8MT6L6 E
+    JOIN TABLE_OQU8TQ C ON TABLE_8MT6L6_COURSE_ID = TABLE_OQU8TQ_COURSE_ID
+    WHERE TABLE_8MT6L6_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_8MT6L6_GRADE IN ('A', 'A+', 'A-');
+
+    SET V_HONORS_RATING = (V_GPA * 40) + (V_HONORS_COURSES * 10) + (V_CREDIT_COUNT / 10);
+
+    RETURN V_HONORS_RATING;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+CREATE TABLE IF NOT EXISTS `table_gg067m` (
+    `table_gg067m_rental_id` INT,
+    `table_gg067m_customer_id` INT,
+    `table_gg067m_boat_id` INT,
+    `table_gg067m_rental_hours` INT,
+    `table_gg067m_hourly_rate` INT,
+    `table_gg067m_fuel_included` INT,
+    `table_gg067m_captain_required` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1tuyv7` (
+    `table_1tuyv7_boat_id` INT,
+    `table_1tuyv7_boat_type` VARCHAR(50),
+    `table_1tuyv7_make` INT,
+    `table_1tuyv7_model` INT,
+    `table_1tuyv7_length_feet` INT,
+    `table_1tuyv7_capacity` INT
+);
+
+INSERT INTO `table_gg067m` (`table_gg067m_rental_id`, `table_gg067m_customer_id`, `table_gg067m_boat_id`, `table_gg067m_rental_hours`, `table_gg067m_hourly_rate`, `table_gg067m_fuel_included`, `table_gg067m_captain_required`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_1tuyv7` (`table_1tuyv7_boat_id`, `table_1tuyv7_boat_type`, `table_1tuyv7_make`, `table_1tuyv7_model`, `table_1tuyv7_length_feet`, `table_1tuyv7_capacity`) VALUES (1, 'test', 3, 4, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 4;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CAPTAIN_FEE INT DEFAULT 150;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GG067M_RENTAL_HOURS, 4), COALESCE(TABLE_GG067M_HOURLY_RATE, 200), COALESCE(TABLE_GG067M_CAPTAIN_REQUIRED, 0)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE, V_CAPTAIN_FEE
+    FROM TABLE_GG067M
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT TABLE_1TUYV7_LENGTH_FEET * 5 INTO V_FUEL_SURCHARGE
+    FROM TABLE_GG067M BR
+    JOIN TABLE_1TUYV7 B ON TABLE_GG067M_BOAT_ID = TABLE_1TUYV7_BOAT_ID
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM AND TABLE_GG067M_FUEL_INCLUDED = 0;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE + V_FUEL_SURCHARGE;
+
+    IF V_CAPTAIN_FEE > 0 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + V_CAPTAIN_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+CREATE TABLE IF NOT EXISTS `table_9mgf73` (
+    `table_9mgf73_class_id` INT,
+    `table_9mgf73_instructor_id` INT,
+    `table_9mgf73_class_type` VARCHAR(50),
+    `table_9mgf73_duration_minutes` INT,
+    `table_9mgf73_max_capacity` INT,
+    `table_9mgf73_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_t7gqnp` (
+    `table_t7gqnp_booking_id` INT,
+    `table_t7gqnp_member_id` INT,
+    `table_t7gqnp_class_id` INT,
+    `table_t7gqnp_booking_date` DATE,
+    `table_t7gqnp_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9mgf73` (`table_9mgf73_class_id`, `table_9mgf73_instructor_id`, `table_9mgf73_class_type`, `table_9mgf73_duration_minutes`, `table_9mgf73_max_capacity`, `table_9mgf73_price`) VALUES (1, 2, 'test', 4, 5, 1.0);
+
+INSERT INTO `table_t7gqnp` (`table_t7gqnp_booking_id`, `table_t7gqnp_member_id`, `table_t7gqnp_class_id`, `table_t7gqnp_booking_date`, `table_t7gqnp_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_CAPACITY INT DEFAULT 20;
+    DECLARE V_BOOKED_COUNT INT DEFAULT 0;
+    DECLARE V_ACTUAL_ATTENDANCE INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_BOOKED_COUNT
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COALESCE(MAX(TABLE_9MGF73_MAX_CAPACITY), 20)
+    INTO V_MAX_CAPACITY
+    FROM TABLE_9MGF73 F
+    WHERE TABLE_9MGF73_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTUAL_ATTENDANCE
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM AND TABLE_T7GQNP_ATTENDANCE_STATUS = 'ATTENDED';
+
+    IF V_MAX_CAPACITY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_COUNT * 100) / V_MAX_CAPACITY;
+
+    IF V_OCCUPANCY_PERCENT > 100 THEN
+        SET V_OCCUPANCY_PERCENT = 100;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(-92)) - -502 + (cast(v_occupancy_percent as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+CREATE TABLE IF NOT EXISTS `table_02dgpw` (
+    `table_02dgpw_policy_id` INT,
+    `table_02dgpw_customer_id` INT,
+    `table_02dgpw_bike_value` INT,
+    `table_02dgpw_bike_type` VARCHAR(50),
+    `table_02dgpw_annual_premium` INT,
+    `table_02dgpw_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_beolwf` (
+    `table_beolwf_claim_id` INT,
+    `table_beolwf_policy_id` INT,
+    `table_beolwf_claim_date` DATE,
+    `table_beolwf_claim_amount` DECIMAL(10,2),
+    `table_beolwf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_02dgpw` (`table_02dgpw_policy_id`, `table_02dgpw_customer_id`, `table_02dgpw_bike_value`, `table_02dgpw_bike_type`, `table_02dgpw_annual_premium`, `table_02dgpw_deductible_amount`) VALUES (1, 2, 3, 'test', 5, 1.0);
+
+INSERT INTO `table_beolwf` (`table_beolwf_claim_id`, `table_beolwf_policy_id`, `table_beolwf_claim_date`, `table_beolwf_claim_amount`, `table_beolwf_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_02DGPW_BIKE_VALUE, 10000), COALESCE(TABLE_02DGPW_ANNUAL_PREMIUM, 500), COALESCE(TABLE_02DGPW_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_02DGPW
+    WHERE TABLE_02DGPW_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = V_BIKE_VALUE / 1000;
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7()) - -552 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = (MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + (v_count) + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_SQUARES_1_TO_5_e5vas7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 4 UNION SELECT 9 UNION SELECT 16 UNION SELECT 25;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TIMESTAMP_0m3n7o----- */
+CREATE TABLE IF NOT EXISTS `table_1hn7bd` (
+    `table_1hn7bd_ctimestamp` TIMESTAMP
+);
+
+INSERT INTO `table_1hn7bd` (`table_1hn7bd_ctimestamp`) VALUES ('2024-01-01 10:00:00');
+
+/* -----Called: MYSQL_FUNC_PROC_TIMESTAMP_0m3n7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIMESTAMP_0m3n7o() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_1HN7BD`;
+    RETURN (MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(17, 37)) - -647 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+CREATE TABLE IF NOT EXISTS table_wz9osw (
+    table_wz9osw_produto_id INT,
+    table_wz9osw_Quantidade_produto INT
+);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (3, 0);
+
+/* -----Called: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM TABLE_WZ9OSW WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE TABLE_WZ9OSW SET TABLE_WZ9OSW_QUANTIDADE_PRODUTO = TABLE_WZ9OSW_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_WZ9OSW (`TABLE_WZ9OSW_PRODUTO_ID`, `TABLE_WZ9OSW_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN ROWS_AFFECTED;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A - B;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    READ_LOOP: LOOP
+        SET V_RESULT = (MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy()) - 510 + ((MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(15, 0)) - 124 + (v_result)) + 1;
+        IF V_RESULT >= N THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(1);

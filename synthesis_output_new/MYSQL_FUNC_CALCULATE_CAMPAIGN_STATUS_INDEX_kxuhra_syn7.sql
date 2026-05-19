@@ -1,0 +1,393 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_i7exsg` (
+    `table_i7exsg_campaign_id` INT,
+    `table_i7exsg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_i7exsg` (`table_i7exsg_campaign_id`, `table_i7exsg_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p----- */
+CREATE TABLE IF NOT EXISTS `table_xr5qaa` (
+    `table_xr5qaa_customer_id` INT,
+    `table_xr5qaa_monthly_cost` DECIMAL(10,2),
+    `table_xr5qaa_status` VARCHAR(50)
+);
+
+INSERT INTO `table_xr5qaa` (`table_xr5qaa_customer_id`, `table_xr5qaa_monthly_cost`, `table_xr5qaa_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_XR5QAA_MONTHLY_COST, 0), TABLE_XR5QAA_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_XR5QAA
+    WHERE TABLE_XR5QAA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+CREATE TABLE IF NOT EXISTS `table_pjlwth` (
+    `table_pjlwth_emp_id` INT,
+    `table_pjlwth_department_id` INT,
+    `table_pjlwth_salary` INT,
+    `table_pjlwth_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcp73a` (
+    `table_hcp73a_department_id` INT,
+    `table_hcp73a_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pjlwth` (`table_pjlwth_emp_id`, `table_pjlwth_department_id`, `table_pjlwth_salary`, `table_pjlwth_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_hcp73a` (`table_hcp73a_department_id`, `table_hcp73a_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_STABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_PJLWTH_HIRE_DATE, CURDATE())), 0), COUNT(*)
+    INTO V_AVG_TENURE, V_EMPLOYEE_COUNT
+    FROM TABLE_PJLWTH
+    WHERE TABLE_PJLWTH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_SCORE = (V_AVG_TENURE * 10) + (V_EMPLOYEE_COUNT * 2);
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(-6)) - 570 + (v_stability_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN 'FIZZBUZZ';
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN (MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl(37)) - 414 + (cast(n as char));
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl----- */
+CREATE TABLE IF NOT EXISTS `table_g3knxg` (
+    `table_g3knxg_emp_id` INT,
+    `table_g3knxg_department_id` INT,
+    `table_g3knxg_salary` INT,
+    `table_g3knxg_hire_date` DATE,
+    `table_g3knxg_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_0tsrev` (
+    `table_0tsrev_department_id` INT,
+    `table_0tsrev_name` VARCHAR(50)
+);
+
+INSERT INTO `table_g3knxg` (`table_g3knxg_emp_id`, `table_g3knxg_department_id`, `table_g3knxg_salary`, `table_g3knxg_hire_date`, `table_g3knxg_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_0tsrev` (`table_0tsrev_department_id`, `table_0tsrev_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_G3KNXG_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_G3KNXG
+    WHERE TABLE_G3KNXG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(STDDEV(TABLE_G3KNXG_SALARY), 0) / 1000
+    INTO V_TURNOVER_RATE
+    FROM TABLE_G3KNXG
+    WHERE TABLE_G3KNXG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (V_AVG_TENURE * 15) - (V_TURNOVER_RATE * 5);
+
+    RETURN GREATEST(V_STABILITY_INDEX, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+CREATE TABLE IF NOT EXISTS `table_ljz443` (
+    `table_ljz443_order_id` INT,
+    `table_ljz443_customer_id` INT,
+    `table_ljz443_restaurant_id` INT,
+    `table_ljz443_driver_id` INT,
+    `table_ljz443_order_total` DECIMAL(10,2),
+    `table_ljz443_delivery_fee` INT,
+    `table_ljz443_order_time` DATE,
+    `table_ljz443_delivery_time` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cn41jp` (
+    `table_cn41jp_restaurant_id` INT,
+    `table_cn41jp_name` VARCHAR(50),
+    `table_cn41jp_cuisine_type` VARCHAR(50),
+    `table_cn41jp_avg_preparation_time` DATE
+);
+
+INSERT INTO `table_ljz443` (`table_ljz443_order_id`, `table_ljz443_customer_id`, `table_ljz443_restaurant_id`, `table_ljz443_driver_id`, `table_ljz443_order_total`, `table_ljz443_delivery_fee`, `table_ljz443_order_time`, `table_ljz443_delivery_time`) VALUES (1, 2, 3, 4, 1.0, 6, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_cn41jp` (`table_cn41jp_restaurant_id`, `table_cn41jp_name`, `table_cn41jp_cuisine_type`, `table_cn41jp_avg_preparation_time`) VALUES (1, 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TIME DATETIME;
+    DECLARE V_DELIVERY_TIME DATETIME;
+    DECLARE V_PREPARATION_TIME INT DEFAULT 15;
+    DECLARE V_TOTAL_DELIVERY_MINS INT DEFAULT 0;
+    DECLARE V_DELIVERY_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_LJZ443_ORDER_TIME, TABLE_LJZ443_DELIVERY_TIME
+    INTO V_ORDER_TIME, V_DELIVERY_TIME
+    FROM TABLE_LJZ443 O
+    WHERE TABLE_LJZ443_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TIME IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DELIVERY_TIME IS NULL THEN
+        SET V_DELIVERY_TIME = NOW();
+    END IF;
+
+    SET V_TOTAL_DELIVERY_MINS = TIMESTAMPDIFF(MINUTE, V_ORDER_TIME, V_DELIVERY_TIME);
+
+    SET V_DELIVERY_SCORE = 100 - (V_TOTAL_DELIVERY_MINS - V_PREPARATION_TIME);
+
+    IF V_DELIVERY_SCORE < 0 THEN
+        SET V_DELIVERY_SCORE = 0;
+    END IF;
+
+    RETURN V_DELIVERY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+CREATE TABLE IF NOT EXISTS `table_uy67bq` (
+    `table_uy67bq_product_id` INT,
+    `table_uy67bq_price` DECIMAL(10,2),
+    `table_uy67bq_category_id` INT
+);
+
+INSERT INTO `table_uy67bq` (`table_uy67bq_product_id`, `table_uy67bq_price`, `table_uy67bq_category_id`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_UY67BQ_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_UY67BQ
+    WHERE TABLE_UY67BQ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - 633 + (floor(v_avg_price / 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+CREATE TABLE IF NOT EXISTS `table_bgkvze` (
+    `table_bgkvze_cdouble` INT
+);
+
+INSERT INTO `table_bgkvze` (`table_bgkvze_cdouble`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_BGKVZE_CDOUBLE) INTO RESULT FROM `TABLE_BGKVZE`;
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(88)) - 204 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+CREATE TABLE IF NOT EXISTS `table_lrokng` (
+    `table_lrokng_customer_id` INT,
+    `table_lrokng_order_date` DATE,
+    `table_lrokng_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lrokng` (`table_lrokng_customer_id`, `table_lrokng_order_date`, `table_lrokng_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_LROKNG_CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM TABLE_LROKNG
+    WHERE TABLE_LROKNG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+CREATE TABLE IF NOT EXISTS `table_cfexjo` (
+    `table_cfexjo_campaign_id` INT,
+    `table_cfexjo_target_audience_size` INT,
+    `table_cfexjo_budget` INT,
+    `table_cfexjo_start_date` DATE,
+    `table_cfexjo_end_date` DATE,
+    `table_cfexjo_channel` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m5fef2` (
+    `table_m5fef2_conversion_id` INT,
+    `table_m5fef2_campaign_id` INT,
+    `table_m5fef2_conversion_date` DATE,
+    `table_m5fef2_conversion_value` INT
+);
+
+INSERT INTO `table_cfexjo` (`table_cfexjo_campaign_id`, `table_cfexjo_target_audience_size`, `table_cfexjo_budget`, `table_cfexjo_start_date`, `table_cfexjo_end_date`, `table_cfexjo_channel`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_m5fef2` (`table_m5fef2_conversion_id`, `table_m5fef2_campaign_id`, `table_m5fef2_conversion_date`, `table_m5fef2_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TARGET_SIZE INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CFEXJO_TARGET_AUDIENCE_SIZE, 1000)
+    INTO V_TARGET_SIZE
+    FROM TABLE_CFEXJO
+    WHERE TABLE_CFEXJO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_M5FEF2_CONVERSION_VALUE), (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(62)) - -426 + (0))
+    INTO V_CONVERSION_COUNT, V_TOTAL_VALUE
+    FROM TABLE_M5FEF2
+    WHERE TABLE_M5FEF2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TARGET_SIZE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_CONVERSION_COUNT * 100) / V_TARGET_SIZE;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+CREATE TABLE IF NOT EXISTS `table_fuz15j` (
+    `table_fuz15j_product_id` INT,
+    `table_fuz15j_category_id` INT,
+    `table_fuz15j_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fuz15j` (`table_fuz15j_product_id`, `table_fuz15j_category_id`, `table_fuz15j_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FUZ15J_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FUZ15J_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_CATEGORY_ID = (SELECT TABLE_FUZ15J_CATEGORY_ID FROM TABLE_FUZ15J WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_RATIO = (V_PRICE * 100) / V_CATEGORY_AVG;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_I7EXSG_STATUS
+    INTO V_STATUS
+    FROM TABLE_I7EXSG
+    WHERE TABLE_I7EXSG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(-84)) - 183 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(15)) - 83 + (50));
+        WHEN 'COMPLETED' THEN RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p(-89)) - -324 + (75);
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(-45)) - 460 + (10);
+    END CASE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(1);

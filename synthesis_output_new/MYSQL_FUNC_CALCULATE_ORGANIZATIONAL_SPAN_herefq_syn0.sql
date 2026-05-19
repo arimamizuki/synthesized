@@ -1,0 +1,416 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_djvdv7` (
+    `table_djvdv7_emp_id` INT,
+    `table_djvdv7_manager_id` INT,
+    `table_djvdv7_department_id` INT,
+    `table_djvdv7_salary` INT,
+    `table_djvdv7_hire_date` DATE
+);
+
+INSERT INTO `table_djvdv7` (`table_djvdv7_emp_id`, `table_djvdv7_manager_id`, `table_djvdv7_department_id`, `table_djvdv7_salary`, `table_djvdv7_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d(86)) - -7 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+CREATE TABLE IF NOT EXISTS `table_ljz443` (
+    `table_ljz443_order_id` INT,
+    `table_ljz443_customer_id` INT,
+    `table_ljz443_restaurant_id` INT,
+    `table_ljz443_driver_id` INT,
+    `table_ljz443_order_total` DECIMAL(10,2),
+    `table_ljz443_delivery_fee` INT,
+    `table_ljz443_order_time` DATE,
+    `table_ljz443_delivery_time` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cn41jp` (
+    `table_cn41jp_restaurant_id` INT,
+    `table_cn41jp_name` VARCHAR(50),
+    `table_cn41jp_cuisine_type` VARCHAR(50),
+    `table_cn41jp_avg_preparation_time` DATE
+);
+
+INSERT INTO `table_ljz443` (`table_ljz443_order_id`, `table_ljz443_customer_id`, `table_ljz443_restaurant_id`, `table_ljz443_driver_id`, `table_ljz443_order_total`, `table_ljz443_delivery_fee`, `table_ljz443_order_time`, `table_ljz443_delivery_time`) VALUES (1, 2, 3, 4, 1.0, 6, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_cn41jp` (`table_cn41jp_restaurant_id`, `table_cn41jp_name`, `table_cn41jp_cuisine_type`, `table_cn41jp_avg_preparation_time`) VALUES (1, 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_SCORE_hhch9d(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TIME DATETIME;
+    DECLARE V_DELIVERY_TIME DATETIME;
+    DECLARE V_PREPARATION_TIME INT DEFAULT 15;
+    DECLARE V_TOTAL_DELIVERY_MINS INT DEFAULT 0;
+    DECLARE V_DELIVERY_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_LJZ443_ORDER_TIME, TABLE_LJZ443_DELIVERY_TIME
+    INTO V_ORDER_TIME, V_DELIVERY_TIME
+    FROM TABLE_LJZ443 O
+    WHERE TABLE_LJZ443_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TIME IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DELIVERY_TIME IS NULL THEN
+        SET V_DELIVERY_TIME = NOW();
+    END IF;
+
+    SET V_TOTAL_DELIVERY_MINS = TIMESTAMPDIFF(MINUTE, V_ORDER_TIME, V_DELIVERY_TIME);
+
+    SET V_DELIVERY_SCORE = 100 - (V_TOTAL_DELIVERY_MINS - V_PREPARATION_TIME);
+
+    IF V_DELIVERY_SCORE < 0 THEN
+        SET V_DELIVERY_SCORE = 0;
+    END IF;
+
+    RETURN V_DELIVERY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+CREATE TABLE IF NOT EXISTS `table_exbt6p` (
+    `table_exbt6p_task_id` INT,
+    `table_exbt6p_project_id` INT,
+    `table_exbt6p_assignee_id` INT,
+    `table_exbt6p_estimated_hours` INT,
+    `table_exbt6p_actual_hours` INT,
+    `table_exbt6p_status` VARCHAR(50),
+    `table_exbt6p_priority` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0kik0` (
+    `table_o0kik0_project_id` INT,
+    `table_o0kik0_project_name` VARCHAR(50),
+    `table_o0kik0_start_date` DATE,
+    `table_o0kik0_deadline` INT,
+    `table_o0kik0_budget` INT
+);
+
+INSERT INTO `table_exbt6p` (`table_exbt6p_task_id`, `table_exbt6p_project_id`, `table_exbt6p_assignee_id`, `table_exbt6p_estimated_hours`, `table_exbt6p_actual_hours`, `table_exbt6p_status`, `table_exbt6p_priority`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_o0kik0` (`table_o0kik0_project_id`, `table_o0kik0_project_name`, `table_o0kik0_start_date`, `table_o0kik0_deadline`, `table_o0kik0_budget`) VALUES (1, 'test', '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ESTIMATED INT DEFAULT 0;
+    DECLARE V_TOTAL_ACTUAL INT DEFAULT 0;
+    DECLARE V_COMPLETED_TASKS INT DEFAULT 0;
+    DECLARE V_TOTAL_TASKS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EXBT6P_ESTIMATED_HOURS), 0), COALESCE(SUM(TABLE_EXBT6P_ACTUAL_HOURS), 0), COUNT(*)
+    INTO V_TOTAL_ESTIMATED, V_TOTAL_ACTUAL, V_TOTAL_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_COMPLETED_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM AND TABLE_EXBT6P_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_TASKS = 0 THEN
+        RETURN 50;
+    END IF;
+
+    SET V_HEALTH_SCORE = (V_COMPLETED_TASKS * 100) / V_TOTAL_TASKS;
+
+    IF V_TOTAL_ACTUAL > V_TOTAL_ESTIMATED THEN
+        SET V_HEALTH_SCORE = V_HEALTH_SCORE - 20;
+    END IF;
+
+    RETURN CAST(V_HEALTH_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(66)) - 121 + ((v_bedrooms * 20) + (v_bathrooms * 15) + (v_square_feet / 100) + ((2024 - v_year_built) * 2) + (v_feature_count * 10));
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(36)) - 837 + (v_property_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+CREATE TABLE IF NOT EXISTS `table_lbmp6b` (
+    `table_lbmp6b_emp_id` INT,
+    `table_lbmp6b_department_id` INT,
+    `table_lbmp6b_salary` INT
+);
+
+INSERT INTO `table_lbmp6b` (`table_lbmp6b_emp_id`, `table_lbmp6b_department_id`, `table_lbmp6b_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_LBMP6B_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_LBMP6B_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_DEPARTMENT_ID = (SELECT TABLE_LBMP6B_DEPARTMENT_ID FROM TABLE_LBMP6B WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM);
+
+    RETURN FLOOR((V_SALARY * 100) / V_DEPT_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5----- */
+CREATE TABLE IF NOT EXISTS `table_dw24b3` (
+    `table_dw24b3_customer_id` INT,
+    `table_dw24b3_order_date` DATE
+);
+
+INSERT INTO `table_dw24b3` (`table_dw24b3_customer_id`, `table_dw24b3_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_SPAN_MONTHS_fy9me5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_DW24B3_ORDER_DATE), MAX(TABLE_DW24B3_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_DW24B3
+    WHERE TABLE_DW24B3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_FIRST_ORDER, V_LAST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+CREATE TABLE IF NOT EXISTS `table_y6h4yf` (
+    `table_y6h4yf_playlist_id` INT,
+    `table_y6h4yf_user_id` INT,
+    `table_y6h4yf_playlist_name` VARCHAR(50),
+    `table_y6h4yf_track_count` INT,
+    `table_y6h4yf_total_duration` DECIMAL(10,2),
+    `table_y6h4yf_creation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ewdcw9` (
+    `table_ewdcw9_follower_id` INT,
+    `table_ewdcw9_playlist_id` INT,
+    `table_ewdcw9_follow_date` DATE
+);
+
+INSERT INTO `table_y6h4yf` (`table_y6h4yf_playlist_id`, `table_y6h4yf_user_id`, `table_y6h4yf_playlist_name`, `table_y6h4yf_track_count`, `table_y6h4yf_total_duration`, `table_y6h4yf_creation_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_ewdcw9` (`table_ewdcw9_follower_id`, `table_ewdcw9_playlist_id`, `table_ewdcw9_follow_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(PLAYLIST_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACK_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_DURATION INT DEFAULT 0;
+    DECLARE V_FOLLOWER_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y6H4YF_TRACK_COUNT, 0), COALESCE(TABLE_Y6H4YF_TOTAL_DURATION, 0)
+    INTO V_TRACK_COUNT, V_TOTAL_DURATION
+    FROM TABLE_Y6H4YF
+    WHERE TABLE_Y6H4YF_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_FOLLOWER_COUNT
+    FROM TABLE_EWDCW9
+    WHERE TABLE_EWDCW9_PLAYLIST_ID = PLAYLIST_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = (V_FOLLOWER_COUNT * 50) + (V_TRACK_COUNT * 2) + (V_TOTAL_DURATION / 60);
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp()) - 375 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(39)) - -286 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa()) - 427 + (cast(v_popularity_score as signed))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_dh8dwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 20 UNION SELECT 40 UNION SELECT 60 UNION SELECT 80 UNION SELECT 100 UNION SELECT 120 UNION SELECT 140 UNION SELECT 160 UNION SELECT 180 UNION SELECT 200 UNION SELECT 220 UNION SELECT 240 UNION SELECT 260 UNION SELECT 280 UNION SELECT 300 UNION SELECT 320 UNION SELECT 340 UNION SELECT 360 UNION SELECT 380 UNION SELECT 400;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * N;
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 2;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_DJVDV7
+    WHERE TABLE_DJVDV7_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAYLIST_POPULARITY_5x3gng(-49)) - 784 + ((MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(-10)) - -619 + ((MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(53)) - 254 + ((MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0(-32)) - -673 + (v_direct_reports))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(1);

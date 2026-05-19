@@ -1,0 +1,352 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+CREATE TABLE IF NOT EXISTS `table_jcyow9` (
+    `table_jcyow9_order_id` INT,
+    `table_jcyow9_customer_id` INT
+);
+
+INSERT INTO `table_jcyow9` (`table_jcyow9_order_id`, `table_jcyow9_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_JCYOW9_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_JCYOW9
+    WHERE TABLE_JCYOW9_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(25, 96)) - -883 + (v_customer_id % 50);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        SET V_RESULT = P_A - P_B;
+    ELSE
+        SET V_RESULT = P_B - P_A;
+    END IF;
+
+    IF V_ERROR = (MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(-38)) - 455 + (1) THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+CREATE TABLE IF NOT EXISTS `table_ejio0q` (
+    `table_ejio0q_campaign_id` INT,
+    `table_ejio0q_start_date` DATE
+);
+
+INSERT INTO `table_ejio0q` (`table_ejio0q_campaign_id`, `table_ejio0q_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_EJIO0Q_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_EJIO0Q
+    WHERE TABLE_EJIO0Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo(-28)) - -402 + (floor((v_price * v_stock) / 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo----- */
+CREATE TABLE IF NOT EXISTS `table_x4avci` (
+    `table_x4avci_emp_id` INT,
+    `table_x4avci_department_id` INT
+);
+
+INSERT INTO `table_x4avci` (`table_x4avci_emp_id`, `table_x4avci_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_INDEX_hatolo(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_X4AVCI
+    WHERE TABLE_X4AVCI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(20, 55)) - -411 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(-32)) - -298 + ((MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym(16)) - -306 + (v_count)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym----- */
+CREATE TABLE IF NOT EXISTS `table_8ltuyy` (
+    `table_8ltuyy_order_id` INT,
+    `table_8ltuyy_customer_id` INT,
+    `table_8ltuyy_order_date` DATE,
+    `table_8ltuyy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_35umu5` (
+    `table_35umu5_customer_id` INT,
+    `table_35umu5_country` INT
+);
+
+INSERT INTO `table_8ltuyy` (`table_8ltuyy_order_id`, `table_8ltuyy_customer_id`, `table_8ltuyy_order_date`, `table_8ltuyy_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_35umu5` (`table_35umu5_customer_id`, `table_35umu5_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGIONAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_CONCENTRATION INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_REGIONAL_CUSTOMERS
+    FROM TABLE_35UMU5
+    WHERE TABLE_35UMU5_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_35UMU5;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONCENTRATION = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(57)) - -302 + ((v_regional_customers * 100) / v_total_customers);
+
+    RETURN V_CONCENTRATION;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt----- */
+CREATE TABLE IF NOT EXISTS `table_klhvo2` (
+    `table_klhvo2_emp_id` INT,
+    `table_klhvo2_name` VARCHAR(50),
+    `table_klhvo2_salary` INT,
+    `table_klhvo2_hire_date` DATE,
+    `table_klhvo2_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwrb2x` (
+    `table_mwrb2x_dept_id` INT,
+    `table_mwrb2x_name` VARCHAR(50),
+    `table_mwrb2x_location` INT
+);
+
+INSERT INTO `table_klhvo2` (`table_klhvo2_emp_id`, `table_klhvo2_name`, `table_klhvo2_salary`, `table_klhvo2_hire_date`, `table_klhvo2_department_id`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_mwrb2x` (`table_mwrb2x_dept_id`, `table_mwrb2x_name`, `table_mwrb2x_location`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_yijagt(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_KLHVO2_SALARY), 0), COALESCE(MAX(TABLE_KLHVO2_SALARY), 0), COALESCE(MIN(TABLE_KLHVO2_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_KLHVO2
+    WHERE TABLE_KLHVO2_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_MIN_SALARY > 0 THEN
+        SET V_VARIANCE = ((V_MAX_SALARY - V_MIN_SALARY) * 100.0) / V_MIN_SALARY;
+    END IF;
+
+    RETURN FLOOR(V_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+CREATE TABLE IF NOT EXISTS `table_6jyzbz` (
+    `table_6jyzbz_supplier_id` INT,
+    `table_6jyzbz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6jyzbz` (`table_6jyzbz_supplier_id`, `table_6jyzbz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_6JYZBZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_6JYZBZ
+    WHERE TABLE_6JYZBZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+CREATE TABLE IF NOT EXISTS `table_o8t87v` (
+    `table_o8t87v_order_id` INT,
+    `table_o8t87v_customer_id` INT,
+    `table_o8t87v_order_date` DATE,
+    `table_o8t87v_total_amount` DECIMAL(10,2),
+    `table_o8t87v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_satxgm` (
+    `table_satxgm_order_id` INT,
+    `table_satxgm_product_id` INT,
+    `table_satxgm_quantity` INT,
+    `table_satxgm_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o8t87v` (`table_o8t87v_order_id`, `table_o8t87v_customer_id`, `table_o8t87v_order_date`, `table_o8t87v_total_amount`, `table_o8t87v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_satxgm` (`table_satxgm_order_id`, `table_satxgm_product_id`, `table_satxgm_quantity`, `table_satxgm_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FINAL_PRICE_iolexh(ORDER_ID_PARAM INT, DISCOUNT_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT;
+    DECLARE V_DISCOUNT INT;
+    DECLARE V_FINAL_PRICE INT;
+
+    SELECT COALESCE(SUM(TABLE_SATXGM_QUANTITY * TABLE_SATXGM_UNIT_PRICE), 0) INTO V_SUBTOTAL
+    FROM TABLE_SATXGM
+    WHERE TABLE_SATXGM_ORDER_ID = ORDER_ID_PARAM;
+
+    IF DISCOUNT_PERCENT < 0 THEN
+        SET DISCOUNT_PERCENT = 0;
+    ELSEIF DISCOUNT_PERCENT > 50 THEN
+        SET DISCOUNT_PERCENT = 50;
+    END IF;
+
+    SET V_DISCOUNT = V_SUBTOTAL * DISCOUNT_PERCENT / 100;
+    SET V_FINAL_PRICE = V_SUBTOTAL - V_DISCOUNT;
+
+    RETURN V_FINAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF STR IS NULL OR STR = '' THEN
+        SIGNAL SQLSTATE '22004' SET MESSAGE_TEXT = 'CANNOT PARSE NULL OR EMPTY STRING';
+    END IF;
+    IF NOT STR REGEXP '^[+-]?[0-9]+$' THEN
+        SIGNAL SQLSTATE '22018' SET MESSAGE_TEXT = 'STRING IS NOT A VALID INTEGER';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + ((MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(-84)) - 596 + (cast(str as signed))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_PARSE_INT_r2qmuz(1);

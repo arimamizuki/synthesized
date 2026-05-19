@@ -1,0 +1,379 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_SAFE_DIVIDE_5yo93a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_DIVIDE_5yo93a(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012' BEGIN SET V_RESULT = 0; END;
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '2201I' BEGIN SET V_RESULT = 0; END;
+
+    IF B = (MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(89, 68, 86)) - -753 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = A / B;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > 1000 THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE VAL
+        WHEN 1 THEN RETURN 'ONE';
+        WHEN 2 THEN RETURN 'TWO';
+        WHEN 3 THEN RETURN 'THREE';
+        ELSE RETURN 'OTHER';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(-9)) - 520 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+CREATE TABLE IF NOT EXISTS `table_d7zjcs` (
+    `table_d7zjcs_order_id` INT,
+    `table_d7zjcs_customer_id` INT,
+    `table_d7zjcs_order_date` DATE,
+    `table_d7zjcs_shipped_date` DATE,
+    `table_d7zjcs_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d7zjcs` (`table_d7zjcs_order_id`, `table_d7zjcs_customer_id`, `table_d7zjcs_order_date`, `table_d7zjcs_shipped_date`, `table_d7zjcs_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_DATE DATE;
+    DECLARE V_SHIPPED_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_D7ZJCS_ORDER_DATE, TABLE_D7ZJCS_SHIPPED_DATE
+    INTO V_ORDER_DATE, V_SHIPPED_DATE
+    FROM TABLE_D7ZJCS
+    WHERE TABLE_D7ZJCS_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    IF V_SHIPPED_DATE IS NULL THEN
+        SET V_SHIPPED_DATE = CURDATE();
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_SHIPPED_DATE, V_ORDER_DATE);
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+CREATE TABLE IF NOT EXISTS `table_h1shr7` (
+    `table_h1shr7_emp_id` INT,
+    `table_h1shr7_department_id` INT,
+    `table_h1shr7_hire_date` DATE,
+    `table_h1shr7_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cm7r4q` (
+    `table_cm7r4q_department_id` INT,
+    `table_cm7r4q_name` VARCHAR(50)
+);
+
+INSERT INTO `table_h1shr7` (`table_h1shr7_emp_id`, `table_h1shr7_department_id`, `table_h1shr7_hire_date`, `table_h1shr7_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_cm7r4q` (`table_cm7r4q_department_id`, `table_cm7r4q_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_PRIOR_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_YEAR_HIRES = (MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(65, 43)) - -240 + ((MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi(27)) - 708 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_YEAR_HIRES - V_PRIOR_YEAR_HIRES) * 100) / V_PRIOR_YEAR_HIRES;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi----- */
+CREATE TABLE IF NOT EXISTS `table_lxngzw` (
+    `table_lxngzw_service_id` INT,
+    `table_lxngzw_pet_id` INT,
+    `table_lxngzw_service_type` VARCHAR(50),
+    `table_lxngzw_service_date` DATE,
+    `table_lxngzw_duration_minutes` INT,
+    `table_lxngzw_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5kdoe7` (
+    `table_5kdoe7_pet_id` INT,
+    `table_5kdoe7_owner_id` INT,
+    `table_5kdoe7_breed` INT,
+    `table_5kdoe7_age_months` INT,
+    `table_5kdoe7_weight_kg` INT
+);
+
+INSERT INTO `table_lxngzw` (`table_lxngzw_service_id`, `table_lxngzw_pet_id`, `table_lxngzw_service_type`, `table_lxngzw_service_date`, `table_lxngzw_duration_minutes`, `table_lxngzw_cost`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_5kdoe7` (`table_5kdoe7_pet_id`, `table_5kdoe7_owner_id`, `table_5kdoe7_breed`, `table_5kdoe7_age_months`, `table_5kdoe7_weight_kg`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SERVICES INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(COUNT(*), 0), COALESCE(SUM(TABLE_LXNGZW_COST), 0)
+    INTO V_TOTAL_SERVICES, V_TOTAL_COST
+    FROM TABLE_LXNGZW
+    WHERE TABLE_LXNGZW_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_5KDOE7_AGE_MONTHS, 0), COALESCE(TABLE_5KDOE7_WEIGHT_KG, 0)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_5KDOE7
+    WHERE TABLE_5KDOE7_PET_ID = PET_ID_PARAM;
+
+    SET V_SCORE = (V_TOTAL_COST / 100) + (V_TOTAL_SERVICES * 5);
+
+    IF V_PET_AGE < 12 THEN
+        SET V_SCORE = V_SCORE + 20;
+    END IF;
+
+    IF V_PET_WEIGHT > 30 THEN
+        SET V_SCORE = V_SCORE + (V_PET_WEIGHT - 30);
+    END IF;
+
+    RETURN CAST(V_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+CREATE TABLE IF NOT EXISTS `table_dnotdk` (
+    `table_dnotdk_job_id` INT,
+    `table_dnotdk_customer_id` INT,
+    `table_dnotdk_mover_id` INT,
+    `table_dnotdk_origin_zip` INT,
+    `table_dnotdk_dest_zip` INT,
+    `table_dnotdk_distance_miles` INT,
+    `table_dnotdk_truck_size` INT,
+    `table_dnotdk_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kr203y` (
+    `table_kr203y_zip_code` INT,
+    `table_kr203y_zone` INT,
+    `table_kr203y_base_rate_per_mile` INT
+);
+
+INSERT INTO `table_dnotdk` (`table_dnotdk_job_id`, `table_dnotdk_customer_id`, `table_dnotdk_mover_id`, `table_dnotdk_origin_zip`, `table_dnotdk_dest_zip`, `table_dnotdk_distance_miles`, `table_dnotdk_truck_size`, `table_dnotdk_base_price`) VALUES (1, 2, 3, 4, 5, 6, 7, 1.0);
+
+INSERT INTO `table_kr203y` (`table_kr203y_zip_code`, `table_kr203y_zone`, `table_kr203y_base_rate_per_mile`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOVING_ESTIMATE_224883(DISTANCE_MILES_PARAM INT, TRUCK_SIZE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_TRUCK_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 50;
+    DECLARE V_TOTAL_ESTIMATE INT DEFAULT 0;
+
+    CASE TRUCK_SIZE_PARAM
+        WHEN 'SMALL' THEN SET V_TRUCK_MULTIPLIER = 1;
+        WHEN 'MEDIUM' THEN SET V_TRUCK_MULTIPLIER = (MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(-41)) - 417 + (2);
+        WHEN 'LARGE' THEN SET V_TRUCK_MULTIPLIER = 3;
+        WHEN 'EXTRA_LARGE' THEN SET V_TRUCK_MULTIPLIER = 4;
+        ELSE SET V_TRUCK_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_ESTIMATE = (MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(86)) - 811 + ((distance_miles_param * v_base_rate * v_truck_multiplier) + v_fuel_surcharge);
+
+    IF DISTANCE_MILES_PARAM > 500 THEN
+        SET V_TOTAL_ESTIMATE = V_TOTAL_ESTIMATE - (V_TOTAL_ESTIMATE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_ESTIMATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+CREATE TABLE IF NOT EXISTS `table_6vqrgc` (
+    `table_6vqrgc_emp_id` INT,
+    `table_6vqrgc_salary` INT
+);
+
+INSERT INTO `table_6vqrgc` (`table_6vqrgc_emp_id`, `table_6vqrgc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_6VQRGC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_6VQRGC
+    WHERE TABLE_6VQRGC_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(48)) - 438 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SIMPLE_x22uld(62)) - -907 + ((MYSQL_FUNC_SAFE_DIVIDE_5yo93a(93, -83)) - 250 + (v_age_months)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(1);

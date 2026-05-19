@@ -1,0 +1,335 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_5fzj9q` (
+    `table_5fzj9q_customer_id` INT,
+    `table_5fzj9q_status` VARCHAR(50)
+);
+
+INSERT INTO `table_5fzj9q` (`table_5fzj9q_customer_id`, `table_5fzj9q_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+CREATE TABLE IF NOT EXISTS `table_153cac` (
+    `table_153cac_order_id` INT,
+    `table_153cac_customer_id` INT,
+    `table_153cac_order_date` DATE,
+    `table_153cac_total_amount` DECIMAL(10,2),
+    `table_153cac_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4wgu3o` (
+    `table_4wgu3o_order_id` INT,
+    `table_4wgu3o_product_id` INT,
+    `table_4wgu3o_quantity` INT
+);
+
+INSERT INTO `table_153cac` (`table_153cac_order_id`, `table_153cac_customer_id`, `table_153cac_order_date`, `table_153cac_total_amount`, `table_153cac_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4wgu3o` (`table_4wgu3o_order_id`, `table_4wgu3o_product_id`, `table_4wgu3o_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_COMPLEXITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_4WGU3O_PRODUCT_ID), COALESCE(SUM(TABLE_4WGU3O_QUANTITY), 0)
+    INTO V_ITEM_COUNT, V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_4WGU3O
+    WHERE TABLE_4WGU3O_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_COMPLEXITY_SCORE = (MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(-51)) - 445 + ((v_item_count * 2) + (v_unique_products * 3) + (v_total_quantity / 5));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(-13)) - 913 + ((MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(34)) - -927 + (v_complexity_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+CREATE TABLE IF NOT EXISTS `table_rjv3br` (
+    `table_rjv3br_customer_id` INT,
+    `table_rjv3br_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ejry3z` (
+    `table_ejry3z_order_id` INT,
+    `table_ejry3z_customer_id` INT,
+    `table_ejry3z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rjv3br` (`table_rjv3br_customer_id`, `table_rjv3br_country`) VALUES (1, 1);
+
+INSERT INTO `table_ejry3z` (`table_ejry3z_order_id`, `table_ejry3z_customer_id`, `table_ejry3z_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_EJRY3Z O
+    JOIN TABLE_RJV3BR C ON TABLE_EJRY3Z_CUSTOMER_ID = TABLE_RJV3BR_CUSTOMER_ID
+    WHERE TABLE_RJV3BR_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+CREATE TABLE IF NOT EXISTS `table_tenjc7` (
+    `table_tenjc7_product_id` INT,
+    `table_tenjc7_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tenjc7` (`table_tenjc7_product_id`, `table_tenjc7_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TENJC7_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_TENJC7
+    WHERE TABLE_TENJC7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+CREATE TABLE IF NOT EXISTS `table_6t26dr` (
+    `table_6t26dr_order_id` INT,
+    `table_6t26dr_customer_id` INT,
+    `table_6t26dr_order_date` DATE,
+    `table_6t26dr_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_9i40nw` (
+    `table_9i40nw_order_id` INT,
+    `table_9i40nw_product_id` INT,
+    `table_9i40nw_quantity` INT,
+    `table_9i40nw_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6t26dr` (`table_6t26dr_order_id`, `table_6t26dr_customer_id`, `table_6t26dr_order_date`, `table_6t26dr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_9i40nw` (`table_9i40nw_order_id`, `table_9i40nw_product_id`, `table_9i40nw_quantity`, `table_9i40nw_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_GROSS_PROFIT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_9I40NW_QUANTITY * TABLE_9I40NW_UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM TABLE_9I40NW
+    WHERE TABLE_9I40NW_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6T26DR_TOTAL_AMOUNT, 0)
+    INTO V_COST
+    FROM TABLE_6T26DR
+    WHERE TABLE_6T26DR_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_GROSS_PROFIT = (MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8(40, 81)) - 862 + ((MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(-61)) - 25 + (v_revenue - v_cost));
+
+    RETURN (MYSQL_FUNC_COUNT_BITS_SET_sk78sm(-82)) - 39 + (v_gross_profit);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8(N INT, K INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF K < 0 OR K > N THEN
+        RETURN 0;
+    END IF;
+
+    IF K > N - K THEN
+        SET K = N - K;
+    END IF;
+
+    SET V_I = 0;
+
+    WHILE V_I < K DO
+        SET V_RESULT = V_RESULT * (N - V_I);
+        SET V_RESULT = V_RESULT / ((MYSQL_FUNC_FUNC_197_WHILE_5a093q()) - -872 + (v_i + 1));
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN FLOOR(V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_197_WHILE_5a093q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_197_WHILE_5a093q() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE WHILE_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    WHILE I < 3 DO
+        SET I = I + 1;
+        SET WHILE_COUNT = (MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(-41)) - 417 + (while_count) + 1;
+    END WHILE;
+    
+    RETURN WHILE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+CREATE TABLE IF NOT EXISTS `table_6vqrgc` (
+    `table_6vqrgc_emp_id` INT,
+    `table_6vqrgc_salary` INT
+);
+
+INSERT INTO `table_6vqrgc` (`table_6vqrgc_emp_id`, `table_6vqrgc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_6VQRGC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_6VQRGC
+    WHERE TABLE_6VQRGC_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(2)) - 834 + (floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+CREATE TABLE IF NOT EXISTS `table_1497my` (
+    `table_1497my_emp_id` INT,
+    `table_1497my_department_id` INT,
+    `table_1497my_salary` INT
+);
+
+INSERT INTO `table_1497my` (`table_1497my_emp_id`, `table_1497my_department_id`, `table_1497my_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_1497MY_SALARY), 0), COALESCE(AVG(TABLE_1497MY_SALARY), 1)
+    INTO V_DEPT_AVG, V_OVERALL_AVG
+    FROM TABLE_1497MY
+    WHERE TABLE_1497MY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = V_TEMP >> 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_5FZJ9Q
+    WHERE TABLE_5FZJ9Q_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_5FZJ9Q_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_COMPLEXITY_SCORE_m4m4wg(-50)) - 241 + (case when v_count > 0 then 1 else 0 end);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(1);

@@ -1,0 +1,361 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TIME_wu095y----- */
+CREATE TABLE IF NOT EXISTS `table_z2mr2n` (
+    `table_z2mr2n_ctime` INT
+);
+
+INSERT INTO `table_z2mr2n` (`table_z2mr2n_ctime`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TIME_wu095y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIME_wu095y() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT `TABLE_Z2MR2N_CTIME` INTO RESULT FROM `TABLE_Z2MR2N`;
+    RETURN (MYSQL_FUNC_PROC_YEAR_pmoygo()) - 253 + ((MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(35)) - 176 + ((MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(-61)) - -185 + (result)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp----- */
+CREATE TABLE IF NOT EXISTS `table_u0nmnk` (
+    `table_u0nmnk_product_id` INT,
+    `table_u0nmnk_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u0nmnk` (`table_u0nmnk_product_id`, `table_u0nmnk_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U0NMNK_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_U0NMNK
+    WHERE TABLE_U0NMNK_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+CREATE TABLE IF NOT EXISTS `table_nfhkgx` (
+    `table_nfhkgx_policy_id` INT,
+    `table_nfhkgx_customer_id` INT,
+    `table_nfhkgx_policy_type` VARCHAR(50),
+    `table_nfhkgx_premium_amount` DECIMAL(10,2),
+    `table_nfhkgx_coverage_amount` DECIMAL(10,2),
+    `table_nfhkgx_start_date` DATE,
+    `table_nfhkgx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tr1zz3` (
+    `table_tr1zz3_claim_id` INT,
+    `table_tr1zz3_policy_id` INT,
+    `table_tr1zz3_claim_amount` DECIMAL(10,2),
+    `table_tr1zz3_claim_date` DATE,
+    `table_tr1zz3_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nfhkgx` (`table_nfhkgx_policy_id`, `table_nfhkgx_customer_id`, `table_nfhkgx_policy_type`, `table_nfhkgx_premium_amount`, `table_nfhkgx_coverage_amount`, `table_nfhkgx_start_date`, `table_nfhkgx_status`) VALUES (1, 2, 'test', 1.0, 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_tr1zz3` (`table_tr1zz3_claim_id`, `table_tr1zz3_policy_id`, `table_tr1zz3_claim_amount`, `table_tr1zz3_claim_date`, `table_tr1zz3_status`) VALUES (1, 2, 1.0, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POLICY_SCORE_4eyrf6(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREMIUM INT DEFAULT 0;
+    DECLARE V_COVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NFHKGX_PREMIUM_AMOUNT, 0), COALESCE(TABLE_NFHKGX_COVERAGE_AMOUNT, 0)
+    INTO V_PREMIUM, V_COVERAGE
+    FROM TABLE_NFHKGX
+    WHERE TABLE_NFHKGX_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_TR1ZZ3_CLAIM_AMOUNT), 0)
+    INTO V_TOTAL_CLAIMS, V_CLAIM_AMOUNT
+    FROM TABLE_TR1ZZ3
+    WHERE TABLE_TR1ZZ3_POLICY_ID = POLICY_ID_PARAM AND TABLE_TR1ZZ3_STATUS = 'APPROVED';
+
+    SET V_SCORE = (V_COVERAGE / NULLIF(V_PREMIUM, 0)) - (V_CLAIM_AMOUNT / 100);
+
+    IF V_TOTAL_CLAIMS > 5 THEN
+        SET V_SCORE = V_SCORE - 20;
+    END IF;
+
+    RETURN CAST(V_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+CREATE TABLE IF NOT EXISTS `table_qkugmq` (
+    `table_qkugmq_cyear` INT
+);
+
+INSERT INTO `table_qkugmq` (`table_qkugmq_cyear`) VALUES (2024);
+
+/* -----Called: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_YEAR_pmoygo() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT TABLE_QKUGMQ_CYEAR INTO RESULT FROM `TABLE_QKUGMQ` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(-60, 7)) - 100 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+CREATE TABLE IF NOT EXISTS `table_5jb34m` (
+    `table_5jb34m_room_id` INT,
+    `table_5jb34m_room_type` VARCHAR(50),
+    `table_5jb34m_floor` INT,
+    `table_5jb34m_is_occupied` INT,
+    `table_5jb34m_daily_rate` INT,
+    `table_5jb34m_max_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nvdwjr` (
+    `table_nvdwjr_res_id` INT,
+    `table_nvdwjr_room_id` INT,
+    `table_nvdwjr_guest_id` INT,
+    `table_nvdwjr_check_in` INT,
+    `table_nvdwjr_check_out` INT,
+    `table_nvdwjr_guests_count` INT,
+    `table_nvdwjr_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5jb34m` (`table_5jb34m_room_id`, `table_5jb34m_room_type`, `table_5jb34m_floor`, `table_5jb34m_is_occupied`, `table_5jb34m_daily_rate`, `table_5jb34m_max_occupancy`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_nvdwjr` (`table_nvdwjr_res_id`, `table_nvdwjr_room_id`, `table_nvdwjr_guest_id`, `table_nvdwjr_check_in`, `table_nvdwjr_check_out`, `table_nvdwjr_guests_count`, `table_nvdwjr_total_price`) VALUES (1, 2, 3, 4, 5, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(ROOM_ID_PARAM INT, YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_OCCUPIED_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_NVDWJR_TOTAL_PRICE), 0) INTO V_TOTAL_REVENUE
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    SELECT COALESCE(TABLE_5JB34M_DAILY_RATE, 0) INTO V_DAILY_RATE
+    FROM TABLE_5JB34M
+    WHERE TABLE_5JB34M_ROOM_ID = ROOM_ID_PARAM;
+
+    SELECT COALESCE(SUM(DATEDIFF(TABLE_NVDWJR_CHECK_OUT, TABLE_NVDWJR_CHECK_IN)), 0) INTO V_OCCUPIED_DAYS
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7()) - 578 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(-91)) - 732 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(-80)) - 507 + (v_total_revenue + (v_occupied_days * v_daily_rate / 2))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+CREATE TABLE IF NOT EXISTS `table_bzkg88` (
+    `table_bzkg88_customer_id` INT,
+    `table_bzkg88_registration_date` DATE
+);
+
+INSERT INTO `table_bzkg88` (`table_bzkg88_customer_id`, `table_bzkg88_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACQUISITION_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BZKG88_REGISTRATION_DATE)
+    INTO V_ACQUISITION_YEAR
+    FROM TABLE_BZKG88
+    WHERE TABLE_BZKG88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ACQUISITION_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0----- */
+CREATE TABLE IF NOT EXISTS `table_6a0wz4` (
+    `table_6a0wz4_emp_id` INT,
+    `table_6a0wz4_department_id` INT,
+    `table_6a0wz4_salary` INT
+);
+
+INSERT INTO `table_6a0wz4` (`table_6a0wz4_emp_id`, `table_6a0wz4_department_id`, `table_6a0wz4_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_6A0WZ4_SALARY), 0)
+    INTO V_TOTAL_SALARY
+    FROM TABLE_6A0WZ4
+    WHERE TABLE_6A0WZ4_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_RETURN_CONSTANT_koelg7()) - -454 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RETURN_CONSTANT_koelg7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(15)) - 754 + (42);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+CREATE TABLE IF NOT EXISTS `table_6l8uxl` (
+    `table_6l8uxl_warranty_id` INT,
+    `table_6l8uxl_product_id` INT,
+    `table_6l8uxl_purchase_date` DATE,
+    `table_6l8uxl_warranty_months` INT,
+    `table_6l8uxl_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6l8uxl` (`table_6l8uxl_warranty_id`, `table_6l8uxl_product_id`, `table_6l8uxl_purchase_date`, `table_6l8uxl_warranty_months`, `table_6l8uxl_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT TABLE_6L8UXL_PURCHASE_DATE, TABLE_6L8UXL_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM TABLE_6L8UXL
+    WHERE TABLE_6L8UXL_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = (MYSQL_FUNC_PROC_TIME_wu095y()) - 777 + (5000 + (v_hire_count * 1000));
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(1);

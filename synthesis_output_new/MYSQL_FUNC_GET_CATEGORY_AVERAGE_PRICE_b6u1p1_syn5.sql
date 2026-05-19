@@ -1,0 +1,393 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_9xgqho` (
+    `table_9xgqho_product_id` INT,
+    `table_9xgqho_category_id` INT,
+    `table_9xgqho_price` DECIMAL(10,2),
+    `table_9xgqho_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_izucf1` (
+    `table_izucf1_category_id` INT,
+    `table_izucf1_category_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9xgqho` (`table_9xgqho_product_id`, `table_9xgqho_category_id`, `table_9xgqho_price`, `table_9xgqho_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_izucf1` (`table_izucf1_category_id`, `table_izucf1_category_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+CREATE TABLE IF NOT EXISTS `table_wvbnyq` (
+    `table_wvbnyq_cbit` BIT(1)
+);
+
+INSERT INTO `table_wvbnyq` (`table_wvbnyq_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT_ea2fyr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT TABLE_WVBNYQ_CBIT FROM `TABLE_WVBNYQ`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO RESULT;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m(-88)) - 138 + ((MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(80)) - -338 + (result));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+CREATE TABLE IF NOT EXISTS table_hdmev5 (
+    table_hdmev5_rental_id INT,
+    table_hdmev5_inventory_id INT,
+    table_hdmev5_return_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS table_1hevtl (
+    table_1hevtl_inventory_id INT
+);
+
+INSERT INTO table_hdmev5 (`table_hdmev5_rental_id`, `table_hdmev5_inventory_id`, `table_hdmev5_return_date`) VALUES (1, 2, '2024-01-01');
+
+INSERT INTO table_1hevtl (`table_1hevtl_inventory_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INVENTORY_IN_STOCK_u9i0gk(P_INVENTORY_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTALS INT;
+    DECLARE V_OUT INT;
+
+    SELECT COUNT(*) INTO V_RENTALS
+    FROM TABLE_HDMEV5
+    WHERE TABLE_HDMEV5_INVENTORY_ID = P_INVENTORY_ID;
+
+    IF V_RENTALS = 0 THEN
+        RETURN 1;
+    END IF;
+
+    SELECT COUNT(TABLE_HDMEV5_RENTAL_ID) INTO V_OUT
+    FROM TABLE_1HEVTL LEFT JOIN TABLE_HDMEV5 USING(TABLE_1HEVTL_INVENTORY_ID)
+    WHERE TABLE_1HEVTL.TABLE_1HEVTL_INVENTORY_ID = P_INVENTORY_ID
+    AND TABLE_HDMEV5.TABLE_HDMEV5_RETURN_DATE IS NULL;
+
+    IF V_OUT > 0 THEN
+        RETURN 0;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m----- */
+CREATE TABLE IF NOT EXISTS `table_ids638` (
+    `table_ids638_emp_id` INT,
+    `table_ids638_manager_id` INT,
+    `table_ids638_department_id` INT,
+    `table_ids638_salary` INT,
+    `table_ids638_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_x43z64` (
+    `table_x43z64_department_id` INT,
+    `table_x43z64_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ids638` (`table_ids638_emp_id`, `table_ids638_manager_id`, `table_ids638_department_id`, `table_ids638_salary`, `table_ids638_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_x43z64` (`table_x43z64_department_id`, `table_x43z64_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TEAM_LEADER_EFFECTIVENESS_gfv14m(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_AVG_REPORT_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_LEADER_SALARY INT DEFAULT 0;
+    DECLARE V_EFFECTIVENESS_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_IDS638_SALARY), 0)
+    INTO V_AVG_REPORT_SALARY
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT TABLE_IDS638_SALARY
+    INTO V_LEADER_SALARY
+    FROM TABLE_IDS638
+    WHERE TABLE_IDS638_EMP_ID = EMP_ID_PARAM;
+
+    SET V_EFFECTIVENESS_SCORE = (V_DIRECT_REPORTS * 10) + (V_AVG_REPORT_SALARY / 100) + (V_LEADER_SALARY / 10000 * 20);
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp(-15, -77)) - 107 + ((MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(-85)) - -35 + (v_effectiveness_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+CREATE TABLE IF NOT EXISTS `table_jtm566` (
+    `table_jtm566_order_id` INT,
+    `table_jtm566_customer_id` INT,
+    `table_jtm566_order_date` DATE,
+    `table_jtm566_total_amount` DECIMAL(10,2),
+    `table_jtm566_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ae03tz` (
+    `table_ae03tz_refund_id` INT,
+    `table_ae03tz_order_id` INT,
+    `table_ae03tz_refund_amount` DECIMAL(10,2),
+    `table_ae03tz_reason` INT
+);
+
+INSERT INTO `table_jtm566` (`table_jtm566_order_id`, `table_jtm566_customer_id`, `table_jtm566_order_date`, `table_jtm566_total_amount`, `table_jtm566_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ae03tz` (`table_ae03tz_refund_id`, `table_ae03tz_order_id`, `table_ae03tz_refund_amount`, `table_ae03tz_reason`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_COUNT INT DEFAULT 0;
+    DECLARE V_RISK_INDICATOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JTM566_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_JTM566
+    WHERE TABLE_JTM566_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_REFUND_COUNT
+    FROM TABLE_AE03TZ
+    WHERE TABLE_AE03TZ_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_RISK_INDICATOR = V_REFUND_COUNT * 20 + (V_ORDER_TOTAL / 100);
+
+    IF V_ORDER_TOTAL > 500 THEN
+        SET V_RISK_INDICATOR = V_RISK_INDICATOR + 15;
+    END IF;
+
+    RETURN V_RISK_INDICATOR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp(BASE INT, EXP INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF BASE < 0 AND EXP != FLOOR(EXP) THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'CANNOT RAISE NEGATIVE BASE TO FRACTIONAL EXPONENT';
+    END IF;
+    IF BASE = 0 AND EXP < 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'CANNOT RAISE ZERO TO NEGATIVE POWER';
+    END IF;
+    RETURN POW(BASE, EXP);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+CREATE TABLE IF NOT EXISTS `table_3iivgl` (
+    `table_3iivgl_supplier_id` INT,
+    `table_3iivgl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_3iivgl` (`table_3iivgl_supplier_id`, `table_3iivgl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_3IIVGL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_3IIVGL
+    WHERE TABLE_3IIVGL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds(83)) - 349 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds----- */
+CREATE TABLE IF NOT EXISTS `table_bch2wq` (
+    `table_bch2wq_sub_id` INT,
+    `table_bch2wq_customer_id` INT,
+    `table_bch2wq_start_date` DATE,
+    `table_bch2wq_end_date` DATE,
+    `table_bch2wq_monthly_fee` INT
+);
+
+INSERT INTO `table_bch2wq` (`table_bch2wq_sub_id`, `table_bch2wq_customer_id`, `table_bch2wq_start_date`, `table_bch2wq_end_date`, `table_bch2wq_monthly_fee`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACTIVE_SUBS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_BCH2WQ_MONTHLY_FEE), 0)
+    INTO V_ACTIVE_SUBS, V_TOTAL_REVENUE
+    FROM TABLE_BCH2WQ
+    WHERE TABLE_BCH2WQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_BCH2WQ_END_DATE >= CURDATE();
+
+    RETURN (MYSQL_FUNC_EMP_AVG_SALARY_5keii4(-89)) - -964 + (v_total_revenue);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+CREATE TABLE IF NOT EXISTS table_4rpywt (
+    table_4rpywt_emp_no INT,
+    table_4rpywt_first_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS table_qtgf21 (
+    table_qtgf21_emp_no INT,
+    table_qtgf21_salary DECIMAL(10,2)
+);
+
+INSERT INTO table_4rpywt (`table_4rpywt_emp_no`, `table_4rpywt_first_name`) VALUES (10001, 'Georgi');
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 60117);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 62102);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 66074);
+
+/* -----Called: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_AVG_SALARY_5keii4(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE AVG_SALARY INT;
+    
+    SELECT CAST(AVG(TABLE_QTGF21_SALARY) AS UNSIGNED) INTO AVG_SALARY
+    FROM TABLE_4RPYWT E 
+    JOIN TABLE_QTGF21 S ON TABLE_4RPYWT_EMP_NO = TABLE_QTGF21_EMP_NO
+    WHERE TABLE_4RPYWT_EMP_NO = P_EMP_NO;
+    
+    RETURN AVG_SALARY;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE INT;
+    DECLARE V_MIN_PRICE INT;
+    DECLARE V_MAX_PRICE INT;
+    DECLARE V_PRODUCT_COUNT INT;
+
+    SELECT COALESCE(AVG(TABLE_9XGQHO_PRICE), (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_doj4wl(-44)) - -55 + ((MYSQL_FUNC_PROC_BIT_ea2fyr()) - 988 + ((MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + (0)))), MIN(TABLE_9XGQHO_PRICE), MAX(TABLE_9XGQHO_PRICE), COUNT(*)
+    INTO V_AVG_PRICE, V_MIN_PRICE, V_MAX_PRICE, V_PRODUCT_COUNT
+    FROM TABLE_9XGQHO
+    WHERE TABLE_9XGQHO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_PRODUCT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(88, -30)) - -568 + (v_avg_price);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(1);

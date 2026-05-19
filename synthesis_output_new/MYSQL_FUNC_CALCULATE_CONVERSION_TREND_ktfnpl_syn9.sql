@@ -1,0 +1,443 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ik0x1s` (
+    `table_ik0x1s_campaign_id` INT,
+    `table_ik0x1s_start_date` DATE,
+    `table_ik0x1s_end_date` DATE,
+    `table_ik0x1s_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_np8rkj` (
+    `table_np8rkj_conversion_id` INT,
+    `table_np8rkj_campaign_id` INT,
+    `table_np8rkj_conversion_date` DATE
+);
+
+INSERT INTO `table_ik0x1s` (`table_ik0x1s_campaign_id`, `table_ik0x1s_start_date`, `table_ik0x1s_end_date`, `table_ik0x1s_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_np8rkj` (`table_np8rkj_conversion_id`, `table_np8rkj_campaign_id`, `table_np8rkj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+CREATE TABLE IF NOT EXISTS `table_ufhrdo` (
+    `table_ufhrdo_emp_id` INT,
+    `table_ufhrdo_department_id` INT,
+    `table_ufhrdo_salary` INT,
+    `table_ufhrdo_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mhmpip` (
+    `table_mhmpip_department_id` INT,
+    `table_mhmpip_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ufhrdo` (`table_ufhrdo_emp_id`, `table_ufhrdo_department_id`, `table_ufhrdo_salary`, `table_ufhrdo_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_mhmpip` (`table_mhmpip_department_id`, `table_mhmpip_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRIOR_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_UFHRDO_SALARY), 0)
+    INTO V_CURRENT_AVG
+    FROM TABLE_UFHRDO
+    WHERE TABLE_UFHRDO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_AVG - V_PRIOR_AVG) * 100) / V_PRIOR_AVG;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc----- */
+CREATE TABLE IF NOT EXISTS `table_wghfa1` (
+    `table_wghfa1_product_id` INT,
+    `table_wghfa1_supplier_id` INT,
+    `table_wghfa1_price` DECIMAL(10,2),
+    `table_wghfa1_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_on8z78` (
+    `table_on8z78_supplier_id` INT,
+    `table_on8z78_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_wghfa1` (`table_wghfa1_product_id`, `table_wghfa1_supplier_id`, `table_wghfa1_price`, `table_wghfa1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_on8z78` (`table_on8z78_supplier_id`, `table_on8z78_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_DEPENDENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ON8Z78_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_ON8Z78
+    WHERE TABLE_ON8Z78_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WGHFA1_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_TOTAL_STOCK
+    FROM TABLE_WGHFA1
+    WHERE TABLE_WGHFA1_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_DEPENDENCY_SCORE = (MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(54)) - -610 + ((MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m()) - 175 + ((v_product_count * 10) + (v_total_stock / 100) + (v_rating * 5)));
+
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526(67)) - -69 + (v_dependency_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_4_VALUES_e23u9m() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 25 UNION SELECT 50 UNION SELECT 75 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526----- */
+CREATE TABLE IF NOT EXISTS `table_yfm7r6` (
+    `table_yfm7r6_product_id` INT,
+    `table_yfm7r6_price` DECIMAL(10,2),
+    `table_yfm7r6_stock_quantity` INT
+);
+
+INSERT INTO `table_yfm7r6` (`table_yfm7r6_product_id`, `table_yfm7r6_price`, `table_yfm7r6_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_YFM7R6_PRICE, 0) * COALESCE(TABLE_YFM7R6_STOCK_QUANTITY, 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_YFM7R6
+    WHERE TABLE_YFM7R6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(37)) - 714 + (v_inventory_value);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+CREATE TABLE IF NOT EXISTS `table_l9v62y` (
+    `table_l9v62y_student_id` INT,
+    `table_l9v62y_school_id` INT,
+    `table_l9v62y_grade_level` INT,
+    `table_l9v62y_subjects_needed` INT,
+    `table_l9v62y_session_rate` INT,
+    `table_l9v62y_scholarship_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o7ya9e` (
+    `table_o7ya9e_session_id` INT,
+    `table_o7ya9e_student_id` INT,
+    `table_o7ya9e_tutor_id` INT,
+    `table_o7ya9e_session_date` DATE,
+    `table_o7ya9e_duration_minutes` INT,
+    `table_o7ya9e_subjects_covered` INT
+);
+
+INSERT INTO `table_l9v62y` (`table_l9v62y_student_id`, `table_l9v62y_school_id`, `table_l9v62y_grade_level`, `table_l9v62y_subjects_needed`, `table_l9v62y_session_rate`, `table_l9v62y_scholarship_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_o7ya9e` (`table_o7ya9e_session_id`, `table_o7ya9e_student_id`, `table_o7ya9e_tutor_id`, `table_o7ya9e_session_date`, `table_o7ya9e_duration_minutes`, `table_o7ya9e_subjects_covered`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SESSION_RATE INT DEFAULT 40;
+    DECLARE V_SCHOLARSHIP_PERCENT INT DEFAULT 0;
+    DECLARE V_TOTAL_SESSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_BALANCE_OWED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L9V62Y_SESSION_RATE, 40), COALESCE(TABLE_L9V62Y_SCHOLARSHIP_PERCENT, 0)
+    INTO V_SESSION_RATE, V_SCHOLARSHIP_PERCENT
+    FROM TABLE_L9V62Y
+    WHERE TABLE_L9V62Y_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_SESSIONS
+    FROM TABLE_O7YA9E
+    WHERE TABLE_O7YA9E_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_TOTAL_SESSIONS * V_SESSION_RATE;
+    SET V_BALANCE_OWED = V_TOTAL_CHARGES - (V_TOTAL_CHARGES * V_SCHOLARSHIP_PERCENT / 100);
+
+    RETURN CAST(V_BALANCE_OWED AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+CREATE TABLE IF NOT EXISTS `table_sq14za` (
+    `table_sq14za_emp_id` INT,
+    `table_sq14za_salary` INT
+);
+
+INSERT INTO `table_sq14za` (`table_sq14za_emp_id`, `table_sq14za_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_SQ14ZA_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_SQ14ZA
+    WHERE TABLE_SQ14ZA_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(91)) - -565 + ((MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(-7)) - -487 + (floor(v_salary / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii----- */
+CREATE TABLE IF NOT EXISTS `table_pkendf` (
+    `table_pkendf_employee_id` INT,
+    `table_pkendf_manager_id` INT,
+    `table_pkendf_department_id` INT,
+    `table_pkendf_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ps5v2j` (
+    `table_ps5v2j_department_id` INT,
+    `table_ps5v2j_name` VARCHAR(50),
+    `table_ps5v2j_budget` INT
+);
+
+INSERT INTO `table_pkendf` (`table_pkendf_employee_id`, `table_pkendf_manager_id`, `table_pkendf_department_id`, `table_pkendf_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_ps5v2j` (`table_ps5v2j_department_id`, `table_ps5v2j_name`, `table_ps5v2j_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHAIN_LENGTH INT DEFAULT 0;
+    DECLARE V_CURRENT_MANAGER INT DEFAULT 0;
+    DECLARE V_CURRENT_EMPLOYEE INT DEFAULT EMPLOYEE_ID_PARAM;
+    DECLARE V_DONE INT DEFAULT FALSE;
+
+    SELECT TABLE_PKENDF_MANAGER_ID INTO V_CURRENT_MANAGER FROM TABLE_PKENDF WHERE TABLE_PKENDF_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+    MY_LOOP: WHILE V_CURRENT_MANAGER IS NOT NULL AND V_CHAIN_LENGTH < 100 DO
+        SET V_CHAIN_LENGTH = V_CHAIN_LENGTH + 1;
+        SET V_CURRENT_EMPLOYEE = V_CURRENT_MANAGER;
+
+        SELECT TABLE_PKENDF_MANAGER_ID INTO V_CURRENT_MANAGER
+        FROM TABLE_PKENDF
+        WHERE TABLE_PKENDF_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+        IF V_CHAIN_LENGTH > 10 THEN
+            ITERATE MY_LOOP;
+        END IF;
+    END WHILE MY_LOOP;
+
+    RETURN V_CHAIN_LENGTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+CREATE TABLE IF NOT EXISTS `table_uhn84w` (
+    `table_uhn84w_emp_id` INT,
+    `table_uhn84w_salary` INT
+);
+
+INSERT INTO `table_uhn84w` (`table_uhn84w_emp_id`, `table_uhn84w_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_INDEX_4uezvk(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_UHN84W_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_UHN84W
+    WHERE TABLE_UHN84W_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(76)) - -958 + (floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN FLOOR(V_COMPETITIVENESS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+CREATE TABLE IF NOT EXISTS `table_vg2w6v` (
+    `table_vg2w6v_emp_id` INT,
+    `table_vg2w6v_department_id` INT,
+    `table_vg2w6v_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1f80w1` (
+    `table_1f80w1_department_id` INT,
+    `table_1f80w1_name` VARCHAR(50),
+    `table_1f80w1_budget` INT
+);
+
+INSERT INTO `table_vg2w6v` (`table_vg2w6v_emp_id`, `table_vg2w6v_department_id`, `table_vg2w6v_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_1f80w1` (`table_1f80w1_department_id`, `table_1f80w1_name`, `table_1f80w1_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_VG2W6V_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_VG2W6V
+    WHERE TABLE_VG2W6V_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_1F80W1_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_1F80W1
+    WHERE TABLE_1F80W1_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_OLDER_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TREND INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_RECENT_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    SELECT COUNT(*)
+    INTO V_OLDER_CONVERSIONS
+    FROM TABLE_NP8RKJ C
+    JOIN TABLE_IK0X1S CM ON TABLE_NP8RKJ_CAMPAIGN_ID = TABLE_IK0X1S_CAMPAIGN_ID
+    WHERE TABLE_NP8RKJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM
+    AND TABLE_NP8RKJ_CONVERSION_DATE >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+    AND TABLE_NP8RKJ_CONVERSION_DATE < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+    IF V_OLDER_CONVERSIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TREND = (MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(39)) - -77 + (((v_recent_conversions - v_older_conversions) * 100) / v_older_conversions);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_DEPENDENCY_SCORE_6u5dlc(-20)) - -137 + ((MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(-69)) - 468 + (v_trend));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CONVERSION_TREND_ktfnpl(1);

@@ -1,0 +1,367 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ioows3` (
+    `table_ioows3_product_id` INT,
+    `table_ioows3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ioows3` (`table_ioows3_product_id`, `table_ioows3_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_MODULO_t8sg35----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MODULO_t8sg35(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A % B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+CREATE TABLE IF NOT EXISTS `table_purtuc` (
+    `table_purtuc_order_id` INT,
+    `table_purtuc_customer_id` INT,
+    `table_purtuc_order_date` DATE,
+    `table_purtuc_total_amount` DECIMAL(10,2),
+    `table_purtuc_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jhl5t1` (
+    `table_jhl5t1_order_id` INT,
+    `table_jhl5t1_product_id` INT,
+    `table_jhl5t1_quantity` INT,
+    `table_jhl5t1_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_purtuc` (`table_purtuc_order_id`, `table_purtuc_customer_id`, `table_purtuc_order_date`, `table_purtuc_total_amount`, `table_purtuc_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_jhl5t1` (`table_jhl5t1_order_id`, `table_jhl5t1_product_id`, `table_jhl5t1_quantity`, `table_jhl5t1_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(ORDER_ID_PARAM INT, TAX_RATE_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_JHL5T1_QUANTITY * TABLE_JHL5T1_UNIT_PRICE), 0)
+    INTO V_SUBTOTAL
+    FROM TABLE_JHL5T1
+    WHERE TABLE_JHL5T1_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_TAX_AMOUNT = (V_SUBTOTAL * TAX_RATE_PERCENT) / 100;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac(-60)) - 349 + (v_tax_amount);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac----- */
+CREATE TABLE IF NOT EXISTS `table_vedznu` (
+    `table_vedznu_student_id` INT,
+    `table_vedznu_first_name` VARCHAR(50),
+    `table_vedznu_last_name` VARCHAR(50),
+    `table_vedznu_grade_level` INT,
+    `table_vedznu_enrollment_date` DATE,
+    `table_vedznu_tuition_balance` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wc9t0r` (
+    `table_wc9t0r_payment_id` INT,
+    `table_wc9t0r_student_id` INT,
+    `table_wc9t0r_amount` DECIMAL(10,2),
+    `table_wc9t0r_payment_date` DATE,
+    `table_wc9t0r_payment_method` INT
+);
+
+INSERT INTO `table_vedznu` (`table_vedznu_student_id`, `table_vedznu_first_name`, `table_vedznu_last_name`, `table_vedznu_grade_level`, `table_vedznu_enrollment_date`, `table_vedznu_tuition_balance`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_wc9t0r` (`table_wc9t0r_payment_id`, `table_wc9t0r_student_id`, `table_wc9t0r_amount`, `table_wc9t0r_payment_date`, `table_wc9t0r_payment_method`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TUITION_BALANCE INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEDZNU_TUITION_BALANCE, 0)
+    INTO V_TUITION_BALANCE
+    FROM TABLE_VEDZNU
+    WHERE TABLE_VEDZNU_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WC9T0R_AMOUNT), 0) INTO V_TOTAL_PAYMENTS
+    FROM TABLE_WC9T0R
+    WHERE TABLE_WC9T0R_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_REMAINING_BALANCE = V_TUITION_BALANCE - V_TOTAL_PAYMENTS;
+
+    IF V_REMAINING_BALANCE < 0 THEN
+        SET V_REMAINING_BALANCE = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(-89)) - -487 + (cast(v_remaining_balance as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV BIGINT DEFAULT 0;
+    DECLARE V_CURR BIGINT DEFAULT 1;
+    DECLARE V_NEXT BIGINT;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN RETURN 0;
+    ELSEIF N = 1 THEN RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+CREATE TABLE IF NOT EXISTS `table_0nask3` (
+    `table_0nask3_emp_id` INT,
+    `table_0nask3_hire_date` DATE
+);
+
+INSERT INTO `table_0nask3` (`table_0nask3_emp_id`, `table_0nask3_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_0NASK3_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM TABLE_0NASK3
+    WHERE TABLE_0NASK3_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(-27, -55)) - 793 + (v_years);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+CREATE TABLE IF NOT EXISTS `table_97n3j7` (
+    `table_97n3j7_order_id` INT,
+    `table_97n3j7_warehouse_id` INT,
+    `table_97n3j7_order_date` DATE,
+    `table_97n3j7_total_items` DECIMAL(10,2),
+    `table_97n3j7_total_weight` DECIMAL(10,2),
+    `table_97n3j7_shipping_method` INT,
+    `table_97n3j7_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_97n3j7` (`table_97n3j7_order_id`, `table_97n3j7_warehouse_id`, `table_97n3j7_order_date`, `table_97n3j7_total_items`, `table_97n3j7_total_weight`, `table_97n3j7_shipping_method`, `table_97n3j7_shipping_cost`) VALUES (1, 2, '2024-01-01', 1.0, 1.0, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_METHOD_COST_s81eew(ORDER_ID_PARAM INT, SHIPPING_METHOD_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 10;
+    DECLARE V_WEIGHT_COST INT DEFAULT 0;
+    DECLARE V_METHOD_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_97N3J7_TOTAL_WEIGHT, 0) INTO V_TOTAL_WEIGHT
+    FROM TABLE_97N3J7
+    WHERE TABLE_97N3J7_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE SHIPPING_METHOD_PARAM
+        WHEN 'STANDARD' THEN SET V_METHOD_MULTIPLIER = 1;
+        WHEN 'EXPRESS' THEN SET V_METHOD_MULTIPLIER = 2;
+        WHEN 'OVERNIGHT' THEN SET V_METHOD_MULTIPLIER = 3;
+        WHEN 'INTERNATIONAL' THEN SET V_METHOD_MULTIPLIER = 5;
+        ELSE SET V_METHOD_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_WEIGHT_COST = V_TOTAL_WEIGHT / 10;
+    SET V_TOTAL_COST = (V_BASE_COST + V_WEIGHT_COST) * V_METHOD_MULTIPLIER;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+CREATE TABLE IF NOT EXISTS `table_4ua3im` (
+    `table_4ua3im_rental_id` INT,
+    `table_4ua3im_equipment_id` INT,
+    `table_4ua3im_customer_id` INT,
+    `table_4ua3im_rental_date` DATE,
+    `table_4ua3im_return_date` DATE,
+    `table_4ua3im_daily_rate` INT,
+    `table_4ua3im_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_n9ijgh` (
+    `table_n9ijgh_equipment_id` INT,
+    `table_n9ijgh_name` VARCHAR(50),
+    `table_n9ijgh_category` INT,
+    `table_n9ijgh_replacement_value` INT,
+    `table_n9ijgh_is_insured` INT
+);
+
+INSERT INTO `table_4ua3im` (`table_4ua3im_rental_id`, `table_4ua3im_equipment_id`, `table_4ua3im_customer_id`, `table_4ua3im_rental_date`, `table_4ua3im_return_date`, `table_4ua3im_daily_rate`, `table_4ua3im_deposit_amount`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_n9ijgh` (`table_n9ijgh_equipment_id`, `table_n9ijgh_name`, `table_n9ijgh_category`, `table_n9ijgh_replacement_value`, `table_n9ijgh_is_insured`) VALUES (1, 'test', 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_DATE DATE;
+    DECLARE V_RETURN_DATE DATE;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+    DECLARE V_DEPOSIT INT DEFAULT 0;
+    DECLARE V_RENTAL_DAYS INT DEFAULT 0;
+    DECLARE V_REPLACEMENT_VALUE INT DEFAULT 0;
+    DECLARE V_INSURANCE_COST INT DEFAULT 0;
+
+    SELECT TABLE_4UA3IM_RENTAL_DATE, TABLE_4UA3IM_RETURN_DATE, TABLE_4UA3IM_DAILY_RATE, TABLE_4UA3IM_DEPOSIT_AMOUNT, TABLE_N9IJGH_REPLACEMENT_VALUE
+    INTO V_RENTAL_DATE, V_RETURN_DATE, V_DAILY_RATE, V_DEPOSIT, V_REPLACEMENT_VALUE
+    FROM TABLE_4UA3IM R
+    JOIN TABLE_N9IJGH E ON TABLE_4UA3IM_EQUIPMENT_ID = TABLE_N9IJGH_EQUIPMENT_ID
+    WHERE TABLE_4UA3IM_RENTAL_ID = RENTAL_ID_PARAM;
+
+    IF V_RETURN_DATE IS NULL THEN
+        SET V_RETURN_DATE = CURDATE();
+    END IF;
+
+    SET V_RENTAL_DAYS = DATEDIFF(V_RETURN_DATE, V_RENTAL_DATE);
+    IF V_RENTAL_DAYS <= 0 THEN
+        SET V_RENTAL_DAYS = 1;
+    END IF;
+
+    SET V_INSURANCE_COST = (V_REPLACEMENT_VALUE * V_RENTAL_DAYS) / 1000;
+
+    IF V_DEPOSIT < V_INSURANCE_COST THEN
+        SET V_INSURANCE_COST = V_INSURANCE_COST + 50;
+    END IF;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(-80, -61, -30)) - 827 + (cast(v_insurance_cost as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(A INT, B INT, C INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN RETURN 'INVALID';
+        WHEN A = B AND B = C THEN RETURN 'EQUILATERAL';
+        WHEN A = B OR B = C OR A = C THEN RETURN 'ISOSCELES';
+        ELSE RETURN 'SCALENE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_REVERSE_NUMBER_jcfo74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_NUMBER_jcfo74(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+
+    IF NUM < 0 THEN
+        SET V_IS_NEGATIVE = 1;
+        SET NUM = -NUM;
+    END IF;
+
+    REVERSE_LOOP: WHILE NUM > 0 DO
+        SET V_DIGIT = NUM MOD 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET NUM = NUM DIV 10;
+    END WHILE REVERSE_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + (-v_reversed);
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_IOOWS3_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_IOOWS3
+    WHERE TABLE_IOOWS3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RENTAL_INSURANCE_8e5d3c(-94)) - -509 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(60)) - 955 + ((MYSQL_FUNC_CALCULATE_TAX_AMOUNT_0u0oup(-16, -20)) - 290 + ((MYSQL_FUNC_MODULO_t8sg35(83, 64)) - 350 + (floor((v_price * 0.3) / 10)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(1);

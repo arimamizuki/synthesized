@@ -1,0 +1,521 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1146443 (id INT, v1146444 TEXT);
+CREATE TABLE IF NOT EXISTS test_table (id VARCHAR(50), name VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1146445 (id INT, data TEXT);
+CREATE TABLE IF NOT EXISTS v1146467 (v1146468 INT, v1146469 MEDIUMINT);
+CREATE TABLE IF NOT EXISTS v1146483 (v1146484 CHAR(20) CHARACTER SET utf8mb3, v1146485 VARCHAR(20) CHARACTER SET utf8mb3, v1146486 TEXT(20) CHARACTER SET utf8mb3);
+CREATE TABLE IF NOT EXISTS v1146495 (v1146496 VARCHAR(3073));
+INSERT INTO v1146443 VALUES (1, 'test'), (2, 'sample'), (3, NULL);
+INSERT INTO test_table VALUES ('xep80', 'example'), ('1', 'test'), ('ger', 'data');
+INSERT INTO v1146445 VALUES (1, 'info'), (2, 'more_info');
+INSERT INTO v1146467 VALUES (10, 100), (20, 200);
+INSERT INTO v1146483 VALUES ('abc', 'def', 'ghi'), ('jkl', 'mno', 'pqr');
+INSERT INTO v1146495 VALUES ('initial_data');
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+CREATE TABLE IF NOT EXISTS `table_z79t7b` (
+    `table_z79t7b_sale_id` INT,
+    `table_z79t7b_property_id` INT,
+    `table_z79t7b_agent_id` INT,
+    `table_z79t7b_sale_price` DECIMAL(10,2),
+    `table_z79t7b_commission_rate` INT,
+    `table_z79t7b_agent_split_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vmfcd8` (
+    `table_vmfcd8_agent_id` INT,
+    `table_vmfcd8_name` VARCHAR(50),
+    `table_vmfcd8_years_experience` INT,
+    `table_vmfcd8_commission_rate` INT
+);
+
+INSERT INTO `table_z79t7b` (`table_z79t7b_sale_id`, `table_z79t7b_property_id`, `table_z79t7b_agent_id`, `table_z79t7b_sale_price`, `table_z79t7b_commission_rate`, `table_z79t7b_agent_split_percent`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+INSERT INTO `table_vmfcd8` (`table_vmfcd8_agent_id`, `table_vmfcd8_name`, `table_vmfcd8_years_experience`, `table_vmfcd8_commission_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(SALE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALE_PRICE INT DEFAULT 0;
+    DECLARE V_COMMISSION_RATE INT DEFAULT 3;
+    DECLARE V_AGENT_SPLIT INT DEFAULT 60;
+    DECLARE V_TOTAL_COMMISSION INT DEFAULT 0;
+    DECLARE V_AGENT_COMMISSION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Z79T7B_SALE_PRICE, 0), COALESCE(TABLE_Z79T7B_COMMISSION_RATE, 3)
+    INTO V_SALE_PRICE, V_COMMISSION_RATE
+    FROM TABLE_Z79T7B
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_Z79T7B_AGENT_SPLIT_PERCENT, 60) INTO V_AGENT_SPLIT
+    FROM TABLE_Z79T7B RC
+    JOIN TABLE_VMFCD8 A ON TABLE_Z79T7B_AGENT_ID = TABLE_VMFCD8_AGENT_ID
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SET V_TOTAL_COMMISSION = V_SALE_PRICE * V_COMMISSION_RATE / 100;
+    SET V_AGENT_COMMISSION = (MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(-66)) - 848 + (v_total_commission * v_agent_split / 100);
+
+    RETURN CAST(V_AGENT_COMMISSION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+CREATE TABLE IF NOT EXISTS `table_9adjz6` (
+    `table_9adjz6_student_id` INT,
+    `table_9adjz6_name` VARCHAR(50),
+    `table_9adjz6_enrollment_date` DATE,
+    `table_9adjz6_graduation_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9uabjr` (
+    `table_9uabjr_course_id` INT,
+    `table_9uabjr_credits` INT,
+    `table_9uabjr_difficulty_level` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sz2t2v` (
+    `table_sz2t2v_student_id` INT,
+    `table_sz2t2v_course_id` INT,
+    `table_sz2t2v_grade` INT
+);
+
+INSERT INTO `table_9adjz6` (`table_9adjz6_student_id`, `table_9adjz6_name`, `table_9adjz6_enrollment_date`, `table_9adjz6_graduation_year`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_9uabjr` (`table_9uabjr_course_id`, `table_9uabjr_credits`, `table_9uabjr_difficulty_level`) VALUES (1, 1, 1);
+
+INSERT INTO `table_sz2t2v` (`table_sz2t2v_student_id`, `table_sz2t2v_course_id`, `table_sz2t2v_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_YEAR INT DEFAULT 0;
+    DECLARE V_GRADUATION_YEAR INT DEFAULT 0;
+    DECLARE V_YEARS_REMAINING INT DEFAULT 0;
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_REQUIRED_CREDITS INT DEFAULT 120;
+    DECLARE V_GRADE_POINT_AVG DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PROGRESS_SCORE INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_9ADJZ6_ENROLLMENT_DATE), TABLE_9ADJZ6_GRADUATION_YEAR
+    INTO V_ENROLLMENT_YEAR, V_GRADUATION_YEAR
+    FROM TABLE_9ADJZ6
+    WHERE TABLE_9ADJZ6_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_YEARS_REMAINING = V_GRADUATION_YEAR - YEAR(CURDATE());
+
+    SELECT COALESCE(SUM(TABLE_9UABJR_CREDITS), 0)
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_SZ2T2V E
+    JOIN TABLE_9UABJR C ON TABLE_SZ2T2V_COURSE_ID = TABLE_9UABJR_COURSE_ID
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_SZ2T2V_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(AVG(CASE TABLE_SZ2T2V_GRADE
+        WHEN 'A' THEN 4.0 WHEN 'B' THEN 3.0 WHEN 'C' THEN 2.0 WHEN 'D' THEN 1.0 ELSE 0.0 END), 0.00)
+    INTO V_GRADE_POINT_AVG
+    FROM TABLE_SZ2T2V
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_PROGRESS_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp(-54)) - -535 + (((v_completed_credits * 100) / v_required_credits) + (v_grade_point_avg * 15) - (v_years_remaining * 5));
+
+    RETURN GREATEST(V_PROGRESS_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp----- */
+CREATE TABLE IF NOT EXISTS `table_vt1lm2` (
+    `table_vt1lm2_customer_id` INT,
+    `table_vt1lm2_registration_date` DATE,
+    `table_vt1lm2_total_orders` DECIMAL(10,2),
+    `table_vt1lm2_total_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vt1lm2` (`table_vt1lm2_customer_id`, `table_vt1lm2_registration_date`, `table_vt1lm2_total_orders`, `table_vt1lm2_total_spent`) VALUES (1, '2024-01-01', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_REGISTRATION_YEAR INT;
+    DECLARE V_LOYALTY_YEARS INT;
+    DECLARE V_CURRENT_YEAR INT DEFAULT YEAR(CURDATE());
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VT1LM2_TOTAL_ORDERS, 0), COALESCE(TABLE_VT1LM2_TOTAL_SPENT, 0), YEAR(TABLE_VT1LM2_REGISTRATION_DATE)
+    INTO V_TOTAL_ORDERS, V_TOTAL_SPENT, V_REGISTRATION_YEAR
+    FROM TABLE_VT1LM2
+    WHERE TABLE_VT1LM2_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_LOYALTY_YEARS = V_CURRENT_YEAR - V_REGISTRATION_YEAR;
+
+    IF V_LOYALTY_YEARS < 0 THEN
+        SET V_LOYALTY_YEARS = 0;
+    END IF;
+
+    SET V_VALUE_SCORE = (V_TOTAL_SPENT / 100) + (V_TOTAL_ORDERS * 10) + (V_LOYALTY_YEARS * 50);
+
+    RETURN V_VALUE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + (0))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + (null);
+    END IF;
+
+    REPEAT
+        SET V_RESULT = (MYSQL_FUNC_PROC_VECTOR_nlaylc()) - -362 + (concat(v_result, str));
+        SET V_I = V_I + 1;
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_COUNT - V_PRIOR_COUNT) * 100) / V_PRIOR_COUNT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(-13)) - 913 + (v_growth_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+CREATE TABLE IF NOT EXISTS `table_tenjc7` (
+    `table_tenjc7_product_id` INT,
+    `table_tenjc7_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tenjc7` (`table_tenjc7_product_id`, `table_tenjc7_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TENJC7_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_TENJC7
+    WHERE TABLE_TENJC7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+CREATE TABLE IF NOT EXISTS `table_95d2jl` (
+    `table_95d2jl_vec` INT
+);
+
+INSERT INTO `table_95d2jl` (`table_95d2jl_vec`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_95D2JL_VEC INTO RESULT FROM `TABLE_95D2JL` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549(-62)) - -259 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549----- */
+CREATE TABLE IF NOT EXISTS `table_99htxi` (
+    `table_99htxi_emp_id` INT,
+    `table_99htxi_department_id` INT,
+    `table_99htxi_salary` INT,
+    `table_99htxi_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_9r4x7o` (
+    `table_9r4x7o_department_id` INT,
+    `table_9r4x7o_name` VARCHAR(50)
+);
+
+INSERT INTO `table_99htxi` (`table_99htxi_emp_id`, `table_99htxi_department_id`, `table_99htxi_salary`, `table_99htxi_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_9r4x7o` (`table_9r4x7o_department_id`, `table_9r4x7o_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_INDEX_mp5549(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_99HTXI_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(STDDEV(TABLE_99HTXI_SALARY), 0)
+    INTO V_TURNOVER_RATE
+    FROM TABLE_99HTXI
+    WHERE TABLE_99HTXI_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_EMPLOYEE_COUNT * 5) + (V_AVG_TENURE * 10) - (V_TURNOVER_RATE / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0665_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_id INT;
+    DECLARE v_utf8_val VARCHAR(50) DEFAULT 'sample_utf8';
+    DECLARE v_json_data JSON;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_text_val TEXT;
+    DECLARE v_cur CURSOR FOR SELECT v1146468 FROM v1146467 WHERE v1146469 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Use IF/ELSEIF/ELSE structure
+    IF p1 > 100 THEN
+        SET v_counter = 10;
+    ELSEIF p1 > 50 THEN
+        SET v_counter = 20;
+    ELSE
+        SET v_counter = 30;
+    END IF;
+
+    -- First input statement: UPDATE v1146443 with character set conversion
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN END;
+        UPDATE v1146443 AS x1 
+        SET v1146444 = @d 
+        WHERE v1146444 = CAST(@utf82 AS CHAR CHARACTER SET ujis);
+    END;
+
+    -- Second input statement: UPDATE test_table with LEFT JOIN
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN END;
+        UPDATE test_table AS x1 
+        LEFT JOIN v1146445 AS x2 ON TRUE 
+        SET id = ('[INV][INV]ȏ[INV]ɏ[INV]ʏ[INV]ˏ[INV][INV]') 
+        WHERE x1.id = 'xep80' 
+            AND x1.id = '1' 
+            AND x1.id = 'ger' 
+            AND '2001-12-21 23:14:24' >= id 
+            AND '2001-12-21 23:14:24' <= id 
+            AND x1.id = x1.id 
+            AND x1.id = 21231039;
+    END;
+
+    -- Use CASE/WHEN structure
+    CASE 
+        WHEN (MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + (p2 > 0) THEN
+            -- Third input statement: CREATE TABLE v1146467 (already created, use it)
+            INSERT INTO v1146467 VALUES (p1, p2);
+            SET v_counter = v_counter + 1;
+        WHEN (MYSQL_FUNC_CURSOR_FUNC_COUNT_1_TO_50_8n4h30()) - -843 + (p2 = 0) THEN
+            -- Fourth input statement: CREATE TABLE v1146483 (already created, use it)
+            INSERT INTO v1146483 VALUES (CONCAT('val', p1), CONCAT('str', p2), 'text_data');
+            SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(52)) - 333 + (2);
+        ELSE
+            -- Fifth input statement: CREATE TABLE v1146495 (already created, use it)
+            INSERT INTO v1146495 VALUES (REPEAT('x', p1));
+            SET v_counter = v_counter + 3;
+    END CASE;
+
+    -- Use WHILE...DO loop
+    WHILE v_counter < 50 DO
+        SET v_counter = v_counter + 1;
+        IF v_counter MOD 10 = 0 THEN
+            -- Use JSON function for demonstration
+            SET v_json_data = JSON_OBJECT('counter', v_counter, 'p1', p1, 'p2', p2);
+            INSERT INTO v1146483 (v1146484, v1146485, v1146486) 
+            VALUES (JSON_UNQUOTE(JSON_EXTRACT(v_json_data, '$.counter')), 
+                    JSON_UNQUOTE(JSON_EXTRACT(v_json_data, '$.p1')),
+                    JSON_UNQUOTE(JSON_EXTRACT(v_json_data, '$.p2')));
+        END IF;
+    END WHILE;
+
+    -- Use CURSOR with REPEAT...UNTIL loop
+    OPEN v_cur;
+    REPEAT
+        FETCH v_cur INTO v_id;
+        IF NOT v_done THEN
+            SET v_counter = v_counter + v_id;
+            -- Use geometric function for demonstration
+            SET v_geom = ST_GeomFromText(CONCAT('POINT(', v_id, ' ', v_counter, ')'));
+        END IF;
+    UNTIL v_done END REPEAT;
+    CLOSE v_cur;
+
+    -- Use SIGNAL for conditional error handling
+    IF v_counter < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Counter went negative!';
+    END IF;
+
+    -- Final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0665_proc(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,463 @@
+/* -----Dependency for: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+CREATE TABLE IF NOT EXISTS table_wpq3qd (
+    table_wpq3qd_emp_no INT,
+    table_wpq3qd_salary INT
+);
+
+INSERT INTO table_wpq3qd (`table_wpq3qd_emp_no`, `table_wpq3qd_salary`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(TABLE_WPQ3QD_SALARY) - MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN IFNULL(SALARY_CALC, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+CREATE TABLE IF NOT EXISTS `table_34i93l` (
+    `table_34i93l_customer_id` INT,
+    `table_34i93l_registration_date` DATE,
+    `table_34i93l_tier_level` INT,
+    `table_34i93l_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vp00q0` (
+    `table_vp00q0_order_id` INT,
+    `table_vp00q0_customer_id` INT,
+    `table_vp00q0_order_date` DATE,
+    `table_vp00q0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1gdozo` (
+    `table_1gdozo_review_id` INT,
+    `table_1gdozo_customer_id` INT,
+    `table_1gdozo_product_id` INT,
+    `table_1gdozo_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_34i93l` (`table_34i93l_customer_id`, `table_34i93l_registration_date`, `table_34i93l_tier_level`, `table_34i93l_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_vp00q0` (`table_vp00q0_order_id`, `table_vp00q0_customer_id`, `table_vp00q0_order_date`, `table_vp00q0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_1gdozo` (`table_1gdozo_review_id`, `table_1gdozo_customer_id`, `table_1gdozo_product_id`, `table_1gdozo_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_34I93L_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_34I93L
+    WHERE TABLE_34I93L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_VP00Q0_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM TABLE_VP00Q0
+    WHERE TABLE_VP00Q0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_1GDOZO_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_1GDOZO
+    WHERE TABLE_1GDOZO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    SET V_LOYALTY_SCORE = (V_ORDER_COUNT * 10) + (V_TOTAL_SPENT / 100) + (V_AVG_REVIEW_RATING * 15);
+    SET V_LOYALTY_SCORE = (MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8()) - -842 + (v_loyalty_score) * V_TIER_MULTIPLIER / 2;
+
+    RETURN V_LOYALTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+CREATE TABLE IF NOT EXISTS `table_exts6s` (
+    `table_exts6s_employee_id` INT,
+    `table_exts6s_department_id` INT,
+    `table_exts6s_salary` INT,
+    `table_exts6s_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4gafba` (
+    `table_4gafba_bonus_id` INT,
+    `table_4gafba_employee_id` INT,
+    `table_4gafba_bonus_amount` DECIMAL(10,2),
+    `table_4gafba_bonus_date` DATE
+);
+
+INSERT INTO `table_exts6s` (`table_exts6s_employee_id`, `table_exts6s_department_id`, `table_exts6s_salary`, `table_exts6s_performance_rating`) VALUES (1, 2, 3, 1.0);
+
+INSERT INTO `table_4gafba` (`table_4gafba_bonus_id`, `table_4gafba_employee_id`, `table_4gafba_bonus_amount`, `table_4gafba_bonus_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PREVIOUS_BONUS_TOTAL INT DEFAULT 0;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+    DECLARE V_RATING_MULTIPLIER DECIMAL(3,2) DEFAULT 1.00;
+
+    SELECT COALESCE(TABLE_EXTS6S_SALARY, 0), COALESCE(TABLE_EXTS6S_PERFORMANCE_RATING, 3.00)
+    INTO V_SALARY, V_PERFORMANCE_RATING
+    FROM TABLE_EXTS6S
+    WHERE TABLE_EXTS6S_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4GAFBA_BONUS_AMOUNT), 0)
+    INTO V_PREVIOUS_BONUS_TOTAL
+    FROM TABLE_4GAFBA
+    WHERE TABLE_4GAFBA_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_RATING_MULTIPLIER = V_PERFORMANCE_RATING / 3.00;
+
+    SET V_BONUS_AMOUNT = (V_SALARY * V_RATING_MULTIPLIER) / 10;
+
+    IF V_PERFORMANCE_RATING >= 4.5 THEN
+        SET V_BONUS_AMOUNT = V_BONUS_AMOUNT + (V_BONUS_AMOUNT * 50 / 100);
+    END IF;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 17 UNION SELECT 34 UNION SELECT 51 UNION SELECT 68 UNION SELECT 85 UNION SELECT 102 UNION SELECT 119 UNION SELECT 136 UNION SELECT 153 UNION SELECT 170 UNION SELECT 187 UNION SELECT 204 UNION SELECT 221 UNION SELECT 238 UNION SELECT 255 UNION SELECT 272 UNION SELECT 289;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(-77)) - 263 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+CREATE TABLE IF NOT EXISTS `table_ttn14y` (
+    `table_ttn14y_claim_id` INT,
+    `table_ttn14y_policy_id` INT,
+    `table_ttn14y_claim_date` DATE,
+    `table_ttn14y_claim_amount` DECIMAL(10,2),
+    `table_ttn14y_status` VARCHAR(50),
+    `table_ttn14y_processing_days` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hwxj55` (
+    `table_hwxj55_policy_id` INT,
+    `table_hwxj55_customer_id` INT,
+    `table_hwxj55_policy_type` VARCHAR(50),
+    `table_hwxj55_premium_annual` INT
+);
+
+INSERT INTO `table_ttn14y` (`table_ttn14y_claim_id`, `table_ttn14y_policy_id`, `table_ttn14y_claim_date`, `table_ttn14y_claim_amount`, `table_ttn14y_status`, `table_ttn14y_processing_days`) VALUES (1, 2, '2024-01-01', 1.0, 'test', 6);
+
+INSERT INTO `table_hwxj55` (`table_hwxj55_policy_id`, `table_hwxj55_customer_id`, `table_hwxj55_policy_type`, `table_hwxj55_premium_annual`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_AVG_PROCESSING_DAYS DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_APPROVED_CLAIMS INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_TTN14Y_PROCESSING_DAYS), 0)
+    INTO V_TOTAL_CLAIMS, V_AVG_PROCESSING_DAYS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPROVED_CLAIMS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM AND TABLE_TTN14Y_STATUS = 'APPROVED';
+
+    IF V_TOTAL_CLAIMS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_EFFICIENCY_SCORE = 100 - (V_AVG_PROCESSING_DAYS * 2) + (V_APPROVED_CLAIMS * 10 / V_TOTAL_CLAIMS);
+
+    RETURN GREATEST(V_EFFICIENCY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+CREATE TABLE IF NOT EXISTS `table_pb5yd8` (
+    `table_pb5yd8_emp_id` INT
+);
+
+INSERT INTO `table_pb5yd8` (`table_pb5yd8_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 17) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+CREATE TABLE IF NOT EXISTS `table_mraj7y` (
+    `table_mraj7y_card_id` INT,
+    `table_mraj7y_holder_id` INT,
+    `table_mraj7y_balance` INT,
+    `table_mraj7y_card_type` VARCHAR(50),
+    `table_mraj7y_issue_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_s45x67` (
+    `table_s45x67_trip_id` INT,
+    `table_s45x67_card_id` INT,
+    `table_s45x67_station_enter` INT,
+    `table_s45x67_station_exit` INT,
+    `table_s45x67_fare_amount` DECIMAL(10,2),
+    `table_s45x67_trip_date` DATE
+);
+
+INSERT INTO `table_mraj7y` (`table_mraj7y_card_id`, `table_mraj7y_holder_id`, `table_mraj7y_balance`, `table_mraj7y_card_type`, `table_mraj7y_issue_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_s45x67` (`table_s45x67_trip_id`, `table_s45x67_card_id`, `table_s45x67_station_enter`, `table_s45x67_station_exit`, `table_s45x67_fare_amount`, `table_s45x67_trip_date`) VALUES (1, 2, 3, 4, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_CARD_TYPE VARCHAR(20) DEFAULT 'STANDARD';
+    DECLARE V_TRIP_COUNT INT DEFAULT 0;
+    DECLARE V_DAILY_CAP INT DEFAULT 100;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_FARE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MRAJ7Y_BALANCE, 0), TABLE_MRAJ7Y_CARD_TYPE
+    INTO V_BALANCE, V_CARD_TYPE
+    FROM TABLE_MRAJ7Y
+    WHERE TABLE_MRAJ7Y_CARD_ID = CARD_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TRIP_COUNT
+    FROM TABLE_S45X67
+    WHERE TABLE_S45X67_CARD_ID = CARD_ID_PARAM
+      AND TABLE_S45X67_TRIP_DATE >= CURDATE();
+
+    IF V_CARD_TYPE = 'SENIOR' THEN
+        SET V_DISCOUNT = 50;
+    ELSEIF V_CARD_TYPE = 'STUDENT' THEN
+        SET V_DISCOUNT = 30;
+    END IF;
+
+    IF V_TRIP_COUNT >= 5 THEN
+        SET V_DISCOUNT = (MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + (v_discount + 20);
+    END IF;
+
+    SET V_FINAL_FARE = 25 - (25 * V_DISCOUNT / 100);
+
+    RETURN CAST(V_FINAL_FARE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt(34)) - 274 + (v_cost_per_hire);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt----- */
+CREATE TABLE IF NOT EXISTS `table_ddlcx3` (
+    `table_ddlcx3_customer_id` INT,
+    `table_ddlcx3_order_date` DATE,
+    `table_ddlcx3_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ddlcx3` (`table_ddlcx3_customer_id`, `table_ddlcx3_order_date`, `table_ddlcx3_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 1;
+
+    SELECT COUNT(*), TIMESTAMPDIFF(MONTH, MIN(TABLE_DDLCX3_ORDER_DATE), CURDATE())
+    INTO V_ORDER_COUNT, V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_DDLCX3 O
+    WHERE TABLE_DDLCX3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS <= (MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(-67)) - -489 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+CREATE TABLE IF NOT EXISTS `table_qrf16h` (
+    `table_qrf16h_customer_id` INT,
+    `table_qrf16h_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_qrf16h` (`table_qrf16h_customer_id`, `table_qrf16h_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_QRF16H_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_QRF16H
+    WHERE TABLE_QRF16H_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 1000;
+        WHEN 'PREMIUM' THEN RETURN 500;
+        WHEN 'BASIC' THEN RETURN 100;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(START_NUM INT, END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+
+    IF (MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(-91, 78)) - -501 + (start_num) > END_NUM THEN
+        RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_RECORD_HASH_0031cl(-90)) - -341 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(-57)) - -854 + (0));
+    END IF;
+
+    SET V_CURRENT = START_NUM;
+
+    CALC_LOOP: WHILE V_CURRENT <= END_NUM DO
+        IF V_CURRENT MOD 2 = 0 THEN
+            SET V_SUM = V_SUM + V_CURRENT;
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_TRANSIT_FARE_fzbzh5(44)) - -586 + (v_count + 1);
+        END IF;
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE CALC_LOOP;
+
+    IF V_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_AVERAGE_OF_EVENS_qsct3w(1, 1);

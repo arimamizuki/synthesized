@@ -1,0 +1,420 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1nqetr` (
+    `table_1nqetr_order_id` INT,
+    `table_1nqetr_customer_id` INT,
+    `table_1nqetr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1nqetr` (`table_1nqetr_order_id`, `table_1nqetr_customer_id`, `table_1nqetr_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf----- */
+CREATE TABLE IF NOT EXISTS `table_g94l07` (
+    `table_g94l07_emp_id` INT,
+    `table_g94l07_department_id` INT,
+    `table_g94l07_salary` INT,
+    `table_g94l07_hire_date` DATE,
+    `table_g94l07_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_g94l07` (`table_g94l07_emp_id`, `table_g94l07_department_id`, `table_g94l07_salary`, `table_g94l07_hire_date`, `table_g94l07_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G94L07_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_G94L07_HIRE_DATE, CURDATE()), COALESCE(TABLE_G94L07_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_G94L07
+    WHERE TABLE_G94L07_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa(83)) - -708 + (v_performance * (1 + v_tenure_years * 0.05) * (1 + v_salary / 100000));
+
+    RETURN FLOOR(V_ADJUSTED_SCORE * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa----- */
+CREATE TABLE IF NOT EXISTS `table_aye21j` (
+    `table_aye21j_employee_id` INT,
+    `table_aye21j_department_id` INT,
+    `table_aye21j_salary` INT,
+    `table_aye21j_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1x2rb1` (
+    `table_1x2rb1_department_id` INT,
+    `table_1x2rb1_name` VARCHAR(50),
+    `table_1x2rb1_manager_id` INT
+);
+
+INSERT INTO `table_aye21j` (`table_aye21j_employee_id`, `table_aye21j_department_id`, `table_aye21j_salary`, `table_aye21j_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1x2rb1` (`table_1x2rb1_department_id`, `table_1x2rb1_name`, `table_1x2rb1_manager_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_BANDS_3j6kpa(DEPT_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_BAND_RANGE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_AYE21J_SALARY), 0), COALESCE(MAX(TABLE_AYE21J_SALARY), 0), COALESCE(MIN(TABLE_AYE21J_SALARY), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_AYE21J
+    WHERE TABLE_AYE21J_DEPARTMENT_ID = DEPT_ID;
+
+    SET V_BAND_RANGE = V_MAX_SALARY - V_MIN_SALARY;
+
+    CASE
+        WHEN V_EMP_COUNT = 0 THEN RETURN 0;
+        WHEN V_AVG_SALARY < 3000 THEN SET V_BAND_RANGE = (MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4(39)) - 491 + (v_band_range) * 8 / 10;
+        WHEN V_AVG_SALARY > 10000 THEN SET V_BAND_RANGE = V_BAND_RANGE * 12 / 10;
+        ELSE SET V_BAND_RANGE = V_BAND_RANGE * 10 / 10;
+    END CASE;
+
+    RETURN V_BAND_RANGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4----- */
+CREATE TABLE IF NOT EXISTS `table_e5g1kk` (
+    `table_e5g1kk_order_id` INT,
+    `table_e5g1kk_order_date` DATE
+);
+
+INSERT INTO `table_e5g1kk` (`table_e5g1kk_order_id`, `table_e5g1kk_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_MONTH_y97oq4(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_E5G1KK_ORDER_DATE)
+    INTO V_MONTH
+    FROM TABLE_E5G1KK
+    WHERE TABLE_E5G1KK_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz(51)) - 390 + (v_month);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz----- */
+CREATE TABLE IF NOT EXISTS `table_605e7b` (
+    `table_605e7b_customer_id` INT,
+    `table_605e7b_order_date` DATE,
+    `table_605e7b_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_605e7b` (`table_605e7b_customer_id`, `table_605e7b_order_date`, `table_605e7b_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AVG_ORDER_FREQUENCY_qb32tz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SPAN INT DEFAULT 1;
+
+    SELECT COUNT(*), DATEDIFF(MAX(TABLE_605E7B_ORDER_DATE), MIN(TABLE_605E7B_ORDER_DATE)) + 1
+    INTO V_ORDER_COUNT, V_DAYS_SPAN
+    FROM TABLE_605E7B
+    WHERE TABLE_605E7B_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT <= 1 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + (0);
+    END IF;
+
+    RETURN FLOOR((V_ORDER_COUNT * 30) / V_DAYS_SPAN);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ah7ot` (
+    `table_4ah7ot_student_id` INT,
+    `table_4ah7ot_name` VARCHAR(50),
+    `table_4ah7ot_class_id` INT,
+    `table_4ah7ot_score` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hqvgbn` (
+    `table_hqvgbn_class_id` INT,
+    `table_hqvgbn_teacher_id` INT,
+    `table_hqvgbn_average_score` INT
+);
+
+INSERT INTO `table_4ah7ot` (`table_4ah7ot_student_id`, `table_4ah7ot_name`, `table_4ah7ot_class_id`, `table_4ah7ot_score`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_hqvgbn` (`table_hqvgbn_class_id`, `table_hqvgbn_teacher_id`, `table_hqvgbn_average_score`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLASS_AVG INT DEFAULT 0;
+    DECLARE V_STUDENT_COUNT INT DEFAULT 0;
+    DECLARE V_BELOW_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_AVG_COUNT INT DEFAULT 0;
+    DECLARE V_CURVE_FACTOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_HQVGBN_AVERAGE_SCORE, 0)
+    INTO V_CLASS_AVG
+    FROM TABLE_HQVGBN
+    WHERE TABLE_HQVGBN_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_STUDENT_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_BELOW_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE < V_CLASS_AVG;
+
+    SELECT COUNT(*)
+    INTO V_ABOVE_AVG_COUNT
+    FROM TABLE_4AH7OT
+    WHERE TABLE_4AH7OT_CLASS_ID = CLASS_ID_PARAM AND TABLE_4AH7OT_SCORE >= V_CLASS_AVG;
+
+    IF V_STUDENT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_BELOW_AVG_COUNT > V_ABOVE_AVG_COUNT THEN
+        SET V_CURVE_FACTOR = -((V_BELOW_AVG_COUNT - V_ABOVE_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    ELSE
+        SET V_CURVE_FACTOR = ((V_ABOVE_AVG_COUNT - V_BELOW_AVG_COUNT) * 100) / V_STUDENT_COUNT;
+    END IF;
+
+    RETURN V_CURVE_FACTOR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx----- */
+CREATE TABLE IF NOT EXISTS `table_ka0z4x` (
+    `table_ka0z4x_customer_id` INT,
+    `table_ka0z4x_registration_date` DATE
+);
+
+INSERT INTO `table_ka0z4x` (`table_ka0z4x_customer_id`, `table_ka0z4x_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_KA0Z4X_REGISTRATION_DATE)
+    INTO V_AGE_DAYS
+    FROM TABLE_KA0Z4X
+    WHERE TABLE_KA0Z4X_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + (v_age_days);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(15)) - 83 + (v_base_cost);
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+CREATE TABLE IF NOT EXISTS `table_pjlwth` (
+    `table_pjlwth_emp_id` INT,
+    `table_pjlwth_department_id` INT,
+    `table_pjlwth_salary` INT,
+    `table_pjlwth_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcp73a` (
+    `table_hcp73a_department_id` INT,
+    `table_hcp73a_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pjlwth` (`table_pjlwth_emp_id`, `table_pjlwth_department_id`, `table_pjlwth_salary`, `table_pjlwth_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_hcp73a` (`table_hcp73a_department_id`, `table_hcp73a_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_SCORE_6tp3xw(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_STABILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_PJLWTH_HIRE_DATE, CURDATE())), 0), COUNT(*)
+    INTO V_AVG_TENURE, V_EMPLOYEE_COUNT
+    FROM TABLE_PJLWTH
+    WHERE TABLE_PJLWTH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_SCORE = (V_AVG_TENURE * 10) + (V_EMPLOYEE_COUNT * 2);
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - -792 + (v_stability_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+CREATE TABLE IF NOT EXISTS `table_fove5m` (
+    `table_fove5m_country` INT
+);
+
+INSERT INTO `table_fove5m` (`table_fove5m_country`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FOVE5M
+    WHERE TABLE_FOVE5M_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_1NQETR_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_1NQETR
+    WHERE TABLE_1NQETR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL > 1000 THEN
+        RETURN 5;
+    ELSEIF V_TOTAL > 500 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL > 200 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_vmeddx(6)) - 189 + ((MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf(45)) - 51 + (3));
+    ELSEIF V_TOTAL > 100 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CLASS_CURVE_FACTOR_4ddkkg(-12)) - 899 + (2);
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(1);

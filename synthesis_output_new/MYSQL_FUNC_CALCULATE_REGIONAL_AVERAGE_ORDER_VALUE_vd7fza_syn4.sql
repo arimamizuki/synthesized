@@ -1,0 +1,468 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_xf6ad9` (
+    `table_xf6ad9_order_id` INT,
+    `table_xf6ad9_customer_id` INT,
+    `table_xf6ad9_order_date` DATE,
+    `table_xf6ad9_total_amount` DECIMAL(10,2),
+    `table_xf6ad9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcchnd` (
+    `table_hcchnd_customer_id` INT,
+    `table_hcchnd_country` INT
+);
+
+INSERT INTO `table_xf6ad9` (`table_xf6ad9_order_id`, `table_xf6ad9_customer_id`, `table_xf6ad9_order_date`, `table_xf6ad9_total_amount`, `table_xf6ad9_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_hcchnd` (`table_hcchnd_customer_id`, `table_hcchnd_country`) VALUES (1, 2);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb----- */
+CREATE TABLE IF NOT EXISTS `table_o9xb6z` (
+    `table_o9xb6z_department_id` INT,
+    `table_o9xb6z_salary` INT
+);
+
+INSERT INTO `table_o9xb6z` (`table_o9xb6z_department_id`, `table_o9xb6z_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_O9XB6Z_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_O9XB6Z
+    WHERE TABLE_O9XB6Z_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+CREATE TABLE IF NOT EXISTS `table_cse3r2` (
+    `table_cse3r2_order_id` INT,
+    `table_cse3r2_customer_id` INT,
+    `table_cse3r2_order_date` DATE,
+    `table_cse3r2_total_amount` DECIMAL(10,2),
+    `table_cse3r2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_pvtnbo` (
+    `table_pvtnbo_shipment_id` INT,
+    `table_pvtnbo_order_id` INT,
+    `table_pvtnbo_carrier` INT,
+    `table_pvtnbo_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cse3r2` (`table_cse3r2_order_id`, `table_cse3r2_customer_id`, `table_cse3r2_order_date`, `table_cse3r2_total_amount`, `table_cse3r2_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_pvtnbo` (`table_pvtnbo_shipment_id`, `table_pvtnbo_order_id`, `table_pvtnbo_carrier`, `table_pvtnbo_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(CARRIER_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_EFFICIENCY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_PVTNBO_SHIPPING_COST), (MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q()) - -816 + ((MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(-59)) - -979 + (0)))
+    INTO V_AVG_SHIPPING_COST
+    FROM TABLE_PVTNBO
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_CSE3R2_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_PVTNBO S
+    JOIN TABLE_CSE3R2 O ON TABLE_PVTNBO_ORDER_ID = TABLE_CSE3R2_ORDER_ID
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    IF V_AVG_ORDER_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_EFFICIENCY = (V_AVG_SHIPPING_COST / V_AVG_ORDER_VALUE) * 100;
+
+    RETURN FLOOR(V_COST_EFFICIENCY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+CREATE TABLE IF NOT EXISTS `table_tgavgl` (
+    `table_tgavgl_order_id` INT,
+    `table_tgavgl_customer_id` INT,
+    `table_tgavgl_order_date` DATE,
+    `table_tgavgl_total_amount` DECIMAL(10,2),
+    `table_tgavgl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d0pa5w` (
+    `table_d0pa5w_customer_id` INT,
+    `table_d0pa5w_customer_segment` INT
+);
+
+INSERT INTO `table_tgavgl` (`table_tgavgl_order_id`, `table_tgavgl_customer_id`, `table_tgavgl_order_date`, `table_tgavgl_total_amount`, `table_tgavgl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_d0pa5w` (`table_d0pa5w_customer_id`, `table_d0pa5w_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEGMENT_ORDER_COUNT_tfgo4c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_SEGMENT_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_D0PA5W_CUSTOMER_SEGMENT
+    INTO V_SEGMENT
+    FROM TABLE_D0PA5W
+    WHERE TABLE_D0PA5W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SEGMENT_ORDER_COUNT
+    FROM TABLE_TGAVGL O
+    JOIN TABLE_D0PA5W C ON TABLE_TGAVGL_CUSTOMER_ID = TABLE_D0PA5W_CUSTOMER_ID
+    WHERE TABLE_D0PA5W_CUSTOMER_SEGMENT = V_SEGMENT
+    AND MONTH(TABLE_TGAVGL_ORDER_DATE) = MONTH(CURDATE())
+    AND YEAR(TABLE_TGAVGL_ORDER_DATE) = YEAR(CURDATE());
+
+    RETURN V_SEGMENT_ORDER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_195_LEAVE_0s1b9q() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LEAVE_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LEAVE_COUNT = (MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb(75, -38)) - 371 + ((MYSQL_FUNC_CALCULATE_REGIONAL_MARKET_SHARE_ch3kkb(-17)) - 444 + ((MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(10)) - -4 + (leave_count))) + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LEAVE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIGITS_2fzxll----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + V_DIGIT;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REGIONAL_MARKET_SHARE_ch3kkb----- */
+CREATE TABLE IF NOT EXISTS `table_hfeotl` (
+    `table_hfeotl_customer_id` INT,
+    `table_hfeotl_registration_date` DATE,
+    `table_hfeotl_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_p0nx9j` (
+    `table_p0nx9j_order_id` INT,
+    `table_p0nx9j_customer_id` INT,
+    `table_p0nx9j_order_date` DATE,
+    `table_p0nx9j_total_amount` DECIMAL(10,2),
+    `table_p0nx9j_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hfeotl` (`table_hfeotl_customer_id`, `table_hfeotl_registration_date`, `table_hfeotl_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_p0nx9j` (`table_p0nx9j_order_id`, `table_p0nx9j_customer_id`, `table_p0nx9j_order_date`, `table_p0nx9j_total_amount`, `table_p0nx9j_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REGIONAL_MARKET_SHARE_ch3kkb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_MARKET_SHARE_ch3kkb(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+    DECLARE V_COUNTRY_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_MARKET_SHARE INT DEFAULT 0;
+
+    SELECT TABLE_HFEOTL_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_HFEOTL
+    WHERE TABLE_HFEOTL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_TOTAL_ORDERS
+    FROM TABLE_P0NX9J O
+    JOIN TABLE_HFEOTL C ON TABLE_P0NX9J_CUSTOMER_ID = TABLE_HFEOTL_CUSTOMER_ID
+    WHERE TABLE_HFEOTL_COUNTRY = V_CUSTOMER_COUNTRY;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM TABLE_P0NX9J
+    WHERE TABLE_P0NX9J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_COUNTRY_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MARKET_SHARE = (V_CUSTOMER_ORDERS * 100) / V_COUNTRY_TOTAL_ORDERS;
+
+    RETURN V_MARKET_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_SEARCH_ITERATIVE_ccgtvb(SORTED_ARRAY INT, TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEFT INT DEFAULT 1;
+    DECLARE V_RIGHT INT DEFAULT 0;
+    DECLARE V_MID INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 0;
+    DECLARE V_ELEMENT INT DEFAULT 0;
+    DECLARE V_COMMA_POS INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT_POS INT DEFAULT 1;
+    DECLARE V_ELEMENT_STR VARCHAR(50) DEFAULT '';
+
+    IF SORTED_ARRAY IS NULL OR LENGTH(SORTED_ARRAY) = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RIGHT = (MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(-96)) - -484 + (length(sorted_array) - length(replace(sorted_array, ',', '')) + 1);
+
+    WHILE V_LEFT <= V_RIGHT DO
+        SET V_MID = (V_LEFT + V_RIGHT) / 2;
+        SET V_POS = 1;
+        SET V_COMMA_POS = LOCATE(',', SORTED_ARRAY, V_POS);
+
+        WHILE V_POS < V_MID AND V_COMMA_POS > 0 DO
+            SET V_POS = V_COMMA_POS + 1;
+            SET V_COMMA_POS = LOCATE(',', SORTED_ARRAY, V_POS);
+        END WHILE;
+
+        IF V_COMMA_POS = 0 THEN
+            SET V_COMMA_POS = LENGTH(SORTED_ARRAY) + 1;
+        END IF;
+
+        SET V_ELEMENT_STR = SUBSTRING(SORTED_ARRAY, V_POS, V_COMMA_POS - V_POS);
+        SET V_ELEMENT = CAST(V_ELEMENT_STR AS SIGNED);
+
+        IF V_ELEMENT = TARGET THEN
+            RETURN V_MID;
+        ELSEIF V_ELEMENT < TARGET THEN
+            SET V_LEFT = V_MID + 1;
+        ELSE
+            SET V_RIGHT = V_MID - 1;
+        END IF;
+    END WHILE;
+
+    RETURN -1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+CREATE TABLE IF NOT EXISTS `table_npdkhs` (
+    `table_npdkhs_emp_id` INT,
+    `table_npdkhs_department_id` INT,
+    `table_npdkhs_salary` INT,
+    `table_npdkhs_hire_date` DATE,
+    `table_npdkhs_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_npdkhs` (`table_npdkhs_emp_id`, `table_npdkhs_department_id`, `table_npdkhs_salary`, `table_npdkhs_hire_date`, `table_npdkhs_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NPDKHS_PERFORMANCE_RATING, 0), COALESCE(TABLE_NPDKHS_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_NPDKHS_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM TABLE_NPDKHS
+    WHERE TABLE_NPDKHS_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERF_RATIO = (V_PERFORMANCE * V_SALARY) / V_TENURE_YEARS;
+
+    RETURN FLOOR(V_PERF_RATIO / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, (MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(-40)) - 678 + (0))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik----- */
+CREATE TABLE IF NOT EXISTS `table_i5gepj` (
+    `table_i5gepj_product_id` INT,
+    `table_i5gepj_category_id` INT,
+    `table_i5gepj_price` DECIMAL(10,2),
+    `table_i5gepj_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o2ctj5` (
+    `table_o2ctj5_order_id` INT,
+    `table_o2ctj5_product_id` INT,
+    `table_o2ctj5_quantity` INT
+);
+
+INSERT INTO `table_i5gepj` (`table_i5gepj_product_id`, `table_i5gepj_category_id`, `table_i5gepj_price`, `table_i5gepj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_o2ctj5` (`table_o2ctj5_order_id`, `table_o2ctj5_product_id`, `table_o2ctj5_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOW_STOCK_ALERT_THRESHOLD_g7trik(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_SALES DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_ALERT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I5GEPJ_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_I5GEPJ
+    WHERE TABLE_I5GEPJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_O2CTJ5_QUANTITY), 0) / 30
+    INTO V_AVG_DAILY_SALES
+    FROM TABLE_O2CTJ5
+    WHERE TABLE_O2CTJ5_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_ALERT_THRESHOLD = FLOOR(V_AVG_DAILY_SALES * 7);
+
+    IF V_STOCK < V_ALERT_THRESHOLD THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+    DECLARE V_CUSTOMER_AVG_ORDER INT DEFAULT 0;
+    DECLARE V_REGIONAL_AVG_ORDER INT DEFAULT 0;
+
+    SELECT TABLE_HCCHND_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_HCCHND
+    WHERE TABLE_HCCHND_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XF6AD9_TOTAL_AMOUNT), (MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb(-2)) - 964 + (0)))
+    INTO V_CUSTOMER_AVG_ORDER
+    FROM TABLE_XF6AD9
+    WHERE TABLE_XF6AD9_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_XF6AD9_STATUS = 'COMPLETED';
+
+    SELECT COALESCE(AVG(TABLE_XF6AD9_TOTAL_AMOUNT), 0)
+    INTO V_REGIONAL_AVG_ORDER
+    FROM TABLE_XF6AD9 O
+    JOIN TABLE_HCCHND C ON TABLE_XF6AD9_CUSTOMER_ID = TABLE_HCCHND_CUSTOMER_ID
+    WHERE TABLE_HCCHND_COUNTRY = V_CUSTOMER_COUNTRY AND TABLE_XF6AD9_STATUS = 'COMPLETED';
+
+    IF V_REGIONAL_AVG_ORDER = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(-31)) - -620 + (floor((v_customer_avg_order * 100) / v_regional_avg_order));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza(1);

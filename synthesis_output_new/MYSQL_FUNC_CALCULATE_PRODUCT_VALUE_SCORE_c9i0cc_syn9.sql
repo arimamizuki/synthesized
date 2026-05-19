@@ -1,0 +1,457 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_bjjty8` (
+    `table_bjjty8_product_id` INT,
+    `table_bjjty8_price` DECIMAL(10,2),
+    `table_bjjty8_stock_quantity` INT
+);
+
+INSERT INTO `table_bjjty8` (`table_bjjty8_product_id`, `table_bjjty8_price`, `table_bjjty8_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+CREATE TABLE IF NOT EXISTS `table_ges1vf` (
+    `table_ges1vf_booking_id` INT,
+    `table_ges1vf_member_id` INT,
+    `table_ges1vf_guest_count` INT,
+    `table_ges1vf_tee_time` DATE,
+    `table_ges1vf_course_type` VARCHAR(50),
+    `table_ges1vf_cart_rental` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_n0xpdt` (
+    `table_n0xpdt_member_id` INT,
+    `table_n0xpdt_membership_type` VARCHAR(50),
+    `table_n0xpdt_handicap` INT,
+    `table_n0xpdt_home_course_id` INT
+);
+
+INSERT INTO `table_ges1vf` (`table_ges1vf_booking_id`, `table_ges1vf_member_id`, `table_ges1vf_guest_count`, `table_ges1vf_tee_time`, `table_ges1vf_course_type`, `table_ges1vf_cart_rental`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_n0xpdt` (`table_n0xpdt_member_id`, `table_n0xpdt_membership_type`, `table_n0xpdt_handicap`, `table_n0xpdt_home_course_id`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GUEST_COUNT INT DEFAULT 0;
+    DECLARE V_CART_RENTAL INT DEFAULT 0;
+    DECLARE V_GREEN_FEE INT DEFAULT 75;
+    DECLARE V_MEMBERSHIP_TYPE VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GES1VF_GUEST_COUNT, 0), COALESCE(TABLE_GES1VF_CART_RENTAL, 0)
+    INTO V_GUEST_COUNT, V_CART_RENTAL
+    FROM TABLE_GES1VF
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_N0XPDT_MEMBERSHIP_TYPE, 'REGULAR')
+    INTO V_MEMBERSHIP_TYPE
+    FROM TABLE_GES1VF GCB
+    JOIN TABLE_N0XPDT M ON TABLE_GES1VF_MEMBER_ID = TABLE_N0XPDT_MEMBER_ID
+    WHERE TABLE_GES1VF_BOOKING_ID = BOOKING_ID_PARAM;
+
+    IF V_MEMBERSHIP_TYPE = 'PREMIUM' THEN
+        SET V_GREEN_FEE = V_GREEN_FEE - 25;
+    END IF;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(49)) - 320 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(-64)) - 947 + ((v_green_fee * (1 + v_guest_count)) + v_cart_rental));
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+CREATE TABLE IF NOT EXISTS `table_7jm36x` (
+    `table_7jm36x_order_id` INT,
+    `table_7jm36x_order_date` DATE
+);
+
+INSERT INTO `table_7jm36x` (`table_7jm36x_order_id`, `table_7jm36x_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_7JM36X_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_7JM36X
+    WHERE TABLE_7JM36X_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+CREATE TABLE IF NOT EXISTS `table_9mgf73` (
+    `table_9mgf73_class_id` INT,
+    `table_9mgf73_instructor_id` INT,
+    `table_9mgf73_class_type` VARCHAR(50),
+    `table_9mgf73_duration_minutes` INT,
+    `table_9mgf73_max_capacity` INT,
+    `table_9mgf73_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_t7gqnp` (
+    `table_t7gqnp_booking_id` INT,
+    `table_t7gqnp_member_id` INT,
+    `table_t7gqnp_class_id` INT,
+    `table_t7gqnp_booking_date` DATE,
+    `table_t7gqnp_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9mgf73` (`table_9mgf73_class_id`, `table_9mgf73_instructor_id`, `table_9mgf73_class_type`, `table_9mgf73_duration_minutes`, `table_9mgf73_max_capacity`, `table_9mgf73_price`) VALUES (1, 2, 'test', 4, 5, 1.0);
+
+INSERT INTO `table_t7gqnp` (`table_t7gqnp_booking_id`, `table_t7gqnp_member_id`, `table_t7gqnp_class_id`, `table_t7gqnp_booking_date`, `table_t7gqnp_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_OCCUPANCY_nglonf(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_CAPACITY INT DEFAULT 20;
+    DECLARE V_BOOKED_COUNT INT DEFAULT 0;
+    DECLARE V_ACTUAL_ATTENDANCE INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_BOOKED_COUNT
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COALESCE(MAX(TABLE_9MGF73_MAX_CAPACITY), 20)
+    INTO V_MAX_CAPACITY
+    FROM TABLE_9MGF73 F
+    WHERE TABLE_9MGF73_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_ACTUAL_ATTENDANCE
+    FROM TABLE_T7GQNP
+    WHERE TABLE_T7GQNP_CLASS_ID = CLASS_ID_PARAM AND TABLE_T7GQNP_ATTENDANCE_STATUS = 'ATTENDED';
+
+    IF V_MAX_CAPACITY = (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1(70)) - 75 + ((MYSQL_FUNC_FUNC_194_ITERATE_7cimib()) - -942 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_COUNT * (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p(-89)) - -324 + (100)) / V_MAX_CAPACITY;
+
+    IF V_OCCUPANCY_PERCENT > 100 THEN
+        SET V_OCCUPANCY_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_OCCUPANCY_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_194_ITERATE_7cimib----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_194_ITERATE_7cimib() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ITER_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        IF I < 3 THEN
+            ITERATE LABEL1;
+        END IF;
+        SET ITER_COUNT = ITER_COUNT + 1;
+        IF I >= 5 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN ITER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1----- */
+CREATE TABLE IF NOT EXISTS `table_8nhmuw` (
+    `table_8nhmuw_campaign_id` INT,
+    `table_8nhmuw_status` VARCHAR(50),
+    `table_8nhmuw_budget` INT
+);
+
+INSERT INTO `table_8nhmuw` (`table_8nhmuw_campaign_id`, `table_8nhmuw_status`, `table_8nhmuw_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_INDEX_kohji1(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_8NHMUW_STATUS, COALESCE(TABLE_8NHMUW_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_8NHMUW
+    WHERE TABLE_8NHMUW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN V_BUDGET;
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN V_BUDGET / 2;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN V_BUDGET * 2;
+    ELSE
+        RETURN V_BUDGET / 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p----- */
+CREATE TABLE IF NOT EXISTS `table_xr5qaa` (
+    `table_xr5qaa_customer_id` INT,
+    `table_xr5qaa_monthly_cost` DECIMAL(10,2),
+    `table_xr5qaa_status` VARCHAR(50)
+);
+
+INSERT INTO `table_xr5qaa` (`table_xr5qaa_customer_id`, `table_xr5qaa_monthly_cost`, `table_xr5qaa_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_SCORE_pnrw7p(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_XR5QAA_MONTHLY_COST, (MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(80)) - -352 + (0)), TABLE_XR5QAA_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_XR5QAA
+    WHERE TABLE_XR5QAA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(2)) - 125 + (v_monthly_cost * 12);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ts7o4` (
+    `table_4ts7o4_order_id` INT,
+    `table_4ts7o4_customer_id` INT,
+    `table_4ts7o4_order_date` DATE,
+    `table_4ts7o4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_y3npq4` (
+    `table_y3npq4_order_id` INT,
+    `table_y3npq4_product_id` INT,
+    `table_y3npq4_quantity` INT,
+    `table_y3npq4_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4ts7o4` (`table_4ts7o4_order_id`, `table_4ts7o4_customer_id`, `table_4ts7o4_order_date`, `table_4ts7o4_status`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_y3npq4` (`table_y3npq4_order_id`, `table_y3npq4_product_id`, `table_y3npq4_quantity`, `table_y3npq4_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_ITEM_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_FRAUD_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_Y3NPQ4_QUANTITY * TABLE_Y3NPQ4_UNIT_PRICE), 0), COUNT(*)
+    INTO V_ORDER_TOTAL, V_ITEM_COUNT
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_Y3NPQ4_PRODUCT_ID)
+    INTO V_UNIQUE_PRODUCTS
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ITEM_COUNT > 0 THEN
+        SET V_AVG_ITEM_PRICE = V_ORDER_TOTAL / V_ITEM_COUNT;
+    END IF;
+
+    IF V_ORDER_TOTAL > 10000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 30;
+    END IF;
+
+    IF V_UNIQUE_PRODUCTS < V_ITEM_COUNT / 2 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 20;
+    END IF;
+
+    IF V_AVG_ITEM_PRICE > 5000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 25;
+    END IF;
+
+    RETURN LEAST(V_FRAUD_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_PRIMES_UP_TO_wfumwa(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_IS_PRIME = 1;
+        SET V_J = (MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(-95)) - 160 + (2);
+
+        INNER_LOOP: WHILE V_J < V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                ITERATE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(61)) - 544 + (v_count) + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+CREATE TABLE IF NOT EXISTS `table_fxzsef` (
+    `table_fxzsef_product_id` INT,
+    `table_fxzsef_supplier_id` INT,
+    `table_fxzsef_price` DECIMAL(10,2),
+    `table_fxzsef_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_gcudli` (
+    `table_gcudli_supplier_id` INT,
+    `table_gcudli_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_fxzsef` (`table_fxzsef_product_id`, `table_fxzsef_supplier_id`, `table_fxzsef_price`, `table_fxzsef_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_gcudli` (`table_gcudli_supplier_id`, `table_gcudli_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_SCORE_x2k8ln(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_STOCK INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GCUDLI_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_GCUDLI
+    WHERE TABLE_GCUDLI_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_FXZSEF_STOCK_QUANTITY), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_STOCK
+    FROM TABLE_FXZSEF
+    WHERE TABLE_FXZSEF_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_QUALITY_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 3) + (V_AVG_STOCK / 100);
+
+    RETURN V_QUALITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+CREATE TABLE IF NOT EXISTS `table_kt12e3` (
+    `table_kt12e3_customer_id` INT,
+    `table_kt12e3_registration_date` DATE,
+    `table_kt12e3_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dh8s23` (
+    `table_dh8s23_order_id` INT,
+    `table_dh8s23_customer_id` INT,
+    `table_dh8s23_order_date` DATE,
+    `table_dh8s23_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kt12e3` (`table_kt12e3_customer_id`, `table_kt12e3_registration_date`, `table_kt12e3_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_dh8s23` (`table_dh8s23_order_id`, `table_dh8s23_customer_id`, `table_dh8s23_order_date`, `table_dh8s23_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM TABLE_DH8S23
+    WHERE TABLE_DH8S23_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM TABLE_DH8S23 O
+    JOIN TABLE_KT12E3 C ON TABLE_DH8S23_CUSTOMER_ID = TABLE_KT12E3_CUSTOMER_ID
+    WHERE TABLE_KT12E3_COUNTRY = (SELECT TABLE_KT12E3_COUNTRY FROM TABLE_KT12E3 WHERE TABLE_KT12E3_CUSTOMER_ID = CUSTOMER_ID_PARAM);
+
+    IF V_COUNTRY_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION = (V_CUSTOMER_ORDERS * 100) / V_COUNTRY_ORDERS;
+
+    RETURN V_PENETRATION;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BJJTY8_PRICE, 0), COALESCE(TABLE_BJJTY8_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_BJJTY8
+    WHERE TABLE_BJJTY8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_GOLF_GAME_COST_oxjyvx(5)) - -660 + (floor((v_price * v_stock) / 100));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_VALUE_SCORE_c9i0cc(1);

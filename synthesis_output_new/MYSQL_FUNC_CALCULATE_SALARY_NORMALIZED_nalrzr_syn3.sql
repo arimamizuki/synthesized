@@ -1,0 +1,390 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_sq14za` (
+    `table_sq14za_emp_id` INT,
+    `table_sq14za_salary` INT
+);
+
+INSERT INTO `table_sq14za` (`table_sq14za_emp_id`, `table_sq14za_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN LOG(X);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SP_COUNT INT DEFAULT 0;
+    
+    SAVEPOINT SP1;
+    SET SP_COUNT = (MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe(-9)) - 409 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(76)) - -523 + (sp_count)) + 1;
+    
+    ROLLBACK TO SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RELEASE SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RETURN SP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+CREATE TABLE IF NOT EXISTS `table_1e6l3o` (
+    `table_1e6l3o_supplier_id` INT,
+    `table_1e6l3o_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1e6l3o` (`table_1e6l3o_supplier_id`, `table_1e6l3o_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_u30r11(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_1E6L3O_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_1E6L3O
+    WHERE TABLE_1E6L3O_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe----- */
+CREATE TABLE IF NOT EXISTS `table_quvwhn` (
+    `table_quvwhn_order_id` INT,
+    `table_quvwhn_customer_id` INT,
+    `table_quvwhn_order_date` DATE,
+    `table_quvwhn_total_amount` DECIMAL(10,2),
+    `table_quvwhn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1ci25p` (
+    `table_1ci25p_order_id` INT,
+    `table_1ci25p_product_id` INT,
+    `table_1ci25p_quantity` INT
+);
+
+INSERT INTO `table_quvwhn` (`table_quvwhn_order_id`, `table_quvwhn_customer_id`, `table_quvwhn_order_date`, `table_quvwhn_total_amount`, `table_quvwhn_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_1ci25p` (`table_1ci25p_order_id`, `table_1ci25p_product_id`, `table_1ci25p_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROCESSING_TIME_m3whxe(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_PROCESSING_TIME INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_1CI25P_QUANTITY), 0)
+    INTO V_ORDER_ITEM_COUNT, V_TOTAL_QUANTITY
+    FROM TABLE_1CI25P
+    WHERE TABLE_1CI25P_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_PROCESSING_TIME = V_ORDER_ITEM_COUNT * 5 + V_TOTAL_QUANTITY * 2;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca(66)) - -594 + (v_processing_time);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca----- */
+CREATE TABLE IF NOT EXISTS `table_m725of` (
+    `table_m725of_order_id` INT,
+    `table_m725of_customer_id` INT,
+    `table_m725of_order_date` DATE,
+    `table_m725of_total_amount` DECIMAL(10,2),
+    `table_m725of_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tvlmfz` (
+    `table_tvlmfz_customer_id` INT,
+    `table_tvlmfz_customer_segment` INT
+);
+
+INSERT INTO `table_m725of` (`table_m725of_order_id`, `table_m725of_customer_id`, `table_m725of_order_date`, `table_m725of_total_amount`, `table_m725of_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_tvlmfz` (`table_tvlmfz_customer_id`, `table_tvlmfz_customer_segment`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFETIME_VALUE_5ay7ca(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_CUSTOMER_TENURE_DAYS INT DEFAULT 0;
+    DECLARE V_PREDICTED_LIFETIME_VALUE INT DEFAULT 0;
+    DECLARE V_SEGMENT_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_CUSTOMER_SEGMENT VARCHAR(20) DEFAULT 'REGULAR';
+
+    SELECT COALESCE(SUM(TABLE_M725OF_TOTAL_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_REVENUE, V_ORDER_COUNT
+    FROM TABLE_M725OF
+    WHERE TABLE_M725OF_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_M725OF_STATUS = 'COMPLETED';
+
+    SELECT TABLE_TVLMFZ_CUSTOMER_SEGMENT
+    INTO V_CUSTOMER_SEGMENT
+    FROM TABLE_TVLMFZ
+    WHERE TABLE_TVLMFZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), MIN(TABLE_M725OF_ORDER_DATE))
+    INTO V_CUSTOMER_TENURE_DAYS
+    FROM TABLE_M725OF
+    WHERE TABLE_M725OF_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = V_TOTAL_REVENUE / V_ORDER_COUNT;
+    END IF;
+
+    SET V_SEGMENT_MULTIPLIER = CASE V_CUSTOMER_SEGMENT
+        WHEN 'PREMIUM' THEN 4
+        WHEN 'VIP' THEN 5
+        WHEN 'REGULAR' THEN 2
+        ELSE 1
+    END;
+
+    IF V_CUSTOMER_TENURE_DAYS > 0 THEN
+        SET V_PREDICTED_LIFETIME_VALUE = (V_TOTAL_REVENUE * V_SEGMENT_MULTIPLIER * 365) / V_CUSTOMER_TENURE_DAYS;
+    ELSE
+        SET V_PREDICTED_LIFETIME_VALUE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(94)) - 483 + (v_avg_order_value * 12 * v_segment_multiplier);
+    END IF;
+
+    RETURN V_PREDICTED_LIFETIME_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+CREATE TABLE IF NOT EXISTS `table_vhtw5f` (
+    `table_vhtw5f_emp_id` INT,
+    `table_vhtw5f_department_id` INT,
+    `table_vhtw5f_salary` INT,
+    `table_vhtw5f_hire_date` DATE,
+    `table_vhtw5f_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4ljt9e` (
+    `table_4ljt9e_department_id` INT,
+    `table_4ljt9e_name` VARCHAR(50)
+);
+
+INSERT INTO `table_vhtw5f` (`table_vhtw5f_emp_id`, `table_vhtw5f_department_id`, `table_vhtw5f_salary`, `table_vhtw5f_hire_date`, `table_vhtw5f_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_4ljt9e` (`table_4ljt9e_department_id`, `table_4ljt9e_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_VHTW5F_HIRE_DATE, CURDATE()), COALESCE(TABLE_VHTW5F_PERFORMANCE_RATING, 0), COALESCE(TABLE_VHTW5F_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_VHTW5F
+    WHERE TABLE_VHTW5F_EMP_ID = EMP_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_TENURE_YEARS * 20) + (V_PERFORMANCE * 15) + (V_SALARY / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN 0;
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = (MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(76)) - -860 + (sqrt(v_s * (v_s - a) * (v_s - b) * (v_s - c)));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = (MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(14)) - -332 + (((v_order_total - v_shipping_cost) * 100) / v_order_total);
+
+    RETURN (MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(-73)) - 411 + (v_shipping_margin);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+CREATE TABLE IF NOT EXISTS `table_do1xw5` (
+    `table_do1xw5_policy_id` INT,
+    `table_do1xw5_customer_id` INT,
+    `table_do1xw5_plan_type` VARCHAR(50),
+    `table_do1xw5_premium_monthly` INT,
+    `table_do1xw5_deductible_amount` DECIMAL(10,2),
+    `table_do1xw5_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0k2w6` (
+    `table_o0k2w6_claim_id` INT,
+    `table_o0k2w6_policy_id` INT,
+    `table_o0k2w6_claim_date` DATE,
+    `table_o0k2w6_claim_amount` DECIMAL(10,2),
+    `table_o0k2w6_status` VARCHAR(50)
+);
+
+INSERT INTO `table_do1xw5` (`table_do1xw5_policy_id`, `table_do1xw5_customer_id`, `table_do1xw5_plan_type`, `table_do1xw5_premium_monthly`, `table_do1xw5_deductible_amount`, `table_do1xw5_coverage_limit`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_o0k2w6` (`table_o0k2w6_claim_id`, `table_o0k2w6_policy_id`, `table_o0k2w6_claim_date`, `table_o0k2w6_claim_amount`, `table_o0k2w6_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HEALTH_INSURANCE_ROI_hbp6xq(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PREMIUMS INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DO1XW5_PREMIUM_MONTHLY * 12), 0), COALESCE(MAX(TABLE_DO1XW5_COVERAGE_LIMIT), 0)
+    INTO V_TOTAL_PREMIUMS, V_COVERAGE_LIMIT
+    FROM TABLE_DO1XW5
+    WHERE TABLE_DO1XW5_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O0K2W6_CLAIM_AMOUNT), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_O0K2W6
+    WHERE TABLE_O0K2W6_POLICY_ID = POLICY_ID_PARAM AND TABLE_O0K2W6_STATUS = 'APPROVED';
+
+    IF V_TOTAL_PREMIUMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_COVERAGE_LIMIT - V_TOTAL_CLAIMS) * 100) / V_TOTAL_PREMIUMS;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_SQ14ZA_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_SQ14ZA
+    WHERE TABLE_SQ14ZA_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(-70, -88, -83)) - -908 + ((MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s()) - 753 + ((MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(36)) - 385 + (floor(v_salary / 100))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(1);

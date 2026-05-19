@@ -1,0 +1,449 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v6167 (v6168 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v6720 (v6168 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v6326 (v6328 INT);
+CREATE TABLE IF NOT EXISTS v6396 (v6397 BLOB);
+CREATE TABLE IF NOT EXISTS v6155 (v6086 INT);
+CREATE TABLE IF NOT EXISTS v6801 (v6086 INT);
+CREATE TABLE IF NOT EXISTS v6538 (v6541 INT, v6540 DOUBLE, v6539 INT);
+CREATE TABLE IF NOT EXISTS v6516 (v6541 INT);
+INSERT INTO v6167 VALUES (0), (0), (0), (128);
+INSERT INTO v6720 VALUES (0), (0), (0), (128);
+INSERT INTO v6326 VALUES (10), (20), (30), (40);
+INSERT INTO v6396 VALUES (NULL);
+INSERT INTO v6155 VALUES (100), (200), (300);
+INSERT INTO v6538 VALUES (1, 0.0, 0), (2, 0.0, 10), (3, 0.0, 20);
+INSERT INTO v6516 VALUES (1), (2), (3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+CREATE TABLE IF NOT EXISTS `table_54mt9z` (
+    `table_54mt9z_emp_id` INT,
+    `table_54mt9z_department_id` INT,
+    `table_54mt9z_salary` INT,
+    `table_54mt9z_hire_date` DATE,
+    `table_54mt9z_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_54mt9z` (`table_54mt9z_emp_id`, `table_54mt9z_department_id`, `table_54mt9z_salary`, `table_54mt9z_hire_date`, `table_54mt9z_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_54MT9Z_HIRE_DATE, CURDATE()), COALESCE(TABLE_54MT9Z_PERFORMANCE_RATING, 0), COALESCE(TABLE_54MT9Z_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_54MT9Z
+    WHERE TABLE_54MT9Z_EMP_ID = EMP_ID_PARAM;
+
+    SET V_LOYALTY_SCORE = (V_TENURE_YEARS * 15) + (V_PERFORMANCE * 20) + (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(-100)) - 950 + (v_loyalty_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2----- */
+CREATE TABLE IF NOT EXISTS `table_2sxoyp` (
+    `table_2sxoyp_inventory_id` INT,
+    `table_2sxoyp_product_id` INT,
+    `table_2sxoyp_warehouse_id` INT,
+    `table_2sxoyp_quantity` INT,
+    `table_2sxoyp_min_stock_level` INT
+);
+
+INSERT INTO `table_2sxoyp` (`table_2sxoyp_inventory_id`, `table_2sxoyp_product_id`, `table_2sxoyp_warehouse_id`, `table_2sxoyp_quantity`, `table_2sxoyp_min_stock_level`) VALUES (1, 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_REORDER_NEEDED_gi1nd2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_MIN_LEVEL INT DEFAULT 0;
+    DECLARE V_NEEDS_REORDER INT DEFAULT 0;
+    DECLARE V_WAREHOUSE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2SXOYP_QUANTITY), 0), COUNT(DISTINCT TABLE_2SXOYP_WAREHOUSE_ID)
+    INTO V_TOTAL_STOCK, V_WAREHOUSE_COUNT
+    FROM TABLE_2SXOYP
+    WHERE TABLE_2SXOYP_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_WAREHOUSE_COUNT = 0 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - -890 + (1);
+    END IF;
+
+    SET V_MIN_LEVEL = V_WAREHOUSE_COUNT * 100;
+
+    IF V_TOTAL_STOCK < V_MIN_LEVEL THEN
+        SET V_NEEDS_REORDER = 1;
+    ELSE
+        SET V_NEEDS_REORDER = 0;
+    END IF;
+
+    RETURN V_NEEDS_REORDER;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE IF_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 5;
+    
+    IF VAL > 10 THEN
+        SET IF_COUNT = 10;
+    ELSEIF VAL > 5 THEN
+        SET IF_COUNT = 5;
+    ELSE
+        SET IF_COUNT = 0;
+    END IF;
+    
+    RETURN (MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(-60, 67)) - 926 + ((MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(-100)) - 942 + ((MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(-19)) - -552 + (if_count)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk----- */
+CREATE TABLE IF NOT EXISTS `table_1oa1v7` (
+    `table_1oa1v7_product_id` INT,
+    `table_1oa1v7_category_id` INT,
+    `table_1oa1v7_price` DECIMAL(10,2),
+    `table_1oa1v7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_axebhx` (
+    `table_axebhx_category_id` INT,
+    `table_axebhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_1oa1v7` (`table_1oa1v7_product_id`, `table_1oa1v7_category_id`, `table_1oa1v7_price`, `table_1oa1v7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_axebhx` (`table_axebhx_category_id`, `table_axebhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_PRODUCT_RATIO_7rqeyk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_PRODUCTS
+    FROM TABLE_1OA1V7
+    WHERE TABLE_1OA1V7_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_1OA1V7_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_PRODUCTS * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN V_PREMIUM_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+CREATE TABLE IF NOT EXISTS `table_siem0e` (
+    `table_siem0e_order_id` INT,
+    `table_siem0e_customer_id` INT,
+    `table_siem0e_order_date` DATE,
+    `table_siem0e_total_amount` DECIMAL(10,2),
+    `table_siem0e_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ivbzho` (
+    `table_ivbzho_order_id` INT,
+    `table_ivbzho_product_id` INT,
+    `table_ivbzho_quantity` INT
+);
+
+INSERT INTO `table_siem0e` (`table_siem0e_order_id`, `table_siem0e_customer_id`, `table_siem0e_order_date`, `table_siem0e_total_amount`, `table_siem0e_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ivbzho` (`table_ivbzho_order_id`, `table_ivbzho_product_id`, `table_ivbzho_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_AFFINITY_SCORE_eygd3k(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_AFFINITY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_IVBZHO_PRODUCT_ID), COALESCE(SUM(TABLE_IVBZHO_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_QUANTITY
+    FROM TABLE_IVBZHO
+    WHERE TABLE_IVBZHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_AFFINITY_SCORE = V_UNIQUE_PRODUCTS * 10 + V_TOTAL_QUANTITY * 2;
+
+    RETURN V_AFFINITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, 0), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = (MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4()) - 671 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(-73)) - -343 + (v_balance + v_overdraft_limit));
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = 1;
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_PROC_TEXT_r5pjjb()) - -706 + (v_can_withdraw);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+CREATE TABLE IF NOT EXISTS `table_0itd65` (
+    `table_0itd65_customer_id` INT,
+    `table_0itd65_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_09nz76` (
+    `table_09nz76_order_id` INT,
+    `table_09nz76_customer_id` INT,
+    `table_09nz76_order_date` DATE,
+    `table_09nz76_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0itd65` (`table_0itd65_customer_id`, `table_0itd65_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_09nz76` (`table_09nz76_order_id`, `table_09nz76_customer_id`, `table_09nz76_order_date`, `table_09nz76_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_0ITD65_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM TABLE_0ITD65
+    WHERE TABLE_0ITD65_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_09NZ76
+    WHERE TABLE_09NZ76_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_TOTAL_ORDERS * 100) / V_TOTAL_VISITS;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+CREATE TABLE IF NOT EXISTS `table_82nhzq` (
+    `table_82nhzq_ctext` VARCHAR(255)
+);
+
+INSERT INTO `table_82nhzq` (`table_82nhzq_ctext`) VALUES ('sample_text');
+
+/* -----Called: MYSQL_FUNC_PROC_TEXT_r5pjjb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TEXT_r5pjjb() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_82NHZQ`;
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0438(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_loop_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v6328 FROM v6326 ORDER BY 1 DESC;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -1;
+    END;
+
+    -- Statement 1: UPDATE with LEFT JOIN
+    SET @sql1 = 'UPDATE v6167 AS x0 LEFT JOIN v6720 AS x1 ON x0.v6168 = x0.v6168 SET v6168 = CONCAT(v6168, \', Updated\') WHERE v6168 = 0 AND v6168 = 0 AND v6168 = 0 AND v6168 = 128';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Statement 2: SELECT with ORDER BY DESC, using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_loop_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = (MYSQL_FUNC_FUNC_199_IF_STMT_r5xpri()) - 936 + ((MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(-62)) - 862 + (v_counter)) + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 3: INSERT with UNHEX and CONCAT
+    SET @sql3 = "INSERT INTO v6396 (v6397) VALUES (UNHEX(CONCAT('0000000001BA0B00000200000000000000000000000000000000000000000000000000', '00000000000000000000000000000000F03F000000000000F03F000000000000000000', '00000000000000')))";
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+
+    -- Statement 4: CREATE TABLE AS SELECT
+    SET @sql4 = 'CREATE TABLE IF NOT EXISTS v6801 AS SELECT x3.v6086, x3.v6086 FROM v6155 AS x3';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+
+    -- Statement 5: UPDATE with LN and modulo condition
+    SET @sql5 = 'UPDATE v6538 AS x1 LEFT JOIN v6516 AS x4 ON x1.v6541 = x1.v6541 SET v6540 = LN(0) WHERE (v6539 % 7) > 5';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Procedural logic: IF/ELSE based on p1 and p2
+    IF p1 > 0 THEN
+        SET v_counter = v_counter + p1;
+    ELSE
+        SET v_counter = v_counter - p2;
+    END IF;
+
+    -- CASE/WHEN for additional logic
+    CASE
+        WHEN v_counter > 100 THEN SET result = v_counter;
+        WHEN v_counter BETWEEN 50 AND 100 THEN SET result = 50;
+        ELSE SET result = 0;
+    END CASE;
+
+    -- WHILE loop for iteration
+    WHILE v_row_count < 3 DO
+        SET v_counter = v_counter + 1;
+        SET v_row_count = v_row_count + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0438(1, 1, @out_result);
+
+SELECT @out_result;

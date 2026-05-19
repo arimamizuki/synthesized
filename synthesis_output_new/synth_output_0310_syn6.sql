@@ -1,0 +1,380 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v3544 (v3536 INT, v3537 CHAR(10));
+CREATE TABLE IF NOT EXISTS v3585 (v3586 BIGINT, v3587 INT, v3588 CHAR(20));
+CREATE TABLE IF NOT EXISTS v3565 (v3566 INT, v3567 CHAR(20));
+CREATE TABLE IF NOT EXISTS v3729 (v3730 INT, v3731 DATE, v3732 CHAR(10));
+CREATE TABLE IF NOT EXISTS v3668 (v3669 INT, v3670 CHAR(10));
+CREATE TABLE IF NOT EXISTS v3645 (v3646 INT, s1 TEXT);
+CREATE TABLE IF NOT EXISTS v3559 (v3546 INT, s1 TEXT);
+INSERT INTO v3544 VALUES (1, 'test'), (2, 'data'), (3, 'example');
+INSERT INTO v3585 VALUES (100, 1, 'alpha'), (200, 2, 'beta'), (300, 6, 'gamma');
+INSERT INTO v3565 VALUES (1, 'first'), (2, 'second'), (3, 'third');
+INSERT INTO v3729 VALUES (10, '2023-01-01', 'old'), (20, '2023-02-15', 'new'), (30, '2023-03-20', 'current');
+INSERT INTO v3668 VALUES (10, 'old'), (20, 'new'), (30, 'current');
+INSERT INTO v3645 VALUES (1, 'SELECT test t17059925'), (2, 'normal data'), (3, 'EXPLAIN query');
+INSERT INTO v3559 VALUES (100, 'SELECT sample'), (200, 'EXPLAIN example'), (300, 'plain text');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+CREATE TABLE IF NOT EXISTS `table_cz6psu` (
+    `table_cz6psu_product_id` INT,
+    `table_cz6psu_supplier_id` INT,
+    `table_cz6psu_category_id` INT
+);
+
+INSERT INTO `table_cz6psu` (`table_cz6psu_product_id`, `table_cz6psu_supplier_id`, `table_cz6psu_category_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_CZ6PSU_SUPPLIER_ID, TABLE_CZ6PSU_CATEGORY_ID
+    INTO V_SUPPLIER_ID, V_CATEGORY_ID
+    FROM TABLE_CZ6PSU
+    WHERE TABLE_CZ6PSU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + ((MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(-2, 65)) - -515 + ((v_supplier_id + v_category_id) % 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MAX_077bna----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MAX_077bna(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(11, 3)) - 870 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_PRICE_COMPETITIVENESS_cb2cw6(-70)) - -493 + (a)) > B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_PRICE_COMPETITIVENESS_cb2cw6----- */
+CREATE TABLE IF NOT EXISTS `table_n2l8yq` (
+    `table_n2l8yq_product_id` INT,
+    `table_n2l8yq_supplier_id` INT,
+    `table_n2l8yq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_hrln5x` (
+    `table_hrln5x_supplier_id` INT,
+    `table_hrln5x_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_n2l8yq` (`table_n2l8yq_product_id`, `table_n2l8yq_supplier_id`, `table_n2l8yq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_hrln5x` (`table_hrln5x_supplier_id`, `table_hrln5x_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_PRICE_COMPETITIVENESS_cb2cw6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_PRICE_COMPETITIVENESS_cb2cw6(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SUPPLIER_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_N2L8YQ_PRICE), 0)
+    INTO V_SUPPLIER_AVG
+    FROM TABLE_N2L8YQ
+    WHERE TABLE_N2L8YQ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_N2L8YQ_PRICE), 1)
+    INTO V_AVG_PRICE
+    FROM TABLE_N2L8YQ;
+
+    IF V_SUPPLIER_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPETITIVENESS = (V_AVG_PRICE * 100) / V_SUPPLIER_AVG;
+
+    RETURN V_COMPETITIVENESS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PERMUTATION_COUNT_wbblpk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PERMUTATION_COUNT_wbblpk(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF R > N OR N < 0 OR R < 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COUNTER = 0;
+
+    PERM_LOOP: WHILE V_COUNTER < R DO
+        SET V_RESULT = V_RESULT * (N - V_COUNTER);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE PERM_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10
+        UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_IS_PRIME_ffuaq7(-51)) - 682 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(94)) - 483 + (v_sum) + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+CREATE TABLE IF NOT EXISTS `table_vhtw5f` (
+    `table_vhtw5f_emp_id` INT,
+    `table_vhtw5f_department_id` INT,
+    `table_vhtw5f_salary` INT,
+    `table_vhtw5f_hire_date` DATE,
+    `table_vhtw5f_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4ljt9e` (
+    `table_4ljt9e_department_id` INT,
+    `table_4ljt9e_name` VARCHAR(50)
+);
+
+INSERT INTO `table_vhtw5f` (`table_vhtw5f_emp_id`, `table_vhtw5f_department_id`, `table_vhtw5f_salary`, `table_vhtw5f_hire_date`, `table_vhtw5f_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_4ljt9e` (`table_4ljt9e_department_id`, `table_4ljt9e_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_VHTW5F_HIRE_DATE, CURDATE()), COALESCE(TABLE_VHTW5F_PERFORMANCE_RATING, 0), COALESCE(TABLE_VHTW5F_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_VHTW5F
+    WHERE TABLE_VHTW5F_EMP_ID = EMP_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_TENURE_YEARS * 20) + (V_PERFORMANCE * 15) + (V_SALARY / 1000);
+
+    RETURN V_RETENTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_ffuaq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_ffuaq7(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    IF N <= (MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(22)) - 600 + (1) THEN
+        RETURN 0;
+    END IF;
+    IF N <= 3 THEN
+        RETURN 1;
+    END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN
+        RETURN 0;
+    END IF;
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_BOOLEAN_km7s69----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(FLAG INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF FLAG = 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0310(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE v_sql TEXT;
+    DECLARE cur CURSOR FOR SELECT v3546 FROM v3559 WHERE s1 LIKE '%SELECT%t17059925%' LIMIT 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: Create index on v3544 using ST_ASBINARY
+    SET v_sql = 'CREATE INDEX v3763 ON v3544((ST_ASBINARY(2 * v3536)))';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1;
+        SET @s1 = (MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav()) - 194 + ((MYSQL_FUNC_GET_MAX_077bna(93, 43)) - 268 + (v_sql));
+        PREPARE stmt1 FROM @s1;
+        EXECUTE stmt1;
+        DEALLOCATE PREPARE stmt1;
+    END;
+
+    -- Statement 2: Update v3585 with LEFT JOIN and condition
+    SET v_sql = 'UPDATE v3585 AS x1 LEFT OUTER JOIN v3565 AS x2 ON x1.v3586 = x1.v3587 SET x1.v3586 = 9223372036854775808 WHERE (v3587 % 5) > 5';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 2;
+        SET @s2 = v_sql;
+        PREPARE stmt2 FROM @s2;
+        EXECUTE stmt2;
+        DEALLOCATE PREPARE stmt2;
+    END;
+
+    -- Statement 3: Update v3729 with NATURAL JOIN
+    SET v_sql = 'UPDATE v3729 AS x0 NATURAL JOIN v3668 AS x1 SET v3731 = "2019-05-01"';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 3;
+        SET @s3 = v_sql;
+        PREPARE stmt3 FROM @s3;
+        EXECUTE stmt3;
+        DEALLOCATE PREPARE stmt3;
+    END;
+
+    -- Statement 4: Create view using cursor and conditional logic
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SET v_sql = CONCAT('CREATE VIEW v3766 AS SELECT *, GREATEST(v3546, NULL) AS x2, v3646 <=> "9388607" AS x3 FROM v3645 JOIN v3559 ON v3645.v3646 = v3559.v3546 WHERE (v3559.s1 LIKE "%SELECT%t17059925%" AND NOT v3559.s1 LIKE "%EXPLAIN%") OR v3645.v3646 LIKE "%dual%"');
+        BEGIN
+            DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 4;
+            SET @s4 = v_sql;
+            PREPARE stmt4 FROM @s4;
+            EXECUTE stmt4;
+            DEALLOCATE PREPARE stmt4;
+        END;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: Create index on v3645 using ST_ASBINARY with geometric calculation
+    SET v_sql = 'CREATE INDEX v3768 ON v3645((ST_ASBINARY(1024 * 1024 * 1024)))';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 5;
+        SET @s5 = v_sql;
+        PREPARE stmt5 FROM @s5;
+        EXECUTE stmt5;
+        DEALLOCATE PREPARE stmt5;
+    END;
+
+    -- Use CASE to determine final result
+    CASE
+        WHEN v_counter > 10 THEN SET result = v_counter;
+        WHEN v_counter BETWEEN 5 AND 10 THEN SET result = v_counter * 2;
+        ELSE SET result = v_counter + p1 + p2;
+    END CASE;
+
+    -- Use WHILE loop for additional processing
+    WHILE v_counter < 15 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0310(1, 1, @out_result);
+
+SELECT @out_result;

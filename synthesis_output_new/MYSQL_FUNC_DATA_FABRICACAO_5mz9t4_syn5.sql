@@ -1,0 +1,320 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+CREATE TABLE IF NOT EXISTS `table_g3imfa` (
+    `table_g3imfa_order_id` INT,
+    `table_g3imfa_customer_id` INT,
+    `table_g3imfa_order_date` DATE,
+    `table_g3imfa_total_amount` DECIMAL(10,2),
+    `table_g3imfa_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_koyw4b` (
+    `table_koyw4b_order_id` INT,
+    `table_koyw4b_product_id` INT,
+    `table_koyw4b_quantity` INT
+);
+
+INSERT INTO `table_g3imfa` (`table_g3imfa_order_id`, `table_g3imfa_customer_id`, `table_g3imfa_order_date`, `table_g3imfa_total_amount`, `table_g3imfa_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_koyw4b` (`table_koyw4b_order_id`, `table_koyw4b_product_id`, `table_koyw4b_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_KOYW4B_QUANTITY), 0)
+    INTO V_TOTAL_ITEMS
+    FROM TABLE_KOYW4B
+    WHERE TABLE_KOYW4B_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_TOTAL_ITEMS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+CREATE TABLE IF NOT EXISTS `table_nw3b9o` (
+    `table_nw3b9o_zone_id` INT,
+    `table_nw3b9o_hourly_rate` INT,
+    `table_nw3b9o_max_capacity` INT,
+    `table_nw3b9o_current_occupied` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8u2yi0` (
+    `table_8u2yi0_trans_id` INT,
+    `table_8u2yi0_vehicle_id` INT,
+    `table_8u2yi0_zone_id` INT,
+    `table_8u2yi0_entry_time` DATE,
+    `table_8u2yi0_exit_time` DATE,
+    `table_8u2yi0_amount_paid` INT
+);
+
+INSERT INTO `table_nw3b9o` (`table_nw3b9o_zone_id`, `table_nw3b9o_hourly_rate`, `table_nw3b9o_max_capacity`, `table_nw3b9o_current_occupied`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_8u2yi0` (`table_8u2yi0_trans_id`, `table_8u2yi0_vehicle_id`, `table_8u2yi0_zone_id`, `table_8u2yi0_entry_time`, `table_8u2yi0_exit_time`, `table_8u2yi0_amount_paid`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(ZONE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_MAX_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_OCCUPIED INT DEFAULT 0;
+    DECLARE V_BASE_FEE INT DEFAULT 0;
+    DECLARE V_SURGE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NW3B9O_HOURLY_RATE, 10), COALESCE(TABLE_NW3B9O_MAX_CAPACITY, 100)
+    INTO V_HOURLY_RATE, V_MAX_CAPACITY
+    FROM TABLE_NW3B9O
+    WHERE TABLE_NW3B9O_ZONE_ID = ZONE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_OCCUPIED
+    FROM TABLE_8U2YI0
+    WHERE TABLE_8U2YI0_ZONE_ID = ZONE_ID_PARAM AND TABLE_8U2YI0_EXIT_TIME IS NULL;
+
+    SET V_BASE_FEE = HOURS_PARAM * V_HOURLY_RATE;
+
+    IF V_CURRENT_OCCUPIED > V_MAX_CAPACITY * 80 / 100 THEN
+        SET V_SURGE_FEE = V_BASE_FEE * 25 / 100;
+    END IF;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + V_SURGE_FEE;
+
+    RETURN (MYSQL_FUNC_NEGATE_VALUE_1ykrf9(1)) - 423 + (cast(v_total_fee as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_VALUE_1ykrf9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_VALUE_1ykrf9(X INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN -X;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+CREATE TABLE IF NOT EXISTS `table_m5l6r9` (
+    `table_m5l6r9_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `table_m5l6r9` (`table_m5l6r9_cdecimal`) VALUES (42);
+
+/* -----Called: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(TABLE_M5L6R9_CDECIMAL AS SIGNED) INTO RESULT FROM `TABLE_M5L6R9` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(48)) - -245 + (coalesce(result, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+CREATE TABLE IF NOT EXISTS `table_i7exsg` (
+    `table_i7exsg_campaign_id` INT,
+    `table_i7exsg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_i7exsg` (`table_i7exsg_campaign_id`, `table_i7exsg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_I7EXSG_STATUS
+    INTO V_STATUS
+    FROM TABLE_I7EXSG
+    WHERE TABLE_I7EXSG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'COMPLETED' THEN RETURN 75;
+        WHEN 'CANCELLED' THEN RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(-63)) - -893 + (0);
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um----- */
+CREATE TABLE IF NOT EXISTS `table_xb9hgj` (
+    `table_xb9hgj_customer_id` INT,
+    `table_xb9hgj_start_date` DATE
+);
+
+INSERT INTO `table_xb9hgj` (`table_xb9hgj_customer_id`, `table_xb9hgj_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_WEEK_OF_YEAR_4yf3um(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_XB9HGJ_START_DATE)
+    INTO V_WEEK
+    FROM TABLE_XB9HGJ
+    WHERE TABLE_XB9HGJ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= (MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs(40)) - 144 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    IF N = (MYSQL_FUNC_CURSOR_FUNC_SUM_10_TO_100_snxfsr()) - -324 + (1) OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_10_TO_100_snxfsr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_10_TO_100_snxfsr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50
+        UNION SELECT 60 UNION SELECT 70 UNION SELECT 80 UNION SELECT 90 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VERIFY_GOLDBACH_PAIR_txo6xs(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 3;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF N <= 2 OR N % 2 != 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_I = 3;
+
+    OUTER_LOOP: WHILE V_I <= N / 2 DO
+        SET V_IS_PRIME = 1;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_PRIME = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_J = N - V_I;
+            SET V_IS_PRIME = 1;
+            SET V_J = 2;
+
+            CHECK_LOOP: WHILE V_J * V_J <= V_J DO
+                IF V_J % V_J = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE CHECK_LOOP;
+                END IF;
+                SET V_J = V_J + 1;
+            END WHILE CHECK_LOOP;
+
+            IF V_IS_PRIME = 1 THEN
+                RETURN V_I;
+            END IF;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN (MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(60)) - -138 + ((MYSQL_FUNC_PROC_DECIMAL_zozmya()) - 940 + ((MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(36)) - 963 + ((MYSQL_FUNC_CALCULATE_PARKING_FEE_mnr9lo(-78, 28)) - -527 + ((MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(-94)) - 175 + (current_year - data_first)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(1);

@@ -1,0 +1,383 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1yd99c` (
+    `table_1yd99c_policy_id` INT,
+    `table_1yd99c_customer_id` INT,
+    `table_1yd99c_monthly_benefit` INT,
+    `table_1yd99c_elimination_period_days` INT,
+    `table_1yd99c_benefit_duration_months` INT,
+    `table_1yd99c_premium_monthly` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5qb4ll` (
+    `table_5qb4ll_claim_id` INT,
+    `table_5qb4ll_policy_id` INT,
+    `table_5qb4ll_claim_start_date` DATE,
+    `table_5qb4ll_claim_end_date` DATE,
+    `table_5qb4ll_total_benefits_paid` INT
+);
+
+INSERT INTO `table_1yd99c` (`table_1yd99c_policy_id`, `table_1yd99c_customer_id`, `table_1yd99c_monthly_benefit`, `table_1yd99c_elimination_period_days`, `table_1yd99c_benefit_duration_months`, `table_1yd99c_premium_monthly`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_5qb4ll` (`table_5qb4ll_claim_id`, `table_5qb4ll_policy_id`, `table_5qb4ll_claim_start_date`, `table_5qb4ll_claim_end_date`, `table_5qb4ll_total_benefits_paid`) VALUES (1, 2, '2024-01-01', '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUBE_VOLUME_pjbvyc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUBE_VOLUME_pjbvyc(SIDE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN SIDE * SIDE * SIDE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN FLOOR(V_COMPETITIVENESS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux(86)) - 165 + ((MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(3, 84, -40)) - 945 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(21)) - 350 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(-10)) - -301 + (floor(v_price)))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+CREATE TABLE IF NOT EXISTS `table_7gncdo` (
+    `table_7gncdo_product_id` INT,
+    `table_7gncdo_category_id` INT
+);
+
+INSERT INTO `table_7gncdo` (`table_7gncdo_product_id`, `table_7gncdo_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRODUCT_COUNT_nco0pk(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_7GNCDO
+    WHERE TABLE_7GNCDO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a(-69)) - -58 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(-79)) - -721 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+CREATE TABLE IF NOT EXISTS `table_19h5rl` (
+    `table_19h5rl_campaign_id` INT,
+    `table_19h5rl_budget` INT,
+    `table_19h5rl_start_date` DATE,
+    `table_19h5rl_end_date` DATE,
+    `table_19h5rl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qizrpx` (
+    `table_qizrpx_conversion_id` INT,
+    `table_qizrpx_campaign_id` INT,
+    `table_qizrpx_conversion_value` INT
+);
+
+INSERT INTO `table_19h5rl` (`table_19h5rl_campaign_id`, `table_19h5rl_budget`, `table_19h5rl_start_date`, `table_19h5rl_end_date`, `table_19h5rl_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_qizrpx` (`table_qizrpx_conversion_id`, `table_qizrpx_campaign_id`, `table_qizrpx_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_INDEX_nciuif(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_ROI_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_19H5RL_BUDGET, 1), DATEDIFF(TABLE_19H5RL_END_DATE, TABLE_19H5RL_START_DATE)
+    INTO V_BUDGET, V_DURATION_DAYS
+    FROM TABLE_19H5RL
+    WHERE TABLE_19H5RL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QIZRPX_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_QIZRPX
+    WHERE TABLE_QIZRPX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100.0) / V_BUDGET / V_DURATION_DAYS;
+
+    RETURN FLOOR(V_ROI_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a----- */
+CREATE TABLE IF NOT EXISTS `table_qo7hbf` (
+    `table_qo7hbf_emp_id` INT,
+    `table_qo7hbf_salary` INT
+);
+
+INSERT INTO `table_qo7hbf` (`table_qo7hbf_emp_id`, `table_qo7hbf_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_QO7HBF_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_QO7HBF
+    WHERE TABLE_QO7HBF_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 70000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+CREATE TABLE IF NOT EXISTS `table_ql6ocn` (
+    `table_ql6ocn_customer_id` INT,
+    `table_ql6ocn_country` INT
+);
+
+INSERT INTO `table_ql6ocn` (`table_ql6ocn_customer_id`, `table_ql6ocn_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_QL6OCN
+    WHERE TABLE_QL6OCN_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(-51)) - -128 + (v_customer_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(SUM INT, INTEREST INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CAST(SUM * POW(1 + INTEREST / 100.0, YEARS) AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux----- */
+CREATE TABLE IF NOT EXISTS `table_d8xwkk` (
+    `table_d8xwkk_customer_id` INT,
+    `table_d8xwkk_tier_level` INT,
+    `table_d8xwkk_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_u3n2ec` (
+    `table_u3n2ec_order_id` INT,
+    `table_u3n2ec_customer_id` INT,
+    `table_u3n2ec_order_date` DATE,
+    `table_u3n2ec_total_amount` DECIMAL(10,2),
+    `table_u3n2ec_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d8xwkk` (`table_d8xwkk_customer_id`, `table_d8xwkk_tier_level`, `table_d8xwkk_registration_date`) VALUES (1, 1, '2024-01-01');
+
+INSERT INTO `table_u3n2ec` (`table_u3n2ec_order_id`, `table_u3n2ec_customer_id`, `table_u3n2ec_order_date`, `table_u3n2ec_total_amount`, `table_u3n2ec_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_BENEFIT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_D8XWKK_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_D8XWKK
+    WHERE TABLE_D8XWKK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_U3N2EC_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDERS, V_TOTAL_SPENT
+    FROM TABLE_U3N2EC
+    WHERE TABLE_U3N2EC_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_U3N2EC_STATUS = 'COMPLETED';
+
+    SET V_BENEFIT_SCORE = V_TOTAL_ORDERS * 10 + (V_TOTAL_SPENT / 1000);
+
+    CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 50;
+        WHEN 'GOLD' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 30;
+        WHEN 'SILVER' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 15;
+        ELSE SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 5;
+    END CASE;
+
+    RETURN V_BENEFIT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BENEFIT_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_MONTHLY_BENEFIT INT DEFAULT 0;
+    DECLARE V_REMAINING_MONTHS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1YD99C_BENEFIT_DURATION_MONTHS, 12), COALESCE(TABLE_1YD99C_MONTHLY_BENEFIT, 2000)
+    INTO V_BENEFIT_DURATION, V_MONTHLY_BENEFIT
+    FROM TABLE_1YD99C
+    WHERE TABLE_1YD99C_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5QB4LL_TOTAL_BENEFITS_PAID), 0) INTO V_TOTAL_PAID
+    FROM TABLE_5QB4LL
+    WHERE TABLE_5QB4LL_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_REMAINING_MONTHS = (MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(76)) - -958 + ((MYSQL_FUNC_CALCULATE_CUBE_VOLUME_pjbvyc(47)) - 741 + (v_benefit_duration - (v_total_paid / v_monthly_benefit)));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + (cast(v_remaining_months as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(1);

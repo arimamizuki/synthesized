@@ -1,0 +1,313 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_a2mkwz` (
+    `table_a2mkwz_campaign_id` INT,
+    `table_a2mkwz_start_date` DATE
+);
+
+INSERT INTO `table_a2mkwz` (`table_a2mkwz_campaign_id`, `table_a2mkwz_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+CREATE TABLE IF NOT EXISTS table_4tkghb (
+    table_4tkghb_inventory_id INT PRIMARY KEY,
+    table_4tkghb_film_id INT,
+    table_4tkghb_store_id INT
+);
+
+CREATE TABLE IF NOT EXISTS table_qb1ggy (
+    table_qb1ggy_rental_id INT PRIMARY KEY,
+    table_qb1ggy_inventory_id INT,
+    table_qb1ggy_return_date DATE
+);
+
+INSERT INTO table_4tkghb (`table_4tkghb_inventory_id`, `table_4tkghb_film_id`, `table_4tkghb_store_id`) VALUES (1, 2, 3);
+
+INSERT INTO table_qb1ggy (`table_qb1ggy_rental_id`, `table_qb1ggy_inventory_id`, `table_qb1ggy_return_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE FILM_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*)
+    INTO FILM_COUNT
+    FROM TABLE_4TKGHB
+    WHERE TABLE_4TKGHB_FILM_ID = P_FILM_ID
+    AND TABLE_4TKGHB_STORE_ID = P_STORE_ID
+    AND NOT EXISTS (
+        SELECT 1 FROM TABLE_QB1GGY 
+        WHERE TABLE_QB1GGY.TABLE_QB1GGY_INVENTORY_ID = TABLE_4TKGHB.TABLE_4TKGHB_INVENTORY_ID 
+        AND TABLE_QB1GGY.TABLE_QB1GGY_RETURN_DATE IS NULL
+    );
+    
+    RETURN (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + (film_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+CREATE TABLE IF NOT EXISTS table_i88pr4 (
+    table_i88pr4_id INT,
+    table_i88pr4_preco INT
+);
+
+INSERT INTO table_i88pr4 (`table_i88pr4_id`, `table_i88pr4_preco`) VALUES (2, 100);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(VAR_PRODUTO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    
+    SELECT TABLE_I88PR4_PRECO INTO RESULT
+    FROM TABLE_I88PR4
+    WHERE TABLE_I88PR4.TABLE_I88PR4_ID = VAR_PRODUTO;
+    
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(-85, -79)) - -461 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DIVIDE_f8lxxy(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(37)) - 100 + (p_a / p_b);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    READ_LOOP: LOOP
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(56)) - -857 + (v_result + 1);
+        IF V_RESULT >= N THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+CREATE TABLE IF NOT EXISTS `table_5fzj9q` (
+    `table_5fzj9q_customer_id` INT,
+    `table_5fzj9q_status` VARCHAR(50)
+);
+
+INSERT INTO `table_5fzj9q` (`table_5fzj9q_customer_id`, `table_5fzj9q_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_5FZJ9Q
+    WHERE TABLE_5FZJ9Q_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_5FZJ9Q_STATUS = 'ACTIVE';
+
+    RETURN CASE WHEN V_COUNT > 0 THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_SCORE_126e1e----- */
+CREATE TABLE IF NOT EXISTS `table_xr1bzo` (
+    `table_xr1bzo_campaign_id` INT,
+    `table_xr1bzo_channel` INT,
+    `table_xr1bzo_budget` INT
+);
+
+INSERT INTO `table_xr1bzo` (`table_xr1bzo_campaign_id`, `table_xr1bzo_channel`, `table_xr1bzo_budget`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_SCORE_126e1e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_SCORE_126e1e(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_XR1BZO_CHANNEL, COALESCE(TABLE_XR1BZO_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_XR1BZO
+    WHERE TABLE_XR1BZO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN RETURN (MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(-10)) - -619 + (floor((v_budget * 2) / 1000));
+        WHEN 'ORGANIC' THEN RETURN FLOOR((V_BUDGET * 3) / 1000);
+        WHEN 'SOCIAL' THEN RETURN FLOOR((V_BUDGET * 150) / 1000);
+        ELSE RETURN FLOOR(V_BUDGET / 1000);
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (V_BEDROOMS * 20) + (V_BATHROOMS * 15) + (V_SQUARE_FEET / 100) + ((2024 - V_YEAR_BUILT) * 2) + (V_FEATURE_COUNT * 10);
+
+    RETURN V_PROPERTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_A2MKWZ_START_DATE)
+    INTO V_MONTH
+    FROM TABLE_A2MKWZ
+    WHERE TABLE_A2MKWZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(-98)) - 261 + ((MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(95)) - 779 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(56)) - -857 + ((MYSQL_FUNC_FILM_NOT_IN_STOCK_uwyi3b(-37, 16)) - 432 + (v_month))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6(1);

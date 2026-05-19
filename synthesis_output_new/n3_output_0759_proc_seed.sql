@@ -1,0 +1,74 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1151405 (v1151407 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1151419 (v1151420 DATETIME);
+CREATE TABLE IF NOT EXISTS v1151423 (v1151424 INT, v1151426 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1151437 (v1151437_id INT AUTO_INCREMENT PRIMARY KEY, v1151809 CHAR(1));
+CREATE TABLE IF NOT EXISTS v1151607 (v1151608 POINT);
+CREATE TABLE IF NOT EXISTS v1151808 (v1151809 CHAR(1));
+INSERT INTO v1151405 VALUES (ST_GEOMFROMTEXT('POINT(230 9)'));
+INSERT INTO v1151419 VALUES (NOW()), (NOW() - INTERVAL 1 HOUR);
+INSERT INTO v1151423 VALUES (1, 'test'), (1, 12345);
+INSERT INTO v1151437 (v1151809) VALUES ('N');
+INSERT INTO v1151607 VALUES (POINT(0, 0));
+INSERT INTO v1151808 VALUES ('N');
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0759_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_point POINT;
+    DECLARE v_dt DATETIME;
+    DECLARE v_val VARCHAR(50);
+    DECLARE cur CURSOR FOR SELECT v1151420 FROM v1151419 ORDER BY v1151420 LIMIT 12;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: INSERT with POINT
+    INSERT INTO v1151607 (v1151608) VALUES (POINT(p1, p2));
+
+    -- Statement 2: INSERT with multiple values
+    INSERT INTO v1151423 (v1151424, v1151426) VALUES (p1, '𠻠'), (p1, 198006), (p1, 'Lun'), (p1, 439), (p1, 498), (p1, 'catchment'), (p1, 'violinist');
+
+    -- Statement 3: UPDATE with geometry function
+    IF p1 > 0 THEN
+        UPDATE v1151405 AS x0 SET v1151407 = ST_GEOMFROMTEXT('POINT(230 9)') WHERE (FLOOR(ATAN(x0.v1151407)) IS NULL) = '23';
+    END IF;
+
+    -- Statement 4: UPDATE with JOIN and SUBTIME
+    CASE 
+        WHEN p2 > 0 THEN
+            UPDATE v1151808 AS x1 JOIN v1151437 AS x5 ON x1.v1151809 = x1.v1151809 SET x1.v1151809 = 'Y' WHERE x1.v1151809 >= SUBTIME(CURRENT_TIMESTAMP(), '10:00:00');
+        ELSE
+            SET v_counter = v_counter + 1;
+    END CASE;
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_dt;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1151419 AS x0 SET x0.v1151420 = '99999.99999' WHERE x0.v1151420 = CURRENT_TIMESTAMP() ORDER BY v1151420, v1151420 LIMIT 12;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use WHILE loop for additional processing
+    WHILE v_counter < p2 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0759_proc(1, 1, @out_result);
+
+SELECT @out_result;

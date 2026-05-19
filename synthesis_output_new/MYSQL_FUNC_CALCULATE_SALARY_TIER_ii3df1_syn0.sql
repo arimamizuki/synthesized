@@ -1,0 +1,325 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+CREATE TABLE IF NOT EXISTS `table_jcyow9` (
+    `table_jcyow9_order_id` INT,
+    `table_jcyow9_customer_id` INT
+);
+
+INSERT INTO `table_jcyow9` (`table_jcyow9_order_id`, `table_jcyow9_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_JCYOW9_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_JCYOW9
+    WHERE TABLE_JCYOW9_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(74)) - 53 + ((MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(-81, -74, 100)) - 813 + (v_customer_id % 50));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C) / 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+CREATE TABLE IF NOT EXISTS `table_1ac6i8` (
+    `table_1ac6i8_category_id` INT,
+    `table_1ac6i8_stock_quantity` INT
+);
+
+INSERT INTO `table_1ac6i8` (`table_1ac6i8_category_id`, `table_1ac6i8_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_1AC6I8_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_1AC6I8
+    WHERE TABLE_1AC6I8_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+CREATE TABLE IF NOT EXISTS `table_kzmcio` (
+    `table_kzmcio_emp_id` INT,
+    `table_kzmcio_department_id` INT,
+    `table_kzmcio_salary` INT,
+    `table_kzmcio_hire_date` DATE
+);
+
+INSERT INTO `table_kzmcio` (`table_kzmcio_emp_id`, `table_kzmcio_department_id`, `table_kzmcio_salary`, `table_kzmcio_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_KZMCIO_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM TABLE_KZMCIO
+    WHERE TABLE_KZMCIO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5(-84)) - 944 + ((v_headcount * 10) + (v_avg_salary / 100));
+
+    RETURN (MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn()) - -505 + (v_headcount_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5----- */
+CREATE TABLE IF NOT EXISTS `table_wz941v` (
+    `table_wz941v_customer_id` INT,
+    `table_wz941v_status` VARCHAR(50),
+    `table_wz941v_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wz941v` (`table_wz941v_customer_id`, `table_wz941v_status`, `table_wz941v_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_e4elf5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_WZ941V_STATUS, COALESCE(TABLE_WZ941V_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_WZ941V
+    WHERE TABLE_WZ941V_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(-79)) - 72 + (v_monthly_cost * 5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+CREATE TABLE IF NOT EXISTS `table_skl2vl` (
+    `table_skl2vl_plan_id` INT,
+    `table_skl2vl_plan_name` VARCHAR(50),
+    `table_skl2vl_monthly_price` DECIMAL(10,2),
+    `table_skl2vl_data_limit_mb` TEXT,
+    `table_skl2vl_minutes_limit` INT,
+    `table_skl2vl_rollover_enabled` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqh6ms` (
+    `table_oqh6ms_sub_id` INT,
+    `table_oqh6ms_user_id` INT,
+    `table_oqh6ms_plan_id` INT,
+    `table_oqh6ms_start_date` DATE,
+    `table_oqh6ms_data_used_mb` TEXT,
+    `table_oqh6ms_minutes_used` INT,
+    `table_oqh6ms_status` VARCHAR(50)
+);
+
+INSERT INTO `table_skl2vl` (`table_skl2vl_plan_id`, `table_skl2vl_plan_name`, `table_skl2vl_monthly_price`, `table_skl2vl_data_limit_mb`, `table_skl2vl_minutes_limit`, `table_skl2vl_rollover_enabled`) VALUES (1, 'test', 1.0, 'test', 5, 6);
+
+INSERT INTO `table_oqh6ms` (`table_oqh6ms_sub_id`, `table_oqh6ms_user_id`, `table_oqh6ms_plan_id`, `table_oqh6ms_start_date`, `table_oqh6ms_data_used_mb`, `table_oqh6ms_minutes_used`, `table_oqh6ms_status`) VALUES (1, 2, 3, '2024-01-01', 'test', 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(SUB_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DATA_LIMIT INT DEFAULT 0;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_MINUTES_LIMIT INT DEFAULT 0;
+    DECLARE V_MINUTES_USED INT DEFAULT 0;
+    DECLARE V_DATA_OVERAGE INT DEFAULT 0;
+    DECLARE V_MINUTES_OVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_SKL2VL_DATA_LIMIT_MB, COALESCE(TABLE_OQH6MS_DATA_USED_MB, 0), TABLE_SKL2VL_MINUTES_LIMIT, COALESCE(TABLE_OQH6MS_MINUTES_USED, 0)
+    INTO V_DATA_LIMIT, V_DATA_USED, V_MINUTES_LIMIT, V_MINUTES_USED
+    FROM TABLE_OQH6MS U
+    JOIN TABLE_SKL2VL P ON TABLE_OQH6MS_PLAN_ID = TABLE_SKL2VL_PLAN_ID
+    WHERE TABLE_OQH6MS_SUB_ID = SUB_ID_PARAM;
+
+    SET V_DATA_OVERAGE = GREATEST(0, V_DATA_USED - V_DATA_LIMIT);
+    SET V_MINUTES_OVERAGE = GREATEST(0, V_MINUTES_USED - V_MINUTES_LIMIT);
+
+    SET V_TOTAL_OVERAGE = (V_DATA_OVERAGE / 100) + (V_MINUTES_OVERAGE / 10);
+
+    RETURN CAST(V_TOTAL_OVERAGE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+CREATE TABLE IF NOT EXISTS `table_m3vpww` (
+    `table_m3vpww_cbit10` INT
+);
+
+INSERT INTO `table_m3vpww` (`table_m3vpww_cbit10`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_M3VPWW_CBIT10 INTO RESULT FROM `TABLE_M3VPWW` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, (MYSQL_FUNC_FUNC1_abekbp()) - 180 + (0))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(-80, -61, -30)) - 827 + (v_total_sold / v_current_stock);
+
+    RETURN V_TURNOVER_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_abekbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_abekbp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(A INT, B INT, C INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN RETURN 'INVALID';
+        WHEN A = B AND B = C THEN RETURN 'EQUILATERAL';
+        WHEN A = B OR B = C OR A = C THEN RETURN 'ISOSCELES';
+        ELSE RETURN 'SCALENE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - 612 + (4);
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(-84)) - 596 + (3);
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + (2);
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(1);

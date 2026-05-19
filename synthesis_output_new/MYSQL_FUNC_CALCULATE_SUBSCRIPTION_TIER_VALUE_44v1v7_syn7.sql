@@ -1,0 +1,326 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1n374m` (
+    `table_1n374m_customer_id` INT,
+    `table_1n374m_status` VARCHAR(50),
+    `table_1n374m_monthly_cost` DECIMAL(10,2),
+    `table_1n374m_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_1n374m` (`table_1n374m_customer_id`, `table_1n374m_status`, `table_1n374m_monthly_cost`, `table_1n374m_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_RANDOM_DATETIME_BETWEEN_qw3u1r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RANDOM_DATETIME_BETWEEN_qw3u1r(DATE_FROM INT, DATE_TO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SET RESULT = UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_FROM)) + FLOOR(RAND() * (UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_TO)) - UNIX_TIMESTAMP(FROM_UNIXTIME(DATE_FROM)) + 1));
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(-84)) - 260 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(51)) - -618 + ((MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(-84, 8)) - 638 + (unix_timestamp(from_unixtime(result)))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (3.14159 * cap_height * cap_height * (3 * radius - cap_height) / 3);
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+CREATE TABLE IF NOT EXISTS `table_orbfvy` (
+    `table_orbfvy_product_id` INT,
+    `table_orbfvy_category_id` INT,
+    `table_orbfvy_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_orbfvy` (`table_orbfvy_product_id`, `table_orbfvy_category_id`, `table_orbfvy_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_kf0gk1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_ORBFVY
+    WHERE TABLE_ORBFVY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_ORBFVY_PRICE), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_ORBFVY;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(86)) - -556 + (floor((v_category_avg * 100) / v_overall_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+CREATE TABLE IF NOT EXISTS `table_9ay8es` (
+    `table_9ay8es_employee_id` INT,
+    `table_9ay8es_department_id` INT,
+    `table_9ay8es_manager_id` INT,
+    `table_9ay8es_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u58w25` (
+    `table_u58w25_department_id` INT,
+    `table_u58w25_parent_department_id` INT,
+    `table_u58w25_department_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9ay8es` (`table_9ay8es_employee_id`, `table_9ay8es_department_id`, `table_9ay8es_manager_id`, `table_9ay8es_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_u58w25` (`table_u58w25_department_id`, `table_u58w25_parent_department_id`, `table_u58w25_department_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_PARENT_ID INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT 0;
+
+    SET V_CURRENT_ID = (MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r(60)) - -158 + (department_id_param);
+
+    DEPTH_LOOP: WHILE V_CURRENT_ID IS NOT NULL AND V_CURRENT_ID != 0 DO
+        SELECT COALESCE(TABLE_U58W25_PARENT_DEPARTMENT_ID, 0)
+        INTO V_PARENT_ID
+        FROM TABLE_U58W25
+        WHERE TABLE_U58W25_DEPARTMENT_ID = V_CURRENT_ID;
+
+        IF V_PARENT_ID = 0 OR V_PARENT_ID = V_CURRENT_ID THEN
+            LEAVE DEPTH_LOOP;
+        END IF;
+
+        SET V_DEPTH = V_DEPTH + 1;
+        SET V_CURRENT_ID = V_PARENT_ID;
+    END WHILE DEPTH_LOOP;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r----- */
+CREATE TABLE IF NOT EXISTS `table_hg090m` (
+    `table_hg090m_order_id` INT,
+    `table_hg090m_customer_id` INT,
+    `table_hg090m_order_date` DATE,
+    `table_hg090m_total_amount` DECIMAL(10,2),
+    `table_hg090m_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_3azbru` (
+    `table_3azbru_order_id` INT,
+    `table_3azbru_product_id` INT,
+    `table_3azbru_quantity` INT,
+    `table_3azbru_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hg090m` (`table_hg090m_order_id`, `table_hg090m_customer_id`, `table_hg090m_order_date`, `table_hg090m_total_amount`, `table_hg090m_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_3azbru` (`table_3azbru_order_id`, `table_3azbru_product_id`, `table_3azbru_quantity`, `table_3azbru_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISCOUNT_ELIGIBILITY_SCORE_cxs40r(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_DISCOUNT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_3AZBRU_QUANTITY * TABLE_3AZBRU_UNIT_PRICE), 0), COUNT(*)
+    INTO V_TOTAL_AMOUNT, V_ITEM_COUNT
+    FROM TABLE_3AZBRU
+    WHERE TABLE_3AZBRU_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT_SCORE = (V_TOTAL_AMOUNT / 100) + (V_ITEM_COUNT * 5);
+
+    RETURN V_DISCOUNT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+CREATE TABLE IF NOT EXISTS `table_sm6ixz` (
+    `table_sm6ixz_product_id` INT,
+    `table_sm6ixz_category_id` INT,
+    `table_sm6ixz_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_sm6ixz` (`table_sm6ixz_product_id`, `table_sm6ixz_category_id`, `table_sm6ixz_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_w7f42o(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_SM6IXZ_PRICE), 0), COALESCE(MIN(TABLE_SM6IXZ_PRICE), 1)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_SM6IXZ
+    WHERE TABLE_SM6IXZ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (v_max_price - v_min_price);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct----- */
+CREATE TABLE IF NOT EXISTS `table_p3fp7f` (
+    `table_p3fp7f_order_id` INT,
+    `table_p3fp7f_customer_id` INT,
+    `table_p3fp7f_order_date` DATE,
+    `table_p3fp7f_shipping_address` INT,
+    `table_p3fp7f_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dqxaxg` (
+    `table_dqxaxg_shipment_id` INT,
+    `table_dqxaxg_order_id` INT,
+    `table_dqxaxg_carrier` INT,
+    `table_dqxaxg_shipping_cost` DECIMAL(10,2),
+    `table_dqxaxg_delivery_date` DATE
+);
+
+INSERT INTO `table_p3fp7f` (`table_p3fp7f_order_id`, `table_p3fp7f_customer_id`, `table_p3fp7f_order_date`, `table_p3fp7f_shipping_address`, `table_p3fp7f_shipping_method`) VALUES (1, 1, '2024-01-01', 1, 1);
+
+INSERT INTO `table_dqxaxg` (`table_dqxaxg_shipment_id`, `table_dqxaxg_order_id`, `table_dqxaxg_carrier`, `table_dqxaxg_shipping_cost`, `table_dqxaxg_delivery_date`) VALUES (1, 2, 3, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'GROUND';
+    DECLARE V_DISTANCE_MILES INT DEFAULT 0;
+    DECLARE V_CARRIER VARCHAR(50) DEFAULT '';
+    DECLARE V_CARBON_FOOTPRINT INT DEFAULT 0;
+
+    SELECT TABLE_P3FP7F_SHIPPING_METHOD
+    INTO V_SHIPPING_METHOD
+    FROM TABLE_P3FP7F
+    WHERE TABLE_P3FP7F_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_DQXAXG_CARRIER, 'STANDARD'), COALESCE(TABLE_DQXAXG_SHIPPING_COST, 10)
+    INTO V_CARRIER, V_DISTANCE_MILES
+    FROM TABLE_DQXAXG
+    WHERE TABLE_DQXAXG_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'AIR' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 2;
+        WHEN 'EXPRESS' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 150 / 100;
+        WHEN 'GROUND' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 50 / 100;
+        ELSE SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 30 / 100;
+    END CASE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(28)) - 479 + (v_carbon_footprint);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+CREATE TABLE IF NOT EXISTS `table_qp58sm` (
+    `table_qp58sm_emp_id` INT,
+    `table_qp58sm_hire_date` DATE
+);
+
+INSERT INTO `table_qp58sm` (`table_qp58sm_emp_id`, `table_qp58sm_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_QUARTER_12mzeu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_QP58SM_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_QP58SM
+    WHERE TABLE_QP58SM_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_HIRE_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1N374M_PLAN_TYPE, COALESCE(TABLE_1N374M_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_1N374M
+    WHERE TABLE_1N374M_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1N374M_STATUS = 'ACTIVE';
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(1);

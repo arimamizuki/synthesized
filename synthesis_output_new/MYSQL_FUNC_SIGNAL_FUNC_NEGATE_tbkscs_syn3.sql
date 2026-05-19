@@ -1,0 +1,400 @@
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+CREATE TABLE IF NOT EXISTS `table_0era44` (
+    `table_0era44_policy_id` INT,
+    `table_0era44_customer_id` INT,
+    `table_0era44_property_value` INT,
+    `table_0era44_coverage_limit` INT,
+    `table_0era44_deductible_amount` DECIMAL(10,2),
+    `table_0era44_premium_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r40gj7` (
+    `table_r40gj7_claim_id` INT,
+    `table_r40gj7_policy_id` INT,
+    `table_r40gj7_claim_date` DATE,
+    `table_r40gj7_claim_amount` DECIMAL(10,2),
+    `table_r40gj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_0era44` (`table_0era44_policy_id`, `table_0era44_customer_id`, `table_0era44_property_value`, `table_0era44_coverage_limit`, `table_0era44_deductible_amount`, `table_0era44_premium_annual`) VALUES (1, 2, 3, 4, 1.0, 6);
+
+INSERT INTO `table_r40gj7` (`table_r40gj7_claim_id`, `table_r40gj7_policy_id`, `table_r40gj7_claim_date`, `table_r40gj7_claim_amount`, `table_r40gj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PROPERTY_VALUE INT DEFAULT 0;
+    DECLARE V_COVERAGE_LIMIT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_COVERAGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0ERA44_PROPERTY_VALUE, 0), COALESCE(TABLE_0ERA44_COVERAGE_LIMIT, 0), COALESCE(TABLE_0ERA44_DEDUCTIBLE_AMOUNT, 0)
+    INTO V_PROPERTY_VALUE, V_COVERAGE_LIMIT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_0ERA44
+    WHERE TABLE_0ERA44_POLICY_ID = POLICY_ID_PARAM;
+
+    IF V_PROPERTY_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COVERAGE_RATIO = (V_COVERAGE_LIMIT * 100) / V_PROPERTY_VALUE;
+
+    IF V_COVERAGE_RATIO >= 80 AND V_DEDUCTIBLE_AMOUNT <= 1000 THEN
+        RETURN 100;
+    ELSEIF V_COVERAGE_RATIO >= 60 THEN
+        RETURN 75;
+    ELSE
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(-2, 65)) - -515 + (50);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+CREATE TABLE IF NOT EXISTS `table_mss9em` (
+    `table_mss9em_customer_id` INT
+);
+
+INSERT INTO `table_mss9em` (`table_mss9em_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUB_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_SUB_COUNT
+    FROM TABLE_MSS9EM
+    WHERE TABLE_MSS9EM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(-59)) - -480 + (least(v_sub_count, 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+CREATE TABLE IF NOT EXISTS `table_hdcz7z` (
+    `table_hdcz7z_order_id` INT,
+    `table_hdcz7z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_hdcz7z` (`table_hdcz7z_order_id`, `table_hdcz7z_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_INDEX_SCORE_tc3duy(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_HDCZ7Z_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_HDCZ7Z
+    WHERE TABLE_HDCZ7Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL * 0.1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f----- */
+CREATE TABLE IF NOT EXISTS `table_hhbwcq` (
+    `table_hhbwcq_customer_id` INT,
+    `table_hhbwcq_monthly_cost` DECIMAL(10,2),
+    `table_hhbwcq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hhbwcq` (`table_hhbwcq_customer_id`, `table_hhbwcq_monthly_cost`, `table_hhbwcq_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_HHBWCQ_MONTHLY_COST, 0), TABLE_HHBWCQ_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_HHBWCQ
+    WHERE TABLE_HHBWCQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+CREATE TABLE IF NOT EXISTS `table_exts6s` (
+    `table_exts6s_employee_id` INT,
+    `table_exts6s_department_id` INT,
+    `table_exts6s_salary` INT,
+    `table_exts6s_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4gafba` (
+    `table_4gafba_bonus_id` INT,
+    `table_4gafba_employee_id` INT,
+    `table_4gafba_bonus_amount` DECIMAL(10,2),
+    `table_4gafba_bonus_date` DATE
+);
+
+INSERT INTO `table_exts6s` (`table_exts6s_employee_id`, `table_exts6s_department_id`, `table_exts6s_salary`, `table_exts6s_performance_rating`) VALUES (1, 2, 3, 1.0);
+
+INSERT INTO `table_4gafba` (`table_4gafba_bonus_id`, `table_4gafba_employee_id`, `table_4gafba_bonus_amount`, `table_4gafba_bonus_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PREVIOUS_BONUS_TOTAL INT DEFAULT 0;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+    DECLARE V_RATING_MULTIPLIER DECIMAL(3,2) DEFAULT 1.00;
+
+    SELECT COALESCE(TABLE_EXTS6S_SALARY, 0), COALESCE(TABLE_EXTS6S_PERFORMANCE_RATING, 3.00)
+    INTO V_SALARY, V_PERFORMANCE_RATING
+    FROM TABLE_EXTS6S
+    WHERE TABLE_EXTS6S_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4GAFBA_BONUS_AMOUNT), 0)
+    INTO V_PREVIOUS_BONUS_TOTAL
+    FROM TABLE_4GAFBA
+    WHERE TABLE_4GAFBA_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_RATING_MULTIPLIER = V_PERFORMANCE_RATING / 3.00;
+
+    SET V_BONUS_AMOUNT = (V_SALARY * V_RATING_MULTIPLIER) / 10;
+
+    IF V_PERFORMANCE_RATING >= 4.5 THEN
+        SET V_BONUS_AMOUNT = V_BONUS_AMOUNT + (V_BONUS_AMOUNT * 50 / 100);
+    END IF;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx----- */
+CREATE TABLE IF NOT EXISTS `table_c1huqw` (
+    `table_c1huqw_emp_id` INT,
+    `table_c1huqw_department_id` INT,
+    `table_c1huqw_hire_date` DATE,
+    `table_c1huqw_salary` INT
+);
+
+INSERT INTO `table_c1huqw` (`table_c1huqw_emp_id`, `table_c1huqw_department_id`, `table_c1huqw_hire_date`, `table_c1huqw_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+    DECLARE V_YEARS_OF_SERVICE INT DEFAULT 0;
+
+    SELECT TABLE_C1HUQW_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_C1HUQW
+    WHERE TABLE_C1HUQW_EMP_ID = EMP_ID_PARAM;
+
+    SET V_YEARS_OF_SERVICE = TIMESTAMPDIFF(YEAR, V_HIRE_DATE, CURDATE());
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(26)) - 650 + (v_years_of_service);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+CREATE TABLE IF NOT EXISTS `table_v5hjvn` (
+    `table_v5hjvn_order_id` INT,
+    `table_v5hjvn_customer_id` INT,
+    `table_v5hjvn_order_date` DATE,
+    `table_v5hjvn_shipping_date` DATE,
+    `table_v5hjvn_delivery_date` DATE,
+    `table_v5hjvn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_57ma1s` (
+    `table_57ma1s_order_id` INT,
+    `table_57ma1s_product_id` INT,
+    `table_57ma1s_quantity` INT,
+    `table_57ma1s_discount_percent` INT
+);
+
+INSERT INTO `table_v5hjvn` (`table_v5hjvn_order_id`, `table_v5hjvn_customer_id`, `table_v5hjvn_order_date`, `table_v5hjvn_shipping_date`, `table_v5hjvn_delivery_date`, `table_v5hjvn_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_57ma1s` (`table_57ma1s_order_id`, `table_57ma1s_product_id`, `table_57ma1s_quantity`, `table_57ma1s_discount_percent`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DELIVERY_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DELIVERY_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_57MA1S_QUANTITY * TABLE_57MA1S_DISCOUNT_PERCENT), 0)
+    INTO V_DISCOUNT_PERCENT
+    FROM TABLE_57MA1S
+    WHERE TABLE_57MA1S_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT DATEDIFF(COALESCE(TABLE_V5HJVN_DELIVERY_DATE, CURDATE()), TABLE_V5HJVN_SHIPPING_DATE)
+    INTO V_ACTUAL_DELIVERY_DAYS
+    FROM TABLE_V5HJVN
+    WHERE TABLE_V5HJVN_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DELAY_DAYS = V_ACTUAL_DELIVERY_DAYS - V_EXPECTED_DELIVERY_DAYS;
+
+    IF V_DELAY_DAYS <= 0 THEN
+        SET V_DELAY_SCORE = 100;
+    ELSE
+        SET V_DELAY_SCORE = 100 - (V_DELAY_DAYS * 10);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(-96)) - -88 + (greatest(v_delay_score, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+CREATE TABLE IF NOT EXISTS `table_90sd8x` (
+    `table_90sd8x_property_id` INT,
+    `table_90sd8x_location` INT,
+    `table_90sd8x_bedrooms` INT,
+    `table_90sd8x_bathrooms` INT,
+    `table_90sd8x_monthly_rent` INT,
+    `table_90sd8x_property_tax_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_19x1zt` (
+    `table_19x1zt_request_id` INT,
+    `table_19x1zt_property_id` INT,
+    `table_19x1zt_request_date` DATE,
+    `table_19x1zt_estimated_cost` DECIMAL(10,2),
+    `table_19x1zt_priority` INT
+);
+
+INSERT INTO `table_90sd8x` (`table_90sd8x_property_id`, `table_90sd8x_location`, `table_90sd8x_bedrooms`, `table_90sd8x_bathrooms`, `table_90sd8x_monthly_rent`, `table_90sd8x_property_tax_annual`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_19x1zt` (`table_19x1zt_request_id`, `table_19x1zt_property_id`, `table_19x1zt_request_date`, `table_19x1zt_estimated_cost`, `table_19x1zt_priority`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_ANNUAL_PROPERTY_TAX INT DEFAULT 0;
+    DECLARE V_MAINTENANCE_COST_ANNUAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_INCOME INT DEFAULT 0;
+    DECLARE V_NET_YIELD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_90SD8X_MONTHLY_RENT, 0), COALESCE(TABLE_90SD8X_PROPERTY_TAX_ANNUAL, 0)
+    INTO V_MONTHLY_RENT, V_ANNUAL_PROPERTY_TAX
+    FROM TABLE_90SD8X
+    WHERE TABLE_90SD8X_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_19X1ZT_ESTIMATED_COST), 0)
+    INTO V_MAINTENANCE_COST_ANNUAL
+    FROM TABLE_19X1ZT
+    WHERE TABLE_19X1ZT_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_ANNUAL_INCOME = (V_MONTHLY_RENT * 12) - V_ANNUAL_PROPERTY_TAX - V_MAINTENANCE_COST_ANNUAL;
+
+    RETURN V_ANNUAL_INCOME;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_YEARS_OF_SERVICE_gqzjqx(-68)) - -362 + ((MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(11)) - -163 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(98)) - -6 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(-43)) - -748 + ((MYSQL_FUNC_CALCULATE_HOME_INSURANCE_SCORE_kzvzwl(-44)) - 809 + ((MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (-p_n))))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(1);

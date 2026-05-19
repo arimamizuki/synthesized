@@ -1,0 +1,372 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+CREATE TABLE IF NOT EXISTS `table_nv01cq` (
+    `table_nv01cq_customer_id` INT,
+    `table_nv01cq_country` INT
+);
+
+INSERT INTO `table_nv01cq` (`table_nv01cq_customer_id`, `table_nv01cq_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NV01CQ
+    WHERE TABLE_NV01CQ_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(4)) - 419 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+CREATE TABLE IF NOT EXISTS `table_7dht4m` (
+    `table_7dht4m_campaign_id` INT,
+    `table_7dht4m_status` VARCHAR(50),
+    `table_7dht4m_budget` INT
+);
+
+INSERT INTO `table_7dht4m` (`table_7dht4m_campaign_id`, `table_7dht4m_status`, `table_7dht4m_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_7DHT4M_STATUS, COALESCE(TABLE_7DHT4M_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_7DHT4M
+    WHERE TABLE_7DHT4M_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN V_BUDGET;
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN V_BUDGET / 2;
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN V_BUDGET * 2;
+    ELSE
+        RETURN V_BUDGET / 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = ((V_ORDER_TOTAL - V_SHIPPING_COST) * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(0)) - 168 + ((MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(63)) - 405 + (v_shipping_margin));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+CREATE TABLE IF NOT EXISTS `table_i56p0d` (
+    `table_i56p0d_emp_id` INT,
+    `table_i56p0d_salary` INT,
+    `table_i56p0d_hire_date` DATE
+);
+
+INSERT INTO `table_i56p0d` (`table_i56p0d_emp_id`, `table_i56p0d_salary`, `table_i56p0d_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I56P0D_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_I56P0D_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_I56P0D
+    WHERE TABLE_I56P0D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_SALARY / V_TENURE_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_PRIME_CHECK_kzsr1m(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_IS_PRIME INT DEFAULT 1;
+
+    IF N < 2 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: LOOP
+        IF V_I * V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+        IF N MOD V_I = 0 THEN
+            SET V_IS_PRIME = 0;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END LOOP;
+
+    RETURN V_IS_PRIME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+CREATE TABLE IF NOT EXISTS `table_i7exsg` (
+    `table_i7exsg_campaign_id` INT,
+    `table_i7exsg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_i7exsg` (`table_i7exsg_campaign_id`, `table_i7exsg_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_I7EXSG_STATUS
+    INTO V_STATUS
+    FROM TABLE_I7EXSG
+    WHERE TABLE_I7EXSG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN (MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(49, -19)) - 132 + (100);
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'COMPLETED' THEN RETURN 75;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+CREATE TABLE IF NOT EXISTS `table_q0ba91` (
+    `table_q0ba91_job_id` INT,
+    `table_q0ba91_inspector_id` INT,
+    `table_q0ba91_property_id` INT,
+    `table_q0ba91_inspection_type` VARCHAR(50),
+    `table_q0ba91_square_footage` INT,
+    `table_q0ba91_inspection_date` DATE,
+    `table_q0ba91_base_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ljuqz` (
+    `table_0ljuqz_property_id` INT,
+    `table_0ljuqz_property_type` VARCHAR(50),
+    `table_0ljuqz_year_built` INT,
+    `table_0ljuqz_num_rooms` INT
+);
+
+INSERT INTO `table_q0ba91` (`table_q0ba91_job_id`, `table_q0ba91_inspector_id`, `table_q0ba91_property_id`, `table_q0ba91_inspection_type`, `table_q0ba91_square_footage`, `table_q0ba91_inspection_date`, `table_q0ba91_base_fee`) VALUES (1, 1, 1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_0ljuqz` (`table_0ljuqz_property_id`, `table_0ljuqz_property_type`, `table_0ljuqz_year_built`, `table_0ljuqz_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(PROPERTY_ID_PARAM INT, INSPECTION_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SQUARE_FOOTAGE INT DEFAULT 1500;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_BASE_FEE INT DEFAULT 300;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0BA91_SQUARE_FOOTAGE, 1500), COALESCE(TABLE_0LJUQZ_YEAR_BUILT, 2000)
+    INTO V_SQUARE_FOOTAGE, V_YEAR_BUILT
+    FROM TABLE_Q0BA91 H
+    JOIN TABLE_0LJUQZ P ON TABLE_Q0BA91_PROPERTY_ID = TABLE_0LJUQZ_PROPERTY_ID
+    WHERE TABLE_Q0BA91_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + (V_SQUARE_FOOTAGE / 100) * 10;
+
+    IF (YEAR(CURDATE()) - V_YEAR_BUILT) > 30 THEN
+        SET V_AGE_SURCHARGE = 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(24)) - 512 + (cast(v_total_fee as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+CREATE TABLE IF NOT EXISTS `table_w56b1h` (
+    `table_w56b1h_emp_id` INT,
+    `table_w56b1h_department_id` INT,
+    `table_w56b1h_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ispea` (
+    `table_0ispea_department_id` INT,
+    `table_0ispea_name` VARCHAR(50),
+    `table_0ispea_budget` INT
+);
+
+INSERT INTO `table_w56b1h` (`table_w56b1h_emp_id`, `table_w56b1h_department_id`, `table_w56b1h_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_0ispea` (`table_0ispea_department_id`, `table_0ispea_name`, `table_0ispea_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_W56B1H;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_W56B1H
+    WHERE TABLE_W56B1H_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_AVG_SALARY = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(65)) - 650 + (50);
+    END IF;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STRING_LENGTH_jflyrh(INPUT_STRING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LENGTH INT DEFAULT 0;
+    SET V_LENGTH = (MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(-86)) - 807 + (char_length(input_string));
+    RETURN V_LENGTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+CREATE TABLE IF NOT EXISTS `table_wsac0c` (
+    `table_wsac0c_emp_id` INT,
+    `table_wsac0c_department_id` INT,
+    `table_wsac0c_salary` INT
+);
+
+INSERT INTO `table_wsac0c` (`table_wsac0c_emp_id`, `table_wsac0c_department_id`, `table_wsac0c_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPANY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_WSAC0C
+    WHERE TABLE_WSAC0C_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 1)
+    INTO V_COMPANY_AVG
+    FROM TABLE_WSAC0C;
+
+    RETURN FLOOR((V_AVG_SALARY * 100) / V_COMPANY_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_194_ITERATE_7cimib() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ITER_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        IF I < 3 THEN
+            ITERATE LABEL1;
+        END IF;
+        SET ITER_COUNT = (MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_INDEX_kxuhra(48)) - -245 + ((MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(76)) - -860 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(12)) - -371 + (iter_count))) + 1;
+        IF I >= 5 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN ITER_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FUNC_194_ITERATE_7cimib();

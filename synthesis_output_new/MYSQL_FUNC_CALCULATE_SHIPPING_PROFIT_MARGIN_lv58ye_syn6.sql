@@ -1,0 +1,486 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+CREATE TABLE IF NOT EXISTS `table_ebd300` (
+    `table_ebd300_meter_id` INT,
+    `table_ebd300_customer_id` INT,
+    `table_ebd300_meter_reading` INT,
+    `table_ebd300_reading_date` DATE,
+    `table_ebd300_consumption_kwh` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7mak4e` (
+    `table_7mak4e_tariff_id` INT,
+    `table_7mak4e_tier_name` VARCHAR(50),
+    `table_7mak4e_min_kwh` INT,
+    `table_7mak4e_max_kwh` INT,
+    `table_7mak4e_rate_per_kwh` INT
+);
+
+INSERT INTO `table_ebd300` (`table_ebd300_meter_id`, `table_ebd300_customer_id`, `table_ebd300_meter_reading`, `table_ebd300_reading_date`, `table_ebd300_consumption_kwh`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_7mak4e` (`table_7mak4e_tariff_id`, `table_7mak4e_tier_name`, `table_7mak4e_min_kwh`, `table_7mak4e_max_kwh`, `table_7mak4e_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_PREVIOUS_READING INT DEFAULT 0;
+    DECLARE V_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_BASE_RATE INT DEFAULT 10;
+    DECLARE V_TOTAL_BILL INT DEFAULT 0;
+    DECLARE V_PEAK_CONSUMPTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1;
+
+    SELECT COALESCE(TABLE_EBD300_METER_READING, 0) INTO V_PREVIOUS_READING
+    FROM TABLE_EBD300
+    WHERE TABLE_EBD300_METER_ID = METER_ID_PARAM
+    ORDER BY TABLE_EBD300_READING_DATE DESC LIMIT 1 OFFSET 1;
+
+    SET V_CONSUMPTION = V_CURRENT_READING - V_PREVIOUS_READING;
+
+    IF V_CONSUMPTION < 0 THEN
+        SET V_CONSUMPTION = 0;
+    END IF;
+
+    SET V_TOTAL_BILL = V_BASE_RATE + (V_CONSUMPTION * 15);
+
+    IF V_CONSUMPTION > 500 THEN
+        SET V_PEAK_CONSUMPTION = V_CONSUMPTION - 500;
+        SET V_TOTAL_BILL = V_TOTAL_BILL + (V_PEAK_CONSUMPTION * 25);
+    END IF;
+
+    RETURN CAST(V_TOTAL_BILL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 12 / 100;
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(-89)) - -487 + (v_entry_fee * 2);
+    END CASE;
+
+    RETURN CAST(V_PRIZE_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV BIGINT DEFAULT 0;
+    DECLARE V_CURR BIGINT DEFAULT 1;
+    DECLARE V_NEXT BIGINT;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = (MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(-71)) - 879 + (0) THEN RETURN 0;
+    ELSEIF N = 1 THEN RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + (MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(-81)) - -95 + (v_curr);
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai----- */
+CREATE TABLE IF NOT EXISTS `table_qanhi7` (
+    `table_qanhi7_student_id` INT,
+    `table_qanhi7_name` VARCHAR(50),
+    `table_qanhi7_enrollment_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2h1ofb` (
+    `table_2h1ofb_course_id` INT,
+    `table_2h1ofb_credits` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ud2jrb` (
+    `table_ud2jrb_student_id` INT,
+    `table_ud2jrb_course_id` INT,
+    `table_ud2jrb_grade` INT
+);
+
+INSERT INTO `table_qanhi7` (`table_qanhi7_student_id`, `table_qanhi7_name`, `table_qanhi7_enrollment_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_2h1ofb` (`table_2h1ofb_course_id`, `table_2h1ofb_credits`) VALUES (1, 1);
+
+INSERT INTO `table_ud2jrb` (`table_ud2jrb_student_id`, `table_ud2jrb_course_id`, `table_ud2jrb_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ATTEMPTED INT DEFAULT 0;
+    DECLARE V_COMPLETION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), 0)
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_UD2JRB_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), 0)
+    INTO V_TOTAL_ATTEMPTED
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM;
+
+    IF V_TOTAL_ATTEMPTED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPLETION_RATE = (V_COMPLETED_CREDITS * 100) / V_TOTAL_ATTEMPTED;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(-57)) - 238 + (v_completion_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi----- */
+CREATE TABLE IF NOT EXISTS `table_2jrw9z` (
+    `table_2jrw9z_order_id` INT,
+    `table_2jrw9z_order_date` DATE,
+    `table_2jrw9z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2jrw9z` (`table_2jrw9z_order_id`, `table_2jrw9z_order_date`, `table_2jrw9z_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2JRW9Z_ORDER_DATE), YEAR(TABLE_2JRW9Z_ORDER_DATE)
+    INTO V_MONTH, V_YEAR
+    FROM TABLE_2JRW9Z
+    WHERE TABLE_2JRW9Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (V_YEAR * 12) + V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+CREATE TABLE IF NOT EXISTS `table_th8mrt` (
+    `table_th8mrt_customer_id` INT,
+    `table_th8mrt_order_id` INT
+);
+
+INSERT INTO `table_th8mrt` (`table_th8mrt_customer_id`, `table_th8mrt_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MIN(TABLE_TH8MRT_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_TH8MRT
+    WHERE TABLE_TH8MRT_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ORDER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 5 UNION SELECT 15 UNION SELECT 25 UNION SELECT 35 UNION SELECT 45 UNION SELECT 55 UNION SELECT 65;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF (MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(44)) - -206 + (v_i) > V_MAX THEN
+            SET V_MAX = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+CREATE TABLE IF NOT EXISTS `table_khmak7` (
+    `table_khmak7_order_id` INT,
+    `table_khmak7_customer_id` INT,
+    `table_khmak7_order_date` DATE,
+    `table_khmak7_total_amount` DECIMAL(10,2),
+    `table_khmak7_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_7res4i` (
+    `table_7res4i_order_id` INT,
+    `table_7res4i_product_id` INT,
+    `table_7res4i_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0dame` (
+    `table_l0dame_product_id` INT,
+    `table_l0dame_category_id` INT,
+    `table_l0dame_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_khmak7` (`table_khmak7_order_id`, `table_khmak7_customer_id`, `table_khmak7_order_date`, `table_khmak7_total_amount`, `table_khmak7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_7res4i` (`table_7res4i_order_id`, `table_7res4i_product_id`, `table_7res4i_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_l0dame` (`table_l0dame_product_id`, `table_l0dame_category_id`, `table_l0dame_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_HIGH_VALUE_ITEMS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_7RES4I_QUANTITY * TABLE_L0DAME_PRICE), 0), COUNT(*)
+    INTO V_SUBTOTAL, V_TOTAL_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_HIGH_VALUE_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM AND TABLE_L0DAME_PRICE > 100;
+
+    IF V_TOTAL_ITEMS > 0 AND (V_HIGH_VALUE_ITEMS * 100 / V_TOTAL_ITEMS) > 50 THEN
+        SET V_DISCOUNT_PERCENTAGE = 15;
+    ELSEIF V_SUBTOTAL > 1000 THEN
+        SET V_DISCOUNT_PERCENTAGE = 10;
+    ELSEIF V_SUBTOTAL > 500 THEN
+        SET V_DISCOUNT_PERCENTAGE = (MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + (5);
+    ELSE
+        SET V_DISCOUNT_PERCENTAGE = 0;
+    END IF;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn----- */
+CREATE TABLE IF NOT EXISTS `table_4c3hky` (
+    `table_4c3hky_order_id` INT,
+    `table_4c3hky_customer_id` INT,
+    `table_4c3hky_order_date` DATE,
+    `table_4c3hky_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_8sqbth` (
+    `table_8sqbth_customer_id` INT,
+    `table_8sqbth_country` INT
+);
+
+INSERT INTO `table_4c3hky` (`table_4c3hky_order_id`, `table_4c3hky_customer_id`, `table_4c3hky_order_date`, `table_4c3hky_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_8sqbth` (`table_8sqbth_customer_id`, `table_8sqbth_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+    DECLARE V_CUSTOMER_REVENUE INT DEFAULT 0;
+    DECLARE V_COUNTRY_REVENUE INT DEFAULT 0;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT TABLE_8SQBTH_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_8SQBTH
+    WHERE TABLE_8SQBTH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4C3HKY_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_4C3HKY
+    WHERE TABLE_4C3HKY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4C3HKY_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_4C3HKY O
+    JOIN TABLE_8SQBTH C ON TABLE_4C3HKY_CUSTOMER_ID = TABLE_8SQBTH_CUSTOMER_ID
+    WHERE TABLE_8SQBTH_COUNTRY = V_CUSTOMER_COUNTRY;
+
+    IF V_COUNTRY_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_CUSTOMER_REVENUE * 100) / V_COUNTRY_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn(35)) - -224 + ((MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (((v_order_total - v_shipping_cost) * 100) / v_order_total));
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_MAX_7_VALUES_i3eztn()) - -837 + ((MYSQL_FUNC_CALCULATE_ELECTRICITY_BILL_r8n8f2(0)) - 519 + (v_shipping_margin));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(1);

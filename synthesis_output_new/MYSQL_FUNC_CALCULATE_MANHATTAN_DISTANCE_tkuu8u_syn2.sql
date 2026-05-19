@@ -1,0 +1,409 @@
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        RETURN -1;
+    END IF;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+CREATE TABLE IF NOT EXISTS `table_129mia` (
+    `table_129mia_customer_id` INT,
+    `table_129mia_registration_date` DATE,
+    `table_129mia_tier_level` INT,
+    `table_129mia_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qvw4li` (
+    `table_qvw4li_order_id` INT,
+    `table_qvw4li_customer_id` INT,
+    `table_qvw4li_order_date` DATE,
+    `table_qvw4li_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tkbm59` (
+    `table_tkbm59_review_id` INT,
+    `table_tkbm59_customer_id` INT,
+    `table_tkbm59_product_id` INT,
+    `table_tkbm59_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_129mia` (`table_129mia_customer_id`, `table_129mia_registration_date`, `table_129mia_tier_level`, `table_129mia_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_qvw4li` (`table_qvw4li_order_id`, `table_qvw4li_customer_id`, `table_qvw4li_order_date`, `table_qvw4li_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_tkbm59` (`table_tkbm59_review_id`, `table_tkbm59_customer_id`, `table_tkbm59_product_id`, `table_tkbm59_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_CHURN_RISK_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_129MIA_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_129MIA
+    WHERE TABLE_129MIA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), MAX(TABLE_QVW4LI_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_LAST_ORDER_DATE
+    FROM TABLE_QVW4LI
+    WHERE TABLE_QVW4LI_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), V_LAST_ORDER_DATE)
+    INTO V_DAYS_SINCE_LAST_ORDER;
+
+    SELECT COALESCE(AVG(TABLE_TKBM59_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_TKBM59
+    WHERE TABLE_TKBM59_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_CHURN_RISK_SCORE = 50;
+
+    IF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 30;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 60 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 30 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    IF V_AVG_REVIEW_RATING < 3.0 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 15;
+    END IF;
+
+    IF V_ORDER_COUNT < 3 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    RETURN LEAST(V_CHURN_RISK_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+CREATE TABLE IF NOT EXISTS `table_9ay8es` (
+    `table_9ay8es_employee_id` INT,
+    `table_9ay8es_department_id` INT,
+    `table_9ay8es_manager_id` INT,
+    `table_9ay8es_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u58w25` (
+    `table_u58w25_department_id` INT,
+    `table_u58w25_parent_department_id` INT,
+    `table_u58w25_department_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9ay8es` (`table_9ay8es_employee_id`, `table_9ay8es_department_id`, `table_9ay8es_manager_id`, `table_9ay8es_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_u58w25` (`table_u58w25_department_id`, `table_u58w25_parent_department_id`, `table_u58w25_department_name`) VALUES (1, 2, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_PARENT_ID INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT 0;
+
+    SET V_CURRENT_ID = DEPARTMENT_ID_PARAM;
+
+    DEPTH_LOOP: WHILE V_CURRENT_ID IS NOT NULL AND V_CURRENT_ID != 0 DO
+        SELECT COALESCE(TABLE_U58W25_PARENT_DEPARTMENT_ID, 0)
+        INTO V_PARENT_ID
+        FROM TABLE_U58W25
+        WHERE TABLE_U58W25_DEPARTMENT_ID = V_CURRENT_ID;
+
+        IF V_PARENT_ID = 0 OR V_PARENT_ID = V_CURRENT_ID THEN
+            LEAVE DEPTH_LOOP;
+        END IF;
+
+        SET V_DEPTH = (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (v_depth) + 1;
+        SET V_CURRENT_ID = V_PARENT_ID;
+    END WHILE DEPTH_LOOP;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+CREATE TABLE IF NOT EXISTS `table_lbmp6b` (
+    `table_lbmp6b_emp_id` INT,
+    `table_lbmp6b_department_id` INT,
+    `table_lbmp6b_salary` INT
+);
+
+INSERT INTO `table_lbmp6b` (`table_lbmp6b_emp_id`, `table_lbmp6b_department_id`, `table_lbmp6b_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_INDEX_0vj85v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_LBMP6B_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_LBMP6B_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_LBMP6B
+    WHERE TABLE_LBMP6B_DEPARTMENT_ID = (SELECT TABLE_LBMP6B_DEPARTMENT_ID FROM TABLE_LBMP6B WHERE TABLE_LBMP6B_EMP_ID = EMP_ID_PARAM);
+
+    RETURN FLOOR((V_SALARY * 100) / V_DEPT_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN (MYSQL_FUNC_PROC_TIME_wu095y()) - 777 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TIME_wu095y----- */
+CREATE TABLE IF NOT EXISTS `table_z2mr2n` (
+    `table_z2mr2n_ctime` INT
+);
+
+INSERT INTO `table_z2mr2n` (`table_z2mr2n_ctime`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TIME_wu095y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TIME_wu095y() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT `TABLE_Z2MR2N_CTIME` INTO RESULT FROM `TABLE_Z2MR2N`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(INCOME INT, TAX_YEAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_TAXABLE_INCOME INT DEFAULT 0;
+
+    SET V_TAXABLE_INCOME = INCOME;
+
+    IF INCOME <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF INCOME <= 10000 THEN
+        SET V_TAX_AMOUNT = INCOME * 10 / 100;
+    ELSEIF INCOME <= 40000 THEN
+        SET V_TAX_AMOUNT = 1000 + ((INCOME - 10000) * 20 / 100);
+    ELSEIF INCOME <= 85000 THEN
+        SET V_TAX_AMOUNT = 1000 + 6000 + ((INCOME - 40000) * 30 / 100);
+    ELSE
+        SET V_TAX_AMOUNT = 1000 + 6000 + 13500 + ((INCOME - 85000) * 35 / 100);
+    END IF;
+
+    RETURN CAST(V_TAX_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav----- */
+CREATE TABLE IF NOT EXISTS `table_1v8mfd` (
+    `table_1v8mfd_flight_id` INT,
+    `table_1v8mfd_airline_code` INT,
+    `table_1v8mfd_origin` INT,
+    `table_1v8mfd_destination` INT,
+    `table_1v8mfd_distance_miles` INT,
+    `table_1v8mfd_base_price` DECIMAL(10,2),
+    `table_1v8mfd_available_seats` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_y7dilj` (
+    `table_y7dilj_booking_id` INT,
+    `table_y7dilj_flight_id` INT,
+    `table_y7dilj_passenger_id` INT,
+    `table_y7dilj_seat_class` INT,
+    `table_y7dilj_price_paid` INT
+);
+
+INSERT INTO `table_1v8mfd` (`table_1v8mfd_flight_id`, `table_1v8mfd_airline_code`, `table_1v8mfd_origin`, `table_1v8mfd_destination`, `table_1v8mfd_distance_miles`, `table_1v8mfd_base_price`, `table_1v8mfd_available_seats`) VALUES (1, 2, 3, 4, 5, 1.0, 7);
+
+INSERT INTO `table_y7dilj` (`table_y7dilj_booking_id`, `table_y7dilj_flight_id`, `table_y7dilj_passenger_id`, `table_y7dilj_seat_class`, `table_y7dilj_price_paid`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 200;
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_DEMAND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1V8MFD_BASE_PRICE, 200), COALESCE(TABLE_1V8MFD_AVAILABLE_SEATS, 100)
+    INTO V_BASE_PRICE, V_AVAILABLE_SEATS
+    FROM TABLE_1V8MFD
+    WHERE TABLE_1V8MFD_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BOOKED_SEATS
+    FROM TABLE_Y7DILJ
+    WHERE TABLE_Y7DILJ_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    SET V_DEMAND_SCORE = ((V_AVAILABLE_SEATS - V_BOOKED_SEATS) * 100) / V_AVAILABLE_SEATS;
+
+    IF V_BASE_PRICE > 500 THEN
+        SET V_DEMAND_SCORE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(-83)) - -747 + (v_demand_score - 20);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(-96)) - -484 + (cast(v_demand_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+CREATE TABLE IF NOT EXISTS `table_w5wcxl` (
+    `table_w5wcxl_campaign_id` INT,
+    `table_w5wcxl_channel` INT,
+    `table_w5wcxl_target_audience` INT,
+    `table_w5wcxl_budget` INT,
+    `table_w5wcxl_start_date` DATE,
+    `table_w5wcxl_end_date` DATE,
+    `table_w5wcxl_status` VARCHAR(50)
+);
+
+INSERT INTO `table_w5wcxl` (`table_w5wcxl_campaign_id`, `table_w5wcxl_channel`, `table_w5wcxl_target_audience`, `table_w5wcxl_budget`, `table_w5wcxl_start_date`, `table_w5wcxl_end_date`, `table_w5wcxl_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_W5WCXL_START_DATE, TABLE_W5WCXL_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W5WCXL
+    WHERE TABLE_W5WCXL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_DAYS = DATEDIFF(V_END_DATE, V_START_DATE);
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+CREATE TABLE IF NOT EXISTS `table_npdkhs` (
+    `table_npdkhs_emp_id` INT,
+    `table_npdkhs_department_id` INT,
+    `table_npdkhs_salary` INT,
+    `table_npdkhs_hire_date` DATE,
+    `table_npdkhs_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_npdkhs` (`table_npdkhs_emp_id`, `table_npdkhs_department_id`, `table_npdkhs_salary`, `table_npdkhs_hire_date`, `table_npdkhs_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NPDKHS_PERFORMANCE_RATING, 0), COALESCE(TABLE_NPDKHS_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_NPDKHS_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM TABLE_NPDKHS
+    WHERE TABLE_NPDKHS_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERF_RATIO = (V_PERFORMANCE * V_SALARY) / V_TENURE_YEARS;
+
+    RETURN FLOOR(V_PERF_RATIO / 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE INT DEFAULT 0;
+    SET V_DISTANCE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(86)) - -556 + ((MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(-53)) - -673 + (abs(x1 - x2) + abs(y1 - y2)));
+    RETURN (MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav(-11)) - -3 + ((MYSQL_FUNC_CALCULATE_TAX_WITH_TIER_o2600g(14, 88)) - -213 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(-25)) - 819 + (v_distance)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(1, 1, 1, 1);

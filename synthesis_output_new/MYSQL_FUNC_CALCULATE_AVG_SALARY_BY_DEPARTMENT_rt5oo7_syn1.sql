@@ -1,0 +1,412 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_xqsksz` (
+    `table_xqsksz_emp_id` INT,
+    `table_xqsksz_department_id` INT,
+    `table_xqsksz_salary` INT,
+    `table_xqsksz_hire_date` DATE
+);
+
+INSERT INTO `table_xqsksz` (`table_xqsksz_emp_id`, `table_xqsksz_department_id`, `table_xqsksz_salary`, `table_xqsksz_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+CREATE TABLE IF NOT EXISTS `table_ukztpb` (
+    `table_ukztpb_donation_id` INT,
+    `table_ukztpb_donor_id` INT,
+    `table_ukztpb_campaign_id` INT,
+    `table_ukztpb_amount` DECIMAL(10,2),
+    `table_ukztpb_donation_date` DATE,
+    `table_ukztpb_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4jtf78` (
+    `table_4jtf78_campaign_id` INT,
+    `table_4jtf78_name` VARCHAR(50),
+    `table_4jtf78_goal_amount` DECIMAL(10,2),
+    `table_4jtf78_raised_amount` DECIMAL(10,2),
+    `table_4jtf78_start_date` DATE
+);
+
+INSERT INTO `table_ukztpb` (`table_ukztpb_donation_id`, `table_ukztpb_donor_id`, `table_ukztpb_campaign_id`, `table_ukztpb_amount`, `table_ukztpb_donation_date`, `table_ukztpb_payment_method`) VALUES (1, 2, 3, 1.0, '2024-01-01', 6);
+
+INSERT INTO `table_4jtf78` (`table_4jtf78_campaign_id`, `table_4jtf78_name`, `table_4jtf78_goal_amount`, `table_4jtf78_raised_amount`, `table_4jtf78_start_date`) VALUES (1, 'test', 1.0, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4JTF78_GOAL_AMOUNT, 1000), COALESCE(TABLE_4JTF78_RAISED_AMOUNT, 0)
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM TABLE_4JTF78
+    WHERE TABLE_4JTF78_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_UKZTPB_AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM TABLE_UKZTPB
+    WHERE TABLE_UKZTPB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * 100) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(-35, 50)) - -558 + (cast(v_progress_percent as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(RADIUS INT, DISTANCE_FROM_CENTER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TANGENT_LENGTH DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SQUARED_DISTANCE INT DEFAULT 0;
+    DECLARE V_SQUARED_RADIUS INT DEFAULT 0;
+
+    IF DISTANCE_FROM_CENTER <= RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQUARED_DISTANCE = DISTANCE_FROM_CENTER * DISTANCE_FROM_CENTER;
+    SET V_SQUARED_RADIUS = (MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3(-5)) - 236 + (radius * radius);
+
+    SET V_TANGENT_LENGTH = SQRT(V_SQUARED_DISTANCE - V_SQUARED_RADIUS);
+
+    RETURN FLOOR(V_TANGENT_LENGTH);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+CREATE TABLE IF NOT EXISTS `table_00w3dk` (
+    `table_00w3dk_order_id` INT,
+    `table_00w3dk_customer_id` INT,
+    `table_00w3dk_order_date` DATE,
+    `table_00w3dk_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_00w3dk` (`table_00w3dk_order_id`, `table_00w3dk_customer_id`, `table_00w3dk_order_date`, `table_00w3dk_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_00W3DK_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_TOTAL
+    FROM TABLE_00W3DK
+    WHERE TABLE_00W3DK_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_00W3DK_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN FLOOR(V_RECENT_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+CREATE TABLE IF NOT EXISTS `table_nsm6c8` (
+    `table_nsm6c8_campaign_id` INT,
+    `table_nsm6c8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nsm6c8` (`table_nsm6c8_campaign_id`, `table_nsm6c8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_NSM6C8_STATUS
+    INTO V_STATUS
+    FROM TABLE_NSM6C8
+    WHERE TABLE_NSM6C8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+CREATE TABLE IF NOT EXISTS `table_42hbdg` (
+    `table_42hbdg_emp_id` INT,
+    `table_42hbdg_department_id` INT,
+    `table_42hbdg_salary` INT,
+    `table_42hbdg_hire_date` DATE,
+    `table_42hbdg_performance_score` INT
+);
+
+INSERT INTO `table_42hbdg` (`table_42hbdg_emp_id`, `table_42hbdg_department_id`, `table_42hbdg_salary`, `table_42hbdg_hire_date`, `table_42hbdg_performance_score`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(DEPARTMENT_ID_PARAM INT, EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_42HBDG_SALARY, 0) INTO V_EMP_SALARY
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BELOW_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY < V_EMP_SALARY;
+
+    SELECT COUNT(*) INTO V_ABOVE_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY > V_EMP_SALARY;
+
+    SET V_RANK = (MYSQL_FUNC_TOGGLE_BITS_b7n993(13, 45)) - -197 + (v_below_count + 1);
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_TOGGLE_BITS_b7n993----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TOGGLE_BITS_b7n993(NUM INT, BIT_POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_BIT_POS INT DEFAULT 0;
+    DECLARE V_CURRENT_BIT INT;
+
+    TOGGLE_LOOP: WHILE BIT_POSITIONS > 0 DO
+        SET V_BIT_POS = BIT_POSITIONS MOD 10;
+        SET V_CURRENT_BIT = (NUM >> V_BIT_POS) & 1;
+
+        IF V_CURRENT_BIT = 0 THEN
+            SET V_RESULT = V_RESULT | (1 << V_BIT_POS);
+        END IF;
+
+        SET BIT_POSITIONS = BIT_POSITIONS DIV 10;
+    END WHILE TOGGLE_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+CREATE TABLE IF NOT EXISTS `table_gg067m` (
+    `table_gg067m_rental_id` INT,
+    `table_gg067m_customer_id` INT,
+    `table_gg067m_boat_id` INT,
+    `table_gg067m_rental_hours` INT,
+    `table_gg067m_hourly_rate` INT,
+    `table_gg067m_fuel_included` INT,
+    `table_gg067m_captain_required` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1tuyv7` (
+    `table_1tuyv7_boat_id` INT,
+    `table_1tuyv7_boat_type` VARCHAR(50),
+    `table_1tuyv7_make` INT,
+    `table_1tuyv7_model` INT,
+    `table_1tuyv7_length_feet` INT,
+    `table_1tuyv7_capacity` INT
+);
+
+INSERT INTO `table_gg067m` (`table_gg067m_rental_id`, `table_gg067m_customer_id`, `table_gg067m_boat_id`, `table_gg067m_rental_hours`, `table_gg067m_hourly_rate`, `table_gg067m_fuel_included`, `table_gg067m_captain_required`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_1tuyv7` (`table_1tuyv7_boat_id`, `table_1tuyv7_boat_type`, `table_1tuyv7_make`, `table_1tuyv7_model`, `table_1tuyv7_length_feet`, `table_1tuyv7_capacity`) VALUES (1, 'test', 3, 4, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BOAT_RENTAL_COST_x82okz(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 4;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CAPTAIN_FEE INT DEFAULT 150;
+    DECLARE V_FUEL_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_GG067M_RENTAL_HOURS, 4), COALESCE(TABLE_GG067M_HOURLY_RATE, 200), COALESCE(TABLE_GG067M_CAPTAIN_REQUIRED, 0)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE, V_CAPTAIN_FEE
+    FROM TABLE_GG067M
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT TABLE_1TUYV7_LENGTH_FEET * 5 INTO V_FUEL_SURCHARGE
+    FROM TABLE_GG067M BR
+    JOIN TABLE_1TUYV7 B ON TABLE_GG067M_BOAT_ID = TABLE_1TUYV7_BOAT_ID
+    WHERE TABLE_GG067M_RENTAL_ID = RENTAL_ID_PARAM AND TABLE_GG067M_FUEL_INCLUDED = 0;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(-42)) - -323 + (v_rental_hours * v_hourly_rate + v_fuel_surcharge);
+
+    IF V_CAPTAIN_FEE > 0 THEN
+        SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(-83)) - -752 + (v_total_cost + v_captain_fee);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+CREATE TABLE IF NOT EXISTS `table_6pbou9` (
+    `table_6pbou9_reading_id` INT,
+    `table_6pbou9_meter_id` INT,
+    `table_6pbou9_reading_date` DATE,
+    `table_6pbou9_kwh_used` INT,
+    `table_6pbou9_reading_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5nr18y` (
+    `table_5nr18y_tier_id` INT,
+    `table_5nr18y_tier_name` VARCHAR(50),
+    `table_5nr18y_min_kwh` INT,
+    `table_5nr18y_max_kwh` INT,
+    `table_5nr18y_rate_per_kwh` INT
+);
+
+INSERT INTO `table_6pbou9` (`table_6pbou9_reading_id`, `table_6pbou9_meter_id`, `table_6pbou9_reading_date`, `table_6pbou9_kwh_used`, `table_6pbou9_reading_type`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_5nr18y` (`table_5nr18y_tier_id`, `table_5nr18y_tier_name`, `table_5nr18y_min_kwh`, `table_5nr18y_max_kwh`, `table_5nr18y_rate_per_kwh`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIME_OF_USE_CHARGE_hdoftg(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PEAK_KWH INT DEFAULT 0;
+    DECLARE V_OFFPEAK_KWH INT DEFAULT 0;
+    DECLARE V_PEAK_RATE INT DEFAULT 15;
+    DECLARE V_OFFPEAK_RATE INT DEFAULT 8;
+    DECLARE V_TOTAL_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_PEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'PEAK';
+
+    SELECT COALESCE(SUM(TABLE_6PBOU9_KWH_USED), 0) INTO V_OFFPEAK_KWH
+    FROM TABLE_6PBOU9
+    WHERE TABLE_6PBOU9_METER_ID = METER_ID_PARAM AND TABLE_6PBOU9_READING_TYPE = 'OFFPEAK';
+
+    SET V_TOTAL_CHARGE = (V_PEAK_KWH * V_PEAK_RATE) + (V_OFFPEAK_KWH * V_OFFPEAK_RATE);
+
+    RETURN CAST(V_TOTAL_CHARGE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+CREATE TABLE IF NOT EXISTS `table_g2p8j5` (
+    `table_g2p8j5_order_id` INT,
+    `table_g2p8j5_customer_id` INT,
+    `table_g2p8j5_order_date` DATE,
+    `table_g2p8j5_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zzb55x` (
+    `table_zzb55x_customer_id` INT,
+    `table_zzb55x_country` INT
+);
+
+INSERT INTO `table_g2p8j5` (`table_g2p8j5_order_id`, `table_g2p8j5_customer_id`, `table_g2p8j5_order_date`, `table_g2p8j5_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_zzb55x` (`table_zzb55x_customer_id`, `table_zzb55x_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_G2P8J5_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_G2P8J5 O
+    JOIN TABLE_ZZB55X C ON TABLE_G2P8J5_CUSTOMER_ID = TABLE_ZZB55X_CUSTOMER_ID
+    WHERE TABLE_ZZB55X_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - 612 + (floor(v_avg_order_value));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+CREATE TABLE IF NOT EXISTS `table_kzmcio` (
+    `table_kzmcio_emp_id` INT,
+    `table_kzmcio_department_id` INT,
+    `table_kzmcio_salary` INT,
+    `table_kzmcio_hire_date` DATE
+);
+
+INSERT INTO `table_kzmcio` (`table_kzmcio_emp_id`, `table_kzmcio_department_id`, `table_kzmcio_salary`, `table_kzmcio_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_KZMCIO_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM TABLE_KZMCIO
+    WHERE TABLE_KZMCIO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (V_HEADCOUNT * 10) + (V_AVG_SALARY / 100);
+
+    RETURN V_HEADCOUNT_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XQSKSZ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_XQSKSZ
+    WHERE TABLE_XQSKSZ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(-34)) - -424 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(-72)) - 4 + (floor(v_avg_salary)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_AVG_SALARY_BY_DEPARTMENT_rt5oo7(1);

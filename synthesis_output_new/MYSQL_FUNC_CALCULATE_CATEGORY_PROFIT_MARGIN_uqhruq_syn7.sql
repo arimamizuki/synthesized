@@ -1,0 +1,404 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_7s2v0h` (
+    `table_7s2v0h_category_id` INT,
+    `table_7s2v0h_price` DECIMAL(10,2),
+    `table_7s2v0h_stock_quantity` INT
+);
+
+INSERT INTO `table_7s2v0h` (`table_7s2v0h_category_id`, `table_7s2v0h_price`, `table_7s2v0h_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N MOD 2 = 0 THEN
+        SET V_RESULT = P_N * 2;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(-29)) - 918 + ((MYSQL_FUNC_TEST_4080c6()) - -185 + (v_result));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_TEST_4080c6----- */
+CREATE TABLE IF NOT EXISTS table_k80otc (
+    table_k80otc_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_k80otc_name VARCHAR(100)
+);
+
+INSERT INTO table_k80otc (`table_k80otc_name`) VALUES 
+    ('Product A'),
+    ('Product B'),
+    ('Product C'),
+    ('Product D'),
+    ('Product E'),
+    ('Product F'),
+    ('Product G');
+
+/* -----Called: MYSQL_FUNC_TEST_4080c6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_4080c6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE COUNT_PRODUCTS_VAR INT;
+    DECLARE RESULT INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO COUNT_PRODUCTS_VAR FROM TABLE_K80OTC;
+
+    IF COUNT_PRODUCTS_VAR >= 7 THEN
+        SET RESULT = 1;
+    ELSE
+        SET RESULT = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(-72)) - 944 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+CREATE TABLE IF NOT EXISTS `table_4dqelz` (
+    `table_4dqelz_loan_id` INT,
+    `table_4dqelz_customer_id` INT,
+    `table_4dqelz_principal_amount` DECIMAL(10,2),
+    `table_4dqelz_interest_rate` INT,
+    `table_4dqelz_term_months` INT,
+    `table_4dqelz_monthly_payment` INT,
+    `table_4dqelz_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4dqelz` (`table_4dqelz_loan_id`, `table_4dqelz_customer_id`, `table_4dqelz_principal_amount`, `table_4dqelz_interest_rate`, `table_4dqelz_term_months`, `table_4dqelz_monthly_payment`, `table_4dqelz_status`) VALUES (1, 2, 1.0, 4, 5, 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4DQELZ_PRINCIPAL_AMOUNT, 0), COALESCE(TABLE_4DQELZ_MONTHLY_PAYMENT, 0), COALESCE(TABLE_4DQELZ_TERM_MONTHS, 12)
+    INTO V_PRINCIPAL, V_MONTHLY_PAYMENT, V_TERM_MONTHS
+    FROM TABLE_4DQELZ
+    WHERE TABLE_4DQELZ_LOAN_ID = LOAN_ID_PARAM;
+
+    SET V_TOTAL_PAYMENT = V_MONTHLY_PAYMENT * V_TERM_MONTHS;
+    SET V_TOTAL_INTEREST = V_TOTAL_PAYMENT - V_PRINCIPAL;
+
+    RETURN GREATEST(V_TOTAL_INTEREST, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+
+    UGLY_LOOP: WHILE V_TEMP % 2 = 0 DO
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    UGLY_LOOP2: WHILE V_TEMP % 3 = 0 DO
+        SET V_TEMP = V_TEMP / 3;
+    END WHILE;
+
+    UGLY_LOOP3: WHILE V_TEMP % 5 = 0 DO
+        SET V_TEMP = V_TEMP / 5;
+    END WHILE;
+
+    IF V_TEMP = 1 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+CREATE TABLE IF NOT EXISTS `table_a3kxxw` (
+    `table_a3kxxw_campaign_id` INT,
+    `table_a3kxxw_status` VARCHAR(50),
+    `table_a3kxxw_start_date` DATE,
+    `table_a3kxxw_end_date` DATE
+);
+
+INSERT INTO `table_a3kxxw` (`table_a3kxxw_campaign_id`, `table_a3kxxw_status`, `table_a3kxxw_start_date`, `table_a3kxxw_end_date`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START DATE;
+    DECLARE V_END DATE;
+
+    SELECT TABLE_A3KXXW_START_DATE, TABLE_A3KXXW_END_DATE
+    INTO V_START, V_END
+    FROM TABLE_A3KXXW
+    WHERE TABLE_A3KXXW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END IS NULL OR V_START IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (0);
+    END IF;
+
+    RETURN DATEDIFF(V_END, V_START);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, 0), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+CREATE TABLE IF NOT EXISTS `table_gkpv1s` (
+    `table_gkpv1s_department_id` INT
+);
+
+INSERT INTO `table_gkpv1s` (`table_gkpv1s_department_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_GKPV1S
+    WHERE TABLE_GKPV1S_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(80)) - 932 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+CREATE TABLE IF NOT EXISTS `table_vc2b5u` (
+    `table_vc2b5u_emp_id` INT,
+    `table_vc2b5u_department_id` INT,
+    `table_vc2b5u_salary` INT,
+    `table_vc2b5u_hire_date` DATE,
+    `table_vc2b5u_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_se6mls` (
+    `table_se6mls_department_id` INT,
+    `table_se6mls_name` VARCHAR(50),
+    `table_se6mls_manager_id` INT
+);
+
+INSERT INTO `table_vc2b5u` (`table_vc2b5u_emp_id`, `table_vc2b5u_department_id`, `table_vc2b5u_salary`, `table_vc2b5u_hire_date`, `table_vc2b5u_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_se6mls` (`table_se6mls_department_id`, `table_se6mls_name`, `table_se6mls_manager_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_PERFORMANCE_RATING), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_INDEX = (V_AVG_PERFORMANCE * 30) + (V_AVG_SALARY / 1000) + (V_EMPLOYEE_COUNT / 5);
+
+    RETURN V_PERFORMANCE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+CREATE TABLE IF NOT EXISTS `table_if4wjn` (
+    `table_if4wjn_appointment_id` INT,
+    `table_if4wjn_customer_id` INT,
+    `table_if4wjn_therapist_id` INT,
+    `table_if4wjn_service_type` VARCHAR(50),
+    `table_if4wjn_duration_minutes` INT,
+    `table_if4wjn_appointment_date` DATE,
+    `table_if4wjn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6nekv6` (
+    `table_6nekv6_service_id` INT,
+    `table_6nekv6_name` VARCHAR(50),
+    `table_6nekv6_base_price` DECIMAL(10,2),
+    `table_6nekv6_duration_default` INT
+);
+
+INSERT INTO `table_if4wjn` (`table_if4wjn_appointment_id`, `table_if4wjn_customer_id`, `table_if4wjn_therapist_id`, `table_if4wjn_service_type`, `table_if4wjn_duration_minutes`, `table_if4wjn_appointment_date`, `table_if4wjn_price`) VALUES (1, 2, 3, 'test', 5, '2024-01-01', 1.0);
+
+INSERT INTO `table_6nekv6` (`table_6nekv6_service_id`, `table_6nekv6_name`, `table_6nekv6_base_price`, `table_6nekv6_duration_default`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(SERVICE_TYPE_PARAM INT, ADD_ONS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 80;
+    DECLARE V_ADDON_COST INT DEFAULT 30;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'MASSAGE' THEN SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(34)) - -560 + (100);
+        WHEN 'FACIAL' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BODY_WRAP' THEN SET V_BASE_PRICE = 120;
+        WHEN 'REFLEXOLOGY' THEN SET V_BASE_PRICE = 60;
+        ELSE SET V_BASE_PRICE = 80;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE + (ADD_ONS_PARAM * V_ADDON_COST);
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+CREATE TABLE IF NOT EXISTS `table_h9b2gz` (
+    `table_h9b2gz_campaign_id` INT,
+    `table_h9b2gz_channel` INT,
+    `table_h9b2gz_budget` INT,
+    `table_h9b2gz_start_date` DATE,
+    `table_h9b2gz_end_date` DATE,
+    `table_h9b2gz_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ettoso` (
+    `table_ettoso_conversion_id` INT,
+    `table_ettoso_campaign_id` INT,
+    `table_ettoso_conversion_value` INT
+);
+
+INSERT INTO `table_h9b2gz` (`table_h9b2gz_campaign_id`, `table_h9b2gz_channel`, `table_h9b2gz_budget`, `table_h9b2gz_start_date`, `table_h9b2gz_end_date`, `table_h9b2gz_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ettoso` (`table_ettoso_conversion_id`, `table_ettoso_campaign_id`, `table_ettoso_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_ETTOSO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM TABLE_ETTOSO
+    WHERE TABLE_ETTOSO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(TABLE_H9B2GZ_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_H9B2GZ
+    WHERE TABLE_H9B2GZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = ((V_TOTAL_REVENUE - V_CAMPAIGN_BUDGET) * 100) / V_CAMPAIGN_BUDGET;
+    END IF;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_7S2V0H_PRICE), 0), COALESCE(SUM(TABLE_7S2V0H_STOCK_QUANTITY), 0)
+    INTO V_AVG_PRICE, V_TOTAL_STOCK
+    FROM TABLE_7S2V0H
+    WHERE TABLE_7S2V0H_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(-38, -31)) - -751 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(-41)) - -403 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(63)) - -880 + ((MYSQL_FUNC_HANDLER_FUNC_DOUBLE_IF_EVEN_ud4r0g(78)) - -916 + (floor((v_avg_price * v_total_stock) / 100)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(1);

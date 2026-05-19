@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1133845 (v1133846 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1133826 (v1133827 INT, v1133831 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1133634 (v1133635 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1133871 (v1133872 DATETIME);
+CREATE TABLE IF NOT EXISTS v1133832 (v1133833 DECIMAL(10,6));
+INSERT INTO v1133845 VALUES ('y'), ('z'), ('a');
+INSERT INTO v1133826 VALUES (100, 'azundris'), (200, 'test'), (300, 'other');
+INSERT INTO v1133634 VALUES ('a\\\\b'), ('ac'), ('xyz');
+INSERT INTO v1133871 VALUES (NULL), (NULL);
+INSERT INTO v1133832 VALUES (7), (7), (5), (8);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + ((MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(90)) - 112 + (side * 4));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+CREATE TABLE IF NOT EXISTS `table_3iwn00` (
+    `table_3iwn00_emp_id` INT,
+    `table_3iwn00_salary` INT
+);
+
+INSERT INTO `table_3iwn00` (`table_3iwn00_emp_id`, `table_3iwn00_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3IWN00_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_3IWN00
+    WHERE TABLE_3IWN00_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(-77)) - 460 + ((MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + (floor(v_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(-61)) - 263 + (floor((v_price * v_stock) / 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= N / 2 DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    SET V_SUM = V_SUM + N;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_53vomz(64)) - -918 + ((MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(76)) - 728 + ((MYSQL_FUNC_COUNT_BITS_SET_sk78sm(-82)) - 39 + (result_count)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_sk78sm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_sk78sm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = N;
+
+    WHILE V_TEMP > 0 DO
+        IF (V_TEMP & 1) = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(90)) - 216 + (v_temp >> 1);
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+CREATE TABLE IF NOT EXISTS `table_alvd0j` (
+    `table_alvd0j_customer_id` INT,
+    `table_alvd0j_plan_type` VARCHAR(50),
+    `table_alvd0j_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_alvd0j` (`table_alvd0j_customer_id`, `table_alvd0j_plan_type`, `table_alvd0j_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_v2qjlh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_ALVD0J_PLAN_TYPE, COALESCE(TABLE_ALVD0J_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_ALVD0J
+    WHERE TABLE_ALVD0J_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_MONTHLY_COST > 500 OR V_PLAN_TYPE = 'ENTERPRISE' THEN
+        RETURN 5;
+    ELSEIF V_MONTHLY_COST > 200 OR V_PLAN_TYPE = 'PREMIUM' THEN
+        RETURN 4;
+    ELSEIF V_MONTHLY_COST > 100 THEN
+        RETURN 3;
+    ELSEIF V_MONTHLY_COST > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_SIEVE_lgz8bp(LIMIT_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_J INT DEFAULT 2;
+    DECLARE V_IS_COMPOSITE INT DEFAULT 0;
+
+    IF LIMIT_NUM < 2 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= LIMIT_NUM DO
+        SET V_IS_COMPOSITE = 0;
+        SET V_J = 2;
+
+        INNER_LOOP: WHILE V_J * V_J <= V_I DO
+            IF V_I % V_J = 0 THEN
+                SET V_IS_COMPOSITE = 1;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_IS_COMPOSITE = 0 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_53vomz----- */
+CREATE TABLE IF NOT EXISTS `table_wsb8wb` (
+    `table_wsb8wb_campaign_id` INT,
+    `table_wsb8wb_start_date` DATE,
+    `table_wsb8wb_end_date` DATE,
+    `table_wsb8wb_budget` INT,
+    `table_wsb8wb_spent_amount` DECIMAL(10,2),
+    `table_wsb8wb_status` VARCHAR(50)
+);
+
+INSERT INTO `table_wsb8wb` (`table_wsb8wb_campaign_id`, `table_wsb8wb_start_date`, `table_wsb8wb_end_date`, `table_wsb8wb_budget`, `table_wsb8wb_spent_amount`, `table_wsb8wb_status`) VALUES (1, '2024-01-01', '2024-01-01', 4, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_53vomz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_53vomz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT INT DEFAULT 0;
+    DECLARE V_REMAINING INT DEFAULT 0;
+    DECLARE V_UTILIZATION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WSB8WB_BUDGET, 0), COALESCE(TABLE_WSB8WB_SPENT_AMOUNT, 0)
+    INTO V_BUDGET, V_SPENT
+    FROM TABLE_WSB8WB
+    WHERE TABLE_WSB8WB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REMAINING = V_BUDGET - V_SPENT;
+    SET V_UTILIZATION_RATE = (V_SPENT * 100) / V_BUDGET;
+
+    RETURN CAST(V_UTILIZATION_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0306_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp_val DECIMAL(10,6);
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cursor_val DECIMAL(10,6);
+    DECLARE cur CURSOR FOR SELECT v1133833 FROM v1133832 WHERE v1133833 = 7 ORDER BY v1133833 LIMIT 90;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Statement 1: UPDATE with REPEAT function
+    UPDATE v1133845 AS x0 SET x0.v1133846 = REPEAT('b', p1) WHERE v1133846 = 'y';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: UPDATE with LIKE pattern
+    UPDATE v1133826 AS x0 SET v1133827 = 500 WHERE v1133831 LIKE CONCAT('%azun', 'dris%');
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE with multiple LIKE conditions
+    UPDATE v1133634 AS x0 SET v1133635 = 1414 WHERE v1133635 LIKE 'a\\\\\\\\b' OR v1133635 LIKE 'ac';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: INSERT with TIMESTAMP and integer value
+    INSERT INTO v1133871 (v1133872) VALUES (TIMESTAMP('2001-01-01 00:01:01.1')), (FROM_UNIXTIME(p1));
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT, using cursor to process
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1133832 AS x1 SET x1.v1133833 = 0.040372670 * v_cursor_val WHERE v1133833 = v_cursor_val;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Use IF/ELSEIF/ELSE for conditional logic
+    IF v_counter > 10 THEN
+        SET result = v_counter * 2;
+    ELSEIF v_counter BETWEEN 5 AND 10 THEN
+        SET result = v_counter + 100;
+    ELSE
+        SET result = v_counter;
+    END IF;
+
+    -- Use CASE/WHEN for additional logic
+    CASE 
+        WHEN p1 > 0 AND (MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(-8)) - -955 + (p2) > 0 THEN
+            SET result = result + p1 + p2;
+        WHEN p1 > 0 THEN
+            SET result = result + p1;
+        ELSE
+            SET result = result + p2;
+    END CASE;
+
+    -- Use WHILE loop for iteration
+    WHILE v_row_count < 5 DO
+        SET v_row_count = v_row_count + 1;
+        SET result = result + 1;
+    END WHILE;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0306_proc(1, 1, @out_result);
+
+SELECT @out_result;

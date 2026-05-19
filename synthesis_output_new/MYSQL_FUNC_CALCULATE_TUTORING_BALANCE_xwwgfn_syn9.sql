@@ -1,0 +1,377 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_l9v62y` (
+    `table_l9v62y_student_id` INT,
+    `table_l9v62y_school_id` INT,
+    `table_l9v62y_grade_level` INT,
+    `table_l9v62y_subjects_needed` INT,
+    `table_l9v62y_session_rate` INT,
+    `table_l9v62y_scholarship_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o7ya9e` (
+    `table_o7ya9e_session_id` INT,
+    `table_o7ya9e_student_id` INT,
+    `table_o7ya9e_tutor_id` INT,
+    `table_o7ya9e_session_date` DATE,
+    `table_o7ya9e_duration_minutes` INT,
+    `table_o7ya9e_subjects_covered` INT
+);
+
+INSERT INTO `table_l9v62y` (`table_l9v62y_student_id`, `table_l9v62y_school_id`, `table_l9v62y_grade_level`, `table_l9v62y_subjects_needed`, `table_l9v62y_session_rate`, `table_l9v62y_scholarship_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_o7ya9e` (`table_o7ya9e_session_id`, `table_o7ya9e_student_id`, `table_o7ya9e_tutor_id`, `table_o7ya9e_session_date`, `table_o7ya9e_duration_minutes`, `table_o7ya9e_subjects_covered`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+CREATE TABLE IF NOT EXISTS `table_kt12e3` (
+    `table_kt12e3_customer_id` INT,
+    `table_kt12e3_registration_date` DATE,
+    `table_kt12e3_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dh8s23` (
+    `table_dh8s23_order_id` INT,
+    `table_dh8s23_customer_id` INT,
+    `table_dh8s23_order_date` DATE,
+    `table_dh8s23_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kt12e3` (`table_kt12e3_customer_id`, `table_kt12e3_registration_date`, `table_kt12e3_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_dh8s23` (`table_dh8s23_order_id`, `table_dh8s23_customer_id`, `table_dh8s23_order_date`, `table_dh8s23_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ORDERS INT DEFAULT 0;
+    DECLARE V_COUNTRY_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_ORDERS
+    FROM TABLE_DH8S23
+    WHERE TABLE_DH8S23_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_ORDERS
+    FROM TABLE_DH8S23 O
+    JOIN TABLE_KT12E3 C ON TABLE_DH8S23_CUSTOMER_ID = TABLE_KT12E3_CUSTOMER_ID
+    WHERE TABLE_KT12E3_COUNTRY = (SELECT TABLE_KT12E3_COUNTRY FROM TABLE_KT12E3 WHERE TABLE_KT12E3_CUSTOMER_ID = CUSTOMER_ID_PARAM);
+
+    IF V_COUNTRY_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION = (MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(-2, 73)) - -787 + ((v_customer_orders * 100) / v_country_orders);
+
+    RETURN V_PENETRATION;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MIN_4r2u7f(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A < P_B THEN
+        SET V_RESULT = P_A;
+    ELSE
+        SET V_RESULT = P_B;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+CREATE TABLE IF NOT EXISTS `table_zoew3f` (
+    `table_zoew3f_campaign_id` INT,
+    `table_zoew3f_budget` INT,
+    `table_zoew3f_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qkdaim` (
+    `table_qkdaim_conversion_id` INT,
+    `table_qkdaim_campaign_id` INT,
+    `table_qkdaim_conversion_value` INT
+);
+
+INSERT INTO `table_zoew3f` (`table_zoew3f_campaign_id`, `table_zoew3f_budget`, `table_zoew3f_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_qkdaim` (`table_qkdaim_conversion_id`, `table_qkdaim_campaign_id`, `table_qkdaim_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REMAINING DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_ZOEW3F_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_ZOEW3F
+    WHERE TABLE_ZOEW3F_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_QKDAIM_CONVERSION_VALUE), 0)
+    INTO V_SPENT
+    FROM TABLE_QKDAIM
+    WHERE TABLE_QKDAIM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SET V_REMAINING = (MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(-29)) - -155 + ((MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(15)) - 754 + (v_budget - v_spent));
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(48)) - 14 + ((MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(29, 20)) - 450 + (floor(v_remaining)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+CREATE TABLE IF NOT EXISTS `table_6l8uxl` (
+    `table_6l8uxl_warranty_id` INT,
+    `table_6l8uxl_product_id` INT,
+    `table_6l8uxl_purchase_date` DATE,
+    `table_6l8uxl_warranty_months` INT,
+    `table_6l8uxl_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6l8uxl` (`table_6l8uxl_warranty_id`, `table_6l8uxl_product_id`, `table_6l8uxl_purchase_date`, `table_6l8uxl_warranty_months`, `table_6l8uxl_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT TABLE_6L8UXL_PURCHASE_DATE, TABLE_6L8UXL_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM TABLE_6L8UXL
+    WHERE TABLE_6L8UXL_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = 2;
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+CREATE TABLE IF NOT EXISTS `table_3pis8d` (
+    `table_3pis8d_campaign_id` INT,
+    `table_3pis8d_start_date` DATE
+);
+
+INSERT INTO `table_3pis8d` (`table_3pis8d_campaign_id`, `table_3pis8d_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_WEEK_cn6cja(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_3PIS8D_START_DATE)
+    INTO V_WEEK
+    FROM TABLE_3PIS8D
+    WHERE TABLE_3PIS8D_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(58)) - -984 + (v_week));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+CREATE TABLE IF NOT EXISTS `table_ycmequ` (
+    `table_ycmequ_emp_id` INT,
+    `table_ycmequ_department_id` INT
+);
+
+INSERT INTO `table_ycmequ` (`table_ycmequ_emp_id`, `table_ycmequ_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_INDEX_l7vz3a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_YCMEQU_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_YCMEQU
+    WHERE TABLE_YCMEQU_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_DEPT_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+CREATE TABLE IF NOT EXISTS `table_tpfwx5` (
+    `table_tpfwx5_campaign_id` INT,
+    `table_tpfwx5_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tpfwx5` (`table_tpfwx5_campaign_id`, `table_tpfwx5_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PRIORITY_INDEX_ie2w3y(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_TPFWX5_STATUS
+    INTO V_STATUS
+    FROM TABLE_TPFWX5
+    WHERE TABLE_TPFWX5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 10
+        WHEN 'PAUSED' THEN 5
+        WHEN 'COMPLETED' THEN 8
+        WHEN 'CANCELLED' THEN 1
+        ELSE 2
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+CREATE TABLE IF NOT EXISTS table_rfse4k (
+    table_rfse4k_employee_id INT,
+    table_rfse4k_first_name VARCHAR(50),
+    table_rfse4k_last_name VARCHAR(50),
+    table_rfse4k_salary INT
+);
+
+INSERT INTO table_rfse4k (`table_rfse4k_employee_id`, `table_rfse4k_first_name`, `table_rfse4k_last_name`, `table_rfse4k_salary`) VALUES (1, 'test', 'test', 4);
+
+/* -----Called: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_RFSE4K
+    WHERE TABLE_RFSE4K_SALARY > 35000
+    ORDER BY TABLE_RFSE4K_FIRST_NAME, TABLE_RFSE4K_LAST_NAME, TABLE_RFSE4K_EMPLOYEE_ID;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SESSION_RATE INT DEFAULT 40;
+    DECLARE V_SCHOLARSHIP_PERCENT INT DEFAULT 0;
+    DECLARE V_TOTAL_SESSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_BALANCE_OWED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L9V62Y_SESSION_RATE, 40), COALESCE(TABLE_L9V62Y_SCHOLARSHIP_PERCENT, 0)
+    INTO V_SESSION_RATE, V_SCHOLARSHIP_PERCENT
+    FROM TABLE_L9V62Y
+    WHERE TABLE_L9V62Y_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_SESSIONS
+    FROM TABLE_O7YA9E
+    WHERE TABLE_O7YA9E_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_TOTAL_SESSIONS * V_SESSION_RATE;
+    SET V_BALANCE_OWED = (MYSQL_FUNC_CALCULATE_BUDGET_REMAINING_INDEX_a0jnec(38)) - 555 + (v_total_charges - (v_total_charges * v_scholarship_percent / 100));
+
+    RETURN (MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp()) - -504 + ((MYSQL_FUNC_CALCULATE_PENETRATION_INDEX_dpuj1r(-95)) - 160 + (cast(v_balance_owed as signed)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(1);

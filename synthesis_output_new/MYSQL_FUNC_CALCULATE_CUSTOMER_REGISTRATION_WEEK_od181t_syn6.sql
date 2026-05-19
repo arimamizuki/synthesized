@@ -1,0 +1,399 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_j5f09c` (
+    `table_j5f09c_customer_id` INT,
+    `table_j5f09c_registration_date` DATE
+);
+
+INSERT INTO `table_j5f09c` (`table_j5f09c_customer_id`, `table_j5f09c_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+CREATE TABLE IF NOT EXISTS `table_bvk6ew` (
+    `table_bvk6ew_customer_id` INT
+);
+
+INSERT INTO `table_bvk6ew` (`table_bvk6ew_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_BVK6EW
+    WHERE TABLE_BVK6EW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= V_SQRT_N DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+            IF V_DIVISOR != N / V_DIVISOR THEN
+                SET V_SUM = V_SUM + (N / V_DIVISOR);
+            END IF;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+CREATE TABLE IF NOT EXISTS `table_h9b2gz` (
+    `table_h9b2gz_campaign_id` INT,
+    `table_h9b2gz_channel` INT,
+    `table_h9b2gz_budget` INT,
+    `table_h9b2gz_start_date` DATE,
+    `table_h9b2gz_end_date` DATE,
+    `table_h9b2gz_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ettoso` (
+    `table_ettoso_conversion_id` INT,
+    `table_ettoso_campaign_id` INT,
+    `table_ettoso_conversion_value` INT
+);
+
+INSERT INTO `table_h9b2gz` (`table_h9b2gz_campaign_id`, `table_h9b2gz_channel`, `table_h9b2gz_budget`, `table_h9b2gz_start_date`, `table_h9b2gz_end_date`, `table_h9b2gz_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ettoso` (`table_ettoso_conversion_id`, `table_ettoso_campaign_id`, `table_ettoso_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_ETTOSO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM TABLE_ETTOSO
+    WHERE TABLE_ETTOSO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(TABLE_H9B2GZ_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_H9B2GZ
+    WHERE TABLE_H9B2GZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = ((V_TOTAL_REVENUE - V_CAMPAIGN_BUDGET) * 100) / V_CAMPAIGN_BUDGET;
+    END IF;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(-86)) - -288 + (0))
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(63)) - -880 + (v_efficiency_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_QUARTER;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+CREATE TABLE IF NOT EXISTS `table_a3kxxw` (
+    `table_a3kxxw_campaign_id` INT,
+    `table_a3kxxw_status` VARCHAR(50),
+    `table_a3kxxw_start_date` DATE,
+    `table_a3kxxw_end_date` DATE
+);
+
+INSERT INTO `table_a3kxxw` (`table_a3kxxw_campaign_id`, `table_a3kxxw_status`, `table_a3kxxw_start_date`, `table_a3kxxw_end_date`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START DATE;
+    DECLARE V_END DATE;
+
+    SELECT TABLE_A3KXXW_START_DATE, TABLE_A3KXXW_END_DATE
+    INTO V_START, V_END
+    FROM TABLE_A3KXXW
+    WHERE TABLE_A3KXXW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END IS NULL OR V_START IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_VENUE_BOOKING_COST_tking4(-83, 98)) - -859 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_RETURN_CONSTANT_koelg7()) - -454 + ((MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(-39)) - -733 + (datediff(v_end, v_start)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VENUE_BOOKING_COST_tking4----- */
+CREATE TABLE IF NOT EXISTS `table_rm9iqh` (
+    `table_rm9iqh_venue_id` INT,
+    `table_rm9iqh_venue_name` VARCHAR(50),
+    `table_rm9iqh_capacity` INT,
+    `table_rm9iqh_rental_fee_per_hour` INT,
+    `table_rm9iqh_location_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1zafiu` (
+    `table_1zafiu_booking_id` INT,
+    `table_1zafiu_venue_id` INT,
+    `table_1zafiu_event_type` VARCHAR(50),
+    `table_1zafiu_booking_date` DATE,
+    `table_1zafiu_duration_hours` INT,
+    `table_1zafiu_setup_required` INT
+);
+
+INSERT INTO `table_rm9iqh` (`table_rm9iqh_venue_id`, `table_rm9iqh_venue_name`, `table_rm9iqh_capacity`, `table_rm9iqh_rental_fee_per_hour`, `table_rm9iqh_location_type`) VALUES (1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_1zafiu` (`table_1zafiu_booking_id`, `table_1zafiu_venue_id`, `table_1zafiu_event_type`, `table_1zafiu_booking_date`, `table_1zafiu_duration_hours`, `table_1zafiu_setup_required`) VALUES (1, 2, 'test', '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VENUE_BOOKING_COST_tking4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VENUE_BOOKING_COST_tking4(VENUE_ID_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_FEE INT DEFAULT 100;
+    DECLARE V_SETUP_FEE INT DEFAULT 50;
+    DECLARE V_LOCATION_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RM9IQH_RENTAL_FEE_PER_HOUR, 100)
+    INTO V_RENTAL_FEE
+    FROM TABLE_RM9IQH
+    WHERE TABLE_RM9IQH_VENUE_ID = VENUE_ID_PARAM;
+
+    SELECT CASE TABLE_RM9IQH_LOCATION_TYPE
+        WHEN 'DOWNTOWN' THEN 2
+        WHEN 'SUBURBAN' THEN 1
+        WHEN 'RURAL' THEN 0
+        ELSE 1
+    END INTO V_LOCATION_MULTIPLIER
+    FROM TABLE_RM9IQH
+    WHERE TABLE_RM9IQH_VENUE_ID = VENUE_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_FEE * HOURS_PARAM * V_LOCATION_MULTIPLIER;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+CREATE TABLE IF NOT EXISTS `table_apsp1p` (
+    `table_apsp1p_customer_id` INT,
+    `table_apsp1p_registration_date` DATE,
+    `table_apsp1p_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j667hh` (
+    `table_j667hh_order_id` INT,
+    `table_j667hh_customer_id` INT,
+    `table_j667hh_order_date` DATE,
+    `table_j667hh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_apsp1p` (`table_apsp1p_customer_id`, `table_apsp1p_registration_date`, `table_apsp1p_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_j667hh` (`table_j667hh_order_id`, `table_j667hh_customer_id`, `table_j667hh_order_date`, `table_j667hh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_PURCHASE_PATTERN_jqvhk1(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_PATTERN_SCORE INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(MONTHLY_ORDERS), 0)
+    INTO V_AVG_MONTHLY_ORDERS
+    FROM (
+        SELECT COUNT(*) AS MONTHLY_ORDERS
+        FROM TABLE_J667HH
+        WHERE TABLE_J667HH_CUSTOMER_ID = CUSTOMER_ID_PARAM
+        GROUP BY YEAR(TABLE_J667HH_ORDER_DATE), MONTH(TABLE_J667HH_ORDER_DATE)
+    ) MONTHLY;
+
+    IF V_CURRENT_MONTH IN (11, 12) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 1.5;
+    ELSEIF V_CURRENT_MONTH IN (6, 7, 8) THEN
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS * 0.8;
+    ELSE
+        SET V_PATTERN_SCORE = V_AVG_MONTHLY_ORDERS;
+    END IF;
+
+    RETURN FLOOR(V_PATTERN_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RETURN_CONSTANT_koelg7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 42;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_J5F09C_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_J5F09C
+    WHERE TABLE_J5F09C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + ((MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(34)) - -560 + ((MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + ((MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(31)) - -928 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(81)) - 365 + (v_week)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(1);

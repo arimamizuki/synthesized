@@ -1,0 +1,399 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_u6bv6v` (
+    `table_u6bv6v_campaign_id` INT,
+    `table_u6bv6v_start_date` DATE
+);
+
+INSERT INTO `table_u6bv6v` (`table_u6bv6v_campaign_id`, `table_u6bv6v_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+CREATE TABLE IF NOT EXISTS `table_6x50qw` (
+    `table_6x50qw_product_id` INT,
+    `table_6x50qw_category_id` INT,
+    `table_6x50qw_price` DECIMAL(10,2),
+    `table_6x50qw_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dg2mja` (
+    `table_dg2mja_category_id` INT,
+    `table_dg2mja_name` VARCHAR(50)
+);
+
+INSERT INTO `table_6x50qw` (`table_6x50qw_product_id`, `table_6x50qw_category_id`, `table_6x50qw_price`, `table_6x50qw_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_dg2mja` (`table_dg2mja_category_id`, `table_dg2mja_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_THRESHOLD INT DEFAULT 500;
+    DECLARE V_BULK_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_BULK_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_6X50QW_STOCK_QUANTITY > V_BULK_THRESHOLD;
+
+    IF V_TOTAL_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_BULK_RATIO = (V_BULK_STOCK * 100) / V_TOTAL_STOCK;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(-95)) - -131 + (v_bulk_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+CREATE TABLE IF NOT EXISTS `table_thz1np` (
+    `table_thz1np_product_id` INT,
+    `table_thz1np_category_id` INT,
+    `table_thz1np_price` DECIMAL(10,2),
+    `table_thz1np_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8ug1be` (
+    `table_8ug1be_category_id` INT,
+    `table_8ug1be_name` VARCHAR(50)
+);
+
+INSERT INTO `table_thz1np` (`table_thz1np_product_id`, `table_thz1np_category_id`, `table_thz1np_price`, `table_thz1np_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_8ug1be` (`table_8ug1be_category_id`, `table_8ug1be_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_STOCK DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_ADEQUACY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_THZ1NP_STOCK_QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_STOCK, V_TOTAL_PRODUCTS
+    FROM TABLE_THZ1NP
+    WHERE TABLE_THZ1NP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_STOCK = V_TOTAL_STOCK / V_TOTAL_PRODUCTS;
+
+    SET V_ADEQUACY_SCORE = V_AVG_STOCK / 10;
+
+    RETURN V_ADEQUACY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny(25)) - -874 + ((MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (quarter(v_registration_date)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny----- */
+CREATE TABLE IF NOT EXISTS `table_0z33eu` (
+    `table_0z33eu_emp_id` INT,
+    `table_0z33eu_department_id` INT,
+    `table_0z33eu_hire_date` DATE
+);
+
+INSERT INTO `table_0z33eu` (`table_0z33eu_emp_id`, `table_0z33eu_department_id`, `table_0z33eu_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_0Z33EU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_0Z33EU
+    WHERE TABLE_0Z33EU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(-25)) - 819 + ((MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s()) - 753 + ((MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + (floor(v_avg_tenure * 10))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = V_SUM + V_I;
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_074_SAVEPOINT_vppg3s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SP_COUNT INT DEFAULT 0;
+    
+    SAVEPOINT SP1;
+    SET SP_COUNT = (MYSQL_FUNC_PROC_BIT1_7d7is7()) - -908 + (sp_count) + 1;
+    
+    ROLLBACK TO SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RELEASE SAVEPOINT SP1;
+    SET SP_COUNT = SP_COUNT + 1;
+    
+    RETURN SP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+CREATE TABLE IF NOT EXISTS `table_gmjb6t` (
+    `table_gmjb6t_cbit` BIT(1)
+);
+
+INSERT INTO `table_gmjb6t` (`table_gmjb6t_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT1_7d7is7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    
+    SELECT CAST(TABLE_GMJB6T_CBIT AS UNSIGNED) INTO RESULT 
+    FROM `TABLE_GMJB6T` 
+    LIMIT 1;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+CREATE TABLE IF NOT EXISTS `table_129mia` (
+    `table_129mia_customer_id` INT,
+    `table_129mia_registration_date` DATE,
+    `table_129mia_tier_level` INT,
+    `table_129mia_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qvw4li` (
+    `table_qvw4li_order_id` INT,
+    `table_qvw4li_customer_id` INT,
+    `table_qvw4li_order_date` DATE,
+    `table_qvw4li_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tkbm59` (
+    `table_tkbm59_review_id` INT,
+    `table_tkbm59_customer_id` INT,
+    `table_tkbm59_product_id` INT,
+    `table_tkbm59_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_129mia` (`table_129mia_customer_id`, `table_129mia_registration_date`, `table_129mia_tier_level`, `table_129mia_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_qvw4li` (`table_qvw4li_order_id`, `table_qvw4li_customer_id`, `table_qvw4li_order_date`, `table_qvw4li_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_tkbm59` (`table_tkbm59_review_id`, `table_tkbm59_customer_id`, `table_tkbm59_product_id`, `table_tkbm59_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_CHURN_RISK_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_129MIA_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_129MIA
+    WHERE TABLE_129MIA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), MAX(TABLE_QVW4LI_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_LAST_ORDER_DATE
+    FROM TABLE_QVW4LI
+    WHERE TABLE_QVW4LI_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), V_LAST_ORDER_DATE)
+    INTO V_DAYS_SINCE_LAST_ORDER;
+
+    SELECT COALESCE(AVG(TABLE_TKBM59_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_TKBM59
+    WHERE TABLE_TKBM59_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_CHURN_RISK_SCORE = 50;
+
+    IF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 30;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 60 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 30 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    IF V_AVG_REVIEW_RATING < 3.0 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 15;
+    END IF;
+
+    IF V_ORDER_COUNT < 3 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    RETURN LEAST(V_CHURN_RISK_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_U6BV6V_START_DATE)
+    INTO V_DAY
+    FROM TABLE_U6BV6V
+    WHERE TABLE_U6BV6V_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + ((MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(-32)) - -480 + ((MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + (v_day)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(1);

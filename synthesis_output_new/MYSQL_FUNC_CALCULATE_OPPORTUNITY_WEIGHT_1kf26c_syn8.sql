@@ -1,0 +1,395 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_atvcax` (
+    `table_atvcax_opportunity_id` INT,
+    `table_atvcax_customer_id` INT,
+    `table_atvcax_sales_rep_id` INT,
+    `table_atvcax_stage` INT,
+    `table_atvcax_probability_percent` INT,
+    `table_atvcax_deal_value` INT,
+    `table_atvcax_close_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_5f5rgz` (
+    `table_5f5rgz_rep_id` INT,
+    `table_5f5rgz_name` VARCHAR(50),
+    `table_5f5rgz_quota` INT,
+    `table_5f5rgz_territory` INT
+);
+
+INSERT INTO `table_atvcax` (`table_atvcax_opportunity_id`, `table_atvcax_customer_id`, `table_atvcax_sales_rep_id`, `table_atvcax_stage`, `table_atvcax_probability_percent`, `table_atvcax_deal_value`, `table_atvcax_close_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_5f5rgz` (`table_5f5rgz_rep_id`, `table_5f5rgz_name`, `table_5f5rgz_quota`, `table_5f5rgz_territory`) VALUES (1, '2024-01-01', 1, 1);
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(-17)) - -96 + (v_result) * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+CREATE TABLE IF NOT EXISTS `table_cnc54j` (
+    `table_cnc54j_customer_id` INT
+);
+
+INSERT INTO `table_cnc54j` (`table_cnc54j_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(74)) - 371 + (customer_id_param % 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+CREATE TABLE IF NOT EXISTS `table_inbu5d` (
+    `table_inbu5d_product_id` INT,
+    `table_inbu5d_category_id` INT,
+    `table_inbu5d_price` DECIMAL(10,2),
+    `table_inbu5d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_04apsc` (
+    `table_04apsc_order_id` INT,
+    `table_04apsc_product_id` INT,
+    `table_04apsc_quantity` INT
+);
+
+INSERT INTO `table_inbu5d` (`table_inbu5d_product_id`, `table_inbu5d_category_id`, `table_inbu5d_price`, `table_inbu5d_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_04apsc` (`table_04apsc_order_id`, `table_04apsc_product_id`, `table_04apsc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_AVG_INVENTORY INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_INBU5D_STOCK_QUANTITY, (MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(87)) - 572 + ((MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(-38)) - -908 + (0)))
+    INTO V_CURRENT_STOCK
+    FROM TABLE_INBU5D
+    WHERE TABLE_INBU5D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_04APSC_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_04APSC
+    WHERE TABLE_04APSC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_INVENTORY = V_CURRENT_STOCK;
+
+    IF V_AVG_INVENTORY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATIO = V_TOTAL_SOLD / V_AVG_INVENTORY;
+
+    RETURN FLOOR(V_TURNOVER_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GENERATE_RANDOM_PASSWORD_rdu5px(LENGTH_PARAM INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PASSWORD VARCHAR(100) DEFAULT '';
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_CHAR_CODE INT DEFAULT 0;
+    DECLARE V_USE_SPECIAL INT DEFAULT 0;
+
+    IF LENGTH_PARAM <= 0 THEN
+        RETURN '';
+    END IF;
+
+    SET V_I = 1;
+
+    PASSWORD_LOOP: WHILE V_I <= LENGTH_PARAM DO
+        SET V_USE_SPECIAL = RAND() * 10;
+
+        IF V_USE_SPECIAL < 3 AND V_I < LENGTH_PARAM THEN
+            SET V_CHAR_CODE = RAND() * 10 + 33;
+        ELSEIF V_USE_SPECIAL < 6 THEN
+            SET V_CHAR_CODE = RAND() * 26 + 65;
+        ELSE
+            SET V_CHAR_CODE = RAND() * 26 + 97;
+        END IF;
+
+        SET V_PASSWORD = CONCAT(V_PASSWORD, CHAR(V_CHAR_CODE));
+        SET V_I = V_I + 1;
+    END WHILE PASSWORD_LOOP;
+
+    RETURN V_PASSWORD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+CREATE TABLE IF NOT EXISTS `table_2jb7oh` (
+    `table_2jb7oh_order_id` INT,
+    `table_2jb7oh_customer_id` INT,
+    `table_2jb7oh_order_date` DATE,
+    `table_2jb7oh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2jb7oh` (`table_2jb7oh_order_id`, `table_2jb7oh_customer_id`, `table_2jb7oh_order_date`, `table_2jb7oh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVG_DAYS_BETWEEN_ORDERS_azqzsi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT COUNT(*), MIN(TABLE_2JB7OH_ORDER_DATE), MAX(TABLE_2JB7OH_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_2JB7OH
+    WHERE TABLE_2JB7OH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN (MYSQL_FUNC_PROC_BIT_ea2fyr()) - 988 + (0);
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(88, -30)) - -568 + (floor(datediff(v_last_order, v_first_order) / (v_order_count - 1)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+CREATE TABLE IF NOT EXISTS `table_wvbnyq` (
+    `table_wvbnyq_cbit` BIT(1)
+);
+
+INSERT INTO `table_wvbnyq` (`table_wvbnyq_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT_ea2fyr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT_ea2fyr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT TABLE_WVBNYQ_CBIT FROM `TABLE_WVBNYQ`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO RESULT;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(39)) - 206 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o----- */
+CREATE TABLE IF NOT EXISTS `table_81gamz` (
+    `table_81gamz_store_id` INT,
+    `table_81gamz_region` INT,
+    `table_81gamz_store_type` VARCHAR(50),
+    `table_81gamz_monthly_rent` INT,
+    `table_81gamz_sales_target` INT,
+    `table_81gamz_sales_actual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c3mq9y` (
+    `table_c3mq9y_employee_id` INT,
+    `table_c3mq9y_store_id` INT,
+    `table_c3mq9y_role` INT,
+    `table_c3mq9y_salary` INT,
+    `table_c3mq9y_hire_date` DATE
+);
+
+INSERT INTO `table_81gamz` (`table_81gamz_store_id`, `table_81gamz_region`, `table_81gamz_store_type`, `table_81gamz_monthly_rent`, `table_81gamz_sales_target`, `table_81gamz_sales_actual`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c3mq9y` (`table_c3mq9y_employee_id`, `table_c3mq9y_store_id`, `table_c3mq9y_role`, `table_c3mq9y_salary`, `table_c3mq9y_hire_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(STORE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALES_TARGET INT DEFAULT 0;
+    DECLARE V_SALES_ACTUAL INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_81GAMZ_SALES_TARGET, 0), COALESCE(TABLE_81GAMZ_SALES_ACTUAL, 0)
+    INTO V_SALES_TARGET, V_SALES_ACTUAL
+    FROM TABLE_81GAMZ
+    WHERE TABLE_81GAMZ_STORE_ID = STORE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_EMPLOYEE_COUNT
+    FROM TABLE_C3MQ9Y
+    WHERE TABLE_C3MQ9Y_STORE_ID = STORE_ID_PARAM;
+
+    IF V_SALES_TARGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERFORMANCE_SCORE = ((V_SALES_ACTUAL - V_SALES_TARGET) * 100) / V_SALES_TARGET;
+
+    IF V_EMPLOYEE_COUNT > 10 THEN
+        SET V_PERFORMANCE_SCORE = V_PERFORMANCE_SCORE - 5;
+    END IF;
+
+    RETURN CAST(V_PERFORMANCE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8----- */
+CREATE TABLE IF NOT EXISTS `table_5qgm2m` (
+    `table_5qgm2m_emp_id` INT,
+    `table_5qgm2m_hire_date` DATE
+);
+
+INSERT INTO `table_5qgm2m` (`table_5qgm2m_emp_id`, `table_5qgm2m_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_5QGM2M_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_5QGM2M
+    WHERE TABLE_5QGM2M_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_HIRE_YEAR - 2000;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = V_SUM + V_I;
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_OPPORTUNITY_WEIGHT_1kf26c(OPPORTUNITY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PROBABILITY INT DEFAULT 0;
+    DECLARE V_DEAL_VALUE INT DEFAULT 0;
+    DECLARE V_DAYS_TO_CLOSE INT DEFAULT 0;
+    DECLARE V_WEIGHT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ATVCAX_PROBABILITY_PERCENT, 0), COALESCE(TABLE_ATVCAX_DEAL_VALUE, 0), DATEDIFF(TABLE_ATVCAX_CLOSE_DATE, CURDATE())
+    INTO V_PROBABILITY, V_DEAL_VALUE, V_DAYS_TO_CLOSE
+    FROM TABLE_ATVCAX
+    WHERE TABLE_ATVCAX_OPPORTUNITY_ID = OPPORTUNITY_ID_PARAM;
+
+    SET V_WEIGHT_SCORE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_YEAR_INDEX_s68zj8(-38)) - -411 + ((MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + ((v_deal_value * v_probability) / 100));
+
+    IF V_DAYS_TO_CLOSE < 0 THEN
+        SET V_WEIGHT_SCORE = V_WEIGHT_SCORE - 50;
+    END IF;
+
+    RETURN (MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + (cast(v_weight_score as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_OPPORTUNITY_WEIGHT_1kf26c(1);

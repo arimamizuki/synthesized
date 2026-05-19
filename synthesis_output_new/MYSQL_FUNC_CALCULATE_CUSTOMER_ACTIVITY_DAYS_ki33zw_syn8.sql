@@ -1,0 +1,373 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_t3oyhq` (
+    `table_t3oyhq_customer_id` INT,
+    `table_t3oyhq_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_e0ydbc` (
+    `table_e0ydbc_order_id` INT,
+    `table_e0ydbc_customer_id` INT,
+    `table_e0ydbc_order_date` DATE
+);
+
+INSERT INTO `table_t3oyhq` (`table_t3oyhq_customer_id`, `table_t3oyhq_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_e0ydbc` (`table_e0ydbc_order_id`, `table_e0ydbc_customer_id`, `table_e0ydbc_order_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_DATA_FABRICACAO_5mz9t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN CURRENT_YEAR - DATA_FIRST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+CREATE TABLE IF NOT EXISTS `table_kcy5si` (
+    `table_kcy5si_meter_id` INT,
+    `table_kcy5si_customer_id` INT,
+    `table_kcy5si_meter_type` VARCHAR(50),
+    `table_kcy5si_current_reading` INT,
+    `table_kcy5si_previous_reading` INT,
+    `table_kcy5si_tariff_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c44eze` (
+    `table_c44eze_panel_id` INT,
+    `table_c44eze_meter_id` INT,
+    `table_c44eze_capacity_kw` INT,
+    `table_c44eze_installation_date` DATE,
+    `table_c44eze_efficiency_percent` INT
+);
+
+INSERT INTO `table_kcy5si` (`table_kcy5si_meter_id`, `table_kcy5si_customer_id`, `table_kcy5si_meter_type`, `table_kcy5si_current_reading`, `table_kcy5si_previous_reading`, `table_kcy5si_tariff_rate`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c44eze` (`table_c44eze_panel_id`, `table_c44eze_meter_id`, `table_c44eze_capacity_kw`, `table_c44eze_installation_date`, `table_c44eze_efficiency_percent`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(METER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY_KW INT DEFAULT 5;
+    DECLARE V_EFFICIENCY_PERCENT INT DEFAULT 80;
+    DECLARE V_CURRENT_READING INT DEFAULT 0;
+    DECLARE V_CREDIT_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C44EZE_CAPACITY_KW, 5), COALESCE(TABLE_C44EZE_EFFICIENCY_PERCENT, 80)
+    INTO V_CAPACITY_KW, V_EFFICIENCY_PERCENT
+    FROM TABLE_C44EZE
+    WHERE TABLE_C44EZE_METER_ID = METER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_KCY5SI_CURRENT_READING, 0) INTO V_CURRENT_READING
+    FROM TABLE_KCY5SI
+    WHERE TABLE_KCY5SI_METER_ID = METER_ID_PARAM;
+
+    SET V_CREDIT_AMOUNT = (MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(-98, -47)) - -38 + ((MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(39)) - -380 + ((v_capacity_kw * v_efficiency_percent * v_current_reading) / 1000));
+
+    RETURN (MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(-36)) - 174 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(5)) - 647 + (cast(v_credit_amount as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+CREATE TABLE IF NOT EXISTS `table_yywzmn` (
+    `table_yywzmn_supplier_id` INT,
+    `table_yywzmn_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_yywzmn` (`table_yywzmn_supplier_id`, `table_yywzmn_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_YYWZMN_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_YYWZMN
+    WHERE TABLE_YYWZMN_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+CREATE TABLE IF NOT EXISTS `table_nqwaay` (
+    `table_nqwaay_order_id` INT,
+    `table_nqwaay_customer_id` INT,
+    `table_nqwaay_order_date` DATE,
+    `table_nqwaay_total_amount` DECIMAL(10,2),
+    `table_nqwaay_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rjmeai` (
+    `table_rjmeai_order_id` INT,
+    `table_rjmeai_product_id` INT,
+    `table_rjmeai_quantity` INT
+);
+
+INSERT INTO `table_nqwaay` (`table_nqwaay_order_id`, `table_nqwaay_customer_id`, `table_nqwaay_order_date`, `table_nqwaay_total_amount`, `table_nqwaay_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_rjmeai` (`table_rjmeai_order_id`, `table_rjmeai_product_id`, `table_rjmeai_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_DIVERSITY_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_RJMEAI_PRODUCT_ID), COALESCE(SUM(TABLE_RJMEAI_QUANTITY), (MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(-40)) - -668 + (0))
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_ITEMS
+    FROM TABLE_RJMEAI
+    WHERE TABLE_RJMEAI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DIVERSITY_INDEX = (V_UNIQUE_PRODUCTS * 100) / V_TOTAL_ITEMS;
+
+    RETURN V_DIVERSITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox----- */
+CREATE TABLE IF NOT EXISTS `table_gt6jol` (
+    `table_gt6jol_customer_id` INT,
+    `table_gt6jol_plan_type` VARCHAR(50),
+    `table_gt6jol_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_avp7kg` (
+    `table_avp7kg_customer_id` INT,
+    `table_avp7kg_tier_level` INT
+);
+
+INSERT INTO `table_gt6jol` (`table_gt6jol_customer_id`, `table_gt6jol_plan_type`, `table_gt6jol_status`) VALUES (1, 'test', 'test');
+
+INSERT INTO `table_avp7kg` (`table_avp7kg_customer_id`, `table_avp7kg_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_ALIGNMENT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_GT6JOL_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_GT6JOL
+    WHERE TABLE_GT6JOL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_AVP7KG_TIER_LEVEL
+    INTO V_TIER
+    FROM TABLE_AVP7KG
+    WHERE TABLE_AVP7KG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF (V_TIER = 'PLATINUM' AND V_PLAN_TYPE = 'ENTERPRISE') OR
+       (V_TIER = 'GOLD' AND V_PLAN_TYPE = 'PREMIUM') OR
+       (V_TIER = 'SILVER' AND V_PLAN_TYPE = 'BASIC') THEN
+        SET V_ALIGNMENT_SCORE = 100;
+    ELSEIF (V_TIER IN ('PLATINUM', 'GOLD') AND V_PLAN_TYPE IN ('PREMIUM', 'ENTERPRISE')) OR
+            (V_TIER = 'SILVER' AND V_PLAN_TYPE IN ('BASIC', 'PREMIUM')) THEN
+        SET V_ALIGNMENT_SCORE = 70;
+    ELSE
+        SET V_ALIGNMENT_SCORE = 30;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me(-8, -23)) - -784 + (v_alignment_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_QUOTIENT_lml7me(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_LCM_OF_NUMBERS_ggg8bj(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A % V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+CREATE TABLE IF NOT EXISTS `table_x92ggb` (
+    `table_x92ggb_order_id` INT,
+    `table_x92ggb_customer_id` INT,
+    `table_x92ggb_order_date` DATE,
+    `table_x92ggb_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrtan3` (
+    `table_wrtan3_customer_id` INT,
+    `table_wrtan3_registration_date` DATE
+);
+
+INSERT INTO `table_x92ggb` (`table_x92ggb_order_id`, `table_x92ggb_customer_id`, `table_x92ggb_order_date`, `table_x92ggb_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wrtan3` (`table_wrtan3_customer_id`, `table_wrtan3_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPECTED_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_X92GGB
+    WHERE TABLE_X92GGB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_WRTAN3_REGISTRATION_DATE) / 30
+    INTO V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_WRTAN3
+    WHERE TABLE_WRTAN3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNTDOWN_9sgkxx(-37)) - 942 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_ORDERS = V_CUSTOMER_AGE_MONTHS * 0.5;
+    SET V_REPEAT_RATE = FLOOR((V_ORDER_COUNT / V_EXPECTED_ORDERS) * 100);
+
+    RETURN V_REPEAT_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNTDOWN_9sgkxx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNTDOWN_9sgkxx(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRODUCT INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_PRODUCT = V_PRODUCT * N;
+        SET N = N - 1;
+    UNTIL N <= 0 END REPEAT;
+
+    RETURN V_PRODUCT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(BASE INT, EXP INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF EXP < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * BASE;
+        SET EXP = EXP - 1;
+    UNTIL EXP <= 0 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER DATE;
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MIN(TABLE_E0YDBC_ORDER_DATE), MAX(TABLE_E0YDBC_ORDER_DATE)
+    INTO V_FIRST_ORDER, V_LAST_ORDER
+    FROM TABLE_E0YDBC
+    WHERE TABLE_E0YDBC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER IS NULL THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_POWER_rt8ycw(46, -99)) - -727 + ((MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(-91)) - 973 + (0));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SOLAR_CREDIT_5sfk79(11)) - 319 + (datediff(v_last_order, v_first_order));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ACTIVITY_DAYS_ki33zw(1);

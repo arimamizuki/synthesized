@@ -1,0 +1,468 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_j3bj4c` (
+    `table_j3bj4c_customer_id` INT,
+    `table_j3bj4c_country` INT,
+    `table_j3bj4c_registration_date` DATE
+);
+
+INSERT INTO `table_j3bj4c` (`table_j3bj4c_customer_id`, `table_j3bj4c_country`, `table_j3bj4c_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+CREATE TABLE IF NOT EXISTS `table_narka3` (
+    `table_narka3_dept_id` INT,
+    `table_narka3_name` VARCHAR(50),
+    `table_narka3_manager_id` INT,
+    `table_narka3_headcount` INT,
+    `table_narka3_annual_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mbm03z` (
+    `table_mbm03z_emp_id` INT,
+    `table_mbm03z_dept_id` INT,
+    `table_mbm03z_salary` INT,
+    `table_mbm03z_hire_date` DATE,
+    `table_mbm03z_performance_score` INT
+);
+
+INSERT INTO `table_narka3` (`table_narka3_dept_id`, `table_narka3_name`, `table_narka3_manager_id`, `table_narka3_headcount`, `table_narka3_annual_budget`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_mbm03z` (`table_mbm03z_emp_id`, `table_mbm03z_dept_id`, `table_mbm03z_salary`, `table_mbm03z_hire_date`, `table_mbm03z_performance_score`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE_YEARS DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BUDGET_PER_EMPLOYEE INT DEFAULT 0;
+    DECLARE V_RETENTION_RISK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NARKA3_HEADCOUNT, 10), COALESCE(TABLE_NARKA3_ANNUAL_BUDGET, 0)
+    INTO V_HEADCOUNT, V_BUDGET_PER_EMPLOYEE
+    FROM TABLE_NARKA3
+    WHERE TABLE_NARKA3_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_MBM03Z_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE_YEARS
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_MBM03Z_PERFORMANCE_SCORE), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_RETENTION_RISK = (MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(76)) - -656 + ((MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(-77)) - 460 + (50 - (v_avg_tenure_years * 5) + ((5 - v_avg_performance) * 10)));
+
+    RETURN V_RETENTION_RISK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIVISORS_s6j5x4(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= N / 2 DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+        END IF;
+        SET V_DIVISOR = (MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(-59)) - 840 + (v_divisor + 1);
+    END WHILE DIVISOR_LOOP;
+
+    SET V_SUM = V_SUM + N;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+CREATE TABLE IF NOT EXISTS `table_0rmlv2` (
+    `table_0rmlv2_id` INT,
+    `table_0rmlv2_username` VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6aha2u` (
+    `table_6aha2u_user_id` INT
+);
+
+INSERT INTO `table_0rmlv2` (`table_0rmlv2_id`, `table_0rmlv2_username`) VALUES (1, 'test');
+
+INSERT INTO `table_6aha2u` (`table_6aha2u_user_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(P_USERNAME_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE USERNAME_VAL VARCHAR(30);
+    DECLARE PHOTO_COUNT INT;
+    
+    SELECT `TABLE_0RMLV2_USERNAME` INTO USERNAME_VAL FROM `TABLE_0RMLV2` WHERE `TABLE_0RMLV2_ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF USERNAME_VAL IS NULL THEN
+        RETURN 0;
+    END IF;
+    
+    SELECT COUNT(UP.`TABLE_6AHA2U_USER_ID`) INTO PHOTO_COUNT
+    FROM `TABLE_6AHA2U` AS UP
+    LEFT JOIN `TABLE_0RMLV2` AS U ON U.`TABLE_0RMLV2_ID` = UP.`TABLE_6AHA2U_USER_ID`
+    WHERE U.`TABLE_0RMLV2_USERNAME` = USERNAME_VAL;
+    
+    RETURN COALESCE(PHOTO_COUNT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_CREDIT_CARD_FORMAT_3lg50j(CARD_NUMBER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_CHAR VARCHAR(1);
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    IF CARD_NUMBER IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_INDEX <= CHAR_LENGTH(CARD_NUMBER) DO
+        SET V_CHAR = SUBSTRING(CARD_NUMBER, V_INDEX, 1);
+
+        IF V_CHAR IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN
+            SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        END IF;
+
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE;
+
+    IF V_DIGIT_COUNT >= 13 AND V_DIGIT_COUNT <= 19 THEN
+        SET V_RESULT = 1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+CREATE TABLE IF NOT EXISTS `table_cz6psu` (
+    `table_cz6psu_product_id` INT,
+    `table_cz6psu_supplier_id` INT,
+    `table_cz6psu_category_id` INT
+);
+
+INSERT INTO `table_cz6psu` (`table_cz6psu_product_id`, `table_cz6psu_supplier_id`, `table_cz6psu_category_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_CZ6PSU_SUPPLIER_ID, TABLE_CZ6PSU_CATEGORY_ID
+    INTO V_SUPPLIER_ID, V_CATEGORY_ID
+    FROM TABLE_CZ6PSU
+    WHERE TABLE_CZ6PSU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(-46)) - 218 + ((MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(57)) - -190 + ((MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(76)) - -958 + ((v_supplier_id + v_category_id) % 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN FLOOR(V_COMPETITIVENESS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+CREATE TABLE IF NOT EXISTS `table_w25bcy` (
+    `table_w25bcy_order_id` INT,
+    `table_w25bcy_customer_id` INT,
+    `table_w25bcy_order_date` DATE,
+    `table_w25bcy_total_amount` DECIMAL(10,2),
+    `table_w25bcy_discount_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bv9gwj` (
+    `table_bv9gwj_product_id` INT,
+    `table_bv9gwj_name` VARCHAR(50),
+    `table_bv9gwj_price` DECIMAL(10,2),
+    `table_bv9gwj_category_id` INT
+);
+
+INSERT INTO `table_w25bcy` (`table_w25bcy_order_id`, `table_w25bcy_customer_id`, `table_w25bcy_order_date`, `table_w25bcy_total_amount`, `table_w25bcy_discount_percent`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_bv9gwj` (`table_bv9gwj_product_id`, `table_bv9gwj_name`, `table_bv9gwj_price`, `table_bv9gwj_category_id`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BAKERY_ORDER_TOTAL_b1nwx2(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TAX_RATE INT DEFAULT 8;
+    DECLARE V_TAX_AMOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_TOTAL INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_BV9GWJ_PRICE * FLOOR(RAND() * 10 + 1)), 0) INTO V_SUBTOTAL
+    FROM TABLE_W25BCY BO
+    JOIN TABLE_BV9GWJ P ON RAND() > 0.5
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_W25BCY_DISCOUNT_PERCENT, 0) INTO V_DISCOUNT
+    FROM TABLE_W25BCY
+    WHERE TABLE_W25BCY_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DISCOUNT = LEAST(V_DISCOUNT, 50);
+
+    SET V_FINAL_TOTAL = V_SUBTOTAL - (V_SUBTOTAL * V_DISCOUNT / 100);
+    SET V_TAX_AMOUNT = V_FINAL_TOTAL * V_TAX_RATE / 100;
+    SET V_FINAL_TOTAL = V_FINAL_TOTAL + V_TAX_AMOUNT;
+
+    RETURN CAST(V_FINAL_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(86)) - -457 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_TOTAL * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+CREATE TABLE IF NOT EXISTS `table_s5c2sb` (
+    `table_s5c2sb_listing_id` INT,
+    `table_s5c2sb_employer_id` INT,
+    `table_s5c2sb_title` INT,
+    `table_s5c2sb_salary_min` INT,
+    `table_s5c2sb_salary_max` INT,
+    `table_s5c2sb_posted_date` DATE,
+    `table_s5c2sb_application_deadline` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_w5l6s0` (
+    `table_w5l6s0_application_id` INT,
+    `table_w5l6s0_listing_id` INT,
+    `table_w5l6s0_applicant_id` INT,
+    `table_w5l6s0_applied_date` DATE,
+    `table_w5l6s0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s5c2sb` (`table_s5c2sb_listing_id`, `table_s5c2sb_employer_id`, `table_s5c2sb_title`, `table_s5c2sb_salary_min`, `table_s5c2sb_salary_max`, `table_s5c2sb_posted_date`, `table_s5c2sb_application_deadline`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_w5l6s0` (`table_w5l6s0_application_id`, `table_w5l6s0_listing_id`, `table_w5l6s0_applicant_id`, `table_w5l6s0_applied_date`, `table_w5l6s0_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(LISTING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_MIN INT DEFAULT 0;
+    DECLARE V_SALARY_MAX INT DEFAULT 0;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_POSTED INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_S5C2SB_SALARY_MIN), 0), COALESCE(MAX(TABLE_S5C2SB_SALARY_MAX), 0), COUNT(*)
+    INTO V_SALARY_MIN, V_SALARY_MAX, V_APPLICATION_COUNT
+    FROM TABLE_S5C2SB L
+    LEFT JOIN TABLE_W5L6S0 A ON TABLE_S5C2SB_LISTING_ID = TABLE_W5L6S0_LISTING_ID
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM
+    GROUP BY TABLE_S5C2SB_LISTING_ID;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_S5C2SB_POSTED_DATE) INTO V_DAYS_SINCE_POSTED
+    FROM TABLE_S5C2SB
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM;
+
+    IF V_DAYS_SINCE_POSTED = 0 THEN
+        SET V_DAYS_SINCE_POSTED = 1;
+    END IF;
+
+    SET V_ENGAGEMENT_SCORE = (V_APPLICATION_COUNT * 100) / V_DAYS_SINCE_POSTED;
+
+    IF V_SALARY_MAX > 100000 THEN
+        SET V_ENGAGEMENT_SCORE = (MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(9)) - 250 + (v_engagement_score + 20);
+    END IF;
+
+    RETURN CAST(V_ENGAGEMENT_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+CREATE TABLE IF NOT EXISTS `table_6i0q6l` (
+    `table_6i0q6l_ad_id` INT,
+    `table_6i0q6l_company_id` INT,
+    `table_6i0q6l_location_id` INT,
+    `table_6i0q6l_billboard_size` INT,
+    `table_6i0q6l_monthly_rent` INT,
+    `table_6i0q6l_duration_months` INT,
+    `table_6i0q6l_impressions_expected` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8fquy9` (
+    `table_8fquy9_location_id` INT,
+    `table_8fquy9_city` INT,
+    `table_8fquy9_traffic_count` INT,
+    `table_8fquy9_visibility_score` INT
+);
+
+INSERT INTO `table_6i0q6l` (`table_6i0q6l_ad_id`, `table_6i0q6l_company_id`, `table_6i0q6l_location_id`, `table_6i0q6l_billboard_size`, `table_6i0q6l_monthly_rent`, `table_6i0q6l_duration_months`, `table_6i0q6l_impressions_expected`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_8fquy9` (`table_8fquy9_location_id`, `table_8fquy9_city`, `table_8fquy9_traffic_count`, `table_8fquy9_visibility_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(AD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 5000;
+    DECLARE V_IMPRESSIONS_EXPECTED INT DEFAULT 0;
+    DECLARE V_TRAFFIC_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6I0Q6L_MONTHLY_RENT, 5000), COALESCE(TABLE_6I0Q6L_IMPRESSIONS_EXPECTED, 100000)
+    INTO V_MONTHLY_RENT, V_IMPRESSIONS_EXPECTED
+    FROM TABLE_6I0Q6L
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8FQUY9_TRAFFIC_COUNT, 50000)
+    INTO V_TRAFFIC_COUNT
+    FROM TABLE_6I0Q6L BA
+    JOIN TABLE_8FQUY9 BL ON TABLE_6I0Q6L_LOCATION_ID = TABLE_8FQUY9_LOCATION_ID
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SET V_ROI_SCORE = (V_IMPRESSIONS_EXPECTED * V_TRAFFIC_COUNT) / V_MONTHLY_RENT;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(MONTH, TABLE_J3BJ4C_REGISTRATION_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_J3BJ4C
+    WHERE TABLE_J3BJ4C_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(-77)) - 361 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(-36)) - -831 + (floor(v_avg_tenure)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_TENURE_6uqx6v(1);

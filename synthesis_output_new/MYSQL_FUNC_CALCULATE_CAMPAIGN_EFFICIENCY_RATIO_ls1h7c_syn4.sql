@@ -1,0 +1,407 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_ya6y3k` (
+    `table_ya6y3k_campaign_id` INT,
+    `table_ya6y3k_channel_type` VARCHAR(50),
+    `table_ya6y3k_target_demographic` INT,
+    `table_ya6y3k_budget` INT,
+    `table_ya6y3k_start_date` DATE,
+    `table_ya6y3k_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mj9bj6` (
+    `table_mj9bj6_conversion_id` INT,
+    `table_mj9bj6_campaign_id` INT,
+    `table_mj9bj6_conversion_value` INT,
+    `table_mj9bj6_conversion_cost` DECIMAL(10,2),
+    `table_mj9bj6_conversion_date` DATE
+);
+
+INSERT INTO `table_ya6y3k` (`table_ya6y3k_campaign_id`, `table_ya6y3k_channel_type`, `table_ya6y3k_target_demographic`, `table_ya6y3k_budget`, `table_ya6y3k_start_date`, `table_ya6y3k_end_date`) VALUES (1, '2024-01-01', 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_mj9bj6` (`table_mj9bj6_conversion_id`, `table_mj9bj6_campaign_id`, `table_mj9bj6_conversion_value`, `table_mj9bj6_conversion_cost`, `table_mj9bj6_conversion_date`) VALUES (1, 2, 3, 1.0, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+CREATE TABLE IF NOT EXISTS `table_m3mbja` (
+    `table_m3mbja_campaign_id` INT,
+    `table_m3mbja_channel` INT,
+    `table_m3mbja_target_conversions` INT,
+    `table_m3mbja_actual_conversions` INT,
+    `table_m3mbja_impressions` INT,
+    `table_m3mbja_clicks` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ok18np` (
+    `table_ok18np_ad_group_id` INT,
+    `table_ok18np_campaign_id` INT,
+    `table_ok18np_keyword` INT,
+    `table_ok18np_quality_score` INT
+);
+
+INSERT INTO `table_m3mbja` (`table_m3mbja_campaign_id`, `table_m3mbja_channel`, `table_m3mbja_target_conversions`, `table_m3mbja_actual_conversions`, `table_m3mbja_impressions`, `table_m3mbja_clicks`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_ok18np` (`table_ok18np_ad_group_id`, `table_ok18np_campaign_id`, `table_ok18np_keyword`, `table_ok18np_quality_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(AD_GROUP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUALITY_SCORE INT DEFAULT 5;
+    DECLARE V_CTR DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_IMPRESSIONS INT DEFAULT 0;
+    DECLARE V_CLICKS INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_AD_QUALITY INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_M3MBJA_IMPRESSIONS), 0), COALESCE(SUM(TABLE_M3MBJA_CLICKS), 0), COALESCE(SUM(TABLE_M3MBJA_ACTUAL_CONVERSIONS), 0)
+    INTO V_IMPRESSIONS, V_CLICKS, V_CONVERSIONS
+    FROM TABLE_OK18NP AG
+    JOIN TABLE_M3MBJA C ON TABLE_OK18NP_CAMPAIGN_ID = TABLE_M3MBJA_CAMPAIGN_ID
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    SELECT TABLE_OK18NP_QUALITY_SCORE
+    INTO V_QUALITY_SCORE
+    FROM TABLE_OK18NP
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    IF V_IMPRESSIONS > 0 THEN
+        SET V_CTR = (V_CLICKS * 100.0) / V_IMPRESSIONS;
+    END IF;
+
+    IF V_CLICKS > 0 THEN
+        SET V_CONVERSION_RATE = (V_CONVERSIONS * 100.0) / V_CLICKS;
+    END IF;
+
+    SET V_AD_QUALITY = V_QUALITY_SCORE + (V_CTR * 2) + V_CONVERSION_RATE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(-1)) - 368 + (floor(v_ad_quality));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+CREATE TABLE IF NOT EXISTS `table_1ffs7g` (
+    `table_1ffs7g_customer_id` INT,
+    `table_1ffs7g_status` VARCHAR(50)
+);
+
+INSERT INTO `table_1ffs7g` (`table_1ffs7g_customer_id`, `table_1ffs7g_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_COUNT_brs4j7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACTIVE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ACTIVE_COUNT
+    FROM TABLE_1FFS7G
+    WHERE TABLE_1FFS7G_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1FFS7G_STATUS = 'ACTIVE';
+
+    RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(15)) - 610 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj(-90)) - -803 + ((MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(-53)) - -673 + ((MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(92, -78)) - 241 + (v_active_count))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+CREATE TABLE IF NOT EXISTS `table_dpem7n` (
+    `table_dpem7n_unit_id` INT,
+    `table_dpem7n_facility_id` INT,
+    `table_dpem7n_unit_size` INT,
+    `table_dpem7n_monthly_rate` INT,
+    `table_dpem7n_climate_controlled` INT,
+    `table_dpem7n_current_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4mro06` (
+    `table_4mro06_rental_id` INT,
+    `table_4mro06_unit_id` INT,
+    `table_4mro06_customer_id` INT,
+    `table_4mro06_start_date` DATE,
+    `table_4mro06_rental_months` INT,
+    `table_4mro06_monthly_payment` INT
+);
+
+INSERT INTO `table_dpem7n` (`table_dpem7n_unit_id`, `table_dpem7n_facility_id`, `table_dpem7n_unit_size`, `table_dpem7n_monthly_rate`, `table_dpem7n_climate_controlled`, `table_dpem7n_current_occupancy`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_4mro06` (`table_4mro06_rental_id`, `table_4mro06_unit_id`, `table_4mro06_customer_id`, `table_4mro06_start_date`, `table_4mro06_rental_months`, `table_4mro06_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(UNIT_ID_PARAM INT, MONTHS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RATE INT DEFAULT 100;
+    DECLARE V_CLIMATE_PREMIUM INT DEFAULT 20;
+    DECLARE V_SIZE_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DPEM7N_MONTHLY_RATE, 100)
+    INTO V_MONTHLY_RATE
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM;
+
+    SELECT TABLE_DPEM7N_MONTHLY_RATE * 20 / 100 INTO V_CLIMATE_PREMIUM
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM AND TABLE_DPEM7N_CLIMATE_CONTROLLED = 1;
+
+    SET V_TOTAL_COST = (V_MONTHLY_RATE + V_CLIMATE_PREMIUM) * MONTHS_PARAM;
+
+    IF MONTHS_PARAM >= 12 THEN
+        SET V_SIZE_DISCOUNT = V_TOTAL_COST * 10 / 100;
+        SET V_TOTAL_COST = V_TOTAL_COST - V_SIZE_DISCOUNT;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        RETURN -(MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(28)) - 602 + (1);
+    END IF;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N < 0 THEN
+        RETURN -N;
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+CREATE TABLE IF NOT EXISTS `table_xuw9z4` (
+    `table_xuw9z4_emp_id` INT,
+    `table_xuw9z4_department_id` INT
+);
+
+INSERT INTO `table_xuw9z4` (`table_xuw9z4_emp_id`, `table_xuw9z4_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_XUW9Z4
+    WHERE TABLE_XUW9Z4_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(-43)) - 385 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LEAP_YEAR_ooshk3(YEAR_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF YEAR_VAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'YEAR CANNOT BE NEGATIVE';
+    END IF;
+    IF (YEAR_VAL MOD 4 = 0 AND YEAR_VAL MOD 100 != 0) OR (YEAR_VAL MOD 400 = 0) THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(29)) - -302 + (1);
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+CREATE TABLE IF NOT EXISTS `table_maha9n` (
+    `table_maha9n_campaign_id` INT,
+    `table_maha9n_channel` INT,
+    `table_maha9n_budget` INT,
+    `table_maha9n_start_date` DATE,
+    `table_maha9n_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_isannf` (
+    `table_isannf_conversion_id` INT,
+    `table_isannf_campaign_id` INT,
+    `table_isannf_conversion_date` DATE
+);
+
+INSERT INTO `table_maha9n` (`table_maha9n_campaign_id`, `table_maha9n_channel`, `table_maha9n_budget`, `table_maha9n_start_date`, `table_maha9n_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_isannf` (`table_isannf_conversion_id`, `table_isannf_campaign_id`, `table_isannf_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CAMPAIGN_DURATION INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_MIX_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_MAHA9N_CHANNEL, DATEDIFF(TABLE_MAHA9N_END_DATE, TABLE_MAHA9N_START_DATE)
+    INTO V_CHANNEL, V_CAMPAIGN_DURATION
+    FROM TABLE_MAHA9N
+    WHERE TABLE_MAHA9N_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ISANNF
+    WHERE TABLE_ISANNF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 5;
+        WHEN 'ORGANIC' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 8;
+        WHEN 'SOCIAL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 6;
+        WHEN 'EMAIL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 7;
+        ELSE SET V_MIX_INDEX = V_CONVERSION_COUNT * 4;
+    END CASE;
+
+    RETURN V_MIX_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+CREATE TABLE IF NOT EXISTS `table_ybsj22` (
+    `table_ybsj22_campaign_id` INT,
+    `table_ybsj22_channel` INT
+);
+
+INSERT INTO `table_ybsj22` (`table_ybsj22_campaign_id`, `table_ybsj22_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_YBSJ22_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_YBSJ22
+    WHERE TABLE_YBSJ22_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMBINATION_xu2n8y(N INT, R INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERATOR INT DEFAULT 1;
+    DECLARE V_DENOMINATOR INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_RESULT INT DEFAULT 1;
+
+    IF R < 0 OR R > N OR N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF R = 0 OR R = N THEN
+        RETURN 1;
+    END IF;
+
+    IF R > N - R THEN
+        SET R = N - R;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= R DO
+        SET V_NUMERATOR = V_NUMERATOR * (N - V_COUNTER + 1);
+        SET V_DENOMINATOR = V_DENOMINATOR * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    SET V_RESULT = V_NUMERATOR / V_DENOMINATOR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSION_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_CONVERSION_COST INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_YA6Y3K_BUDGET, (MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(89)) - 7 + (0))
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_YA6Y3K
+    WHERE TABLE_YA6Y3K_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_MJ9BJ6_CONVERSION_VALUE), 0), COALESCE(SUM(TABLE_MJ9BJ6_CONVERSION_COST), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_CONVERSION_VALUE, V_TOTAL_CONVERSION_COST
+    FROM TABLE_MJ9BJ6
+    WHERE TABLE_MJ9BJ6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = ((V_TOTAL_CONVERSION_VALUE - V_TOTAL_CONVERSION_COST) * 100) / V_CAMPAIGN_BUDGET;
+
+    RETURN V_EFFICIENCY_RATIO;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_RATIO_ls1h7c(1);

@@ -1,0 +1,370 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qanhi7` (
+    `table_qanhi7_student_id` INT,
+    `table_qanhi7_name` VARCHAR(50),
+    `table_qanhi7_enrollment_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_2h1ofb` (
+    `table_2h1ofb_course_id` INT,
+    `table_2h1ofb_credits` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ud2jrb` (
+    `table_ud2jrb_student_id` INT,
+    `table_ud2jrb_course_id` INT,
+    `table_ud2jrb_grade` INT
+);
+
+INSERT INTO `table_qanhi7` (`table_qanhi7_student_id`, `table_qanhi7_name`, `table_qanhi7_enrollment_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_2h1ofb` (`table_2h1ofb_course_id`, `table_2h1ofb_credits`) VALUES (1, 1);
+
+INSERT INTO `table_ud2jrb` (`table_ud2jrb_student_id`, `table_ud2jrb_course_id`, `table_ud2jrb_grade`) VALUES (1, 2, 3);
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(-13)) - -4 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+CREATE TABLE IF NOT EXISTS `table_lho0kf` (
+    `table_lho0kf_campaign_id` INT,
+    `table_lho0kf_start_date` DATE,
+    `table_lho0kf_end_date` DATE
+);
+
+INSERT INTO `table_lho0kf` (`table_lho0kf_campaign_id`, `table_lho0kf_start_date`, `table_lho0kf_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_MONTHS_DURATION_50q7b4(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_LHO0KF_START_DATE, TABLE_LHO0KF_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_LHO0KF
+    WHERE TABLE_LHO0KF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, V_END_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+CREATE TABLE IF NOT EXISTS `table_fedjkb` (
+    `table_fedjkb_product_id` INT,
+    `table_fedjkb_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fedjkb` (`table_fedjkb_product_id`, `table_fedjkb_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FEDJKB_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FEDJKB
+    WHERE TABLE_FEDJKB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(-13)) - -544 + (loop_count) + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_MONTH_uv623o(MONTH_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE MONTH_NUM
+        WHEN 1 THEN RETURN 'JANUARY';
+        WHEN 2 THEN RETURN 'FEBRUARY';
+        WHEN 3 THEN RETURN 'MARCH';
+        WHEN 4 THEN RETURN 'APRIL';
+        WHEN 5 THEN RETURN 'MAY';
+        WHEN 6 THEN RETURN 'JUNE';
+        WHEN 7 THEN RETURN 'JULY';
+        WHEN 8 THEN RETURN 'AUGUST';
+        WHEN 9 THEN RETURN 'SEPTEMBER';
+        WHEN 10 THEN RETURN 'OCTOBER';
+        WHEN 11 THEN RETURN 'NOVEMBER';
+        WHEN 12 THEN RETURN 'DECEMBER';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_INDEX_d0hur2----- */
+CREATE TABLE IF NOT EXISTS `table_ku0d6b` (
+    `table_ku0d6b_customer_id` INT,
+    `table_ku0d6b_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ku0d6b` (`table_ku0d6b_customer_id`, `table_ku0d6b_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_INDEX_d0hur2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_INDEX_d0hur2(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_KU0D6B_STATUS
+    INTO V_STATUS
+    FROM TABLE_KU0D6B
+    WHERE TABLE_KU0D6B_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'PENDING' THEN RETURN 25;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+CREATE TABLE IF NOT EXISTS `table_75ig4z` (
+    `table_75ig4z_flight_id` INT,
+    `table_75ig4z_origin` INT,
+    `table_75ig4z_destination` INT,
+    `table_75ig4z_departure_time` DATE,
+    `table_75ig4z_arrival_time` DATE,
+    `table_75ig4z_aircraft_type` VARCHAR(50),
+    `table_75ig4z_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ch532i` (
+    `table_ch532i_leg_id` INT,
+    `table_ch532i_booking_id` INT,
+    `table_ch532i_flight_id` INT,
+    `table_ch532i_seat_class` INT,
+    `table_ch532i_seat_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_75ig4z` (`table_75ig4z_flight_id`, `table_75ig4z_origin`, `table_75ig4z_destination`, `table_75ig4z_departure_time`, `table_75ig4z_arrival_time`, `table_75ig4z_aircraft_type`, `table_75ig4z_base_price`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_ch532i` (`table_ch532i_leg_id`, `table_ch532i_booking_id`, `table_ch532i_flight_id`, `table_ch532i_seat_class`, `table_ch532i_seat_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPARTURE TIME;
+    DECLARE V_ARRIVAL TIME;
+    DECLARE V_DURATION_MINS INT DEFAULT 0;
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_DELAY_RISK INT DEFAULT 0;
+
+    SELECT TABLE_75IG4Z_DEPARTURE_TIME, TABLE_75IG4Z_ARRIVAL_TIME, TABLE_75IG4Z_BASE_PRICE
+    INTO V_DEPARTURE, V_ARRIVAL, V_PRICE
+    FROM TABLE_75IG4Z
+    WHERE TABLE_75IG4Z_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    IF V_DEPARTURE IS NULL OR V_ARRIVAL IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_MINS = TIME_TO_SEC(TIMEDIFF(V_ARRIVAL, V_DEPARTURE)) / 60;
+
+    IF V_DURATION_MINS < 0 THEN
+        SET V_DURATION_MINS = V_DURATION_MINS + 1440;
+    END IF;
+
+    IF V_DURATION_MINS > 480 THEN
+        SET V_DELAY_RISK = V_DURATION_MINS / 60;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(49, -19)) - 132 + (cast(v_duration_mins + v_delay_risk as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+CREATE TABLE IF NOT EXISTS `table_q0ba91` (
+    `table_q0ba91_job_id` INT,
+    `table_q0ba91_inspector_id` INT,
+    `table_q0ba91_property_id` INT,
+    `table_q0ba91_inspection_type` VARCHAR(50),
+    `table_q0ba91_square_footage` INT,
+    `table_q0ba91_inspection_date` DATE,
+    `table_q0ba91_base_fee` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ljuqz` (
+    `table_0ljuqz_property_id` INT,
+    `table_0ljuqz_property_type` VARCHAR(50),
+    `table_0ljuqz_year_built` INT,
+    `table_0ljuqz_num_rooms` INT
+);
+
+INSERT INTO `table_q0ba91` (`table_q0ba91_job_id`, `table_q0ba91_inspector_id`, `table_q0ba91_property_id`, `table_q0ba91_inspection_type`, `table_q0ba91_square_footage`, `table_q0ba91_inspection_date`, `table_q0ba91_base_fee`) VALUES (1, 1, 1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_0ljuqz` (`table_0ljuqz_property_id`, `table_0ljuqz_property_type`, `table_0ljuqz_year_built`, `table_0ljuqz_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INSPECTION_FEE_z5rjo7(PROPERTY_ID_PARAM INT, INSPECTION_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SQUARE_FOOTAGE INT DEFAULT 1500;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_BASE_FEE INT DEFAULT 300;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0BA91_SQUARE_FOOTAGE, 1500), COALESCE(TABLE_0LJUQZ_YEAR_BUILT, 2000)
+    INTO V_SQUARE_FOOTAGE, V_YEAR_BUILT
+    FROM TABLE_Q0BA91 H
+    JOIN TABLE_0LJUQZ P ON TABLE_Q0BA91_PROPERTY_ID = TABLE_0LJUQZ_PROPERTY_ID
+    WHERE TABLE_Q0BA91_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_FEE = V_BASE_FEE + (V_SQUARE_FOOTAGE / (MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(-36, 16, -81)) - -861 + (100)) * 10;
+
+    IF (YEAR(CURDATE()) - V_YEAR_BUILT) > 30 THEN
+        SET V_AGE_SURCHARGE = 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_MAX_VALUE_ci2sv5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX INT DEFAULT 0;
+    SET V_MAX = A;
+    IF B > V_MAX THEN SET V_MAX = B; END IF;
+    IF C > V_MAX THEN SET V_MAX = C; END IF;
+    RETURN (MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (v_max);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ATTEMPTED INT DEFAULT 0;
+    DECLARE V_COMPLETION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), (MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(-52)) - 808 + ((MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(14)) - -293 + (0)))
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_UD2JRB_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(SUM(TABLE_2H1OFB_CREDITS), 0)
+    INTO V_TOTAL_ATTEMPTED
+    FROM TABLE_UD2JRB E
+    JOIN TABLE_2H1OFB C ON TABLE_UD2JRB_COURSE_ID = TABLE_2H1OFB_COURSE_ID
+    WHERE TABLE_UD2JRB_STUDENT_ID = STUDENT_ID_PARAM;
+
+    IF V_TOTAL_ATTEMPTED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPLETION_RATE = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_INDEX_d0hur2(48)) - -240 + ((MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + ((v_completed_credits * 100) / v_total_attempted));
+
+    RETURN V_COMPLETION_RATE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CREDIT_COMPLETION_RATE_zz93ai(1);

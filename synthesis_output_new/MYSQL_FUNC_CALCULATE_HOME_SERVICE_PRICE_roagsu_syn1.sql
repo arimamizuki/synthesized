@@ -1,0 +1,382 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_8org9o` (
+    `table_8org9o_booking_id` INT,
+    `table_8org9o_customer_id` INT,
+    `table_8org9o_provider_id` INT,
+    `table_8org9o_service_type` VARCHAR(50),
+    `table_8org9o_scheduled_date` DATE,
+    `table_8org9o_duration_hours` INT,
+    `table_8org9o_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_hfwv29` (
+    `table_hfwv29_provider_id` INT,
+    `table_hfwv29_rating` DECIMAL(3,1),
+    `table_hfwv29_years_experience` INT,
+    `table_hfwv29_is_available` INT
+);
+
+INSERT INTO `table_8org9o` (`table_8org9o_booking_id`, `table_8org9o_customer_id`, `table_8org9o_provider_id`, `table_8org9o_service_type`, `table_8org9o_scheduled_date`, `table_8org9o_duration_hours`, `table_8org9o_base_price`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_hfwv29` (`table_hfwv29_provider_id`, `table_hfwv29_rating`, `table_hfwv29_years_experience`, `table_hfwv29_is_available`) VALUES (1, 1.0, 3, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+CREATE TABLE IF NOT EXISTS `table_b4dc8l` (
+    `table_b4dc8l_card_id` INT,
+    `table_b4dc8l_customer_id` INT,
+    `table_b4dc8l_card_type` VARCHAR(50),
+    `table_b4dc8l_credit_limit` INT,
+    `table_b4dc8l_current_balance` INT,
+    `table_b4dc8l_interest_rate` INT,
+    `table_b4dc8l_min_payment_rate` INT
+);
+
+INSERT INTO `table_b4dc8l` (`table_b4dc8l_card_id`, `table_b4dc8l_customer_id`, `table_b4dc8l_card_type`, `table_b4dc8l_credit_limit`, `table_b4dc8l_current_balance`, `table_b4dc8l_interest_rate`, `table_b4dc8l_min_payment_rate`) VALUES (1, 1, 'test', 1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(CARD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CREDIT_LIMIT INT DEFAULT 0;
+    DECLARE V_CURRENT_BALANCE INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+    DECLARE V_MIN_PAYMENT INT DEFAULT 0;
+    DECLARE V_INTEREST_CHARGE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_B4DC8L_CREDIT_LIMIT, 1000), COALESCE(TABLE_B4DC8L_CURRENT_BALANCE, 0)
+    INTO V_CREDIT_LIMIT, V_CURRENT_BALANCE
+    FROM TABLE_B4DC8L
+    WHERE TABLE_B4DC8L_CARD_ID = CARD_ID_PARAM;
+
+    IF V_CREDIT_LIMIT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_CURRENT_BALANCE * 100) / V_CREDIT_LIMIT;
+
+    IF V_UTILIZATION > 80 THEN
+        SET V_UTILIZATION = V_UTILIZATION + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(-11)) - -515 + (cast(v_utilization as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+CREATE TABLE IF NOT EXISTS `table_rsa7ps` (
+    `table_rsa7ps_supplier_id` INT,
+    `table_rsa7ps_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_rsa7ps` (`table_rsa7ps_supplier_id`, `table_rsa7ps_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_RSA7PS_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_RSA7PS
+    WHERE TABLE_RSA7PS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(51)) - -490 + (floor(v_rating * 10));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+CREATE TABLE IF NOT EXISTS `table_tqo94u` (
+    `table_tqo94u_emp_id` INT,
+    `table_tqo94u_hire_date` DATE
+);
+
+INSERT INTO `table_tqo94u` (`table_tqo94u_emp_id`, `table_tqo94u_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_TQO94U_HIRE_DATE)
+    INTO V_WEEK
+    FROM TABLE_TQO94U
+    WHERE TABLE_TQO94U_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(43)) - 259 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n()) - 420 + (v_week));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 3 UNION SELECT 5 UNION SELECT 7 UNION SELECT 9
+        UNION SELECT 11 UNION SELECT 13 UNION SELECT 15 UNION SELECT 17 UNION SELECT 19;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(39)) - -380 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+CREATE TABLE IF NOT EXISTS `table_nqwaay` (
+    `table_nqwaay_order_id` INT,
+    `table_nqwaay_customer_id` INT,
+    `table_nqwaay_order_date` DATE,
+    `table_nqwaay_total_amount` DECIMAL(10,2),
+    `table_nqwaay_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rjmeai` (
+    `table_rjmeai_order_id` INT,
+    `table_rjmeai_product_id` INT,
+    `table_rjmeai_quantity` INT
+);
+
+INSERT INTO `table_nqwaay` (`table_nqwaay_order_id`, `table_nqwaay_customer_id`, `table_nqwaay_order_date`, `table_nqwaay_total_amount`, `table_nqwaay_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_rjmeai` (`table_rjmeai_order_id`, `table_rjmeai_product_id`, `table_rjmeai_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ITEM_DIVERSITY_INDEX_j184gk(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+    DECLARE V_DIVERSITY_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_RJMEAI_PRODUCT_ID), COALESCE(SUM(TABLE_RJMEAI_QUANTITY), 0)
+    INTO V_UNIQUE_PRODUCTS, V_TOTAL_ITEMS
+    FROM TABLE_RJMEAI
+    WHERE TABLE_RJMEAI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL_ITEMS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DIVERSITY_INDEX = (V_UNIQUE_PRODUCTS * 100) / V_TOTAL_ITEMS;
+
+    RETURN V_DIVERSITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+CREATE TABLE IF NOT EXISTS `table_c3gwib` (
+    `table_c3gwib_campaign_id` INT,
+    `table_c3gwib_budget` INT
+);
+
+INSERT INTO `table_c3gwib` (`table_c3gwib_campaign_id`, `table_c3gwib_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C3GWIB_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_C3GWIB
+    WHERE TABLE_C3GWIB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(38, -56)) - 805 + ((MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(29, 20)) - 450 + (floor(v_budget / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(13)) - 734 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+CREATE TABLE IF NOT EXISTS `table_u6bv6v` (
+    `table_u6bv6v_campaign_id` INT,
+    `table_u6bv6v_start_date` DATE
+);
+
+INSERT INTO `table_u6bv6v` (`table_u6bv6v_campaign_id`, `table_u6bv6v_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_U6BV6V_START_DATE)
+    INTO V_DAY
+    FROM TABLE_U6BV6V
+    WHERE TABLE_U6BV6V_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+CREATE TABLE IF NOT EXISTS `table_xma1f9` (
+    `table_xma1f9_appointment_id` INT,
+    `table_xma1f9_pet_id` INT,
+    `table_xma1f9_service_type` VARCHAR(50),
+    `table_xma1f9_appointment_date` DATE,
+    `table_xma1f9_duration_minutes` INT,
+    `table_xma1f9_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_23iq77` (
+    `table_23iq77_pet_id` INT,
+    `table_23iq77_breed` INT,
+    `table_23iq77_size` INT,
+    `table_23iq77_age_months` INT
+);
+
+INSERT INTO `table_xma1f9` (`table_xma1f9_appointment_id`, `table_xma1f9_pet_id`, `table_xma1f9_service_type`, `table_xma1f9_appointment_date`, `table_xma1f9_duration_minutes`, `table_xma1f9_base_price`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_23iq77` (`table_23iq77_pet_id`, `table_23iq77_breed`, `table_23iq77_size`, `table_23iq77_age_months`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(PET_ID_PARAM INT, SERVICE_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_SIZE VARCHAR(10) DEFAULT 'MEDIUM';
+    DECLARE V_PET_AGE INT DEFAULT 12;
+    DECLARE V_BASE_PRICE INT DEFAULT 40;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_23IQ77_SIZE, 'MEDIUM'), TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_PET_SIZE, V_PET_AGE
+    FROM TABLE_23IQ77
+    WHERE TABLE_23IQ77_PET_ID = PET_ID_PARAM;
+
+    SET V_PET_AGE = 12;
+
+    CASE V_PET_SIZE
+        WHEN 'LARGE' THEN SET V_SIZE_MULTIPLIER = 2;
+        WHEN 'MEDIUM' THEN SET V_SIZE_MULTIPLIER = 1;
+        WHEN 'SMALL' THEN SET V_SIZE_MULTIPLIER = 0;
+        ELSE SET V_SIZE_MULTIPLIER = 1;
+    END CASE;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'FULL_GROOMING' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BATH' THEN SET V_BASE_PRICE = 40;
+        WHEN 'HAIRCUT' THEN SET V_BASE_PRICE = 60;
+        WHEN 'NAIL_TRIM' THEN SET V_BASE_PRICE = 20;
+        ELSE SET V_BASE_PRICE = 50;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * V_SIZE_MULTIPLIER;
+
+    IF V_PET_AGE < 6 THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE + 10;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOME_SERVICE_PRICE_roagsu(SERVICE_TYPE_PARAM INT, HOURS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'PLUMBING' THEN SET V_BASE_PRICE = 80;
+        WHEN 'ELECTRICAL' THEN SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(38)) - -120 + ((MYSQL_FUNC_CALCULATE_CREDIT_UTILIZATION_pejmam(-35)) - -207 + (100));
+        WHEN 'HVAC' THEN SET V_BASE_PRICE = 120;
+        WHEN 'CLEANING' THEN SET V_BASE_PRICE = 40;
+        WHEN 'LANDSCAPING' THEN SET V_BASE_PRICE = 45;
+        ELSE SET V_BASE_PRICE = 50;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * HOURS_PARAM;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HOME_SERVICE_PRICE_roagsu(1, 1);

@@ -1,0 +1,380 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_3o46m6` (
+    `table_3o46m6_campaign_id` INT,
+    `table_3o46m6_budget` INT,
+    `table_3o46m6_start_date` DATE,
+    `table_3o46m6_end_date` DATE,
+    `table_3o46m6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_olefgc` (
+    `table_olefgc_conversion_id` INT,
+    `table_olefgc_campaign_id` INT,
+    `table_olefgc_conversion_value` INT
+);
+
+INSERT INTO `table_3o46m6` (`table_3o46m6_campaign_id`, `table_3o46m6_budget`, `table_3o46m6_start_date`, `table_3o46m6_end_date`, `table_3o46m6_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_olefgc` (`table_olefgc_conversion_id`, `table_olefgc_campaign_id`, `table_olefgc_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(18)) - 860 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = FIRST_TERM + (NUM_TERMS - 1) * COMMON_DIFF;
+    SET V_SUM = (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(-86)) - -601 + ((num_terms * (first_term + v_last_term)) / 2);
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0----- */
+CREATE TABLE IF NOT EXISTS `table_brru3s` (
+    `table_brru3s_customer_id` INT,
+    `table_brru3s_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_brru3s` (`table_brru3s_customer_id`, `table_brru3s_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BRRU3S_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_BRRU3S
+    WHERE TABLE_BRRU3S_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - 959 + (v_monthly_cost * 12);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+CREATE TABLE IF NOT EXISTS `table_qpwars` (
+    `table_qpwars_category_id` INT,
+    `table_qpwars_stock_quantity` INT
+);
+
+INSERT INTO `table_qpwars` (`table_qpwars_category_id`, `table_qpwars_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_QPWARS_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_QPWARS
+    WHERE TABLE_QPWARS_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (v_stock);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (V_SHIPPING_COST * 100) / V_ORDER_VALUE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(-72)) - 944 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+CREATE TABLE IF NOT EXISTS `table_4dqelz` (
+    `table_4dqelz_loan_id` INT,
+    `table_4dqelz_customer_id` INT,
+    `table_4dqelz_principal_amount` DECIMAL(10,2),
+    `table_4dqelz_interest_rate` INT,
+    `table_4dqelz_term_months` INT,
+    `table_4dqelz_monthly_payment` INT,
+    `table_4dqelz_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4dqelz` (`table_4dqelz_loan_id`, `table_4dqelz_customer_id`, `table_4dqelz_principal_amount`, `table_4dqelz_interest_rate`, `table_4dqelz_term_months`, `table_4dqelz_monthly_payment`, `table_4dqelz_status`) VALUES (1, 2, 1.0, 4, 5, 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4DQELZ_PRINCIPAL_AMOUNT, 0), COALESCE(TABLE_4DQELZ_MONTHLY_PAYMENT, 0), COALESCE(TABLE_4DQELZ_TERM_MONTHS, 12)
+    INTO V_PRINCIPAL, V_MONTHLY_PAYMENT, V_TERM_MONTHS
+    FROM TABLE_4DQELZ
+    WHERE TABLE_4DQELZ_LOAN_ID = LOAN_ID_PARAM;
+
+    SET V_TOTAL_PAYMENT = V_MONTHLY_PAYMENT * V_TERM_MONTHS;
+    SET V_TOTAL_INTEREST = V_TOTAL_PAYMENT - V_PRINCIPAL;
+
+    RETURN GREATEST(V_TOTAL_INTEREST, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+CREATE TABLE IF NOT EXISTS `table_khmak7` (
+    `table_khmak7_order_id` INT,
+    `table_khmak7_customer_id` INT,
+    `table_khmak7_order_date` DATE,
+    `table_khmak7_total_amount` DECIMAL(10,2),
+    `table_khmak7_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_7res4i` (
+    `table_7res4i_order_id` INT,
+    `table_7res4i_product_id` INT,
+    `table_7res4i_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_l0dame` (
+    `table_l0dame_product_id` INT,
+    `table_l0dame_category_id` INT,
+    `table_l0dame_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_khmak7` (`table_khmak7_order_id`, `table_khmak7_customer_id`, `table_khmak7_order_date`, `table_khmak7_total_amount`, `table_khmak7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_7res4i` (`table_7res4i_order_id`, `table_7res4i_product_id`, `table_7res4i_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_l0dame` (`table_l0dame_product_id`, `table_l0dame_category_id`, `table_l0dame_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUBTOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_HIGH_VALUE_ITEMS INT DEFAULT 0;
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_7RES4I_QUANTITY * TABLE_L0DAME_PRICE), 0), COUNT(*)
+    INTO V_SUBTOTAL, V_TOTAL_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_HIGH_VALUE_ITEMS
+    FROM TABLE_7RES4I OI
+    JOIN TABLE_L0DAME P ON TABLE_7RES4I_PRODUCT_ID = TABLE_L0DAME_PRODUCT_ID
+    WHERE TABLE_7RES4I_ORDER_ID = ORDER_ID_PARAM AND TABLE_L0DAME_PRICE > 100;
+
+    IF V_TOTAL_ITEMS > 0 AND (V_HIGH_VALUE_ITEMS * 100 / V_TOTAL_ITEMS) > 50 THEN
+        SET V_DISCOUNT_PERCENTAGE = 15;
+    ELSEIF V_SUBTOTAL > 1000 THEN
+        SET V_DISCOUNT_PERCENTAGE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(-6, 95)) - 952 + (10);
+    ELSEIF V_SUBTOTAL > 500 THEN
+        SET V_DISCOUNT_PERCENTAGE = 5;
+    ELSE
+        SET V_DISCOUNT_PERCENTAGE = 0;
+    END IF;
+
+    RETURN V_DISCOUNT_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(62)) - -246 + ((MYSQL_FUNC_INSERT_CATEGORY_14nmvh(11)) - 549 + (v_result * base));
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INSERT_CATEGORY_14nmvh----- */
+CREATE TABLE IF NOT EXISTS table_idt4cg (
+    table_idt4cg_category_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_idt4cg_category_name VARCHAR(255)
+);
+
+INSERT INTO table_idt4cg (`table_idt4cg_category_id`, `table_idt4cg_category_name`) VALUES (1, 'TestCategory');
+
+/* -----Called: MYSQL_FUNC_INSERT_CATEGORY_14nmvh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INSERT_CATEGORY_14nmvh(CATEGORY_NAME_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE NEW_ID INT;
+    
+    INSERT INTO TABLE_IDT4CG (`TABLE_IDT4CG_CATEGORY_ID`, `TABLE_IDT4CG_CATEGORY_NAME`)
+    VALUES (DEFAULT, CAST(CATEGORY_NAME_PARAM AS CHAR));
+    
+    SET NEW_ID = LAST_INSERT_ID();
+    
+    RETURN NEW_ID;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+CREATE TABLE IF NOT EXISTS `table_smasih` (
+    `table_smasih_account_id` INT,
+    `table_smasih_customer_id` INT,
+    `table_smasih_account_type` INT,
+    `table_smasih_balance` INT,
+    `table_smasih_interest_rate` INT,
+    `table_smasih_opened_date` DATE
+);
+
+INSERT INTO `table_smasih` (`table_smasih_account_id`, `table_smasih_customer_id`, `table_smasih_account_type`, `table_smasih_balance`, `table_smasih_interest_rate`, `table_smasih_opened_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACCOUNT_INTEREST_EARNED_68zqh5(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_DAYS_HELD INT DEFAULT 0;
+    DECLARE V_INTEREST_EARNED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SMASIH_BALANCE, 0), COALESCE(TABLE_SMASIH_INTEREST_RATE, 0.00)
+    INTO V_BALANCE, V_INTEREST_RATE
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_SMASIH_OPENED_DATE)
+    INTO V_DAYS_HELD
+    FROM TABLE_SMASIH
+    WHERE TABLE_SMASIH_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_INTEREST_EARNED = (V_BALANCE * V_INTEREST_RATE * V_DAYS_HELD) / 36500;
+
+    RETURN FLOOR(V_INTEREST_EARNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3O46M6_BUDGET, (MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(-54, 7, 35)) - -988 + (0))
+    INTO V_BUDGET
+    FROM TABLE_3O46M6
+    WHERE TABLE_3O46M6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OLEFGC_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_OLEFGC
+    WHERE TABLE_OLEFGC_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = (MYSQL_FUNC_CALCULATE_ORDER_WEIGHTED_DISCOUNT_caw0xp(44)) - -206 + (((v_revenue - v_budget) * 100) / v_budget);
+
+    RETURN V_ROI_INDEX;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(1);

@@ -1,0 +1,394 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_an7207` (
+    `table_an7207_emp_id` INT,
+    `table_an7207_manager_id` INT,
+    `table_an7207_department_id` INT,
+    `table_an7207_salary` INT,
+    `table_an7207_hire_date` DATE
+);
+
+INSERT INTO `table_an7207` (`table_an7207_emp_id`, `table_an7207_manager_id`, `table_an7207_department_id`, `table_an7207_salary`, `table_an7207_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+CREATE TABLE IF NOT EXISTS `table_ru00nt` (
+    `table_ru00nt_order_id` INT,
+    `table_ru00nt_customer_id` INT,
+    `table_ru00nt_order_date` DATE,
+    `table_ru00nt_total_amount` DECIMAL(10,2),
+    `table_ru00nt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_musi5v` (
+    `table_musi5v_shipment_id` INT,
+    `table_musi5v_order_id` INT,
+    `table_musi5v_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ru00nt` (`table_ru00nt_order_id`, `table_ru00nt_customer_id`, `table_ru00nt_order_date`, `table_ru00nt_total_amount`, `table_ru00nt_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_musi5v` (`table_musi5v_shipment_id`, `table_musi5v_order_id`, `table_musi5v_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MUSI5V_SHIPPING_COST, 0), COALESCE(TABLE_RU00NT_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_VALUE
+    FROM TABLE_RU00NT O
+    LEFT JOIN TABLE_MUSI5V S ON TABLE_RU00NT_ORDER_ID = TABLE_MUSI5V_ORDER_ID
+    WHERE TABLE_RU00NT_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_EFFICIENCY = (MYSQL_FUNC_BUG9056_FUNC1_c3545j(86, -61)) - -879 + ((v_shipping_cost * 100) / v_order_value);
+
+    RETURN (MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv(37, 70)) - -740 + (v_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv(N INT, LEVELS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_LEVELS INT DEFAULT LEVELS;
+
+    IF LEVELS <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT + V_I;
+
+        IF V_LEVELS > 1 AND V_I > 1 THEN
+            SET V_LEVELS = V_LEVELS - 1;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_FUNC1_c3545j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_FUNC1_c3545j(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HYPOTENUSE DECIMAL(10,2) DEFAULT 0.00;
+    SET V_HYPOTENUSE = (MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(26)) - 533 + (sqrt(a * a + b * b));
+    RETURN FLOOR(V_HYPOTENUSE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+CREATE TABLE IF NOT EXISTS `table_gvnxly` (
+    `table_gvnxly_product_id` INT,
+    `table_gvnxly_category_id` INT,
+    `table_gvnxly_price` DECIMAL(10,2),
+    `table_gvnxly_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1sfbje` (
+    `table_1sfbje_category_id` INT,
+    `table_1sfbje_name` VARCHAR(50)
+);
+
+INSERT INTO `table_gvnxly` (`table_gvnxly_product_id`, `table_gvnxly_category_id`, `table_gvnxly_price`, `table_gvnxly_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1sfbje` (`table_1sfbje_category_id`, `table_1sfbje_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PREMIUM_CATEGORY_RATIO_tr412i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PREMIUM_COUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_RATIO INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_PREMIUM_COUNT
+    FROM TABLE_GVNXLY
+    WHERE TABLE_GVNXLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_GVNXLY_PRICE > 100;
+
+    IF V_TOTAL_PRODUCTS = (MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(-2, 65)) - -515 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREMIUM_RATIO = (V_PREMIUM_COUNT * 100) / V_TOTAL_PRODUCTS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(12)) - 123 + (v_premium_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+CREATE TABLE IF NOT EXISTS `table_g6fcdl` (
+    `table_g6fcdl_product_id` INT,
+    `table_g6fcdl_supplier_id` INT,
+    `table_g6fcdl_price` DECIMAL(10,2),
+    `table_g6fcdl_stock_quantity` INT
+);
+
+INSERT INTO `table_g6fcdl` (`table_g6fcdl_product_id`, `table_g6fcdl_supplier_id`, `table_g6fcdl_price`, `table_g6fcdl_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G6FCDL_PRICE, 0), COALESCE(TABLE_G6FCDL_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_G6FCDL
+    WHERE TABLE_G6FCDL_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = (V_PRICE * V_STOCK) / 100;
+
+    RETURN V_INVENTORY_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MODULO_vuz3hu(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+CREATE TABLE IF NOT EXISTS `table_34i93l` (
+    `table_34i93l_customer_id` INT,
+    `table_34i93l_registration_date` DATE,
+    `table_34i93l_tier_level` INT,
+    `table_34i93l_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vp00q0` (
+    `table_vp00q0_order_id` INT,
+    `table_vp00q0_customer_id` INT,
+    `table_vp00q0_order_date` DATE,
+    `table_vp00q0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1gdozo` (
+    `table_1gdozo_review_id` INT,
+    `table_1gdozo_customer_id` INT,
+    `table_1gdozo_product_id` INT,
+    `table_1gdozo_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_34i93l` (`table_34i93l_customer_id`, `table_34i93l_registration_date`, `table_34i93l_tier_level`, `table_34i93l_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_vp00q0` (`table_vp00q0_order_id`, `table_vp00q0_customer_id`, `table_vp00q0_order_date`, `table_vp00q0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_1gdozo` (`table_1gdozo_review_id`, `table_1gdozo_customer_id`, `table_1gdozo_product_id`, `table_1gdozo_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_34I93L_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_34I93L
+    WHERE TABLE_34I93L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_VP00Q0_TOTAL_AMOUNT), 0)
+    INTO V_ORDER_COUNT, V_TOTAL_SPENT
+    FROM TABLE_VP00Q0
+    WHERE TABLE_VP00Q0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_1GDOZO_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_1GDOZO
+    WHERE TABLE_1GDOZO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN 4
+        WHEN 'GOLD' THEN 3
+        WHEN 'SILVER' THEN 2
+        ELSE 1
+    END;
+
+    SET V_LOYALTY_SCORE = (V_ORDER_COUNT * 10) + (V_TOTAL_SPENT / 100) + (V_AVG_REVIEW_RATING * 15);
+    SET V_LOYALTY_SCORE = V_LOYALTY_SCORE * V_TIER_MULTIPLIER / 2;
+
+    RETURN V_LOYALTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+CREATE TABLE IF NOT EXISTS `table_75ig4z` (
+    `table_75ig4z_flight_id` INT,
+    `table_75ig4z_origin` INT,
+    `table_75ig4z_destination` INT,
+    `table_75ig4z_departure_time` DATE,
+    `table_75ig4z_arrival_time` DATE,
+    `table_75ig4z_aircraft_type` VARCHAR(50),
+    `table_75ig4z_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ch532i` (
+    `table_ch532i_leg_id` INT,
+    `table_ch532i_booking_id` INT,
+    `table_ch532i_flight_id` INT,
+    `table_ch532i_seat_class` INT,
+    `table_ch532i_seat_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_75ig4z` (`table_75ig4z_flight_id`, `table_75ig4z_origin`, `table_75ig4z_destination`, `table_75ig4z_departure_time`, `table_75ig4z_arrival_time`, `table_75ig4z_aircraft_type`, `table_75ig4z_base_price`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_ch532i` (`table_ch532i_leg_id`, `table_ch532i_booking_id`, `table_ch532i_flight_id`, `table_ch532i_seat_class`, `table_ch532i_seat_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DURATION_e7q648(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPARTURE TIME;
+    DECLARE V_ARRIVAL TIME;
+    DECLARE V_DURATION_MINS INT DEFAULT 0;
+    DECLARE V_PRICE INT DEFAULT 0;
+    DECLARE V_DELAY_RISK INT DEFAULT 0;
+
+    SELECT TABLE_75IG4Z_DEPARTURE_TIME, TABLE_75IG4Z_ARRIVAL_TIME, TABLE_75IG4Z_BASE_PRICE
+    INTO V_DEPARTURE, V_ARRIVAL, V_PRICE
+    FROM TABLE_75IG4Z
+    WHERE TABLE_75IG4Z_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    IF V_DEPARTURE IS NULL OR V_ARRIVAL IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_MINS = TIME_TO_SEC(TIMEDIFF(V_ARRIVAL, V_DEPARTURE)) / 60;
+
+    IF V_DURATION_MINS < 0 THEN
+        SET V_DURATION_MINS = V_DURATION_MINS + 1440;
+    END IF;
+
+    IF V_DURATION_MINS > 480 THEN
+        SET V_DELAY_RISK = V_DURATION_MINS / 60;
+    END IF;
+
+    RETURN CAST(V_DURATION_MINS + V_DELAY_RISK AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_AN7207_SALARY, TIMESTAMPDIFF(YEAR, TABLE_AN7207_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_AN7207
+    WHERE TABLE_AN7207_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = (MYSQL_FUNC_CALCULATE_CUSTOMER_LOYALTY_SCORE_2fjbks(-57)) - -854 + ((MYSQL_FUNC_CALCULATE_FULFILLMENT_COST_EFFICIENCY_hgdy2e(-36)) - 647 + (v_salary * (1 + v_tenure_years * 0.02)));
+
+    RETURN (MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr(73, -30)) - 772 + (floor(v_adjusted_salary));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(1);

@@ -1,0 +1,450 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1292192 (v1292193 VARCHAR(30));
+CREATE TABLE IF NOT EXISTS v1292346 (v1292347 DOUBLE);
+CREATE TABLE IF NOT EXISTS v1292807 (v1292808 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1292534 (v1292808 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1293059 (x3 INT);
+INSERT INTO v1292192 VALUES (1), (0), (NULL);
+INSERT INTO v1292346 VALUES (0);
+INSERT INTO v1292807 VALUES ('test'), ('m'), ('z');
+INSERT INTO v1292534 VALUES ('UTC');
+INSERT INTO v1293059 VALUES (0), (5), (NULL);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl----- */
+CREATE TABLE IF NOT EXISTS `table_1nqetr` (
+    `table_1nqetr_order_id` INT,
+    `table_1nqetr_customer_id` INT,
+    `table_1nqetr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1nqetr` (`table_1nqetr_order_id`, `table_1nqetr_customer_id`, `table_1nqetr_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_1NQETR_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_1NQETR
+    WHERE TABLE_1NQETR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL > 1000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(-13)) - 913 + (5);
+    ELSEIF V_TOTAL > 500 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL > 200 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov(-99)) - 200 + (3);
+    ELSEIF V_TOTAL > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(61)) - 152 + ((MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(70, 34)) - -400 + (1));
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+CREATE TABLE IF NOT EXISTS `table_tenjc7` (
+    `table_tenjc7_product_id` INT,
+    `table_tenjc7_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tenjc7` (`table_tenjc7_product_id`, `table_tenjc7_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TENJC7_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_TENJC7
+    WHERE TABLE_TENJC7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(41)) - -150 + (3);
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(-70)) - -852 + (1);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+CREATE TABLE IF NOT EXISTS `table_6o33dj` (
+    `table_6o33dj_emp_id` INT,
+    `table_6o33dj_department_id` INT,
+    `table_6o33dj_salary` INT,
+    `table_6o33dj_hire_date` DATE
+);
+
+INSERT INTO `table_6o33dj` (`table_6o33dj_emp_id`, `table_6o33dj_department_id`, `table_6o33dj_salary`, `table_6o33dj_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_okgsfo(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_YEAR INT DEFAULT 0;
+    DECLARE V_AVG_SALARY_INCREASE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT YEAR(TABLE_6O33DJ_HIRE_DATE)
+    INTO V_HIRE_YEAR
+    FROM TABLE_6O33DJ
+    WHERE TABLE_6O33DJ_EMP_ID = EMP_ID_PARAM;
+
+    SET V_AVG_SALARY_INCREASE = (YEAR(CURDATE()) - V_HIRE_YEAR) * 0.03 * 100;
+
+    RETURN FLOOR(V_AVG_SALARY_INCREASE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(P_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+    DECLARE V_DIGIT INT;
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    SET V_ORIGINAL = ABS(P_NUM);
+    SET V_TEMP = V_ORIGINAL;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7(-87)) - 962 + (v_temp div 10);
+    END WHILE COUNT_LOOP;
+
+    SET V_TEMP = V_ORIGINAL;
+
+    POWER_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + CAST(POW(V_DIGIT, V_DIGIT_COUNT) AS UNSIGNED);
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE POWER_LOOP;
+
+    IF V_SUM = V_ORIGINAL THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7----- */
+CREATE TABLE IF NOT EXISTS `table_jxahv8` (
+    `table_jxahv8_prescription_id` INT,
+    `table_jxahv8_pet_id` INT,
+    `table_jxahv8_vet_id` INT,
+    `table_jxahv8_medication_name` VARCHAR(50),
+    `table_jxahv8_dosage_mg` INT,
+    `table_jxahv8_frequency` INT,
+    `table_jxahv8_duration_days` INT,
+    `table_jxahv8_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_xfr3z3` (
+    `table_xfr3z3_pet_id` INT,
+    `table_xfr3z3_weight_kg` INT,
+    `table_xfr3z3_breed` INT
+);
+
+INSERT INTO `table_jxahv8` (`table_jxahv8_prescription_id`, `table_jxahv8_pet_id`, `table_jxahv8_vet_id`, `table_jxahv8_medication_name`, `table_jxahv8_dosage_mg`, `table_jxahv8_frequency`, `table_jxahv8_duration_days`, `table_jxahv8_price`) VALUES (1, 2, 3, 'test', 5, 6, 7, 1.0);
+
+INSERT INTO `table_xfr3z3` (`table_xfr3z3_pet_id`, `table_xfr3z3_weight_kg`, `table_xfr3z3_breed`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_COST_q6bmq7(PRESCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DOSAGE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 7;
+    DECLARE V_BASE_PRICE INT DEFAULT 20;
+    DECLARE V_WEIGHT_FACTOR INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JXAHV8_DOSAGE_MG, 50), COALESCE(TABLE_JXAHV8_DURATION_DAYS, 7)
+    INTO V_DOSAGE, V_DURATION
+    FROM TABLE_JXAHV8
+    WHERE TABLE_JXAHV8_PRESCRIPTION_ID = PRESCRIPTION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_XFR3Z3_WEIGHT_KG, 5) INTO V_WEIGHT_FACTOR
+    FROM TABLE_JXAHV8 VP
+    JOIN TABLE_XFR3Z3 P ON TABLE_JXAHV8_PET_ID = TABLE_XFR3Z3_PET_ID
+    WHERE TABLE_JXAHV8_PRESCRIPTION_ID = PRESCRIPTION_ID_PARAM;
+
+    SET V_TOTAL_COST = V_BASE_PRICE + (V_DOSAGE / 10) * 5 + (V_DURATION * 2);
+
+    IF V_WEIGHT_FACTOR > 30 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 15;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov----- */
+CREATE TABLE IF NOT EXISTS `table_6jxhs5` (
+    `table_6jxhs5_inventory_id` INT,
+    `table_6jxhs5_product_id` INT,
+    `table_6jxhs5_quantity` INT,
+    `table_6jxhs5_warehouse_id` INT,
+    `table_6jxhs5_last_updated` DATE
+);
+
+INSERT INTO `table_6jxhs5` (`table_6jxhs5_inventory_id`, `table_6jxhs5_product_id`, `table_6jxhs5_quantity`, `table_6jxhs5_warehouse_id`, `table_6jxhs5_last_updated`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_evmiov(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_AVG_DAILY_USAGE INT DEFAULT 10;
+    DECLARE V_DAYS_UNTIL_STOCKOUT INT;
+    DECLARE V_PRIORITY INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6JXHS5_QUANTITY), 0) INTO V_TOTAL_QUANTITY
+    FROM TABLE_6JXHS5
+    WHERE TABLE_6JXHS5_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_QUANTITY <= 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(-23)) - -814 + (100);
+    END IF;
+
+    SET V_DAYS_UNTIL_STOCKOUT = V_TOTAL_QUANTITY / NULLIF(V_AVG_DAILY_USAGE, 0);
+
+    CASE
+        WHEN V_DAYS_UNTIL_STOCKOUT < 7 THEN SET V_PRIORITY = 100;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 14 THEN SET V_PRIORITY = 75;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 30 THEN SET V_PRIORITY = 50;
+        WHEN V_DAYS_UNTIL_STOCKOUT < 60 THEN SET V_PRIORITY = 25;
+        ELSE SET V_PRIORITY = 0;
+    END CASE;
+
+    RETURN V_PRIORITY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+CREATE TABLE IF NOT EXISTS `table_5byx69` (
+    `table_5byx69_loan_id` INT,
+    `table_5byx69_customer_id` INT,
+    `table_5byx69_principal` INT,
+    `table_5byx69_interest_rate` INT,
+    `table_5byx69_term_months` INT,
+    `table_5byx69_start_date` DATE,
+    `table_5byx69_remaining_balance` INT
+);
+
+INSERT INTO `table_5byx69` (`table_5byx69_loan_id`, `table_5byx69_customer_id`, `table_5byx69_principal`, `table_5byx69_interest_rate`, `table_5byx69_term_months`, `table_5byx69_start_date`, `table_5byx69_remaining_balance`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+    DECLARE V_MONTHLY_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5BYX69_PRINCIPAL, 0), COALESCE(TABLE_5BYX69_INTEREST_RATE, 0), COALESCE(TABLE_5BYX69_TERM_MONTHS, 0), COALESCE(TABLE_5BYX69_REMAINING_BALANCE, 0)
+    INTO V_PRINCIPAL, V_INTEREST_RATE, V_TERM_MONTHS, V_REMAINING_BALANCE
+    FROM TABLE_5BYX69
+    WHERE TABLE_5BYX69_LOAN_ID = LOAN_ID_PARAM;
+
+    IF V_PRINCIPAL = 0 OR V_TERM_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MONTHLY_INTEREST = (V_REMAINING_BALANCE * V_INTEREST_RATE) / (100 * 12);
+
+    RETURN CAST(V_MONTHLY_INTEREST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(SIZE INT, POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF SIZE <= (MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(22)) - 600 + (0) OR POSITIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET POSITIONS = POSITIONS % SIZE;
+    IF POSITIONS = 0 THEN
+        RETURN (SIZE * (SIZE - 1)) / 2;
+    END IF;
+
+    SET V_I = 1;
+    WHILE V_I <= POSITIONS DO
+        SET V_J = SIZE;
+        WHILE V_J > 1 DO
+            SET V_RESULT = V_RESULT + 1;
+            SET V_J = V_J - 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_BOOLEAN_km7s69----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(FLAG INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF FLAG = 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+CREATE TABLE IF NOT EXISTS `table_n1vs7c` (
+    `table_n1vs7c_customer_id` INT,
+    `table_n1vs7c_start_date` DATE
+);
+
+INSERT INTO `table_n1vs7c` (`table_n1vs7c_customer_id`, `table_n1vs7c_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_DURATION_MONTHS_mbuft2(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N1VS7C_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N1VS7C
+    WHERE TABLE_N1VS7C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1588_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp VARCHAR(50);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val DOUBLE;
+    DECLARE cur CURSOR FOR SELECT v1292347 FROM v1292346 WHERE v1292347 > 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Update v1292192 with conditional date values based on input parameters
+    UPDATE v1292192 AS x0 
+    SET v1292193 = CASE 
+        WHEN v1292193 = (MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(-56)) - -918 + (1) THEN '2001-08-14 00:00:00' 
+        WHEN v1292193 = 0 THEN '1999-08-15'
+        ELSE '2000-01-01'
+    END;
+
+    -- Insert into v1292346 using input parameters
+    INSERT INTO v1292346 (v1292347) VALUES (p1), (p2), (p1 * p2 * 0.001);
+
+    -- Update v1292807 using a join and input parameter condition
+    UPDATE v1292807 AS x1
+    JOIN v1292534 AS x6 ON x1.v1292808 = x6.v1292808
+    SET x1.v1292808 = CONVERT_TZ('2005-01-01 10:00', 'UTC', 'UTC')
+    WHERE x1.v1292808 BETWEEN 'a' AND 'z' AND p1 > 0;
+
+    -- Insert into v1292807 with input parameter value
+    INSERT INTO v1292807 (v1292808) VALUES (CAST(p2 AS CHAR));
+
+    -- Update v1293059 with conditional logic and loop
+    IF p1 > 0 THEN
+        UPDATE v1293059 AS x1 
+        SET x3 = 12 
+        WHERE NOT (x3) OR x3 IS NULL;
+    ELSE
+        UPDATE v1293059 AS x1 
+        SET x3 = p1 
+        WHERE x3 IS NOT NULL;
+    END IF;
+
+    -- Use cursor to iterate through inserted values and count
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Additional procedural logic using CASE and WHILE
+    SET v_temp = 'processing';
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+        CASE v_counter
+            WHEN 5 THEN
+                SET v_temp = 'midpoint';
+            WHEN 10 THEN
+                SET v_temp = 'done';
+            ELSE
+                SET v_temp = 'counting';
+        END CASE;
+    END WHILE;
+
+    -- Final output
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1588_proc(1, 1, @out_result);
+
+SELECT @out_result;

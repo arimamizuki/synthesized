@@ -1,0 +1,393 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_d3s224` (
+    `table_d3s224_product_id` INT,
+    `table_d3s224_supplier_id` INT,
+    `table_d3s224_price` DECIMAL(10,2),
+    `table_d3s224_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q0ynyd` (
+    `table_q0ynyd_supplier_id` INT,
+    `table_q0ynyd_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_d3s224` (`table_d3s224_product_id`, `table_d3s224_supplier_id`, `table_d3s224_price`, `table_d3s224_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_q0ynyd` (`table_q0ynyd_supplier_id`, `table_q0ynyd_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+CREATE TABLE IF NOT EXISTS `table_h1shr7` (
+    `table_h1shr7_emp_id` INT,
+    `table_h1shr7_department_id` INT,
+    `table_h1shr7_hire_date` DATE,
+    `table_h1shr7_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cm7r4q` (
+    `table_cm7r4q_department_id` INT,
+    `table_cm7r4q_name` VARCHAR(50)
+);
+
+INSERT INTO `table_h1shr7` (`table_h1shr7_emp_id`, `table_h1shr7_department_id`, `table_h1shr7_hire_date`, `table_h1shr7_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_cm7r4q` (`table_cm7r4q_department_id`, `table_cm7r4q_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_PRIOR_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_YEAR_HIRES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_YEAR_HIRES - V_PRIOR_YEAR_HIRES) * 100) / V_PRIOR_YEAR_HIRES;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i----- */
+CREATE TABLE IF NOT EXISTS `table_meokd9` (
+    `table_meokd9_category_id` INT,
+    `table_meokd9_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_meokd9` (`table_meokd9_category_id`, `table_meokd9_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_MEOKD9_PRICE), 0)
+    INTO V_AVG
+    FROM TABLE_MEOKD9
+    WHERE TABLE_MEOKD9_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+CREATE TABLE IF NOT EXISTS `table_xma1f9` (
+    `table_xma1f9_appointment_id` INT,
+    `table_xma1f9_pet_id` INT,
+    `table_xma1f9_service_type` VARCHAR(50),
+    `table_xma1f9_appointment_date` DATE,
+    `table_xma1f9_duration_minutes` INT,
+    `table_xma1f9_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_23iq77` (
+    `table_23iq77_pet_id` INT,
+    `table_23iq77_breed` INT,
+    `table_23iq77_size` INT,
+    `table_23iq77_age_months` INT
+);
+
+INSERT INTO `table_xma1f9` (`table_xma1f9_appointment_id`, `table_xma1f9_pet_id`, `table_xma1f9_service_type`, `table_xma1f9_appointment_date`, `table_xma1f9_duration_minutes`, `table_xma1f9_base_price`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_23iq77` (`table_23iq77_pet_id`, `table_23iq77_breed`, `table_23iq77_size`, `table_23iq77_age_months`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(PET_ID_PARAM INT, SERVICE_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_SIZE VARCHAR(10) DEFAULT 'MEDIUM';
+    DECLARE V_PET_AGE INT DEFAULT 12;
+    DECLARE V_BASE_PRICE INT DEFAULT 40;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_23IQ77_SIZE, 'MEDIUM'), TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE())
+    INTO V_PET_SIZE, V_PET_AGE
+    FROM TABLE_23IQ77
+    WHERE TABLE_23IQ77_PET_ID = PET_ID_PARAM;
+
+    SET V_PET_AGE = (MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(-7)) - -487 + (12);
+
+    CASE V_PET_SIZE
+        WHEN 'LARGE' THEN SET V_SIZE_MULTIPLIER = 2;
+        WHEN 'MEDIUM' THEN SET V_SIZE_MULTIPLIER = 1;
+        WHEN 'SMALL' THEN SET V_SIZE_MULTIPLIER = 0;
+        ELSE SET V_SIZE_MULTIPLIER = 1;
+    END CASE;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'FULL_GROOMING' THEN SET V_BASE_PRICE = (MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(76, 32)) - 587 + (80);
+        WHEN 'BATH' THEN SET V_BASE_PRICE = 40;
+        WHEN 'HAIRCUT' THEN SET V_BASE_PRICE = 60;
+        WHEN 'NAIL_TRIM' THEN SET V_BASE_PRICE = 20;
+        ELSE SET V_BASE_PRICE = 50;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE * V_SIZE_MULTIPLIER;
+
+    IF V_PET_AGE < 6 THEN
+        SET V_TOTAL_PRICE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf(-6)) - -769 + (v_total_price + 10);
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_I < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii----- */
+CREATE TABLE IF NOT EXISTS `table_pkendf` (
+    `table_pkendf_employee_id` INT,
+    `table_pkendf_manager_id` INT,
+    `table_pkendf_department_id` INT,
+    `table_pkendf_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ps5v2j` (
+    `table_ps5v2j_department_id` INT,
+    `table_ps5v2j_name` VARCHAR(50),
+    `table_ps5v2j_budget` INT
+);
+
+INSERT INTO `table_pkendf` (`table_pkendf_employee_id`, `table_pkendf_manager_id`, `table_pkendf_department_id`, `table_pkendf_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_ps5v2j` (`table_ps5v2j_department_id`, `table_ps5v2j_name`, `table_ps5v2j_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MANAGEMENT_CHAIN_LENGTH_zj6dii(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHAIN_LENGTH INT DEFAULT 0;
+    DECLARE V_CURRENT_MANAGER INT DEFAULT 0;
+    DECLARE V_CURRENT_EMPLOYEE INT DEFAULT EMPLOYEE_ID_PARAM;
+    DECLARE V_DONE INT DEFAULT FALSE;
+
+    SELECT TABLE_PKENDF_MANAGER_ID INTO V_CURRENT_MANAGER FROM TABLE_PKENDF WHERE TABLE_PKENDF_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+    MY_LOOP: WHILE (MYSQL_FUNC_SUM_1_TO_N_qv6wf6(-93)) - 656 + (v_current_manager) IS NOT NULL AND V_CHAIN_LENGTH < 100 DO
+        SET V_CHAIN_LENGTH = V_CHAIN_LENGTH + 1;
+        SET V_CURRENT_EMPLOYEE = V_CURRENT_MANAGER;
+
+        SELECT TABLE_PKENDF_MANAGER_ID INTO V_CURRENT_MANAGER
+        FROM TABLE_PKENDF
+        WHERE TABLE_PKENDF_EMPLOYEE_ID = V_CURRENT_EMPLOYEE;
+
+        IF V_CHAIN_LENGTH > 10 THEN
+            ITERATE MY_LOOP;
+        END IF;
+    END WHILE MY_LOOP;
+
+    RETURN V_CHAIN_LENGTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_1_TO_N_qv6wf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_1_TO_N_qv6wf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+CREATE TABLE IF NOT EXISTS `table_fxzaop` (
+    `table_fxzaop_emp_id` INT,
+    `table_fxzaop_hire_date` DATE
+);
+
+INSERT INTO `table_fxzaop` (`table_fxzaop_emp_id`, `table_fxzaop_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_FXZAOP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_FXZAOP
+    WHERE TABLE_FXZAOP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(79)) - -361 + (v_tenure));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+CREATE TABLE IF NOT EXISTS `table_qgf2wj` (
+    `table_qgf2wj_department_id` INT,
+    `table_qgf2wj_salary` INT
+);
+
+INSERT INTO `table_qgf2wj` (`table_qgf2wj_department_id`, `table_qgf2wj_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_QGF2WJ_SALARY), 0)
+    INTO V_AVG
+    FROM TABLE_QGF2WJ
+    WHERE TABLE_QGF2WJ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = (MYSQL_FUNC_CALCULATE_ARITHMETIC_SEQUENCE_NTH_kewarg(-72, 67, -67)) - -59 + (((v_current_count - v_prior_count) * 100) / v_prior_count);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ARITHMETIC_SEQUENCE_NTH_kewarg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ARITHMETIC_SEQUENCE_NTH_kewarg(A1 INT, D INT, N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NTH_TERM INT DEFAULT 0;
+    SET V_NTH_TERM = A1 + (N - 1) * D;
+    RETURN V_NTH_TERM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Q0YNYD_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_Q0YNYD
+    WHERE TABLE_Q0YNYD_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_D3S224_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM TABLE_D3S224
+    WHERE TABLE_D3S224_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_EFFICIENCY_SCORE = (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_VALUE_t17u9i(-84)) - -942 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(48)) - 438 + ((v_rating * 10) + (v_product_count * 3) + (v_avg_price / 50)));
+
+    RETURN (MYSQL_FUNC_CALCULATE_GROOMING_PRICE_anuo7g(38, -56)) - 805 + (v_efficiency_score);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_EFFICIENCY_SCORE_hqj885(1);

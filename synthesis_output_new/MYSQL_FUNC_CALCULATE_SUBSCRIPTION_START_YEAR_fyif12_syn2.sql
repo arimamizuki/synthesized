@@ -1,0 +1,405 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_jczj5p` (
+    `table_jczj5p_customer_id` INT,
+    `table_jczj5p_start_date` DATE,
+    `table_jczj5p_status` VARCHAR(50)
+);
+
+INSERT INTO `table_jczj5p` (`table_jczj5p_customer_id`, `table_jczj5p_start_date`, `table_jczj5p_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + ((p_a + p_b + p_c) / 3);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(9)) - 250 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+CREATE TABLE IF NOT EXISTS `table_6i0q6l` (
+    `table_6i0q6l_ad_id` INT,
+    `table_6i0q6l_company_id` INT,
+    `table_6i0q6l_location_id` INT,
+    `table_6i0q6l_billboard_size` INT,
+    `table_6i0q6l_monthly_rent` INT,
+    `table_6i0q6l_duration_months` INT,
+    `table_6i0q6l_impressions_expected` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8fquy9` (
+    `table_8fquy9_location_id` INT,
+    `table_8fquy9_city` INT,
+    `table_8fquy9_traffic_count` INT,
+    `table_8fquy9_visibility_score` INT
+);
+
+INSERT INTO `table_6i0q6l` (`table_6i0q6l_ad_id`, `table_6i0q6l_company_id`, `table_6i0q6l_location_id`, `table_6i0q6l_billboard_size`, `table_6i0q6l_monthly_rent`, `table_6i0q6l_duration_months`, `table_6i0q6l_impressions_expected`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_8fquy9` (`table_8fquy9_location_id`, `table_8fquy9_city`, `table_8fquy9_traffic_count`, `table_8fquy9_visibility_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(AD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 5000;
+    DECLARE V_IMPRESSIONS_EXPECTED INT DEFAULT 0;
+    DECLARE V_TRAFFIC_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6I0Q6L_MONTHLY_RENT, 5000), COALESCE(TABLE_6I0Q6L_IMPRESSIONS_EXPECTED, 100000)
+    INTO V_MONTHLY_RENT, V_IMPRESSIONS_EXPECTED
+    FROM TABLE_6I0Q6L
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8FQUY9_TRAFFIC_COUNT, 50000)
+    INTO V_TRAFFIC_COUNT
+    FROM TABLE_6I0Q6L BA
+    JOIN TABLE_8FQUY9 BL ON TABLE_6I0Q6L_LOCATION_ID = TABLE_8FQUY9_LOCATION_ID
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SET V_ROI_SCORE = (V_IMPRESSIONS_EXPECTED * V_TRAFFIC_COUNT) / V_MONTHLY_RENT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(85)) - -325 + (cast(v_roi_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+CREATE TABLE IF NOT EXISTS `table_77c9lm` (
+    `table_77c9lm_emp_id` INT,
+    `table_77c9lm_dept_id` INT,
+    `table_77c9lm_manager_id` INT,
+    `table_77c9lm_salary` INT,
+    `table_77c9lm_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0zp2ks` (
+    `table_0zp2ks_dept_id` INT,
+    `table_0zp2ks_name` VARCHAR(50)
+);
+
+INSERT INTO `table_77c9lm` (`table_77c9lm_emp_id`, `table_77c9lm_dept_id`, `table_77c9lm_manager_id`, `table_77c9lm_salary`, `table_77c9lm_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0zp2ks` (`table_0zp2ks_dept_id`, `table_0zp2ks_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_SIZE INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_77C9LM_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_77C9LM_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_SIZE
+    FROM TABLE_77C9LM E
+    JOIN TABLE_0ZP2KS D ON TABLE_77C9LM_DEPT_ID = TABLE_0ZP2KS_DEPT_ID
+    WHERE TABLE_0ZP2KS_DEPT_ID = (SELECT TABLE_77C9LM_DEPT_ID FROM TABLE_77C9LM WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_READINESS_SCORE = (V_YEARS_EMPLOYED * 10) + (V_DIRECT_REPORTS * 15) + ((V_DEPT_SIZE * 100) / 1000);
+
+    IF V_SALARY > 100000 THEN
+        SET V_READINESS_SCORE = (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + (v_readiness_score) + 20;
+    END IF;
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(90)) - -10 + (quarter(v_registration_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+CREATE TABLE IF NOT EXISTS `table_m5s0fu` (
+    `table_m5s0fu_product_id` INT,
+    `table_m5s0fu_price` DECIMAL(10,2),
+    `table_m5s0fu_stock_quantity` INT
+);
+
+INSERT INTO `table_m5s0fu` (`table_m5s0fu_product_id`, `table_m5s0fu_price`, `table_m5s0fu_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M5S0FU_PRICE, (MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp()) - 375 + (0))), COALESCE(TABLE_M5S0FU_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_M5S0FU
+    WHERE TABLE_M5S0FU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_PRICE / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_TO_8_lbq7pp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 2;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, 0), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = (MYSQL_FUNC_CALCULATE_ORDER_PROFITABILITY_RATIO_9jyo53(88)) - -136 + (v_total_amount - v_paid_amount);
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = 15;
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = 10;
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (MYSQL_FUNC_PROC2_ktdgwa()) - 741 + ((v_balance_due * v_penalty_rate) / 100);
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_PROFITABILITY_RATIO_9jyo53----- */
+CREATE TABLE IF NOT EXISTS `table_022jtl` (
+    `table_022jtl_order_id` INT,
+    `table_022jtl_customer_id` INT,
+    `table_022jtl_order_date` DATE,
+    `table_022jtl_total_amount` DECIMAL(10,2),
+    `table_022jtl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_webtxs` (
+    `table_webtxs_order_id` INT,
+    `table_webtxs_product_id` INT,
+    `table_webtxs_quantity` INT,
+    `table_webtxs_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_022jtl` (`table_022jtl_order_id`, `table_022jtl_customer_id`, `table_022jtl_order_date`, `table_022jtl_total_amount`, `table_022jtl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_webtxs` (`table_webtxs_order_id`, `table_webtxs_product_id`, `table_webtxs_quantity`, `table_webtxs_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_PROFITABILITY_RATIO_9jyo53----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_PROFITABILITY_RATIO_9jyo53(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_WEBTXS_QUANTITY * TABLE_WEBTXS_UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM TABLE_WEBTXS
+    WHERE TABLE_WEBTXS_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_022JTL_TOTAL_AMOUNT, 0)
+    INTO V_COST
+    FROM TABLE_022JTL
+    WHERE TABLE_022JTL_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_REVENUE - V_COST) * 100) / V_REVENUE;
+
+    RETURN V_PROFIT_MARGIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_ktdgwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_ktdgwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_YEAR_fyif12(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_JCZJ5P_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_JCZJ5P
+    WHERE TABLE_JCZJ5P_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(-81, -74, 100)) - 813 + (0);
+    END IF;
+
+    RETURN YEAR(V_START_DATE);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_YEAR_fyif12(1);

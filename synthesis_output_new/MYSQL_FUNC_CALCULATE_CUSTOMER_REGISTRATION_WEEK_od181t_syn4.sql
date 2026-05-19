@@ -1,0 +1,356 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_j5f09c` (
+    `table_j5f09c_customer_id` INT,
+    `table_j5f09c_registration_date` DATE
+);
+
+INSERT INTO `table_j5f09c` (`table_j5f09c_customer_id`, `table_j5f09c_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+CREATE TABLE IF NOT EXISTS `table_k6cijp` (
+    `table_k6cijp_course_id` INT,
+    `table_k6cijp_course_name` VARCHAR(50),
+    `table_k6cijp_credits` INT,
+    `table_k6cijp_department_id` INT,
+    `table_k6cijp_max_students` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rhsiv6` (
+    `table_rhsiv6_enrollment_id` INT,
+    `table_rhsiv6_student_id` INT,
+    `table_rhsiv6_course_id` INT,
+    `table_rhsiv6_grade` INT,
+    `table_rhsiv6_enrollment_date` DATE
+);
+
+INSERT INTO `table_k6cijp` (`table_k6cijp_course_id`, `table_k6cijp_course_name`, `table_k6cijp_credits`, `table_k6cijp_department_id`, `table_k6cijp_max_students`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_rhsiv6` (`table_rhsiv6_enrollment_id`, `table_rhsiv6_student_id`, `table_rhsiv6_course_id`, `table_rhsiv6_grade`, `table_rhsiv6_enrollment_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ENROLLED INT DEFAULT 0;
+    DECLARE V_PASSING_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_SUCCESS_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_RHSIV6_GRADE >= 60 THEN 1 END), COALESCE(AVG(TABLE_RHSIV6_GRADE), (MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(-2)) - 961 + (0))
+    INTO V_TOTAL_ENROLLED, V_PASSING_COUNT, V_AVG_GRADE
+    FROM TABLE_RHSIV6
+    WHERE TABLE_RHSIV6_COURSE_ID = COURSE_ID_PARAM;
+
+    IF V_TOTAL_ENROLLED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUCCESS_RATE = (V_PASSING_COUNT * 100) / V_TOTAL_ENROLLED;
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_SUCCESS_RATE = V_SUCCESS_RATE + 5;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(-93, -66)) - 913 + (cast(v_success_rate as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+CREATE TABLE IF NOT EXISTS `table_74xcmp` (
+    `table_74xcmp_airline_id` INT,
+    `table_74xcmp_name` VARCHAR(50),
+    `table_74xcmp_iata_code` INT,
+    `table_74xcmp_safety_rating` DECIMAL(3,1),
+    `table_74xcmp_fleet_size` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_r5kuxo` (
+    `table_r5kuxo_flight_id` INT,
+    `table_r5kuxo_airline_id` INT,
+    `table_r5kuxo_origin` INT,
+    `table_r5kuxo_destination` INT,
+    `table_r5kuxo_distance_miles` INT
+);
+
+INSERT INTO `table_74xcmp` (`table_74xcmp_airline_id`, `table_74xcmp_name`, `table_74xcmp_iata_code`, `table_74xcmp_safety_rating`, `table_74xcmp_fleet_size`) VALUES (1, 'test', 3, 1.0, 5);
+
+INSERT INTO `table_r5kuxo` (`table_r5kuxo_flight_id`, `table_r5kuxo_airline_id`, `table_r5kuxo_origin`, `table_r5kuxo_destination`, `table_r5kuxo_distance_miles`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_ENVIRONMENTAL_IMPACT_kzn2nu(DISTANCE_MILES_PARAM INT, AIRLINE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SAFETY_RATING INT DEFAULT 80;
+    DECLARE V_FLEET_SIZE INT DEFAULT 50;
+    DECLARE V_FUEL_CONSUMPTION INT DEFAULT 0;
+    DECLARE V_CARBON_OFFSET_COST INT DEFAULT 0;
+    DECLARE V_ENVIRONMENTAL_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_74XCMP_SAFETY_RATING, 80), COALESCE(TABLE_74XCMP_FLEET_SIZE, 50)
+    INTO V_SAFETY_RATING, V_FLEET_SIZE
+    FROM TABLE_74XCMP
+    WHERE TABLE_74XCMP_AIRLINE_ID = AIRLINE_ID_PARAM;
+
+    SET V_FUEL_CONSUMPTION = (DISTANCE_MILES_PARAM * 5) / 1000;
+
+    SET V_CARBON_OFFSET_COST = V_FUEL_CONSUMPTION * 20;
+
+    SET V_ENVIRONMENTAL_SCORE = 100 - V_CARBON_OFFSET_COST + (V_SAFETY_RATING / 10);
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (greatest(v_environmental_score, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt----- */
+CREATE TABLE IF NOT EXISTS `table_ddlcx3` (
+    `table_ddlcx3_customer_id` INT,
+    `table_ddlcx3_order_date` DATE,
+    `table_ddlcx3_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ddlcx3` (`table_ddlcx3_customer_id`, `table_ddlcx3_order_date`, `table_ddlcx3_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_FREQUENCY_SCORE_di51qt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 1;
+
+    SELECT COUNT(*), TIMESTAMPDIFF(MONTH, MIN(TABLE_DDLCX3_ORDER_DATE), CURDATE())
+    INTO V_ORDER_COUNT, V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_DDLCX3 O
+    WHERE TABLE_DDLCX3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_AGE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+CREATE TABLE IF NOT EXISTS `table_t4xtqx` (
+    `table_t4xtqx_order_id` INT,
+    `table_t4xtqx_customer_id` INT,
+    `table_t4xtqx_order_date` DATE,
+    `table_t4xtqx_total_amount` DECIMAL(10,2),
+    `table_t4xtqx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_evisnb` (
+    `table_evisnb_payment_id` INT,
+    `table_evisnb_order_id` INT,
+    `table_evisnb_payment_date` DATE,
+    `table_evisnb_amount_paid` INT
+);
+
+INSERT INTO `table_t4xtqx` (`table_t4xtqx_order_id`, `table_t4xtqx_customer_id`, `table_t4xtqx_order_date`, `table_t4xtqx_total_amount`, `table_t4xtqx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_evisnb` (`table_evisnb_payment_id`, `table_evisnb_order_id`, `table_evisnb_payment_date`, `table_evisnb_amount_paid`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_COMPLETION_STATUS_h34dvo(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_COMPLETION_STATUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T4XTQX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_T4XTQX
+    WHERE TABLE_T4XTQX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_EVISNB_AMOUNT_PAID), 0)
+    INTO V_AMOUNT_PAID
+    FROM TABLE_EVISNB
+    WHERE TABLE_EVISNB_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_AMOUNT_PAID >= V_ORDER_TOTAL THEN
+        RETURN (MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(95)) - 779 + (100);
+    END IF;
+
+    SET V_COMPLETION_STATUS = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-9)) - -779 + ((v_amount_paid * 100) / v_order_total);
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(19, 100)) - -110 + (v_completion_status);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = V_COUNT + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+CREATE TABLE IF NOT EXISTS table_i88pr4 (
+    table_i88pr4_id INT,
+    table_i88pr4_preco INT
+);
+
+INSERT INTO table_i88pr4 (`table_i88pr4_id`, `table_i88pr4_preco`) VALUES (2, 100);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(VAR_PRODUTO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    
+    SELECT TABLE_I88PR4_PRECO INTO RESULT
+    FROM TABLE_I88PR4
+    WHERE TABLE_I88PR4.TABLE_I88PR4_ID = VAR_PRODUTO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(76)) - -860 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+CREATE TABLE IF NOT EXISTS `table_wggirr` (
+    `table_wggirr_order_id` INT,
+    `table_wggirr_customer_id` INT,
+    `table_wggirr_order_date` DATE,
+    `table_wggirr_total_amount` DECIMAL(10,2),
+    `table_wggirr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_iyjgsr` (
+    `table_iyjgsr_shipment_id` INT,
+    `table_iyjgsr_order_id` INT,
+    `table_iyjgsr_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wggirr` (`table_wggirr_order_id`, `table_wggirr_customer_id`, `table_wggirr_order_date`, `table_wggirr_total_amount`, `table_wggirr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_iyjgsr` (`table_iyjgsr_shipment_id`, `table_iyjgsr_order_id`, `table_iyjgsr_shipping_cost`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_PROFIT_MARGIN_lv58ye(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_SHIPPING_MARGIN INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WGGIRR_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_WGGIRR
+    WHERE TABLE_WGGIRR_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_IYJGSR_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_IYJGSR
+    WHERE TABLE_IYJGSR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SHIPPING_MARGIN = ((V_ORDER_TOTAL - V_SHIPPING_COST) * 100) / V_ORDER_TOTAL;
+
+    RETURN V_SHIPPING_MARGIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS(A / B) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_J5F09C_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_J5F09C
+    WHERE TABLE_J5F09C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(-5)) - 75 + (v_week));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(1);

@@ -1,0 +1,474 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1167735 (v1167745 VARCHAR(100), v1167746 INT);
+CREATE TABLE IF NOT EXISTS v1167781 (v1167782 VARCHAR(100), v1167783 INT, v1167784 TEXT);
+CREATE TABLE IF NOT EXISTS v1167710 (v1167711 INT, v1167712 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1167712 (v1167713 INT, v1167714 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1167824 (v1167825 BINARY(4), v1167826 CHAR(4) CHARACTER SET koi8r, x3 INT);
+INSERT INTO v1167735 VALUES ('FUNCTION', 1), ('test', 2), ('value', 3);
+INSERT INTO v1167781 VALUES ('initial', 5, REPEAT('x', 10)), ('second', 0, REPEAT('y', 5)), ('third', 3, REPEAT('z', 8));
+INSERT INTO v1167710 VALUES (3, 'aaa'), (5, 'bbb'), (2, 'ccc');
+INSERT INTO v1167712 VALUES (10, 'ref1'), (20, 'ref2'), (30, 'ref3');
+
+/* -----Called: MYSQL_FUNC_SQUARE_4pyj0b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SQUARE_4pyj0b(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN N * N;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_0890----- */
+CREATE TABLE IF NOT EXISTS v31003 (v31005 INT, v31004 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v30911 (v30929 INT, v30914 INT, v30944 INT);
+CREATE TABLE IF NOT EXISTS v31502 (v31503 INT);
+CREATE TABLE IF NOT EXISTS v31871 (v31872 INT);
+CREATE TABLE IF NOT EXISTS x14 (v31005 INT);
+CREATE TABLE IF NOT EXISTS x12 (v31005 INT);
+INSERT INTO v31003 VALUES (1, '01-01-01'), (2, '2001-1-1 0:0:0'), (3, '02-02-02'), (10, '01-01-01'), (20, '2001-1-1 0:0:0');
+INSERT INTO x14 VALUES (0), (1), (2), (3), (4), (5), (6), (7), (8), (9);
+INSERT INTO x12 VALUES (0), (1), (2), (3), (4), (5), (6), (7), (8), (9);
+INSERT INTO v31502 VALUES (100), (200), (300);
+INSERT INTO v31871 VALUES (10), (20), (30);
+
+/* -----Called: synth_output_0890----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0890(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v31005 FROM v31003 WHERE v31004 = '01-01-01';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+    END;
+
+    -- Statement 1: CTE with SELECT INTO
+    SET @sql1 = 'WITH x9 AS (SELECT 0 AS x13 UNION ALL SELECT 2 * x14.v31005 + 2 FROM x14 WHERE x14.v31005 < 50 UNION ALL SELECT 2 * x12.v31005 + 1 FROM x12 WHERE x12.v31005 < 50) SELECT COUNT(*) INTO @cte_count FROM v31003 AS x8 WHERE (''1'', x8.v31004) IN ((''1'', ''01-01-01''), (''1'', ''2001-1-1 0:0:0''), (''1'', ''02-02-02''))';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(98)) - 519 + (v_counter) + IFNULL(@cte_count, 0);
+
+    -- Statement 2: INSERT using dynamic SQL with conditional logic
+    IF p1 > 0 THEN
+        SET @sql2 = 'INSERT INTO v30911 (v30929, v30914, v30944) VALUES (1, 2, 746305)';
+        PREPARE stmt2 FROM @sql2;
+        EXECUTE stmt2;
+        DEALLOCATE PREPARE stmt2;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Statement 3: CREATE TABLE AS SELECT (DDL) using prepared statement
+    SET @sql3 = 'CREATE TABLE IF NOT EXISTS v31822 AS SELECT CASE WHEN 1 THEN v31503 ELSE v31503 END AS col1, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col2, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col3, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col4, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col5, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col6, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col7, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col8, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col9, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col10, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col11, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col12, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col13, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col14, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col15, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col16, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col17, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col18, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col19, CASE WHEN 1 THEN v31503 ELSE v31503 END AS col20 FROM v31502';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: CREATE TABLE with CHECK constraints (DDL)
+    SET @sql4 = 'CREATE TABLE IF NOT EXISTS v31865 (v31866 DATE CHECK (v31868 > ''2007-01-01''), v31867 DATETIME CHECK (v31866 > ''2007-01-01 12:00:01''), v31868 DATETIME CHECK (v31867 > ''2007-01-01 00:00:01.000000''), v31869 TIME CHECK (v31869 > ''12:00:01.000000''), v31870 YEAR CHECK (v31870 > ''2007''))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: CREATE INDEX (DDL) using loop to validate
+    SET @sql5 = 'CREATE INDEX v31906 ON v31871((v31872 + 1), (v31872 + 2), (v31872 + 3), (v31872 + 4), (v31872 + 5))';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + 1;
+
+    -- Cursor loop for additional processing (procedural structure)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final conditional logic
+    CASE
+        WHEN v_counter > 100 THEN SET result = v_counter;
+        WHEN v_counter BETWEEN 50 AND 100 THEN SET result = v_counter * 2;
+        ELSE SET result = v_counter + p1 + p2;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+CREATE TABLE IF NOT EXISTS `table_sqshp3` (
+    `table_sqshp3_emp_id` INT,
+    `table_sqshp3_department_id` INT,
+    `table_sqshp3_hire_date` DATE
+);
+
+INSERT INTO `table_sqshp3` (`table_sqshp3_emp_id`, `table_sqshp3_department_id`, `table_sqshp3_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_SQSHP3_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_SQSHP3
+    WHERE TABLE_SQSHP3_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_TENURE * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+CREATE TABLE IF NOT EXISTS `table_thz1np` (
+    `table_thz1np_product_id` INT,
+    `table_thz1np_category_id` INT,
+    `table_thz1np_price` DECIMAL(10,2),
+    `table_thz1np_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8ug1be` (
+    `table_8ug1be_category_id` INT,
+    `table_8ug1be_name` VARCHAR(50)
+);
+
+INSERT INTO `table_thz1np` (`table_thz1np_product_id`, `table_thz1np_category_id`, `table_thz1np_price`, `table_thz1np_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_8ug1be` (`table_8ug1be_category_id`, `table_8ug1be_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_STOCK DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_ADEQUACY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_THZ1NP_STOCK_QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_STOCK, V_TOTAL_PRODUCTS
+    FROM TABLE_THZ1NP
+    WHERE TABLE_THZ1NP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_STOCK = V_TOTAL_STOCK / V_TOTAL_PRODUCTS;
+
+    SET V_ADEQUACY_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(-49)) - 816 + (v_avg_stock / 10);
+
+    RETURN (MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(93, -26)) - 288 + ((MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0(-32)) - -673 + (v_adequacy_score));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ABSOLUTE_y0ucp0(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TREE_DEPTH_SUM_uzs8ho(N INT, CURRENT_DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(-91)) - 973 + (0) OR CURRENT_DEPTH > 100 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUM = N * CURRENT_DEPTH;
+
+    IF N > 1 THEN
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(-99, -90)) - 428 + (v_sum) + CALCULATE_TREE_DEPTH_SUM(N - 1, CURRENT_DEPTH + 1);
+    END IF;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DATA_FABRICACAO_5mz9t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN CURRENT_YEAR - DATA_FIRST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+CREATE TABLE IF NOT EXISTS `table_33kbxb` (
+    `table_33kbxb_product_id` INT,
+    `table_33kbxb_category_id` INT,
+    `table_33kbxb_supplier_id` INT,
+    `table_33kbxb_price` DECIMAL(10,2),
+    `table_33kbxb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_kkdez3` (
+    `table_kkdez3_category_id` INT,
+    `table_kkdez3_name` VARCHAR(50),
+    `table_kkdez3_discount_percent` INT
+);
+
+INSERT INTO `table_33kbxb` (`table_33kbxb_product_id`, `table_33kbxb_category_id`, `table_33kbxb_supplier_id`, `table_33kbxb_price`, `table_33kbxb_stock_quantity`) VALUES (1, 2, 3, 1.0, 5);
+
+INSERT INTO `table_kkdez3` (`table_kkdez3_category_id`, `table_kkdez3_name`, `table_kkdez3_discount_percent`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FINAL_PRICE_jqico3(PRODUCT_ID_PARAM INT, QUANTITY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT INT DEFAULT 0;
+    DECLARE V_QUANTITY_DISCOUNT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_DISCOUNT INT DEFAULT 0;
+
+    SELECT TABLE_33KBXB_PRICE, COALESCE(TABLE_KKDEZ3_DISCOUNT_PERCENT, 0)
+    INTO V_BASE_PRICE, V_CATEGORY_DISCOUNT
+    FROM TABLE_33KBXB P
+    LEFT JOIN TABLE_KKDEZ3 C ON TABLE_33KBXB_CATEGORY_ID = TABLE_KKDEZ3_CATEGORY_ID
+    WHERE TABLE_33KBXB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_DISCOUNT = V_BASE_PRICE * V_CATEGORY_DISCOUNT / 100;
+
+    IF QUANTITY_PARAM >= 100 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 15 / 100;
+    ELSEIF QUANTITY_PARAM >= 50 THEN
+        SET V_QUANTITY_DISCOUNT = (MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(-59)) - -500 + (v_base_price * 10 / 100);
+    ELSEIF QUANTITY_PARAM >= 10 THEN
+        SET V_QUANTITY_DISCOUNT = V_BASE_PRICE * 5 / 100;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - V_DISCOUNT - V_QUANTITY_DISCOUNT;
+
+    RETURN GREATEST(V_FINAL_PRICE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+CREATE TABLE IF NOT EXISTS `table_3xzodd` (
+    `table_3xzodd_sale_id` INT,
+    `table_3xzodd_product_id` INT,
+    `table_3xzodd_salesperson_id` INT,
+    `table_3xzodd_sale_date` DATE,
+    `table_3xzodd_quantity` INT,
+    `table_3xzodd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_3xzodd` (`table_3xzodd_sale_id`, `table_3xzodd_product_id`, `table_3xzodd_salesperson_id`, `table_3xzodd_sale_date`, `table_3xzodd_quantity`, `table_3xzodd_unit_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(SALESPERSON_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALES INT DEFAULT 0;
+    DECLARE V_TRANSACTION_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALE_VALUE INT DEFAULT 0;
+    DECLARE V_BONUS_RATE INT DEFAULT 5;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), SUM(TABLE_3XZODD_QUANTITY * TABLE_3XZODD_UNIT_PRICE)
+    INTO V_TRANSACTION_COUNT, V_TOTAL_SALES
+    FROM TABLE_3XZODD
+    WHERE TABLE_3XZODD_SALESPERSON_ID = SALESPERSON_ID_PARAM
+      AND TABLE_3XZODD_SALE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
+
+    IF V_TRANSACTION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_SALE_VALUE = V_TOTAL_SALES / V_TRANSACTION_COUNT;
+
+    CASE
+        WHEN V_AVG_SALE_VALUE > 5000 THEN SET V_BONUS_RATE = 12;
+        WHEN V_AVG_SALE_VALUE > 2000 THEN SET V_BONUS_RATE = 8;
+        WHEN V_AVG_SALE_VALUE > 1000 THEN SET V_BONUS_RATE = 6;
+        ELSE SET V_BONUS_RATE = 4;
+    END CASE;
+
+    SET V_BONUS_AMOUNT = V_TOTAL_SALES * V_BONUS_RATE / 100;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+CREATE TABLE IF NOT EXISTS `table_0uzv2f` (
+    `table_0uzv2f_order_id` INT,
+    `table_0uzv2f_customer_id` INT,
+    `table_0uzv2f_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0uzv2f` (`table_0uzv2f_order_id`, `table_0uzv2f_customer_id`, `table_0uzv2f_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REVENUE_SHARE_u7vfyi(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_0UZV2F
+    WHERE TABLE_0UZV2F_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_0UZV2F_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_0UZV2F;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CUSTOMER_REVENUE * 100) / V_TOTAL_REVENUE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0955_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val VARCHAR(100);
+    DECLARE v_geom_result INT;
+    DECLARE cur CURSOR FOR SELECT v1167745 FROM v1167735 WHERE v1167745 != 'FUNCTION';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Insert statement adapted: use input params for dynamic value
+    INSERT INTO v1167735 (v1167745) VALUES (CONCAT('p1_value_', p1));
+
+    -- First UPDATE with JOIN adapted: use p1 in WHERE condition
+    UPDATE v1167781 AS x0, v1167735 AS x1 LEFT JOIN v1167735 AS x6 ON x1.v1167745 = 'FUNCTION'
+    SET x0.v1167784 = REPEAT('x', 1000)
+    WHERE x0.v1167783 > 0 AND x0.v1167783 = p1;
+
+    -- Second UPDATE: use p2 to control repetition
+    UPDATE v1167710 AS x0 SET v1167711 = (REPEAT('b', v1167711)) WHERE v1167711 = p2;
+
+    -- Third UPDATE: use p1 in join condition
+    UPDATE v1167781 AS x1 LEFT JOIN v1167712 AS x4 ON (x1.v1167783 = x1.v1167782)
+    SET x1.v1167782 = 'other'
+    WHERE x1.v1167783 = p1;
+
+    -- CREATE TABLE AS SELECT with geometry: use subquery to get scalar result
+    SELECT ST_CONTAINS(
+        ST_UNION(
+            ST_INTERSECTION(
+                ST_GEOMFROMTEXT('POINT(-3 3)'),
+                ST_GEOMFROMTEXT('POLYGON((8 3,-2 9,-10 2,-10 -9,7 -1,4 1,7 6,5 -10,5 3,2 1,-10 0, 8 3))')
+            ),
+            ST_CONVEXHULL(ST_GEOMFROMTEXT('MULTIPOINT(8 -8,-7 5)'))
+        ),
+        ST_UNION(
+            ST_GEOMFROMTEXT('POINT(4 1)'),
+            ST_GEOMFROMTEXT('MULTIPOINT(-10 -10,5 -2,-6 -7,1 5,-3 0)')
+        )
+    ) INTO v_geom_result;
+
+    INSERT INTO v1167824 (v1167825, v1167826, x3)
+    VALUES (BINARY(REPEAT(CHAR(0), 4)), 'test', v_geom_result);
+
+    -- Use CURSOR with loop to iterate over table
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+CALL synth_output_0890(34, -28, @_syn_10068);
+        SET v_counter = v_counter + @_syn_10068 - -1 + (1);
+
+        -- Use IF/ELSEIF/ELSE conditional
+        IF v_val = 'test' THEN
+            SET v_affected = (MYSQL_FUNC_SQUARE_4pyj0b(87)) - -668 + (v_affected) + 10;
+        ELSEIF v_val = 'value' THEN
+            SET v_affected = v_affected + (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(-95)) - -131 + (20);
+        ELSE
+            SET v_affected = v_affected + 1;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use REPEAT loop with condition based on p2
+    SET v_done = 0;
+    REPEAT
+        SET v_affected = v_affected + 1;
+        SET v_done = v_done + 1;
+    UNTIL v_done >= p2 END REPEAT;
+
+    -- Use CASE/WHEN for final result calculation
+    CASE
+        WHEN v_affected > 50 THEN SET result = v_affected;
+        WHEN v_affected > 20 THEN SET result = v_counter + p1;
+        ELSE SET result = v_counter * p2;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0955_proc(1, 1, @out_result);
+
+SELECT @out_result;

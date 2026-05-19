@@ -1,0 +1,419 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v9172 (v9174 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v9190 (v9191 INT);
+CREATE TABLE IF NOT EXISTS v9091 (v9092 INT);
+CREATE TABLE IF NOT EXISTS v9221 (v9222 INT, v9223 DATE);
+CREATE TABLE IF NOT EXISTS v9150 (v8881 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS x9 (v9223 DATE);
+CREATE TABLE IF NOT EXISTS x13 (v8881 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS x14 (v8881 VARCHAR(100));
+INSERT INTO v9172 VALUES (ST_GEOMFROMTEXT('POINT(0 0)')), (ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO v9190 VALUES (2), (2), (5);
+INSERT INTO v9091 VALUES (85998), (86000), (85995);
+INSERT INTO v9221 VALUES (1, '2004-10-15'), (2, '2005-03-20');
+INSERT INTO v9150 VALUES ('foo2'), ('foo2'), ('bar');
+INSERT INTO x9 VALUES ('2004-10-15'), ('2004-10-16');
+INSERT INTO x13 VALUES ('foo2'), ('foo2');
+INSERT INTO x14 VALUES ('foo2'), ('bar');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi(-23)) - -393 + ((MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(-84, 8)) - 638 + ((MYSQL_FUNC_REVERSE_NUMBER_jcfo74(84)) - -975 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(-86)) - 807 + (floor(v_price / 100)))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+CREATE TABLE IF NOT EXISTS `table_wsac0c` (
+    `table_wsac0c_emp_id` INT,
+    `table_wsac0c_department_id` INT,
+    `table_wsac0c_salary` INT
+);
+
+INSERT INTO `table_wsac0c` (`table_wsac0c_emp_id`, `table_wsac0c_department_id`, `table_wsac0c_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPANY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_WSAC0C
+    WHERE TABLE_WSAC0C_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 1)
+    INTO V_COMPANY_AVG
+    FROM TABLE_WSAC0C;
+
+    RETURN FLOOR((V_AVG_SALARY * 100) / V_COMPANY_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_REVERSE_NUMBER_jcfo74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_REVERSE_NUMBER_jcfo74(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+
+    IF NUM < 0 THEN
+        SET V_IS_NEGATIVE = 1;
+        SET NUM = -NUM;
+    END IF;
+
+    REVERSE_LOOP: WHILE NUM > 0 DO
+        SET V_DIGIT = NUM MOD 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET NUM = NUM DIV 10;
+    END WHILE REVERSE_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        RETURN -V_REVERSED;
+    END IF;
+
+    RETURN V_REVERSED;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERICAL_CAP_VOLUME_osho29(RADIUS INT, CAP_HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = 3.14159 * CAP_HEIGHT * CAP_HEIGHT * (3 * RADIUS - CAP_HEIGHT) / 3;
+    RETURN FLOOR(V_VOLUME);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIMULATE_ARRAY_SUM_llxfgi(ARR_SIZE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_INDEX INT DEFAULT 1;
+    DECLARE V_VALUE INT DEFAULT 0;
+
+    IF ARR_SIZE <= (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + (0) OR ARR_SIZE > 10000 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_INDEX <= ARR_SIZE DO
+        SET V_VALUE = V_INDEX * 2;
+        SET V_SUM = (MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9()) - 776 + (v_sum + v_value);
+        SET V_INDEX = V_INDEX + 1;
+    END WHILE CALC_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(38)) - -120 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+CREATE TABLE IF NOT EXISTS `table_rsa7ps` (
+    `table_rsa7ps_supplier_id` INT,
+    `table_rsa7ps_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_rsa7ps` (`table_rsa7ps_supplier_id`, `table_rsa7ps_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_RSA7PS_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_RSA7PS
+    WHERE TABLE_RSA7PS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_18_VALUES_bdb3k9() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 18 UNION SELECT 36 UNION SELECT 54 UNION SELECT 72 UNION SELECT 90 UNION SELECT 108 UNION SELECT 126 UNION SELECT 144 UNION SELECT 162 UNION SELECT 180 UNION SELECT 198 UNION SELECT 216 UNION SELECT 234 UNION SELECT 252 UNION SELECT 270 UNION SELECT 288 UNION SELECT 306;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(38)) - -370 + ((MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i(10, 26)) - 362 + (v_sum + v_i));
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i----- */
+CREATE TABLE IF NOT EXISTS `table_sv5ywz` (
+    `table_sv5ywz_job_id` INT,
+    `table_sv5ywz_customer_id` INT,
+    `table_sv5ywz_technician_id` INT,
+    `table_sv5ywz_job_type` VARCHAR(50),
+    `table_sv5ywz_property_size_sqft` INT,
+    `table_sv5ywz_labor_hours` INT,
+    `table_sv5ywz_material_cost` DECIMAL(10,2),
+    `table_sv5ywz_job_date` DATE
+);
+
+INSERT INTO `table_sv5ywz` (`table_sv5ywz_job_id`, `table_sv5ywz_customer_id`, `table_sv5ywz_technician_id`, `table_sv5ywz_job_type`, `table_sv5ywz_property_size_sqft`, `table_sv5ywz_labor_hours`, `table_sv5ywz_material_cost`, `table_sv5ywz_job_date`) VALUES (1, 2, 3, 'test', 5, 6, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LANDSCAPING_QUOTE_lno42i(PROPERTY_SIZE_PARAM INT, JOB_TYPE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_RATE INT DEFAULT 2;
+    DECLARE V_LABOR_RATE INT DEFAULT 50;
+    DECLARE V_JOB_TYPE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_QUOTE INT DEFAULT 0;
+
+    CASE JOB_TYPE_PARAM
+        WHEN 'LAWN_MAINTENANCE' THEN SET V_JOB_TYPE_MULTIPLIER = 1;
+        WHEN 'TREE_TRIMMING' THEN SET V_JOB_TYPE_MULTIPLIER = 2;
+        WHEN 'LANDSCAPE_DESIGN' THEN SET V_JOB_TYPE_MULTIPLIER = 3;
+        WHEN 'IRRIGATION' THEN SET V_JOB_TYPE_MULTIPLIER = 2;
+        ELSE SET V_JOB_TYPE_MULTIPLIER = 1;
+    END CASE;
+
+    SET V_TOTAL_QUOTE = (PROPERTY_SIZE_PARAM * V_BASE_RATE * V_JOB_TYPE_MULTIPLIER / 100) + V_LABOR_RATE;
+
+    RETURN CAST(V_TOTAL_QUOTE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM_DIGITS INT DEFAULT 0;
+    DECLARE V_PRODUCT_DIGITS INT DEFAULT 1;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    DIGIT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM_DIGITS = V_SUM_DIGITS + V_DIGIT;
+        IF V_DIGIT != 0 THEN
+            SET V_PRODUCT_DIGITS = V_PRODUCT_DIGITS * V_DIGIT;
+        END IF;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE DIGIT_LOOP;
+
+    SET V_RESULT = V_SUM_DIGITS - V_PRODUCT_DIGITS;
+
+    IF V_RESULT > 1 THEN
+        IF V_RESULT = 2 THEN RETURN 1; END IF;
+        IF V_RESULT % 2 = 0 THEN RETURN 0; END IF;
+
+        DECLARE_CHECK: BEGIN
+            DECLARE V_I INT DEFAULT 3;
+            WHILE V_I * V_I <= V_RESULT DO
+                IF V_RESULT % V_I = 0 THEN
+                    RETURN 0;
+                END IF;
+                SET V_I = V_I + 2;
+            END WHILE;
+        END DECLARE_CHECK;
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0523(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_quarter INT;
+    DECLARE v_json_result JSON;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v8881 FROM v9150 WHERE v8881 = 'foo2';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE geometry
+    SET @sql1 = 'UPDATE v9172 AS x1 SET v9174 = ST_GEOMFROMTEXT(''POINT(61 203)'')';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: UPDATE with JOIN and LIKE
+    SET @sql2 = 'UPDATE v9190 AS x0 INNER JOIN v9091 AS x4 ON x0.v9191 = 2 SET v9191 = 9 WHERE v9191 LIKE ''x''';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with modulo condition
+    SET @sql3 = 'UPDATE v9091 AS x1 SET v9092 = 85998 WHERE (v9092 % 7) > 5';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: CTE with spatial and date extraction
+    BEGIN
+        DECLARE v_x_val DOUBLE;
+        DECLARE v_date_check DATE;
+        DECLARE done_cte INT DEFAULT FALSE;
+        DECLARE cur_cte CURSOR FOR 
+            WITH RECURSIVE x8 AS (
+                SELECT X(v9223) AS x_val FROM x9 GROUP BY v9223 ORDER BY CASE WHEN v9223 IS NULL THEN 1 ELSE 0 END, v9223
+            )
+            SELECT v9222, EXTRACT(QUARTER FROM '2004-10-15') AS x3, v9223 
+            FROM v9221 AS x6 WHERE '1000-01-01' > x6.v9223;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_cte = TRUE;
+
+        OPEN cur_cte;
+        read_loop: LOOP
+            FETCH cur_cte INTO v_counter, v_quarter, v_date_check;
+            IF done_cte THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+            IF v_quarter = 4 THEN
+                SET v_counter = v_counter + 10;
+            END IF;
+        END LOOP;
+        CLOSE cur_cte;
+    END;
+
+    -- Statement 5: CTE with JSON aggregation and window function
+    BEGIN
+        DECLARE done_json INT DEFAULT FALSE;
+        DECLARE v_val1 VARCHAR(100);
+        DECLARE v_val2 VARCHAR(100);
+        DECLARE cur_json CURSOR FOR 
+            WITH RECURSIVE x9 AS (
+                SELECT * FROM x13 WHERE 0 
+                UNION 
+                SELECT * FROM x14
+            )
+            SELECT v8881, JSON_ARRAYAGG(1) OVER (ORDER BY SUM(v8881) DESC) AS x4 
+            FROM v9150 AS x8 
+            WHERE x8.v8881 = 'foo2' AND CASE 1 WHEN x8.v8881 THEN 1 ELSE 1 END
+            GROUP BY v8881;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_json = TRUE;
+
+        OPEN cur_json;
+        json_loop: LOOP
+            FETCH cur_json INTO v_val1, v_json_result;
+            IF (MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(14)) - -332 + (done_json) THEN
+                LEAVE json_loop;
+            END IF;
+            IF v_val1 = 'foo2' AND JSON_LENGTH(v_json_result) > 0 THEN
+                SET v_counter = v_counter + JSON_LENGTH(v_json_result);
+            END IF;
+        END LOOP;
+        CLOSE cur_json;
+    END;
+
+    -- Final conditional logic
+    CASE 
+        WHEN v_counter > 5 THEN
+            SET result = v_counter * p1;
+        WHEN v_counter BETWEEN 0 AND 5 THEN
+            SET result = v_counter + p2;
+        ELSE
+            SET result = 0;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0523(1, 1, @out_result);
+
+SELECT @out_result;

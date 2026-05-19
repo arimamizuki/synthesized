@@ -1,0 +1,345 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_3c891b` (
+    `table_3c891b_customer_id` INT,
+    `table_3c891b_country` INT
+);
+
+INSERT INTO `table_3c891b` (`table_3c891b_customer_id`, `table_3c891b_country`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+CREATE TABLE IF NOT EXISTS `table_bgkvze` (
+    `table_bgkvze_cdouble` INT
+);
+
+INSERT INTO `table_bgkvze` (`table_bgkvze_cdouble`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_BGKVZE_CDOUBLE) INTO RESULT FROM `TABLE_BGKVZE`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1----- */
+CREATE TABLE IF NOT EXISTS `table_y6pcvf` (
+    `table_y6pcvf_animal_id` INT,
+    `table_y6pcvf_name` VARCHAR(50),
+    `table_y6pcvf_species` INT,
+    `table_y6pcvf_breed` INT,
+    `table_y6pcvf_age_months` INT,
+    `table_y6pcvf_weight_kg` INT,
+    `table_y6pcvf_adoption_fee` INT,
+    `table_y6pcvf_arrival_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vkheg9` (
+    `table_vkheg9_application_id` INT,
+    `table_vkheg9_animal_id` INT,
+    `table_vkheg9_applicant_id` INT,
+    `table_vkheg9_application_date` DATE,
+    `table_vkheg9_status` VARCHAR(50)
+);
+
+INSERT INTO `table_y6pcvf` (`table_y6pcvf_animal_id`, `table_y6pcvf_name`, `table_y6pcvf_species`, `table_y6pcvf_breed`, `table_y6pcvf_age_months`, `table_y6pcvf_weight_kg`, `table_y6pcvf_adoption_fee`, `table_y6pcvf_arrival_date`) VALUES (1, '2024-01-01', 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vkheg9` (`table_vkheg9_application_id`, `table_vkheg9_animal_id`, `table_vkheg9_applicant_id`, `table_vkheg9_application_date`, `table_vkheg9_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(ANIMAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANIMAL_AGE INT DEFAULT 0;
+    DECLARE V_ADOPTION_FEE INT DEFAULT 100;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_MATCH_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()) - TIMESTAMPDIFF(MONTH, CURDATE(), CURDATE()),
+           COALESCE(TABLE_Y6PCVF_ADOPTION_FEE, 100)
+    INTO V_ANIMAL_AGE, V_ADOPTION_FEE
+    FROM TABLE_Y6PCVF
+    WHERE TABLE_Y6PCVF_ANIMAL_ID = ANIMAL_ID_PARAM;
+
+    SET V_ANIMAL_AGE = 12;
+
+    SELECT COUNT(*) INTO V_APPLICATION_COUNT
+    FROM TABLE_VKHEG9
+    WHERE TABLE_VKHEG9_ANIMAL_ID = ANIMAL_ID_PARAM AND TABLE_VKHEG9_STATUS = 'PENDING';
+
+    SET V_MATCH_SCORE = 100 - V_ANIMAL_AGE - (V_ADOPTION_FEE / 10) + (V_APPLICATION_COUNT * 10);
+
+    RETURN CAST(V_MATCH_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+CREATE TABLE IF NOT EXISTS `table_ze3ja4` (
+    `table_ze3ja4_order_id` INT,
+    `table_ze3ja4_customer_id` INT,
+    `table_ze3ja4_order_date` DATE
+);
+
+INSERT INTO `table_ze3ja4` (`table_ze3ja4_order_id`, `table_ze3ja4_customer_id`, `table_ze3ja4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_ZE3JA4_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_ZE3JA4
+    WHERE TABLE_ZE3JA4_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+CREATE TABLE IF NOT EXISTS `table_cejk8t` (
+    `table_cejk8t_campaign_id` INT,
+    `table_cejk8t_channel` INT,
+    `table_cejk8t_budget` INT,
+    `table_cejk8t_status` VARCHAR(50)
+);
+
+INSERT INTO `table_cejk8t` (`table_cejk8t_campaign_id`, `table_cejk8t_channel`, `table_cejk8t_budget`, `table_cejk8t_status`) VALUES (1, 1, 1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_CEJK8T_CHANNEL, COALESCE(TABLE_CEJK8T_BUDGET, 0), TABLE_CEJK8T_STATUS
+    INTO V_CHANNEL, V_BUDGET, V_STATUS
+    FROM TABLE_CEJK8T
+    WHERE TABLE_CEJK8T_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_BUDGET / 100
+        WHEN 'ORGANIC' THEN V_BUDGET / 50
+        WHEN 'SOCIAL' THEN V_BUDGET / 75
+        ELSE V_BUDGET / 100
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_NEXT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF P_N = (MYSQL_FUNC_FUNC_197_WHILE_5a093q()) - -872 + (1) THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I < P_N DO
+        SET V_NEXT = (MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(73)) - -810 + (v_prev + v_curr);
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf()) - 463 + (-1);
+    END IF;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_200_CASE_STMT_6mp7gf() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CASE_COUNT INT DEFAULT 0;
+    DECLARE VAL INT DEFAULT 2;
+    
+    CASE VAL
+        WHEN 1 THEN SET CASE_COUNT = 10;
+        WHEN 2 THEN SET CASE_COUNT = 20;
+        WHEN 3 THEN SET CASE_COUNT = 30;
+        ELSE SET CASE_COUNT = 0;
+    END CASE;
+    
+    RETURN CASE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+CREATE TABLE IF NOT EXISTS `table_djtr88` (
+    `table_djtr88_campaign_id` INT,
+    `table_djtr88_budget` INT
+);
+
+INSERT INTO `table_djtr88` (`table_djtr88_campaign_id`, `table_djtr88_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_NORMALIZED_INDEX_1ivk49(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DJTR88_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_DJTR88
+    WHERE TABLE_DJTR88_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 100;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_197_WHILE_5a093q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_197_WHILE_5a093q() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE WHILE_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    WHILE I < 3 DO
+        SET I = I + 1;
+        SET WHILE_COUNT = (MYSQL_FUNC_FIND_LCM_ss65f4(50, -25)) - 12 + (while_count) + 1;
+    END WHILE;
+    
+    RETURN WHILE_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_LCM_ss65f4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_LCM_ss65f4(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT;
+    DECLARE V_TEMP_B INT;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A MOD V_TEMP_B;
+        SET V_TEMP_A = (MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(-64)) - 182 + (v_gcd);
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+CREATE TABLE IF NOT EXISTS `table_vevirx` (
+    `table_vevirx_order_id` INT,
+    `table_vevirx_customer_id` INT,
+    `table_vevirx_order_date` DATE,
+    `table_vevirx_total_amount` DECIMAL(10,2),
+    `table_vevirx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5od72a` (
+    `table_5od72a_refund_id` INT,
+    `table_5od72a_order_id` INT,
+    `table_5od72a_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vevirx` (`table_vevirx_order_id`, `table_vevirx_customer_id`, `table_vevirx_order_date`, `table_vevirx_total_amount`, `table_vevirx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_5od72a` (`table_5od72a_refund_id`, `table_5od72a_order_id`, `table_5od72a_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NPS_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEVIRX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_VEVIRX
+    WHERE TABLE_VEVIRX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5OD72A_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_5OD72A
+    WHERE TABLE_5OD72A_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NPS_CONTRIBUTION = V_ORDER_TOTAL - (V_REFUND_TOTAL * 2);
+
+    RETURN V_NPS_CONTRIBUTION;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_3C891B
+    WHERE TABLE_3C891B_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(31)) - -295 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(12)) - -143 + ((MYSQL_FUNC_CALCULATE_ADOPTION_MATCH_SCORE_m5a5d1(45)) - 29 + ((MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - 633 + (v_customer_count))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(1);

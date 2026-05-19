@@ -1,0 +1,356 @@
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_LOG_CHECK_duamcl(X INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF X <= 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'LOGARITHM ARGUMENT MUST BE POSITIVE';
+    END IF;
+    RETURN LOG(X);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3----- */
+CREATE TABLE IF NOT EXISTS `table_5sgfso` (
+    `table_5sgfso_customer_id` INT,
+    `table_5sgfso_registration_date` DATE
+);
+
+INSERT INTO `table_5sgfso` (`table_5sgfso_customer_id`, `table_5sgfso_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_5SGFSO_REGISTRATION_DATE)
+    INTO V_MONTH
+    FROM TABLE_5SGFSO
+    WHERE TABLE_5SGFSO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+CREATE TABLE IF NOT EXISTS `table_n2l8kn` (
+    `table_n2l8kn_campaign_id` INT,
+    `table_n2l8kn_start_date` DATE
+);
+
+INSERT INTO `table_n2l8kn` (`table_n2l8kn_campaign_id`, `table_n2l8kn_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_MONTHS_eci4dy(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_N2L8KN_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_N2L8KN
+    WHERE TABLE_N2L8KN_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(-39)) - 4 + (floor((v_dept_avg * 100) / v_overall_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l----- */
+CREATE TABLE IF NOT EXISTS `table_o45tl3` (
+    `table_o45tl3_customer_id` INT,
+    `table_o45tl3_registration_date` DATE,
+    `table_o45tl3_city` INT,
+    `table_o45tl3_total_purchases` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o45tl3` (`table_o45tl3_customer_id`, `table_o45tl3_registration_date`, `table_o45tl3_city`, `table_o45tl3_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_TIER_gi0i3l(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PURCHASES INT DEFAULT 0;
+    DECLARE V_REGISTRATION_YEAR INT;
+    DECLARE V_CURRENT_YEAR INT DEFAULT YEAR(CURDATE());
+    DECLARE V_LOYALTY_YEARS INT;
+    DECLARE V_TIER_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O45TL3_TOTAL_PURCHASES, 0), YEAR(TABLE_O45TL3_REGISTRATION_DATE)
+    INTO V_TOTAL_PURCHASES, V_REGISTRATION_YEAR
+    FROM TABLE_O45TL3
+    WHERE TABLE_O45TL3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_PURCHASES <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LOYALTY_YEARS = V_CURRENT_YEAR - V_REGISTRATION_YEAR;
+
+    SET V_TIER_SCORE = V_TOTAL_PURCHASES / 1000 + V_LOYALTY_YEARS * 5;
+
+    CASE
+        WHEN V_TIER_SCORE >= 100 THEN RETURN 4;
+        WHEN V_TIER_SCORE >= 50 THEN RETURN 3;
+        WHEN V_TIER_SCORE >= 20 THEN RETURN 2;
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BLOB_0dgedf----- */
+CREATE TABLE IF NOT EXISTS `table_yibnl6` (
+    `table_yibnl6_cblob` BLOB
+);
+
+INSERT INTO `table_yibnl6` (`table_yibnl6_cblob`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BLOB_0dgedf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BLOB_0dgedf() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_YIBNL6`;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(41)) - 228 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+CREATE TABLE IF NOT EXISTS `table_p305c9` (
+    `table_p305c9_order_id` INT,
+    `table_p305c9_customer_id` INT,
+    `table_p305c9_order_date` DATE,
+    `table_p305c9_shipped_date` DATE,
+    `table_p305c9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kwrowd` (
+    `table_kwrowd_order_id` INT,
+    `table_kwrowd_product_id` INT,
+    `table_kwrowd_quantity` INT,
+    `table_kwrowd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_p305c9` (`table_p305c9_order_id`, `table_p305c9_customer_id`, `table_p305c9_order_date`, `table_p305c9_shipped_date`, `table_p305c9_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_kwrowd` (`table_kwrowd_order_id`, `table_kwrowd_product_id`, `table_kwrowd_quantity`, `table_kwrowd_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_yvt3pq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DAYS INT DEFAULT 3;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT DATEDIFF(COALESCE(TABLE_P305C9_SHIPPED_DATE, CURDATE()), TABLE_P305C9_ORDER_DATE)
+    INTO V_ACTUAL_DAYS
+    FROM TABLE_P305C9
+    WHERE TABLE_P305C9_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS THEN SET V_DELAY_SCORE = 0;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 2 THEN SET V_DELAY_SCORE = V_ACTUAL_DAYS - V_EXPECTED_DAYS;
+        WHEN V_ACTUAL_DAYS <= V_EXPECTED_DAYS * 3 THEN SET V_DELAY_SCORE = (V_ACTUAL_DAYS - V_EXPECTED_DAYS) * 2;
+        ELSE SET V_DELAY_SCORE = (MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(-83)) - 336 + ((v_actual_days - v_expected_days) * 5);
+    END CASE;
+
+    RETURN V_DELAY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+CREATE TABLE IF NOT EXISTS `table_1yd99c` (
+    `table_1yd99c_policy_id` INT,
+    `table_1yd99c_customer_id` INT,
+    `table_1yd99c_monthly_benefit` INT,
+    `table_1yd99c_elimination_period_days` INT,
+    `table_1yd99c_benefit_duration_months` INT,
+    `table_1yd99c_premium_monthly` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5qb4ll` (
+    `table_5qb4ll_claim_id` INT,
+    `table_5qb4ll_policy_id` INT,
+    `table_5qb4ll_claim_start_date` DATE,
+    `table_5qb4ll_claim_end_date` DATE,
+    `table_5qb4ll_total_benefits_paid` INT
+);
+
+INSERT INTO `table_1yd99c` (`table_1yd99c_policy_id`, `table_1yd99c_customer_id`, `table_1yd99c_monthly_benefit`, `table_1yd99c_elimination_period_days`, `table_1yd99c_benefit_duration_months`, `table_1yd99c_premium_monthly`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_5qb4ll` (`table_5qb4ll_claim_id`, `table_5qb4ll_policy_id`, `table_5qb4ll_claim_start_date`, `table_5qb4ll_claim_end_date`, `table_5qb4ll_total_benefits_paid`) VALUES (1, 2, '2024-01-01', '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DISABILITY_BENEFIT_REMAINING_18zgxb(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BENEFIT_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_MONTHLY_BENEFIT INT DEFAULT 0;
+    DECLARE V_REMAINING_MONTHS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1YD99C_BENEFIT_DURATION_MONTHS, 12), COALESCE(TABLE_1YD99C_MONTHLY_BENEFIT, 2000)
+    INTO V_BENEFIT_DURATION, V_MONTHLY_BENEFIT
+    FROM TABLE_1YD99C
+    WHERE TABLE_1YD99C_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5QB4LL_TOTAL_BENEFITS_PAID), 0) INTO V_TOTAL_PAID
+    FROM TABLE_5QB4LL
+    WHERE TABLE_5QB4LL_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_REMAINING_MONTHS = V_BENEFIT_DURATION - (V_TOTAL_PAID / V_MONTHLY_BENEFIT);
+
+    RETURN (MYSQL_FUNC_IS_POSITIVE_kz2ysr(-67)) - -794 + (cast(v_remaining_months as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_POSITIVE_kz2ysr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_POSITIVE_kz2ysr(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N > 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, 0), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = V_QUALITY_SCORE - 10;
+    END IF;
+
+    RETURN CAST(V_QUALITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + ((MYSQL_FUNC_PROC_BLOB_0dgedf()) - 705 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3(-24)) - 953 + (v_result))) * v_i);
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(1);

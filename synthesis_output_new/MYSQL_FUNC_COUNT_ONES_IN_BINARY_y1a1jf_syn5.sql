@@ -1,0 +1,359 @@
+/* -----Called: MYSQL_FUNC_RETURN_CONSTANT_koelg7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980()) - 36 + (42);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 4;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN BASE;
+    END IF;
+
+    RETURN BASE * POWER_RECURSIVE(BASE, EXPONENT - 1);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu----- */
+CREATE TABLE IF NOT EXISTS `table_j2j32s` (
+    `table_j2j32s_emp_id` INT,
+    `table_j2j32s_manager_id` INT,
+    `table_j2j32s_salary` INT,
+    `table_j2j32s_name` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_0bfnrs` (
+    `table_0bfnrs_dept_id` INT,
+    `table_0bfnrs_manager_id` INT
+);
+
+INSERT INTO `table_j2j32s` (`table_j2j32s_emp_id`, `table_j2j32s_manager_id`, `table_j2j32s_salary`, `table_j2j32s_name`) VALUES (1, 1, 1, 'test');
+
+INSERT INTO `table_0bfnrs` (`table_0bfnrs_dept_id`, `table_0bfnrs_manager_id`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEVEL INT DEFAULT 0;
+    DECLARE V_MANAGER_ID INT;
+    DECLARE V_CURRENT_EMP INT;
+    DECLARE V_MAX_ITERATIONS INT DEFAULT 100;
+    DECLARE V_ITERATION INT DEFAULT 0;
+
+    SET V_CURRENT_EMP = EMP_ID_PARAM;
+
+    LEVEL_LOOP: WHILE V_CURRENT_EMP IS NOT NULL AND V_ITERATION < V_MAX_ITERATIONS DO
+        SELECT TABLE_J2J32S_MANAGER_ID INTO V_MANAGER_ID
+        FROM TABLE_J2J32S
+        WHERE TABLE_J2J32S_EMP_ID = V_CURRENT_EMP;
+
+        IF (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + (v_manager_id) IS NULL THEN
+            LEAVE LEVEL_LOOP;
+        END IF;
+
+        SET V_LEVEL = V_LEVEL + 1;
+        SET V_CURRENT_EMP = V_MANAGER_ID;
+        SET V_ITERATION = V_ITERATION + 1;
+    END WHILE LEVEL_LOOP;
+
+    RETURN V_LEVEL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN V_HIRING_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POWER_y2j5yj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POWER_y2j5yj(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    POWER_LOOP: WHILE V_COUNTER < EXPONENT DO
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(93)) - 965 + (v_result * base);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE POWER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5----- */
+CREATE TABLE IF NOT EXISTS `table_gtn1m7` (
+    `table_gtn1m7_appt_id` INT,
+    `table_gtn1m7_client_id` INT,
+    `table_gtn1m7_stylist_id` INT,
+    `table_gtn1m7_service_id` INT,
+    `table_gtn1m7_appointment_date` DATE,
+    `table_gtn1m7_duration_minutes` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t6eu0r` (
+    `table_t6eu0r_service_id` INT,
+    `table_t6eu0r_service_name` VARCHAR(50),
+    `table_t6eu0r_base_price` DECIMAL(10,2),
+    `table_t6eu0r_category` INT
+);
+
+INSERT INTO `table_gtn1m7` (`table_gtn1m7_appt_id`, `table_gtn1m7_client_id`, `table_gtn1m7_stylist_id`, `table_gtn1m7_service_id`, `table_gtn1m7_appointment_date`, `table_gtn1m7_duration_minutes`) VALUES (1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_t6eu0r` (`table_t6eu0r_service_id`, `table_t6eu0r_service_name`, `table_t6eu0r_base_price`, `table_t6eu0r_category`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BEAUTY_SERVICE_COST_cinzd5(APPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TIP_PERCENT INT DEFAULT 15;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_T6EU0R_BASE_PRICE, 50), COALESCE(TABLE_GTN1M7_DURATION_MINUTES, 60)
+    INTO V_BASE_PRICE, V_DURATION
+    FROM TABLE_GTN1M7 A
+    JOIN TABLE_T6EU0R S ON TABLE_GTN1M7_SERVICE_ID = TABLE_T6EU0R_SERVICE_ID
+    WHERE TABLE_GTN1M7_APPT_ID = APPT_ID_PARAM;
+
+    IF V_DURATION > 90 THEN
+        SET V_TIP_PERCENT = (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(-86)) - -288 + (20);
+    END IF;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(-93)) - -109 + (v_base_price + (v_base_price * v_tip_percent / 100));
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_QUARTER;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+CREATE TABLE IF NOT EXISTS `table_y4xawp` (
+    `table_y4xawp_dept_id` INT,
+    `table_y4xawp_budget` INT,
+    `table_y4xawp_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ab2uoo` (
+    `table_ab2uoo_emp_id` INT,
+    `table_ab2uoo_dept_id` INT,
+    `table_ab2uoo_salary` INT
+);
+
+INSERT INTO `table_y4xawp` (`table_y4xawp_dept_id`, `table_y4xawp_budget`, `table_y4xawp_headcount`) VALUES (1, 1, 1);
+
+INSERT INTO `table_ab2uoo` (`table_ab2uoo_emp_id`, `table_ab2uoo_dept_id`, `table_ab2uoo_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_HEADROOM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y4XAWP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_Y4XAWP
+    WHERE TABLE_Y4XAWP_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_AB2UOO_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_AB2UOO
+    WHERE TABLE_AB2UOO_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_HEADROOM = (MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(-39)) - 651 + (v_budget - v_total_salaries);
+
+    RETURN V_HEADROOM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+CREATE TABLE IF NOT EXISTS `table_9dqpf3` (
+    `table_9dqpf3_campaign_id` INT,
+    `table_9dqpf3_start_date` DATE,
+    `table_9dqpf3_end_date` DATE,
+    `table_9dqpf3_budget` INT
+);
+
+INSERT INTO `table_9dqpf3` (`table_9dqpf3_campaign_id`, `table_9dqpf3_start_date`, `table_9dqpf3_end_date`, `table_9dqpf3_budget`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAILY_BUDGET_9y1xlm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 1;
+
+    SELECT COALESCE(TABLE_9DQPF3_BUDGET, 0), DATEDIFF(TABLE_9DQPF3_END_DATE, TABLE_9DQPF3_START_DATE) + 1
+    INTO V_BUDGET, V_DAYS
+    FROM TABLE_9DQPF3
+    WHERE TABLE_9DQPF3_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DAYS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        IF V_TEMP MOD 2 = 1 THEN
+            SET V_COUNT = (MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu(-20)) - -569 + ((MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + (v_count)) + 1;
+        END IF;
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_POWER_y2j5yj(-1, -27)) - 377 + ((MYSQL_FUNC_RETURN_CONSTANT_koelg7()) - -454 + (v_temp div 2));
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_COUNT_ONES_IN_BINARY_y1a1jf(1);

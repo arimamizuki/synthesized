@@ -1,0 +1,405 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_lxngzw` (
+    `table_lxngzw_service_id` INT,
+    `table_lxngzw_pet_id` INT,
+    `table_lxngzw_service_type` VARCHAR(50),
+    `table_lxngzw_service_date` DATE,
+    `table_lxngzw_duration_minutes` INT,
+    `table_lxngzw_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5kdoe7` (
+    `table_5kdoe7_pet_id` INT,
+    `table_5kdoe7_owner_id` INT,
+    `table_5kdoe7_breed` INT,
+    `table_5kdoe7_age_months` INT,
+    `table_5kdoe7_weight_kg` INT
+);
+
+INSERT INTO `table_lxngzw` (`table_lxngzw_service_id`, `table_lxngzw_pet_id`, `table_lxngzw_service_type`, `table_lxngzw_service_date`, `table_lxngzw_duration_minutes`, `table_lxngzw_cost`) VALUES (1, 2, 'test', '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_5kdoe7` (`table_5kdoe7_pet_id`, `table_5kdoe7_owner_id`, `table_5kdoe7_breed`, `table_5kdoe7_age_months`, `table_5kdoe7_weight_kg`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_FIND_LCM_ss65f4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_LCM_ss65f4(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT;
+    DECLARE V_TEMP_B INT;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A MOD V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(INNER_RADIUS INT, OUTER_RADIUS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF INNER_RADIUS >= OUTER_RADIUS THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980()) - 36 + (0);
+    END IF;
+
+    SET V_AREA = 3.14159 * (OUTER_RADIUS * OUTER_RADIUS - INNER_RADIUS * INNER_RADIUS);
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(21)) - 80 + (floor(v_area));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_4_TO_8_vuu980() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 4;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(50)) - 421 + ((MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(-69)) - 468 + (floor(v_avg_tenure)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+CREATE TABLE IF NOT EXISTS `table_ufhrdo` (
+    `table_ufhrdo_emp_id` INT,
+    `table_ufhrdo_department_id` INT,
+    `table_ufhrdo_salary` INT,
+    `table_ufhrdo_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mhmpip` (
+    `table_mhmpip_department_id` INT,
+    `table_mhmpip_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ufhrdo` (`table_ufhrdo_emp_id`, `table_ufhrdo_department_id`, `table_ufhrdo_salary`, `table_ufhrdo_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_mhmpip` (`table_mhmpip_department_id`, `table_mhmpip_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRIOR_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_UFHRDO_SALARY), 0)
+    INTO V_CURRENT_AVG
+    FROM TABLE_UFHRDO
+    WHERE TABLE_UFHRDO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_AVG - V_PRIOR_AVG) * 100) / V_PRIOR_AVG;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+CREATE TABLE IF NOT EXISTS `table_pe877c` (
+    `table_pe877c_employee_id` INT,
+    `table_pe877c_department_id` INT,
+    `table_pe877c_salary` INT,
+    `table_pe877c_hire_date` DATE,
+    `table_pe877c_is_remote` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvva5n` (
+    `table_vvva5n_project_id` INT,
+    `table_vvva5n_team_lead_id` INT,
+    `table_vvva5n_budget` INT,
+    `table_vvva5n_deadline` INT,
+    `table_vvva5n_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pe877c` (`table_pe877c_employee_id`, `table_pe877c_department_id`, `table_pe877c_salary`, `table_pe877c_hire_date`, `table_pe877c_is_remote`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_vvva5n` (`table_vvva5n_project_id`, `table_vvva5n_team_lead_id`, `table_vvva5n_budget`, `table_vvva5n_deadline`, `table_vvva5n_status`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_REMOTE INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PROJECT_COUNT INT DEFAULT 0;
+    DECLARE V_COMPLETED_PROJECTS INT DEFAULT 0;
+    DECLARE V_REMOTE_IMPACT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PE877C_IS_REMOTE, 0), COALESCE(TABLE_PE877C_SALARY, 50000)
+    INTO V_IS_REMOTE, V_SALARY
+    FROM TABLE_PE877C
+    WHERE TABLE_PE877C_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_VVVA5N_STATUS = 'COMPLETED' THEN 1 END)
+    INTO V_PROJECT_COUNT, V_COMPLETED_PROJECTS
+    FROM TABLE_VVVA5N
+    WHERE TABLE_VVVA5N_TEAM_LEAD_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_IS_REMOTE = 1 THEN
+        SET V_REMOTE_IMPACT_SCORE = 80 + (V_COMPLETED_PROJECTS * 5) - (V_SALARY / 10000);
+    ELSE
+        SET V_REMOTE_IMPACT_SCORE = 70 + (V_COMPLETED_PROJECTS * 3);
+    END IF;
+
+    RETURN V_REMOTE_IMPACT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+CREATE TABLE IF NOT EXISTS `table_6vqrgc` (
+    `table_6vqrgc_emp_id` INT,
+    `table_6vqrgc_salary` INT
+);
+
+INSERT INTO `table_6vqrgc` (`table_6vqrgc_emp_id`, `table_6vqrgc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_6VQRGC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_6VQRGC
+    WHERE TABLE_6VQRGC_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9----- */
+CREATE TABLE IF NOT EXISTS `table_6gsq8i` (
+    `table_6gsq8i_emp_id` INT,
+    `table_6gsq8i_department_id` INT,
+    `table_6gsq8i_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_pj7xye` (
+    `table_pj7xye_department_id` INT,
+    `table_pj7xye_name` VARCHAR(50)
+);
+
+INSERT INTO `table_6gsq8i` (`table_6gsq8i_emp_id`, `table_6gsq8i_department_id`, `table_6gsq8i_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_pj7xye` (`table_pj7xye_department_id`, `table_pj7xye_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_6GSQ8I_SALARY), (MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl(37)) - 414 + ((MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b(-76)) - -442 + (0))), COALESCE(MAX(TABLE_6GSQ8I_SALARY), 0), COALESCE(MIN(TABLE_6GSQ8I_SALARY), 0)
+    INTO V_AVG_SALARY, V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_6GSQ8I
+    WHERE TABLE_6GSQ8I_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_AVG_SALARY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = ((V_MAX_SALARY - V_MIN_SALARY) * 100) / V_AVG_SALARY;
+
+    RETURN V_VARIANCE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b----- */
+CREATE TABLE IF NOT EXISTS `table_87irfc` (
+    `table_87irfc_order_id` INT,
+    `table_87irfc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_87irfc` (`table_87irfc_order_id`, `table_87irfc_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TOTAL_BUCKET_h1z57b(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_87IRFC_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_87IRFC
+    WHERE TABLE_87IRFC_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL / 50);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl----- */
+CREATE TABLE IF NOT EXISTS `table_g3knxg` (
+    `table_g3knxg_emp_id` INT,
+    `table_g3knxg_department_id` INT,
+    `table_g3knxg_salary` INT,
+    `table_g3knxg_hire_date` DATE,
+    `table_g3knxg_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_0tsrev` (
+    `table_0tsrev_department_id` INT,
+    `table_0tsrev_name` VARCHAR(50)
+);
+
+INSERT INTO `table_g3knxg` (`table_g3knxg_emp_id`, `table_g3knxg_department_id`, `table_g3knxg_salary`, `table_g3knxg_hire_date`, `table_g3knxg_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_0tsrev` (`table_0tsrev_department_id`, `table_0tsrev_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WORKFORCE_STABILITY_INDEX_16hzcl(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_TURNOVER_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_STABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_G3KNXG_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_G3KNXG
+    WHERE TABLE_G3KNXG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(STDDEV(TABLE_G3KNXG_SALARY), 0) / 1000
+    INTO V_TURNOVER_RATE
+    FROM TABLE_G3KNXG
+    WHERE TABLE_G3KNXG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_STABILITY_INDEX = (V_AVG_TENURE * 15) - (V_TURNOVER_RATE * 5);
+
+    RETURN GREATEST(V_STABILITY_INDEX, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SERVICES INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(COUNT(*), 0), COALESCE(SUM(TABLE_LXNGZW_COST), 0)
+    INTO V_TOTAL_SERVICES, V_TOTAL_COST
+    FROM TABLE_LXNGZW
+    WHERE TABLE_LXNGZW_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_5KDOE7_AGE_MONTHS, 0), COALESCE(TABLE_5KDOE7_WEIGHT_KG, 0)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_5KDOE7
+    WHERE TABLE_5KDOE7_PET_ID = PET_ID_PARAM;
+
+    SET V_SCORE = (V_TOTAL_COST / 100) + (V_TOTAL_SERVICES * 5);
+
+    IF V_PET_AGE < 12 THEN
+        SET V_SCORE = V_SCORE + 20;
+    END IF;
+
+    IF V_PET_WEIGHT > 30 THEN
+        SET V_SCORE = (MYSQL_FUNC_CALCULATE_SALARY_VALUE_z77bd5(-41)) - 417 + (v_score + (v_pet_weight - 30));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_s15ac9(98)) - -543 + ((MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(0, 100)) - 462 + ((MYSQL_FUNC_FIND_LCM_ss65f4(50, -25)) - 12 + (cast(v_score as signed))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PET_SERVICE_SCORE_iadlqi(1);

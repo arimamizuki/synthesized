@@ -1,0 +1,375 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_5jb34m` (
+    `table_5jb34m_room_id` INT,
+    `table_5jb34m_room_type` VARCHAR(50),
+    `table_5jb34m_floor` INT,
+    `table_5jb34m_is_occupied` INT,
+    `table_5jb34m_daily_rate` INT,
+    `table_5jb34m_max_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nvdwjr` (
+    `table_nvdwjr_res_id` INT,
+    `table_nvdwjr_room_id` INT,
+    `table_nvdwjr_guest_id` INT,
+    `table_nvdwjr_check_in` INT,
+    `table_nvdwjr_check_out` INT,
+    `table_nvdwjr_guests_count` INT,
+    `table_nvdwjr_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5jb34m` (`table_5jb34m_room_id`, `table_5jb34m_room_type`, `table_5jb34m_floor`, `table_5jb34m_is_occupied`, `table_5jb34m_daily_rate`, `table_5jb34m_max_occupancy`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_nvdwjr` (`table_nvdwjr_res_id`, `table_nvdwjr_room_id`, `table_nvdwjr_guest_id`, `table_nvdwjr_check_in`, `table_nvdwjr_check_out`, `table_nvdwjr_guests_count`, `table_nvdwjr_total_price`) VALUES (1, 2, 3, 4, 5, 6, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+CREATE TABLE IF NOT EXISTS `table_t8em8p` (
+    `table_t8em8p_emp_id` INT,
+    `table_t8em8p_salary` INT,
+    `table_t8em8p_hire_date` DATE,
+    `table_t8em8p_department_id` INT
+);
+
+INSERT INTO `table_t8em8p` (`table_t8em8p_emp_id`, `table_t8em8p_salary`, `table_t8em8p_hire_date`, `table_t8em8p_department_id`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(DEPARTMENT_ID_PARAM INT, PERFORMANCE_RATING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_BASE INT DEFAULT 1000;
+    DECLARE V_FINAL_BONUS INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_T8EM8P_SALARY), 0) INTO V_DEPT_AVG_SALARY
+    FROM TABLE_T8EM8P
+    WHERE TABLE_T8EM8P_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    CASE PERFORMANCE_RATING
+        WHEN 5 THEN SET V_FINAL_BONUS = (MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(-85)) - 855 + (v_bonus_base) * 3;
+        WHEN 4 THEN SET V_FINAL_BONUS = V_BONUS_BASE * 2;
+        WHEN 3 THEN SET V_FINAL_BONUS = V_BONUS_BASE;
+        WHEN 2 THEN SET V_FINAL_BONUS = V_BONUS_BASE / 2;
+        ELSE SET V_FINAL_BONUS = 0;
+    END CASE;
+
+    RETURN V_FINAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+CREATE TABLE IF NOT EXISTS `table_uyis6v` (
+    `table_uyis6v_order_id` INT,
+    `table_uyis6v_customer_id` INT,
+    `table_uyis6v_order_date` DATE,
+    `table_uyis6v_total_amount` DECIMAL(10,2),
+    `table_uyis6v_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2nffbi` (
+    `table_2nffbi_refund_id` INT,
+    `table_2nffbi_order_id` INT,
+    `table_2nffbi_refund_amount` DECIMAL(10,2),
+    `table_2nffbi_refund_date` DATE,
+    `table_2nffbi_reason` INT
+);
+
+INSERT INTO `table_uyis6v` (`table_uyis6v_order_id`, `table_uyis6v_customer_id`, `table_uyis6v_order_date`, `table_uyis6v_total_amount`, `table_uyis6v_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_2nffbi` (`table_2nffbi_refund_id`, `table_2nffbi_order_id`, `table_2nffbi_refund_amount`, `table_2nffbi_refund_date`, `table_2nffbi_reason`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_PERCENTAGE_vn44w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UYIS6V_TOTAL_AMOUNT, (MYSQL_FUNC_HANDLER_FUNC_MULTIPLY_661dmt(-88, -66)) - -611 + ((MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(100)) - -534 + (0))))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_UYIS6V
+    WHERE TABLE_UYIS6V_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_2NFFBI_REFUND_AMOUNT), 0)
+    INTO V_REFUND_AMOUNT
+    FROM TABLE_2NFFBI
+    WHERE TABLE_2NFFBI_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_AMOUNT * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(69)) - -699 + ((MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(30, 84)) - 479 + (v_refund_rate));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_ODD_NUMBERS_mq0g32(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    REPEAT
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = V_SUM + V_I;
+        END IF;
+        SET V_I = V_I + 1;
+    UNTIL V_I > N END REPEAT;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPLEX_MATH_6zogei(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_POWER INT DEFAULT 0;
+    DECLARE V_SQRT_VAL INT DEFAULT 0;
+
+    SET V_POWER = POW(A, 3) + POW(B, 3);
+
+    IF V_POWER > 0 THEN
+        SET V_SQRT_VAL = FLOOR(SQRT(V_POWER));
+    END IF;
+
+    SET V_RESULT = (A * B) + V_SQRT_VAL + (A % B);
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm----- */
+CREATE TABLE IF NOT EXISTS `table_kg7iws` (
+    `table_kg7iws_campaign_id` INT,
+    `table_kg7iws_status` VARCHAR(50),
+    `table_kg7iws_budget` INT,
+    `table_kg7iws_start_date` DATE
+);
+
+INSERT INTO `table_kg7iws` (`table_kg7iws_campaign_id`, `table_kg7iws_status`, `table_kg7iws_budget`, `table_kg7iws_start_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_KG7IWS_STATUS, COALESCE(TABLE_KG7IWS_BUDGET, 0), DATEDIFF(CURDATE(), TABLE_KG7IWS_START_DATE)
+    INTO V_STATUS, V_BUDGET, V_DAYS
+    FROM TABLE_KG7IWS
+    WHERE TABLE_KG7IWS_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER((MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(65)) - -397 + (input_str));
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+CREATE TABLE IF NOT EXISTS `table_r8spts` (
+    `table_r8spts_product_id` INT,
+    `table_r8spts_customer_id` INT,
+    `table_r8spts_product_type` VARCHAR(50),
+    `table_r8spts_warranty_years` INT,
+    `table_r8spts_coverage_amount` DECIMAL(10,2),
+    `table_r8spts_premium_annual` INT,
+    `table_r8spts_deductible` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oabm0f` (
+    `table_oabm0f_claim_id` INT,
+    `table_oabm0f_product_id` INT,
+    `table_oabm0f_claim_date` DATE,
+    `table_oabm0f_repair_cost` DECIMAL(10,2),
+    `table_oabm0f_status` VARCHAR(50)
+);
+
+INSERT INTO `table_r8spts` (`table_r8spts_product_id`, `table_r8spts_customer_id`, `table_r8spts_product_type`, `table_r8spts_warranty_years`, `table_r8spts_coverage_amount`, `table_r8spts_premium_annual`, `table_r8spts_deductible`) VALUES (1, 2, 'test', 4, 1.0, 6, 7);
+
+INSERT INTO `table_oabm0f` (`table_oabm0f_claim_id`, `table_oabm0f_product_id`, `table_oabm0f_claim_date`, `table_oabm0f_repair_cost`, `table_oabm0f_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WARRANTY_COVERAGE_SCORE_cq981a(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WARRANTY_YEARS INT DEFAULT 2;
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_COVERAGE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R8SPTS_WARRANTY_YEARS, 2), COALESCE(TABLE_R8SPTS_COVERAGE_AMOUNT, 1000), COALESCE(TABLE_R8SPTS_DEDUCTIBLE, 100)
+    INTO V_WARRANTY_YEARS, V_COVERAGE_AMOUNT, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_R8SPTS
+    WHERE TABLE_R8SPTS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OABM0F_REPAIR_COST), 0) INTO V_TOTAL_CLAIMS
+    FROM TABLE_OABM0F
+    WHERE TABLE_OABM0F_PRODUCT_ID = PRODUCT_ID_PARAM AND TABLE_OABM0F_STATUS = 'APPROVED';
+
+    SET V_COVERAGE_SCORE = (V_WARRANTY_YEARS * 20) + (V_COVERAGE_AMOUNT / 100) - (V_DEDUCTIBLE_AMOUNT / 10);
+
+    IF V_TOTAL_CLAIMS > 500 THEN
+        SET V_COVERAGE_SCORE = V_COVERAGE_SCORE - 30;
+    END IF;
+
+    RETURN CAST(V_COVERAGE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_MULTIPLY_661dmt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_MULTIPLY_661dmt(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq(18)) - 305 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FIBONACCI_4zjrbq(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV INT DEFAULT 0;
+    DECLARE V_CURR INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_NEXT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF P_N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    WHILE V_I < P_N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_POWER_RECURSIVE_usf0et(26, -26)) - -521 + (-1);
+    END IF;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_RECURSIVE_usf0et----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_RECURSIVE_usf0et(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF EXPONENT = 0 THEN
+        RETURN 1;
+    END IF;
+
+    IF EXPONENT = 1 THEN
+        RETURN BASE;
+    END IF;
+
+    RETURN BASE * POWER_RECURSIVE(BASE, EXPONENT - 1);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(ROOM_ID_PARAM INT, YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_OCCUPIED_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_NVDWJR_TOTAL_PRICE), 0) INTO V_TOTAL_REVENUE
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    SELECT COALESCE(TABLE_5JB34M_DAILY_RATE, 0) INTO V_DAILY_RATE
+    FROM TABLE_5JB34M
+    WHERE TABLE_5JB34M_ROOM_ID = ROOM_ID_PARAM;
+
+    SELECT COALESCE(SUM(DATEDIFF(TABLE_NVDWJR_CHECK_OUT, TABLE_NVDWJR_CHECK_IN)), 0) INTO V_OCCUPIED_DAYS
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(-27, 79)) - 857 + (v_total_revenue + (v_occupied_days * v_daily_rate / 2));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(1, 1);

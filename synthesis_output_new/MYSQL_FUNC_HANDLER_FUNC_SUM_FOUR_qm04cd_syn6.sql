@@ -1,0 +1,348 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1----- */
+CREATE TABLE IF NOT EXISTS `table_34bctx` (
+    `table_34bctx_emp_id` INT,
+    `table_34bctx_department_id` INT,
+    `table_34bctx_salary` INT,
+    `table_34bctx_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0s6yx2` (
+    `table_0s6yx2_department_id` INT,
+    `table_0s6yx2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_34bctx` (`table_34bctx_emp_id`, `table_34bctx_department_id`, `table_34bctx_salary`, `table_34bctx_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0s6yx2` (`table_0s6yx2_department_id`, `table_0s6yx2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_KPI_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_34BCTX_SALARY), 0), COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_34BCTX_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMPLOYEE_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_34BCTX
+    WHERE TABLE_34BCTX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_KPI_SCORE = (V_EMPLOYEE_COUNT * 5) + (V_AVG_SALARY / 1000 * 10) + (V_AVG_TENURE * 8);
+
+    RETURN V_KPI_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+CREATE TABLE IF NOT EXISTS `table_cse3r2` (
+    `table_cse3r2_order_id` INT,
+    `table_cse3r2_customer_id` INT,
+    `table_cse3r2_order_date` DATE,
+    `table_cse3r2_total_amount` DECIMAL(10,2),
+    `table_cse3r2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_pvtnbo` (
+    `table_pvtnbo_shipment_id` INT,
+    `table_pvtnbo_order_id` INT,
+    `table_pvtnbo_carrier` INT,
+    `table_pvtnbo_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cse3r2` (`table_cse3r2_order_id`, `table_cse3r2_customer_id`, `table_cse3r2_order_date`, `table_cse3r2_total_amount`, `table_cse3r2_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_pvtnbo` (`table_pvtnbo_shipment_id`, `table_pvtnbo_order_id`, `table_pvtnbo_carrier`, `table_pvtnbo_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(CARRIER_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COST_EFFICIENCY DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_PVTNBO_SHIPPING_COST), 0)
+    INTO V_AVG_SHIPPING_COST
+    FROM TABLE_PVTNBO
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_CSE3R2_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_PVTNBO S
+    JOIN TABLE_CSE3R2 O ON TABLE_PVTNBO_ORDER_ID = TABLE_CSE3R2_ORDER_ID
+    WHERE TABLE_PVTNBO_CARRIER = CARRIER_PARAM;
+
+    IF V_AVG_ORDER_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_EFFICIENCY = (V_AVG_SHIPPING_COST / V_AVG_ORDER_VALUE) * 100;
+
+    RETURN FLOOR(V_COST_EFFICIENCY);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(YEAR_VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN YEAR_VAL MOD 400 = 0 THEN RETURN 'LEAP_YEAR';
+        WHEN YEAR_VAL MOD 100 = 0 THEN RETURN 'NOT_LEAP_YEAR';
+        WHEN YEAR_VAL MOD 4 = 0 THEN RETURN 'LEAP_YEAR';
+        ELSE RETURN 'NOT_LEAP_YEAR';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+CREATE TABLE IF NOT EXISTS `table_o1nktm` (
+    `table_o1nktm_appraisal_id` INT,
+    `table_o1nktm_customer_id` INT,
+    `table_o1nktm_item_id` INT,
+    `table_o1nktm_item_type` VARCHAR(50),
+    `table_o1nktm_carat_weight` INT,
+    `table_o1nktm_clarity_grade` INT,
+    `table_o1nktm_appraisal_value` INT,
+    `table_o1nktm_appraisal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_pnmyy1` (
+    `table_pnmyy1_item_id` INT,
+    `table_pnmyy1_item_type` VARCHAR(50),
+    `table_pnmyy1_metal_type` VARCHAR(50),
+    `table_pnmyy1_gemstone_type` VARCHAR(50),
+    `table_pnmyy1_purchase_date` DATE
+);
+
+INSERT INTO `table_o1nktm` (`table_o1nktm_appraisal_id`, `table_o1nktm_customer_id`, `table_o1nktm_item_id`, `table_o1nktm_item_type`, `table_o1nktm_carat_weight`, `table_o1nktm_clarity_grade`, `table_o1nktm_appraisal_value`, `table_o1nktm_appraisal_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_pnmyy1` (`table_pnmyy1_item_id`, `table_pnmyy1_item_type`, `table_pnmyy1_metal_type`, `table_pnmyy1_gemstone_type`, `table_pnmyy1_purchase_date`) VALUES (1, 'test', 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CARAT_WEIGHT INT DEFAULT 0;
+    DECLARE V_APPRAISAL_VALUE INT DEFAULT 0;
+    DECLARE V_METAL_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O1NKTM_CARAT_WEIGHT, 1), COALESCE(TABLE_O1NKTM_APPRAISAL_VALUE, 1000)
+    INTO V_CARAT_WEIGHT, V_APPRAISAL_VALUE
+    FROM TABLE_O1NKTM
+    WHERE TABLE_O1NKTM_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT CASE TABLE_PNMYY1_METAL_TYPE
+        WHEN 'PLATINUM' THEN 3
+        WHEN 'GOLD' THEN 2
+        WHEN 'SILVER' THEN 1
+        ELSE 1
+    END INTO V_METAL_MULTIPLIER
+    FROM TABLE_PNMYY1
+    WHERE TABLE_PNMYY1_ITEM_ID = ITEM_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_APPRAISAL_VALUE * V_METAL_MULTIPLIER + V_CARAT_WEIGHT * 100;
+
+    RETURN (MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + ((MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(-44, -90)) - -623 + (cast(v_total_value as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SLANT_HEIGHT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_SLANT_HEIGHT = SQRT(RADIUS * RADIUS + HEIGHT * HEIGHT);
+    SET V_SURFACE_AREA = (MYSQL_FUNC_PROC2_mjor62()) - -749 + (3.14159 * radius * (radius + v_slant_height));
+
+    RETURN FLOOR(V_SURFACE_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_mjor62----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_mjor62() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(-36)) - 134 + ((MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(-21)) - -698 + (a - b));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+CREATE TABLE IF NOT EXISTS `table_u9789c` (
+    `table_u9789c_investment_id` INT,
+    `table_u9789c_customer_id` INT,
+    `table_u9789c_portfolio_id` INT,
+    `table_u9789c_investment_type` VARCHAR(50),
+    `table_u9789c_current_value` INT,
+    `table_u9789c_initial_investment` INT,
+    `table_u9789c_risk_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ctio69` (
+    `table_ctio69_portfolio_id` INT,
+    `table_ctio69_manager_id` INT,
+    `table_ctio69_total_value` DECIMAL(10,2),
+    `table_ctio69_performance_score` INT
+);
+
+INSERT INTO `table_u9789c` (`table_u9789c_investment_id`, `table_u9789c_customer_id`, `table_u9789c_portfolio_id`, `table_u9789c_investment_type`, `table_u9789c_current_value`, `table_u9789c_initial_investment`, `table_u9789c_risk_rating`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_ctio69` (`table_ctio69_portfolio_id`, `table_ctio69_manager_id`, `table_ctio69_total_value`, `table_ctio69_performance_score`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(PORTFOLIO_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_VALUE INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_RETURN_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_AVG_RISK_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_RISK_ADJUSTED_RETURN INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U9789C_INITIAL_INVESTMENT), 0), COALESCE(SUM(TABLE_U9789C_CURRENT_VALUE), 0)
+    INTO V_INITIAL_VALUE, V_CURRENT_VALUE
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_U9789C_RISK_RATING), 3.0)
+    INTO V_AVG_RISK_RATING
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    IF V_INITIAL_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RETURN_PERCENTAGE = ((V_CURRENT_VALUE - V_INITIAL_VALUE) * 100) / V_INITIAL_VALUE;
+
+    SET V_RISK_ADJUSTED_RETURN = V_RETURN_PERCENTAGE - (V_AVG_RISK_RATING * 5);
+
+    RETURN V_RISK_ADJUSTED_RETURN;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+CREATE TABLE IF NOT EXISTS `table_lk5a67` (
+    `table_lk5a67_product_id` INT,
+    `table_lk5a67_stock_quantity` INT
+);
+
+INSERT INTO `table_lk5a67` (`table_lk5a67_product_id`, `table_lk5a67_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_SCORE_1ucqt0(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_LK5A67_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_LK5A67
+    WHERE TABLE_LK5A67_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(-59)) - 840 + (least(v_stock, 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+CREATE TABLE IF NOT EXISTS `table_0rmlv2` (
+    `table_0rmlv2_id` INT,
+    `table_0rmlv2_username` VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6aha2u` (
+    `table_6aha2u_user_id` INT
+);
+
+INSERT INTO `table_0rmlv2` (`table_0rmlv2_id`, `table_0rmlv2_username`) VALUES (1, 'test');
+
+INSERT INTO `table_6aha2u` (`table_6aha2u_user_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDF_USERS_PHOTOS_COUNT_0epnym(P_USERNAME_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE USERNAME_VAL VARCHAR(30);
+    DECLARE PHOTO_COUNT INT;
+    
+    SELECT `TABLE_0RMLV2_USERNAME` INTO USERNAME_VAL FROM `TABLE_0RMLV2` WHERE `TABLE_0RMLV2_ID` = P_USERNAME_ID LIMIT 1;
+    
+    IF USERNAME_VAL IS NULL THEN
+        RETURN 0;
+    END IF;
+    
+    SELECT COUNT(UP.`TABLE_6AHA2U_USER_ID`) INTO PHOTO_COUNT
+    FROM `TABLE_6AHA2U` AS UP
+    LEFT JOIN `TABLE_0RMLV2` AS U ON U.`TABLE_0RMLV2_ID` = UP.`TABLE_6AHA2U_USER_ID`
+    WHERE U.`TABLE_0RMLV2_USERNAME` = USERNAME_VAL;
+    
+    RETURN COALESCE(PHOTO_COUNT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B + P_C + P_D;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_LEAP_YEAR_ekz866(55)) - 728 + ((MYSQL_FUNC_CALCULATE_CARRIER_COST_EFFICIENCY_1mo841(-31)) - -620 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1(-70)) - -666 + (-1)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(-30)) - -103 + (v_result);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_HANDLER_FUNC_SUM_FOUR_qm04cd(1, 1, 1, 1);

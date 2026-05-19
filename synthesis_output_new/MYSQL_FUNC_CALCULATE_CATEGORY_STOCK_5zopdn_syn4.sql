@@ -1,0 +1,439 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qpwars` (
+    `table_qpwars_category_id` INT,
+    `table_qpwars_stock_quantity` INT
+);
+
+INSERT INTO `table_qpwars` (`table_qpwars_category_id`, `table_qpwars_stock_quantity`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+CREATE TABLE IF NOT EXISTS table_wpq3qd (
+    table_wpq3qd_emp_no INT,
+    table_wpq3qd_salary INT
+);
+
+INSERT INTO table_wpq3qd (`table_wpq3qd_emp_no`, `table_wpq3qd_salary`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(P_EMP_NO INT, CHAR_SEQ INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SALARY_CALC INT;
+    
+    IF CHAR_SEQ = 0 THEN
+        SELECT MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSEIF CHAR_SEQ = 1 THEN
+        SELECT MAX(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    ELSE
+        SELECT MAX(TABLE_WPQ3QD_SALARY) - MIN(TABLE_WPQ3QD_SALARY) INTO SALARY_CALC
+        FROM TABLE_WPQ3QD
+        WHERE TABLE_WPQ3QD_EMP_NO = P_EMP_NO;
+    END IF;
+    
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(39)) - -286 + (ifnull(salary_calc, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(-64)) - 335 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * N;
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+CREATE TABLE IF NOT EXISTS `table_qzk6th` (
+    `table_qzk6th_enrollment_id` INT,
+    `table_qzk6th_child_id` INT,
+    `table_qzk6th_program_type` VARCHAR(50),
+    `table_qzk6th_hours_per_week` INT,
+    `table_qzk6th_weekly_rate` INT,
+    `table_qzk6th_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hbhj2x` (
+    `table_hbhj2x_child_id` INT,
+    `table_hbhj2x_date_of_birth` DATE,
+    `table_hbhj2x_parent_id` INT
+);
+
+INSERT INTO `table_qzk6th` (`table_qzk6th_enrollment_id`, `table_qzk6th_child_id`, `table_qzk6th_program_type`, `table_qzk6th_hours_per_week`, `table_qzk6th_weekly_rate`, `table_qzk6th_start_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_hbhj2x` (`table_hbhj2x_child_id`, `table_hbhj2x_date_of_birth`, `table_hbhj2x_parent_id`) VALUES (1, '2024-01-01', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(CHILD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHILD_AGE INT DEFAULT 0;
+    DECLARE V_PROGRAM_RATE INT DEFAULT 0;
+    DECLARE V_EXTRA_HOURS INT DEFAULT 0;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_HBHJ2X_DATE_OF_BIRTH, CURDATE())
+    INTO V_CHILD_AGE
+    FROM TABLE_HBHJ2X
+    WHERE TABLE_HBHJ2X_CHILD_ID = CHILD_ID_PARAM;
+
+    SELECT TABLE_QZK6TH_WEEKLY_RATE
+    INTO V_PROGRAM_RATE
+    FROM TABLE_QZK6TH
+    WHERE TABLE_QZK6TH_CHILD_ID = CHILD_ID_PARAM
+    ORDER BY TABLE_QZK6TH_START_DATE DESC LIMIT 1;
+
+    IF V_PROGRAM_RATE IS NULL THEN
+        SET V_PROGRAM_RATE = 200;
+    END IF;
+
+    SET V_TOTAL_FEE = V_PROGRAM_RATE;
+
+    IF V_CHILD_AGE < 2 THEN
+        SET V_AGE_SURCHARGE = V_PROGRAM_RATE * 25 / 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BOOK_LATE_FEE_eklljg----- */
+CREATE TABLE IF NOT EXISTS `table_y9uwj3` (
+    `table_y9uwj3_book_id` INT,
+    `table_y9uwj3_isbn` INT,
+    `table_y9uwj3_title` INT,
+    `table_y9uwj3_author` INT,
+    `table_y9uwj3_category_id` INT,
+    `table_y9uwj3_total_copies` DECIMAL(10,2),
+    `table_y9uwj3_available_copies` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wzq0sj` (
+    `table_wzq0sj_loan_id` INT,
+    `table_wzq0sj_book_id` INT,
+    `table_wzq0sj_borrower_id` INT,
+    `table_wzq0sj_loan_date` DATE,
+    `table_wzq0sj_due_date` DATE,
+    `table_wzq0sj_return_date` DATE
+);
+
+INSERT INTO `table_y9uwj3` (`table_y9uwj3_book_id`, `table_y9uwj3_isbn`, `table_y9uwj3_title`, `table_y9uwj3_author`, `table_y9uwj3_category_id`, `table_y9uwj3_total_copies`, `table_y9uwj3_available_copies`) VALUES (1, 2, 3, 4, 5, 1.0, 7);
+
+INSERT INTO `table_wzq0sj` (`table_wzq0sj_loan_id`, `table_wzq0sj_book_id`, `table_wzq0sj_borrower_id`, `table_wzq0sj_loan_date`, `table_wzq0sj_due_date`, `table_wzq0sj_return_date`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BOOK_LATE_FEE_eklljg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BOOK_LATE_FEE_eklljg(BOOK_ID_PARAM INT, DAYS_LATE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAILY_RATE INT DEFAULT 5;
+    DECLARE V_MAX_FEE INT DEFAULT 100;
+    DECLARE V_LATE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_LOANS INT DEFAULT 0;
+
+    IF DAYS_LATE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT COUNT(*) INTO V_TOTAL_LOANS
+    FROM TABLE_WZQ0SJ
+    WHERE TABLE_WZQ0SJ_BOOK_ID = BOOK_ID_PARAM AND TABLE_WZQ0SJ_RETURN_DATE IS NULL;
+
+    SET V_LATE_FEE = (MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel()) - -569 + (days_late * v_daily_rate);
+
+    IF V_TOTAL_LOANS > 3 THEN
+        SET V_LATE_FEE = V_LATE_FEE * 2;
+    END IF;
+
+    IF V_LATE_FEE > V_MAX_FEE THEN
+        SET V_LATE_FEE = V_MAX_FEE;
+    END IF;
+
+    RETURN V_LATE_FEE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_100_VALUES_odygel() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = (MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(-80)) - 408 + (v_prize_pool * 12 / 100);
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = V_ENTRY_FEE * 2;
+    END CASE;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds(83)) - 349 + (cast(v_prize_amount as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds----- */
+CREATE TABLE IF NOT EXISTS `table_bch2wq` (
+    `table_bch2wq_sub_id` INT,
+    `table_bch2wq_customer_id` INT,
+    `table_bch2wq_start_date` DATE,
+    `table_bch2wq_end_date` DATE,
+    `table_bch2wq_monthly_fee` INT
+);
+
+INSERT INTO `table_bch2wq` (`table_bch2wq_sub_id`, `table_bch2wq_customer_id`, `table_bch2wq_start_date`, `table_bch2wq_end_date`, `table_bch2wq_monthly_fee`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_4khkds(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACTIVE_SUBS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_BCH2WQ_MONTHLY_FEE), 0)
+    INTO V_ACTIVE_SUBS, V_TOTAL_REVENUE
+    FROM TABLE_BCH2WQ
+    WHERE TABLE_BCH2WQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_BCH2WQ_END_DATE >= CURDATE();
+
+    RETURN V_TOTAL_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+CREATE TABLE IF NOT EXISTS `table_f1o54x` (
+    `table_f1o54x_ticket_id` INT,
+    `table_f1o54x_resort_id` INT,
+    `table_f1o54x_skier_id` INT,
+    `table_f1o54x_ticket_type` VARCHAR(50),
+    `table_f1o54x_num_days` INT,
+    `table_f1o54x_daily_rate` INT,
+    `table_f1o54x_total_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_22hjdu` (
+    `table_22hjdu_resort_id` INT,
+    `table_22hjdu_resort_name` VARCHAR(50),
+    `table_22hjdu_elevation` INT,
+    `table_22hjdu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_f1o54x` (`table_f1o54x_ticket_id`, `table_f1o54x_resort_id`, `table_f1o54x_skier_id`, `table_f1o54x_ticket_type`, `table_f1o54x_num_days`, `table_f1o54x_daily_rate`, `table_f1o54x_total_cost`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_22hjdu` (`table_22hjdu_resort_id`, `table_22hjdu_resort_name`, `table_22hjdu_elevation`, `table_22hjdu_base_price`) VALUES (1, 'test', 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SKI_PACKAGE_COST_qj4qir(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUM_DAYS INT DEFAULT 1;
+    DECLARE V_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_ELEVATION INT DEFAULT 5000;
+    DECLARE V_ELEVATION_PREMIUM INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_F1O54X_NUM_DAYS, 1), COALESCE(TABLE_F1O54X_DAILY_RATE, 100)
+    INTO V_NUM_DAYS, V_DAILY_RATE
+    FROM TABLE_F1O54X
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_22HJDU_ELEVATION, 5000)
+    INTO V_ELEVATION
+    FROM TABLE_F1O54X SLT
+    JOIN TABLE_22HJDU SR ON TABLE_F1O54X_RESORT_ID = TABLE_22HJDU_RESORT_ID
+    WHERE TABLE_F1O54X_TICKET_ID = TICKET_ID_PARAM;
+
+    SET V_TOTAL_COST = (MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk(38)) - 785 + (v_num_days * v_daily_rate);
+
+    IF V_ELEVATION > 8000 THEN
+        SET V_ELEVATION_PREMIUM = V_TOTAL_COST * 25 / 100;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_ELEVATION_PREMIUM;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk----- */
+CREATE TABLE IF NOT EXISTS `table_dc4eg5` (
+    `table_dc4eg5_customer_id` INT,
+    `table_dc4eg5_country` INT,
+    `table_dc4eg5_registration_date` DATE
+);
+
+INSERT INTO `table_dc4eg5` (`table_dc4eg5_customer_id`, `table_dc4eg5_country`, `table_dc4eg5_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_MARKET_SIZE_1wswjk(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_DC4EG5
+    WHERE TABLE_DC4EG5_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_QPWARS_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_QPWARS
+    WHERE TABLE_QPWARS_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + ((MYSQL_FUNC_CALCULATE_BOOK_LATE_FEE_eklljg(46, 26)) - -369 + ((MYSQL_FUNC_GET_EMP_SALARY_INFO_kkqsdi(-91, 78)) - -501 + (v_stock)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(1);

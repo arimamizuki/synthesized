@@ -1,0 +1,658 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v250348 (
+    v250349 INT,
+    v250351 VARCHAR(100),
+    v250351_val VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v250494 (
+    v250349 INT,
+    v250351_val VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v250339 (
+    v250142 VARCHAR(100),
+    v250143 INT
+);
+CREATE TABLE IF NOT EXISTS v250282 (
+    v250283 CHAR(1),
+    v250284 DATETIME
+);
+CREATE TABLE IF NOT EXISTS v250764 (
+    v250765 CHAR(10) CHARACTER SET koi8r,
+    v250766 TEXT CHARACTER SET koi8r
+);
+CREATE TABLE IF NOT EXISTS v250273 (
+    v250274 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS x11 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    data VARCHAR(100)
+);
+INSERT INTO v250348 (v250349, v250351, v250351_val) VALUES
+(1, 'test1', 'val1'),
+(2, 'test2', 'val2'),
+(NULL, 'test3', 'val3');
+INSERT INTO v250494 (v250349, v250351_val) VALUES
+(1, 'val1'),
+(2, 'val2'),
+(3, 'val3');
+INSERT INTO v250339 (v250142, v250143) VALUES
+('auto_increment_increment', 100),
+('auto_increment_increment', 200),
+('other_value', 300);
+INSERT INTO v250282 (v250283, v250284) VALUES
+('Y', '2011-03-27 12:00:00'),
+('N', '2011-03-27 13:00:00'),
+('Y', '2011-03-28 01:00:00');
+INSERT INTO x11 (data) VALUES ('row1'), ('row2'), ('row3');
+
+/* -----Dependency for: n3_output_1458_proc----- */
+CREATE TABLE IF NOT EXISTS v1255752 (v1255753 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1256252 (v1256253 INT, v1256254 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1256359 (v1256360 VARCHAR(20), v1256361 INT, v1256362 INT, v1256363 CHAR(1), v1256364 VARCHAR(20), v1256365 VARCHAR(20), v1256366 VARCHAR(20));
+CREATE TABLE IF NOT EXISTS v1256862 (v1256863 INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, v1256864 INT UNSIGNED);
+CREATE TABLE IF NOT EXISTS v1256148 (v1256149 INT, v1256150 INT, v1256151 INT);
+CREATE TABLE IF NOT EXISTS v1256025 (v1256026 INT, v1256027 INT);
+CREATE TABLE IF NOT EXISTS v1255970 (v1255971 INT, v1255972 INT);
+INSERT INTO v1255752 (v1255753) VALUES (ST_GEOMFROMTEXT('POINT(0 0)')), (ST_GEOMFROMTEXT('POINT(1 1)')), (ST_GEOMFROMTEXT('POINT(2 2)'));
+INSERT INTO v1256252 VALUES (1, ST_GEOMFROMTEXT('POINT(0 0)')), (2, ST_GEOMFROMTEXT('POINT(1 1)')), (3, ST_GEOMFROMTEXT('POINT(2 2)'));
+INSERT INTO v1256359 VALUES ('PRIMARY', 1, 100, 't', 'mysql', 'size', 'big'), ('SECONDARY', 2, 200, 'f', 'mysql', 'size', 'small');
+INSERT INTO v1256148 VALUES (1, 1, 1), (2, 1, 1), (3, 1, 1);
+INSERT INTO v1256025 VALUES (1, 10), (2, 20), (3, 30);
+INSERT INTO v1255970 VALUES (1, 100), (2, 200), (3, 300);
+
+/* -----Called: n3_output_1458_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1458_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_insert_id INT DEFAULT 0;
+    DECLARE v_poly1 GEOMETRY;
+    DECLARE v_srid_check INT DEFAULT 0;
+    DECLARE v_geo_check INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cur_geom GEOMETRY;
+    DECLARE v_cur_id INT;
+    
+    -- Cursor for iterating through geometry table
+    DECLARE geom_cursor CURSOR FOR SELECT v1255753 FROM v1255752;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Create polygon geometry from input parameters
+    SET v_poly1 = ST_GEOMFROMTEXT(CONCAT('POLYGON((0 0,0 ', p1, ',', p2, ' ', p1, ',', p2, ' 0,0 0))'));
+
+    -- Statement 1: INSERT with complex geometry (adapted inline)
+    INSERT INTO v1255752 (v1255753) VALUES 
+        (ST_GEOMCOLLFROMWKB(ST_ASWKB(ST_GEOMCOLLFROMTEXT(CONCAT('GEOMETRYCOLLECTION(', 'GEOMETRYCOLLECTION(),', 'POINT(0 0),', 'GEOMETRYCOLLECTION(', 'LINESTRING(0 0,10 10),', 'GEOMETRYCOLLECTION(', 'GEOMETRYCOLLECTION())),', 'GEOMETRYCOLLECTION(),', 'GEOMETRYCOLLECTION(', 'GEOMETRYCOLLECTION()),', 'POLYGON((0 0,0 10,10 10,10 0,0 0)),', 'MULTIPOINT(0 0,2 2,4 4,6 6,8 8,10 10),', 'MULTILINESTRING((0 0,10 10),(0 10,10 0)),', 'MULTIPOLYGON(((0 0,0 5,5 5,5 0,0 0)),((5 5,5 10,10 10,10 5,5 5))))')))));
+    
+    SET v_insert_id = LAST_INSERT_ID();
+
+    -- Statement 2: UPDATE using geometry (adapted inline)
+    UPDATE v1256252 AS x1 SET x1.v1256254 = v_poly1 WHERE x1.v1256253 = v_insert_id;
+
+    -- Statement 3: UPDATE with complex WHERE conditions using p1/p2 (adapted inline)
+    UPDATE v1256359 AS x0 SET v1256362 = p1 
+    WHERE v1256364 = 'mysql' 
+      AND v1256363 = 't' 
+      AND v1256360 = 'PRIMARY' 
+      AND v1256366 = 'size'
+      AND v1256361 = p2;
+
+    -- Statement 4: CREATE TABLE AS SELECT (adapted inline - create temporary table)
+    CREATE TEMPORARY TABLE IF NOT EXISTS temp_v1256862 AS 
+    SELECT NULLIF(2, 1.1) AS col1, 
+           NULLIF(5, 1.2) AS col2, 
+           NULLIF(1.1, 1) AS col3, 
+           NULLIF(1, 2) AS col4, 
+           NULLIF(1, 1.2) AS col5, 
+           NULLIF('test', 'string') AS col6;
+
+    -- Statement 5: Complex UPDATE with window function and geometry (adapted inline)
+    -- Using cursor to iterate through geometries and perform conditional updates
+    OPEN geom_cursor;
+    read_loop: LOOP
+        FETCH geom_cursor INTO v_cur_geom;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Check SRID condition
+        SET v_srid_check = ST_SRID(ST_CONVEXHULL(ST_GEOMFROMTEXT('LINESTRING(0 0, 5 5)')));
+        
+        IF v_srid_check = 1 THEN
+            -- Perform update with window function logic
+            UPDATE v1256148 AS x1, v1256025 AS x5 
+            LEFT JOIN v1255970 AS x3 ON x5.v1256027 = x5.v1256027 
+            SET x1.v1256149 = -9223372036854775808 
+            WHERE ST_SRID(ST_CONVEXHULL(ST_GEOMFROMTEXT('LINESTRING(0 0, 5 5)'))) = 1 
+              AND x1.v1256151 = 1 
+              AND x1.v1256150 = 1 
+              AND x1.v1256149 = 1
+              AND x5.v1256026 = p1
+            ORDER BY (1 + ROW_NUMBER() OVER ()) 
+            LIMIT 48;
+            
+            SET v_counter = v_counter + 1;
+        END IF;
+    END LOOP;
+    CLOSE geom_cursor;
+
+    -- Set output result based on procedural logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503----- */
+CREATE TABLE IF NOT EXISTS `table_yeopj7` (
+    `table_yeopj7_customer_id` INT,
+    `table_yeopj7_start_date` DATE,
+    `table_yeopj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_yeopj7` (`table_yeopj7_customer_id`, `table_yeopj7_start_date`, `table_yeopj7_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_MONTHS_2vu503(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_YEOPJ7_START_DATE, TABLE_YEOPJ7_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_YEOPJ7
+    WHERE TABLE_YEOPJ7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_PROC_BIGINT_elxddt()) - 293 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(-6)) - 200 + (0));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(-1)) - 248 + ((MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(-60, 7)) - 100 + ((MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(81)) - 194 + (timestampdiff(month, v_start_date, curdate()))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+CREATE TABLE IF NOT EXISTS `table_9o63nl` (
+    `table_9o63nl_transaction_id` INT,
+    `table_9o63nl_account_id` INT,
+    `table_9o63nl_transaction_date` DATE,
+    `table_9o63nl_transaction_type` VARCHAR(50),
+    `table_9o63nl_amount` DECIMAL(10,2),
+    `table_9o63nl_balance_after` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7t580` (
+    `table_i7t580_account_id` INT,
+    `table_i7t580_customer_id` INT,
+    `table_i7t580_account_type` INT,
+    `table_i7t580_credit_limit` INT
+);
+
+INSERT INTO `table_9o63nl` (`table_9o63nl_transaction_id`, `table_9o63nl_account_id`, `table_9o63nl_transaction_date`, `table_9o63nl_transaction_type`, `table_9o63nl_amount`, `table_9o63nl_balance_after`) VALUES (1, 2, '2024-01-01', 'test', 1.0, 6);
+
+INSERT INTO `table_i7t580` (`table_i7t580_account_id`, `table_i7t580_customer_id`, `table_i7t580_account_type`, `table_i7t580_credit_limit`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DETECT_UNUSUAL_TRANSACTION_PATTERN_r36ml6(TRANSACTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AMOUNT INT DEFAULT 0;
+    DECLARE V_ACCOUNT_AVG DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_ACCOUNT_STDDEV DECIMAL(12,2) DEFAULT 0.00;
+    DECLARE V_Z_SCORE DECIMAL(6,2) DEFAULT 0.00;
+    DECLARE V_DEVIATION_COUNT INT DEFAULT 0;
+    DECLARE V_IS_SUSPICIOUS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9O63NL_AMOUNT, 0)
+    INTO V_AMOUNT
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9O63NL_AMOUNT), 0), COUNT(*)
+    INTO V_ACCOUNT_AVG, V_DEVIATION_COUNT
+    FROM TABLE_9O63NL T
+    JOIN TABLE_I7T580 A ON TABLE_9O63NL_ACCOUNT_ID = TABLE_I7T580_ACCOUNT_ID
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_DEVIATION_COUNT < 10 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT STDDEV(TABLE_9O63NL_AMOUNT)
+    INTO V_ACCOUNT_STDDEV
+    FROM TABLE_9O63NL
+    WHERE TABLE_9O63NL_ACCOUNT_ID = (SELECT TABLE_9O63NL_ACCOUNT_ID FROM TABLE_9O63NL WHERE TABLE_9O63NL_TRANSACTION_ID = TRANSACTION_ID_PARAM)
+      AND TABLE_9O63NL_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_ACCOUNT_STDDEV > 0 THEN
+        SET V_Z_SCORE = (V_AMOUNT - V_ACCOUNT_AVG) / V_ACCOUNT_STDDEV;
+    END IF;
+
+    IF ABS(V_Z_SCORE) > 3 THEN
+        SET V_IS_SUSPICIOUS = (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600()) - 356 + (1);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(62)) - -141 + (v_is_suspicious);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+CREATE TABLE IF NOT EXISTS `table_yyt47f` (
+    `table_yyt47f_emp_id` INT,
+    `table_yyt47f_salary` INT
+);
+
+INSERT INTO `table_yyt47f` (`table_yyt47f_emp_id`, `table_yyt47f_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_YYT47F_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_YYT47F
+    WHERE TABLE_YYT47F_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(-25)) - 819 + (floor(v_salary / 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+CREATE TABLE IF NOT EXISTS `table_129mia` (
+    `table_129mia_customer_id` INT,
+    `table_129mia_registration_date` DATE,
+    `table_129mia_tier_level` INT,
+    `table_129mia_total_purchases` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_qvw4li` (
+    `table_qvw4li_order_id` INT,
+    `table_qvw4li_customer_id` INT,
+    `table_qvw4li_order_date` DATE,
+    `table_qvw4li_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tkbm59` (
+    `table_tkbm59_review_id` INT,
+    `table_tkbm59_customer_id` INT,
+    `table_tkbm59_product_id` INT,
+    `table_tkbm59_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_129mia` (`table_129mia_customer_id`, `table_129mia_registration_date`, `table_129mia_tier_level`, `table_129mia_total_purchases`) VALUES (1, '2024-01-01', 3, 1.0);
+
+INSERT INTO `table_qvw4li` (`table_qvw4li_order_id`, `table_qvw4li_customer_id`, `table_qvw4li_order_date`, `table_qvw4li_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_tkbm59` (`table_tkbm59_review_id`, `table_tkbm59_customer_id`, `table_tkbm59_product_id`, `table_tkbm59_rating`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_txabph(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_AVG_REVIEW_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_CHURN_RISK_SCORE INT DEFAULT 0;
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+
+    SELECT TABLE_129MIA_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_129MIA
+    WHERE TABLE_129MIA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), MAX(TABLE_QVW4LI_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_LAST_ORDER_DATE
+    FROM TABLE_QVW4LI
+    WHERE TABLE_QVW4LI_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), V_LAST_ORDER_DATE)
+    INTO V_DAYS_SINCE_LAST_ORDER;
+
+    SELECT COALESCE(AVG(TABLE_TKBM59_RATING), 0)
+    INTO V_AVG_REVIEW_RATING
+    FROM TABLE_TKBM59
+    WHERE TABLE_TKBM59_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_CHURN_RISK_SCORE = 50;
+
+    IF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 30;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 60 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 30 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    IF V_AVG_REVIEW_RATING < 3.0 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 15;
+    END IF;
+
+    IF V_ORDER_COUNT < 3 THEN
+        SET V_CHURN_RISK_SCORE = V_CHURN_RISK_SCORE + 10;
+    END IF;
+
+    RETURN LEAST(V_CHURN_RISK_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+CREATE TABLE IF NOT EXISTS `table_5jb34m` (
+    `table_5jb34m_room_id` INT,
+    `table_5jb34m_room_type` VARCHAR(50),
+    `table_5jb34m_floor` INT,
+    `table_5jb34m_is_occupied` INT,
+    `table_5jb34m_daily_rate` INT,
+    `table_5jb34m_max_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_nvdwjr` (
+    `table_nvdwjr_res_id` INT,
+    `table_nvdwjr_room_id` INT,
+    `table_nvdwjr_guest_id` INT,
+    `table_nvdwjr_check_in` INT,
+    `table_nvdwjr_check_out` INT,
+    `table_nvdwjr_guests_count` INT,
+    `table_nvdwjr_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5jb34m` (`table_5jb34m_room_id`, `table_5jb34m_room_type`, `table_5jb34m_floor`, `table_5jb34m_is_occupied`, `table_5jb34m_daily_rate`, `table_5jb34m_max_occupancy`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_nvdwjr` (`table_nvdwjr_res_id`, `table_nvdwjr_room_id`, `table_nvdwjr_guest_id`, `table_nvdwjr_check_in`, `table_nvdwjr_check_out`, `table_nvdwjr_guests_count`, `table_nvdwjr_total_price`) VALUES (1, 2, 3, 4, 5, 6, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_46bn4l(ROOM_ID_PARAM INT, YEAR_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_OCCUPIED_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_NVDWJR_TOTAL_PRICE), 0) INTO V_TOTAL_REVENUE
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    SELECT COALESCE(TABLE_5JB34M_DAILY_RATE, 0) INTO V_DAILY_RATE
+    FROM TABLE_5JB34M
+    WHERE TABLE_5JB34M_ROOM_ID = ROOM_ID_PARAM;
+
+    SELECT COALESCE(SUM(DATEDIFF(TABLE_NVDWJR_CHECK_OUT, TABLE_NVDWJR_CHECK_IN)), 0) INTO V_OCCUPIED_DAYS
+    FROM TABLE_NVDWJR
+    WHERE TABLE_NVDWJR_ROOM_ID = ROOM_ID_PARAM
+      AND YEAR(TABLE_NVDWJR_CHECK_IN) = YEAR_PARAM;
+
+    RETURN V_TOTAL_REVENUE + (V_OCCUPIED_DAYS * V_DAILY_RATE / 2);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+CREATE TABLE IF NOT EXISTS `table_qa1oat` (
+    `table_qa1oat_emp_id` INT,
+    `table_qa1oat_department_id` INT
+);
+
+INSERT INTO `table_qa1oat` (`table_qa1oat_emp_id`, `table_qa1oat_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_QA1OAT
+    WHERE TABLE_QA1OAT_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT > 50 THEN
+        RETURN 5;
+    ELSEIF V_EMP_COUNT > 20 THEN
+        RETURN 4;
+    ELSEIF V_EMP_COUNT > 10 THEN
+        RETURN 3;
+    ELSEIF V_EMP_COUNT > 5 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+CREATE TABLE IF NOT EXISTS `table_uem6e2` (
+    `table_uem6e2_campaign_id` INT,
+    `table_uem6e2_start_date` DATE,
+    `table_uem6e2_end_date` DATE,
+    `table_uem6e2_budget` INT,
+    `table_uem6e2_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zqstr6` (
+    `table_zqstr6_conversion_id` INT,
+    `table_zqstr6_campaign_id` INT,
+    `table_zqstr6_conversion_date` DATE
+);
+
+INSERT INTO `table_uem6e2` (`table_uem6e2_campaign_id`, `table_uem6e2_start_date`, `table_uem6e2_end_date`, `table_uem6e2_budget`, `table_uem6e2_status`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_zqstr6` (`table_zqstr6_conversion_id`, `table_zqstr6_campaign_id`, `table_zqstr6_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_EFFICIENCY_8hdx58(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_EFFICIENCY INT DEFAULT 0;
+
+    SELECT DATEDIFF(TABLE_UEM6E2_END_DATE, TABLE_UEM6E2_START_DATE)
+    INTO V_DURATION_DAYS
+    FROM TABLE_UEM6E2
+    WHERE TABLE_UEM6E2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ZQSTR6
+    WHERE TABLE_ZQSTR6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_DURATION_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY = V_CONVERSION_COUNT / V_DURATION_DAYS;
+
+    RETURN V_EFFICIENCY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+CREATE TABLE IF NOT EXISTS `table_w6hk65` (
+    `table_w6hk65_cbigint` BIGINT
+);
+
+INSERT INTO `table_w6hk65` (`table_w6hk65_cbigint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIGINT_elxddt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIGINT_elxddt() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    DECLARE TEMP_VAL BIGINT;
+    DECLARE DONE INT DEFAULT FALSE;
+    DECLARE CUR CURSOR FOR SELECT TABLE_W6HK65_CBIGINT FROM `TABLE_W6HK65`;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = TRUE;
+    
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO TEMP_VAL;
+        IF DONE THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET RESULT = RESULT + 1;
+    END LOOP;
+    CLOSE CUR;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1795(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_varErrorNo INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_geomtext TEXT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_id INT;
+    DECLARE v_data VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT id, data FROM x11;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with NATURAL RIGHT JOIN
+    SET @sql1 = 'UPDATE v250348 AS x1 NATURAL RIGHT JOIN v250494 AS x5 SET v250351 = ? WHERE v250349 IS NULL';
+    SET @varErrorNo = p1;
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1 USING @varErrorNo;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: SELECT with CTE and window function
+    SET @sql2 = 'WITH x7 AS (SELECT * FROM x11 LIMIT 200) SELECT v250142, COUNT(*) + v250143 - v250142 + v250142 - v250142 + v250143 - v250143 + v250142 - v250143 + v250142 - v250142, RANK() OVER (ORDER BY v250142) AS x1, LOCATE(''Query'', v250142) - 6 - 2001 FROM v250339 WHERE v250142 = ''auto_increment_increment''';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with date range
+    SET @sql3 = 'UPDATE v250282 AS x0 SET v250283 = ''N'' WHERE v250284 BETWEEN ''2011-03-26 23:00:00'' AND ''2011-03-28 00:00:00''';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: CREATE TABLE AS SELECT with geometry
+    SET @sql4 = 'CREATE TABLE v250764 (v250765 CHAR(10) CHARACTER SET koi8r, v250766 TEXT CHARACTER SET koi8r) AS SELECT /*+ MAX_EXECUTION_TIME(''/foo/something'') */ ST_ASTEXT(ST_ENVELOPE(ST_GEOMFROMTEXT(''POINT(0 -0)'')))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: INSERT with geometry
+    SET @sql5 = 'INSERT INTO v250273 (v250274) VALUES (ST_GEOMFROMTEXT(''MULTILINESTRING((1 1, 2 2))'', 4326))';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + 1;
+
+    -- Procedural logic using CURSOR, WHILE loop, and IF condition
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_id, v_data;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        IF v_id IS NOT NULL THEN
+            SET v_counter = v_counter + v_id;
+        ELSE
+            SET v_counter = v_counter + p2;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- CASE statement for final result calculation
+    CASE
+        WHEN v_counter > 100 THEN SET result = v_counter;
+        WHEN v_counter BETWEEN 50 AND 100 THEN SET result = v_counter * 2;
+        ELSE SET result = v_counter + p1 + p2;
+    END CASE;
+
+    -- WHILE loop example
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1795(1, 1, @out_result);
+
+SELECT @out_result;

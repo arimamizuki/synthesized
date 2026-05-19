@@ -1,0 +1,420 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_0itd65` (
+    `table_0itd65_customer_id` INT,
+    `table_0itd65_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_09nz76` (
+    `table_09nz76_order_id` INT,
+    `table_09nz76_customer_id` INT,
+    `table_09nz76_order_date` DATE,
+    `table_09nz76_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0itd65` (`table_0itd65_customer_id`, `table_0itd65_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_09nz76` (`table_09nz76_order_id`, `table_09nz76_customer_id`, `table_09nz76_order_date`, `table_09nz76_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(-54)) - 478 + ((MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4(-18)) - -554 + (0)))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_TOTAL * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_HALVE_7oq9d4(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N / 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+CREATE TABLE IF NOT EXISTS `table_1n374m` (
+    `table_1n374m_customer_id` INT,
+    `table_1n374m_status` VARCHAR(50),
+    `table_1n374m_monthly_cost` DECIMAL(10,2),
+    `table_1n374m_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_1n374m` (`table_1n374m_customer_id`, `table_1n374m_status`, `table_1n374m_monthly_cost`, `table_1n374m_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_44v1v7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1N374M_PLAN_TYPE, COALESCE(TABLE_1N374M_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_1N374M
+    WHERE TABLE_1N374M_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_1N374M_STATUS = 'ACTIVE';
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+CREATE TABLE IF NOT EXISTS `table_w5wcxl` (
+    `table_w5wcxl_campaign_id` INT,
+    `table_w5wcxl_channel` INT,
+    `table_w5wcxl_target_audience` INT,
+    `table_w5wcxl_budget` INT,
+    `table_w5wcxl_start_date` DATE,
+    `table_w5wcxl_end_date` DATE,
+    `table_w5wcxl_status` VARCHAR(50)
+);
+
+INSERT INTO `table_w5wcxl` (`table_w5wcxl_campaign_id`, `table_w5wcxl_channel`, `table_w5wcxl_target_audience`, `table_w5wcxl_budget`, `table_w5wcxl_start_date`, `table_w5wcxl_end_date`, `table_w5wcxl_status`) VALUES (1, 1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+    DECLARE V_DURATION_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_W5WCXL_START_DATE, TABLE_W5WCXL_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W5WCXL
+    WHERE TABLE_W5WCXL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DURATION_DAYS = DATEDIFF(V_END_DATE, V_START_DATE);
+
+    RETURN V_DURATION_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV BIGINT DEFAULT 0;
+    DECLARE V_CURR BIGINT DEFAULT 1;
+    DECLARE V_NEXT BIGINT;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN RETURN 0;
+    ELSEIF N = 1 THEN RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = (MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(-76)) - 142 + (v_prev + v_curr);
+        SET V_PREV = V_CURR;
+        SET V_CURR = (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + (v_next);
+        SET V_I = (MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(-5)) - 893 + (v_i + 1);
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN 10;
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye----- */
+CREATE TABLE IF NOT EXISTS `table_xsp4oe` (
+    `table_xsp4oe_order_id` INT,
+    `table_xsp4oe_customer_id` INT,
+    `table_xsp4oe_order_status` VARCHAR(50),
+    `table_xsp4oe_total_amount` DECIMAL(10,2),
+    `table_xsp4oe_order_date` DATE
+);
+
+INSERT INTO `table_xsp4oe` (`table_xsp4oe_order_id`, `table_xsp4oe_customer_id`, `table_xsp4oe_order_status`, `table_xsp4oe_total_amount`, `table_xsp4oe_order_date`) VALUES (1, 2, 'test', 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PENDING_COUNT INT DEFAULT 0;
+    DECLARE V_PROCESSING_COUNT INT DEFAULT 0;
+    DECLARE V_SHIPPED_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_PENDING INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_PENDING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PENDING';
+
+    SELECT COUNT(*) INTO V_PROCESSING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PROCESSING';
+
+    SELECT COUNT(*) INTO V_SHIPPED_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'SHIPPED';
+
+    SET V_TOTAL_PENDING = V_PENDING_COUNT + V_PROCESSING_COUNT;
+
+    RETURN V_TOTAL_PENDING;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+CREATE TABLE IF NOT EXISTS `table_1do798` (
+    `table_1do798_device_id` INT,
+    `table_1do798_location` INT,
+    `table_1do798_device_type` VARCHAR(50),
+    `table_1do798_last_maintenance_date` DATE,
+    `table_1do798_operating_hours` DECIMAL(3,1),
+    `table_1do798_failure_probability` INT
+);
+
+INSERT INTO `table_1do798` (`table_1do798_device_id`, `table_1do798_location`, `table_1do798_device_type`, `table_1do798_last_maintenance_date`, `table_1do798_operating_hours`, `table_1do798_failure_probability`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 6);
+
+/* -----Called: MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PREDICT_MAINTENANCE_WINDOW_46pshp(DEVICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_OPERATING_HOURS INT DEFAULT 0;
+    DECLARE V_FAILURE_PROB DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DAYS_SINCE_MAINTENANCE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1DO798_OPERATING_HOURS, 0), COALESCE(TABLE_1DO798_FAILURE_PROBABILITY, 0.00)
+    INTO V_OPERATING_HOURS, V_FAILURE_PROB
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_1DO798_LAST_MAINTENANCE_DATE)
+    INTO V_DAYS_SINCE_MAINTENANCE
+    FROM TABLE_1DO798
+    WHERE TABLE_1DO798_DEVICE_ID = DEVICE_ID_PARAM;
+
+    SET V_RISK_SCORE = (V_OPERATING_HOURS / 100) + (V_FAILURE_PROB * 100) + (V_DAYS_SINCE_MAINTENANCE / 10);
+
+    IF V_RISK_SCORE > 80 THEN
+        RETURN 1;
+    ELSEIF V_RISK_SCORE > 50 THEN
+        RETURN 7;
+    ELSEIF V_RISK_SCORE > 30 THEN
+        RETURN 30;
+    ELSE
+        RETURN 90;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -(MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(-50)) - -203 + (1);
+    END IF;
+
+    SET V_RESULT = P_A MOD P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_WARRANTY_MONTHS * 5) + (V_SECURITY_RATING * 10) - (V_COST / 100);
+
+    RETURN CAST(V_VALUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_0ITD65_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM TABLE_0ITD65
+    WHERE TABLE_0ITD65_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_09NZ76
+    WHERE TABLE_09NZ76_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = (MYSQL_FUNC_HANDLER_FUNC_REM_9t2r2t(-39, -27)) - -159 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_xp8gob(-83)) - -747 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(-89)) - -487 + ((MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(-46)) - 218 + ((v_total_orders * 100) / v_total_visits));
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(1);

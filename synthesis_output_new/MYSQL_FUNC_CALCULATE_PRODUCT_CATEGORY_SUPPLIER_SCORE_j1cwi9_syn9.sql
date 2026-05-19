@@ -1,0 +1,401 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_cz6psu` (
+    `table_cz6psu_product_id` INT,
+    `table_cz6psu_supplier_id` INT,
+    `table_cz6psu_category_id` INT
+);
+
+INSERT INTO `table_cz6psu` (`table_cz6psu_product_id`, `table_cz6psu_supplier_id`, `table_cz6psu_category_id`) VALUES (1, 1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+CREATE TABLE IF NOT EXISTS `table_u9789c` (
+    `table_u9789c_investment_id` INT,
+    `table_u9789c_customer_id` INT,
+    `table_u9789c_portfolio_id` INT,
+    `table_u9789c_investment_type` VARCHAR(50),
+    `table_u9789c_current_value` INT,
+    `table_u9789c_initial_investment` INT,
+    `table_u9789c_risk_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ctio69` (
+    `table_ctio69_portfolio_id` INT,
+    `table_ctio69_manager_id` INT,
+    `table_ctio69_total_value` DECIMAL(10,2),
+    `table_ctio69_performance_score` INT
+);
+
+INSERT INTO `table_u9789c` (`table_u9789c_investment_id`, `table_u9789c_customer_id`, `table_u9789c_portfolio_id`, `table_u9789c_investment_type`, `table_u9789c_current_value`, `table_u9789c_initial_investment`, `table_u9789c_risk_rating`) VALUES (1, 2, 3, 'test', 5, 6, 1.0);
+
+INSERT INTO `table_ctio69` (`table_ctio69_portfolio_id`, `table_ctio69_manager_id`, `table_ctio69_total_value`, `table_ctio69_performance_score`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(PORTFOLIO_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_VALUE INT DEFAULT 0;
+    DECLARE V_CURRENT_VALUE INT DEFAULT 0;
+    DECLARE V_RETURN_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_AVG_RISK_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_RISK_ADJUSTED_RETURN INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U9789C_INITIAL_INVESTMENT), 0), COALESCE(SUM(TABLE_U9789C_CURRENT_VALUE), 0)
+    INTO V_INITIAL_VALUE, V_CURRENT_VALUE
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_U9789C_RISK_RATING), 3.0)
+    INTO V_AVG_RISK_RATING
+    FROM TABLE_U9789C
+    WHERE TABLE_U9789C_PORTFOLIO_ID = PORTFOLIO_ID_PARAM;
+
+    IF V_INITIAL_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RETURN_PERCENTAGE = ((V_CURRENT_VALUE - V_INITIAL_VALUE) * 100) / V_INITIAL_VALUE;
+
+    SET V_RISK_ADJUSTED_RETURN = V_RETURN_PERCENTAGE - (V_AVG_RISK_RATING * 5);
+
+    RETURN V_RISK_ADJUSTED_RETURN;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+CREATE TABLE IF NOT EXISTS `table_83jk04` (
+    `table_83jk04_transaction_id` INT,
+    `table_83jk04_account_id` INT,
+    `table_83jk04_transaction_date` DATE,
+    `table_83jk04_amount` DECIMAL(10,2),
+    `table_83jk04_transaction_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4xsou8` (
+    `table_4xsou8_account_id` INT,
+    `table_4xsou8_customer_id` INT,
+    `table_4xsou8_balance` INT,
+    `table_4xsou8_account_type` INT
+);
+
+INSERT INTO `table_83jk04` (`table_83jk04_transaction_id`, `table_83jk04_account_id`, `table_83jk04_transaction_date`, `table_83jk04_amount`, `table_83jk04_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4xsou8` (`table_4xsou8_account_id`, `table_4xsou8_customer_id`, `table_4xsou8_balance`, `table_4xsou8_account_type`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(ACCOUNT_ID_PARAM INT, MIN_AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_NET_CHANGE INT DEFAULT 0;
+    DECLARE V_TX_COUNT INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CREDITS, V_TX_COUNT
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'CREDIT'
+      AND TABLE_83JK04_AMOUNT >= MIN_AMOUNT;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0)
+    INTO V_TOTAL_DEBITS
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'DEBIT';
+
+    SELECT TABLE_4XSOU8_BALANCE INTO V_BALANCE FROM TABLE_4XSOU8 WHERE TABLE_4XSOU8_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_NET_CHANGE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(83)) - -929 + (coalesce(v_balance, 0) + v_net_change);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+CREATE TABLE IF NOT EXISTS `table_ffie3d` (
+    `table_ffie3d_product_id` INT,
+    `table_ffie3d_category_id` INT,
+    `table_ffie3d_supplier_id` INT,
+    `table_ffie3d_unit_cost` DECIMAL(10,2),
+    `table_ffie3d_unit_price` DECIMAL(10,2),
+    `table_ffie3d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wl2lrm` (
+    `table_wl2lrm_order_id` INT,
+    `table_wl2lrm_product_id` INT,
+    `table_wl2lrm_quantity` INT
+);
+
+INSERT INTO `table_ffie3d` (`table_ffie3d_product_id`, `table_ffie3d_category_id`, `table_ffie3d_supplier_id`, `table_ffie3d_unit_cost`, `table_ffie3d_unit_price`, `table_ffie3d_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `table_wl2lrm` (`table_wl2lrm_order_id`, `table_wl2lrm_product_id`, `table_wl2lrm_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FFIE3D_UNIT_COST, (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(-86)) - -601 + (0)), COALESCE(TABLE_FFIE3D_UNIT_PRICE, 0), COALESCE(TABLE_FFIE3D_STOCK_QUANTITY, 0)
+    INTO V_UNIT_COST, V_UNIT_PRICE, V_STOCK_QUANTITY
+    FROM TABLE_FFIE3D
+    WHERE TABLE_FFIE3D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WL2LRM_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_WL2LRM
+    WHERE TABLE_WL2LRM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_UNIT_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_UNIT_PRICE - V_UNIT_COST) * 100) / V_UNIT_PRICE;
+
+    SET V_PROFITABILITY_INDEX = (V_PROFIT_MARGIN * V_SALES_VOLUME) / GREATEST(V_STOCK_QUANTITY, 1);
+
+    RETURN V_PROFITABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+CREATE TABLE IF NOT EXISTS `table_qpwars` (
+    `table_qpwars_category_id` INT,
+    `table_qpwars_stock_quantity` INT
+);
+
+INSERT INTO `table_qpwars` (`table_qpwars_category_id`, `table_qpwars_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_5zopdn(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_QPWARS_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_QPWARS
+    WHERE TABLE_QPWARS_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SQUARE_SUM_k51lbc(-42)) - -105 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(16)) - -460 + (floor((v_rating / 5.0) * 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5----- */
+CREATE TABLE IF NOT EXISTS `table_gq6pk8` (
+    `table_gq6pk8_customer_id` INT,
+    `table_gq6pk8_registration_date` DATE
+);
+
+INSERT INTO `table_gq6pk8` (`table_gq6pk8_customer_id`, `table_gq6pk8_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_YEARS_vybjr5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_GQ6PK8_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_GQ6PK8
+    WHERE TABLE_GQ6PK8_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(-72)) - 4 + (v_age_years);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+CREATE TABLE IF NOT EXISTS `table_ukztpb` (
+    `table_ukztpb_donation_id` INT,
+    `table_ukztpb_donor_id` INT,
+    `table_ukztpb_campaign_id` INT,
+    `table_ukztpb_amount` DECIMAL(10,2),
+    `table_ukztpb_donation_date` DATE,
+    `table_ukztpb_payment_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4jtf78` (
+    `table_4jtf78_campaign_id` INT,
+    `table_4jtf78_name` VARCHAR(50),
+    `table_4jtf78_goal_amount` DECIMAL(10,2),
+    `table_4jtf78_raised_amount` DECIMAL(10,2),
+    `table_4jtf78_start_date` DATE
+);
+
+INSERT INTO `table_ukztpb` (`table_ukztpb_donation_id`, `table_ukztpb_donor_id`, `table_ukztpb_campaign_id`, `table_ukztpb_amount`, `table_ukztpb_donation_date`, `table_ukztpb_payment_method`) VALUES (1, 2, 3, 1.0, '2024-01-01', 6);
+
+INSERT INTO `table_4jtf78` (`table_4jtf78_campaign_id`, `table_4jtf78_name`, `table_4jtf78_goal_amount`, `table_4jtf78_raised_amount`, `table_4jtf78_start_date`) VALUES (1, 'test', 1.0, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_PROGRESS_c6jf28(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GOAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_RAISED_AMOUNT INT DEFAULT 0;
+    DECLARE V_DONATION_COUNT INT DEFAULT 0;
+    DECLARE V_PROGRESS_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4JTF78_GOAL_AMOUNT, 1000), COALESCE(TABLE_4JTF78_RAISED_AMOUNT, 0)
+    INTO V_GOAL_AMOUNT, V_RAISED_AMOUNT
+    FROM TABLE_4JTF78
+    WHERE TABLE_4JTF78_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_UKZTPB_AMOUNT), 0)
+    INTO V_DONATION_COUNT, V_RAISED_AMOUNT
+    FROM TABLE_UKZTPB
+    WHERE TABLE_UKZTPB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_GOAL_AMOUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROGRESS_PERCENT = (V_RAISED_AMOUNT * 100) / V_GOAL_AMOUNT;
+
+    IF V_PROGRESS_PERCENT > 100 THEN
+        SET V_PROGRESS_PERCENT = 100;
+    END IF;
+
+    RETURN CAST(V_PROGRESS_PERCENT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SQUARE_SUM_k51lbc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SQUARE_SUM_k51lbc(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + (V_I * V_I);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIGITS_2fzxll----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(95)) - 488 + (abs(num));
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + V_DIGIT;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+CREATE TABLE IF NOT EXISTS `table_6dotge` (
+    `table_6dotge_customer_id` INT,
+    `table_6dotge_order_date` DATE
+);
+
+INSERT INTO `table_6dotge` (`table_6dotge_customer_id`, `table_6dotge_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_66u9b4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(MAX(TABLE_6DOTGE_ORDER_DATE))
+    INTO V_MONTH
+    FROM TABLE_6DOTGE
+    WHERE TABLE_6DOTGE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_CZ6PSU_SUPPLIER_ID, TABLE_CZ6PSU_CATEGORY_ID
+    INTO V_SUPPLIER_ID, V_CATEGORY_ID
+    FROM TABLE_CZ6PSU
+    WHERE TABLE_CZ6PSU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(10)) - -4 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - 959 + ((MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(-46, -13)) - 229 + ((MYSQL_FUNC_CALCULATE_PORTFOLIO_RISK_ADJUSTED_RETURN_r0971c(-21)) - -698 + ((v_supplier_id + v_category_id) % 100))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SUPPLIER_SCORE_j1cwi9(1);

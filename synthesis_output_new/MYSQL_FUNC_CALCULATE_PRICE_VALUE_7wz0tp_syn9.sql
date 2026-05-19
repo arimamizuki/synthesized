@@ -1,0 +1,349 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_u0nmnk` (
+    `table_u0nmnk_product_id` INT,
+    `table_u0nmnk_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u0nmnk` (`table_u0nmnk_product_id`, `table_u0nmnk_price`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(29)) - -945 + ((v_revenue * 100) / v_budget);
+
+    RETURN (MYSQL_FUNC_FUNC3_le49g6()) - 950 + (v_efficiency_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC3_le49g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC3_le49g6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+CREATE TABLE IF NOT EXISTS `table_8el8bx` (
+    `table_8el8bx_reg_id` INT,
+    `table_8el8bx_attendee_id` INT,
+    `table_8el8bx_conference_id` INT,
+    `table_8el8bx_registration_date` DATE,
+    `table_8el8bx_ticket_type` VARCHAR(50),
+    `table_8el8bx_total_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_29ijnu` (
+    `table_29ijnu_conference_id` INT,
+    `table_29ijnu_name` VARCHAR(50),
+    `table_29ijnu_start_date` DATE,
+    `table_29ijnu_venue_id` INT,
+    `table_29ijnu_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8el8bx` (`table_8el8bx_reg_id`, `table_8el8bx_attendee_id`, `table_8el8bx_conference_id`, `table_8el8bx_registration_date`, `table_8el8bx_ticket_type`, `table_8el8bx_total_paid`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_29ijnu` (`table_29ijnu_conference_id`, `table_29ijnu_name`, `table_29ijnu_start_date`, `table_29ijnu_venue_id`, `table_29ijnu_base_price`) VALUES (1, 'test', '2024-01-01', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(CONFERENCE_ID_PARAM INT, DAYS_BEFORE_EVENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_FINAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_29IJNU_BASE_PRICE, 100) INTO V_BASE_PRICE
+    FROM TABLE_29IJNU
+    WHERE TABLE_29IJNU_CONFERENCE_ID = CONFERENCE_ID_PARAM;
+
+    IF DAYS_BEFORE_EVENT >= 30 THEN
+        SET V_DISCOUNT_PERCENT = 25;
+    ELSEIF DAYS_BEFORE_EVENT >= 14 THEN
+        SET V_DISCOUNT_PERCENT = 15;
+    ELSEIF DAYS_BEFORE_EVENT >= 7 THEN
+        SET V_DISCOUNT_PERCENT = 10;
+    ELSE
+        SET V_DISCOUNT_PERCENT = 0;
+    END IF;
+
+    SET V_FINAL_PRICE = V_BASE_PRICE - (V_BASE_PRICE * V_DISCOUNT_PERCENT / 100);
+
+    RETURN CAST(V_FINAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(99)) - 614 + ((MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok(-63)) - 64 + (a + b));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok----- */
+CREATE TABLE IF NOT EXISTS `table_lbqo3b` (
+    `table_lbqo3b_product_id` INT,
+    `table_lbqo3b_supplier_id` INT
+);
+
+INSERT INTO `table_lbqo3b` (`table_lbqo3b_product_id`, `table_lbqo3b_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_INDEX_npaiok(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+
+    SELECT TABLE_LBQO3B_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_LBQO3B
+    WHERE TABLE_LBQO3B_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(-20)) - 877 + (v_supplier_id % 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+CREATE TABLE IF NOT EXISTS `table_qx7ezz` (
+    `table_qx7ezz_customer_id` INT,
+    `table_qx7ezz_registration_date` DATE,
+    `table_qx7ezz_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l1v2g` (
+    `table_4l1v2g_order_id` INT,
+    `table_4l1v2g_customer_id` INT,
+    `table_4l1v2g_order_date` DATE,
+    `table_4l1v2g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_qx7ezz` (`table_qx7ezz_customer_id`, `table_qx7ezz_registration_date`, `table_qx7ezz_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_4l1v2g` (`table_4l1v2g_order_id`, `table_4l1v2g_customer_id`, `table_4l1v2g_order_date`, `table_4l1v2g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HISTORICAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TREND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_HISTORICAL_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE < DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_HISTORICAL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_TREND_SCORE = ((V_RECENT_AVG - V_HISTORICAL_AVG) * 100) / V_HISTORICAL_AVG;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-9)) - -779 + (v_trend_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = V_COUNT + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_NEXT_PRIME_g9gbxp(P_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+    DECLARE V_MAX_SEARCH INT DEFAULT 1000;
+
+    SET V_CURRENT = P_NUM + 1;
+
+    SEARCH_LOOP: WHILE (MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88)) - 635 + (v_current) <= P_NUM + V_MAX_SEARCH DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            RETURN V_CURRENT;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE SEARCH_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF A < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_U0NMNK_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_U0NMNK
+    WHERE TABLE_U0NMNK_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_BUG9056_PROC1_uaqsvs(52, -78)) - -412 + ((MYSQL_FUNC_CALCULATE_EARLY_BIRD_DISCOUNT_ss4dv5(85, 70)) - -149 + ((MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + (floor(v_price))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRICE_VALUE_7wz0tp(1);

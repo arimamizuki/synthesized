@@ -1,0 +1,371 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_vhtw5f` (
+    `table_vhtw5f_emp_id` INT,
+    `table_vhtw5f_department_id` INT,
+    `table_vhtw5f_salary` INT,
+    `table_vhtw5f_hire_date` DATE,
+    `table_vhtw5f_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4ljt9e` (
+    `table_4ljt9e_department_id` INT,
+    `table_4ljt9e_name` VARCHAR(50)
+);
+
+INSERT INTO `table_vhtw5f` (`table_vhtw5f_emp_id`, `table_vhtw5f_department_id`, `table_vhtw5f_salary`, `table_vhtw5f_hire_date`, `table_vhtw5f_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_4ljt9e` (`table_4ljt9e_department_id`, `table_4ljt9e_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj----- */
+CREATE TABLE IF NOT EXISTS `table_wzbdma` (
+    `table_wzbdma_policy_id` INT,
+    `table_wzbdma_customer_id` INT,
+    `table_wzbdma_pet_id` INT,
+    `table_wzbdma_pet_type` VARCHAR(50),
+    `table_wzbdma_breed` INT,
+    `table_wzbdma_age_years` INT,
+    `table_wzbdma_premium_annual` INT,
+    `table_wzbdma_coverage_limit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_isrddy` (
+    `table_isrddy_breed_id` INT,
+    `table_isrddy_breed_name` VARCHAR(50),
+    `table_isrddy_size_category` INT,
+    `table_isrddy_avg_lifespan` INT
+);
+
+INSERT INTO `table_wzbdma` (`table_wzbdma_policy_id`, `table_wzbdma_customer_id`, `table_wzbdma_pet_id`, `table_wzbdma_pet_type`, `table_wzbdma_breed`, `table_wzbdma_age_years`, `table_wzbdma_premium_annual`, `table_wzbdma_coverage_limit`) VALUES (1, 1, 1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_isrddy` (`table_isrddy_breed_id`, `table_isrddy_breed_name`, `table_isrddy_size_category`, `table_isrddy_avg_lifespan`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_BASE_PREMIUM INT DEFAULT 300;
+    DECLARE V_SIZE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WZBDMA_AGE_YEARS, 1) INTO V_PET_AGE
+    FROM TABLE_WZBDMA
+    WHERE TABLE_WZBDMA_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_ISRDDY_SIZE_CATEGORY, 1) INTO V_SIZE_MULTIPLIER
+    FROM TABLE_WZBDMA IP
+    JOIN TABLE_ISRDDY B ON TABLE_WZBDMA_BREED = TABLE_ISRDDY_BREED_NAME
+    WHERE TABLE_WZBDMA_PET_ID = PET_ID_PARAM;
+
+    SET V_FINAL_PREMIUM = (MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(5)) - -829 + ((MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(-35, 50)) - -558 + (v_base_premium * v_size_multiplier));
+
+    IF V_PET_AGE > 8 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + (V_FINAL_PREMIUM * 25 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(3)) - 215 + (cast(v_final_premium as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TANGENT_LENGTH_9q0kmh(RADIUS INT, DISTANCE_FROM_CENTER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TANGENT_LENGTH DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SQUARED_DISTANCE INT DEFAULT 0;
+    DECLARE V_SQUARED_RADIUS INT DEFAULT 0;
+
+    IF DISTANCE_FROM_CENTER <= RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SQUARED_DISTANCE = DISTANCE_FROM_CENTER * DISTANCE_FROM_CENTER;
+    SET V_SQUARED_RADIUS = RADIUS * RADIUS;
+
+    SET V_TANGENT_LENGTH = SQRT(V_SQUARED_DISTANCE - V_SQUARED_RADIUS);
+
+    RETURN FLOOR(V_TANGENT_LENGTH);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_026r9h(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            SET V_SUM = V_SUM + V_I;
+            IF V_I != N / V_I THEN
+                SET V_SUM = V_SUM + (N / V_I);
+            END IF;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+CREATE TABLE IF NOT EXISTS `table_m7ln5k` (
+    `table_m7ln5k_emp_id` INT,
+    `table_m7ln5k_manager_id` INT,
+    `table_m7ln5k_department_id` INT,
+    `table_m7ln5k_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_6u5em7` (
+    `table_6u5em7_department_id` INT,
+    `table_6u5em7_name` VARCHAR(50)
+);
+
+INSERT INTO `table_m7ln5k` (`table_m7ln5k_emp_id`, `table_m7ln5k_manager_id`, `table_m7ln5k_department_id`, `table_m7ln5k_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_6u5em7` (`table_6u5em7_department_id`, `table_6u5em7_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPAN_OF_CONTROL_ep8poz(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_M7LN5K
+    WHERE TABLE_M7LN5K_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(37)) - 567 + (v_direct_reports);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+CREATE TABLE IF NOT EXISTS `table_2bqs47` (
+    `table_2bqs47_emp_id` INT,
+    `table_2bqs47_hire_date` DATE
+);
+
+INSERT INTO `table_2bqs47` (`table_2bqs47_emp_id`, `table_2bqs47_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2BQS47_HIRE_DATE)
+    INTO V_MONTH
+    FROM TABLE_2BQS47
+    WHERE TABLE_2BQS47_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(-69)) - 468 + (v_month);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+CREATE TABLE IF NOT EXISTS `table_ufhrdo` (
+    `table_ufhrdo_emp_id` INT,
+    `table_ufhrdo_department_id` INT,
+    `table_ufhrdo_salary` INT,
+    `table_ufhrdo_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mhmpip` (
+    `table_mhmpip_department_id` INT,
+    `table_mhmpip_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ufhrdo` (`table_ufhrdo_emp_id`, `table_ufhrdo_department_id`, `table_ufhrdo_salary`, `table_ufhrdo_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_mhmpip` (`table_mhmpip_department_id`, `table_mhmpip_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRIOR_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_UFHRDO_SALARY), 0)
+    INTO V_CURRENT_AVG
+    FROM TABLE_UFHRDO
+    WHERE TABLE_UFHRDO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = (MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - -431 + (((v_current_avg - v_prior_avg) * 100) / v_prior_avg);
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(PRINCIPAL INT, RATE INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+    DECLARE V_YEARLY_INTEREST INT DEFAULT 0;
+
+    IF PRINCIPAL <= (MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(-62)) - 862 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(13)) - 734 + (0)) OR RATE <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET_LOOP: WHILE V_COUNTER <= YEARS DO
+        SET_LOOP_INNER: WHILE V_COUNTER <= 12 DO
+            SET V_RESULT = V_RESULT + (V_RESULT * RATE / 100 / 12);
+            SET V_COUNTER = V_COUNTER + 1;
+        END WHILE SET_LOOP_INNER;
+        SET V_COUNTER = V_COUNTER - 11;
+    END WHILE SET_LOOP;
+
+    RETURN CAST(V_RESULT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+CREATE TABLE IF NOT EXISTS `table_u6bv6v` (
+    `table_u6bv6v_campaign_id` INT,
+    `table_u6bv6v_start_date` DATE
+);
+
+INSERT INTO `table_u6bv6v` (`table_u6bv6v_campaign_id`, `table_u6bv6v_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_DAY_baxowz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAY INT DEFAULT 0;
+
+    SELECT DAY(TABLE_U6BV6V_START_DATE)
+    INTO V_DAY
+    FROM TABLE_U6BV6V
+    WHERE TABLE_U6BV6V_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_DAY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+CREATE TABLE IF NOT EXISTS `table_54mt9z` (
+    `table_54mt9z_emp_id` INT,
+    `table_54mt9z_department_id` INT,
+    `table_54mt9z_salary` INT,
+    `table_54mt9z_hire_date` DATE,
+    `table_54mt9z_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_54mt9z` (`table_54mt9z_emp_id`, `table_54mt9z_department_id`, `table_54mt9z_salary`, `table_54mt9z_hire_date`, `table_54mt9z_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_54MT9Z_HIRE_DATE, CURDATE()), COALESCE(TABLE_54MT9Z_PERFORMANCE_RATING, 0), COALESCE(TABLE_54MT9Z_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_54MT9Z
+    WHERE TABLE_54MT9Z_EMP_ID = EMP_ID_PARAM;
+
+    SET V_LOYALTY_SCORE = (V_TENURE_YEARS * 15) + (V_PERFORMANCE * 20) + (V_SALARY / 1000);
+
+    RETURN V_LOYALTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_RETENTION_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_VHTW5F_HIRE_DATE, CURDATE()), COALESCE(TABLE_VHTW5F_PERFORMANCE_RATING, 0), COALESCE(TABLE_VHTW5F_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_VHTW5F
+    WHERE TABLE_VHTW5F_EMP_ID = EMP_ID_PARAM;
+
+    SET V_RETENTION_INDEX = (V_TENURE_YEARS * 20) + (V_PERFORMANCE * 15) + (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_ceoo6b(32, -65, -96)) - 158 + ((MYSQL_FUNC_CALCULATE_PET_INSURANCE_PREMIUM_8c0auj(-26)) - 473 + (v_retention_index));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_EMPLOYEE_RETENTION_INDEX_2kjcn2(1);

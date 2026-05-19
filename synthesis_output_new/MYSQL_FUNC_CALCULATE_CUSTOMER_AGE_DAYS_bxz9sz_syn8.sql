@@ -1,0 +1,448 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_pe3myb` (
+    `table_pe3myb_customer_id` INT,
+    `table_pe3myb_registration_date` DATE
+);
+
+INSERT INTO `table_pe3myb` (`table_pe3myb_customer_id`, `table_pe3myb_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+CREATE TABLE IF NOT EXISTS `table_g3imfa` (
+    `table_g3imfa_order_id` INT,
+    `table_g3imfa_customer_id` INT,
+    `table_g3imfa_order_date` DATE,
+    `table_g3imfa_total_amount` DECIMAL(10,2),
+    `table_g3imfa_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_koyw4b` (
+    `table_koyw4b_order_id` INT,
+    `table_koyw4b_product_id` INT,
+    `table_koyw4b_quantity` INT
+);
+
+INSERT INTO `table_g3imfa` (`table_g3imfa_order_id`, `table_g3imfa_customer_id`, `table_g3imfa_order_date`, `table_g3imfa_total_amount`, `table_g3imfa_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_koyw4b` (`table_koyw4b_order_id`, `table_koyw4b_product_id`, `table_koyw4b_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ITEMS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_KOYW4B_QUANTITY), 0)
+    INTO V_TOTAL_ITEMS
+    FROM TABLE_KOYW4B
+    WHERE TABLE_KOYW4B_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_TOTAL_ITEMS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+CREATE TABLE IF NOT EXISTS `table_x92ggb` (
+    `table_x92ggb_order_id` INT,
+    `table_x92ggb_customer_id` INT,
+    `table_x92ggb_order_date` DATE,
+    `table_x92ggb_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wrtan3` (
+    `table_wrtan3_customer_id` INT,
+    `table_wrtan3_registration_date` DATE
+);
+
+INSERT INTO `table_x92ggb` (`table_x92ggb_order_id`, `table_x92ggb_customer_id`, `table_x92ggb_order_date`, `table_x92ggb_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wrtan3` (`table_wrtan3_customer_id`, `table_wrtan3_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPECTED_ORDERS DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_REPEAT_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_X92GGB
+    WHERE TABLE_X92GGB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_WRTAN3_REGISTRATION_DATE) / 30
+    INTO V_CUSTOMER_AGE_MONTHS
+    FROM TABLE_WRTAN3
+    WHERE TABLE_WRTAN3_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_CUSTOMER_AGE_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_ORDERS = V_CUSTOMER_AGE_MONTHS * 0.5;
+    SET V_REPEAT_RATE = FLOOR((V_ORDER_COUNT / V_EXPECTED_ORDERS) * 100);
+
+    RETURN V_REPEAT_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF (MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(-19)) - 396 + (n) <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = 2;
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(55)) - -95 + (v_divisor + 1);
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+CREATE TABLE IF NOT EXISTS `table_m40ho1` (
+    `table_m40ho1_product_id` INT,
+    `table_m40ho1_category_id` INT,
+    `table_m40ho1_price` DECIMAL(10,2),
+    `table_m40ho1_is_active` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_42moy1` (
+    `table_42moy1_category_id` INT,
+    `table_42moy1_parent_id` INT,
+    `table_42moy1_category_level` INT
+);
+
+INSERT INTO `table_m40ho1` (`table_m40ho1_product_id`, `table_m40ho1_category_id`, `table_m40ho1_price`, `table_m40ho1_is_active`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_42moy1` (`table_42moy1_category_id`, `table_42moy1_parent_id`, `table_42moy1_category_level`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_TREE_PRICE_pamqhz(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+    DECLARE V_CATEGORY_LEVEL INT DEFAULT 0;
+    DECLARE V_CURRENT_CAT INT;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_MAX_LEVEL INT DEFAULT 10;
+    DECLARE V_LEVEL INT DEFAULT 0;
+
+    DECLARE CAT_CURSOR CURSOR FOR
+        SELECT TABLE_42MOY1_CATEGORY_ID FROM TABLE_42MOY1 WHERE TABLE_42MOY1_PARENT_ID = V_CURRENT_CAT;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    SELECT COALESCE(TABLE_42MOY1_CATEGORY_LEVEL, 0) INTO V_CATEGORY_LEVEL
+    FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_CURRENT_CAT = CATEGORY_ID_PARAM;
+
+    LEVEL_LOOP: WHILE V_LEVEL < V_MAX_LEVEL AND V_DONE = 0 DO
+        SELECT COALESCE(SUM(TABLE_M40HO1_PRICE), 0) INTO V_TOTAL_PRICE
+        FROM TABLE_M40HO1
+        WHERE TABLE_M40HO1_CATEGORY_ID = V_CURRENT_CAT AND TABLE_M40HO1_IS_ACTIVE = 1;
+
+        SELECT TABLE_42MOY1_PARENT_ID INTO V_CURRENT_CAT
+        FROM TABLE_42MOY1 WHERE TABLE_42MOY1_CATEGORY_ID = V_CURRENT_CAT;
+
+        IF V_CURRENT_CAT IS NULL OR V_CURRENT_CAT = 0 THEN
+            SET V_DONE = 1;
+        END IF;
+
+        SET V_LEVEL = V_LEVEL + 1;
+    END WHILE LEVEL_LOOP;
+
+    RETURN V_TOTAL_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(TAXABLE INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX DECIMAL(10,2);
+
+    CASE
+        WHEN TAXABLE <= 10000 THEN SET (MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv(-76)) - -35 + (v_tax) = TAXABLE * 0.10;
+        WHEN TAXABLE <= 50000 THEN SET V_TAX = 1000 + (TAXABLE - 10000) * 0.20;
+        WHEN TAXABLE <= 100000 THEN SET V_TAX = 9000 + (TAXABLE - 50000) * 0.30;
+        ELSE SET V_TAX = (MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(-70)) - 694 + (24000 + (taxable - 100000) * 0.40);
+    END CASE;
+
+    RETURN V_TAX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+CREATE TABLE IF NOT EXISTS `table_5g7p83` (
+    `table_5g7p83_course_id` INT,
+    `table_5g7p83_department_id` INT,
+    `table_5g7p83_credits` INT,
+    `table_5g7p83_difficulty_level` INT,
+    `table_5g7p83_enrollment_capacity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q25s0v` (
+    `table_q25s0v_student_id` INT,
+    `table_q25s0v_course_id` INT,
+    `table_q25s0v_grade` INT,
+    `table_q25s0v_semester` INT
+);
+
+INSERT INTO `table_5g7p83` (`table_5g7p83_course_id`, `table_5g7p83_department_id`, `table_5g7p83_credits`, `table_5g7p83_difficulty_level`, `table_5g7p83_enrollment_capacity`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_q25s0v` (`table_q25s0v_student_id`, `table_q25s0v_course_id`, `table_q25s0v_grade`, `table_q25s0v_semester`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIFFICULTY_LEVEL INT DEFAULT 1;
+    DECLARE V_ENROLLMENT_CAPACITY INT DEFAULT 30;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_FAIL_RATE DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DIFFICULTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5G7P83_DIFFICULTY_LEVEL, 1), COALESCE(TABLE_5G7P83_ENROLLMENT_CAPACITY, 30)
+    INTO V_DIFFICULTY_LEVEL, V_ENROLLMENT_CAPACITY
+    FROM TABLE_5G7P83
+    WHERE TABLE_5G7P83_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_ENROLLMENT
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COALESCE(AVG(CASE TABLE_Q25S0V_GRADE WHEN 'F' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_FAIL_RATE
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SET V_DIFFICULTY_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(80)) - 932 + ((v_difficulty_level * 20) + ((v_current_enrollment * 100) / v_enrollment_capacity) + v_fail_rate);
+
+    RETURN FLOOR(V_DIFFICULTY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+CREATE TABLE IF NOT EXISTS `table_vc2b5u` (
+    `table_vc2b5u_emp_id` INT,
+    `table_vc2b5u_department_id` INT,
+    `table_vc2b5u_salary` INT,
+    `table_vc2b5u_hire_date` DATE,
+    `table_vc2b5u_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_se6mls` (
+    `table_se6mls_department_id` INT,
+    `table_se6mls_name` VARCHAR(50),
+    `table_se6mls_manager_id` INT
+);
+
+INSERT INTO `table_vc2b5u` (`table_vc2b5u_emp_id`, `table_vc2b5u_department_id`, `table_vc2b5u_salary`, `table_vc2b5u_hire_date`, `table_vc2b5u_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+INSERT INTO `table_se6mls` (`table_se6mls_department_id`, `table_se6mls_name`, `table_se6mls_manager_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PERFORMANCE_INDEX_0lacrp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMPLOYEE_COUNT
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_PERFORMANCE_RATING), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_VC2B5U_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_VC2B5U
+    WHERE TABLE_VC2B5U_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_PERFORMANCE_INDEX = (V_AVG_PERFORMANCE * 30) + (V_AVG_SALARY / 1000) + (V_EMPLOYEE_COUNT / 5);
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(-42)) - -323 + ((MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(-95)) - -131 + (v_performance_index));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+CREATE TABLE IF NOT EXISTS `table_thz1np` (
+    `table_thz1np_product_id` INT,
+    `table_thz1np_category_id` INT,
+    `table_thz1np_price` DECIMAL(10,2),
+    `table_thz1np_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8ug1be` (
+    `table_8ug1be_category_id` INT,
+    `table_8ug1be_name` VARCHAR(50)
+);
+
+INSERT INTO `table_thz1np` (`table_thz1np_product_id`, `table_thz1np_category_id`, `table_thz1np_price`, `table_thz1np_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_8ug1be` (`table_8ug1be_category_id`, `table_8ug1be_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_ADEQUACY_l66kt9(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_STOCK DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_ADEQUACY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_THZ1NP_STOCK_QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_STOCK, V_TOTAL_PRODUCTS
+    FROM TABLE_THZ1NP
+    WHERE TABLE_THZ1NP_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_STOCK = V_TOTAL_STOCK / V_TOTAL_PRODUCTS;
+
+    SET V_ADEQUACY_SCORE = V_AVG_STOCK / 10;
+
+    RETURN V_ADEQUACY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+CREATE TABLE IF NOT EXISTS `table_g2p8j5` (
+    `table_g2p8j5_order_id` INT,
+    `table_g2p8j5_customer_id` INT,
+    `table_g2p8j5_order_date` DATE,
+    `table_g2p8j5_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zzb55x` (
+    `table_zzb55x_customer_id` INT,
+    `table_zzb55x_country` INT
+);
+
+INSERT INTO `table_g2p8j5` (`table_g2p8j5_order_id`, `table_g2p8j5_customer_id`, `table_g2p8j5_order_date`, `table_g2p8j5_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_zzb55x` (`table_zzb55x_customer_id`, `table_zzb55x_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_G2P8J5_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_G2P8J5 O
+    JOIN TABLE_ZZB55X C ON TABLE_G2P8J5_CUSTOMER_ID = TABLE_ZZB55X_CUSTOMER_ID
+    WHERE TABLE_ZZB55X_COUNTRY = COUNTRY_PARAM;
+
+    RETURN FLOOR(V_AVG_ORDER_VALUE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv----- */
+CREATE TABLE IF NOT EXISTS `table_z2c3sb` (
+    `table_z2c3sb_customer_id` INT,
+    `table_z2c3sb_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ft08s9` (
+    `table_ft08s9_order_id` INT,
+    `table_ft08s9_customer_id` INT,
+    `table_ft08s9_order_date` DATE,
+    `table_ft08s9_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_z2c3sb` (`table_z2c3sb_customer_id`, `table_z2c3sb_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_ft08s9` (`table_ft08s9_order_id`, `table_ft08s9_customer_id`, `table_ft08s9_order_date`, `table_ft08s9_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(MIN(TABLE_FT08S9_ORDER_DATE))
+    INTO V_FIRST_ORDER_MONTH
+    FROM TABLE_FT08S9
+    WHERE TABLE_FT08S9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_FIRST_ORDER_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_bxz9sz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_DAYS INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_PE3MYB_REGISTRATION_DATE)
+    INTO V_AGE_DAYS
+    FROM TABLE_PE3MYB
+    WHERE TABLE_PE3MYB_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + ((MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_RATE_mljc1y(-36)) - 174 + ((MYSQL_FUNC_CALCULATE_AVERAGE_ITEMS_PER_ORDER_g1gdne(-94)) - 175 + (v_age_days)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_DAYS_bxz9sz(1);

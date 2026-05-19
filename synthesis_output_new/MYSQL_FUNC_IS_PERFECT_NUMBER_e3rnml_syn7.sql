@@ -1,0 +1,347 @@
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+CREATE TABLE IF NOT EXISTS `table_inbu5d` (
+    `table_inbu5d_product_id` INT,
+    `table_inbu5d_category_id` INT,
+    `table_inbu5d_price` DECIMAL(10,2),
+    `table_inbu5d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_04apsc` (
+    `table_04apsc_order_id` INT,
+    `table_04apsc_product_id` INT,
+    `table_04apsc_quantity` INT
+);
+
+INSERT INTO `table_inbu5d` (`table_inbu5d_product_id`, `table_inbu5d_category_id`, `table_inbu5d_price`, `table_inbu5d_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_04apsc` (`table_04apsc_order_id`, `table_04apsc_product_id`, `table_04apsc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_AVG_INVENTORY INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_INBU5D_STOCK_QUANTITY, 0)
+    INTO V_CURRENT_STOCK
+    FROM TABLE_INBU5D
+    WHERE TABLE_INBU5D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_04APSC_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_04APSC
+    WHERE TABLE_04APSC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_INVENTORY = V_CURRENT_STOCK;
+
+    IF V_AVG_INVENTORY = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATIO = V_TOTAL_SOLD / V_AVG_INVENTORY;
+
+    RETURN FLOOR(V_TURNOVER_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(INPUT_STR INT) RETURNS VARCHAR(100) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UPPER VARCHAR(100);
+    SET V_UPPER = UPPER(INPUT_STR);
+    IF INPUT_STR != V_UPPER THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'STRING MUST BE UPPERCASE';
+    END IF;
+    RETURN INPUT_STR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MIN_cm5woy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MIN_cm5woy(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(-13)) - 913 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(-61)) - 854 + (a)) < B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3----- */
+CREATE TABLE IF NOT EXISTS `table_2990of` (
+    `table_2990of_emp_id` INT,
+    `table_2990of_department_id` INT,
+    `table_2990of_salary` INT
+);
+
+INSERT INTO `table_2990of` (`table_2990of_emp_id`, `table_2990of_department_id`, `table_2990of_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANGE_tsipm3(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_2990OF_SALARY), 0), COALESCE(MIN(TABLE_2990OF_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_2990OF
+    WHERE TABLE_2990OF_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(-58)) - -294 + (v_max_salary - v_min_salary);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+CREATE TABLE IF NOT EXISTS `table_crekql` (
+    `table_crekql_campaign_id` INT,
+    `table_crekql_channel` INT,
+    `table_crekql_budget` INT,
+    `table_crekql_start_date` DATE,
+    `table_crekql_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6yunz` (
+    `table_f6yunz_conversion_id` INT,
+    `table_f6yunz_campaign_id` INT,
+    `table_f6yunz_conversion_value` INT
+);
+
+INSERT INTO `table_crekql` (`table_crekql_campaign_id`, `table_crekql_channel`, `table_crekql_budget`, `table_crekql_start_date`, `table_crekql_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_f6yunz` (`table_f6yunz_conversion_id`, `table_f6yunz_campaign_id`, `table_f6yunz_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT TABLE_CREKQL_CHANNEL, COALESCE(TABLE_CREKQL_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_CREKQL
+    WHERE TABLE_CREKQL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6YUNZ_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_F6YUNZ
+    WHERE TABLE_F6YUNZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = (MYSQL_FUNC_POWER_INT_xe7375(-37, 57)) - 442 + (((v_revenue - v_budget) * 100) / v_budget);
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_POWER_INT_xe7375----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_POWER_INT_xe7375(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF EXPONENT < (MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(79, 89)) - -529 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I < EXPONENT DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+CREATE TABLE IF NOT EXISTS `table_uhea2z` (
+    `table_uhea2z_ship_id` INT,
+    `table_uhea2z_order_id` INT,
+    `table_uhea2z_weight` INT,
+    `table_uhea2z_shipping_cost` DECIMAL(10,2),
+    `table_uhea2z_zone` INT,
+    `table_uhea2z_delivery_days` INT
+);
+
+INSERT INTO `table_uhea2z` (`table_uhea2z_ship_id`, `table_uhea2z_order_id`, `table_uhea2z_weight`, `table_uhea2z_shipping_cost`, `table_uhea2z_zone`, `table_uhea2z_delivery_days`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_b1dikm(ORDER_ID_PARAM INT, ZONE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEIGHT INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 500;
+    DECLARE V_ZONE_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UHEA2Z_WEIGHT, 0) INTO V_WEIGHT
+    FROM TABLE_UHEA2Z
+    WHERE TABLE_UHEA2Z_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE ZONE_PARAM
+        WHEN 1 THEN SET V_ZONE_COST = 0;
+        WHEN 2 THEN SET V_ZONE_COST = (MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv(-76)) - -35 + (100);
+        WHEN 3 THEN SET V_ZONE_COST = 200;
+        WHEN 4 THEN SET V_ZONE_COST = 300;
+        ELSE SET V_ZONE_COST = 500;
+    END CASE;
+
+    SET V_TOTAL_COST = V_BASE_COST + (V_WEIGHT * 10) + V_ZONE_COST;
+
+    RETURN V_TOTAL_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv----- */
+CREATE TABLE IF NOT EXISTS `table_z2c3sb` (
+    `table_z2c3sb_customer_id` INT,
+    `table_z2c3sb_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ft08s9` (
+    `table_ft08s9_order_id` INT,
+    `table_ft08s9_customer_id` INT,
+    `table_ft08s9_order_date` DATE,
+    `table_ft08s9_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_z2c3sb` (`table_z2c3sb_customer_id`, `table_z2c3sb_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_ft08s9` (`table_ft08s9_order_id`, `table_ft08s9_customer_id`, `table_ft08s9_order_date`, `table_ft08s9_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_MONTH_6uqklv(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(MIN(TABLE_FT08S9_ORDER_DATE))
+    INTO V_FIRST_ORDER_MONTH
+    FROM TABLE_FT08S9
+    WHERE TABLE_FT08S9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_FIRST_ORDER_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+CREATE TABLE IF NOT EXISTS `table_tenjc7` (
+    `table_tenjc7_product_id` INT,
+    `table_tenjc7_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tenjc7` (`table_tenjc7_product_id`, `table_tenjc7_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_TIER_67qrnb(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TENJC7_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_TENJC7
+    WHERE TABLE_TENJC7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_GET_MIN_cm5woy(-14, -29)) - 829 + ((MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (1)) THEN
+        RETURN (MYSQL_FUNC_SIGNAL_FUNC_UPPERCASE_CHECK_0ss9gp(28)) - -234 + ((MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_RATIO_ni9p4s(74)) - 371 + (0));
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= V_SQRT_N DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+            IF V_DIVISOR != N / V_DIVISOR THEN
+                SET V_SUM = V_SUM + (N / V_DIVISOR);
+            END IF;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(1);

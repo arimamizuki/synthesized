@@ -1,0 +1,386 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_jb6756` (
+    table_jb6756_ctinyint TINYINT
+);
+
+INSERT INTO `table_jb6756` (`table_jb6756_ctinyint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_DATA_FABRICACAO_5mz9t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(DATA_FIRST INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CURRENT_YEAR INT;
+    SET CURRENT_YEAR = YEAR(CURDATE());
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(59)) - 635 + (current_year - data_first);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+CREATE TABLE IF NOT EXISTS `table_qyoum0` (
+    `table_qyoum0_supplier_id` INT,
+    `table_qyoum0_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qyoum0` (`table_qyoum0_supplier_id`, `table_qyoum0_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_EXPERIENCE_SCORE_o6awoe(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QYOUM0_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QYOUM0
+    WHERE TABLE_QYOUM0_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 20);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi----- */
+CREATE TABLE IF NOT EXISTS `table_k6pkzo` (
+    `table_k6pkzo_claim_id` INT,
+    `table_k6pkzo_policy_id` INT,
+    `table_k6pkzo_claim_type` VARCHAR(50),
+    `table_k6pkzo_claim_amount` DECIMAL(10,2),
+    `table_k6pkzo_filing_date` DATE,
+    `table_k6pkzo_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_67wgmn` (
+    `table_67wgmn_transaction_id` INT,
+    `table_67wgmn_policy_id` INT,
+    `table_67wgmn_transaction_date` DATE,
+    `table_67wgmn_amount` DECIMAL(10,2),
+    `table_67wgmn_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `table_k6pkzo` (`table_k6pkzo_claim_id`, `table_k6pkzo_policy_id`, `table_k6pkzo_claim_type`, `table_k6pkzo_claim_amount`, `table_k6pkzo_filing_date`, `table_k6pkzo_status`) VALUES (1, 2, 'test', 1.0, '2024-01-01', 'test');
+
+INSERT INTO `table_67wgmn` (`table_67wgmn_transaction_id`, `table_67wgmn_policy_id`, `table_67wgmn_transaction_date`, `table_67wgmn_amount`, `table_67wgmn_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi(CLAIM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CLAIM_AMOUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_FILING INT DEFAULT 0;
+    DECLARE V_TOTAL_TRANSACTIONS INT DEFAULT 0;
+    DECLARE V_PROCESSING_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_K6PKZO_CLAIM_AMOUNT, 0), DATEDIFF(CURDATE(), TABLE_K6PKZO_FILING_DATE)
+    INTO V_CLAIM_AMOUNT, V_DAYS_SINCE_FILING
+    FROM TABLE_K6PKZO
+    WHERE TABLE_K6PKZO_CLAIM_ID = CLAIM_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_TRANSACTIONS
+    FROM TABLE_67WGMN
+    WHERE TABLE_67WGMN_POLICY_ID = (SELECT TABLE_K6PKZO_POLICY_ID FROM TABLE_K6PKZO WHERE TABLE_K6PKZO_CLAIM_ID = CLAIM_ID_PARAM);
+
+    SET V_PROCESSING_SCORE = (MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + ((v_total_transactions * 5) - v_days_since_filing);
+
+    IF V_CLAIM_AMOUNT > 50000 THEN
+        SET V_PROCESSING_SCORE = V_PROCESSING_SCORE - 20;
+    END IF;
+
+    RETURN CAST(V_PROCESSING_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+CREATE TABLE IF NOT EXISTS table_ojycmm (
+    table_ojycmm_table_schema VARCHAR(64),
+    table_ojycmm_table_name VARCHAR(64)
+);
+
+INSERT INTO table_ojycmm (`table_ojycmm_table_schema`, `table_ojycmm_table_name`) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_DROPVIEWS_m4b55o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DROPVIEWS_m4b55o(PV_DATABASE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LV_STMT VARCHAR(1024);
+    DECLARE LV_VIEW_NAME VARCHAR(64);
+    DECLARE FETCHED INT DEFAULT 0;
+    DECLARE VIEW_COUNT INT DEFAULT 0;
+    DECLARE DONE INT DEFAULT 0;
+    
+    DECLARE VIEW_CURSOR CURSOR FOR
+        SELECT TABLE_OJYCMM_TABLE_NAME 
+        FROM TABLE_OJYCMM 
+        WHERE TABLE_OJYCMM_TABLE_SCHEMA = IFNULL(CONVERT(PV_DATABASE USING UTF8), DATABASE())
+        ORDER BY TABLE_OJYCMM_TABLE_NAME;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE = 1;
+    
+    OPEN VIEW_CURSOR;
+    
+    CURSOR_LOOP: LOOP
+        FETCH VIEW_CURSOR INTO LV_VIEW_NAME;
+        IF DONE = 1 THEN
+            LEAVE CURSOR_LOOP;
+        END IF;
+        
+        SET @SQL := CONCAT('DROP VIEW ', LV_VIEW_NAME);
+        SET VIEW_COUNT = (MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(-5)) - 75 + (view_count) + 1;
+        
+        SET LV_STMT = @SQL;
+    END LOOP CURSOR_LOOP;
+    
+    CLOSE VIEW_CURSOR;
+    
+    RETURN VIEW_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+CREATE TABLE IF NOT EXISTS `table_k6cijp` (
+    `table_k6cijp_course_id` INT,
+    `table_k6cijp_course_name` VARCHAR(50),
+    `table_k6cijp_credits` INT,
+    `table_k6cijp_department_id` INT,
+    `table_k6cijp_max_students` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rhsiv6` (
+    `table_rhsiv6_enrollment_id` INT,
+    `table_rhsiv6_student_id` INT,
+    `table_rhsiv6_course_id` INT,
+    `table_rhsiv6_grade` INT,
+    `table_rhsiv6_enrollment_date` DATE
+);
+
+INSERT INTO `table_k6cijp` (`table_k6cijp_course_id`, `table_k6cijp_course_name`, `table_k6cijp_credits`, `table_k6cijp_department_id`, `table_k6cijp_max_students`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_rhsiv6` (`table_rhsiv6_enrollment_id`, `table_rhsiv6_student_id`, `table_rhsiv6_course_id`, `table_rhsiv6_grade`, `table_rhsiv6_enrollment_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ENROLLED INT DEFAULT 0;
+    DECLARE V_PASSING_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_SUCCESS_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_RHSIV6_GRADE >= 60 THEN 1 END), COALESCE(AVG(TABLE_RHSIV6_GRADE), 0)
+    INTO V_TOTAL_ENROLLED, V_PASSING_COUNT, V_AVG_GRADE
+    FROM TABLE_RHSIV6
+    WHERE TABLE_RHSIV6_COURSE_ID = COURSE_ID_PARAM;
+
+    IF V_TOTAL_ENROLLED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUCCESS_RATE = (V_PASSING_COUNT * 100) / V_TOTAL_ENROLLED;
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_SUCCESS_RATE = V_SUCCESS_RATE + 5;
+    END IF;
+
+    RETURN CAST(V_SUCCESS_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+CREATE TABLE IF NOT EXISTS `table_dc8xhv` (
+    `table_dc8xhv_customer_id` INT,
+    `table_dc8xhv_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_dc8xhv` (`table_dc8xhv_customer_id`, `table_dc8xhv_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_DC8XHV_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_DC8XHV
+    WHERE TABLE_DC8XHV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN (MYSQL_FUNC_TEST_FUNC_hd7sgv()) - 825 + (100);
+        WHEN 'PREMIUM' THEN RETURN 50;
+        WHEN 'BASIC' THEN RETURN 20;
+        ELSE RETURN 5;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_TEST_FUNC_hd7sgv----- */
+CREATE TABLE IF NOT EXISTS table_mr9r8o (
+    table_mr9r8o_category_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_mr9r8o_category_name VARCHAR(255) UNIQUE
+);
+
+/* -----Called: MYSQL_FUNC_TEST_FUNC_hd7sgv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_FUNC_hd7sgv() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE INSERT_DUPLICATE TINYINT DEFAULT FALSE;
+    DECLARE MESSAGE_TEXT VARCHAR(255);
+    DECLARE RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR 1062
+        SET INSERT_DUPLICATE = TRUE;
+
+    INSERT INTO TABLE_MR9R8O (`TABLE_MR9R8O_CATEGORY_ID`, `TABLE_MR9R8O_CATEGORY_NAME`)
+    VALUES (DEFAULT, 'GUITARS');
+
+    IF INSERT_DUPLICATE = TRUE THEN
+        SET MESSAGE_TEXT = 'ROW WAS NOT INSERTED - DUPLICATE ENTRY.';
+        SET RESULT = 0;
+    ELSE
+        SET MESSAGE_TEXT = '1 ROW WAS INSERTED.';
+        SET RESULT = 1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_TEST_4080c6()) - -185 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_TEST_4080c6----- */
+CREATE TABLE IF NOT EXISTS table_k80otc (
+    table_k80otc_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_k80otc_name VARCHAR(100)
+);
+
+INSERT INTO table_k80otc (`table_k80otc_name`) VALUES 
+    ('Product A'),
+    ('Product B'),
+    ('Product C'),
+    ('Product D'),
+    ('Product E'),
+    ('Product F'),
+    ('Product G');
+
+/* -----Called: MYSQL_FUNC_TEST_4080c6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TEST_4080c6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE COUNT_PRODUCTS_VAR INT;
+    DECLARE RESULT INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO COUNT_PRODUCTS_VAR FROM TABLE_K80OTC;
+
+    IF COUNT_PRODUCTS_VAR >= 7 THEN
+        SET RESULT = 1;
+    ELSE
+        SET RESULT = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(-82)) - 947 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+CREATE TABLE IF NOT EXISTS `table_jni2uy` (
+    `table_jni2uy_emp_id` INT,
+    `table_jni2uy_department_id` INT,
+    `table_jni2uy_salary` INT
+);
+
+INSERT INTO `table_jni2uy` (`table_jni2uy_emp_id`, `table_jni2uy_department_id`, `table_jni2uy_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RANK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_JNI2UY_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_JNI2UY
+    WHERE TABLE_JNI2UY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_JNI2UY_DEPARTMENT_ID) + 1
+    INTO V_RANK
+    FROM TABLE_JNI2UY
+    WHERE (SELECT AVG(TABLE_JNI2UY_SALARY) FROM TABLE_JNI2UY WHERE TABLE_JNI2UY_DEPARTMENT_ID = TABLE_JNI2UY_DEPARTMENT_ID) > V_AVG_SALARY;
+
+    RETURN V_RANK;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TINYINT_wstbiu() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_JB6756_CTINYINT) INTO RESULT FROM `TABLE_JB6756`;
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_LEVEL_SCORE_5nc0t4(-78)) - 452 + ((MYSQL_FUNC_DROPVIEWS_m4b55o(45)) - -722 + ((MYSQL_FUNC_CALCULATE_CLAIM_PROCESSING_SCORE_qc7hwi(41)) - -663 + ((MYSQL_FUNC_DATA_FABRICACAO_5mz9t4(-91)) - 973 + (result))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_PROC_TINYINT_wstbiu();

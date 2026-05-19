@@ -1,0 +1,354 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_6i0q6l` (
+    `table_6i0q6l_ad_id` INT,
+    `table_6i0q6l_company_id` INT,
+    `table_6i0q6l_location_id` INT,
+    `table_6i0q6l_billboard_size` INT,
+    `table_6i0q6l_monthly_rent` INT,
+    `table_6i0q6l_duration_months` INT,
+    `table_6i0q6l_impressions_expected` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_8fquy9` (
+    `table_8fquy9_location_id` INT,
+    `table_8fquy9_city` INT,
+    `table_8fquy9_traffic_count` INT,
+    `table_8fquy9_visibility_score` INT
+);
+
+INSERT INTO `table_6i0q6l` (`table_6i0q6l_ad_id`, `table_6i0q6l_company_id`, `table_6i0q6l_location_id`, `table_6i0q6l_billboard_size`, `table_6i0q6l_monthly_rent`, `table_6i0q6l_duration_months`, `table_6i0q6l_impressions_expected`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_8fquy9` (`table_8fquy9_location_id`, `table_8fquy9_city`, `table_8fquy9_traffic_count`, `table_8fquy9_visibility_score`) VALUES (1, 2, 3, 4);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+CREATE TABLE IF NOT EXISTS `table_fvpibn` (
+    `table_fvpibn_product_id` INT,
+    `table_fvpibn_supplier_id` INT
+);
+
+INSERT INTO `table_fvpibn` (`table_fvpibn_product_id`, `table_fvpibn_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_FVPIBN_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+CREATE TABLE IF NOT EXISTS `table_9w5f3o` (
+    `table_9w5f3o_emp_id` INT,
+    `table_9w5f3o_department_id` INT,
+    `table_9w5f3o_salary` INT
+);
+
+INSERT INTO `table_9w5f3o` (`table_9w5f3o_emp_id`, `table_9w5f3o_department_id`, `table_9w5f3o_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_9W5F3O_DEPARTMENT_ID, COALESCE(TABLE_9W5F3O_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9W5F3O_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(-46)) - 156 + ((MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(-46)) - 156 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(-80)) - 507 + (floor((v_salary * 100) / v_dept_avg))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+CREATE TABLE IF NOT EXISTS `table_bzkg88` (
+    `table_bzkg88_customer_id` INT,
+    `table_bzkg88_registration_date` DATE
+);
+
+INSERT INTO `table_bzkg88` (`table_bzkg88_customer_id`, `table_bzkg88_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACQUISITION_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BZKG88_REGISTRATION_DATE)
+    INTO V_ACQUISITION_YEAR
+    FROM TABLE_BZKG88
+    WHERE TABLE_BZKG88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_ACQUISITION_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+CREATE TABLE IF NOT EXISTS `table_vnxm9k` (
+    `table_vnxm9k_emp_id` INT,
+    `table_vnxm9k_manager_id` INT,
+    `table_vnxm9k_department_id` INT,
+    `table_vnxm9k_salary` INT
+);
+
+INSERT INTO `table_vnxm9k` (`table_vnxm9k_emp_id`, `table_vnxm9k_manager_id`, `table_vnxm9k_department_id`, `table_vnxm9k_salary`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT 0;
+
+    SELECT MIN(TABLE_VNXM9K_EMP_ID)
+    INTO V_CURRENT_EMP
+    FROM TABLE_VNXM9K
+    WHERE TABLE_VNXM9K_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_VNXM9K_MANAGER_ID IS NULL;
+
+    WHILE V_CURRENT_EMP IS NOT NULL DO
+        SET V_MAX_DEPTH = (MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(4)) - 925 + ((MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(-29)) - 918 + (v_max_depth) + 1);
+        SELECT MIN(TABLE_VNXM9K_EMP_ID)
+        INTO V_CURRENT_EMP
+        FROM TABLE_VNXM9K
+        WHERE TABLE_VNXM9K_MANAGER_ID = V_CURRENT_EMP;
+    END WHILE;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_UGLY_NUMBER_sqfjqm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+
+    UGLY_LOOP: WHILE V_TEMP % 2 = 0 DO
+        SET V_TEMP = V_TEMP / 2;
+    END WHILE;
+
+    UGLY_LOOP2: WHILE V_TEMP % 3 = 0 DO
+        SET V_TEMP = V_TEMP / 3;
+    END WHILE;
+
+    UGLY_LOOP3: WHILE V_TEMP % 5 = 0 DO
+        SET V_TEMP = V_TEMP / 5;
+    END WHILE;
+
+    IF V_TEMP = 1 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+CREATE TABLE IF NOT EXISTS `table_lotxra` (
+    `table_lotxra_customer_id` INT,
+    `table_lotxra_registration_date` DATE,
+    `table_lotxra_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwrsxc` (
+    `table_mwrsxc_order_id` INT,
+    `table_mwrsxc_customer_id` INT,
+    `table_mwrsxc_order_date` DATE,
+    `table_mwrsxc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lotxra` (`table_lotxra_customer_id`, `table_lotxra_registration_date`, `table_lotxra_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_mwrsxc` (`table_mwrsxc_order_id`, `table_mwrsxc_customer_id`, `table_mwrsxc_order_date`, `table_mwrsxc_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_LOTXRA_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_LOTXRA
+    WHERE TABLE_LOTXRA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT MIN(TABLE_MWRSXC_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM TABLE_MWRSXC
+    WHERE TABLE_MWRSXC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DELAY_DAYS = (MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf(45)) - 51 + (datediff(v_first_order_date, v_registration_date));
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf----- */
+CREATE TABLE IF NOT EXISTS `table_g94l07` (
+    `table_g94l07_emp_id` INT,
+    `table_g94l07_department_id` INT,
+    `table_g94l07_salary` INT,
+    `table_g94l07_hire_date` DATE,
+    `table_g94l07_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_g94l07` (`table_g94l07_emp_id`, `table_g94l07_department_id`, `table_g94l07_salary`, `table_g94l07_hire_date`, `table_g94l07_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ADJUSTED_PERFORMANCE_SCORE_s69hqf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_G94L07_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_G94L07_HIRE_DATE, CURDATE()), COALESCE(TABLE_G94L07_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_G94L07
+    WHERE TABLE_G94L07_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SCORE = V_PERFORMANCE * (1 + V_TENURE_YEARS * 0.05) * (1 + V_SALARY / 100000);
+
+    RETURN FLOOR(V_ADJUSTED_SCORE * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+CREATE TABLE IF NOT EXISTS `table_00w3dk` (
+    `table_00w3dk_order_id` INT,
+    `table_00w3dk_customer_id` INT,
+    `table_00w3dk_order_date` DATE,
+    `table_00w3dk_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_00w3dk` (`table_00w3dk_order_id`, `table_00w3dk_customer_id`, `table_00w3dk_order_date`, `table_00w3dk_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_00W3DK_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_TOTAL
+    FROM TABLE_00W3DK
+    WHERE TABLE_00W3DK_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_00W3DK_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN FLOOR(V_RECENT_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+CREATE TABLE IF NOT EXISTS `table_xuw9z4` (
+    `table_xuw9z4_emp_id` INT,
+    `table_xuw9z4_department_id` INT
+);
+
+INSERT INTO `table_xuw9z4` (`table_xuw9z4_emp_id`, `table_xuw9z4_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_XUW9Z4
+    WHERE TABLE_XUW9Z4_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(AD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 5000;
+    DECLARE V_IMPRESSIONS_EXPECTED INT DEFAULT 0;
+    DECLARE V_TRAFFIC_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6I0Q6L_MONTHLY_RENT, 5000), COALESCE(TABLE_6I0Q6L_IMPRESSIONS_EXPECTED, 100000)
+    INTO V_MONTHLY_RENT, V_IMPRESSIONS_EXPECTED
+    FROM TABLE_6I0Q6L
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8FQUY9_TRAFFIC_COUNT, 50000)
+    INTO V_TRAFFIC_COUNT
+    FROM TABLE_6I0Q6L BA
+    JOIN TABLE_8FQUY9 BL ON TABLE_6I0Q6L_LOCATION_ID = TABLE_8FQUY9_LOCATION_ID
+    WHERE TABLE_6I0Q6L_AD_ID = AD_ID_PARAM;
+
+    SET V_ROI_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj(-90)) - -803 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(75)) - 232 + ((v_impressions_expected * v_traffic_count) / v_monthly_rent));
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(-74)) - -932 + (cast(v_roi_score as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_BILLBOARD_AD_ROI_iy59x4(1);

@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_9ay8es` (
+    `table_9ay8es_employee_id` INT,
+    `table_9ay8es_department_id` INT,
+    `table_9ay8es_manager_id` INT,
+    `table_9ay8es_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u58w25` (
+    `table_u58w25_department_id` INT,
+    `table_u58w25_parent_department_id` INT,
+    `table_u58w25_department_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9ay8es` (`table_9ay8es_employee_id`, `table_9ay8es_department_id`, `table_9ay8es_manager_id`, `table_9ay8es_salary`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_u58w25` (`table_u58w25_department_id`, `table_u58w25_parent_department_id`, `table_u58w25_department_name`) VALUES (1, 2, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+CREATE TABLE IF NOT EXISTS `table_6t26dr` (
+    `table_6t26dr_order_id` INT,
+    `table_6t26dr_customer_id` INT,
+    `table_6t26dr_order_date` DATE,
+    `table_6t26dr_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_9i40nw` (
+    `table_9i40nw_order_id` INT,
+    `table_9i40nw_product_id` INT,
+    `table_9i40nw_quantity` INT,
+    `table_9i40nw_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6t26dr` (`table_6t26dr_order_id`, `table_6t26dr_customer_id`, `table_6t26dr_order_date`, `table_6t26dr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_9i40nw` (`table_9i40nw_order_id`, `table_9i40nw_product_id`, `table_9i40nw_quantity`, `table_9i40nw_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_GROSS_PROFIT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_9I40NW_QUANTITY * TABLE_9I40NW_UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM TABLE_9I40NW
+    WHERE TABLE_9I40NW_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6T26DR_TOTAL_AMOUNT, 0)
+    INTO V_COST
+    FROM TABLE_6T26DR
+    WHERE TABLE_6T26DR_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_GROSS_PROFIT = V_REVENUE - V_COST;
+
+    RETURN V_GROSS_PROFIT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NEGATE_BOOLEAN_km7s69----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(FLAG INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF FLAG = 0 THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+CREATE TABLE IF NOT EXISTS `table_0nask3` (
+    `table_0nask3_emp_id` INT,
+    `table_0nask3_hire_date` DATE
+);
+
+INSERT INTO `table_0nask3` (`table_0nask3_emp_id`, `table_0nask3_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_0NASK3_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM TABLE_0NASK3
+    WHERE TABLE_0NASK3_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(81)) - 365 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(-67)) - 580 + ((MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(-69)) - 468 + (v_years)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+CREATE TABLE IF NOT EXISTS `table_ufhrdo` (
+    `table_ufhrdo_emp_id` INT,
+    `table_ufhrdo_department_id` INT,
+    `table_ufhrdo_salary` INT,
+    `table_ufhrdo_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_mhmpip` (
+    `table_mhmpip_department_id` INT,
+    `table_mhmpip_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ufhrdo` (`table_ufhrdo_emp_id`, `table_ufhrdo_department_id`, `table_ufhrdo_salary`, `table_ufhrdo_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_mhmpip` (`table_mhmpip_department_id`, `table_mhmpip_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_INDEX_703okp(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_PRIOR_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_UFHRDO_SALARY), (MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(-32)) - -105 + (0))
+    INTO V_CURRENT_AVG
+    FROM TABLE_UFHRDO
+    WHERE TABLE_UFHRDO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_AVG = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_AVG - V_PRIOR_AVG) * 100) / V_PRIOR_AVG;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+CREATE TABLE IF NOT EXISTS `table_6j2qnu` (
+    `table_6j2qnu_employee_id` INT,
+    `table_6j2qnu_department_id` INT,
+    `table_6j2qnu_salary` INT,
+    `table_6j2qnu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_qesw7k` (
+    `table_qesw7k_employee_id` INT,
+    `table_qesw7k_effective_date` DATE,
+    `table_qesw7k_salary_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6j2qnu` (`table_6j2qnu_employee_id`, `table_6j2qnu_department_id`, `table_6j2qnu_salary`, `table_6j2qnu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_qesw7k` (`table_qesw7k_employee_id`, `table_qesw7k_effective_date`, `table_qesw7k_salary_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_GROWTH_RATE_j6heiu(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INITIAL_SALARY INT DEFAULT 0;
+    DECLARE V_CURRENT_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, (MYSQL_FUNC_PROC_TINYINT_wstbiu()) - 970 + (0))
+    INTO V_INITIAL_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE ASC LIMIT 1;
+
+    SELECT COALESCE(TABLE_QESW7K_SALARY_AMOUNT, 0)
+    INTO V_CURRENT_SALARY
+    FROM TABLE_QESW7K
+    WHERE TABLE_QESW7K_EMPLOYEE_ID = EMPLOYEE_ID_PARAM
+    ORDER BY TABLE_QESW7K_EFFECTIVE_DATE DESC LIMIT 1;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_6J2QNU_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_6J2QNU
+    WHERE TABLE_6J2QNU_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_INITIAL_SALARY = 0 OR V_YEARS_EMPLOYED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_SALARY - V_INITIAL_SALARY) * 100) / (V_INITIAL_SALARY * V_YEARS_EMPLOYED);
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_TINYINT_wstbiu----- */
+CREATE TABLE IF NOT EXISTS `table_jb6756` (
+    table_jb6756_ctinyint TINYINT
+);
+
+INSERT INTO `table_jb6756` (`table_jb6756_ctinyint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_TINYINT_wstbiu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_TINYINT_wstbiu() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_JB6756_CTINYINT) INTO RESULT FROM `TABLE_JB6756`;
+    RETURN (MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7(16)) - 239 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7----- */
+CREATE TABLE IF NOT EXISTS `table_zvc3qp` (
+    `table_zvc3qp_item_id` INT,
+    `table_zvc3qp_sku` INT,
+    `table_zvc3qp_name` VARCHAR(50),
+    `table_zvc3qp_warehouse_id` INT,
+    `table_zvc3qp_quantity_on_hand` INT,
+    `table_zvc3qp_reorder_point` INT,
+    `table_zvc3qp_unit_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f19oo8` (
+    `table_f19oo8_txn_id` INT,
+    `table_f19oo8_item_id` INT,
+    `table_f19oo8_txn_type` VARCHAR(50),
+    `table_f19oo8_quantity` INT,
+    `table_f19oo8_txn_date` DATE
+);
+
+INSERT INTO `table_zvc3qp` (`table_zvc3qp_item_id`, `table_zvc3qp_sku`, `table_zvc3qp_name`, `table_zvc3qp_warehouse_id`, `table_zvc3qp_quantity_on_hand`, `table_zvc3qp_reorder_point`, `table_zvc3qp_unit_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_f19oo8` (`table_f19oo8_txn_id`, `table_f19oo8_item_id`, `table_f19oo8_txn_type`, `table_f19oo8_quantity`, `table_f19oo8_txn_date`) VALUES (1, 2, 'test', 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_TURNOVER_xsrin7(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_OUTGOING INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ZVC3QP_QUANTITY_ON_HAND, 0), COALESCE(TABLE_ZVC3QP_REORDER_POINT, 0), COALESCE(TABLE_ZVC3QP_UNIT_COST, 0)
+    INTO V_CURRENT_STOCK, V_REORDER_POINT, V_UNIT_COST
+    FROM TABLE_ZVC3QP
+    WHERE TABLE_ZVC3QP_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT COALESCE(SUM(ABS(TABLE_F19OO8_QUANTITY)), 0) INTO V_TOTAL_OUTGOING
+    FROM TABLE_F19OO8
+    WHERE TABLE_F19OO8_ITEM_ID = ITEM_ID_PARAM
+      AND TABLE_F19OO8_TXN_TYPE IN ('OUT', 'SALE', 'TRANSFER')
+      AND TABLE_F19OO8_TXN_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = (V_TOTAL_OUTGOING * V_UNIT_COST) / V_CURRENT_STOCK;
+
+    IF V_CURRENT_STOCK < V_REORDER_POINT THEN
+        SET V_TURNOVER_RATE = V_TURNOVER_RATE - 10;
+    END IF;
+
+    RETURN CAST(V_TURNOVER_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5----- */
+CREATE TABLE IF NOT EXISTS `table_7n5fk6` (
+    `table_7n5fk6_customer_id` INT,
+    `table_7n5fk6_start_date` DATE
+);
+
+INSERT INTO `table_7n5fk6` (`table_7n5fk6_customer_id`, `table_7n5fk6_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_START_MONTH_yitmp5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_7N5FK6_START_DATE)
+    INTO V_START_MONTH
+    FROM TABLE_7N5FK6
+    WHERE TABLE_7N5FK6_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_ADD_NUMBERS_rriimw(94, 67)) - -404 + (v_start_month);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ADD_NUMBERS_rriimw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ADD_NUMBERS_rriimw(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    SET V_RESULT = A + B;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+CREATE TABLE IF NOT EXISTS `table_bvk6ew` (
+    `table_bvk6ew_customer_id` INT
+);
+
+INSERT INTO `table_bvk6ew` (`table_bvk6ew_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_BVK6EW
+    WHERE TABLE_BVK6EW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_PARENT_ID INT DEFAULT 0;
+    DECLARE V_CURRENT_ID INT DEFAULT 0;
+
+    SET V_CURRENT_ID = DEPARTMENT_ID_PARAM;
+
+    DEPTH_LOOP: WHILE V_CURRENT_ID IS NOT NULL AND V_CURRENT_ID != 0 DO
+        SELECT COALESCE(TABLE_U58W25_PARENT_DEPARTMENT_ID, 0)
+        INTO V_PARENT_ID
+        FROM TABLE_U58W25
+        WHERE TABLE_U58W25_DEPARTMENT_ID = V_CURRENT_ID;
+
+        IF (MYSQL_FUNC_NEGATE_BOOLEAN_km7s69(22)) - 600 + ((MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(-51)) - 445 + (v_parent_id)) = 0 OR V_PARENT_ID = V_CURRENT_ID THEN
+            LEAVE DEPTH_LOOP;
+        END IF;
+
+        SET V_DEPTH = (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(60)) - 955 + (v_depth + 1);
+        SET V_CURRENT_ID = V_PARENT_ID;
+    END WHILE DEPTH_LOOP;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_DEPTH_mtb2j2(1);

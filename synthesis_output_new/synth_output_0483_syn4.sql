@@ -1,0 +1,491 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v8078 (
+    v8143 INT,
+    v8142 INT,
+    PRIMARY KEY (v8142)
+);
+CREATE TABLE IF NOT EXISTS v8142 (
+    v8143 INT,
+    v8142 INT,
+    PRIMARY KEY (v8142)
+);
+CREATE TABLE IF NOT EXISTS v8071 (
+    v8072 GEOMETRY,
+    v8074 INT,
+    v8071_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v8220 (
+    v8221 VARCHAR(50),
+    v8222 GEOMETRY,
+    v8223 GEOMETRY,
+    v8220_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v8076 (
+    v8076_id INT AUTO_INCREMENT PRIMARY KEY,
+    v8221 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v7984 (
+    v7989 INT,
+    v7995 VARCHAR(100),
+    v7993 INT,
+    v7984_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v8031 (
+    v8032 INT,
+    v8031_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v8090 (
+    v8092 INT,
+    v8091 INT,
+    v8090_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v8093 (
+    v8093_id INT AUTO_INCREMENT PRIMARY KEY
+);
+INSERT INTO v8078 (v8143, v8142) VALUES (10, 1), (10, 2), (5, 3);
+INSERT INTO v8142 (v8143, v8142) VALUES (10, 1), (10, 2), (5, 3);
+INSERT INTO v8071 (v8072, v8074) VALUES (ST_GEOMFROMTEXT('POINT(19 81)'), 2), (ST_GEOMFROMTEXT('POINT(10 20)'), 5), (ST_GEOMFROMTEXT('POINT(30 40)'), 6);
+INSERT INTO v8220 (v8221, v8222, v8223) VALUES ('test', ST_GEOMFROMTEXT('POINT(1 1)'), ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO v8076 (v8221) VALUES ('v7n v6c v5nà'), ('other');
+INSERT INTO v7984 (v7989, v7995, v7993) VALUES (5, 'abc', 10), (6, 'abcd', 20), (7, 'abxyz', 5);
+INSERT INTO v8031 (v8032) VALUES (0), (0);
+INSERT INTO v8090 (v8092, v8091) VALUES (1, 1), (2, 2);
+INSERT INTO v8093 (v8093_id) VALUES (1), (2);
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+CREATE TABLE IF NOT EXISTS `table_83jk04` (
+    `table_83jk04_transaction_id` INT,
+    `table_83jk04_account_id` INT,
+    `table_83jk04_transaction_date` DATE,
+    `table_83jk04_amount` DECIMAL(10,2),
+    `table_83jk04_transaction_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4xsou8` (
+    `table_4xsou8_account_id` INT,
+    `table_4xsou8_customer_id` INT,
+    `table_4xsou8_balance` INT,
+    `table_4xsou8_account_type` INT
+);
+
+INSERT INTO `table_83jk04` (`table_83jk04_transaction_id`, `table_83jk04_account_id`, `table_83jk04_transaction_date`, `table_83jk04_amount`, `table_83jk04_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4xsou8` (`table_4xsou8_account_id`, `table_4xsou8_customer_id`, `table_4xsou8_balance`, `table_4xsou8_account_type`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(ACCOUNT_ID_PARAM INT, MIN_AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_NET_CHANGE INT DEFAULT 0;
+    DECLARE V_TX_COUNT INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CREDITS, V_TX_COUNT
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'CREDIT'
+      AND TABLE_83JK04_AMOUNT >= MIN_AMOUNT;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0)
+    INTO V_TOTAL_DEBITS
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'DEBIT';
+
+    SELECT TABLE_4XSOU8_BALANCE INTO V_BALANCE FROM TABLE_4XSOU8 WHERE TABLE_4XSOU8_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_NET_CHANGE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN COALESCE(V_BALANCE, 0) + V_NET_CHANGE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_PERFECT_SQUARE_d689mm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERFECT_SQUARE_d689mm(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ROOT INT;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'CANNOT COMPUTE SQUARE ROOT OF NEGATIVE';
+    END IF;
+    SET V_ROOT = FLOOR(SQRT(N));
+    IF V_ROOT * V_ROOT != N THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'NUMBER IS NOT A PERFECT SQUARE';
+    END IF;
+    RETURN V_ROOT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_PROC1_uaqsvs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_PROC1_uaqsvs(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(P_BASE INT, P_EXP INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= P_EXP DO
+        SET V_RESULT = V_RESULT * P_BASE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+CREATE TABLE IF NOT EXISTS `table_eivnkn` (
+    `table_eivnkn_emp_id` INT,
+    `table_eivnkn_department_id` INT,
+    `table_eivnkn_salary` INT,
+    `table_eivnkn_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1bu658` (
+    `table_1bu658_department_id` INT,
+    `table_1bu658_name` VARCHAR(50)
+);
+
+INSERT INTO `table_eivnkn` (`table_eivnkn_emp_id`, `table_eivnkn_department_id`, `table_eivnkn_salary`, `table_eivnkn_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_1bu658` (`table_1bu658_department_id`, `table_1bu658_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_SENIOR_COUNT INT DEFAULT 0;
+    DECLARE V_SENIORITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_SENIOR_COUNT
+    FROM TABLE_EIVNKN
+    WHERE TABLE_EIVNKN_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND TIMESTAMPDIFF(YEAR, TABLE_EIVNKN_HIRE_DATE, CURDATE()) >= 5;
+
+    SET V_SENIORITY_INDEX = (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(-72)) - 326 + ((v_avg_tenure * 10) + (v_senior_count * 15));
+
+    RETURN V_SENIORITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+CREATE TABLE IF NOT EXISTS `table_07mi7x` (
+    `table_07mi7x_emp_id` INT,
+    `table_07mi7x_hire_date` DATE,
+    `table_07mi7x_salary` INT
+);
+
+INSERT INTO `table_07mi7x` (`table_07mi7x_emp_id`, `table_07mi7x_hire_date`, `table_07mi7x_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_07MI7X_HIRE_DATE, CURDATE()), COALESCE(TABLE_07MI7X_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_07MI7X
+    WHERE TABLE_07MI7X_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + ((MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(53)) - -464 + ((v_tenure * 1000) + floor(v_salary / 1000))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+CREATE TABLE IF NOT EXISTS `table_q6el64` (
+    `table_q6el64_emp_id` INT
+);
+
+INSERT INTO `table_q6el64` (`table_q6el64_emp_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_MOD_INDEX_wfluxb(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (EMP_ID_PARAM * 7) % 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 12 / 100;
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = V_ENTRY_FEE * 2;
+    END CASE;
+
+    RETURN CAST(V_PRIZE_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = (MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(-59)) - -500 + (v_total_hours * v_avg_hourly_rate);
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_REVENUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+CREATE TABLE IF NOT EXISTS `table_3xzodd` (
+    `table_3xzodd_sale_id` INT,
+    `table_3xzodd_product_id` INT,
+    `table_3xzodd_salesperson_id` INT,
+    `table_3xzodd_sale_date` DATE,
+    `table_3xzodd_quantity` INT,
+    `table_3xzodd_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_3xzodd` (`table_3xzodd_sale_id`, `table_3xzodd_product_id`, `table_3xzodd_salesperson_id`, `table_3xzodd_sale_date`, `table_3xzodd_quantity`, `table_3xzodd_unit_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALESPERSON_BONUS_aiip3t(SALESPERSON_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALES INT DEFAULT 0;
+    DECLARE V_TRANSACTION_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALE_VALUE INT DEFAULT 0;
+    DECLARE V_BONUS_RATE INT DEFAULT 5;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), SUM(TABLE_3XZODD_QUANTITY * TABLE_3XZODD_UNIT_PRICE)
+    INTO V_TRANSACTION_COUNT, V_TOTAL_SALES
+    FROM TABLE_3XZODD
+    WHERE TABLE_3XZODD_SALESPERSON_ID = SALESPERSON_ID_PARAM
+      AND TABLE_3XZODD_SALE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
+
+    IF V_TRANSACTION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_SALE_VALUE = V_TOTAL_SALES / V_TRANSACTION_COUNT;
+
+    CASE
+        WHEN V_AVG_SALE_VALUE > 5000 THEN SET V_BONUS_RATE = 12;
+        WHEN V_AVG_SALE_VALUE > 2000 THEN SET V_BONUS_RATE = 8;
+        WHEN V_AVG_SALE_VALUE > 1000 THEN SET V_BONUS_RATE = 6;
+        ELSE SET V_BONUS_RATE = 4;
+    END CASE;
+
+    SET V_BONUS_AMOUNT = V_TOTAL_SALES * V_BONUS_RATE / 100;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0483(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_geo GEOMETRY;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v8074 FROM v8071 WHERE v8074 IN (2, 5, 6);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    -- Statement 1: UPDATE v8142 AS x0 NATURAL JOIN v8078 AS x1 SET v8143 = LEFT(v8143, ' \t \t +00002') WHERE v8143 = 10
+    SET @sql1 = 'UPDATE v8142 AS x0 NATURAL JOIN v8078 AS x1 SET x0.v8143 = LEFT(x0.v8143, '' \\t \\t +00002'') WHERE x0.v8143 = 10';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SENIORITY_INDEX_4apqpa(-36)) - -379 + (v_counter) + (MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(-46, -13)) - 229 + (1);
+    
+    -- Statement 2: UPDATE v8071 AS x0 SET v8072 = ST_GEOMFROMTEXT('POINT(19 81)') WHERE v8074 IN (2, 5, 6)
+    SET @sql2 = 'UPDATE v8071 AS x0 SET x0.v8072 = ST_GEOMFROMTEXT(''POINT(19 81)'') WHERE x0.v8074 IN (2, 5, 6)';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+    
+    -- Statement 3: UPDATE v8220 AS x1 RIGHT OUTER JOIN v8076 AS x2 ON ST_CONTAINS(x1.v8223, x1.v8222) SET v8221 = 'v7n v6c v5nà'
+    SET @sql3 = 'UPDATE v8220 AS x1 RIGHT OUTER JOIN v8076 AS x2 ON ST_CONTAINS(x1.v8223, x1.v8222) SET x1.v8221 = ''v7n v6c v5nà''';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+    
+    -- Statement 4: UPDATE v7984 AS x0 SET x0.v7989 = 6 WHERE v7995 LIKE 'ab%' ORDER BY x0.v7993 ASC LIMIT 90
+    SET @sql4 = 'UPDATE v7984 AS x0 SET x0.v7989 = 6 WHERE v7995 LIKE ''ab%'' ORDER BY x0.v7993 ASC LIMIT 90';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+    
+    -- Statement 5: UPDATE v8031 AS x0, v8090 AS x1 JOIN v8093 AS x2 ON x1.v8092 = x1.v8091 SET x0.v8032 = 120
+    SET @sql5 = 'UPDATE v8031 AS x0, v8090 AS x1 JOIN v8093 AS x2 ON x1.v8092 = x1.v8091 SET x0.v8032 = 120';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + 1;
+    
+    -- Use procedural structures: IF/ELSE, WHILE loop, CURSOR
+    IF p1 > 0 THEN
+        SET v_temp = p1;
+        WHILE v_temp > 0 DO
+            SET v_temp = v_temp - 1;
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    ELSE
+        -- Use cursor to iterate over v8071
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO v_geo;
+            IF (MYSQL_FUNC_SIGNAL_FUNC_PERFECT_SQUARE_d689mm(13)) - -421 + (done) THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur;
+    END IF;
+    
+    -- Use CASE statement
+    CASE 
+        WHEN v_counter > 10 THEN SET result = 1;
+        WHEN v_counter > 5 THEN SET result = (MYSQL_FUNC_SIGNAL_FUNC_POWER_g0zz3o(37, 75)) - -316 + (2);
+        ELSE SET result = 0;
+    END CASE;
+    
+    -- Add some more procedural logic
+    IF p2 = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p2 cannot be zero';
+    END IF;
+    
+    SET result = v_counter % p2;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0483(1, 1, @out_result);
+
+SELECT @out_result;

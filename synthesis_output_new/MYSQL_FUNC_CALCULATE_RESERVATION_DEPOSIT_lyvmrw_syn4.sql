@@ -1,0 +1,366 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_3j8w7h` (
+    `table_3j8w7h_reservation_id` INT,
+    `table_3j8w7h_customer_id` INT,
+    `table_3j8w7h_restaurant_id` INT,
+    `table_3j8w7h_party_size` INT,
+    `table_3j8w7h_reservation_date` DATE,
+    `table_3j8w7h_duration_minutes` INT,
+    `table_3j8w7h_deposit_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ghvkl` (
+    `table_5ghvkl_restaurant_id` INT,
+    `table_5ghvkl_name` VARCHAR(50),
+    `table_5ghvkl_rating` DECIMAL(3,1),
+    `table_5ghvkl_cuisine_type` VARCHAR(50)
+);
+
+INSERT INTO `table_3j8w7h` (`table_3j8w7h_reservation_id`, `table_3j8w7h_customer_id`, `table_3j8w7h_restaurant_id`, `table_3j8w7h_party_size`, `table_3j8w7h_reservation_date`, `table_3j8w7h_duration_minutes`, `table_3j8w7h_deposit_amount`) VALUES (1, 2, 3, 4, '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_5ghvkl` (`table_5ghvkl_restaurant_id`, `table_5ghvkl_name`, `table_5ghvkl_rating`, `table_5ghvkl_cuisine_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Called: MYSQL_FUNC_MAKE_MILAGE_wuwz1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(A INT, B INT, C INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN RETURN 'INVALID';
+        WHEN A = B AND B = C THEN RETURN 'EQUILATERAL';
+        WHEN A = B OR B = C OR A = C THEN RETURN 'ISOSCELES';
+        ELSE RETURN 'SCALENE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = (MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(4)) - 419 + (length(cast(n as char)));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = (MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(15)) - 754 + ((MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1(13, -15)) - -156 + (v_temp / 10));
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_TWO_mydyy1(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B) / 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+CREATE TABLE IF NOT EXISTS `table_7dht4m` (
+    `table_7dht4m_campaign_id` INT,
+    `table_7dht4m_status` VARCHAR(50),
+    `table_7dht4m_budget` INT
+);
+
+INSERT INTO `table_7dht4m` (`table_7dht4m_campaign_id`, `table_7dht4m_status`, `table_7dht4m_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_SCORE_p2hsak(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_7DHT4M_STATUS, COALESCE(TABLE_7DHT4M_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_7DHT4M
+    WHERE TABLE_7DHT4M_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS = 'ACTIVE' THEN
+        RETURN V_BUDGET;
+    ELSEIF V_STATUS = 'PAUSED' THEN
+        RETURN (MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(-57)) - 238 + (v_budget / 2);
+    ELSEIF V_STATUS = 'COMPLETED' THEN
+        RETURN V_BUDGET * 2;
+    ELSE
+        RETURN V_BUDGET / 4;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi----- */
+CREATE TABLE IF NOT EXISTS `table_2jrw9z` (
+    `table_2jrw9z_order_id` INT,
+    `table_2jrw9z_order_date` DATE,
+    `table_2jrw9z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2jrw9z` (`table_2jrw9z_order_id`, `table_2jrw9z_order_date`, `table_2jrw9z_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_MONTH_INDEX_vzsfsi(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2JRW9Z_ORDER_DATE), YEAR(TABLE_2JRW9Z_ORDER_DATE)
+    INTO V_MONTH, V_YEAR
+    FROM TABLE_2JRW9Z
+    WHERE TABLE_2JRW9Z_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (V_YEAR * 12) + V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+CREATE TABLE IF NOT EXISTS `table_6l8uxl` (
+    `table_6l8uxl_warranty_id` INT,
+    `table_6l8uxl_product_id` INT,
+    `table_6l8uxl_purchase_date` DATE,
+    `table_6l8uxl_warranty_months` INT,
+    `table_6l8uxl_claim_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6l8uxl` (`table_6l8uxl_warranty_id`, `table_6l8uxl_product_id`, `table_6l8uxl_purchase_date`, `table_6l8uxl_warranty_months`, `table_6l8uxl_claim_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CHECK_WARRANTY_STATUS_fuouol(WARRANTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PURCHASE_DATE DATE;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 0;
+    DECLARE V_EXPIRY_DATE DATE;
+    DECLARE V_DAYS_REMAINING INT DEFAULT 0;
+    DECLARE V_STATUS INT DEFAULT 0;
+
+    SELECT TABLE_6L8UXL_PURCHASE_DATE, TABLE_6L8UXL_WARRANTY_MONTHS
+    INTO V_PURCHASE_DATE, V_WARRANTY_MONTHS
+    FROM TABLE_6L8UXL
+    WHERE TABLE_6L8UXL_WARRANTY_ID = WARRANTY_ID_PARAM;
+
+    IF V_PURCHASE_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(22)) - 481 + (-1);
+    END IF;
+
+    SET V_EXPIRY_DATE = DATE_ADD(V_PURCHASE_DATE, INTERVAL V_WARRANTY_MONTHS MONTH);
+    SET V_DAYS_REMAINING = DATEDIFF(V_EXPIRY_DATE, CURDATE());
+
+    IF V_DAYS_REMAINING < 0 THEN
+        SET V_STATUS = 0;
+    ELSEIF V_DAYS_REMAINING <= 30 THEN
+        SET V_STATUS = 1;
+    ELSE
+        SET V_STATUS = (MYSQL_FUNC_PROC_BIT1_7d7is7()) - -908 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(-73)) - -343 + (2));
+    END IF;
+
+    RETURN V_STATUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACE INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR N > 100 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        INNER_LOOP: WHILE V_J <= N DO
+            IF V_I = V_J THEN
+                SET V_SUM = V_SUM + (V_I * V_J);
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_J = 1;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+CREATE TABLE IF NOT EXISTS `table_0itd65` (
+    `table_0itd65_customer_id` INT,
+    `table_0itd65_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_09nz76` (
+    `table_09nz76_order_id` INT,
+    `table_09nz76_customer_id` INT,
+    `table_09nz76_order_date` DATE,
+    `table_09nz76_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0itd65` (`table_0itd65_customer_id`, `table_0itd65_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_09nz76` (`table_09nz76_order_id`, `table_09nz76_customer_id`, `table_09nz76_order_date`, `table_09nz76_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CONVERSION_RATE_aykmtm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VISITS INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_0ITD65_REGISTRATION_DATE) / 7
+    INTO V_TOTAL_VISITS
+    FROM TABLE_0ITD65
+    WHERE TABLE_0ITD65_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_09NZ76
+    WHERE TABLE_09NZ76_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TOTAL_VISITS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (V_TOTAL_ORDERS * 100) / V_TOTAL_VISITS;
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+CREATE TABLE IF NOT EXISTS `table_gmjb6t` (
+    `table_gmjb6t_cbit` BIT(1)
+);
+
+INSERT INTO `table_gmjb6t` (`table_gmjb6t_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT1_7d7is7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    
+    SELECT CAST(TABLE_GMJB6T_CBIT AS UNSIGNED) INTO RESULT 
+    FROM `TABLE_GMJB6T` 
+    LIMIT 1;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(PARTY_SIZE_PARAM INT, RESTAURANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_DEPOSIT INT DEFAULT 20;
+    DECLARE V_PER_PERSON INT DEFAULT 10;
+    DECLARE V_RATING_BONUS INT DEFAULT 0;
+    DECLARE V_TOTAL_DEPOSIT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5GHVKL_RATING, 3) INTO V_RATING_BONUS
+    FROM TABLE_5GHVKL
+    WHERE TABLE_5GHVKL_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    SET V_TOTAL_DEPOSIT = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_TRIANGLE_avub2x(-80, -61, -30)) - 827 + (v_base_deposit + (party_size_param * v_per_person));
+
+    IF V_RATING_BONUS >= 4 THEN
+        SET V_TOTAL_DEPOSIT = V_TOTAL_DEPOSIT + 20;
+    END IF;
+
+    RETURN (MYSQL_FUNC_MAKE_MILAGE_wuwz1m(-67, 4)) - 542 + (cast(v_total_deposit as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_RESERVATION_DEPOSIT_lyvmrw(1, 1);

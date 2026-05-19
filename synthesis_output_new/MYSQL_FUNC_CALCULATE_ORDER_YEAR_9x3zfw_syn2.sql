@@ -1,0 +1,378 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_azh2nr` (
+    `table_azh2nr_order_id` INT,
+    `table_azh2nr_order_date` DATE
+);
+
+INSERT INTO `table_azh2nr` (`table_azh2nr_order_id`, `table_azh2nr_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+CREATE TABLE IF NOT EXISTS `table_ce0xds` (
+    `table_ce0xds_payment_id` INT,
+    `table_ce0xds_order_id` INT,
+    `table_ce0xds_amount` DECIMAL(10,2),
+    `table_ce0xds_payment_date` DATE,
+    `table_ce0xds_payment_method` INT,
+    `table_ce0xds_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ce0xds` (`table_ce0xds_payment_id`, `table_ce0xds_order_id`, `table_ce0xds_amount`, `table_ce0xds_payment_date`, `table_ce0xds_payment_method`, `table_ce0xds_status`) VALUES (1, 2, 1.0, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_REFUND_o1fbz5(ORDER_ID_PARAM INT, REFUND_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAYMENT_STATUS INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(SUM(TABLE_CE0XDS_AMOUNT), 0) INTO V_TOTAL_PAID
+    FROM TABLE_CE0XDS
+    WHERE TABLE_CE0XDS_ORDER_ID = ORDER_ID_PARAM AND TABLE_CE0XDS_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_PAID = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF REFUND_PERCENT < 0 THEN
+        SET REFUND_PERCENT = 0;
+    END IF;
+
+    IF REFUND_PERCENT > 100 THEN
+        SET REFUND_PERCENT = 100;
+    END IF;
+
+    SET V_REFUND_AMOUNT = V_TOTAL_PAID * REFUND_PERCENT / 100;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(0, 100)) - 462 + (v_refund_amount);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(INNER_RADIUS INT, OUTER_RADIUS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF INNER_RADIUS >= OUTER_RADIUS THEN
+        RETURN (MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr(12)) - 43 + (0);
+    END IF;
+
+    SET V_AREA = (MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1()) - 448 + (3.14159 * (outer_radius * outer_radius - inner_radius * inner_radius));
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_TRIPLE_weqwmr(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr()) - 203 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 8 UNION SELECT 16 UNION SELECT 24 UNION SELECT 32 UNION SELECT 40 UNION SELECT 48 UNION SELECT 56 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_CUBES_1_TO_4_ksvzj1() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 8 UNION SELECT 27 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+CREATE TABLE IF NOT EXISTS `table_ejio0q` (
+    `table_ejio0q_campaign_id` INT,
+    `table_ejio0q_start_date` DATE
+);
+
+INSERT INTO `table_ejio0q` (`table_ejio0q_campaign_id`, `table_ejio0q_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_EJIO0Q_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_EJIO0Q
+    WHERE TABLE_EJIO0Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - -431 + (datediff(curdate(), v_start_date));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+CREATE TABLE IF NOT EXISTS `table_foekw5` (
+    `table_foekw5_emp_id` INT,
+    `table_foekw5_department_id` INT,
+    `table_foekw5_salary` INT,
+    `table_foekw5_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_p5a7l2` (
+    `table_p5a7l2_department_id` INT,
+    `table_p5a7l2_name` VARCHAR(50),
+    `table_p5a7l2_location` INT
+);
+
+INSERT INTO `table_foekw5` (`table_foekw5_emp_id`, `table_foekw5_department_id`, `table_foekw5_salary`, `table_foekw5_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_p5a7l2` (`table_p5a7l2_department_id`, `table_p5a7l2_name`, `table_p5a7l2_location`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUARTILE INT DEFAULT 2;
+
+    SELECT TABLE_FOEKW5_SALARY
+    INTO V_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FOEKW5_SALARY), 0)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_DEPARTMENT_ID = (SELECT TABLE_FOEKW5_DEPARTMENT_ID FROM TABLE_FOEKW5 WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM);
+
+    IF V_SALARY > V_DEPT_AVG_SALARY * 1.5 THEN
+        SET V_QUARTILE = (MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(-85)) - -35 + (4);
+    ELSEIF V_SALARY > V_DEPT_AVG_SALARY * 1.25 THEN
+        SET V_QUARTILE = 3;
+    ELSEIF V_SALARY < V_DEPT_AVG_SALARY * 0.75 THEN
+        SET V_QUARTILE = 1;
+    END IF;
+
+    RETURN V_QUARTILE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+CREATE TABLE IF NOT EXISTS `table_jtm566` (
+    `table_jtm566_order_id` INT,
+    `table_jtm566_customer_id` INT,
+    `table_jtm566_order_date` DATE,
+    `table_jtm566_total_amount` DECIMAL(10,2),
+    `table_jtm566_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ae03tz` (
+    `table_ae03tz_refund_id` INT,
+    `table_ae03tz_order_id` INT,
+    `table_ae03tz_refund_amount` DECIMAL(10,2),
+    `table_ae03tz_reason` INT
+);
+
+INSERT INTO `table_jtm566` (`table_jtm566_order_id`, `table_jtm566_customer_id`, `table_jtm566_order_date`, `table_jtm566_total_amount`, `table_jtm566_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ae03tz` (`table_ae03tz_refund_id`, `table_ae03tz_order_id`, `table_ae03tz_refund_amount`, `table_ae03tz_reason`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RISK_INDICATOR_3ch7mm(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_COUNT INT DEFAULT 0;
+    DECLARE V_RISK_INDICATOR INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_JTM566_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_JTM566
+    WHERE TABLE_JTM566_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_REFUND_COUNT
+    FROM TABLE_AE03TZ
+    WHERE TABLE_AE03TZ_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_RISK_INDICATOR = (MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(-46)) - 218 + (v_refund_count * 20 + (v_order_total / 100));
+
+    IF V_ORDER_TOTAL > 500 THEN
+        SET V_RISK_INDICATOR = V_RISK_INDICATOR + 15;
+    END IF;
+
+    RETURN V_RISK_INDICATOR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+CREATE TABLE IF NOT EXISTS `table_6jcaho` (
+    `table_6jcaho_order_id` INT,
+    `table_6jcaho_customer_id` INT,
+    `table_6jcaho_order_date` DATE,
+    `table_6jcaho_total_amount` DECIMAL(10,2),
+    `table_6jcaho_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lgx2x8` (
+    `table_lgx2x8_refund_id` INT,
+    `table_lgx2x8_order_id` INT,
+    `table_lgx2x8_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6jcaho` (`table_6jcaho_order_id`, `table_6jcaho_customer_id`, `table_6jcaho_order_date`, `table_6jcaho_total_amount`, `table_6jcaho_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_lgx2x8` (`table_lgx2x8_refund_id`, `table_lgx2x8_order_id`, `table_lgx2x8_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_RATE_cjy7w9(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6JCAHO_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_6JCAHO
+    WHERE TABLE_6JCAHO_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_LGX2X8_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_LGX2X8
+    WHERE TABLE_LGX2X8_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REFUND_RATE = (V_REFUND_TOTAL * 100) / V_ORDER_TOTAL;
+
+    RETURN V_REFUND_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_AZH2NR_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_AZH2NR
+    WHERE TABLE_AZH2NR_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(-23)) - 273 + ((MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(-38)) - 455 + ((MYSQL_FUNC_PROCESS_REFUND_o1fbz5(-97, -81)) - -314 + (v_year)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_ORDER_YEAR_9x3zfw(1);

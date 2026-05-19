@@ -1,0 +1,453 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v141598 (
+    v141600 INT,
+    v141632 INT,
+    v141633 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v141632 (
+    v141633 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v141656 (
+    v141657 INT
+);
+CREATE TABLE IF NOT EXISTS v141614 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    data VARCHAR(100)
+);
+INSERT INTO v141598 (v141600, v141632, v141633) VALUES
+(100, 1, 'test1'),
+(200, 2, 'test2'),
+(300, 3, 'test3');
+INSERT INTO v141632 (v141633) VALUES
+('test16'),
+('test17'),
+('test18');
+INSERT INTO v141656 (v141657) VALUES
+(10),
+(20),
+(30);
+INSERT INTO v141614 (data) VALUES
+('row1'),
+('row2'),
+('row3');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+CREATE TABLE IF NOT EXISTS `table_bl5369` (
+    `table_bl5369_emp_id` INT,
+    `table_bl5369_department_id` INT
+);
+
+INSERT INTO `table_bl5369` (`table_bl5369_emp_id`, `table_bl5369_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_BL5369_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(40)) - -9 + (v_emp_count / 10);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+CREATE TABLE IF NOT EXISTS `table_ke34d4` (
+    `table_ke34d4_member_id` INT,
+    `table_ke34d4_tier_level` INT,
+    `table_ke34d4_total_miles` DECIMAL(10,2),
+    `table_ke34d4_miles_expired` INT,
+    `table_ke34d4_last_activity_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_y90k4n` (
+    `table_y90k4n_redemption_id` INT,
+    `table_y90k4n_member_id` INT,
+    `table_y90k4n_flight_id` INT,
+    `table_y90k4n_miles_used` INT,
+    `table_y90k4n_booking_date` DATE
+);
+
+INSERT INTO `table_ke34d4` (`table_ke34d4_member_id`, `table_ke34d4_tier_level`, `table_ke34d4_total_miles`, `table_ke34d4_miles_expired`, `table_ke34d4_last_activity_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+INSERT INTO `table_y90k4n` (`table_y90k4n_redemption_id`, `table_y90k4n_member_id`, `table_y90k4n_flight_id`, `table_y90k4n_miles_used`, `table_y90k4n_booking_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_UPGRADE_POINTS_gox2yv(MEMBER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_MILES INT DEFAULT 0;
+    DECLARE V_MILES_EXPIRED INT DEFAULT 0;
+    DECLARE V_CURRENT_TIER INT DEFAULT 1;
+    DECLARE V_UPGRADE_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KE34D4_TOTAL_MILES, 0), COALESCE(TABLE_KE34D4_MILES_EXPIRED, 0), TABLE_KE34D4_TIER_LEVEL
+    INTO V_TOTAL_MILES, V_MILES_EXPIRED, V_CURRENT_TIER
+    FROM TABLE_KE34D4
+    WHERE TABLE_KE34D4_MEMBER_ID = MEMBER_ID_PARAM;
+
+    SET V_UPGRADE_POINTS = V_TOTAL_MILES - V_MILES_EXPIRED;
+
+    CASE V_CURRENT_TIER
+        WHEN 1 THEN
+            IF V_UPGRADE_POINTS >= 50000 THEN SET V_UPGRADE_POINTS = (MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(12)) - -622 + (v_upgrade_points + 1000);
+            END IF;
+        WHEN 2 THEN
+            IF V_UPGRADE_POINTS >= 100000 THEN SET V_UPGRADE_POINTS = V_UPGRADE_POINTS + 2000;
+            END IF;
+        ELSE SET V_UPGRADE_POINTS = V_UPGRADE_POINTS;
+    END CASE;
+
+    RETURN CAST(V_UPGRADE_POINTS AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+CREATE TABLE IF NOT EXISTS `table_7sluij` (
+    `table_7sluij_emp_id` INT,
+    `table_7sluij_manager_id` INT,
+    `table_7sluij_department_id` INT,
+    `table_7sluij_salary` INT
+);
+
+INSERT INTO `table_7sluij` (`table_7sluij_emp_id`, `table_7sluij_manager_id`, `table_7sluij_department_id`, `table_7sluij_salary`) VALUES (1, NULL, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT NULL AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT TABLE_7SLUIJ_MANAGER_ID INTO V_CURRENT_EMP FROM TABLE_7SLUIJ WHERE TABLE_7SLUIJ_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = V_DEPTH + 1;
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+CREATE TABLE IF NOT EXISTS `table_2iqm3m` (
+    `table_2iqm3m_emp_id` INT,
+    `table_2iqm3m_dept_id` INT,
+    `table_2iqm3m_salary` INT,
+    `table_2iqm3m_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_lbgcfs` (
+    `table_lbgcfs_dept_id` INT,
+    `table_lbgcfs_name` VARCHAR(50),
+    `table_lbgcfs_manager_id` INT,
+    `table_lbgcfs_salary_budget` INT
+);
+
+INSERT INTO `table_2iqm3m` (`table_2iqm3m_emp_id`, `table_2iqm3m_dept_id`, `table_2iqm3m_salary`, `table_2iqm3m_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_lbgcfs` (`table_lbgcfs_dept_id`, `table_lbgcfs_name`, `table_lbgcfs_manager_id`, `table_lbgcfs_salary_budget`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_SALARY_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2IQM3M_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_2IQM3M
+    WHERE TABLE_2IQM3M_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LBGCFS_SALARY_BUDGET, 1000000)
+    INTO V_SALARY_BUDGET
+    FROM TABLE_LBGCFS
+    WHERE TABLE_LBGCFS_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_SALARY_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_PERCENTAGE = (V_TOTAL_SALARIES * 100) / V_SALARY_BUDGET;
+
+    RETURN V_UTILIZATION_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+CREATE TABLE IF NOT EXISTS `table_ce0xds` (
+    `table_ce0xds_payment_id` INT,
+    `table_ce0xds_order_id` INT,
+    `table_ce0xds_amount` DECIMAL(10,2),
+    `table_ce0xds_payment_date` DATE,
+    `table_ce0xds_payment_method` INT,
+    `table_ce0xds_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ce0xds` (`table_ce0xds_payment_id`, `table_ce0xds_order_id`, `table_ce0xds_amount`, `table_ce0xds_payment_date`, `table_ce0xds_payment_method`, `table_ce0xds_status`) VALUES (1, 2, 1.0, '2024-01-01', 5, 'test');
+
+/* -----Called: MYSQL_FUNC_PROCESS_REFUND_o1fbz5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_REFUND_o1fbz5(ORDER_ID_PARAM INT, REFUND_PERCENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_REFUND_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAYMENT_STATUS INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(SUM(TABLE_CE0XDS_AMOUNT), 0) INTO V_TOTAL_PAID
+    FROM TABLE_CE0XDS
+    WHERE TABLE_CE0XDS_ORDER_ID = ORDER_ID_PARAM AND TABLE_CE0XDS_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_PAID = 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF REFUND_PERCENT < 0 THEN
+        SET REFUND_PERCENT = 0;
+    END IF;
+
+    IF REFUND_PERCENT > 100 THEN
+        SET REFUND_PERCENT = 100;
+    END IF;
+
+    SET V_REFUND_AMOUNT = V_TOTAL_PAID * REFUND_PERCENT / 100;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(-70, -88, -83)) - -908 + (v_refund_amount);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + (0));
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN 10;
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1503(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_val VARCHAR(50);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v141600 FROM v141598 ORDER BY v141600;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -1;
+    END;
+
+    -- Statement 1: SELECT with ORDER BY and variable assignment
+    SET @f = 0;
+    SELECT v141600 INTO v_temp FROM v141598 ORDER BY v141600 LIMIT 1;
+    SET v_counter = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (v_counter) + 1;
+
+    -- Statement 2: UPDATE with AES_ENCRYPT/DECRYPT
+    SET @sql_update = 'UPDATE v141632 SET v141633 = ''test16'' WHERE v141633 = AES_DECRYPT(AES_ENCRYPT(''a'', 1.1818212630766e-125), ''a'', REPEAT(''a'', 16))';
+    PREPARE stmt_update FROM @sql_update;
+    EXECUTE stmt_update;
+    DEALLOCATE PREPARE stmt_update;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: SELECT all from v141614 using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: CREATE INDEX with CRC32
+    SET @sql_idx1 = 'CREATE INDEX v141679 ON v141656((CRC32(v141657) - CRC32(v141657)))';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLWARNING BEGIN END;
+        PREPARE stmt_idx1 FROM @sql_idx1;
+        EXECUTE stmt_idx1;
+        DEALLOCATE PREPARE stmt_idx1;
+    END;
+
+    -- Statement 5: CREATE INDEX with NULLIF
+    SET @sql_idx2 = 'CREATE INDEX v141684 ON v141598(((v141600 + v141600) / NULLIF(1, 0)))';
+    BEGIN
+        DECLARE CONTINUE HANDLER FOR SQLWARNING BEGIN END;
+        PREPARE stmt_idx2 FROM @sql_idx2;
+        EXECUTE stmt_idx2;
+        DEALLOCATE PREPARE stmt_idx2;
+    END;
+
+    -- Conditional logic using IF/ELSE
+    IF v_counter > 5 THEN
+        SET v_counter = v_counter * (MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(-66)) - -296 + (2);
+    ELSE
+        SET v_counter = v_counter + 10;
+    END IF;
+
+    -- Loop using WHILE
+    WHILE v_counter < 100 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1503(1, 1, @out_result);
+
+SELECT @out_result;

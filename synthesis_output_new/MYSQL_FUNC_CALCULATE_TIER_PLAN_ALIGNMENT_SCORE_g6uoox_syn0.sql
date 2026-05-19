@@ -1,0 +1,476 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gt6jol` (
+    `table_gt6jol_customer_id` INT,
+    `table_gt6jol_plan_type` VARCHAR(50),
+    `table_gt6jol_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_avp7kg` (
+    `table_avp7kg_customer_id` INT,
+    `table_avp7kg_tier_level` INT
+);
+
+INSERT INTO `table_gt6jol` (`table_gt6jol_customer_id`, `table_gt6jol_plan_type`, `table_gt6jol_status`) VALUES (1, 'test', 'test');
+
+INSERT INTO `table_avp7kg` (`table_avp7kg_customer_id`, `table_avp7kg_tier_level`) VALUES (1, 2);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+CREATE TABLE IF NOT EXISTS `table_pe877c` (
+    `table_pe877c_employee_id` INT,
+    `table_pe877c_department_id` INT,
+    `table_pe877c_salary` INT,
+    `table_pe877c_hire_date` DATE,
+    `table_pe877c_is_remote` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvva5n` (
+    `table_vvva5n_project_id` INT,
+    `table_vvva5n_team_lead_id` INT,
+    `table_vvva5n_budget` INT,
+    `table_vvva5n_deadline` INT,
+    `table_vvva5n_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pe877c` (`table_pe877c_employee_id`, `table_pe877c_department_id`, `table_pe877c_salary`, `table_pe877c_hire_date`, `table_pe877c_is_remote`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_vvva5n` (`table_vvva5n_project_id`, `table_vvva5n_team_lead_id`, `table_vvva5n_budget`, `table_vvva5n_deadline`, `table_vvva5n_status`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_IS_REMOTE INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PROJECT_COUNT INT DEFAULT 0;
+    DECLARE V_COMPLETED_PROJECTS INT DEFAULT 0;
+    DECLARE V_REMOTE_IMPACT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PE877C_IS_REMOTE, 0), COALESCE(TABLE_PE877C_SALARY, 50000)
+    INTO V_IS_REMOTE, V_SALARY
+    FROM TABLE_PE877C
+    WHERE TABLE_PE877C_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_VVVA5N_STATUS = 'COMPLETED' THEN 1 END)
+    INTO V_PROJECT_COUNT, V_COMPLETED_PROJECTS
+    FROM TABLE_VVVA5N
+    WHERE TABLE_VVVA5N_TEAM_LEAD_ID = EMPLOYEE_ID_PARAM;
+
+    IF V_IS_REMOTE = 1 THEN
+        SET V_REMOTE_IMPACT_SCORE = (MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(-48)) - -67 + (80 + (v_completed_projects * 5) - (v_salary / 10000));
+    ELSE
+        SET V_REMOTE_IMPACT_SCORE = (MYSQL_FUNC_FUNC_194_ITERATE_7cimib()) - -942 + ((MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(-46)) - -687 + (70 + (v_completed_projects * 3)));
+    END IF;
+
+    RETURN V_REMOTE_IMPACT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+CREATE TABLE IF NOT EXISTS `table_nesyz1` (
+    `table_nesyz1_pet_id` INT,
+    `table_nesyz1_pet_name` VARCHAR(50),
+    `table_nesyz1_species` INT,
+    `table_nesyz1_breed` INT,
+    `table_nesyz1_age_years` INT,
+    `table_nesyz1_weight_kg` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_a8dzoj` (
+    `table_a8dzoj_visit_id` INT,
+    `table_a8dzoj_pet_id` INT,
+    `table_a8dzoj_vet_id` INT,
+    `table_a8dzoj_visit_date` DATE,
+    `table_a8dzoj_diagnosis` INT,
+    `table_a8dzoj_treatment_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nesyz1` (`table_nesyz1_pet_id`, `table_nesyz1_pet_name`, `table_nesyz1_species`, `table_nesyz1_breed`, `table_nesyz1_age_years`, `table_nesyz1_weight_kg`) VALUES (1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_a8dzoj` (`table_a8dzoj_visit_id`, `table_a8dzoj_pet_id`, `table_a8dzoj_vet_id`, `table_a8dzoj_visit_date`, `table_a8dzoj_diagnosis`, `table_a8dzoj_treatment_cost`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_VET_VISIT_COST_ph2ssj(PET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PET_AGE INT DEFAULT 0;
+    DECLARE V_PET_WEIGHT INT DEFAULT 0;
+    DECLARE V_LAST_VISIT_COST INT DEFAULT 0;
+    DECLARE V_BASE_COST INT DEFAULT 50;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NESYZ1_AGE_YEARS, 1), COALESCE(TABLE_NESYZ1_WEIGHT_KG, 5)
+    INTO V_PET_AGE, V_PET_WEIGHT
+    FROM TABLE_NESYZ1
+    WHERE TABLE_NESYZ1_PET_ID = PET_ID_PARAM;
+
+    SELECT COALESCE(TABLE_A8DZOJ_TREATMENT_COST, 0) INTO V_LAST_VISIT_COST
+    FROM TABLE_A8DZOJ
+    WHERE TABLE_A8DZOJ_PET_ID = PET_ID_PARAM
+    ORDER BY TABLE_A8DZOJ_VISIT_DATE DESC LIMIT 1;
+
+    SET V_TOTAL_COST = V_BASE_COST;
+
+    IF V_PET_AGE < 1 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + 30;
+    END IF;
+
+    IF V_PET_WEIGHT > 50 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_PET_WEIGHT - 50);
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+CREATE TABLE IF NOT EXISTS `table_zvz13f` (
+    `table_zvz13f_employee_id` INT,
+    `table_zvz13f_department_id` INT,
+    `table_zvz13f_salary` INT,
+    `table_zvz13f_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_9qjub2` (
+    `table_9qjub2_review_id` INT,
+    `table_9qjub2_employee_id` INT,
+    `table_9qjub2_review_date` DATE,
+    `table_9qjub2_score` INT
+);
+
+INSERT INTO `table_zvz13f` (`table_zvz13f_employee_id`, `table_zvz13f_department_id`, `table_zvz13f_salary`, `table_zvz13f_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_9qjub2` (`table_9qjub2_review_id`, `table_9qjub2_employee_id`, `table_9qjub2_review_date`, `table_9qjub2_score`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_BONUS_1yfu7v(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_AVG_PERFORMANCE_SCORE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_PERCENTAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_ZVZ13F_HIRE_DATE, CURDATE())
+    INTO V_YEARS_EMPLOYED
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9QJUB2_SCORE), 0.00)
+    INTO V_AVG_PERFORMANCE_SCORE
+    FROM TABLE_9QJUB2
+    WHERE TABLE_9QJUB2_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT TABLE_ZVZ13F_SALARY
+    INTO V_BASE_SALARY
+    FROM TABLE_ZVZ13F
+    WHERE TABLE_ZVZ13F_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_BONUS_PERCENTAGE = LEAST(V_YEARS_EMPLOYED * 2, 20);
+
+    IF V_AVG_PERFORMANCE_SCORE >= 4.5 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 15;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 4.0 THEN
+        SET V_BONUS_PERCENTAGE = V_BONUS_PERCENTAGE + 10;
+    ELSEIF V_AVG_PERFORMANCE_SCORE >= 3.0 THEN
+        SET V_BONUS_PERCENTAGE = (MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(-2, 59)) - -563 + (v_bonus_percentage + 5);
+    END IF;
+
+    SET V_TOTAL_BONUS = (V_BASE_SALARY * V_BONUS_PERCENTAGE) / 100;
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+CREATE TABLE IF NOT EXISTS `table_w96x6p` (
+    `table_w96x6p_player_id` INT,
+    `table_w96x6p_player_name` VARCHAR(50),
+    `table_w96x6p_game_mode` INT,
+    `table_w96x6p_score` INT,
+    `table_w96x6p_rank_position` INT,
+    `table_w96x6p_last_played` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_88r7sb` (
+    `table_88r7sb_tournament_id` INT,
+    `table_88r7sb_game_mode` INT,
+    `table_88r7sb_entry_fee` INT,
+    `table_88r7sb_prize_pool` INT,
+    `table_88r7sb_winner_id` INT
+);
+
+INSERT INTO `table_w96x6p` (`table_w96x6p_player_id`, `table_w96x6p_player_name`, `table_w96x6p_game_mode`, `table_w96x6p_score`, `table_w96x6p_rank_position`, `table_w96x6p_last_played`) VALUES (1, 'test', 1, 1, 1, 1);
+
+INSERT INTO `table_88r7sb` (`table_88r7sb_tournament_id`, `table_88r7sb_game_mode`, `table_88r7sb_entry_fee`, `table_88r7sb_prize_pool`, `table_88r7sb_winner_id`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOURNAMENT_PRIZE_xaxv2u(TOURNAMENT_ID_PARAM INT, RANK_POSITION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRIZE_POOL INT DEFAULT 0;
+    DECLARE V_ENTRY_FEE INT DEFAULT 0;
+    DECLARE V_PRIZE_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_88R7SB_PRIZE_POOL, 1000), COALESCE(TABLE_88R7SB_ENTRY_FEE, 50)
+    INTO V_PRIZE_POOL, V_ENTRY_FEE
+    FROM TABLE_88R7SB
+    WHERE TABLE_88R7SB_TOURNAMENT_ID = TOURNAMENT_ID_PARAM;
+
+    CASE RANK_POSITION_PARAM
+        WHEN 1 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 50 / 100;
+        WHEN 2 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 25 / 100;
+        WHEN 3 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 12 / 100;
+        WHEN 4 THEN SET V_PRIZE_AMOUNT = V_PRIZE_POOL * 5 / 100;
+        ELSE SET V_PRIZE_AMOUNT = V_ENTRY_FEE * 2;
+    END CASE;
+
+    RETURN CAST(V_PRIZE_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_194_ITERATE_7cimib----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_194_ITERATE_7cimib() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ITER_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        IF I < 3 THEN
+            ITERATE LABEL1;
+        END IF;
+        SET ITER_COUNT = (MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(37, 83)) - 348 + (iter_count) + 1;
+        IF I >= 5 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN ITER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_RANGE_1fdlz9(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN -1;
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+CREATE TABLE IF NOT EXISTS `table_j9rj9a` (
+    `table_j9rj9a_customer_id` INT,
+    `table_j9rj9a_order_id` INT
+);
+
+INSERT INTO `table_j9rj9a` (`table_j9rj9a_customer_id`, `table_j9rj9a_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MAX(TABLE_J9RJ9A_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_J9RJ9A
+    WHERE TABLE_J9RJ9A_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8(40, 81)) - 862 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73()) - -790 + (v_order_id % 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CAR_RENTAL_TOTAL_gmlkjw(91)) - 929 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAR_RENTAL_TOTAL_gmlkjw----- */
+CREATE TABLE IF NOT EXISTS `table_5dm2o8` (
+    `table_5dm2o8_booking_id` INT,
+    `table_5dm2o8_customer_id` INT,
+    `table_5dm2o8_car_id` INT,
+    `table_5dm2o8_rental_days` INT,
+    `table_5dm2o8_daily_rate` INT,
+    `table_5dm2o8_insurance_daily` INT,
+    `table_5dm2o8_pickup_location` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_xg1wq8` (
+    `table_xg1wq8_car_id` INT,
+    `table_xg1wq8_car_type` VARCHAR(50),
+    `table_xg1wq8_make` INT,
+    `table_xg1wq8_model` INT,
+    `table_xg1wq8_year` INT,
+    `table_xg1wq8_mileage` INT
+);
+
+INSERT INTO `table_5dm2o8` (`table_5dm2o8_booking_id`, `table_5dm2o8_customer_id`, `table_5dm2o8_car_id`, `table_5dm2o8_rental_days`, `table_5dm2o8_daily_rate`, `table_5dm2o8_insurance_daily`, `table_5dm2o8_pickup_location`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_xg1wq8` (`table_xg1wq8_car_id`, `table_xg1wq8_car_type`, `table_xg1wq8_make`, `table_xg1wq8_model`, `table_xg1wq8_year`, `table_xg1wq8_mileage`) VALUES (1, 'test', 3, 4, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAR_RENTAL_TOTAL_gmlkjw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAR_RENTAL_TOTAL_gmlkjw(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_DAYS INT DEFAULT 1;
+    DECLARE V_DAILY_RATE INT DEFAULT 50;
+    DECLARE V_INSURANCE_DAILY INT DEFAULT 15;
+    DECLARE V_MILEAGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5DM2O8_RENTAL_DAYS, 1), COALESCE(TABLE_5DM2O8_DAILY_RATE, 50), COALESCE(TABLE_5DM2O8_INSURANCE_DAILY, 15)
+    INTO V_RENTAL_DAYS, V_DAILY_RATE, V_INSURANCE_DAILY
+    FROM TABLE_5DM2O8
+    WHERE TABLE_5DM2O8_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_XG1WQ8_MILEAGE, 0) INTO V_MILEAGE_SURCHARGE
+    FROM TABLE_5DM2O8 CRB
+    JOIN TABLE_XG1WQ8 C ON TABLE_5DM2O8_CAR_ID = TABLE_XG1WQ8_CAR_ID
+    WHERE TABLE_5DM2O8_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_DAYS * (V_DAILY_RATE + V_INSURANCE_DAILY);
+
+    IF V_MILEAGE_SURCHARGE > 50000 THEN
+        SET V_TOTAL_COST = V_TOTAL_COST + (V_MILEAGE_SURCHARGE / 1000) * 5;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BINOMIAL_COEFFICIENT_bmgpd8(N INT, K INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF K < 0 OR K > N THEN
+        RETURN 0;
+    END IF;
+
+    IF K > N - K THEN
+        SET K = N - K;
+    END IF;
+
+    SET V_I = 0;
+
+    WHILE V_I < K DO
+        SET V_RESULT = V_RESULT * (N - V_I);
+        SET V_RESULT = V_RESULT / (V_I + 1);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN FLOOR(V_RESULT);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_ALIGNMENT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_GT6JOL_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_GT6JOL
+    WHERE TABLE_GT6JOL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_AVP7KG_TIER_LEVEL
+    INTO V_TIER
+    FROM TABLE_AVP7KG
+    WHERE TABLE_AVP7KG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF (V_TIER = 'PLATINUM' AND V_PLAN_TYPE = 'ENTERPRISE') OR
+       (V_TIER = 'GOLD' AND V_PLAN_TYPE = 'PREMIUM') OR
+       (V_TIER = 'SILVER' AND V_PLAN_TYPE = 'BASIC') THEN
+        SET V_ALIGNMENT_SCORE = 100;
+    ELSEIF (V_TIER IN ('PLATINUM', 'GOLD') AND V_PLAN_TYPE IN ('PREMIUM', 'ENTERPRISE')) OR
+            (V_TIER = 'SILVER' AND V_PLAN_TYPE IN ('BASIC', 'PREMIUM')) THEN
+        SET V_ALIGNMENT_SCORE = (MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_ID_VALUE_girve6(-54)) - -83 + ((MYSQL_FUNC_CALCULATE_REMOTE_WORK_IMPACT_pefjsf(50)) - 421 + (70));
+    ELSE
+        SET V_ALIGNMENT_SCORE = 30;
+    END IF;
+
+    RETURN V_ALIGNMENT_SCORE;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TIER_PLAN_ALIGNMENT_SCORE_g6uoox(1);

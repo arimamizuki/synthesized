@@ -1,0 +1,351 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_yywzmn` (
+    `table_yywzmn_supplier_id` INT,
+    `table_yywzmn_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_yywzmn` (`table_yywzmn_supplier_id`, `table_yywzmn_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(STR1 INT, STR2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEN1 INT DEFAULT 0;
+    DECLARE V_LEN2 INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SET V_LEN1 = (MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(-38, -31)) - -751 + (char_length(str1));
+    SET V_LEN2 = CHAR_LENGTH(STR2);
+
+    IF V_LEN1 = 0 OR V_LEN2 = 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_LEN1 DO
+        SET V_J = (MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(-86)) - 807 + (1);
+        INNER_LOOP: WHILE V_J <= V_LEN2 DO
+            IF SUBSTRING(STR1, V_I, 1) = SUBSTRING(STR2, V_J, 1) THEN
+                SET V_COUNT = V_COUNT + 1;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+CREATE TABLE IF NOT EXISTS `table_if4wjn` (
+    `table_if4wjn_appointment_id` INT,
+    `table_if4wjn_customer_id` INT,
+    `table_if4wjn_therapist_id` INT,
+    `table_if4wjn_service_type` VARCHAR(50),
+    `table_if4wjn_duration_minutes` INT,
+    `table_if4wjn_appointment_date` DATE,
+    `table_if4wjn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6nekv6` (
+    `table_6nekv6_service_id` INT,
+    `table_6nekv6_name` VARCHAR(50),
+    `table_6nekv6_base_price` DECIMAL(10,2),
+    `table_6nekv6_duration_default` INT
+);
+
+INSERT INTO `table_if4wjn` (`table_if4wjn_appointment_id`, `table_if4wjn_customer_id`, `table_if4wjn_therapist_id`, `table_if4wjn_service_type`, `table_if4wjn_duration_minutes`, `table_if4wjn_appointment_date`, `table_if4wjn_price`) VALUES (1, 2, 3, 'test', 5, '2024-01-01', 1.0);
+
+INSERT INTO `table_6nekv6` (`table_6nekv6_service_id`, `table_6nekv6_name`, `table_6nekv6_base_price`, `table_6nekv6_duration_default`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(SERVICE_TYPE_PARAM INT, ADD_ONS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 80;
+    DECLARE V_ADDON_COST INT DEFAULT 30;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'MASSAGE' THEN SET V_BASE_PRICE = 100;
+        WHEN 'FACIAL' THEN SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(88)) - 204 + (80);
+        WHEN 'BODY_WRAP' THEN SET V_BASE_PRICE = 120;
+        WHEN 'REFLEXOLOGY' THEN SET V_BASE_PRICE = 60;
+        ELSE SET V_BASE_PRICE = 80;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE + (ADD_ONS_PARAM * V_ADDON_COST);
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+CREATE TABLE IF NOT EXISTS `table_lrokng` (
+    `table_lrokng_customer_id` INT,
+    `table_lrokng_order_date` DATE,
+    `table_lrokng_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lrokng` (`table_lrokng_customer_id`, `table_lrokng_order_date`, `table_lrokng_total_amount`) VALUES (1, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_TO_CUSTOMER_RATIO_9pa9hk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 1;
+
+    SELECT COUNT(*), COUNT(DISTINCT TABLE_LROKNG_CUSTOMER_ID)
+    INTO V_ORDER_COUNT, V_CUSTOMER_COUNT
+    FROM TABLE_LROKNG
+    WHERE TABLE_LROKNG_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (V_ORDER_COUNT * 100) / V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+CREATE TABLE IF NOT EXISTS `table_wsac0c` (
+    `table_wsac0c_emp_id` INT,
+    `table_wsac0c_department_id` INT,
+    `table_wsac0c_salary` INT
+);
+
+INSERT INTO `table_wsac0c` (`table_wsac0c_emp_id`, `table_wsac0c_department_id`, `table_wsac0c_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_INDEX_cxtcpe(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPANY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_WSAC0C
+    WHERE TABLE_WSAC0C_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_WSAC0C_SALARY), 1)
+    INTO V_COMPANY_AVG
+    FROM TABLE_WSAC0C;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(96, -87)) - 874 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(48)) - 438 + (floor((v_avg_salary * 100) / v_company_avg)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+CREATE TABLE IF NOT EXISTS `table_h1shr7` (
+    `table_h1shr7_emp_id` INT,
+    `table_h1shr7_department_id` INT,
+    `table_h1shr7_hire_date` DATE,
+    `table_h1shr7_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cm7r4q` (
+    `table_cm7r4q_department_id` INT,
+    `table_cm7r4q_name` VARCHAR(50)
+);
+
+INSERT INTO `table_h1shr7` (`table_h1shr7_emp_id`, `table_h1shr7_department_id`, `table_h1shr7_hire_date`, `table_h1shr7_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_cm7r4q` (`table_cm7r4q_department_id`, `table_cm7r4q_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_hhfk0z(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_PRIOR_YEAR_HIRES INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_YEAR_HIRES
+    FROM TABLE_H1SHR7
+    WHERE TABLE_H1SHR7_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_H1SHR7_HIRE_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_YEAR_HIRES = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_YEAR_HIRES - V_PRIOR_YEAR_HIRES) * 100) / V_PRIOR_YEAR_HIRES;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A - P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd----- */
+CREATE TABLE IF NOT EXISTS `table_a8cori` (
+    `table_a8cori_order_id` INT,
+    `table_a8cori_customer_id` INT,
+    `table_a8cori_order_date` DATE,
+    `table_a8cori_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_wabw7c` (
+    `table_wabw7c_customer_id` INT,
+    `table_wabw7c_country` INT
+);
+
+INSERT INTO `table_a8cori` (`table_a8cori_order_id`, `table_a8cori_customer_id`, `table_a8cori_order_date`, `table_a8cori_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_wabw7c` (`table_wabw7c_customer_id`, `table_wabw7c_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_VOLUME INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_VOLUME
+    FROM TABLE_A8CORI O
+    JOIN TABLE_WABW7C C ON TABLE_A8CORI_CUSTOMER_ID = TABLE_WABW7C_CUSTOMER_ID
+    WHERE TABLE_WABW7C_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(-47, 81)) - -438 + ((MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_fagils(-91)) - -494 + (v_order_volume));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_fagils----- */
+CREATE TABLE IF NOT EXISTS `table_fz3zhi` (
+    `table_fz3zhi_product_id` INT,
+    `table_fz3zhi_category_id` INT,
+    `table_fz3zhi_price` DECIMAL(10,2),
+    `table_fz3zhi_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1wqdr1` (
+    `table_1wqdr1_order_id` INT,
+    `table_1wqdr1_product_id` INT,
+    `table_1wqdr1_quantity` INT
+);
+
+INSERT INTO `table_fz3zhi` (`table_fz3zhi_product_id`, `table_fz3zhi_category_id`, `table_fz3zhi_price`, `table_fz3zhi_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_1wqdr1` (`table_1wqdr1_order_id`, `table_1wqdr1_product_id`, `table_1wqdr1_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_fagils----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_fagils(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FZ3ZHI_PRICE, 0), COALESCE(TABLE_FZ3ZHI_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_FZ3ZHI
+    WHERE TABLE_FZ3ZHI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = V_PRICE * V_STOCK;
+
+    RETURN V_INVENTORY_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(PART INT, TOTAL INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF TOTAL = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'TOTAL CANNOT BE ZERO';
+    END IF;
+    IF PART < 0 OR TOTAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUES CANNOT BE NEGATIVE';
+    END IF;
+    RETURN (MYSQL_FUNC_INVENTORY_HELD_BY_CUSTOMER_75hh5p(-60)) - -112 + ((part / total) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_INVENTORY_HELD_BY_CUSTOMER_75hh5p----- */
+CREATE TABLE IF NOT EXISTS table_6gk7rs (
+    table_6gk7rs_inventory_id INT,
+    table_6gk7rs_customer_id INT,
+    table_6gk7rs_return_date DATE
+);
+
+INSERT INTO table_6gk7rs (`table_6gk7rs_inventory_id`, `table_6gk7rs_customer_id`, `table_6gk7rs_return_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_INVENTORY_HELD_BY_CUSTOMER_75hh5p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_INVENTORY_HELD_BY_CUSTOMER_75hh5p(P_INVENTORY_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+  DECLARE V_CUSTOMER_ID INT;
+  
+
+  SELECT TABLE_6GK7RS_CUSTOMER_ID INTO V_CUSTOMER_ID
+  FROM TABLE_6GK7RS
+  WHERE TABLE_6GK7RS_RETURN_DATE IS NULL
+  AND TABLE_6GK7RS_INVENTORY_ID = P_INVENTORY_ID;
+
+  RETURN V_CUSTOMER_ID;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_YYWZMN_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_YYWZMN
+    WHERE TABLE_YYWZMN_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_VOLUME_3a9ccd(-53)) - 348 + ((MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(-47, -54)) - -523 + (floor(v_rating * 20)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_SCORE_tjyq63(1);

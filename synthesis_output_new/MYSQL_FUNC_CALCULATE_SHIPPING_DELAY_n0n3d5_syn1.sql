@@ -1,0 +1,477 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_d7zjcs` (
+    `table_d7zjcs_order_id` INT,
+    `table_d7zjcs_customer_id` INT,
+    `table_d7zjcs_order_date` DATE,
+    `table_d7zjcs_shipped_date` DATE,
+    `table_d7zjcs_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d7zjcs` (`table_d7zjcs_order_id`, `table_d7zjcs_customer_id`, `table_d7zjcs_order_date`, `table_d7zjcs_shipped_date`, `table_d7zjcs_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_AVG_5_VALUES_uslod4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_AVG_5_VALUES_uslod4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM / V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+CREATE TABLE IF NOT EXISTS `table_54mt9z` (
+    `table_54mt9z_emp_id` INT,
+    `table_54mt9z_department_id` INT,
+    `table_54mt9z_salary` INT,
+    `table_54mt9z_hire_date` DATE,
+    `table_54mt9z_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_54mt9z` (`table_54mt9z_emp_id`, `table_54mt9z_department_id`, `table_54mt9z_salary`, `table_54mt9z_hire_date`, `table_54mt9z_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_LOYALTY_SCORE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_54MT9Z_HIRE_DATE, CURDATE()), COALESCE(TABLE_54MT9Z_PERFORMANCE_RATING, 0), COALESCE(TABLE_54MT9Z_SALARY, 0)
+    INTO V_TENURE_YEARS, V_PERFORMANCE, V_SALARY
+    FROM TABLE_54MT9Z
+    WHERE TABLE_54MT9Z_EMP_ID = EMP_ID_PARAM;
+
+    SET V_LOYALTY_SCORE = (V_TENURE_YEARS * 15) + (V_PERFORMANCE * 20) + (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(-31)) - 915 + (v_loyalty_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+CREATE TABLE IF NOT EXISTS `table_38k1vq` (
+    `table_38k1vq_table_id` INT,
+    `table_38k1vq_restaurant_id` INT,
+    `table_38k1vq_capacity` INT,
+    `table_38k1vq_is_outdoor` INT,
+    `table_38k1vq_view_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4e93b8` (
+    `table_4e93b8_reservation_id` INT,
+    `table_4e93b8_table_id` INT,
+    `table_4e93b8_customer_id` INT,
+    `table_4e93b8_party_size` INT,
+    `table_4e93b8_reservation_date` DATE,
+    `table_4e93b8_duration_minutes` INT
+);
+
+INSERT INTO `table_38k1vq` (`table_38k1vq_table_id`, `table_38k1vq_restaurant_id`, `table_38k1vq_capacity`, `table_38k1vq_is_outdoor`, `table_38k1vq_view_type`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_4e93b8` (`table_4e93b8_reservation_id`, `table_4e93b8_table_id`, `table_4e93b8_customer_id`, `table_4e93b8_party_size`, `table_4e93b8_reservation_date`, `table_4e93b8_duration_minutes`) VALUES (1, 2, 3, 4, '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(TABLE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 4;
+    DECLARE V_IS_OUTDOOR INT DEFAULT 0;
+    DECLARE V_RESERVATION_COUNT INT DEFAULT 0;
+    DECLARE V_REVENUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_38K1VQ_CAPACITY, 4), COALESCE(TABLE_38K1VQ_IS_OUTDOOR, 0)
+    INTO V_CAPACITY, V_IS_OUTDOOR
+    FROM TABLE_38K1VQ
+    WHERE TABLE_38K1VQ_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVATION_COUNT
+    FROM TABLE_4E93B8
+    WHERE TABLE_4E93B8_TABLE_ID = TABLE_ID_PARAM
+      AND TABLE_4E93B8_RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_REVENUE_SCORE = V_CAPACITY * V_RESERVATION_COUNT;
+
+    IF V_IS_OUTDOOR = 1 THEN
+        SET V_REVENUE_SCORE = V_REVENUE_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_REVENUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+CREATE TABLE IF NOT EXISTS `table_7oa9eq` (
+    `table_7oa9eq_treatment_id` INT,
+    `table_7oa9eq_patient_id` INT,
+    `table_7oa9eq_dentist_id` INT,
+    `table_7oa9eq_treatment_type` VARCHAR(50),
+    `table_7oa9eq_treatment_date` DATE,
+    `table_7oa9eq_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_eidrga` (
+    `table_eidrga_plan_id` INT,
+    `table_eidrga_patient_id` INT,
+    `table_eidrga_coverage_percent` INT,
+    `table_eidrga_annual_max` INT
+);
+
+INSERT INTO `table_7oa9eq` (`table_7oa9eq_treatment_id`, `table_7oa9eq_patient_id`, `table_7oa9eq_dentist_id`, `table_7oa9eq_treatment_type`, `table_7oa9eq_treatment_date`, `table_7oa9eq_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 1.0);
+
+INSERT INTO `table_eidrga` (`table_eidrga_plan_id`, `table_eidrga_patient_id`, `table_eidrga_coverage_percent`, `table_eidrga_annual_max`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(TREATMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TREATMENT_COST INT DEFAULT 0;
+    DECLARE V_COVERAGE_PERCENT INT DEFAULT 50;
+    DECLARE V_ANNUAL_MAX INT DEFAULT 1500;
+    DECLARE V_TOTAL_USED INT DEFAULT 0;
+    DECLARE V_COVERED_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7OA9EQ_COST, 0)
+    INTO V_TREATMENT_COST
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT TABLE_EIDRGA_COVERAGE_PERCENT, TABLE_EIDRGA_ANNUAL_MAX
+    INTO V_COVERAGE_PERCENT, V_ANNUAL_MAX
+    FROM TABLE_7OA9EQ DT
+    JOIN TABLE_EIDRGA DP ON TABLE_7OA9EQ_PATIENT_ID = TABLE_EIDRGA_PATIENT_ID
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_7OA9EQ_COST), 0) INTO V_TOTAL_USED
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_PATIENT_ID = (SELECT TABLE_7OA9EQ_PATIENT_ID FROM TABLE_7OA9EQ WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM);
+
+    SET V_COVERED_AMOUNT = (MYSQL_FUNC_FACTORIAL_3sonsj(5)) - 164 + (v_treatment_cost * v_coverage_percent / 100);
+
+    IF V_TOTAL_USED > V_ANNUAL_MAX THEN
+        SET V_COVERED_AMOUNT = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(-70)) - -242 + (cast(v_covered_amount as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+CREATE TABLE IF NOT EXISTS `table_2waz00` (
+    `table_2waz00_emp_id` INT,
+    `table_2waz00_department_id` INT,
+    `table_2waz00_hire_date` DATE,
+    `table_2waz00_salary` INT
+);
+
+INSERT INTO `table_2waz00` (`table_2waz00_emp_id`, `table_2waz00_department_id`, `table_2waz00_hire_date`, `table_2waz00_salary`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_PRODUCTIVITY_INDEX_xroan5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_2WAZ00_SALARY), 0),
+           COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_2WAZ00_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMP_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_2WAZ00
+    WHERE TABLE_2WAZ00_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR((V_AVG_SALARY * V_AVG_TENURE) / GREATEST(V_EMP_COUNT, 1));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FACTORIAL_3sonsj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FACTORIAL_3sonsj(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN -(MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(-65)) - -767 + (1);
+    END IF;
+
+    IF N = 0 OR N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    COUNTER_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE COUNTER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn----- */
+CREATE TABLE IF NOT EXISTS `table_fp000x` (
+    `table_fp000x_order_id` INT,
+    `table_fp000x_customer_id` INT,
+    `table_fp000x_order_date` DATE,
+    `table_fp000x_total_amount` DECIMAL(10,2),
+    `table_fp000x_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mueyct` (
+    `table_mueyct_payment_id` INT,
+    `table_mueyct_order_id` INT,
+    `table_mueyct_payment_method` INT,
+    `table_mueyct_amount_paid` INT,
+    `table_mueyct_transaction_fee` INT
+);
+
+INSERT INTO `table_fp000x` (`table_fp000x_order_id`, `table_fp000x_customer_id`, `table_fp000x_order_date`, `table_fp000x_total_amount`, `table_fp000x_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_mueyct` (`table_mueyct_payment_id`, `table_mueyct_order_id`, `table_mueyct_payment_method`, `table_mueyct_amount_paid`, `table_mueyct_transaction_fee`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PAYMENT_PROCESSING_EFFICIENCY_bdpusn(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_AMOUNT_PAID INT DEFAULT 0;
+    DECLARE V_TRANSACTION_FEE INT DEFAULT 0;
+    DECLARE V_PAYMENT_METHOD VARCHAR(20) DEFAULT 'CREDIT_CARD';
+    DECLARE V_PROCESSING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FP000X_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_FP000X
+    WHERE TABLE_FP000X_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT TABLE_MUEYCT_PAYMENT_METHOD, COALESCE(TABLE_MUEYCT_AMOUNT_PAID, 0), COALESCE(TABLE_MUEYCT_TRANSACTION_FEE, 0)
+    INTO V_PAYMENT_METHOD, V_AMOUNT_PAID, V_TRANSACTION_FEE
+    FROM TABLE_MUEYCT
+    WHERE TABLE_MUEYCT_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROCESSING_EFFICIENCY = (MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(92, -78)) - 241 + (100 - ((v_transaction_fee * 100) / v_order_total));
+
+    CASE V_PAYMENT_METHOD
+        WHEN 'WIRE_TRANSFER' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 10;
+        WHEN 'CREDIT_CARD' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 3;
+        WHEN 'CRYPTOCURRENCY' THEN SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 5;
+        ELSE SET V_PROCESSING_EFFICIENCY = V_PROCESSING_EFFICIENCY - 2;
+    END CASE;
+
+    RETURN GREATEST(V_PROCESSING_EFFICIENCY, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+CREATE TABLE IF NOT EXISTS `table_dpem7n` (
+    `table_dpem7n_unit_id` INT,
+    `table_dpem7n_facility_id` INT,
+    `table_dpem7n_unit_size` INT,
+    `table_dpem7n_monthly_rate` INT,
+    `table_dpem7n_climate_controlled` INT,
+    `table_dpem7n_current_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4mro06` (
+    `table_4mro06_rental_id` INT,
+    `table_4mro06_unit_id` INT,
+    `table_4mro06_customer_id` INT,
+    `table_4mro06_start_date` DATE,
+    `table_4mro06_rental_months` INT,
+    `table_4mro06_monthly_payment` INT
+);
+
+INSERT INTO `table_dpem7n` (`table_dpem7n_unit_id`, `table_dpem7n_facility_id`, `table_dpem7n_unit_size`, `table_dpem7n_monthly_rate`, `table_dpem7n_climate_controlled`, `table_dpem7n_current_occupancy`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_4mro06` (`table_4mro06_rental_id`, `table_4mro06_unit_id`, `table_4mro06_customer_id`, `table_4mro06_start_date`, `table_4mro06_rental_months`, `table_4mro06_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(UNIT_ID_PARAM INT, MONTHS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RATE INT DEFAULT 100;
+    DECLARE V_CLIMATE_PREMIUM INT DEFAULT 20;
+    DECLARE V_SIZE_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DPEM7N_MONTHLY_RATE, 100)
+    INTO V_MONTHLY_RATE
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM;
+
+    SELECT TABLE_DPEM7N_MONTHLY_RATE * 20 / 100 INTO V_CLIMATE_PREMIUM
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM AND TABLE_DPEM7N_CLIMATE_CONTROLLED = 1;
+
+    SET V_TOTAL_COST = (V_MONTHLY_RATE + V_CLIMATE_PREMIUM) * MONTHS_PARAM;
+
+    IF MONTHS_PARAM >= 12 THEN
+        SET V_SIZE_DISCOUNT = (MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(3)) - 420 + (v_total_cost * 10 / 100);
+        SET V_TOTAL_COST = V_TOTAL_COST - V_SIZE_DISCOUNT;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+CREATE TABLE IF NOT EXISTS `table_ck40yw` (
+    `table_ck40yw_policy_id` INT,
+    `table_ck40yw_customer_id` INT,
+    `table_ck40yw_policy_type` VARCHAR(50),
+    `table_ck40yw_coverage_amount` DECIMAL(10,2),
+    `table_ck40yw_premium_annual` INT,
+    `table_ck40yw_beneficiary_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_du7xpr` (
+    `table_du7xpr_claim_id` INT,
+    `table_du7xpr_policy_id` INT,
+    `table_du7xpr_claim_date` DATE,
+    `table_du7xpr_payout_amount` DECIMAL(10,2),
+    `table_du7xpr_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ck40yw` (`table_ck40yw_policy_id`, `table_ck40yw_customer_id`, `table_ck40yw_policy_type`, `table_ck40yw_coverage_amount`, `table_ck40yw_premium_annual`, `table_ck40yw_beneficiary_id`) VALUES (1, 2, 'test', 1.0, 5, 6);
+
+INSERT INTO `table_du7xpr` (`table_du7xpr_claim_id`, `table_du7xpr_policy_id`, `table_du7xpr_claim_date`, `table_du7xpr_payout_amount`, `table_du7xpr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID_IN INT DEFAULT 0;
+    DECLARE V_POLICY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CK40YW_COVERAGE_AMOUNT, 0), COALESCE(TABLE_CK40YW_PREMIUM_ANNUAL, 0)
+    INTO V_COVERAGE_AMOUNT, V_PREMIUM_ANNUAL
+    FROM TABLE_CK40YW
+    WHERE TABLE_CK40YW_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_DU7XPR_PAYOUT_AMOUNT), 0) INTO V_TOTAL_PAID_IN
+    FROM TABLE_DU7XPR
+    WHERE TABLE_DU7XPR_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_POLICY_VALUE = V_COVERAGE_AMOUNT - V_TOTAL_PAID_IN;
+
+    RETURN CAST(V_POLICY_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_DATE DATE;
+    DECLARE V_SHIPPED_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_D7ZJCS_ORDER_DATE, TABLE_D7ZJCS_SHIPPED_DATE
+    INTO V_ORDER_DATE, V_SHIPPED_DATE
+    FROM TABLE_D7ZJCS
+    WHERE TABLE_D7ZJCS_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(9)) - -129 + (-1);
+    END IF;
+
+    IF V_SHIPPED_DATE IS NULL THEN
+        SET V_SHIPPED_DATE = (MYSQL_FUNC_CALCULATE_LOYALTY_INDEX_zo0z9q(-62)) - 862 + (curdate());
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_SHIPPED_DATE, V_ORDER_DATE);
+
+    IF V_DELAY_DAYS < (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + ((MYSQL_FUNC_CURSOR_FUNC_AVG_5_VALUES_uslod4()) - 10 + (0)) THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(1);

@@ -1,0 +1,403 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+CREATE TABLE IF NOT EXISTS `table_m3mbja` (
+    `table_m3mbja_campaign_id` INT,
+    `table_m3mbja_channel` INT,
+    `table_m3mbja_target_conversions` INT,
+    `table_m3mbja_actual_conversions` INT,
+    `table_m3mbja_impressions` INT,
+    `table_m3mbja_clicks` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ok18np` (
+    `table_ok18np_ad_group_id` INT,
+    `table_ok18np_campaign_id` INT,
+    `table_ok18np_keyword` INT,
+    `table_ok18np_quality_score` INT
+);
+
+INSERT INTO `table_m3mbja` (`table_m3mbja_campaign_id`, `table_m3mbja_channel`, `table_m3mbja_target_conversions`, `table_m3mbja_actual_conversions`, `table_m3mbja_impressions`, `table_m3mbja_clicks`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_ok18np` (`table_ok18np_ad_group_id`, `table_ok18np_campaign_id`, `table_ok18np_keyword`, `table_ok18np_quality_score`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(AD_GROUP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUALITY_SCORE INT DEFAULT 5;
+    DECLARE V_CTR DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_RATE DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_IMPRESSIONS INT DEFAULT 0;
+    DECLARE V_CLICKS INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_AD_QUALITY INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_M3MBJA_IMPRESSIONS), 0), COALESCE(SUM(TABLE_M3MBJA_CLICKS), 0), COALESCE(SUM(TABLE_M3MBJA_ACTUAL_CONVERSIONS), 0)
+    INTO V_IMPRESSIONS, V_CLICKS, V_CONVERSIONS
+    FROM TABLE_OK18NP AG
+    JOIN TABLE_M3MBJA C ON TABLE_OK18NP_CAMPAIGN_ID = TABLE_M3MBJA_CAMPAIGN_ID
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    SELECT TABLE_OK18NP_QUALITY_SCORE
+    INTO V_QUALITY_SCORE
+    FROM TABLE_OK18NP
+    WHERE TABLE_OK18NP_AD_GROUP_ID = AD_GROUP_ID_PARAM;
+
+    IF V_IMPRESSIONS > 0 THEN
+        SET V_CTR = (V_CLICKS * 100.0) / V_IMPRESSIONS;
+    END IF;
+
+    IF V_CLICKS > 0 THEN
+        SET V_CONVERSION_RATE = (V_CONVERSIONS * 100.0) / V_CLICKS;
+    END IF;
+
+    SET V_AD_QUALITY = V_QUALITY_SCORE + (V_CTR * 2) + V_CONVERSION_RATE;
+
+    RETURN FLOOR(V_AD_QUALITY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(4)) - 925 + ((MYSQL_FUNC_CALCULATE_SALARY_VALUE_ua6xeg(-10)) - -697 + (v_age_months));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_VALUE_ua6xeg----- */
+CREATE TABLE IF NOT EXISTS `table_8lyypo` (
+    `table_8lyypo_emp_id` INT,
+    `table_8lyypo_salary` INT
+);
+
+INSERT INTO `table_8lyypo` (`table_8lyypo_emp_id`, `table_8lyypo_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_VALUE_ua6xeg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_VALUE_ua6xeg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_8LYYPO_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_8LYYPO
+    WHERE TABLE_8LYYPO_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (floor(v_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+CREATE TABLE IF NOT EXISTS `table_lotxra` (
+    `table_lotxra_customer_id` INT,
+    `table_lotxra_registration_date` DATE,
+    `table_lotxra_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwrsxc` (
+    `table_mwrsxc_order_id` INT,
+    `table_mwrsxc_customer_id` INT,
+    `table_mwrsxc_order_date` DATE,
+    `table_mwrsxc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lotxra` (`table_lotxra_customer_id`, `table_lotxra_registration_date`, `table_lotxra_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_mwrsxc` (`table_mwrsxc_order_id`, `table_mwrsxc_customer_id`, `table_mwrsxc_order_date`, `table_mwrsxc_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_LOTXRA_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_LOTXRA
+    WHERE TABLE_LOTXRA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT MIN(TABLE_MWRSXC_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM TABLE_MWRSXC
+    WHERE TABLE_MWRSXC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry(26)) - -728 + (0);
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_FIRST_ORDER_DATE, V_REGISTRATION_DATE);
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry----- */
+CREATE TABLE IF NOT EXISTS `table_l89u66` (
+    `table_l89u66_contract_id` INT,
+    `table_l89u66_customer_id` INT,
+    `table_l89u66_equipment_type` VARCHAR(50),
+    `table_l89u66_contract_term_years` INT,
+    `table_l89u66_annual_cost` DECIMAL(10,2),
+    `table_l89u66_last_service_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sj3wnn` (
+    `table_sj3wnn_record_id` INT,
+    `table_sj3wnn_contract_id` INT,
+    `table_sj3wnn_service_date` DATE,
+    `table_sj3wnn_service_type` VARCHAR(50),
+    `table_sj3wnn_labor_hours` INT,
+    `table_sj3wnn_parts_replaced` INT
+);
+
+INSERT INTO `table_l89u66` (`table_l89u66_contract_id`, `table_l89u66_customer_id`, `table_l89u66_equipment_type`, `table_l89u66_contract_term_years`, `table_l89u66_annual_cost`, `table_l89u66_last_service_date`) VALUES (1, 2, 'test', 4, 1.0, '2024-01-01');
+
+INSERT INTO `table_sj3wnn` (`table_sj3wnn_record_id`, `table_sj3wnn_contract_id`, `table_sj3wnn_service_date`, `table_sj3wnn_service_type`, `table_sj3wnn_labor_hours`, `table_sj3wnn_parts_replaced`) VALUES (1, 2, '2024-01-01', 'test', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HVAC_CONTRACT_ROI_2wrnry(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANNUAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_LABOR_HOURS INT DEFAULT 0;
+    DECLARE V_TOTAL_PARTS_COST INT DEFAULT 0;
+    DECLARE V_SERVICE_COUNT INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L89U66_ANNUAL_COST, 500)
+    INTO V_ANNUAL_COST
+    FROM TABLE_L89U66
+    WHERE TABLE_L89U66_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SJ3WNN_LABOR_HOURS), 0), COUNT(*)
+    INTO V_TOTAL_LABOR_HOURS, V_SERVICE_COUNT
+    FROM TABLE_SJ3WNN
+    WHERE TABLE_SJ3WNN_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SJ3WNN_PARTS_REPLACED), 0) INTO V_TOTAL_PARTS_COST
+    FROM TABLE_SJ3WNN
+    WHERE TABLE_SJ3WNN_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SET V_ROI_SCORE = V_ANNUAL_COST - (V_TOTAL_LABOR_HOURS * 75) - V_TOTAL_PARTS_COST;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT (MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(34)) - -560 + (1) UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+CREATE TABLE IF NOT EXISTS `table_h9b2gz` (
+    `table_h9b2gz_campaign_id` INT,
+    `table_h9b2gz_channel` INT,
+    `table_h9b2gz_budget` INT,
+    `table_h9b2gz_start_date` DATE,
+    `table_h9b2gz_end_date` DATE,
+    `table_h9b2gz_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ettoso` (
+    `table_ettoso_conversion_id` INT,
+    `table_ettoso_campaign_id` INT,
+    `table_ettoso_conversion_value` INT
+);
+
+INSERT INTO `table_h9b2gz` (`table_h9b2gz_campaign_id`, `table_h9b2gz_channel`, `table_h9b2gz_budget`, `table_h9b2gz_start_date`, `table_h9b2gz_end_date`, `table_h9b2gz_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ettoso` (`table_ettoso_conversion_id`, `table_ettoso_campaign_id`, `table_ettoso_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_ETTOSO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM TABLE_ETTOSO
+    WHERE TABLE_ETTOSO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(TABLE_H9B2GZ_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_H9B2GZ
+    WHERE TABLE_H9B2GZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = ((V_TOTAL_REVENUE - V_CAMPAIGN_BUDGET) * 100) / V_CAMPAIGN_BUDGET;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1(-70)) - -666 + (v_roi);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1----- */
+CREATE TABLE IF NOT EXISTS `table_34bctx` (
+    `table_34bctx_emp_id` INT,
+    `table_34bctx_department_id` INT,
+    `table_34bctx_salary` INT,
+    `table_34bctx_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0s6yx2` (
+    `table_0s6yx2_department_id` INT,
+    `table_0s6yx2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_34bctx` (`table_34bctx_emp_id`, `table_34bctx_department_id`, `table_34bctx_salary`, `table_34bctx_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0s6yx2` (`table_0s6yx2_department_id`, `table_0s6yx2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_KPI_SCORE_vzlns1(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_KPI_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_34BCTX_SALARY), 0), COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_34BCTX_HIRE_DATE, CURDATE())), 0)
+    INTO V_EMPLOYEE_COUNT, V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_34BCTX
+    WHERE TABLE_34BCTX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_KPI_SCORE = (V_EMPLOYEE_COUNT * 5) + (V_AVG_SALARY / 1000 * 10) + (V_AVG_TENURE * 8);
+
+    RETURN V_KPI_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+CREATE TABLE IF NOT EXISTS `table_m5l6r9` (
+    `table_m5l6r9_cdecimal` DECIMAL(10,0)
+);
+
+INSERT INTO `table_m5l6r9` (`table_m5l6r9_cdecimal`) VALUES (42);
+
+/* -----Called: MYSQL_FUNC_PROC_DECIMAL_zozmya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DECIMAL_zozmya() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT CAST(TABLE_M5L6R9_CDECIMAL AS SIGNED) INTO RESULT FROM `TABLE_M5L6R9` LIMIT 1;
+    RETURN COALESCE(RESULT, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_PROC_DECIMAL_zozmya()) - 940 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(9)) - -923 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + ((MYSQL_FUNC_CALCULATE_AD_QUALITY_SCORE_7f06tr(89)) - 7 + (v_result * v_counter));
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(1);

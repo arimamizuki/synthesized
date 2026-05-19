@@ -1,0 +1,391 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1131876 (v1131877 INT, v1131878 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1131801 (v1131802 VARCHAR(100), v1131803 TEXT, FULLTEXT INDEX ft_idx (v1131803, v1131802));
+CREATE TABLE IF NOT EXISTS v1131842 (v1131844 VARCHAR(50), v1131845 INT);
+CREATE TABLE IF NOT EXISTS v1131777 (v1131844 VARCHAR(50), v1131846 INT);
+CREATE TABLE IF NOT EXISTS v1131747 (v1131748 GEOMETRY, v1131749 INT);
+CREATE TABLE IF NOT EXISTS v1131878 (v1131879 VARCHAR(100));
+INSERT INTO v1131876 VALUES (3, 'test'), (5, 'value'), (8, 'other');
+INSERT INTO v1131801 VALUES ('the will', 'the will to power'), ('other', 'text without keyword');
+INSERT INTO v1131842 VALUES ('green', 10), ('blue', 20), ('red', 30);
+INSERT INTO v1131777 VALUES ('green', 100), ('yellow', 200);
+INSERT INTO v1131747 VALUES (ST_POINTFROMTEXT('POINT(20 20)'), 500), (ST_POINTFROMTEXT('POINT(10 10)'), 600);
+INSERT INTO v1131878 VALUES ('initial');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+CREATE TABLE IF NOT EXISTS `table_tqo94u` (
+    `table_tqo94u_emp_id` INT,
+    `table_tqo94u_hire_date` DATE
+);
+
+INSERT INTO `table_tqo94u` (`table_tqo94u_emp_id`, `table_tqo94u_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_TQO94U_HIRE_DATE)
+    INTO V_WEEK
+    FROM TABLE_TQO94U
+    WHERE TABLE_TQO94U_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr(73, -30)) - 772 + (v_week);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HYPOTENUSE_vj8iwr(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HYPOTENUSE DECIMAL(10,2) DEFAULT 0.00;
+    SET V_HYPOTENUSE = SQRT(A * A + B * B);
+    RETURN FLOOR(V_HYPOTENUSE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya----- */
+CREATE TABLE IF NOT EXISTS `table_ioows3` (
+    `table_ioows3_product_id` INT,
+    `table_ioows3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ioows3` (`table_ioows3_product_id`, `table_ioows3_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_IOOWS3_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_IOOWS3
+    WHERE TABLE_IOOWS3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(-1)) - 248 + ((MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(-75)) - 959 + (floor((v_price * 0.3) / 10)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq----- */
+CREATE TABLE IF NOT EXISTS `table_9vxf0g` (
+    `table_9vxf0g_order_id` INT,
+    `table_9vxf0g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_9vxf0g` (`table_9vxf0g_order_id`, `table_9vxf0g_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_hpqekq(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_9VXF0G_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_9VXF0G
+    WHERE TABLE_9VXF0G_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(50)) - 959 + (floor(v_total));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+CREATE TABLE IF NOT EXISTS `table_7m5nvz` (
+    `table_7m5nvz_supplier_id` INT,
+    `table_7m5nvz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_7m5nvz` (`table_7m5nvz_supplier_id`, `table_7m5nvz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RELIABILITY_SCORE_3amvtf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_7M5NVZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_7M5NVZ
+    WHERE TABLE_7M5NVZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR((V_RATING / 5.0) * 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+CREATE TABLE IF NOT EXISTS `table_qa1oat` (
+    `table_qa1oat_emp_id` INT,
+    `table_qa1oat_department_id` INT
+);
+
+INSERT INTO `table_qa1oat` (`table_qa1oat_emp_id`, `table_qa1oat_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SIZE_BUCKET_fonc72(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_QA1OAT
+    WHERE TABLE_QA1OAT_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_EMP_COUNT > 50 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(-77)) - -853 + (5);
+    ELSEIF V_EMP_COUNT > 20 THEN
+        RETURN 4;
+    ELSEIF V_EMP_COUNT > 10 THEN
+        RETURN (MYSQL_FUNC_PROC_INT_z44fha()) - -577 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(-92)) - 757 + (3));
+    ELSEIF V_EMP_COUNT > 5 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+CREATE TABLE IF NOT EXISTS `table_u6vck3` (
+    `table_u6vck3_product_id` INT,
+    `table_u6vck3_category_id` INT,
+    `table_u6vck3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u6vck3` (`table_u6vck3_product_id`, `table_u6vck3_category_id`, `table_u6vck3_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_U6VCK3_PRICE), 0), COALESCE(AVG(TABLE_U6VCK3_PRICE), 1)
+    INTO V_CATEGORY_AVG, V_OVERALL_AVG
+    FROM TABLE_U6VCK3
+    WHERE TABLE_U6VCK3_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR((V_CATEGORY_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+CREATE TABLE IF NOT EXISTS `table_4lnfav` (
+    `table_4lnfav_product_id` INT,
+    `table_4lnfav_category_id` INT,
+    `table_4lnfav_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rrjep2` (
+    `table_rrjep2_category_id` INT,
+    `table_rrjep2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_4lnfav` (`table_4lnfav_product_id`, `table_4lnfav_category_id`, `table_4lnfav_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_rrjep2` (`table_rrjep2_category_id`, `table_rrjep2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_4LNFAV
+    WHERE TABLE_4LNFAV_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_OVERALL_AVG
+    FROM TABLE_4LNFAV;
+
+    IF V_OVERALL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_RATIO = (V_CATEGORY_AVG / V_OVERALL_AVG) * 100;
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_INT_z44fha----- */
+CREATE TABLE IF NOT EXISTS `table_hffbmb` (
+    `table_hffbmb_id` INT
+);
+
+INSERT INTO `table_hffbmb` (`table_hffbmb_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_INT_z44fha----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_INT_z44fha() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_HFFBMB_ID INTO RESULT FROM `TABLE_HFFBMB` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(-15)) - 118 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+CREATE TABLE IF NOT EXISTS `table_z9tv6r` (
+    `table_z9tv6r_shipment_id` INT,
+    `table_z9tv6r_order_id` INT,
+    `table_z9tv6r_carrier_id` INT,
+    `table_z9tv6r_shipping_cost` DECIMAL(10,2),
+    `table_z9tv6r_weight_kg` INT,
+    `table_z9tv6r_shipping_date` DATE,
+    `table_z9tv6r_delivery_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1odmhx` (
+    `table_1odmhx_carrier_id` INT,
+    `table_1odmhx_name` VARCHAR(50),
+    `table_1odmhx_base_rate` INT,
+    `table_1odmhx_weight_rate` INT
+);
+
+INSERT INTO `table_z9tv6r` (`table_z9tv6r_shipment_id`, `table_z9tv6r_order_id`, `table_z9tv6r_carrier_id`, `table_z9tv6r_shipping_cost`, `table_z9tv6r_weight_kg`, `table_z9tv6r_shipping_date`, `table_z9tv6r_delivery_date`) VALUES (1, 2, 3, 1.0, 5, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_1odmhx` (`table_1odmhx_carrier_id`, `table_1odmhx_name`, `table_1odmhx_base_rate`, `table_1odmhx_weight_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(SHIPMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_DATE DATE;
+    DECLARE V_EXPECTED_DELIVERY DATE;
+    DECLARE V_ACTUAL_DELIVERY DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_Z9TV6R_SHIPPING_DATE, TABLE_Z9TV6R_DELIVERY_DATE
+    INTO V_SHIPPING_DATE, V_ACTUAL_DELIVERY
+    FROM TABLE_Z9TV6R
+    WHERE TABLE_Z9TV6R_SHIPMENT_ID = SHIPMENT_ID_PARAM;
+
+    IF V_SHIPPING_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_DELIVERY = DATE_ADD(V_SHIPPING_DATE, INTERVAL 7 DAY);
+
+    IF V_ACTUAL_DELIVERY IS NULL THEN
+        SET V_DELAY_DAYS = DATEDIFF(CURDATE(), V_EXPECTED_DELIVERY);
+    ELSE
+        SET V_DELAY_DAYS = DATEDIFF(V_ACTUAL_DELIVERY, V_EXPECTED_DELIVERY);
+    END IF;
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0171_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_pt POINT;
+    DECLARE v_insert_val VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v1131844 FROM v1131842 WHERE v1131844 = 'green';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- First DML: UPDATE with BETWEEN using input param
+    UPDATE v1131876 AS x1 SET v1131878 = CONCAT('v4l_', (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_WEEK_d4jey0(51)) - -490 + (p1)) WHERE v1131877 BETWEEN 4 AND 7;
+
+    -- Second DML: UPDATE with FULLTEXT search (use p1 as modifier)
+    UPDATE v1131801 AS x1 SET v1131802 = CONCAT('LOCK_system_variables_hash_', (MYSQL_FUNC_CALCULATE_PRICE_MARGIN_SCORE_nj2hya(-100)) - 53 + (p2)) WHERE MATCH(v1131803, v1131802) AGAINST('+the +will' IN BOOLEAN MODE);
+
+    -- Third DML: UPDATE with JOIN and variable (use p1 to set @d)
+    SET @d = p1;
+    UPDATE v1131842 AS x0, v1131777 AS x4 SET v1131844 = @d WHERE x0.v1131844 = 'green' AND x4.v1131844 = 'green';
+
+    -- Fourth DML: UPDATE with spatial function (use p2 as value)
+    SET @global_open_cache_overflow = p2;
+    UPDATE v1131747 AS x1 SET v1131749 = @global_open_cache_overflow WHERE ST_EQUALS(v1131748, ST_POINTFROMTEXT('POINT(20 20)'));
+
+    -- Fifth DML: INSERT with cursor loop to adapt values
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_insert_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        INSERT INTO v1131878 (v1131879) VALUES (CONCAT(v_insert_val, '_', p1));
+    END LOOP;
+    CLOSE cur;
+
+    -- Use CASE/WHEN to determine output based on p1, p2
+    CASE
+        WHEN p1 > p2 THEN
+            SET v_counter = p1 - p2;
+        WHEN p1 = p2 THEN
+            SET v_counter = p1 + p2;
+        ELSE
+            SET v_counter = p2 - p1;
+    END CASE;
+
+    -- Use IF to check if any updates were made (simple validation)
+    IF ROW_COUNT() > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+
+    -- Use WHILE loop to count rows in a table
+    SET v_val = 0;
+    WHILE v_val < 5 DO
+        SET v_counter = v_counter + 1;
+        SET v_val = v_val + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0171_proc(1, 1, @out_result);
+
+SELECT @out_result;

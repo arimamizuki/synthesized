@@ -1,0 +1,451 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS tv (
+    a1 INT
+);
+INSERT INTO tv VALUES (1), (2), (3), (4), (5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+CREATE TABLE IF NOT EXISTS `table_scey55` (
+    `table_scey55_project_id` INT,
+    `table_scey55_client_id` INT,
+    `table_scey55_project_type` VARCHAR(50),
+    `table_scey55_estimated_hours` INT,
+    `table_scey55_actual_hours` INT,
+    `table_scey55_labor_rate` INT,
+    `table_scey55_material_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_2tdknr` (
+    `table_2tdknr_contractor_id` INT,
+    `table_2tdknr_name` VARCHAR(50),
+    `table_2tdknr_specialty` INT,
+    `table_2tdknr_hourly_rate` INT
+);
+
+INSERT INTO `table_scey55` (`table_scey55_project_id`, `table_scey55_client_id`, `table_scey55_project_type`, `table_scey55_estimated_hours`, `table_scey55_actual_hours`, `table_scey55_labor_rate`, `table_scey55_material_cost`) VALUES (1, 2, 'test', 4, 5, 6, 1.0);
+
+INSERT INTO `table_2tdknr` (`table_2tdknr_contractor_id`, `table_2tdknr_name`, `table_2tdknr_specialty`, `table_2tdknr_hourly_rate`) VALUES (1, 'test', 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_HOURS INT DEFAULT 0;
+    DECLARE V_ACTUAL_HOURS INT DEFAULT 0;
+    DECLARE V_LABOR_RATE INT DEFAULT 0;
+    DECLARE V_MATERIAL_COST INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_SCEY55_ESTIMATED_HOURS, 0), COALESCE(TABLE_SCEY55_ACTUAL_HOURS, 0), COALESCE(TABLE_SCEY55_LABOR_RATE, 50)
+    INTO V_ESTIMATED_HOURS, V_ACTUAL_HOURS, V_LABOR_RATE
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SCEY55_MATERIAL_COST), 0) INTO V_MATERIAL_COST
+    FROM TABLE_SCEY55
+    WHERE TABLE_SCEY55_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SET V_TOTAL_COST = (V_ACTUAL_HOURS * V_LABOR_RATE) + V_MATERIAL_COST;
+    SET V_BUDGET = V_ESTIMATED_HOURS * V_LABOR_RATE;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = ((V_BUDGET - V_TOTAL_COST) * 100) / V_BUDGET;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_0922_proc----- */
+CREATE TABLE IF NOT EXISTS v1165148 (v1165197 INT, v1165172 CHAR(10), v1165173 CHAR(20));
+CREATE TABLE IF NOT EXISTS v1165171 (v1165172 CHAR(10), v1165173 CHAR(20));
+CREATE TABLE IF NOT EXISTS v1165238 (v1165197 INT);
+CREATE TABLE IF NOT EXISTS v1165196 (v1165197 INT);
+CREATE TABLE IF NOT EXISTS v1165242 (v1165243 INT AUTO_INCREMENT PRIMARY KEY, v1165244 INT, x3 TIME, x4 TIME, x5 TIME, x6 TIME, x7 TIME, x8 TIME, x9 TIME, x10 TIME, x11 TIME, x12 GEOMETRY, x13 TIME, x14 TIME, x15 TIME);
+INSERT INTO v1165148 VALUES (1, 'a', '2000'), (2, 'b', '2001'), (3, 'c', '2002');
+INSERT INTO v1165171 VALUES ('1', '2000'), ('b,c', '2001'), ('2', '2002');
+INSERT INTO v1165238 VALUES (1), (2), (3);
+INSERT INTO v1165196 VALUES (1), (2), (3);
+INSERT INTO v1165242 (v1165244) VALUES (1), (2), (3);
+
+/* -----Called: n3_output_0922_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0922_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_time_val TIME;
+    DECLARE v_check VARCHAR(100);
+    DECLARE cur CURSOR FOR SELECT v1165243 FROM v1165242 WHERE v1165244 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Block 1: INSERT into v1165171 with adapted values
+    INSERT INTO v1165171 (v1165172) VALUES (CAST(p1 AS CHAR)), (CAST(p2 AS CHAR));
+
+    -- Block 2: CREATE TABLE with ADDTIME values (already created, but we insert additional data)
+    INSERT INTO v1165242 (v1165244, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)
+    VALUES (p1, ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.1' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.12' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.123' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.1234' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.12345' AS TIME)),
+            ADDTIME(CAST('00:00:00' AS TIME), CAST('00:00:01.123457' AS TIME)),
+            ADDTIME(CAST('00:00:00.1' AS TIME), CAST('00:00:00' AS TIME)),
+            ADDTIME(CAST('00:00:00.12' AS TIME), CAST('00:00:00' AS TIME)),
+            ST_GEOMFROMTEXT('POINT(1 1)'),
+            ADDTIME(CAST('00:00:00.123' AS TIME), CAST('00:00:00' AS TIME)),
+            ADDTIME(CAST('00:00:00.1234' AS TIME), CAST('00:00:00' AS TIME)),
+            ADDTIME(CAST('00:00:00.12345' AS TIME), CAST('00:00:00' AS TIME)));
+
+    -- Block 3: UPDATE with ST_GEOMFROMTEXT and COALESCE
+    IF p1 > 0 THEN
+        UPDATE v1165242 AS x1 SET x1.x12 = ST_GEOMFROMTEXT('POLYGON((0 0,0 2,4 5,5 5,7 1,0 0))')
+        WHERE '.' OR COALESCE(TRIM(LEADING 'a' FROM CAST(v1165243 AS CHAR)), 'NULL') OR x8 = 'd';
+    END IF;
+
+    -- Block 4: UPDATE with LEFT JOIN
+    SET @k = p2;
+    UPDATE v1165196 AS x1 LEFT JOIN v1165238 AS x5 ON (x1.v1165197 = x1.v1165197) AND (x1.v1165197 = x1.v1165197) AND (x1.v1165197 IS NULL) AND (x1.v1165197 <> x1.v1165197)
+    SET x1.v1165197 = @k WHERE x1.v1165197 = '0';
+
+    -- Block 5: UPDATE with JOIN and ADDTIME
+    UPDATE v1165171 AS x1 JOIN v1165148 AS x6 ON ADDTIME(x1.v1165172, x1.v1165172) = ADDTIME(x1.v1165173, x1.v1165173)
+    SET x1.v1165172 = CAST(p1 AS CHAR) WHERE x1.v1165173 IN ('2000', 16777215);
+
+    -- Cursor loop to count affected rows
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = (MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + (v_counter) + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic with CASE
+    CASE
+        WHEN v_counter > 0 THEN
+            SET result = v_counter;
+        WHEN v_counter = 0 THEN
+            SET result = p1;
+        ELSE
+            SET result = -1;
+    END CASE;
+
+    -- While loop for additional processing
+    WHILE v_counter < p2 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(22)) - -619 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+CREATE TABLE IF NOT EXISTS `table_bth9h0` (
+    `table_bth9h0_campaign_id` INT,
+    `table_bth9h0_start_date` DATE
+);
+
+INSERT INTO `table_bth9h0` (`table_bth9h0_campaign_id`, `table_bth9h0_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BTH9H0_START_DATE)
+    INTO V_YEAR
+    FROM TABLE_BTH9H0
+    WHERE TABLE_BTH9H0_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(19, 100)) - -110 + (v_year);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(56)) - -857 + (a / b)) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+CREATE TABLE IF NOT EXISTS `table_5fzj9q` (
+    `table_5fzj9q_customer_id` INT,
+    `table_5fzj9q_status` VARCHAR(50)
+);
+
+INSERT INTO `table_5fzj9q` (`table_5fzj9q_customer_id`, `table_5fzj9q_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_5FZJ9Q
+    WHERE TABLE_5FZJ9Q_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_5FZJ9Q_STATUS = 'ACTIVE';
+
+    RETURN CASE WHEN V_COUNT > 0 THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_0602----- */
+CREATE TABLE IF NOT EXISTS v13337 (v13338 VARCHAR(255), v13339 INT);
+CREATE TABLE IF NOT EXISTS v13201 (v13201_id INT, v13201_val VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v13129 (v13130 INT, v13131 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v12578 (v12578_id INT, v12578_val VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v12613 (v12614 INT, v12615 INT, geom_col GEOMETRY);
+CREATE TABLE IF NOT EXISTS v13076 (v13077 INT, v13078 INT);
+CREATE TABLE IF NOT EXISTS v12847 (v12848 INT);
+INSERT INTO v13337 VALUES ('test10', 40), ('test12', 35), ('test14', 50);
+INSERT INTO v13201 VALUES (1, 'val1'), (2, 'val2');
+INSERT INTO v13129 VALUES (5, 'a'), (3, 'b'), (0, 'c');
+INSERT INTO v12578 VALUES (1, 'x'), (2, 'y');
+INSERT INTO v12613 VALUES (1, 100, ST_GEOMFROMTEXT('POINT(1 1)')), (3, 200, ST_GEOMFROMTEXT('POINT(3 3)')), (9, 300, ST_GEOMFROMTEXT('POINT(9 9)'));
+INSERT INTO v13076 VALUES (50, 1), (75, 1), (100, 1);
+INSERT INTO v12847 VALUES (5), (10), (15);
+
+/* -----Called: synth_output_0602----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0602(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_georesult INT DEFAULT 0;
+    DECLARE v_loop_done INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v12614 FROM v12613 WHERE v12614 IN (1, 3, 9);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = 1;
+
+    -- Statement 1: UPDATE with STRAIGHT_JOIN
+    SET @sql1 = 'UPDATE v13337 AS x0 STRAIGHT_JOIN v13201 AS x5 ON 1=1 SET x0.v13338 = ''test15'' WHERE v13339 > 34';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    SET v_update_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 2: UPDATE with RIGHT OUTER JOIN
+    SET @sql2 = 'UPDATE v13129 AS x1 RIGHT OUTER JOIN v12578 AS x6 ON x1.v13130 = x1.v13131 SET x1.v13131 = ''b'' WHERE v13130 < 0';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    SET v_update_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 3: WITH RECURSIVE with spatial function
+    SET @sql3 = 'WITH RECURSIVE x8(x9) AS (SELECT x6.v12614 AS x10 FROM v12613 AS x6 WHERE x6.v12614 IN (1, 3, 9) UNION ALL SELECT x6.v12614 + 1 FROM x8, v12613 AS x6 WHERE x6.v12615 < 10) SELECT ST_CROSSES(ST_GEOMFROMTEXT(''MULTIPOINT(1 0,15 0,10 10)''), ST_GEOMFROMTEXT(''MULTILINESTRING((15 0,20 0,20 20,15 0))'')) INTO @geo_val';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_georesult = @geo_val;
+    IF v_georesult = 1 THEN
+        SET v_counter = v_counter + 10;
+    ELSE
+        SET v_counter = v_counter + 5;
+    END IF;
+
+    -- Statement 4: WITH RECURSIVE with complex spatial functions
+    SET @sql4 = 'WITH RECURSIVE x8 AS (SELECT 1 AS x11 UNION ALL SELECT x7.v13078 + 1 FROM x8, v13076 AS x7 WHERE x7.v13077 < 124) SELECT ST_CONTAINS(ST_UNION(ST_ASWKB(ST_INTERSECTION(LINESTRING(POINT(-59, 82), POINT(32, 29)), POINT(2, -5))), ST_CONVEXHULL(ST_GEOMFROMTEXT(''MULTIPOINT(8 -8,-7 5)''))), ST_BUFFER(POINT(-5, 0), 8772, ST_BUFFER_STRATEGY(''point_circle'', 1024 * 1024 * 1024))) INTO @geo_val2 FROM v13076 AS x7 WHERE x7.v13078 = 1 AND x7.v13078 < 1';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_georesult = @geo_val2;
+    CASE v_georesult
+        WHEN 1 THEN SET v_counter = v_counter + 20;
+        WHEN 0 THEN SET v_counter = v_counter + 5;
+        ELSE SET v_counter = v_counter + 1;
+    END CASE;
+
+    -- Statement 5: WITH RECURSIVE with spatial and cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_loop_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET @sql5 = CONCAT('WITH RECURSIVE x8 AS (SELECT 1 AS x9 UNION ALL SELECT ', v_val, ' + 1 FROM x8 WHERE ', v_val, ' < 124) SELECT ST_CROSSES(ST_MULTIPOINTFROMWKB(@wkb_mpt, 4294967296), ST_POINTFROMTEXT(''POINT (12 13)'')) INTO @geo_val3 FROM v12847 AS x6 WHERE x6.v12848 > 3');
+        PREPARE stmt5 FROM @sql5;
+        EXECUTE stmt5;
+        DEALLOCATE PREPARE stmt5;
+        SET v_georesult = @geo_val3;
+        IF v_georesult = 1 THEN
+            SET v_counter = v_counter + v_val;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final loop to add p1 and p2
+    WHILE p1 > 0 DO
+        SET v_counter = v_counter + p2;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 11 UNION SELECT 22 UNION SELECT 33 UNION SELECT 44 UNION SELECT 55 UNION SELECT 66 UNION SELECT 77 UNION SELECT 88 UNION SELECT 99 UNION SELECT 110 UNION SELECT 121;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(29, 20)) - 450 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_BIT_XOR_3bvbt7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A ^ P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FUNC1_dvat8j()) - 542 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_dvat8j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_procedure_bug6866_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_a1 INT;
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT a1 FROM tv WHERE a1 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+CALL synth_output_0602(8, -92, @_syn_24779);
+    IF p2 > @_syn_24779 - -722 + (0) THEN
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO v_a1;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_count = v_count + (MYSQL_FUNC_CALCULATE_PROJECT_PROFITABILITY_sflkje(-12)) - 374 + (1);
+        END LOOP;
+        CLOSE cur;
+        SET result = v_count;
+    ELSE
+        CASE p1
+            WHEN 0 THEN SET result = 0;
+CALL n3_output_0922_proc(-17, 29, @_syn_24769);
+            WHEN 1 THEN SET result = @_syn_24769 - @_io_result + (10);
+            ELSE SET result = -1;
+        END CASE;
+    END IF;
+END; //
+
+DELIMITER ;
+
+CALL sp_procedure_bug6866_proc(1, 1, @out_result);
+
+SELECT @out_result;

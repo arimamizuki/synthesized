@@ -1,0 +1,464 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v15121 (v15122 GEOMETRY, v15123 INT);
+CREATE TABLE IF NOT EXISTS v15069 (v15070 INT, v15071 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v15159 (v15124 INT, v15125 INT);
+CREATE TABLE IF NOT EXISTS v15162 (v15163 INT, v15164 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15045 (v15046 VARCHAR(255), v15047 VARCHAR(255), v15048 INT);
+CREATE TABLE IF NOT EXISTS v15114 (v15115 INT, v15116 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15052 (v15055 VARCHAR(255), v15056 INT);
+CREATE TABLE IF NOT EXISTS v15130 (v15131 INT, v15132 INT);
+CREATE TABLE IF NOT EXISTS v15082 (v15085 JSON, v15086 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v15058 (v15059 INT, v15060 INT);
+CREATE TABLE IF NOT EXISTS x9 (x10 INT, x11 INT);
+CREATE TABLE IF NOT EXISTS x14 (x15 INT, x16 INT);
+CREATE TABLE IF NOT EXISTS x18 (x19 INT, x20 INT);
+CREATE TABLE IF NOT EXISTS x25 (x24 INT, x26 INT);
+CREATE TABLE IF NOT EXISTS x20 (x19 INT, x21 INT);
+CREATE TABLE IF NOT EXISTS x29 (x28 INT, x30 INT);
+CREATE TABLE IF NOT EXISTS x31 (x30 INT, x31 INT);
+CREATE TABLE IF NOT EXISTS x33 (x32 INT, x33 INT);
+CREATE TABLE IF NOT EXISTS x35 (x34 INT, x36 INT);
+CREATE TABLE IF NOT EXISTS x37 (x36 INT, x37 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS x39 (x38 VARCHAR(255), x39 INT);
+CREATE TABLE IF NOT EXISTS x41 (x40 INT, x42 INT);
+CREATE TABLE IF NOT EXISTS x43 (x42 INT, x43 INT);
+CREATE TABLE IF NOT EXISTS x45 (x44 INT, x45 INT);
+CREATE TABLE IF NOT EXISTS x47 (x46 INT, x48 INT);
+CREATE TABLE IF NOT EXISTS x49 (x48 INT, x49 INT);
+CREATE TABLE IF NOT EXISTS x51 (x50 INT, x51 INT);
+INSERT INTO v15121 VALUES (ST_GeomFromText('POINT(0 0)'), 1);
+INSERT INTO v15069 VALUES (1, ST_GeomFromText('POINT(0 0)'));
+INSERT INTO v15159 VALUES (100, 1);
+INSERT INTO v15162 VALUES (1, 'test');
+INSERT INTO v15045 VALUES ('hello', 'world123', 32);
+INSERT INTO v15114 VALUES (1, 'data');
+INSERT INTO v15052 VALUES ('a ', 1);
+INSERT INTO v15130 VALUES (1, 1);
+INSERT INTO v15082 VALUES ('{"key": "value"}', 'fixme');
+INSERT INTO v15058 VALUES (1, 1);
+INSERT INTO x9 VALUES (1, 1);
+INSERT INTO x14 VALUES (1, 1);
+INSERT INTO x18 VALUES (1, 1);
+INSERT INTO x25 VALUES (1, 1);
+INSERT INTO x20 VALUES (1, 1);
+INSERT INTO x29 VALUES (1, 1);
+INSERT INTO x31 VALUES (1, 1);
+INSERT INTO x33 VALUES (1, NULL);
+INSERT INTO x35 VALUES (1, 1);
+INSERT INTO x37 VALUES (1, 'ustralia');
+INSERT INTO x39 VALUES ('ustralia', 1);
+INSERT INTO x41 VALUES (1, 1);
+INSERT INTO x43 VALUES (1, 1);
+INSERT INTO x45 VALUES (2, 1);
+INSERT INTO x47 VALUES (1, 1);
+INSERT INTO x49 VALUES (1, 1);
+INSERT INTO x51 VALUES (2, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+CREATE TABLE IF NOT EXISTS `table_ql6ocn` (
+    `table_ql6ocn_customer_id` INT,
+    `table_ql6ocn_country` INT
+);
+
+INSERT INTO `table_ql6ocn` (`table_ql6ocn_customer_id`, `table_ql6ocn_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_QL6OCN
+    WHERE TABLE_QL6OCN_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_CUSTOMER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+CREATE TABLE IF NOT EXISTS `table_gmjb6t` (
+    `table_gmjb6t_cbit` BIT(1)
+);
+
+INSERT INTO `table_gmjb6t` (`table_gmjb6t_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT1_7d7is7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    
+    SELECT CAST(TABLE_GMJB6T_CBIT AS UNSIGNED) INTO RESULT 
+    FROM `TABLE_GMJB6T` 
+    LIMIT 1;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(21)) - 350 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+CREATE TABLE IF NOT EXISTS `table_cfexjo` (
+    `table_cfexjo_campaign_id` INT,
+    `table_cfexjo_target_audience_size` INT,
+    `table_cfexjo_budget` INT,
+    `table_cfexjo_start_date` DATE,
+    `table_cfexjo_end_date` DATE,
+    `table_cfexjo_channel` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m5fef2` (
+    `table_m5fef2_conversion_id` INT,
+    `table_m5fef2_campaign_id` INT,
+    `table_m5fef2_conversion_date` DATE,
+    `table_m5fef2_conversion_value` INT
+);
+
+INSERT INTO `table_cfexjo` (`table_cfexjo_campaign_id`, `table_cfexjo_target_audience_size`, `table_cfexjo_budget`, `table_cfexjo_start_date`, `table_cfexjo_end_date`, `table_cfexjo_channel`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_m5fef2` (`table_m5fef2_conversion_id`, `table_m5fef2_campaign_id`, `table_m5fef2_conversion_date`, `table_m5fef2_conversion_value`) VALUES (1, 2, '2024-01-01', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CONVERSION_RATE_k1ayca(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TARGET_SIZE INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+    DECLARE V_CONVERSION_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CFEXJO_TARGET_AUDIENCE_SIZE, 1000)
+    INTO V_TARGET_SIZE
+    FROM TABLE_CFEXJO
+    WHERE TABLE_CFEXJO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_M5FEF2_CONVERSION_VALUE), 0)
+    INTO V_CONVERSION_COUNT, V_TOTAL_VALUE
+    FROM TABLE_M5FEF2
+    WHERE TABLE_M5FEF2_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_TARGET_SIZE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONVERSION_RATE = (MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(-23, -81)) - 130 + ((v_conversion_count * 100) / v_target_size);
+
+    RETURN V_CONVERSION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+CREATE TABLE IF NOT EXISTS `table_wp8tiy` (
+    `table_wp8tiy_order_id` INT,
+    `table_wp8tiy_customer_id` INT,
+    `table_wp8tiy_order_date` DATE,
+    `table_wp8tiy_status` VARCHAR(50),
+    `table_wp8tiy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d83unb` (
+    `table_d83unb_order_id` INT,
+    `table_d83unb_product_id` INT,
+    `table_d83unb_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7n22ut` (
+    `table_7n22ut_product_id` INT,
+    `table_7n22ut_category_id` INT,
+    `table_7n22ut_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wp8tiy` (`table_wp8tiy_order_id`, `table_wp8tiy_customer_id`, `table_wp8tiy_order_date`, `table_wp8tiy_status`, `table_wp8tiy_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_d83unb` (`table_d83unb_order_id`, `table_d83unb_product_id`, `table_d83unb_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_7n22ut` (`table_7n22ut_product_id`, `table_7n22ut_category_id`, `table_7n22ut_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(CUSTOMER_ID_PARAM INT, CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CATEGORY_REVENUE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PREFERENCE_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_D83UNB_QUANTITY * TABLE_7N22UT_PRICE), 0)
+    INTO V_CATEGORY_ORDER_COUNT, V_CATEGORY_REVENUE
+    FROM TABLE_WP8TIY O
+    JOIN TABLE_D83UNB OI ON TABLE_WP8TIY_ORDER_ID = TABLE_D83UNB_ORDER_ID
+    JOIN TABLE_7N22UT P ON TABLE_D83UNB_PRODUCT_ID = TABLE_7N22UT_PRODUCT_ID
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_7N22UT_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WP8TIY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_WP8TIY
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREFERENCE_SCORE = ((V_CATEGORY_ORDER_COUNT * 1.0) / V_TOTAL_ORDER_COUNT * 50) +
+                             ((V_CATEGORY_REVENUE * 1.0) / V_TOTAL_REVENUE * 50);
+
+    RETURN FLOOR(V_PREFERENCE_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62----- */
+CREATE TABLE IF NOT EXISTS `table_qq48o8` (
+    `table_qq48o8_supplier_id` INT,
+    `table_qq48o8_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_qq48o8` (`table_qq48o8_supplier_id`, `table_qq48o8_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_VALUE_jzxr62(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_QQ48O8_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_QQ48O8
+    WHERE TABLE_QQ48O8_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MIN_cm5woy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MIN_cm5woy(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(6)) - -666 + (a) < B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PRIME_FACTORIZATION_h84f60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PRIME_FACTORIZATION_h84f60(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FACTOR_COUNT INT DEFAULT 0;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TEMP = N;
+    SET V_DIVISOR = (MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(-8, 84)) - 88 + (2);
+
+    FACTOR_LOOP: WHILE V_DIVISOR <= V_TEMP DO
+        IF V_TEMP % V_DIVISOR = 0 THEN
+            SET V_FACTOR_COUNT = V_FACTOR_COUNT + 1;
+            SET V_TEMP = V_TEMP / V_DIVISOR;
+        ELSE
+            SET V_DIVISOR = V_DIVISOR + 1;
+        END IF;
+    END WHILE FACTOR_LOOP;
+
+    RETURN V_FACTOR_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PRODUCT_RANGE_9suko2(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        RETURN (MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(-76, -89)) - 708 + (-1);
+    END IF;
+
+    SET V_I = P_A;
+    WHILE V_I <= P_B DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    IF A = 0 OR B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_IS_NEGATIVE = 0;
+    IF A < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET A = -A; END IF;
+    IF B < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET B = -B; END IF;
+
+    SET V_TEMP_A = A;
+
+    MULTIPLY_LOOP: WHILE V_TEMP_A > 0 DO
+        IF V_TEMP_A & 1 = 1 THEN
+            SET V_RESULT = V_RESULT + B;
+        END IF;
+        SET V_TEMP_A = V_TEMP_A >> 1;
+        SET B = B << 1;
+    END WHILE MULTIPLY_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        SET V_RESULT = -V_RESULT;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0635(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_json JSON;
+    DECLARE v_str VARCHAR(255);
+    DECLARE cur1 CURSOR FOR SELECT v15122 FROM v15121 WHERE ST_IsValid(v15122);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+
+    -- Statement 1: UPDATE with spatial join
+    SET @sql1 = 'UPDATE v15121 AS x0 RIGHT OUTER JOIN v15069 AS x1 ON ST_CONTAINS(x0.v15122, x0.v15122) SET x0.v15122 = ST_GeomFromText(? ) WHERE v15122 = ADDTIME(v15122, ? )';
+    SET @param1 = 'POINT(1 1)';
+    SET @param2 = '10:00:00';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1 USING @param1, @param2;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: Simple UPDATE with increment
+    SET @sql2 = 'UPDATE v15159 AS x1 SET v15124 = v15124 + 100';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with COERCIBILITY and condition
+    SET @sql3 = 'UPDATE v15162 AS x1 SET v15164 = COERCIBILITY(x1.v15164) WHERE v15163 IN (1, 1)';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with NATURAL JOIN and string functions
+    SET @sql4 = 'UPDATE v15045 AS x1 NATURAL JOIN v15114 AS x2 SET v15046 = LEFT(v15047, CHAR_LENGTH(v15047) - 6) WHERE v15048 IN (32, 23, 5)';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: Complex multi-table UPDATE with spatial, JSON, and arithmetic
+    BEGIN
+        DECLARE v_sha VARCHAR(64);
+        DECLARE v_json_val JSON;
+        DECLARE v_result DECIMAL(10,5);
+        
+        SET v_sha = SHA('fixme');
+        SET v_json_val = CAST(v_sha AS JSON);
+        
+        SET @sql5 = 'UPDATE v15052 AS x1, v15130 AS x8 JOIN v15082 AS x3 LEFT JOIN x9 AS x13 LEFT JOIN x14 AS x17 LEFT JOIN x18 AS x23 ON x25.x24 = x27.x26 ON x20.x19 = x22.x21 ON (((x29.x28 = x31.x30 AND x33.x32 IS NULL) OR (x35.x34 = x37.x36 AND x39.x38 = ? )) AND ((x41.x40 = x43.x42 AND x45.x44 = 2) OR (x47.x46 = x49.x48 AND x51.x50 = 2))) ON 1 RIGHT JOIN v15058 AS x10 ON CAST(SHA(x3.v15086) AS JSON) = x3.v15085 SET x1.v15055 = X(?) / NULLIF(1, 0) WHERE v15055 LIKE ? ';
+        SET @param5a = 'ustralia';
+        SET @param5b = '78';
+        SET @param5c = 'a ';
+        PREPARE stmt5 FROM @sql5;
+        EXECUTE stmt5 USING @param5a, @param5b, @param5c;
+        DEALLOCATE PREPARE stmt5;
+        
+        -- Loop with cursor to check results
+        OPEN cur1;
+        read_loop: LOOP
+            FETCH cur1 INTO v_geo;
+            IF v_done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur1;
+    END;
+
+    -- Conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Additional procedural structures
+    CASE 
+        WHEN v_counter > 10 THEN SET result = 10;
+        WHEN v_counter > 5 THEN SET result = 5;
+        ELSE SET result = v_counter;
+    END CASE;
+
+    -- While loop for demonstration
+    WHILE v_counter > 0 DO
+        SET v_counter = v_counter - 1;
+    END WHILE;
+
+    SET result = v_counter + (MYSQL_FUNC_GET_MIN_cm5woy(-14, -29)) - 829 + (p1) + p2;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0635(1, 1, @out_result);
+
+SELECT @out_result;

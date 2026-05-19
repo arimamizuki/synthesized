@@ -1,0 +1,399 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFUND_FREQUENCY_exhmuy----- */
+CREATE TABLE IF NOT EXISTS `table_tgemx8` (
+    `table_tgemx8_order_id` INT,
+    `table_tgemx8_customer_id` INT,
+    `table_tgemx8_order_date` DATE,
+    `table_tgemx8_total_amount` DECIMAL(10,2),
+    `table_tgemx8_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_0jdyog` (
+    `table_0jdyog_refund_id` INT,
+    `table_0jdyog_order_id` INT,
+    `table_0jdyog_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tgemx8` (`table_tgemx8_order_id`, `table_tgemx8_customer_id`, `table_tgemx8_order_date`, `table_tgemx8_total_amount`, `table_tgemx8_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_0jdyog` (`table_0jdyog_refund_id`, `table_0jdyog_order_id`, `table_0jdyog_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFUND_FREQUENCY_exhmuy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFUND_FREQUENCY_exhmuy(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REFUND_COUNT INT DEFAULT 0;
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_FREQUENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_REFUND_COUNT
+    FROM TABLE_0JDYOG
+    WHERE TABLE_0JDYOG_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_TGEMX8_TOTAL_AMOUNT, 1)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_TGEMX8
+    WHERE TABLE_TGEMX8_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_FREQUENCY_SCORE = (V_REFUND_COUNT * 100) / V_ORDER_TOTAL;
+
+    RETURN (MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(39)) - 206 + (v_frequency_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o----- */
+CREATE TABLE IF NOT EXISTS `table_81gamz` (
+    `table_81gamz_store_id` INT,
+    `table_81gamz_region` INT,
+    `table_81gamz_store_type` VARCHAR(50),
+    `table_81gamz_monthly_rent` INT,
+    `table_81gamz_sales_target` INT,
+    `table_81gamz_sales_actual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_c3mq9y` (
+    `table_c3mq9y_employee_id` INT,
+    `table_c3mq9y_store_id` INT,
+    `table_c3mq9y_role` INT,
+    `table_c3mq9y_salary` INT,
+    `table_c3mq9y_hire_date` DATE
+);
+
+INSERT INTO `table_81gamz` (`table_81gamz_store_id`, `table_81gamz_region`, `table_81gamz_store_type`, `table_81gamz_monthly_rent`, `table_81gamz_sales_target`, `table_81gamz_sales_actual`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_c3mq9y` (`table_c3mq9y_employee_id`, `table_c3mq9y_store_id`, `table_c3mq9y_role`, `table_c3mq9y_salary`, `table_c3mq9y_hire_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORE_PERFORMANCE_SCORE_47j72o(STORE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALES_TARGET INT DEFAULT 0;
+    DECLARE V_SALES_ACTUAL INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_81GAMZ_SALES_TARGET, 0), COALESCE(TABLE_81GAMZ_SALES_ACTUAL, 0)
+    INTO V_SALES_TARGET, V_SALES_ACTUAL
+    FROM TABLE_81GAMZ
+    WHERE TABLE_81GAMZ_STORE_ID = STORE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_EMPLOYEE_COUNT
+    FROM TABLE_C3MQ9Y
+    WHERE TABLE_C3MQ9Y_STORE_ID = STORE_ID_PARAM;
+
+    IF V_SALES_TARGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERFORMANCE_SCORE = ((V_SALES_ACTUAL - V_SALES_TARGET) * 100) / V_SALES_TARGET;
+
+    IF V_EMPLOYEE_COUNT > 10 THEN
+        SET V_PERFORMANCE_SCORE = V_PERFORMANCE_SCORE - 5;
+    END IF;
+
+    RETURN CAST(V_PERFORMANCE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SLANT_HEIGHT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_SLANT_HEIGHT = (MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4(-42)) - 869 + ((MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif(-82, -87)) - 87 + (sqrt(radius * radius + height * height)));
+    SET V_SURFACE_AREA = 3.14159 * RADIUS * (RADIUS + V_SLANT_HEIGHT);
+
+    RETURN (MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs(-80)) - -608 + (floor(v_surface_area));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs----- */
+CREATE TABLE IF NOT EXISTS `table_pgvepb` (
+    `table_pgvepb_product_id` INT,
+    `table_pgvepb_category_id` INT,
+    `table_pgvepb_price` DECIMAL(10,2),
+    `table_pgvepb_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t5jyxz` (
+    `table_t5jyxz_category_id` INT,
+    `table_t5jyxz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_pgvepb` (`table_pgvepb_product_id`, `table_pgvepb_category_id`, `table_pgvepb_price`, `table_pgvepb_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_t5jyxz` (`table_t5jyxz_category_id`, `table_t5jyxz_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_VALUE_RATIO_9akxcs(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_PGVEPB_PRICE, 0), COALESCE(TABLE_PGVEPB_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_PGVEPB
+    WHERE TABLE_PGVEPB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_PGVEPB_STOCK_QUANTITY * TABLE_PGVEPB_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_PGVEPB P
+    WHERE TABLE_PGVEPB_CATEGORY_ID = (SELECT TABLE_PGVEPB_CATEGORY_ID FROM TABLE_PGVEPB WHERE TABLE_PGVEPB_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    IF V_CATEGORY_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    RETURN FLOOR((V_PRICE * V_STOCK * 100) / V_CATEGORY_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_GCD_gptzif(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A <= 0 OR P_B <= 0 THEN
+        RETURN -1;
+    END IF;
+
+    WHILE P_B <> 0 DO
+        SET V_TEMP = P_B;
+        SET P_B = P_A MOD P_B;
+        SET P_A = V_TEMP;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN P_A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4----- */
+CREATE TABLE IF NOT EXISTS `table_tgtqbv` (
+    `table_tgtqbv_vehicle_id` INT,
+    `table_tgtqbv_owner_id` INT,
+    `table_tgtqbv_vehicle_type` VARCHAR(50),
+    `table_tgtqbv_make` INT,
+    `table_tgtqbv_model` INT,
+    `table_tgtqbv_year` INT,
+    `table_tgtqbv_insured_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_suofj7` (
+    `table_suofj7_claim_id` INT,
+    `table_suofj7_vehicle_id` INT,
+    `table_suofj7_claim_date` DATE,
+    `table_suofj7_claim_amount` DECIMAL(10,2),
+    `table_suofj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tgtqbv` (`table_tgtqbv_vehicle_id`, `table_tgtqbv_owner_id`, `table_tgtqbv_vehicle_type`, `table_tgtqbv_make`, `table_tgtqbv_model`, `table_tgtqbv_year`, `table_tgtqbv_insured_value`) VALUES (1, 1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_suofj7` (`table_suofj7_claim_id`, `table_suofj7_vehicle_id`, `table_suofj7_claim_date`, `table_suofj7_claim_amount`, `table_suofj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4(VEHICLE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INSURED_VALUE INT DEFAULT 0;
+    DECLARE V_VEHICLE_YEAR INT DEFAULT 2020;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_BASE_PREMIUM INT DEFAULT 500;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TGTQBV_INSURED_VALUE, 50000), COALESCE(YEAR(CURDATE()) - TABLE_TGTQBV_YEAR, 0)
+    INTO V_INSURED_VALUE, V_VEHICLE_YEAR
+    FROM TABLE_TGTQBV
+    WHERE TABLE_TGTQBV_VEHICLE_ID = VEHICLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_CLAIMS
+    FROM TABLE_SUOFJ7
+    WHERE TABLE_SUOFJ7_VEHICLE_ID = VEHICLE_ID_PARAM AND TABLE_SUOFJ7_STATUS = 'APPROVED';
+
+    SET V_FINAL_PREMIUM = (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(83)) - 905 + ((v_insured_value / 1000) + v_base_premium);
+
+    IF V_VEHICLE_YEAR < 2015 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + 100;
+    END IF;
+
+    IF V_TOTAL_CLAIMS > 0 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + (V_TOTAL_CLAIMS * 200);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj----- */
+CREATE TABLE IF NOT EXISTS `table_le5v5w` (
+    `table_le5v5w_product_id` INT,
+    `table_le5v5w_category_id` INT,
+    `table_le5v5w_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_le5v5w` (`table_le5v5w_product_id`, `table_le5v5w_category_id`, `table_le5v5w_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_LE5V5W_PRICE), 0), COALESCE(MIN(TABLE_LE5V5W_PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_LE5V5W
+    WHERE TABLE_LE5V5W_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_VARIANCE = V_MAX_PRICE - V_MIN_PRICE;
+
+    RETURN V_VARIANCE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc(ARR_SIZE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF ARR_SIZE <= 1 THEN
+        RETURN (MYSQL_FUNC_FACTORIAL_3sonsj(5)) - 164 + (0);
+    END IF;
+
+    SET V_I = 1;
+    OUTER_WHILE: WHILE V_I < ARR_SIZE DO
+        SET V_J = V_I;
+        INNER_WHILE: WHILE V_J > 0 DO
+            SET V_COUNT = V_COUNT + 1;
+            SET V_J = V_J - 1;
+        END WHILE INNER_WHILE;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FACTORIAL_3sonsj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FACTORIAL_3sonsj(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN -(MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(-66)) - 448 + (1);
+    END IF;
+
+    IF N = 0 OR N = 1 THEN
+        RETURN 1;
+    END IF;
+
+    COUNTER_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE COUNTER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+CREATE TABLE IF NOT EXISTS `table_kyivf2` (
+    `table_kyivf2_emp_id` INT,
+    `table_kyivf2_department_id` INT,
+    `table_kyivf2_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_53omk0` (
+    `table_53omk0_emp_id` INT,
+    `table_53omk0_bonus_amount` DECIMAL(10,2),
+    `table_53omk0_bonus_date` DATE
+);
+
+INSERT INTO `table_kyivf2` (`table_kyivf2_emp_id`, `table_kyivf2_department_id`, `table_kyivf2_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_53omk0` (`table_53omk0_emp_id`, `table_53omk0_bonus_amount`, `table_53omk0_bonus_date`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_ANNUAL_COMPENSATION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KYIVF2_SALARY, 0) INTO V_BASE_SALARY
+    FROM TABLE_KYIVF2
+    WHERE TABLE_KYIVF2_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_53OMK0_BONUS_AMOUNT), 0) INTO V_TOTAL_BONUS
+    FROM TABLE_53OMK0
+    WHERE TABLE_53OMK0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ANNUAL_COMPENSATION = (V_BASE_SALARY * 12) + V_TOTAL_BONUS;
+
+    RETURN V_ANNUAL_COMPENSATION;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MAX_077bna(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_MERGE_SORT_COUNT_ixwnsc(14)) - 689 + ((MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(-44, -90)) - -623 + ((MYSQL_FUNC_CALCULATE_REFUND_FREQUENCY_exhmuy(-14)) - -302 + (a))) > B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_GET_MAX_077bna(1, 1);

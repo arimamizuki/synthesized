@@ -1,0 +1,359 @@
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+CREATE TABLE IF NOT EXISTS table_5s385z (
+    table_5s385z_id INT,
+    table_5s385z_preco INT
+);
+
+INSERT INTO table_5s385z (`table_5s385z_id`, `table_5s385z_preco`) VALUES (3, 150);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(VAR_REMEDIO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_PRECO INT DEFAULT 0;
+    
+    SELECT TABLE_5S385Z_PRECO INTO RESULT_PRECO
+    FROM TABLE_5S385Z
+    WHERE TABLE_5S385Z.TABLE_5S385Z_ID = VAR_REMEDIO;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl(72)) - 948 + (result_preco);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+CREATE TABLE IF NOT EXISTS `table_k6vpgx` (
+    `table_k6vpgx_class_id` INT,
+    `table_k6vpgx_instructor_id` INT,
+    `table_k6vpgx_capacity` INT,
+    `table_k6vpgx_current_enrollment` INT,
+    `table_k6vpgx_duration_minutes` INT,
+    `table_k6vpgx_class_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_vvyt03` (
+    `table_vvyt03_booking_id` INT,
+    `table_vvyt03_member_id` INT,
+    `table_vvyt03_class_id` INT,
+    `table_vvyt03_booking_date` DATE,
+    `table_vvyt03_attendance_status` VARCHAR(50)
+);
+
+INSERT INTO `table_k6vpgx` (`table_k6vpgx_class_id`, `table_k6vpgx_instructor_id`, `table_k6vpgx_capacity`, `table_k6vpgx_current_enrollment`, `table_k6vpgx_duration_minutes`, `table_k6vpgx_class_type`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vvyt03` (`table_vvyt03_booking_id`, `table_vvyt03_member_id`, `table_vvyt03_class_id`, `table_vvyt03_booking_date`, `table_vvyt03_attendance_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLASS_POPULARITY_SCORE_b13ksl(CLASS_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 0;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_DURATION INT DEFAULT 0;
+    DECLARE V_TOTAL_BOOKINGS INT DEFAULT 0;
+    DECLARE V_ATTENDANCE_RATE INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_K6VPGX_CAPACITY, 20), COALESCE(TABLE_K6VPGX_CURRENT_ENROLLMENT, 0), COALESCE(TABLE_K6VPGX_DURATION_MINUTES, 60)
+    INTO V_CAPACITY, V_CURRENT_ENROLLMENT, V_DURATION
+    FROM TABLE_K6VPGX
+    WHERE TABLE_K6VPGX_CLASS_ID = CLASS_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(CASE TABLE_VVYT03_ATTENDANCE_STATUS WHEN 'ATTENDED' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_TOTAL_BOOKINGS, V_ATTENDANCE_RATE
+    FROM TABLE_VVYT03
+    WHERE TABLE_VVYT03_CLASS_ID = CLASS_ID_PARAM;
+
+    SET V_POPULARITY_SCORE = (MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s()) - -203 + (((v_current_enrollment * 100) / v_capacity) + (v_total_bookings * 2) + (v_attendance_rate / 2));
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(-89)) - -288 + (v_popularity_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s----- */
+CREATE TABLE IF NOT EXISTS table_egi8wp (
+    table_egi8wp_User CHAR(32),
+    table_egi8wp_Host CHAR(255),
+    table_egi8wp_Grantor CHAR(93)
+);
+
+INSERT INTO table_egi8wp (`table_egi8wp_User`, `table_egi8wp_Host`, `table_egi8wp_Grantor`) VALUES
+('u2', 'localhost', 'test_grantor');
+
+/* -----Called: MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TRANSFORMED_PROCEDURE_bokp9s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_EGI8WP
+    WHERE TABLE_EGI8WP_USER LIKE 'U2%';
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(-56)) - -918 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl----- */
+CREATE TABLE IF NOT EXISTS `table_1nqetr` (
+    `table_1nqetr_order_id` INT,
+    `table_1nqetr_customer_id` INT,
+    `table_1nqetr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1nqetr` (`table_1nqetr_order_id`, `table_1nqetr_customer_id`, `table_1nqetr_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_VALUE_BUCKET_1axikl(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_1NQETR_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_1NQETR
+    WHERE TABLE_1NQETR_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_TOTAL > 1000 THEN
+        RETURN 5;
+    ELSEIF V_TOTAL > 500 THEN
+        RETURN 4;
+    ELSEIF V_TOTAL > 200 THEN
+        RETURN 3;
+    ELSEIF V_TOTAL > 100 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0----- */
+CREATE TABLE IF NOT EXISTS `table_5gubph` (
+    `table_5gubph_employee_id` INT,
+    `table_5gubph_name` VARCHAR(50),
+    `table_5gubph_department_id` INT,
+    `table_5gubph_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_j8tmus` (
+    `table_j8tmus_department_id` INT,
+    `table_j8tmus_name` VARCHAR(50),
+    `table_j8tmus_budget` INT
+);
+
+INSERT INTO `table_5gubph` (`table_5gubph_employee_id`, `table_5gubph_name`, `table_5gubph_department_id`, `table_5gubph_salary`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_j8tmus` (`table_j8tmus_department_id`, `table_j8tmus_name`, `table_j8tmus_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SPENDING_RATIO_d4uqk0(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_DEPARTMENT_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENDING_RATIO INT DEFAULT 0;
+    DECLARE V_EMPLOYEE_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_5GUBPH_SALARY), 0)
+    INTO V_EMPLOYEE_COUNT, V_TOTAL_SALARIES
+    FROM TABLE_5GUBPH
+    WHERE TABLE_5GUBPH_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_J8TMUS_BUDGET, 0)
+    INTO V_DEPARTMENT_BUDGET
+    FROM TABLE_J8TMUS
+    WHERE TABLE_J8TMUS_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_DEPARTMENT_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SPENDING_RATIO = (V_TOTAL_SALARIES * 100) / V_DEPARTMENT_BUDGET;
+
+    RETURN V_SPENDING_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+CREATE TABLE IF NOT EXISTS `table_u6vck3` (
+    `table_u6vck3_product_id` INT,
+    `table_u6vck3_category_id` INT,
+    `table_u6vck3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u6vck3` (`table_u6vck3_product_id`, `table_u6vck3_category_id`, `table_u6vck3_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_U6VCK3_PRICE), 0), COALESCE(AVG(TABLE_U6VCK3_PRICE), 1)
+    INTO V_CATEGORY_AVG, V_OVERALL_AVG
+    FROM TABLE_U6VCK3
+    WHERE TABLE_U6VCK3_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(-77)) - 263 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(-49)) - 936 + ((MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(-28)) - -980 + (floor((v_category_avg * 100) / v_overall_avg))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+CREATE TABLE IF NOT EXISTS `table_3lq4dj` (
+    `table_3lq4dj_product_id` INT,
+    `table_3lq4dj_category_id` INT,
+    `table_3lq4dj_price` DECIMAL(10,2),
+    `table_3lq4dj_stock_quantity` INT
+);
+
+INSERT INTO `table_3lq4dj` (`table_3lq4dj_product_id`, `table_3lq4dj_category_id`, `table_3lq4dj_price`, `table_3lq4dj_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SCORE_2j91mt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3LQ4DJ_PRICE, 0), COALESCE(TABLE_3LQ4DJ_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_3LQ4DJ
+    WHERE TABLE_3LQ4DJ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR((V_PRICE * V_STOCK) / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+CREATE TABLE IF NOT EXISTS `table_zdhyse` (
+    `table_zdhyse_customer_id` INT,
+    `table_zdhyse_registration_date` DATE
+);
+
+INSERT INTO `table_zdhyse` (`table_zdhyse_customer_id`, `table_zdhyse_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LIFESPAN_MONTHS_h354qm(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LIFESPAN_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_ZDHYSE_REGISTRATION_DATE, CURDATE())
+    INTO V_LIFESPAN_MONTHS
+    FROM TABLE_ZDHYSE
+    WHERE TABLE_ZDHYSE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_LIFESPAN_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+CREATE TABLE IF NOT EXISTS `table_ttn14y` (
+    `table_ttn14y_claim_id` INT,
+    `table_ttn14y_policy_id` INT,
+    `table_ttn14y_claim_date` DATE,
+    `table_ttn14y_claim_amount` DECIMAL(10,2),
+    `table_ttn14y_status` VARCHAR(50),
+    `table_ttn14y_processing_days` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_hwxj55` (
+    `table_hwxj55_policy_id` INT,
+    `table_hwxj55_customer_id` INT,
+    `table_hwxj55_policy_type` VARCHAR(50),
+    `table_hwxj55_premium_annual` INT
+);
+
+INSERT INTO `table_ttn14y` (`table_ttn14y_claim_id`, `table_ttn14y_policy_id`, `table_ttn14y_claim_date`, `table_ttn14y_claim_amount`, `table_ttn14y_status`, `table_ttn14y_processing_days`) VALUES (1, 2, '2024-01-01', 1.0, 'test', 6);
+
+INSERT INTO `table_hwxj55` (`table_hwxj55_policy_id`, `table_hwxj55_customer_id`, `table_hwxj55_policy_type`, `table_hwxj55_premium_annual`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLAIMS_PROCESSING_EFFICIENCY_hf38it(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_AVG_PROCESSING_DAYS DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_APPROVED_CLAIMS INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_SCORE INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_TTN14Y_PROCESSING_DAYS), 0)
+    INTO V_TOTAL_CLAIMS, V_AVG_PROCESSING_DAYS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_APPROVED_CLAIMS
+    FROM TABLE_TTN14Y
+    WHERE TABLE_TTN14Y_POLICY_ID = POLICY_ID_PARAM AND TABLE_TTN14Y_STATUS = 'APPROVED';
+
+    IF V_TOTAL_CLAIMS = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_EFFICIENCY_SCORE = 100 - (V_AVG_PROCESSING_DAYS * 2) + (V_APPROVED_CLAIMS * 10 / V_TOTAL_CLAIMS);
+
+    RETURN GREATEST(V_EFFICIENCY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_65e0ab() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(-77)) - -853 + ((MYSQL_FUNC_VER_PRECO_REMEDIO_3f7o95(-92)) - -72 + ((MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + (0)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FUNC2_65e0ab();

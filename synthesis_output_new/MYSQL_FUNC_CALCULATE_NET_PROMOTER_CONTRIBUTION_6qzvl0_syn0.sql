@@ -1,0 +1,429 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_vevirx` (
+    `table_vevirx_order_id` INT,
+    `table_vevirx_customer_id` INT,
+    `table_vevirx_order_date` DATE,
+    `table_vevirx_total_amount` DECIMAL(10,2),
+    `table_vevirx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5od72a` (
+    `table_5od72a_refund_id` INT,
+    `table_5od72a_order_id` INT,
+    `table_5od72a_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vevirx` (`table_vevirx_order_id`, `table_vevirx_customer_id`, `table_vevirx_order_date`, `table_vevirx_total_amount`, `table_vevirx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_5od72a` (`table_5od72a_refund_id`, `table_5od72a_order_id`, `table_5od72a_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+CREATE TABLE IF NOT EXISTS `table_s5c2sb` (
+    `table_s5c2sb_listing_id` INT,
+    `table_s5c2sb_employer_id` INT,
+    `table_s5c2sb_title` INT,
+    `table_s5c2sb_salary_min` INT,
+    `table_s5c2sb_salary_max` INT,
+    `table_s5c2sb_posted_date` DATE,
+    `table_s5c2sb_application_deadline` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_w5l6s0` (
+    `table_w5l6s0_application_id` INT,
+    `table_w5l6s0_listing_id` INT,
+    `table_w5l6s0_applicant_id` INT,
+    `table_w5l6s0_applied_date` DATE,
+    `table_w5l6s0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s5c2sb` (`table_s5c2sb_listing_id`, `table_s5c2sb_employer_id`, `table_s5c2sb_title`, `table_s5c2sb_salary_min`, `table_s5c2sb_salary_max`, `table_s5c2sb_posted_date`, `table_s5c2sb_application_deadline`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_w5l6s0` (`table_w5l6s0_application_id`, `table_w5l6s0_listing_id`, `table_w5l6s0_applicant_id`, `table_w5l6s0_applied_date`, `table_w5l6s0_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(LISTING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_MIN INT DEFAULT 0;
+    DECLARE V_SALARY_MAX INT DEFAULT 0;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_POSTED INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_S5C2SB_SALARY_MIN), 0), COALESCE(MAX(TABLE_S5C2SB_SALARY_MAX), 0), COUNT(*)
+    INTO V_SALARY_MIN, V_SALARY_MAX, V_APPLICATION_COUNT
+    FROM TABLE_S5C2SB L
+    LEFT JOIN TABLE_W5L6S0 A ON TABLE_S5C2SB_LISTING_ID = TABLE_W5L6S0_LISTING_ID
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM
+    GROUP BY TABLE_S5C2SB_LISTING_ID;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_S5C2SB_POSTED_DATE) INTO V_DAYS_SINCE_POSTED
+    FROM TABLE_S5C2SB
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM;
+
+    IF V_DAYS_SINCE_POSTED = 0 THEN
+        SET V_DAYS_SINCE_POSTED = 1;
+    END IF;
+
+    SET V_ENGAGEMENT_SCORE = (V_APPLICATION_COUNT * 100) / V_DAYS_SINCE_POSTED;
+
+    IF V_SALARY_MAX > 100000 THEN
+        SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_ENGAGEMENT_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+CREATE TABLE IF NOT EXISTS `table_jni2uy` (
+    `table_jni2uy_emp_id` INT,
+    `table_jni2uy_department_id` INT,
+    `table_jni2uy_salary` INT
+);
+
+INSERT INTO `table_jni2uy` (`table_jni2uy_emp_id`, `table_jni2uy_department_id`, `table_jni2uy_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RANK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_JNI2UY_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_JNI2UY
+    WHERE TABLE_JNI2UY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_JNI2UY_DEPARTMENT_ID) + 1
+    INTO V_RANK
+    FROM TABLE_JNI2UY
+    WHERE (SELECT AVG(TABLE_JNI2UY_SALARY) FROM TABLE_JNI2UY WHERE TABLE_JNI2UY_DEPARTMENT_ID = TABLE_JNI2UY_DEPARTMENT_ID) > V_AVG_SALARY;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(-71)) - 731 + (v_rank);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+CREATE TABLE IF NOT EXISTS `table_dxqhul` (
+    `table_dxqhul_product_id` INT,
+    `table_dxqhul_category_id` INT,
+    `table_dxqhul_price` DECIMAL(10,2),
+    `table_dxqhul_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_698z3y` (
+    `table_698z3y_category_id` INT,
+    `table_698z3y_name` VARCHAR(50),
+    `table_698z3y_parent_category_id` INT
+);
+
+INSERT INTO `table_dxqhul` (`table_dxqhul_product_id`, `table_dxqhul_category_id`, `table_dxqhul_price`, `table_dxqhul_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_698z3y` (`table_698z3y_category_id`, `table_698z3y_name`, `table_698z3y_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_DISCOUNT_THRESHOLD_ve2zgt(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_STOCK INT DEFAULT 0;
+    DECLARE V_CATEGORY_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DISCOUNT_THRESHOLD INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_DXQHUL_STOCK_QUANTITY), 0)
+    INTO V_CATEGORY_STOCK
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_DXQHUL_PRICE), 0)
+    INTO V_CATEGORY_AVG_PRICE
+    FROM TABLE_DXQHUL
+    WHERE TABLE_DXQHUL_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_DISCOUNT_THRESHOLD = FLOOR(V_CATEGORY_AVG_PRICE * 0.2);
+
+    IF V_CATEGORY_STOCK > 1000 THEN
+        SET V_DISCOUNT_THRESHOLD = V_DISCOUNT_THRESHOLD + 10;
+    END IF;
+
+    RETURN V_DISCOUNT_THRESHOLD;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+CREATE TABLE IF NOT EXISTS `table_ybsj22` (
+    `table_ybsj22_campaign_id` INT,
+    `table_ybsj22_channel` INT
+);
+
+INSERT INTO `table_ybsj22` (`table_ybsj22_campaign_id`, `table_ybsj22_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_YBSJ22_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_YBSJ22
+    WHERE TABLE_YBSJ22_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RESTAURANT_RATING_h6spts----- */
+CREATE TABLE IF NOT EXISTS `table_4m86i9` (
+    `table_4m86i9_restaurant_id` INT,
+    `table_4m86i9_customer_id` INT,
+    `table_4m86i9_rating` DECIMAL(3,1),
+    `table_4m86i9_food_quality` INT,
+    `table_4m86i9_service_score` INT,
+    `table_4m86i9_comment_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1as944` (
+    `table_1as944_restaurant_id` INT,
+    `table_1as944_name` VARCHAR(50),
+    `table_1as944_cuisine_type` VARCHAR(50),
+    `table_1as944_avg_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4m86i9` (`table_4m86i9_restaurant_id`, `table_4m86i9_customer_id`, `table_4m86i9_rating`, `table_4m86i9_food_quality`, `table_4m86i9_service_score`, `table_4m86i9_comment_date`) VALUES (1, 2, 1.0, 4, 5, '2024-01-01');
+
+INSERT INTO `table_1as944` (`table_1as944_restaurant_id`, `table_1as944_name`, `table_1as944_cuisine_type`, `table_1as944_avg_price`) VALUES (1, 'test', 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RESTAURANT_RATING_h6spts----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RESTAURANT_RATING_h6spts(RESTAURANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_RATING INT DEFAULT 0;
+    DECLARE V_AVG_FOOD INT DEFAULT 0;
+    DECLARE V_AVG_SERVICE INT DEFAULT 0;
+    DECLARE V_REVIEW_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_4M86I9_RATING), 0), COALESCE(AVG(TABLE_4M86I9_FOOD_QUALITY), 0), COALESCE(AVG(TABLE_4M86I9_SERVICE_SCORE), 0), COUNT(*)
+    INTO V_AVG_RATING, V_AVG_FOOD, V_AVG_SERVICE, V_REVIEW_COUNT
+    FROM TABLE_4M86I9
+    WHERE TABLE_4M86I9_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF V_REVIEW_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = (V_AVG_RATING * 40 / 100) + (V_AVG_FOOD * 35 / 100) + (V_AVG_SERVICE * 25 / 100);
+
+    IF V_REVIEW_COUNT > 100 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd----- */
+CREATE TABLE IF NOT EXISTS `table_wzbcdn` (
+    `table_wzbcdn_product_id` INT,
+    `table_wzbcdn_name` VARCHAR(50),
+    `table_wzbcdn_category_id` INT,
+    `table_wzbcdn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zpqbn3` (
+    `table_zpqbn3_order_id` INT,
+    `table_zpqbn3_product_id` INT,
+    `table_zpqbn3_quantity` INT,
+    `table_zpqbn3_order_date` DATE
+);
+
+INSERT INTO `table_wzbcdn` (`table_wzbcdn_product_id`, `table_wzbcdn_name`, `table_wzbcdn_category_id`, `table_wzbcdn_price`) VALUES (1, 'test', 3, 1.0);
+
+INSERT INTO `table_zpqbn3` (`table_zpqbn3_order_id`, `table_zpqbn3_product_id`, `table_zpqbn3_quantity`, `table_zpqbn3_order_date`) VALUES (1, 2, 3, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_PRODUCT_POPULARITY_SCORE_5qw0zd(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_QUANTITY INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_QUANTITY_PER_ORDER INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_ZPQBN3_QUANTITY), 0), COUNT(*)
+    INTO V_TOTAL_QUANTITY, V_ORDER_COUNT
+    FROM TABLE_ZPQBN3
+    WHERE TABLE_ZPQBN3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SELECT DATEDIFF(CURDATE(), MAX(TABLE_ZPQBN3_ORDER_DATE))
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_ZPQBN3
+    WHERE TABLE_ZPQBN3_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_AVG_QUANTITY_PER_ORDER = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(-6)) - 990 + (v_total_quantity / v_order_count);
+
+    SET V_POPULARITY_SCORE = (V_ORDER_COUNT * 10) + (V_AVG_QUANTITY_PER_ORDER * 5);
+
+    IF V_DAYS_SINCE_LAST_ORDER <= 7 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 20;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER <= 30 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE + 10;
+    ELSEIF V_DAYS_SINCE_LAST_ORDER > 90 THEN
+        SET V_POPULARITY_SCORE = V_POPULARITY_SCORE - 30;
+    END IF;
+
+    RETURN V_POPULARITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+CREATE TABLE IF NOT EXISTS `table_9duxm5` (
+    `table_9duxm5_emp_id` INT,
+    `table_9duxm5_department_id` INT,
+    `table_9duxm5_salary` INT
+);
+
+INSERT INTO `table_9duxm5` (`table_9duxm5_emp_id`, `table_9duxm5_department_id`, `table_9duxm5_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_COUNT_vs4vmr(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9DUXM5
+    WHERE TABLE_9DUXM5_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q----- */
+CREATE TABLE IF NOT EXISTS `table_pz6dag` (
+    `table_pz6dag_product_id` INT,
+    `table_pz6dag_supplier_id` INT
+);
+
+INSERT INTO `table_pz6dag` (`table_pz6dag_product_id`, `table_pz6dag_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_INDEX_bian6q(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(14)) - 678 + (supplier_id_param % 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+CREATE TABLE IF NOT EXISTS `table_xyocnl` (
+    `table_xyocnl_order_id` INT,
+    `table_xyocnl_customer_id` INT
+);
+
+INSERT INTO `table_xyocnl` (`table_xyocnl_order_id`, `table_xyocnl_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_XYOCNL_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_XYOCNL
+    WHERE TABLE_XYOCNL_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NPS_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEVIRX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_VEVIRX
+    WHERE TABLE_VEVIRX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5OD72A_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_5OD72A
+    WHERE TABLE_5OD72A_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NPS_CONTRIBUTION = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(-82)) - 947 + ((MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(86)) - -457 + (v_order_total - (v_refund_total * 2)));
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + ((MYSQL_FUNC_CALCULATE_CHANNEL_INDEX_k7ydi9(15)) - 610 + (v_nps_contribution));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(1);

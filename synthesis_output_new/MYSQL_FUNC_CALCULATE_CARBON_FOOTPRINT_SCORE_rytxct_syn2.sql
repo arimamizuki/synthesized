@@ -1,0 +1,381 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_p3fp7f` (
+    `table_p3fp7f_order_id` INT,
+    `table_p3fp7f_customer_id` INT,
+    `table_p3fp7f_order_date` DATE,
+    `table_p3fp7f_shipping_address` INT,
+    `table_p3fp7f_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dqxaxg` (
+    `table_dqxaxg_shipment_id` INT,
+    `table_dqxaxg_order_id` INT,
+    `table_dqxaxg_carrier` INT,
+    `table_dqxaxg_shipping_cost` DECIMAL(10,2),
+    `table_dqxaxg_delivery_date` DATE
+);
+
+INSERT INTO `table_p3fp7f` (`table_p3fp7f_order_id`, `table_p3fp7f_customer_id`, `table_p3fp7f_order_date`, `table_p3fp7f_shipping_address`, `table_p3fp7f_shipping_method`) VALUES (1, 1, '2024-01-01', 1, 1);
+
+INSERT INTO `table_dqxaxg` (`table_dqxaxg_shipment_id`, `table_dqxaxg_order_id`, `table_dqxaxg_carrier`, `table_dqxaxg_shipping_cost`, `table_dqxaxg_delivery_date`) VALUES (1, 2, 3, 1.0, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+CREATE TABLE IF NOT EXISTS `table_bl5369` (
+    `table_bl5369_emp_id` INT,
+    `table_bl5369_department_id` INT
+);
+
+INSERT INTO `table_bl5369` (`table_bl5369_emp_id`, `table_bl5369_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_BL5369_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_PROC1_cvo8ys()) - 819 + ((MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(-5)) - 75 + ((MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(12)) - -143 + ((MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(2)) - 125 + (v_emp_count / 10))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+CREATE TABLE IF NOT EXISTS `table_4ts7o4` (
+    `table_4ts7o4_order_id` INT,
+    `table_4ts7o4_customer_id` INT,
+    `table_4ts7o4_order_date` DATE,
+    `table_4ts7o4_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_y3npq4` (
+    `table_y3npq4_order_id` INT,
+    `table_y3npq4_product_id` INT,
+    `table_y3npq4_quantity` INT,
+    `table_y3npq4_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4ts7o4` (`table_4ts7o4_order_id`, `table_4ts7o4_customer_id`, `table_4ts7o4_order_date`, `table_4ts7o4_status`) VALUES (1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_y3npq4` (`table_y3npq4_order_id`, `table_y3npq4_product_id`, `table_y3npq4_quantity`, `table_y3npq4_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_FRAUD_RISK_stztkg(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_ITEM_COUNT INT DEFAULT 0;
+    DECLARE V_UNIQUE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_AVG_ITEM_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_FRAUD_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_Y3NPQ4_QUANTITY * TABLE_Y3NPQ4_UNIT_PRICE), 0), COUNT(*)
+    INTO V_ORDER_TOTAL, V_ITEM_COUNT
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_Y3NPQ4_PRODUCT_ID)
+    INTO V_UNIQUE_PRODUCTS
+    FROM TABLE_Y3NPQ4
+    WHERE TABLE_Y3NPQ4_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ITEM_COUNT > 0 THEN
+        SET V_AVG_ITEM_PRICE = V_ORDER_TOTAL / V_ITEM_COUNT;
+    END IF;
+
+    IF V_ORDER_TOTAL > 10000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 30;
+    END IF;
+
+    IF V_UNIQUE_PRODUCTS < V_ITEM_COUNT / 2 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 20;
+    END IF;
+
+    IF V_AVG_ITEM_PRICE > 5000 THEN
+        SET V_FRAUD_SCORE = V_FRAUD_SCORE + 25;
+    END IF;
+
+    RETURN LEAST(V_FRAUD_SCORE, 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+CREATE TABLE IF NOT EXISTS `table_ze3ja4` (
+    `table_ze3ja4_order_id` INT,
+    `table_ze3ja4_customer_id` INT,
+    `table_ze3ja4_order_date` DATE
+);
+
+INSERT INTO `table_ze3ja4` (`table_ze3ja4_order_id`, `table_ze3ja4_customer_id`, `table_ze3ja4_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_oes2sd(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_ZE3JA4_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_ZE3JA4
+    WHERE TABLE_ZE3JA4_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+CREATE TABLE IF NOT EXISTS `table_k6cijp` (
+    `table_k6cijp_course_id` INT,
+    `table_k6cijp_course_name` VARCHAR(50),
+    `table_k6cijp_credits` INT,
+    `table_k6cijp_department_id` INT,
+    `table_k6cijp_max_students` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_rhsiv6` (
+    `table_rhsiv6_enrollment_id` INT,
+    `table_rhsiv6_student_id` INT,
+    `table_rhsiv6_course_id` INT,
+    `table_rhsiv6_grade` INT,
+    `table_rhsiv6_enrollment_date` DATE
+);
+
+INSERT INTO `table_k6cijp` (`table_k6cijp_course_id`, `table_k6cijp_course_name`, `table_k6cijp_credits`, `table_k6cijp_department_id`, `table_k6cijp_max_students`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_rhsiv6` (`table_rhsiv6_enrollment_id`, `table_rhsiv6_student_id`, `table_rhsiv6_course_id`, `table_rhsiv6_grade`, `table_rhsiv6_enrollment_date`) VALUES (1, 2, 3, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_SUCCESS_RATE_iok9bw(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ENROLLED INT DEFAULT 0;
+    DECLARE V_PASSING_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_SUCCESS_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_RHSIV6_GRADE >= 60 THEN 1 END), COALESCE(AVG(TABLE_RHSIV6_GRADE), 0)
+    INTO V_TOTAL_ENROLLED, V_PASSING_COUNT, V_AVG_GRADE
+    FROM TABLE_RHSIV6
+    WHERE TABLE_RHSIV6_COURSE_ID = COURSE_ID_PARAM;
+
+    IF V_TOTAL_ENROLLED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_SUCCESS_RATE = (V_PASSING_COUNT * 100) / V_TOTAL_ENROLLED;
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_SUCCESS_RATE = V_SUCCESS_RATE + 5;
+    END IF;
+
+    RETURN CAST(V_SUCCESS_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_cvo8ys----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_cvo8ys() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(31)) - -928 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(-6, 95)) - 952 + ((MYSQL_FUNC_FUNC1_dvat8j()) - 542 + (0)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC1_dvat8j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC1_dvat8j() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(52)) - 333 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+CREATE TABLE IF NOT EXISTS `table_z79t7b` (
+    `table_z79t7b_sale_id` INT,
+    `table_z79t7b_property_id` INT,
+    `table_z79t7b_agent_id` INT,
+    `table_z79t7b_sale_price` DECIMAL(10,2),
+    `table_z79t7b_commission_rate` INT,
+    `table_z79t7b_agent_split_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vmfcd8` (
+    `table_vmfcd8_agent_id` INT,
+    `table_vmfcd8_name` VARCHAR(50),
+    `table_vmfcd8_years_experience` INT,
+    `table_vmfcd8_commission_rate` INT
+);
+
+INSERT INTO `table_z79t7b` (`table_z79t7b_sale_id`, `table_z79t7b_property_id`, `table_z79t7b_agent_id`, `table_z79t7b_sale_price`, `table_z79t7b_commission_rate`, `table_z79t7b_agent_split_percent`) VALUES (1, 2, 3, 1.0, 5, 6);
+
+INSERT INTO `table_vmfcd8` (`table_vmfcd8_agent_id`, `table_vmfcd8_name`, `table_vmfcd8_years_experience`, `table_vmfcd8_commission_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AGENT_COMMISSION_d2cj4e(SALE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALE_PRICE INT DEFAULT 0;
+    DECLARE V_COMMISSION_RATE INT DEFAULT 3;
+    DECLARE V_AGENT_SPLIT INT DEFAULT 60;
+    DECLARE V_TOTAL_COMMISSION INT DEFAULT 0;
+    DECLARE V_AGENT_COMMISSION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Z79T7B_SALE_PRICE, 0), COALESCE(TABLE_Z79T7B_COMMISSION_RATE, 3)
+    INTO V_SALE_PRICE, V_COMMISSION_RATE
+    FROM TABLE_Z79T7B
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_Z79T7B_AGENT_SPLIT_PERCENT, 60) INTO V_AGENT_SPLIT
+    FROM TABLE_Z79T7B RC
+    JOIN TABLE_VMFCD8 A ON TABLE_Z79T7B_AGENT_ID = TABLE_VMFCD8_AGENT_ID
+    WHERE TABLE_Z79T7B_SALE_ID = SALE_ID_PARAM;
+
+    SET V_TOTAL_COMMISSION = V_SALE_PRICE * V_COMMISSION_RATE / 100;
+    SET V_AGENT_COMMISSION = V_TOTAL_COMMISSION * V_AGENT_SPLIT / 100;
+
+    RETURN CAST(V_AGENT_COMMISSION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_EXPONENTIAL_8kbgle(BASE INT, MAX_POWER INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_POWER INT DEFAULT 0;
+
+    WHILE V_POWER < MAX_POWER AND V_RESULT < 1000000000 DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_POWER = V_POWER + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PERFECT_NUMBER_e3rnml(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 1;
+    DECLARE V_DIVISOR INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr(11)) - 962 + (0);
+    END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+
+    DIVISOR_LOOP: WHILE V_DIVISOR <= V_SQRT_N DO
+        IF N % V_DIVISOR = 0 THEN
+            SET V_SUM = V_SUM + V_DIVISOR;
+            IF V_DIVISOR != N / V_DIVISOR THEN
+                SET V_SUM = V_SUM + (N / V_DIVISOR);
+            END IF;
+        END IF;
+        SET V_DIVISOR = V_DIVISOR + 1;
+    END WHILE DIVISOR_LOOP;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr----- */
+CREATE TABLE IF NOT EXISTS `table_s8vg31` (
+    `table_s8vg31_customer_id` INT,
+    `table_s8vg31_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_s8vg31` (`table_s8vg31_customer_id`, `table_s8vg31_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S8VG31_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_S8VG31
+    WHERE TABLE_S8VG31_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTHLY_COST * 10;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'GROUND';
+    DECLARE V_DISTANCE_MILES INT DEFAULT 0;
+    DECLARE V_CARRIER VARCHAR(50) DEFAULT '';
+    DECLARE V_CARBON_FOOTPRINT INT DEFAULT 0;
+
+    SELECT TABLE_P3FP7F_SHIPPING_METHOD
+    INTO V_SHIPPING_METHOD
+    FROM TABLE_P3FP7F
+    WHERE TABLE_P3FP7F_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_DQXAXG_CARRIER, 'STANDARD'), COALESCE(TABLE_DQXAXG_SHIPPING_COST, 10)
+    INTO V_CARRIER, V_DISTANCE_MILES
+    FROM TABLE_DQXAXG
+    WHERE TABLE_DQXAXG_ORDER_ID = ORDER_ID_PARAM;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'AIR' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 2;
+        WHEN 'EXPRESS' THEN SET V_CARBON_FOOTPRINT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(-66)) - -296 + (v_distance_miles * 150 / 100);
+        WHEN 'GROUND' THEN SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 50 / 100;
+        ELSE SET V_CARBON_FOOTPRINT = V_DISTANCE_MILES * 30 / 100;
+    END CASE;
+
+    RETURN V_CARBON_FOOTPRINT;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CARBON_FOOTPRINT_SCORE_rytxct(1);

@@ -1,0 +1,402 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_qzk6th` (
+    `table_qzk6th_enrollment_id` INT,
+    `table_qzk6th_child_id` INT,
+    `table_qzk6th_program_type` VARCHAR(50),
+    `table_qzk6th_hours_per_week` INT,
+    `table_qzk6th_weekly_rate` INT,
+    `table_qzk6th_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hbhj2x` (
+    `table_hbhj2x_child_id` INT,
+    `table_hbhj2x_date_of_birth` DATE,
+    `table_hbhj2x_parent_id` INT
+);
+
+INSERT INTO `table_qzk6th` (`table_qzk6th_enrollment_id`, `table_qzk6th_child_id`, `table_qzk6th_program_type`, `table_qzk6th_hours_per_week`, `table_qzk6th_weekly_rate`, `table_qzk6th_start_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_hbhj2x` (`table_hbhj2x_child_id`, `table_hbhj2x_date_of_birth`, `table_hbhj2x_parent_id`) VALUES (1, '2024-01-01', 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+CREATE TABLE IF NOT EXISTS `table_rjv3br` (
+    `table_rjv3br_customer_id` INT,
+    `table_rjv3br_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ejry3z` (
+    `table_ejry3z_order_id` INT,
+    `table_ejry3z_customer_id` INT,
+    `table_ejry3z_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rjv3br` (`table_rjv3br_customer_id`, `table_rjv3br_country`) VALUES (1, 1);
+
+INSERT INTO `table_ejry3z` (`table_ejry3z_order_id`, `table_ejry3z_customer_id`, `table_ejry3z_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT
+    FROM TABLE_EJRY3Z O
+    JOIN TABLE_RJV3BR C ON TABLE_EJRY3Z_CUSTOMER_ID = TABLE_RJV3BR_CUSTOMER_ID
+    WHERE TABLE_RJV3BR_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(70, 34)) - -400 + (v_order_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ROTATE_ARRAY_ELEMENTS_shdl4j(SIZE INT, POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_J INT DEFAULT 0;
+
+    IF SIZE <= 0 OR POSITIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET POSITIONS = POSITIONS % SIZE;
+    IF POSITIONS = 0 THEN
+        RETURN (SIZE * (SIZE - 1)) / 2;
+    END IF;
+
+    SET V_I = 1;
+    WHILE V_I <= POSITIONS DO
+        SET V_J = SIZE;
+        WHILE V_J > 1 DO
+            SET V_RESULT = V_RESULT + 1;
+            SET V_J = V_J - 1;
+        END WHILE;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5----- */
+CREATE TABLE IF NOT EXISTS `table_4sjwty` (
+    `table_4sjwty_order_id` INT,
+    `table_4sjwty_customer_id` INT,
+    `table_4sjwty_order_date` DATE,
+    `table_4sjwty_total_amount` DECIMAL(10,2),
+    `table_4sjwty_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mvkzgz` (
+    `table_mvkzgz_customer_id` INT,
+    `table_mvkzgz_tier_level` INT
+);
+
+INSERT INTO `table_4sjwty` (`table_4sjwty_order_id`, `table_4sjwty_customer_id`, `table_4sjwty_order_date`, `table_4sjwty_total_amount`, `table_4sjwty_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_mvkzgz` (`table_mvkzgz_customer_id`, `table_mvkzgz_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_TIER VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_MIGRATION_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_MVKZGZ_TIER_LEVEL
+    INTO V_CURRENT_TIER
+    FROM TABLE_MVKZGZ
+    WHERE TABLE_MVKZGZ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4SJWTY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_4SJWTY
+    WHERE TABLE_4SJWTY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_4SJWTY_STATUS = 'COMPLETED';
+
+    CASE V_CURRENT_TIER
+        WHEN 'BRONZE' THEN
+            IF V_TOTAL_SPENT >= 500 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 200 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(2)) - 834 + ((MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + ((MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(12)) - -622 + (10)));
+            END IF;
+        WHEN 'SILVER' THEN
+            IF V_TOTAL_SPENT >= 2000 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 1000 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = 10;
+            END IF;
+        WHEN 'GOLD' THEN
+            IF V_TOTAL_SPENT >= 5000 THEN SET V_MIGRATION_SCORE = 80;
+            ELSEIF V_TOTAL_SPENT >= 3000 THEN SET V_MIGRATION_SCORE = 40;
+            ELSE SET V_MIGRATION_SCORE = 10;
+            END IF;
+        ELSE SET V_MIGRATION_SCORE = 0;
+    END CASE;
+
+    RETURN V_MIGRATION_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+CREATE TABLE IF NOT EXISTS `table_7sluij` (
+    `table_7sluij_emp_id` INT,
+    `table_7sluij_manager_id` INT,
+    `table_7sluij_department_id` INT,
+    `table_7sluij_salary` INT
+);
+
+INSERT INTO `table_7sluij` (`table_7sluij_emp_id`, `table_7sluij_manager_id`, `table_7sluij_department_id`, `table_7sluij_salary`) VALUES (1, NULL, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIERARCHY_DEPTH_tgdrpy(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT NULL;
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT EMP_ID_PARAM;
+    DECLARE V_MAX_DEPTH INT DEFAULT 100;
+
+    WHILE V_CURRENT_EMP IS NOT NULL AND V_DEPTH < V_MAX_DEPTH DO
+        SELECT TABLE_7SLUIJ_MANAGER_ID INTO V_CURRENT_EMP FROM TABLE_7SLUIJ WHERE TABLE_7SLUIJ_EMP_ID = V_CURRENT_EMP;
+        IF V_CURRENT_EMP IS NOT NULL AND V_CURRENT_EMP <> EMP_ID_PARAM THEN
+            SET V_DEPTH = V_DEPTH + 1;
+        ELSE
+            SET V_CURRENT_EMP = NULL;
+        END IF;
+    END WHILE;
+
+    RETURN V_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+CREATE TABLE IF NOT EXISTS `table_1497my` (
+    `table_1497my_emp_id` INT,
+    `table_1497my_department_id` INT,
+    `table_1497my_salary` INT
+);
+
+INSERT INTO `table_1497my` (`table_1497my_emp_id`, `table_1497my_department_id`, `table_1497my_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ybytuv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_1497MY_SALARY), 0), COALESCE(AVG(TABLE_1497MY_SALARY), 1)
+    INTO V_DEPT_AVG, V_OVERALL_AVG
+    FROM TABLE_1497MY
+    WHERE TABLE_1497MY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk(38)) - -877 + (floor((v_dept_avg * 100) / v_overall_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk----- */
+CREATE TABLE IF NOT EXISTS `table_k7qjq4` (
+    `table_k7qjq4_customer_id` INT,
+    `table_k7qjq4_plan_type` VARCHAR(50),
+    `table_k7qjq4_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_k7qjq4` (`table_k7qjq4_customer_id`, `table_k7qjq4_plan_type`, `table_k7qjq4_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_K7QJQ4_PLAN_TYPE, COALESCE(TABLE_K7QJQ4_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_K7QJQ4
+    WHERE TABLE_K7QJQ4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 5;
+        WHEN 'PREMIUM' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 3;
+        WHEN 'BASIC' THEN SET V_PRICE_INDEX = V_MONTHLY_COST / 2;
+        ELSE SET V_PRICE_INDEX = V_MONTHLY_COST;
+    END CASE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+CREATE TABLE IF NOT EXISTS `table_s2zydq` (
+    `table_s2zydq_customer_id` INT,
+    `table_s2zydq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s2zydq` (`table_s2zydq_customer_id`, `table_s2zydq_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_VALUE_ifudho(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_S2ZYDQ_STATUS
+    INTO V_STATUS
+    FROM TABLE_S2ZYDQ
+    WHERE TABLE_S2ZYDQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 100;
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'PENDING' THEN RETURN (MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(-31)) - 915 + (25);
+        WHEN 'CANCELLED' THEN RETURN 0;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+CREATE TABLE IF NOT EXISTS `table_38k1vq` (
+    `table_38k1vq_table_id` INT,
+    `table_38k1vq_restaurant_id` INT,
+    `table_38k1vq_capacity` INT,
+    `table_38k1vq_is_outdoor` INT,
+    `table_38k1vq_view_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4e93b8` (
+    `table_4e93b8_reservation_id` INT,
+    `table_4e93b8_table_id` INT,
+    `table_4e93b8_customer_id` INT,
+    `table_4e93b8_party_size` INT,
+    `table_4e93b8_reservation_date` DATE,
+    `table_4e93b8_duration_minutes` INT
+);
+
+INSERT INTO `table_38k1vq` (`table_38k1vq_table_id`, `table_38k1vq_restaurant_id`, `table_38k1vq_capacity`, `table_38k1vq_is_outdoor`, `table_38k1vq_view_type`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_4e93b8` (`table_4e93b8_reservation_id`, `table_4e93b8_table_id`, `table_4e93b8_customer_id`, `table_4e93b8_party_size`, `table_4e93b8_reservation_date`, `table_4e93b8_duration_minutes`) VALUES (1, 2, 3, 4, '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TABLE_REVENUE_SCORE_2e7vtl(TABLE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CAPACITY INT DEFAULT 4;
+    DECLARE V_IS_OUTDOOR INT DEFAULT 0;
+    DECLARE V_RESERVATION_COUNT INT DEFAULT 0;
+    DECLARE V_REVENUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_38K1VQ_CAPACITY, 4), COALESCE(TABLE_38K1VQ_IS_OUTDOOR, 0)
+    INTO V_CAPACITY, V_IS_OUTDOOR
+    FROM TABLE_38K1VQ
+    WHERE TABLE_38K1VQ_TABLE_ID = TABLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_RESERVATION_COUNT
+    FROM TABLE_4E93B8
+    WHERE TABLE_4E93B8_TABLE_ID = TABLE_ID_PARAM
+      AND TABLE_4E93B8_RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SET V_REVENUE_SCORE = V_CAPACITY * V_RESERVATION_COUNT;
+
+    IF V_IS_OUTDOOR = 1 THEN
+        SET V_REVENUE_SCORE = V_REVENUE_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_REVENUE_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(CHILD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHILD_AGE INT DEFAULT 0;
+    DECLARE V_PROGRAM_RATE INT DEFAULT 0;
+    DECLARE V_EXTRA_HOURS INT DEFAULT 0;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_HBHJ2X_DATE_OF_BIRTH, CURDATE())
+    INTO V_CHILD_AGE
+    FROM TABLE_HBHJ2X
+    WHERE TABLE_HBHJ2X_CHILD_ID = CHILD_ID_PARAM;
+
+    SELECT TABLE_QZK6TH_WEEKLY_RATE
+    INTO V_PROGRAM_RATE
+    FROM TABLE_QZK6TH
+    WHERE TABLE_QZK6TH_CHILD_ID = CHILD_ID_PARAM
+    ORDER BY TABLE_QZK6TH_START_DATE DESC LIMIT 1;
+
+    IF (MYSQL_FUNC_CALCULATE_COUNTRY_ORDER_COUNT_p0z015(34)) - -927 + (v_program_rate) IS NULL THEN
+        SET V_PROGRAM_RATE = 200;
+    END IF;
+
+    SET V_TOTAL_FEE = V_PROGRAM_RATE;
+
+    IF V_CHILD_AGE < 2 THEN
+        SET V_AGE_SURCHARGE = V_PROGRAM_RATE * 25 / 100;
+        SET V_TOTAL_FEE = (MYSQL_FUNC_CALCULATE_PLAN_PRICE_INDEX_gycotk(38)) - -877 + (v_total_fee + v_age_surcharge);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TIER_MIGRATION_POTENTIAL_7ener5(-87)) - -783 + (cast(v_total_fee as signed));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(1);

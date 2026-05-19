@@ -1,0 +1,331 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_l7idkt` (
+    `table_l7idkt_supplier_id` INT,
+    `table_l7idkt_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_l7idkt` (`table_l7idkt_supplier_id`, `table_l7idkt_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+CREATE TABLE IF NOT EXISTS `table_if4wjn` (
+    `table_if4wjn_appointment_id` INT,
+    `table_if4wjn_customer_id` INT,
+    `table_if4wjn_therapist_id` INT,
+    `table_if4wjn_service_type` VARCHAR(50),
+    `table_if4wjn_duration_minutes` INT,
+    `table_if4wjn_appointment_date` DATE,
+    `table_if4wjn_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_6nekv6` (
+    `table_6nekv6_service_id` INT,
+    `table_6nekv6_name` VARCHAR(50),
+    `table_6nekv6_base_price` DECIMAL(10,2),
+    `table_6nekv6_duration_default` INT
+);
+
+INSERT INTO `table_if4wjn` (`table_if4wjn_appointment_id`, `table_if4wjn_customer_id`, `table_if4wjn_therapist_id`, `table_if4wjn_service_type`, `table_if4wjn_duration_minutes`, `table_if4wjn_appointment_date`, `table_if4wjn_price`) VALUES (1, 2, 3, 'test', 5, '2024-01-01', 1.0);
+
+INSERT INTO `table_6nekv6` (`table_6nekv6_service_id`, `table_6nekv6_name`, `table_6nekv6_base_price`, `table_6nekv6_duration_default`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(SERVICE_TYPE_PARAM INT, ADD_ONS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 80;
+    DECLARE V_ADDON_COST INT DEFAULT 30;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    CASE SERVICE_TYPE_PARAM
+        WHEN 'MASSAGE' THEN SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(-23)) - -814 + (100);
+        WHEN 'FACIAL' THEN SET V_BASE_PRICE = 80;
+        WHEN 'BODY_WRAP' THEN SET V_BASE_PRICE = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(21)) - 350 + (120);
+        WHEN 'REFLEXOLOGY' THEN SET V_BASE_PRICE = 60;
+        ELSE SET V_BASE_PRICE = 80;
+    END CASE;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE + (ADD_ONS_PARAM * V_ADDON_COST);
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+CREATE TABLE IF NOT EXISTS `table_5byx69` (
+    `table_5byx69_loan_id` INT,
+    `table_5byx69_customer_id` INT,
+    `table_5byx69_principal` INT,
+    `table_5byx69_interest_rate` INT,
+    `table_5byx69_term_months` INT,
+    `table_5byx69_start_date` DATE,
+    `table_5byx69_remaining_balance` INT
+);
+
+INSERT INTO `table_5byx69` (`table_5byx69_loan_id`, `table_5byx69_customer_id`, `table_5byx69_principal`, `table_5byx69_interest_rate`, `table_5byx69_term_months`, `table_5byx69_start_date`, `table_5byx69_remaining_balance`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+    DECLARE V_MONTHLY_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5BYX69_PRINCIPAL, 0), COALESCE(TABLE_5BYX69_INTEREST_RATE, 0), COALESCE(TABLE_5BYX69_TERM_MONTHS, 0), COALESCE(TABLE_5BYX69_REMAINING_BALANCE, 0)
+    INTO V_PRINCIPAL, V_INTEREST_RATE, V_TERM_MONTHS, V_REMAINING_BALANCE
+    FROM TABLE_5BYX69
+    WHERE TABLE_5BYX69_LOAN_ID = LOAN_ID_PARAM;
+
+    IF V_PRINCIPAL = 0 OR V_TERM_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MONTHLY_INTEREST = (V_REMAINING_BALANCE * V_INTEREST_RATE) / (100 * 12);
+
+    RETURN CAST(V_MONTHLY_INTEREST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+CREATE TABLE IF NOT EXISTS `table_ql6ocn` (
+    `table_ql6ocn_customer_id` INT,
+    `table_ql6ocn_country` INT
+);
+
+INSERT INTO `table_ql6ocn` (`table_ql6ocn_customer_id`, `table_ql6ocn_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_52va4p(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_QL6OCN
+    WHERE TABLE_QL6OCN_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC1_zwx1tl()) - 227 + ((MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(40)) - -799 + (v_customer_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+CREATE TABLE IF NOT EXISTS `table_rqpbfb` (
+    `table_rqpbfb_emp_id` INT,
+    `table_rqpbfb_salary` INT
+);
+
+INSERT INTO `table_rqpbfb` (`table_rqpbfb_emp_id`, `table_rqpbfb_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_RQPBFB_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_RQPBFB
+    WHERE TABLE_RQPBFB_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 500);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_zwx1tl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_zwx1tl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, 0), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = V_BALANCE + V_OVERDRAFT_LIMIT;
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = (MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(-11)) - -515 + (1);
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(92)) - -732 + (v_can_withdraw);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+CREATE TABLE IF NOT EXISTS `table_v0ar5y` (
+    `table_v0ar5y_emp_id` INT,
+    `table_v0ar5y_department_id` INT,
+    `table_v0ar5y_salary` INT,
+    `table_v0ar5y_hire_date` DATE,
+    `table_v0ar5y_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_v0ar5y` (`table_v0ar5y_emp_id`, `table_v0ar5y_department_id`, `table_v0ar5y_salary`, `table_v0ar5y_hire_date`, `table_v0ar5y_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETENTION_RISK_INDEX_xryz5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_MARKET_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RISK_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_V0AR5Y_SALARY, 0), COALESCE(TABLE_V0AR5Y_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_V0AR5Y_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_PERFORMANCE, V_TENURE_YEARS
+    FROM TABLE_V0AR5Y
+    WHERE TABLE_V0AR5Y_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_V0AR5Y_SALARY), 0)
+    INTO V_MARKET_AVG_SALARY
+    FROM TABLE_V0AR5Y;
+
+    SET V_RISK_INDEX = (MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(89, 68, 86)) - -753 + (((v_market_avg_salary - v_salary) / 100) + (v_tenure_years * 2) - (v_performance * 10));
+
+    RETURN V_RISK_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RATIO_qv3cj5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RATIO_qv3cj5(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = (A * 100) / B;
+
+    IF C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+    END IF;
+
+    IF V_RESULT > 1000 THEN
+        SET V_RESULT = 1000;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + V_COUNTER;
+        SET V_COUNTER = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(13, -95)) - 781 + (v_counter + 1);
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_GCD_yxg6c7(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT;
+
+    IF A <= 0 OR B <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_TEMP = B;
+        SET B = A MOD B;
+        SET A = V_TEMP;
+    UNTIL B = 0 END REPEAT;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_L7IDKT_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_L7IDKT
+    WHERE TABLE_L7IDKT_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(-60, 67)) - 926 + ((MYSQL_FUNC_CALCULATE_SPA_PACKAGE_PRICE_76tcu7(-38, -31)) - -751 + (floor(v_rating * 15)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_INDEX_64brxz(1);

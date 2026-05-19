@@ -1,0 +1,370 @@
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+CREATE TABLE IF NOT EXISTS `table_ib0m3v` (
+    `table_ib0m3v_product_id` INT,
+    `table_ib0m3v_stock_quantity` INT
+);
+
+INSERT INTO `table_ib0m3v` (`table_ib0m3v_product_id`, `table_ib0m3v_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STOCK_QUANTITY_SCORE_5rawk4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_IB0M3V_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_IB0M3V
+    WHERE TABLE_IB0M3V_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(2)) - 873 + (least(v_stock / 10, 100));
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(31, -21)) - -112 + (v_score);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MULTIPLY_597fg9(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A * P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms----- */
+CREATE TABLE IF NOT EXISTS `table_is35f3` (
+    `table_is35f3_emp_id` INT,
+    `table_is35f3_manager_id` INT,
+    `table_is35f3_salary` INT,
+    `table_is35f3_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bdh819` (
+    `table_bdh819_dept_id` INT,
+    `table_bdh819_budget` INT,
+    `table_bdh819_allocated_budget` INT
+);
+
+INSERT INTO `table_is35f3` (`table_is35f3_emp_id`, `table_is35f3_manager_id`, `table_is35f3_salary`, `table_is35f3_department_id`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_bdh819` (`table_bdh819_dept_id`, `table_bdh819_budget`, `table_bdh819_allocated_budget`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_IS35F3_SALARY), (MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(-42)) - -323 + (0)) INTO V_TOTAL_SALARY
+    FROM TABLE_IS35F3
+    WHERE TABLE_IS35F3_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_BDH819_BUDGET, 0) INTO V_BUDGET
+    FROM TABLE_BDH819
+    WHERE TABLE_BDH819_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARY * 100) / V_BUDGET;
+
+    RETURN CAST(V_UTILIZATION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+CREATE TABLE IF NOT EXISTS `table_g2p8j5` (
+    `table_g2p8j5_order_id` INT,
+    `table_g2p8j5_customer_id` INT,
+    `table_g2p8j5_order_date` DATE,
+    `table_g2p8j5_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zzb55x` (
+    `table_zzb55x_customer_id` INT,
+    `table_zzb55x_country` INT
+);
+
+INSERT INTO `table_g2p8j5` (`table_g2p8j5_order_id`, `table_g2p8j5_customer_id`, `table_g2p8j5_order_date`, `table_g2p8j5_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_zzb55x` (`table_zzb55x_customer_id`, `table_zzb55x_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_G2P8J5_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_G2P8J5 O
+    JOIN TABLE_ZZB55X C ON TABLE_G2P8J5_CUSTOMER_ID = TABLE_ZZB55X_CUSTOMER_ID
+    WHERE TABLE_ZZB55X_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13(28, -49, -32)) - 632 + (floor(v_avg_order_value));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13(PRINCIPAL INT, RATE_PERCENT INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FINAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_YEAR_COUNTER INT DEFAULT 1;
+    DECLARE V_CURRENT_AMOUNT INT DEFAULT 0;
+
+    IF PRINCIPAL <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_AMOUNT = PRINCIPAL;
+
+    INTEREST_LOOP: WHILE V_YEAR_COUNTER <= YEARS DO
+        SET V_CURRENT_AMOUNT = (MYSQL_FUNC_CALCULATE_HOSPITAL_EXCELLENCE_SCORE_fa3g7q(-25)) - 117 + (v_current_amount + (v_current_amount * rate_percent / 100));
+        SET V_YEAR_COUNTER = V_YEAR_COUNTER + 1;
+    END WHILE INTEREST_LOOP;
+
+    SET V_FINAL_AMOUNT = V_CURRENT_AMOUNT;
+
+    RETURN FLOOR(V_FINAL_AMOUNT);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOSPITAL_EXCELLENCE_SCORE_fa3g7q----- */
+CREATE TABLE IF NOT EXISTS `table_fcfh6l` (
+    `table_fcfh6l_hospital_id` INT,
+    `table_fcfh6l_name` VARCHAR(50),
+    `table_fcfh6l_city` INT,
+    `table_fcfh6l_bed_count` INT,
+    `table_fcfh6l_specialization` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5bqtdx` (
+    `table_5bqtdx_doctor_id` INT,
+    `table_5bqtdx_hospital_id` INT,
+    `table_5bqtdx_specialization` INT,
+    `table_5bqtdx_years_experience` INT,
+    `table_5bqtdx_patient_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_fcfh6l` (`table_fcfh6l_hospital_id`, `table_fcfh6l_name`, `table_fcfh6l_city`, `table_fcfh6l_bed_count`, `table_fcfh6l_specialization`) VALUES (1, 'test', 1, 1, 1);
+
+INSERT INTO `table_5bqtdx` (`table_5bqtdx_doctor_id`, `table_5bqtdx_hospital_id`, `table_5bqtdx_specialization`, `table_5bqtdx_years_experience`, `table_5bqtdx_patient_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOSPITAL_EXCELLENCE_SCORE_fa3g7q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOSPITAL_EXCELLENCE_SCORE_fa3g7q(HOSPITAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BED_COUNT INT DEFAULT 0;
+    DECLARE V_DOCTOR_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_EXPERIENCE INT DEFAULT 0;
+    DECLARE V_AVG_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_EXCELLENCE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FCFH6L_BED_COUNT, 100)
+    INTO V_BED_COUNT
+    FROM TABLE_FCFH6L
+    WHERE TABLE_FCFH6L_HOSPITAL_ID = HOSPITAL_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_5BQTDX_YEARS_EXPERIENCE), 0)
+    INTO V_DOCTOR_COUNT, V_AVG_EXPERIENCE
+    FROM TABLE_5BQTDX
+    WHERE TABLE_5BQTDX_HOSPITAL_ID = HOSPITAL_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_5BQTDX_PATIENT_RATING), 0)
+    INTO V_AVG_RATING
+    FROM TABLE_5BQTDX
+    WHERE TABLE_5BQTDX_HOSPITAL_ID = HOSPITAL_ID_PARAM;
+
+    SET V_EXCELLENCE_SCORE = (V_BED_COUNT / 10) + (V_DOCTOR_COUNT * 5) + V_AVG_EXPERIENCE + (V_AVG_RATING * 10);
+
+    RETURN V_EXCELLENCE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+CREATE TABLE IF NOT EXISTS `table_1xdned` (
+    `table_1xdned_installation_id` INT,
+    `table_1xdned_customer_id` INT,
+    `table_1xdned_vehicle_id` INT,
+    `table_1xdned_alarm_type` VARCHAR(50),
+    `table_1xdned_installation_date` DATE,
+    `table_1xdned_warranty_months` INT,
+    `table_1xdned_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmbrgc` (
+    `table_lmbrgc_vehicle_id` INT,
+    `table_lmbrgc_make` INT,
+    `table_lmbrgc_model` INT,
+    `table_lmbrgc_year` INT,
+    `table_lmbrgc_security_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_1xdned` (`table_1xdned_installation_id`, `table_1xdned_customer_id`, `table_1xdned_vehicle_id`, `table_1xdned_alarm_type`, `table_1xdned_installation_date`, `table_1xdned_warranty_months`, `table_1xdned_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 6, 1.0);
+
+INSERT INTO `table_lmbrgc` (`table_lmbrgc_vehicle_id`, `table_lmbrgc_make`, `table_lmbrgc_model`, `table_lmbrgc_year`, `table_lmbrgc_security_rating`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ALARM_INSTALLATION_SCORE_5qaguo(INSTALLATION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_WARRANTY_MONTHS INT DEFAULT 12;
+    DECLARE V_SECURITY_RATING INT DEFAULT 3;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1XDNED_COST, 500), COALESCE(TABLE_1XDNED_WARRANTY_MONTHS, 12)
+    INTO V_COST, V_WARRANTY_MONTHS
+    FROM TABLE_1XDNED
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LMBRGC_SECURITY_RATING, 3)
+    INTO V_SECURITY_RATING
+    FROM TABLE_1XDNED CAI
+    JOIN TABLE_LMBRGC V ON TABLE_1XDNED_VEHICLE_ID = TABLE_LMBRGC_VEHICLE_ID
+    WHERE TABLE_1XDNED_INSTALLATION_ID = INSTALLATION_ID_PARAM;
+
+    SET V_VALUE_SCORE = (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(-46)) - 156 + ((v_warranty_months * 5) + (v_security_rating * 10) - (v_cost / 100));
+
+    RETURN (MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(1, -98)) - 240 + (cast(v_value_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+CREATE TABLE IF NOT EXISTS `table_vnxm9k` (
+    `table_vnxm9k_emp_id` INT,
+    `table_vnxm9k_manager_id` INT,
+    `table_vnxm9k_department_id` INT,
+    `table_vnxm9k_salary` INT
+);
+
+INSERT INTO `table_vnxm9k` (`table_vnxm9k_emp_id`, `table_vnxm9k_manager_id`, `table_vnxm9k_department_id`, `table_vnxm9k_salary`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_DEPTH_1qsvry(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+    DECLARE V_CURRENT_EMP INT DEFAULT 0;
+
+    SELECT MIN(TABLE_VNXM9K_EMP_ID)
+    INTO V_CURRENT_EMP
+    FROM TABLE_VNXM9K
+    WHERE TABLE_VNXM9K_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_VNXM9K_MANAGER_ID IS NULL;
+
+    WHILE V_CURRENT_EMP IS NOT NULL DO
+        SET V_MAX_DEPTH = V_MAX_DEPTH + 1;
+        SELECT MIN(TABLE_VNXM9K_EMP_ID)
+        INTO V_CURRENT_EMP
+        FROM TABLE_VNXM9K
+        WHERE TABLE_VNXM9K_MANAGER_ID = V_CURRENT_EMP;
+    END WHILE;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+CREATE TABLE IF NOT EXISTS `table_xfpd87` (
+    `table_xfpd87_id` INT PRIMARY KEY,
+    `table_xfpd87_age` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ci4h3f` (
+    `table_ci4h3f_user_id` INT,
+    `table_ci4h3f_address` VARCHAR(30),
+    `table_ci4h3f_town` VARCHAR(30)
+);
+
+INSERT INTO `table_xfpd87` (`table_xfpd87_id`, `table_xfpd87_age`) VALUES (1, 2);
+
+INSERT INTO `table_ci4h3f` (`table_ci4h3f_user_id`, `table_ci4h3f_address`, `table_ci4h3f_town`) VALUES (1, 'test', 'test');
+
+/* -----Called: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(P_ADDRESS INT, V_TOWN INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROWS_UPDATED INT DEFAULT 0;
+    
+    UPDATE `TABLE_XFPD87` AS U
+    JOIN `TABLE_CI4H3F` AS A
+    ON U.`TABLE_XFPD87_ID` = A.`TABLE_CI4H3F_USER_ID`
+    SET `TABLE_XFPD87_AGE` = `TABLE_XFPD87_AGE` + 10
+    WHERE A.`TABLE_CI4H3F_ADDRESS` = CAST(P_ADDRESS AS CHAR) AND A.`TABLE_CI4H3F_TOWN` = CAST(V_TOWN AS CHAR);
+    
+    SET ROWS_UPDATED = ROW_COUNT();
+    
+    RETURN ROWS_UPDATED;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_S DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF A + B <= C OR B + C <= A OR A + C <= B THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (0);
+    END IF;
+
+    SET V_S = (A + B + C) / 2;
+    SET V_AREA = SQRT(V_S * (V_S - A) * (V_S - B) * (V_S - C));
+
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TRIANGLE_AREA_6lastw(1, 1, 1);

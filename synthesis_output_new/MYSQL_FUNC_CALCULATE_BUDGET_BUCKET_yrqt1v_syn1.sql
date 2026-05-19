@@ -1,0 +1,432 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+CREATE TABLE IF NOT EXISTS `table_dpem7n` (
+    `table_dpem7n_unit_id` INT,
+    `table_dpem7n_facility_id` INT,
+    `table_dpem7n_unit_size` INT,
+    `table_dpem7n_monthly_rate` INT,
+    `table_dpem7n_climate_controlled` INT,
+    `table_dpem7n_current_occupancy` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4mro06` (
+    `table_4mro06_rental_id` INT,
+    `table_4mro06_unit_id` INT,
+    `table_4mro06_customer_id` INT,
+    `table_4mro06_start_date` DATE,
+    `table_4mro06_rental_months` INT,
+    `table_4mro06_monthly_payment` INT
+);
+
+INSERT INTO `table_dpem7n` (`table_dpem7n_unit_id`, `table_dpem7n_facility_id`, `table_dpem7n_unit_size`, `table_dpem7n_monthly_rate`, `table_dpem7n_climate_controlled`, `table_dpem7n_current_occupancy`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_4mro06` (`table_4mro06_rental_id`, `table_4mro06_unit_id`, `table_4mro06_customer_id`, `table_4mro06_start_date`, `table_4mro06_rental_months`, `table_4mro06_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(UNIT_ID_PARAM INT, MONTHS_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RATE INT DEFAULT 100;
+    DECLARE V_CLIMATE_PREMIUM INT DEFAULT 20;
+    DECLARE V_SIZE_DISCOUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_DPEM7N_MONTHLY_RATE, 100)
+    INTO V_MONTHLY_RATE
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM;
+
+    SELECT TABLE_DPEM7N_MONTHLY_RATE * 20 / 100 INTO V_CLIMATE_PREMIUM
+    FROM TABLE_DPEM7N
+    WHERE TABLE_DPEM7N_UNIT_ID = UNIT_ID_PARAM AND TABLE_DPEM7N_CLIMATE_CONTROLLED = 1;
+
+    SET V_TOTAL_COST = (V_MONTHLY_RATE + V_CLIMATE_PREMIUM) * MONTHS_PARAM;
+
+    IF MONTHS_PARAM >= 12 THEN
+        SET V_SIZE_DISCOUNT = V_TOTAL_COST * 10 / 100;
+        SET V_TOTAL_COST = V_TOTAL_COST - V_SIZE_DISCOUNT;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+CREATE TABLE IF NOT EXISTS `table_h2mz5q` (
+    `table_h2mz5q_emp_id` INT,
+    `table_h2mz5q_salary` INT,
+    `table_h2mz5q_dept_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u90ptn` (
+    `table_u90ptn_dept_id` INT,
+    `table_u90ptn_dept_name` VARCHAR(50),
+    `table_u90ptn_budget` INT
+);
+
+INSERT INTO `table_h2mz5q` (`table_h2mz5q_emp_id`, `table_h2mz5q_salary`, `table_h2mz5q_dept_id`) VALUES (1, 1, 1);
+
+INSERT INTO `table_u90ptn` (`table_u90ptn_dept_id`, `table_u90ptn_dept_name`, `table_u90ptn_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE V_SALARY INT;
+
+    DECLARE SALARY_CURSOR CURSOR FOR
+        SELECT TABLE_H2MZ5Q_SALARY FROM TABLE_H2MZ5Q WHERE TABLE_H2MZ5Q_DEPT_ID = DEPT_ID_PARAM;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_TOTAL_SALARY = -1;
+
+    OPEN SALARY_CURSOR;
+
+    SALARY_LOOP: WHILE V_DONE = 0 DO
+        FETCH SALARY_CURSOR INTO V_SALARY;
+        IF V_DONE = 0 THEN
+            SET V_TOTAL_SALARY = (MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(-3, -64)) - -71 + (v_total_salary + v_salary);
+        END IF;
+    END WHILE SALARY_LOOP;
+
+    CLOSE SALARY_CURSOR;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(96, -87)) - 874 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(64)) - 180 + (coalesce(v_total_salary, 0)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+CREATE TABLE IF NOT EXISTS `table_35z2sn` (
+    `table_35z2sn_restaurant_id` INT,
+    `table_35z2sn_cuisine_type` VARCHAR(50),
+    `table_35z2sn_average_price` DECIMAL(10,2),
+    `table_35z2sn_rating` DECIMAL(3,1),
+    `table_35z2sn_delivery_radius_miles` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l3g0c` (
+    `table_4l3g0c_order_id` INT,
+    `table_4l3g0c_restaurant_id` INT,
+    `table_4l3g0c_customer_id` INT,
+    `table_4l3g0c_order_total` DECIMAL(10,2),
+    `table_4l3g0c_delivery_distance` INT
+);
+
+INSERT INTO `table_35z2sn` (`table_35z2sn_restaurant_id`, `table_35z2sn_cuisine_type`, `table_35z2sn_average_price`, `table_35z2sn_rating`, `table_35z2sn_delivery_radius_miles`) VALUES (1, 'test', 1.0, 1.0, 5);
+
+INSERT INTO `table_4l3g0c` (`table_4l3g0c_order_id`, `table_4l3g0c_restaurant_id`, `table_4l3g0c_customer_id`, `table_4l3g0c_order_total`, `table_4l3g0c_delivery_distance`) VALUES (1, 2, 3, 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_COMPATIBILITY_SCORE_ejhodu(RESTAURANT_ID_PARAM INT, ORDER_DISTANCE_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DELIVERY_RADIUS INT DEFAULT 0;
+    DECLARE V_RESTAURANT_RATING DECIMAL(2,1) DEFAULT 0.0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+    DECLARE V_COMPATIBILITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_35Z2SN_DELIVERY_RADIUS_MILES, 5), COALESCE(TABLE_35Z2SN_RATING, 3.0), COALESCE(TABLE_35Z2SN_AVERAGE_PRICE, 20)
+    INTO V_DELIVERY_RADIUS, V_RESTAURANT_RATING, V_AVG_PRICE
+    FROM TABLE_35Z2SN
+    WHERE TABLE_35Z2SN_RESTAURANT_ID = RESTAURANT_ID_PARAM;
+
+    IF ORDER_DISTANCE_PARAM > V_DELIVERY_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COMPATIBILITY_SCORE = (V_RESTAURANT_RATING * 20) - (V_AVG_PRICE / 5) + ((V_DELIVERY_RADIUS - ORDER_DISTANCE_PARAM) * 5);
+
+    RETURN GREATEST(V_COMPATIBILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+CREATE TABLE IF NOT EXISTS `table_yrlxl9` (
+    `table_yrlxl9_customer_id` INT,
+    `table_yrlxl9_country` INT
+);
+
+INSERT INTO `table_yrlxl9` (`table_yrlxl9_customer_id`, `table_yrlxl9_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_CUSTOMERS
+    FROM TABLE_YRLXL9
+    WHERE TABLE_YRLXL9_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_YRLXL9;
+
+    IF V_TOTAL_CUSTOMERS = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(63)) - -746 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(76)) - 410 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_COUNTRY_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+CREATE TABLE IF NOT EXISTS `table_hzpcez` (
+    `table_hzpcez_campaign_id` INT,
+    `table_hzpcez_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hzpcez` (`table_hzpcez_campaign_id`, `table_hzpcez_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_CODE_qk0yi2(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HZPCEZ_STATUS
+    INTO V_STATUS
+    FROM TABLE_HZPCEZ
+    WHERE TABLE_HZPCEZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 1
+        WHEN 'PAUSED' THEN 2
+        WHEN 'COMPLETED' THEN 3
+        WHEN 'DRAFT' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(10)) - 427 + (v_max_salary - v_min_salary);
+
+    RETURN FLOOR(V_SALARY_VARIANCE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+CREATE TABLE IF NOT EXISTS `table_rfgcxf` (
+    `table_rfgcxf_customer_id` INT,
+    `table_rfgcxf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_rfgcxf` (`table_rfgcxf_customer_id`, `table_rfgcxf_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_CHECK_fqaq9v(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_RFGCXF
+    WHERE TABLE_RFGCXF_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_RFGCXF_STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SUBTRACT_eb9gac(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(80)) - -781 + (p_a - p_b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+CREATE TABLE IF NOT EXISTS `table_3honbg` (
+    `table_3honbg_product_id` INT,
+    `table_3honbg_category_id` INT,
+    `table_3honbg_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_oj1tlr` (
+    `table_oj1tlr_category_id` INT,
+    `table_oj1tlr_name` VARCHAR(50)
+);
+
+INSERT INTO `table_3honbg` (`table_3honbg_product_id`, `table_3honbg_category_id`, `table_3honbg_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_oj1tlr` (`table_oj1tlr_category_id`, `table_oj1tlr_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_3HONBG_PRICE), (MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(-64)) - 335 + (0)), COALESCE(MAX(TABLE_3HONBG_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM TABLE_3HONBG
+    WHERE TABLE_3HONBG_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = (V_AVG_PRICE * 100) / V_MAX_PRICE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+CREATE TABLE IF NOT EXISTS `table_qzk6th` (
+    `table_qzk6th_enrollment_id` INT,
+    `table_qzk6th_child_id` INT,
+    `table_qzk6th_program_type` VARCHAR(50),
+    `table_qzk6th_hours_per_week` INT,
+    `table_qzk6th_weekly_rate` INT,
+    `table_qzk6th_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hbhj2x` (
+    `table_hbhj2x_child_id` INT,
+    `table_hbhj2x_date_of_birth` DATE,
+    `table_hbhj2x_parent_id` INT
+);
+
+INSERT INTO `table_qzk6th` (`table_qzk6th_enrollment_id`, `table_qzk6th_child_id`, `table_qzk6th_program_type`, `table_qzk6th_hours_per_week`, `table_qzk6th_weekly_rate`, `table_qzk6th_start_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_hbhj2x` (`table_hbhj2x_child_id`, `table_hbhj2x_date_of_birth`, `table_hbhj2x_parent_id`) VALUES (1, '2024-01-01', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(CHILD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHILD_AGE INT DEFAULT 0;
+    DECLARE V_PROGRAM_RATE INT DEFAULT 0;
+    DECLARE V_EXTRA_HOURS INT DEFAULT 0;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_HBHJ2X_DATE_OF_BIRTH, CURDATE())
+    INTO V_CHILD_AGE
+    FROM TABLE_HBHJ2X
+    WHERE TABLE_HBHJ2X_CHILD_ID = CHILD_ID_PARAM;
+
+    SELECT TABLE_QZK6TH_WEEKLY_RATE
+    INTO V_PROGRAM_RATE
+    FROM TABLE_QZK6TH
+    WHERE TABLE_QZK6TH_CHILD_ID = CHILD_ID_PARAM
+    ORDER BY TABLE_QZK6TH_START_DATE DESC LIMIT 1;
+
+    IF V_PROGRAM_RATE IS NULL THEN
+        SET V_PROGRAM_RATE = 200;
+    END IF;
+
+    SET V_TOTAL_FEE = V_PROGRAM_RATE;
+
+    IF V_CHILD_AGE < 2 THEN
+        SET V_AGE_SURCHARGE = V_PROGRAM_RATE * 25 / 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_STORAGE_UNIT_COST_dybbjw(92, -78)) - 241 + (5);
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN 4;
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN 3;
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN 2;
+    ELSE
+        RETURN (MYSQL_FUNC_CALC_TOTAL_SALARY_BY_DEPT_gvsvq7(-57)) - 588 + (1);
+    END IF;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(1);

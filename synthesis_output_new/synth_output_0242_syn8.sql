@@ -1,0 +1,406 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v2257 (
+    v2258 INT,
+    v2259 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v2263 (
+    v2264 VARCHAR(50),
+    v2265 INT
+);
+CREATE TABLE IF NOT EXISTS v2317 (
+    v2318 VARCHAR(50),
+    v2319 INT
+);
+CREATE TABLE IF NOT EXISTS v2346 (
+    v2274 INT,
+    v2275 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v2385 (
+    v2387 DOUBLE,
+    v2397 DOUBLE,
+    v2398 VARCHAR(50)
+);
+INSERT INTO v2257 VALUES (1, 'test1'), (2, 'test2'), (3, 'test3');
+INSERT INTO v2263 VALUES ('', 5), ('abc', 10), ('', 15);
+INSERT INTO v2317 VALUES ('13', 20), (' ', 25), ('xyz', 30);
+INSERT INTO v2346 VALUES (10, 'data1'), (20, 'data2'), (30, 'data3');
+INSERT INTO v2385 VALUES (-45.34e-306, 0.0, 'sample1'), (1.5, 00001010112233.1, 'sample2');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+CREATE TABLE IF NOT EXISTS `table_wiu4ve` (
+    `table_wiu4ve_emp_id` INT,
+    `table_wiu4ve_manager_id` INT
+);
+
+INSERT INTO `table_wiu4ve` (`table_wiu4ve_emp_id`, `table_wiu4ve_manager_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MANAGER_ID INT DEFAULT 0;
+
+    SELECT TABLE_WIU4VE_MANAGER_ID
+    INTO V_MANAGER_ID
+    FROM TABLE_WIU4VE
+    WHERE TABLE_WIU4VE_EMP_ID = EMP_ID_PARAM;
+
+    IF V_MANAGER_ID IS NULL THEN
+        RETURN 10;
+    ELSE
+        RETURN 5;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+CREATE TABLE IF NOT EXISTS `table_g6fcdl` (
+    `table_g6fcdl_product_id` INT,
+    `table_g6fcdl_supplier_id` INT,
+    `table_g6fcdl_price` DECIMAL(10,2),
+    `table_g6fcdl_stock_quantity` INT
+);
+
+INSERT INTO `table_g6fcdl` (`table_g6fcdl_product_id`, `table_g6fcdl_supplier_id`, `table_g6fcdl_price`, `table_g6fcdl_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_G6FCDL_PRICE, 0), COALESCE(TABLE_G6FCDL_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_G6FCDL
+    WHERE TABLE_G6FCDL_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_INVENTORY_VALUE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(-9)) - -779 + ((v_price * v_stock) / 100);
+
+    RETURN V_INVENTORY_VALUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_COUNT_cemqry(TARGET INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    REPEAT
+        SET V_COUNT = V_COUNT + 1;
+    UNTIL V_COUNT >= TARGET END REPEAT;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(-55)) - -818 + (p_a + p_b + p_c);
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(-80)) - -964 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+CREATE TABLE IF NOT EXISTS `table_ah3i1s` (
+    `table_ah3i1s_campaign_id` INT,
+    `table_ah3i1s_budget` INT
+);
+
+INSERT INTO `table_ah3i1s` (`table_ah3i1s_campaign_id`, `table_ah3i1s_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AH3I1S_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_AH3I1S
+    WHERE TABLE_AH3I1S_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(-100)) - -340 + (v_budget / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv----- */
+CREATE TABLE IF NOT EXISTS `table_oke29e` (
+    `table_oke29e_product_id` INT,
+    `table_oke29e_category_id` INT,
+    `table_oke29e_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_oke29e` (`table_oke29e_product_id`, `table_oke29e_category_id`, `table_oke29e_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_CATEGORY_SHARE_br2kuv(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_TOTAL DECIMAL(10,2) DEFAULT 1.00;
+    DECLARE V_CATEGORY_ID INT DEFAULT 0;
+
+    SELECT TABLE_OKE29E_CATEGORY_ID, COALESCE(TABLE_OKE29E_PRICE, 0)
+    INTO V_CATEGORY_ID, V_PRICE
+    FROM TABLE_OKE29E
+    WHERE TABLE_OKE29E_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OKE29E_PRICE), 1)
+    INTO V_CATEGORY_TOTAL
+    FROM TABLE_OKE29E
+    WHERE TABLE_OKE29E_CATEGORY_ID = V_CATEGORY_ID;
+
+    RETURN FLOOR((V_PRICE * 100) / V_CATEGORY_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = (MYSQL_FUNC_CALCULATE_CAMPAIGN_SCORE_8chxsu(61)) - 917 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + (v_sum) + v_i);
+        END IF;
+        SET V_I = (MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(-60, 67)) - 926 + (v_i + 1);
+        IF V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_COUNT - V_PRIOR_COUNT) * 100) / V_PRIOR_COUNT;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+CREATE TABLE IF NOT EXISTS `table_az3qra` (
+    `table_az3qra_account_id` INT,
+    `table_az3qra_balance` INT,
+    `table_az3qra_overdraft_limit` INT,
+    `table_az3qra_account_type` INT
+);
+
+INSERT INTO `table_az3qra` (`table_az3qra_account_id`, `table_az3qra_balance`, `table_az3qra_overdraft_limit`, `table_az3qra_account_type`) VALUES (1, 1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VALIDATE_WITHDRAWAL_dcq2g9(ACCOUNT_ID_PARAM INT, AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_OVERDRAFT_LIMIT INT DEFAULT 0;
+    DECLARE V_AVAILABLE_FUNDS INT DEFAULT 0;
+    DECLARE V_CAN_WITHDRAW INT DEFAULT 0;
+
+    
+
+    SELECT COALESCE(TABLE_AZ3QRA_BALANCE, 0), COALESCE(TABLE_AZ3QRA_OVERDRAFT_LIMIT, 0)
+    INTO V_BALANCE, V_OVERDRAFT_LIMIT
+    FROM TABLE_AZ3QRA
+    WHERE TABLE_AZ3QRA_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_AVAILABLE_FUNDS = V_BALANCE + V_OVERDRAFT_LIMIT;
+
+    IF V_AVAILABLE_FUNDS >= AMOUNT THEN
+        SET V_CAN_WITHDRAW = 1;
+    ELSE
+        SET V_CAN_WITHDRAW = 0;
+    END IF;
+
+    RETURN V_CAN_WITHDRAW;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_SCORE_8chxsu----- */
+CREATE TABLE IF NOT EXISTS `table_uaowvf` (
+    `table_uaowvf_campaign_id` INT,
+    `table_uaowvf_status` VARCHAR(50),
+    `table_uaowvf_budget` INT
+);
+
+INSERT INTO `table_uaowvf` (`table_uaowvf_campaign_id`, `table_uaowvf_status`, `table_uaowvf_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_SCORE_8chxsu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_SCORE_8chxsu(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_UAOWVF_STATUS, COALESCE(TABLE_UAOWVF_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_UAOWVF
+    WHERE TABLE_UAOWVF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN V_BUDGET
+        WHEN 'PAUSED' THEN V_BUDGET / 2
+        WHEN 'COMPLETED' THEN V_BUDGET * 2
+        ELSE V_BUDGET / 4
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0242(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_hex_bit_and VARCHAR(64);
+    DECLARE v_hex_bit_xor VARCHAR(64);
+    DECLARE v_val1 INT;
+    DECLARE v_val2 INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT x3.v2258 FROM v2257 AS x3;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Statement 1: UPDATE v2263
+    SET @sql1 = 'UPDATE v2263 AS x0 SET v2264 = 10 WHERE v2264 = ?';
+    PREPARE stmt1 FROM @sql1;
+    SET @val1 = '';
+    EXECUTE stmt1 USING @val1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = (MYSQL_FUNC_HANDLER_FUNC_ADD_THREE_ebedr5(94, 78, 95)) - 76 + (v_counter) + 1;
+
+    -- Statement 2: UPDATE v2385
+    SET @sql2 = 'UPDATE v2385 AS x1 SET v2397 = ? WHERE v2387 = ?';
+    PREPARE stmt2 FROM @sql2;
+    SET @new_val = 00001010112233.1;
+    SET @cond_val = -45.34e-306;
+    EXECUTE stmt2 USING @new_val, @cond_val;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE v2317
+    SET @sql3 = 'UPDATE v2317 AS x1 SET x1.v2318 = ? WHERE v2318 = ?';
+    PREPARE stmt3 FROM @sql3;
+    SET @new_str = ' ';
+    SET @cond_str = '13';
+    EXECUTE stmt3 USING @new_str, @cond_str;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: SELECT with HEX and BIT_AND/BIT_XOR
+    SELECT HEX(BIT_AND(x3.v2274)), HEX(BIT_XOR(x3.v2274)) 
+    INTO v_hex_bit_and, v_hex_bit_xor 
+    FROM v2346 AS x3;
+    
+    IF v_hex_bit_and IS NOT NULL THEN
+        SET v_counter = v_counter + LENGTH(v_hex_bit_and);
+    END IF;
+
+    -- Statement 5: SELECT from v2257 using CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val1;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Using CASE for conditional logic
+        CASE 
+            WHEN (MYSQL_FUNC_CALCULATE_EMPLOYEE_LEVEL_SCORE_72dxpj(44)) - 435 + (v_val1 = p1) THEN
+                SET v_counter = v_counter + 10;
+            WHEN v_val1 = p2 THEN
+                SET v_counter = v_counter + 20;
+            ELSE
+                SET v_counter = v_counter + v_val1;
+        END CASE;
+        
+        -- Using WHILE loop for additional processing
+        WHILE (MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_INDEX_0y1418(12)) - 123 + (v_counter < 100) DO
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0242(1, 1, @out_result);
+
+SELECT @out_result;

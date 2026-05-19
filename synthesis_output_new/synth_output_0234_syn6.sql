@@ -1,0 +1,453 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v2273 (v2274 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v2352 (v2353 VARCHAR(50), v2354 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v2309 (v2353 VARCHAR(50), v2354 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v2267 (v2268 INT);
+CREATE TABLE IF NOT EXISTS v2360 (v2268 INT);
+CREATE TABLE IF NOT EXISTS v2342 (v2274 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v2303 (v2304 GEOMETRY);
+CREATE TABLE IF NOT EXISTS x8 (id INT);
+CREATE TABLE IF NOT EXISTS x9 (id INT);
+CREATE TABLE IF NOT EXISTS x10 (id INT);
+CREATE TABLE IF NOT EXISTS v0 (v1 INT, v2 CHAR(10));
+INSERT INTO v2273 VALUES (1), (2), (3);
+INSERT INTO v2352 VALUES ('foo', 3), ('bar', 4);
+INSERT INTO v2309 VALUES ('foo', 3), ('baz', 5);
+INSERT INTO v2267 VALUES (100), (200), (300);
+INSERT INTO v2360 VALUES (100), (400);
+INSERT INTO v2342 VALUES ('0'), ('1');
+INSERT INTO v2303 VALUES (ST_GeomFromText('POINT(1 1)')), (ST_GeomFromText('POINT(2 2)'));
+INSERT INTO x8 VALUES (26);
+INSERT INTO x9 VALUES (1);
+INSERT INTO x10 VALUES (2);
+INSERT INTO v0 VALUES (1, 'a'), (2, 'b'), (3, 'c');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+CREATE TABLE IF NOT EXISTS `table_2vrwu4` (
+    `table_2vrwu4_emp_id` INT,
+    `table_2vrwu4_hire_date` DATE
+);
+
+INSERT INTO `table_2vrwu4` (`table_2vrwu4_emp_id`, `table_2vrwu4_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_2VRWU4_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_2VRWU4
+    WHERE TABLE_2VRWU4_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(58)) - 401 + ((MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + (0));
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_SIGN_ij8rc9(39)) - 878 + (dayofyear(v_hire_date));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SIGN_ij8rc9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SIGN_ij8rc9(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSEIF P_N < 0 THEN
+        SET V_RESULT = -1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, 0), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_PAID_AMOUNT;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = 15;
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = 10;
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (V_BALANCE_DUE * V_PENALTY_RATE) / 100;
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+CREATE TABLE IF NOT EXISTS `table_toccpm` (
+    `table_toccpm_emp_id` INT,
+    `table_toccpm_department_id` INT,
+    `table_toccpm_salary` INT
+);
+
+INSERT INTO `table_toccpm` (`table_toccpm_emp_id`, `table_toccpm_department_id`, `table_toccpm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_SALARY_RATIO_i18cp7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TOCCPM_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_TOCCPM_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_TOCCPM
+    WHERE TABLE_TOCCPM_DEPARTMENT_ID = (SELECT TABLE_TOCCPM_DEPARTMENT_ID FROM TABLE_TOCCPM WHERE TABLE_TOCCPM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_RATIO = (V_SALARY * 100) / V_DEPT_AVG;
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7----- */
+CREATE TABLE IF NOT EXISTS `table_c6u1yw` (
+    `table_c6u1yw_review_id` INT,
+    `table_c6u1yw_product_id` INT,
+    `table_c6u1yw_rating` DECIMAL(3,1),
+    `table_c6u1yw_helpful_count` INT,
+    `table_c6u1yw_review_date` DATE
+);
+
+INSERT INTO `table_c6u1yw` (`table_c6u1yw_review_id`, `table_c6u1yw_product_id`, `table_c6u1yw_rating`, `table_c6u1yw_helpful_count`, `table_c6u1yw_review_date`) VALUES (1, 2, 1.0, 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_RATING INT DEFAULT 0;
+    DECLARE V_TOTAL_HELPFUL INT DEFAULT 0;
+    DECLARE V_REVIEW_COUNT INT DEFAULT 0;
+    DECLARE V_POPULARITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_C6U1YW_RATING), 0), COALESCE(SUM(TABLE_C6U1YW_HELPFUL_COUNT), 0), COUNT(*)
+    INTO V_AVG_RATING, V_TOTAL_HELPFUL, V_REVIEW_COUNT
+    FROM TABLE_C6U1YW
+    WHERE TABLE_C6U1YW_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_REVIEW_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_POPULARITY_SCORE = (MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(88, -30)) - -568 + ((v_avg_rating * 20) + (v_total_helpful / 10) + (v_review_count * 2));
+
+    RETURN CAST(V_POPULARITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIVIDE_jqtulp(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(-67)) - -489 + (-1);
+    END IF;
+
+    SET V_RESULT = P_A / P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(-89)) - -546 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658----- */
+CREATE TABLE IF NOT EXISTS `table_1sqpyn` (
+    `table_1sqpyn_customer_id` INT,
+    `table_1sqpyn_status` VARCHAR(50),
+    `table_1sqpyn_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_1sqpyn` (`table_1sqpyn_customer_id`, `table_1sqpyn_status`, `table_1sqpyn_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_INDEX_cf9658(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_1SQPYN_STATUS, COALESCE(TABLE_1SQPYN_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_1SQPYN
+    WHERE TABLE_1SQPYN_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+CREATE TABLE IF NOT EXISTS `table_qrf16h` (
+    `table_qrf16h_customer_id` INT,
+    `table_qrf16h_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_qrf16h` (`table_qrf16h_customer_id`, `table_qrf16h_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_QRF16H_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_QRF16H
+    WHERE TABLE_QRF16H_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh()) - 170 + (1000);
+        WHEN 'PREMIUM' THEN RETURN 500;
+        WHEN 'BASIC' THEN RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(21)) - 80 + (100);
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_5_VALUES_9ywbbh() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_TENURE);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0234(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_geo_val GEOMETRY;
+    DECLARE v_calc DECIMAL(30,0);
+    DECLARE cur CURSOR FOR SELECT v2304 FROM v2303;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: INSERT into v2273 using dynamic SQL
+    SET @sql1 = 'INSERT INTO v2273 (v2274) VALUES (2), (100)';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: UPDATE with JOIN using dynamic SQL
+    SET @sql2 = 'UPDATE v2352 AS x1 JOIN v2309 AS x6 ON (x1.v2353 = x1.v2353 AND x1.v2353 = x1.v2354 AND x1.v2354 = 3) SET x1.v2354 = ''somethingelse'' WHERE x1.v2353 = ''foo''';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with LEFT JOIN and complex WHERE using dynamic SQL
+    SET @sql3 = 'UPDATE v2267 AS x1 LEFT OUTER JOIN v2360 AS x2 ON x1.v2268 = x1.v2268 SET x1.v2268 = x1.v2268 + 101 WHERE ((v2268 AND v2268) AND v2268) <> (v2268 AND (v2268 AND v2268))';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with JOIN and arithmetic using dynamic SQL
+    SET @sql4 = 'UPDATE v2273 AS x1 JOIN v2342 AS x7 ON x1.v2274 = x1.v2274 SET x1.v2274 = x1.v2274 + ''1.2'' WHERE x1.v2274 = ''0''';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: Recursive CTE with spatial function using CURSOR and loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_geo_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_calc = FLOOR(CAST(1844674407370955161 AS DECIMAL(19, 0)));
+        IF (MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(57)) - -919 + (v_calc > 0) THEN
+            SET v_counter = v_counter + 1;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use IF/ELSE to finalize result
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Use CASE for additional logic
+    CASE
+        WHEN (MYSQL_FUNC_CALCULATE_PRODUCT_RATING_9et5a7(46)) - 781 + (p1 > p2) THEN
+            SET result = result + p1;
+        WHEN p1 < p2 THEN
+            SET result = result + p2;
+        ELSE
+            SET result = result + 100;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0234(1, 1, @out_result);
+
+SELECT @out_result;

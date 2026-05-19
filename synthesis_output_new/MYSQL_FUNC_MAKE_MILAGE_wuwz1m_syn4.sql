@@ -1,0 +1,414 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS table_zgyvjg (
+    table_zgyvjg_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_zgyvjg_make VARCHAR(20),
+    table_zgyvjg_milage INT
+);
+
+INSERT INTO table_zgyvjg (`table_zgyvjg_make`, `table_zgyvjg_milage`) VALUES 
+('Toyota', 50000),
+('Honda', 75000),
+('Toyota', 30000),
+('Ford', 100000),
+('Toyota', 90000);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj----- */
+CREATE TABLE IF NOT EXISTS `table_le5v5w` (
+    `table_le5v5w_product_id` INT,
+    `table_le5v5w_category_id` INT,
+    `table_le5v5w_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_le5v5w` (`table_le5v5w_product_id`, `table_le5v5w_category_id`, `table_le5v5w_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_LE5V5W_PRICE), 0), COALESCE(MIN(TABLE_LE5V5W_PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_LE5V5W
+    WHERE TABLE_LE5V5W_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SET V_VARIANCE = V_MAX_PRICE - V_MIN_PRICE;
+
+    RETURN V_VARIANCE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+CREATE TABLE IF NOT EXISTS `table_skl2vl` (
+    `table_skl2vl_plan_id` INT,
+    `table_skl2vl_plan_name` VARCHAR(50),
+    `table_skl2vl_monthly_price` DECIMAL(10,2),
+    `table_skl2vl_data_limit_mb` TEXT,
+    `table_skl2vl_minutes_limit` INT,
+    `table_skl2vl_rollover_enabled` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqh6ms` (
+    `table_oqh6ms_sub_id` INT,
+    `table_oqh6ms_user_id` INT,
+    `table_oqh6ms_plan_id` INT,
+    `table_oqh6ms_start_date` DATE,
+    `table_oqh6ms_data_used_mb` TEXT,
+    `table_oqh6ms_minutes_used` INT,
+    `table_oqh6ms_status` VARCHAR(50)
+);
+
+INSERT INTO `table_skl2vl` (`table_skl2vl_plan_id`, `table_skl2vl_plan_name`, `table_skl2vl_monthly_price`, `table_skl2vl_data_limit_mb`, `table_skl2vl_minutes_limit`, `table_skl2vl_rollover_enabled`) VALUES (1, 'test', 1.0, 'test', 5, 6);
+
+INSERT INTO `table_oqh6ms` (`table_oqh6ms_sub_id`, `table_oqh6ms_user_id`, `table_oqh6ms_plan_id`, `table_oqh6ms_start_date`, `table_oqh6ms_data_used_mb`, `table_oqh6ms_minutes_used`, `table_oqh6ms_status`) VALUES (1, 2, 3, '2024-01-01', 'test', 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(SUB_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DATA_LIMIT INT DEFAULT 0;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_MINUTES_LIMIT INT DEFAULT 0;
+    DECLARE V_MINUTES_USED INT DEFAULT 0;
+    DECLARE V_DATA_OVERAGE INT DEFAULT 0;
+    DECLARE V_MINUTES_OVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_SKL2VL_DATA_LIMIT_MB, COALESCE(TABLE_OQH6MS_DATA_USED_MB, 0), TABLE_SKL2VL_MINUTES_LIMIT, COALESCE(TABLE_OQH6MS_MINUTES_USED, 0)
+    INTO V_DATA_LIMIT, V_DATA_USED, V_MINUTES_LIMIT, V_MINUTES_USED
+    FROM TABLE_OQH6MS U
+    JOIN TABLE_SKL2VL P ON TABLE_OQH6MS_PLAN_ID = TABLE_SKL2VL_PLAN_ID
+    WHERE TABLE_OQH6MS_SUB_ID = SUB_ID_PARAM;
+
+    SET V_DATA_OVERAGE = GREATEST(0, V_DATA_USED - V_DATA_LIMIT);
+    SET V_MINUTES_OVERAGE = GREATEST(0, V_MINUTES_USED - V_MINUTES_LIMIT);
+
+    SET V_TOTAL_OVERAGE = (V_DATA_OVERAGE / 100) + (V_MINUTES_OVERAGE / 10);
+
+    RETURN CAST(V_TOTAL_OVERAGE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+CREATE TABLE IF NOT EXISTS `table_qv8ca7` (
+    `table_qv8ca7_product_id` INT,
+    `table_qv8ca7_category_id` INT,
+    `table_qv8ca7_price` DECIMAL(10,2),
+    `table_qv8ca7_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4k0ujz` (
+    `table_4k0ujz_order_id` INT,
+    `table_4k0ujz_product_id` INT,
+    `table_4k0ujz_quantity` INT
+);
+
+INSERT INTO `table_qv8ca7` (`table_qv8ca7_product_id`, `table_qv8ca7_category_id`, `table_qv8ca7_price`, `table_qv8ca7_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_4k0ujz` (`table_4k0ujz_order_id`, `table_4k0ujz_product_id`, `table_4k0ujz_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_STOCK INT DEFAULT 0;
+    DECLARE V_TOTAL_SOLD INT DEFAULT 0;
+    DECLARE V_TURNOVER_RATE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_QV8CA7_STOCK_QUANTITY, 0)
+    INTO V_CURRENT_STOCK
+    FROM TABLE_QV8CA7
+    WHERE TABLE_QV8CA7_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4K0UJZ_QUANTITY), 0)
+    INTO V_TOTAL_SOLD
+    FROM TABLE_4K0UJZ
+    WHERE TABLE_4K0UJZ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_CURRENT_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TURNOVER_RATE = V_TOTAL_SOLD / V_CURRENT_STOCK;
+
+    RETURN (MYSQL_FUNC_SAFE_DIVIDE_5yo93a(93, -83)) - 250 + (v_turnover_rate);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_DIVIDE_5yo93a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_DIVIDE_5yo93a(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012' BEGIN SET V_RESULT = 0; END;
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '2201I' BEGIN SET V_RESULT = 0; END;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = A / B;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+CREATE TABLE IF NOT EXISTS table_wz9osw (
+    table_wz9osw_produto_id INT,
+    table_wz9osw_Quantidade_produto INT
+);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (3, 0);
+
+/* -----Called: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM TABLE_WZ9OSW WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE TABLE_WZ9OSW SET TABLE_WZ9OSW_QUANTIDADE_PRODUTO = TABLE_WZ9OSW_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_WZ9OSW (`TABLE_WZ9OSW_PRODUTO_ID`, `TABLE_WZ9OSW_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7()) - 578 + (rows_affected);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_10_VALUES_id0ip7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(18)) - 363 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+CREATE TABLE IF NOT EXISTS `table_opth2r` (
+    `table_opth2r_hotel_id` INT,
+    `table_opth2r_name` VARCHAR(50),
+    `table_opth2r_city` INT,
+    `table_opth2r_star_rating` DECIMAL(3,1),
+    `table_opth2r_average_daily_rate` INT,
+    `table_opth2r_occupancy_rate` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9q7x7u` (
+    `table_9q7x7u_booking_id` INT,
+    `table_9q7x7u_hotel_id` INT,
+    `table_9q7x7u_guest_id` INT,
+    `table_9q7x7u_check_in_date` DATE,
+    `table_9q7x7u_check_out_date` DATE,
+    `table_9q7x7u_total_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_opth2r` (`table_opth2r_hotel_id`, `table_opth2r_name`, `table_opth2r_city`, `table_opth2r_star_rating`, `table_opth2r_average_daily_rate`, `table_opth2r_occupancy_rate`) VALUES (1, 'test', 3, 1.0, 5, 6);
+
+INSERT INTO `table_9q7x7u` (`table_9q7x7u_booking_id`, `table_9q7x7u_hotel_id`, `table_9q7x7u_guest_id`, `table_9q7x7u_check_in_date`, `table_9q7x7u_check_out_date`, `table_9q7x7u_total_cost`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_REVENUE_POTENTIAL_s02d10(HOTEL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STAR_RATING INT DEFAULT 3;
+    DECLARE V_AVG_DAILY_RATE INT DEFAULT 100;
+    DECLARE V_OCCUPANCY_RATE INT DEFAULT 70;
+    DECLARE V_TOTAL_ROOMS INT DEFAULT 50;
+    DECLARE V_DAILY_POTENTIAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_POTENTIAL INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_OPTH2R_STAR_RATING, 3), COALESCE(TABLE_OPTH2R_AVERAGE_DAILY_RATE, 100), COALESCE(TABLE_OPTH2R_OCCUPANCY_RATE, 70)
+    INTO V_STAR_RATING, V_AVG_DAILY_RATE, V_OCCUPANCY_RATE
+    FROM TABLE_OPTH2R
+    WHERE TABLE_OPTH2R_HOTEL_ID = HOTEL_ID_PARAM;
+
+    SET V_DAILY_POTENTIAL = V_TOTAL_ROOMS * V_AVG_DAILY_RATE * V_STAR_RATING / 3;
+    SET V_ANNUAL_POTENTIAL = (V_DAILY_POTENTIAL * 365 * V_OCCUPANCY_RATE) / 100;
+
+    RETURN FLOOR(V_ANNUAL_POTENTIAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+CREATE TABLE IF NOT EXISTS `table_7oa9eq` (
+    `table_7oa9eq_treatment_id` INT,
+    `table_7oa9eq_patient_id` INT,
+    `table_7oa9eq_dentist_id` INT,
+    `table_7oa9eq_treatment_type` VARCHAR(50),
+    `table_7oa9eq_treatment_date` DATE,
+    `table_7oa9eq_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_eidrga` (
+    `table_eidrga_plan_id` INT,
+    `table_eidrga_patient_id` INT,
+    `table_eidrga_coverage_percent` INT,
+    `table_eidrga_annual_max` INT
+);
+
+INSERT INTO `table_7oa9eq` (`table_7oa9eq_treatment_id`, `table_7oa9eq_patient_id`, `table_7oa9eq_dentist_id`, `table_7oa9eq_treatment_type`, `table_7oa9eq_treatment_date`, `table_7oa9eq_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 1.0);
+
+INSERT INTO `table_eidrga` (`table_eidrga_plan_id`, `table_eidrga_patient_id`, `table_eidrga_coverage_percent`, `table_eidrga_annual_max`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(TREATMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TREATMENT_COST INT DEFAULT 0;
+    DECLARE V_COVERAGE_PERCENT INT DEFAULT 50;
+    DECLARE V_ANNUAL_MAX INT DEFAULT 1500;
+    DECLARE V_TOTAL_USED INT DEFAULT 0;
+    DECLARE V_COVERED_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7OA9EQ_COST, 0)
+    INTO V_TREATMENT_COST
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT TABLE_EIDRGA_COVERAGE_PERCENT, TABLE_EIDRGA_ANNUAL_MAX
+    INTO V_COVERAGE_PERCENT, V_ANNUAL_MAX
+    FROM TABLE_7OA9EQ DT
+    JOIN TABLE_EIDRGA DP ON TABLE_7OA9EQ_PATIENT_ID = TABLE_EIDRGA_PATIENT_ID
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_7OA9EQ_COST), 0) INTO V_TOTAL_USED
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_PATIENT_ID = (SELECT TABLE_7OA9EQ_PATIENT_ID FROM TABLE_7OA9EQ WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM);
+
+    SET V_COVERED_AMOUNT = (MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + ((MYSQL_FUNC_GET_MIN_cm5woy(-14, -29)) - 829 + (v_treatment_cost * v_coverage_percent / 100));
+
+    IF V_TOTAL_USED > V_ANNUAL_MAX THEN
+        SET V_COVERED_AMOUNT = 0;
+    END IF;
+
+    RETURN CAST(V_COVERED_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MIN_cm5woy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MIN_cm5woy(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF A < B THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MAKE_MILAGE_wuwz1m(MK_INT INT, ML INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE MK VARCHAR(20);
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SET MK = CAST(MK_INT AS CHAR);
+    
+    SELECT COUNT(*) INTO RESULT_COUNT 
+    FROM TABLE_ZGYVJG 
+    WHERE TABLE_ZGYVJG_MAKE LIKE MK AND TABLE_ZGYVJG_MILAGE < ML 
+    ORDER BY TABLE_ZGYVJG_MILAGE;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(9)) - -129 + ((MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(17, 37)) - -647 + ((MYSQL_FUNC_CALCULATE_PRODUCT_TURNOVER_RATE_qe2qv8(-24)) - 811 + ((MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(-79)) - 72 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_VARIANCE_raiwaj(83)) - 905 + (result_count)))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_MAKE_MILAGE_wuwz1m(1, 1);

@@ -1,0 +1,354 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+CREATE TABLE IF NOT EXISTS `table_o9epgx` (
+    `table_o9epgx_campaign_id` INT,
+    `table_o9epgx_status` VARCHAR(50)
+);
+
+INSERT INTO `table_o9epgx` (`table_o9epgx_campaign_id`, `table_o9epgx_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_O9EPGX_STATUS
+    INTO V_STATUS
+    FROM TABLE_O9EPGX
+    WHERE TABLE_O9EPGX_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN 10;
+        WHEN 'PAUSED' THEN RETURN 5;
+        WHEN 'COMPLETED' THEN RETURN 8;
+        WHEN 'CANCELLED' THEN RETURN (MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(-64)) - 335 + (0);
+        ELSE RETURN 1;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+CREATE TABLE IF NOT EXISTS `table_qzk6th` (
+    `table_qzk6th_enrollment_id` INT,
+    `table_qzk6th_child_id` INT,
+    `table_qzk6th_program_type` VARCHAR(50),
+    `table_qzk6th_hours_per_week` INT,
+    `table_qzk6th_weekly_rate` INT,
+    `table_qzk6th_start_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_hbhj2x` (
+    `table_hbhj2x_child_id` INT,
+    `table_hbhj2x_date_of_birth` DATE,
+    `table_hbhj2x_parent_id` INT
+);
+
+INSERT INTO `table_qzk6th` (`table_qzk6th_enrollment_id`, `table_qzk6th_child_id`, `table_qzk6th_program_type`, `table_qzk6th_hours_per_week`, `table_qzk6th_weekly_rate`, `table_qzk6th_start_date`) VALUES (1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_hbhj2x` (`table_hbhj2x_child_id`, `table_hbhj2x_date_of_birth`, `table_hbhj2x_parent_id`) VALUES (1, '2024-01-01', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHILDCARE_WEEKLY_FEE_uvavp9(CHILD_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHILD_AGE INT DEFAULT 0;
+    DECLARE V_PROGRAM_RATE INT DEFAULT 0;
+    DECLARE V_EXTRA_HOURS INT DEFAULT 0;
+    DECLARE V_AGE_SURCHARGE INT DEFAULT 0;
+    DECLARE V_TOTAL_FEE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_HBHJ2X_DATE_OF_BIRTH, CURDATE())
+    INTO V_CHILD_AGE
+    FROM TABLE_HBHJ2X
+    WHERE TABLE_HBHJ2X_CHILD_ID = CHILD_ID_PARAM;
+
+    SELECT TABLE_QZK6TH_WEEKLY_RATE
+    INTO V_PROGRAM_RATE
+    FROM TABLE_QZK6TH
+    WHERE TABLE_QZK6TH_CHILD_ID = CHILD_ID_PARAM
+    ORDER BY TABLE_QZK6TH_START_DATE DESC LIMIT 1;
+
+    IF V_PROGRAM_RATE IS NULL THEN
+        SET V_PROGRAM_RATE = 200;
+    END IF;
+
+    SET V_TOTAL_FEE = V_PROGRAM_RATE;
+
+    IF V_CHILD_AGE < 2 THEN
+        SET V_AGE_SURCHARGE = V_PROGRAM_RATE * 25 / 100;
+        SET V_TOTAL_FEE = V_TOTAL_FEE + V_AGE_SURCHARGE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_FEE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+CREATE TABLE IF NOT EXISTS `table_c3gwib` (
+    `table_c3gwib_campaign_id` INT,
+    `table_c3gwib_budget` INT
+);
+
+INSERT INTO `table_c3gwib` (`table_c3gwib_campaign_id`, `table_c3gwib_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_C3GWIB_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_C3GWIB
+    WHERE TABLE_C3GWIB_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(24)) - 386 + (floor(v_budget / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_MATRIX_METHOD_4bqm5a(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIB_0 INT DEFAULT 0;
+    DECLARE V_FIB_1 INT DEFAULT 1;
+    DECLARE V_FIB_N INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 2;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF N = 0 THEN RETURN 0; END IF;
+    IF N = 1 THEN RETURN 1; END IF;
+
+    SET V_COUNTER = 2;
+
+    FIB_LOOP: WHILE V_COUNTER <= N DO
+        SET V_TEMP = V_FIB_1;
+        SET V_FIB_1 = V_FIB_0 + V_FIB_1;
+        SET V_FIB_0 = V_TEMP;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FIB_LOOP;
+
+    RETURN V_FIB_1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+CREATE TABLE IF NOT EXISTS `table_8mbpj1` (
+    `table_8mbpj1_screening_id` INT,
+    `table_8mbpj1_movie_id` INT,
+    `table_8mbpj1_theater_id` INT,
+    `table_8mbpj1_show_time` DATE,
+    `table_8mbpj1_available_seats` INT,
+    `table_8mbpj1_ticket_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ma3ua6` (
+    `table_ma3ua6_booking_id` INT,
+    `table_ma3ua6_screening_id` INT,
+    `table_ma3ua6_customer_id` INT,
+    `table_ma3ua6_seats_booked` INT,
+    `table_ma3ua6_total_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_8mbpj1` (`table_8mbpj1_screening_id`, `table_8mbpj1_movie_id`, `table_8mbpj1_theater_id`, `table_8mbpj1_show_time`, `table_8mbpj1_available_seats`, `table_8mbpj1_ticket_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_ma3ua6` (`table_ma3ua6_booking_id`, `table_ma3ua6_screening_id`, `table_ma3ua6_customer_id`, `table_ma3ua6_seats_booked`, `table_ma3ua6_total_price`) VALUES (1, 2, 3, 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(SCREENING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_OCCUPANCY_PERCENT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8MBPJ1_AVAILABLE_SEATS, 100)
+    INTO V_AVAILABLE_SEATS
+    FROM TABLE_8MBPJ1
+    WHERE TABLE_8MBPJ1_SCREENING_ID = SCREENING_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_MA3UA6_SEATS_BOOKED), (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(-23)) - 351 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj(-47)) - -478 + (0))) INTO V_BOOKED_SEATS
+    FROM TABLE_MA3UA6
+    WHERE TABLE_MA3UA6_SCREENING_ID = SCREENING_ID_PARAM;
+
+    IF V_AVAILABLE_SEATS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_OCCUPANCY_PERCENT = (V_BOOKED_SEATS * 100) / V_AVAILABLE_SEATS;
+
+    RETURN (MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - -431 + ((MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn()) - -505 + (cast(v_occupancy_percent as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+CREATE TABLE IF NOT EXISTS `table_m3vpww` (
+    `table_m3vpww_cbit10` INT
+);
+
+INSERT INTO `table_m3vpww` (`table_m3vpww_cbit10`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_M3VPWW_CBIT10 INTO RESULT FROM `TABLE_M3VPWW` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj----- */
+CREATE TABLE IF NOT EXISTS `table_vdmsbr` (
+    `table_vdmsbr_product_id` INT,
+    `table_vdmsbr_category_id` INT,
+    `table_vdmsbr_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tpusoe` (
+    `table_tpusoe_category_id` INT,
+    `table_tpusoe_name` VARCHAR(50),
+    `table_tpusoe_parent_category_id` INT
+);
+
+INSERT INTO `table_vdmsbr` (`table_vdmsbr_product_id`, `table_vdmsbr_category_id`, `table_vdmsbr_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_tpusoe` (`table_tpusoe_category_id`, `table_tpusoe_name`, `table_tpusoe_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_RANGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_VDMSBR_PRICE), (MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(-32, -14)) - 813 + (0)), COALESCE(MIN(TABLE_VDMSBR_PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_VDMSBR
+    WHERE TABLE_VDMSBR_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MIN_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RANGE_RATIO = (V_MAX_PRICE - V_MIN_PRICE) / V_MIN_PRICE;
+
+    RETURN V_RANGE_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(LENGTH INT, WIDTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN LENGTH * WIDTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= 1 THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+CREATE TABLE IF NOT EXISTS `table_js4wmr` (
+    `table_js4wmr_customer_id` INT,
+    `table_js4wmr_plan_type` VARCHAR(50),
+    `table_js4wmr_start_date` DATE,
+    `table_js4wmr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_taalq5` (
+    `table_taalq5_customer_id` INT,
+    `table_taalq5_tier_level` INT
+);
+
+INSERT INTO `table_js4wmr` (`table_js4wmr_customer_id`, `table_js4wmr_plan_type`, `table_js4wmr_start_date`, `table_js4wmr_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_taalq5` (`table_taalq5_customer_id`, `table_taalq5_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+
+    SELECT TABLE_JS4WMR_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_JS4WMR
+    WHERE TABLE_JS4WMR_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TENURE_MONTHS = TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+
+    RETURN V_TENURE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC2_nz67cs() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SCREENING_OCCUPANCY_fjycqf(-49)) - -683 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_SCORE_gsya0s(43)) - 259 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_STATUS_WEIGHT_tr2nh5(14)) - 285 + (0)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_FUNC2_nz67cs();

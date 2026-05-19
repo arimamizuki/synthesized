@@ -1,0 +1,386 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_gkpv1s` (
+    `table_gkpv1s_department_id` INT
+);
+
+INSERT INTO `table_gkpv1s` (`table_gkpv1s_department_id`) VALUES (1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+CREATE TABLE IF NOT EXISTS `table_bth9h0` (
+    `table_bth9h0_campaign_id` INT,
+    `table_bth9h0_start_date` DATE
+);
+
+INSERT INTO `table_bth9h0` (`table_bth9h0_campaign_id`, `table_bth9h0_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BTH9H0_START_DATE)
+    INTO V_YEAR
+    FROM TABLE_BTH9H0
+    WHERE TABLE_BTH9H0_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_YEAR;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+CREATE TABLE IF NOT EXISTS `table_jcyow9` (
+    `table_jcyow9_order_id` INT,
+    `table_jcyow9_customer_id` INT
+);
+
+INSERT INTO `table_jcyow9` (`table_jcyow9_order_id`, `table_jcyow9_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_JCYOW9_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_JCYOW9
+    WHERE TABLE_JCYOW9_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RETURN_RATE_zsaism(80)) - -916 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3(-24)) - 953 + (v_customer_id % 50));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3----- */
+CREATE TABLE IF NOT EXISTS `table_5sgfso` (
+    `table_5sgfso_customer_id` INT,
+    `table_5sgfso_registration_date` DATE
+);
+
+INSERT INTO `table_5sgfso` (`table_5sgfso_customer_id`, `table_5sgfso_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_MONTH_lm9gn3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_5SGFSO_REGISTRATION_DATE)
+    INTO V_MONTH
+    FROM TABLE_5SGFSO
+    WHERE TABLE_5SGFSO_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RETURN_RATE_zsaism----- */
+CREATE TABLE IF NOT EXISTS `table_k0t2qg` (
+    `table_k0t2qg_return_id` INT,
+    `table_k0t2qg_transaction_id` INT,
+    `table_k0t2qg_customer_id` INT,
+    `table_k0t2qg_return_date` DATE,
+    `table_k0t2qg_item_count` INT,
+    `table_k0t2qg_refund_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_xxzjwr` (
+    `table_xxzjwr_transaction_id` INT,
+    `table_xxzjwr_store_id` INT,
+    `table_xxzjwr_transaction_date` DATE,
+    `table_xxzjwr_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_k0t2qg` (`table_k0t2qg_return_id`, `table_k0t2qg_transaction_id`, `table_k0t2qg_customer_id`, `table_k0t2qg_return_date`, `table_k0t2qg_item_count`, `table_k0t2qg_refund_amount`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_xxzjwr` (`table_xxzjwr_transaction_id`, `table_xxzjwr_store_id`, `table_xxzjwr_transaction_date`, `table_xxzjwr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RETURN_RATE_zsaism----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETURN_RATE_zsaism(STORE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_TRANSACTIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_RETURNS INT DEFAULT 0;
+    DECLARE V_RETURN_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_TOTAL_TRANSACTIONS
+    FROM TABLE_XXZJWR
+    WHERE TABLE_XXZJWR_STORE_ID = STORE_ID_PARAM
+      AND TABLE_XXZJWR_TRANSACTION_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SELECT COUNT(*) INTO V_TOTAL_RETURNS
+    FROM TABLE_K0T2QG R
+    JOIN TABLE_XXZJWR T ON TABLE_K0T2QG_TRANSACTION_ID = TABLE_XXZJWR_TRANSACTION_ID
+    WHERE TABLE_XXZJWR_STORE_ID = STORE_ID_PARAM
+      AND TABLE_K0T2QG_RETURN_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    IF V_TOTAL_TRANSACTIONS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RETURN_RATE = (V_TOTAL_RETURNS * 100) / V_TOTAL_TRANSACTIONS;
+
+    RETURN CAST(V_RETURN_RATE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+CREATE TABLE IF NOT EXISTS `table_skl2vl` (
+    `table_skl2vl_plan_id` INT,
+    `table_skl2vl_plan_name` VARCHAR(50),
+    `table_skl2vl_monthly_price` DECIMAL(10,2),
+    `table_skl2vl_data_limit_mb` TEXT,
+    `table_skl2vl_minutes_limit` INT,
+    `table_skl2vl_rollover_enabled` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_oqh6ms` (
+    `table_oqh6ms_sub_id` INT,
+    `table_oqh6ms_user_id` INT,
+    `table_oqh6ms_plan_id` INT,
+    `table_oqh6ms_start_date` DATE,
+    `table_oqh6ms_data_used_mb` TEXT,
+    `table_oqh6ms_minutes_used` INT,
+    `table_oqh6ms_status` VARCHAR(50)
+);
+
+INSERT INTO `table_skl2vl` (`table_skl2vl_plan_id`, `table_skl2vl_plan_name`, `table_skl2vl_monthly_price`, `table_skl2vl_data_limit_mb`, `table_skl2vl_minutes_limit`, `table_skl2vl_rollover_enabled`) VALUES (1, 'test', 1.0, 'test', 5, 6);
+
+INSERT INTO `table_oqh6ms` (`table_oqh6ms_sub_id`, `table_oqh6ms_user_id`, `table_oqh6ms_plan_id`, `table_oqh6ms_start_date`, `table_oqh6ms_data_used_mb`, `table_oqh6ms_minutes_used`, `table_oqh6ms_status`) VALUES (1, 2, 3, '2024-01-01', 'test', 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(SUB_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DATA_LIMIT INT DEFAULT 0;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_MINUTES_LIMIT INT DEFAULT 0;
+    DECLARE V_MINUTES_USED INT DEFAULT 0;
+    DECLARE V_DATA_OVERAGE INT DEFAULT 0;
+    DECLARE V_MINUTES_OVERAGE INT DEFAULT 0;
+    DECLARE V_TOTAL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_SKL2VL_DATA_LIMIT_MB, COALESCE(TABLE_OQH6MS_DATA_USED_MB, 0), TABLE_SKL2VL_MINUTES_LIMIT, COALESCE(TABLE_OQH6MS_MINUTES_USED, 0)
+    INTO V_DATA_LIMIT, V_DATA_USED, V_MINUTES_LIMIT, V_MINUTES_USED
+    FROM TABLE_OQH6MS U
+    JOIN TABLE_SKL2VL P ON TABLE_OQH6MS_PLAN_ID = TABLE_SKL2VL_PLAN_ID
+    WHERE TABLE_OQH6MS_SUB_ID = SUB_ID_PARAM;
+
+    SET V_DATA_OVERAGE = GREATEST(0, V_DATA_USED - V_DATA_LIMIT);
+    SET V_MINUTES_OVERAGE = GREATEST(0, V_MINUTES_USED - V_MINUTES_LIMIT);
+
+    SET V_TOTAL_OVERAGE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc(-60)) - 371 + ((v_data_overage / 100) + (v_minutes_overage / 10));
+
+    RETURN (MYSQL_FUNC_PROC_BLOB_0dgedf()) - 705 + (cast(v_total_overage as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc----- */
+CREATE TABLE IF NOT EXISTS `table_3tnjz8` (
+    `table_3tnjz8_emp_id` INT,
+    `table_3tnjz8_salary` INT,
+    `table_3tnjz8_department_id` INT
+);
+
+INSERT INTO `table_3tnjz8` (`table_3tnjz8_emp_id`, `table_3tnjz8_salary`, `table_3tnjz8_department_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_3TNJZ8_DEPARTMENT_ID, COALESCE(TABLE_3TNJZ8_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_3TNJZ8
+    WHERE TABLE_3TNJZ8_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_3TNJZ8_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_3TNJZ8
+    WHERE TABLE_3TNJZ8_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(71)) - 8 + (floor((v_salary * 100) / v_dept_avg));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SANITIZE_INPUT_1v2j5i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SANITIZE_INPUT_1v2j5i(INPUT_STRING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_CHAR_POS INT DEFAULT 1;
+    DECLARE V_CHAR_VAL INT;
+    DECLARE V_INPUT_LEN INT DEFAULT 0;
+    DECLARE V_DANGER_COUNT INT DEFAULT 0;
+    DECLARE V_DANGEROUS_CHARS VARCHAR(10) DEFAULT '''"'';--';
+
+    SET V_INPUT_LEN = CHAR_LENGTH(INPUT_STRING);
+
+    WHILE V_CHAR_POS <= V_INPUT_LEN DO
+        SET V_CHAR_VAL = ASCII(SUBSTRING(INPUT_STRING, V_CHAR_POS, 1));
+
+        IF V_CHAR_VAL IN (39, 34, 59, 45, 45) THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        IF V_CHAR_VAL < 32 OR V_CHAR_VAL > 126 THEN
+            SET V_DANGER_COUNT = V_DANGER_COUNT + 1;
+        END IF;
+
+        SET V_CHAR_POS = V_CHAR_POS + 1;
+    END WHILE;
+
+    RETURN V_DANGER_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BLOB_0dgedf----- */
+CREATE TABLE IF NOT EXISTS `table_yibnl6` (
+    `table_yibnl6_cblob` BLOB
+);
+
+INSERT INTO `table_yibnl6` (`table_yibnl6_cblob`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BLOB_0dgedf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BLOB_0dgedf() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT FROM `TABLE_YIBNL6`;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_TOP_PRODUCT_PERCENTAGE_0tpqba(-15)) - 611 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOP_PRODUCT_PERCENTAGE_0tpqba----- */
+CREATE TABLE IF NOT EXISTS `table_arwzsa` (
+    `table_arwzsa_product_id` INT,
+    `table_arwzsa_category_id` INT,
+    `table_arwzsa_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_1ousek` (
+    `table_1ousek_category_id` INT,
+    `table_1ousek_name` VARCHAR(50)
+);
+
+INSERT INTO `table_arwzsa` (`table_arwzsa_product_id`, `table_arwzsa_category_id`, `table_arwzsa_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_1ousek` (`table_1ousek_category_id`, `table_1ousek_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOP_PRODUCT_PERCENTAGE_0tpqba----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOP_PRODUCT_PERCENTAGE_0tpqba(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_PRODUCTS INT DEFAULT 0;
+    DECLARE V_EXPENSIVE_PRODUCTS INT DEFAULT 0;
+    DECLARE V_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_PRODUCTS
+    FROM TABLE_ARWZSA
+    WHERE TABLE_ARWZSA_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EXPENSIVE_PRODUCTS
+    FROM TABLE_ARWZSA
+    WHERE TABLE_ARWZSA_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_ARWZSA_PRICE > 200;
+
+    IF V_TOTAL_PRODUCTS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERCENTAGE = (MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(-96)) - -484 + ((v_expensive_products * 100) / v_total_products);
+
+    RETURN V_PERCENTAGE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+CREATE TABLE IF NOT EXISTS `table_npdkhs` (
+    `table_npdkhs_emp_id` INT,
+    `table_npdkhs_department_id` INT,
+    `table_npdkhs_salary` INT,
+    `table_npdkhs_hire_date` DATE,
+    `table_npdkhs_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_npdkhs` (`table_npdkhs_emp_id`, `table_npdkhs_department_id`, `table_npdkhs_salary`, `table_npdkhs_hire_date`, `table_npdkhs_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_RATIO_6u4e1w(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_PERF_RATIO DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NPDKHS_PERFORMANCE_RATING, 0), COALESCE(TABLE_NPDKHS_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_NPDKHS_HIRE_DATE, CURDATE())
+    INTO V_PERFORMANCE, V_SALARY, V_TENURE_YEARS
+    FROM TABLE_NPDKHS
+    WHERE TABLE_NPDKHS_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PERF_RATIO = (V_PERFORMANCE * V_SALARY) / V_TENURE_YEARS;
+
+    RETURN FLOOR(V_PERF_RATIO / 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_GKPV1S
+    WHERE TABLE_GKPV1S_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_a2bp0l(-79)) - 72 + ((MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_ID_MOD_urr4sb(-84)) - 596 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_START_YEAR_yweph0(22)) - -619 + (v_count)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(1);

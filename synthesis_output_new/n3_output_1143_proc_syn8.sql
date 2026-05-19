@@ -1,0 +1,443 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1192506 (v1192508 VARCHAR(100), v1192510 VARCHAR(100), v1192509 DATE);
+CREATE TABLE IF NOT EXISTS v1192536 (v1192539 VARCHAR(36), v1192543 VARCHAR(36), v1192545 VARCHAR(36), v1192538 VARCHAR(36), v1192537 VARCHAR(36), v1192540 VARCHAR(36), v1192546 VARCHAR(36), v1192544 VARCHAR(36));
+CREATE TABLE IF NOT EXISTS v1192663 (v1192664 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS test_table (id INT);
+CREATE TABLE IF NOT EXISTS v1192715 (id INT);
+CREATE TABLE IF NOT EXISTS v1192657 (v1192658 INT, v1192659 VARCHAR(100));
+INSERT INTO v1192506 VALUES ('1e-5', '0101', '1997-06-15'), ('1e-10', '0101', '1999-01-01'), ('test', '0101', '1998-06-15');
+INSERT INTO v1192536 VALUES (UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID());
+INSERT INTO v1192663 VALUES ('value1'), ('value2'), ('x'), ('x'), ('value3'), ('value4');
+INSERT INTO test_table VALUES (1), (2), (3);
+INSERT INTO v1192715 VALUES (1), (2), (3);
+INSERT INTO v1192657 VALUES (100, 'event44331_2'), (200, 'other_event'), (300, 'event44331_2');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_MONTHS_INDEX_9h2y9g----- */
+CREATE TABLE IF NOT EXISTS `table_gf6dc0` (
+    `table_gf6dc0_emp_id` INT,
+    `table_gf6dc0_hire_date` DATE
+);
+
+INSERT INTO `table_gf6dc0` (`table_gf6dc0_emp_id`, `table_gf6dc0_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_MONTHS_INDEX_9h2y9g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_MONTHS_INDEX_9h2y9g(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GF6DC0_HIRE_DATE, CURDATE())
+    INTO V_TENURE_MONTHS
+    FROM TABLE_GF6DC0
+    WHERE TABLE_GF6DC0_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0(-61)) - -796 + (v_tenure_months);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0----- */
+CREATE TABLE IF NOT EXISTS `table_ue1j5t` (
+    `table_ue1j5t_account_id` INT,
+    `table_ue1j5t_holder_id` INT,
+    `table_ue1j5t_account_type` INT,
+    `table_ue1j5t_balance` INT,
+    `table_ue1j5t_annual_contribution` INT,
+    `table_ue1j5t_employer_match_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_3ib702` (
+    `table_3ib702_transaction_id` INT,
+    `table_3ib702_account_id` INT,
+    `table_3ib702_transaction_date` DATE,
+    `table_3ib702_amount` DECIMAL(10,2),
+    `table_3ib702_transaction_type` VARCHAR(50)
+);
+
+INSERT INTO `table_ue1j5t` (`table_ue1j5t_account_id`, `table_ue1j5t_holder_id`, `table_ue1j5t_account_type`, `table_ue1j5t_balance`, `table_ue1j5t_annual_contribution`, `table_ue1j5t_employer_match_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_3ib702` (`table_3ib702_transaction_id`, `table_3ib702_account_id`, `table_3ib702_transaction_date`, `table_3ib702_amount`, `table_3ib702_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RETIREMENT_MATCH_BENEFIT_ktsoo0(ACCOUNT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ANNUAL_CONTRIBUTION INT DEFAULT 0;
+    DECLARE V_EMPLOYER_MATCH INT DEFAULT 0;
+    DECLARE V_TOTAL_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UE1J5T_ANNUAL_CONTRIBUTION, 0), COALESCE(TABLE_UE1J5T_EMPLOYER_MATCH_PERCENT, 0)
+    INTO V_ANNUAL_CONTRIBUTION, V_EMPLOYER_MATCH
+    FROM TABLE_UE1J5T
+    WHERE TABLE_UE1J5T_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_EMPLOYER_MATCH = (MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(55)) - 821 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(9)) - -923 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(24)) - 512 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4()) - -337 + ((v_annual_contribution * v_employer_match) / 100))));
+    SET V_TOTAL_CONTRIBUTION = V_ANNUAL_CONTRIBUTION + V_EMPLOYER_MATCH;
+
+    RETURN CAST(V_TOTAL_CONTRIBUTION AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_13_VALUES_zqakw4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 26 UNION SELECT 39 UNION SELECT 52 UNION SELECT 65 UNION SELECT 78 UNION SELECT 91 UNION SELECT 104 UNION SELECT 117 UNION SELECT 130 UNION SELECT 143 UNION SELECT 156 UNION SELECT 169;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(-92)) - 757 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu----- */
+CREATE TABLE IF NOT EXISTS `table_2r9w30` (
+    `table_2r9w30_customer_id` INT,
+    `table_2r9w30_total_amount` DECIMAL(10,2),
+    `table_2r9w30_status` VARCHAR(50)
+);
+
+INSERT INTO `table_2r9w30` (`table_2r9w30_customer_id`, `table_2r9w30_total_amount`, `table_2r9w30_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_2R9W30_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL
+    FROM TABLE_2R9W30
+    WHERE TABLE_2R9W30_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_2R9W30_STATUS = 'COMPLETED';
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+CREATE TABLE IF NOT EXISTS `table_4lnfav` (
+    `table_4lnfav_product_id` INT,
+    `table_4lnfav_category_id` INT,
+    `table_4lnfav_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_rrjep2` (
+    `table_rrjep2_category_id` INT,
+    `table_rrjep2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_4lnfav` (`table_4lnfav_product_id`, `table_4lnfav_category_id`, `table_4lnfav_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_rrjep2` (`table_rrjep2_category_id`, `table_rrjep2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_72991j(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_4LNFAV
+    WHERE TABLE_4LNFAV_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_4LNFAV_PRICE), 0)
+    INTO V_OVERALL_AVG
+    FROM TABLE_4LNFAV;
+
+    IF V_OVERALL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_RATIO = (V_CATEGORY_AVG / V_OVERALL_AVG) * 100;
+
+    RETURN FLOOR(V_RATIO);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+CREATE TABLE IF NOT EXISTS `table_w56b1h` (
+    `table_w56b1h_emp_id` INT,
+    `table_w56b1h_department_id` INT,
+    `table_w56b1h_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0ispea` (
+    `table_0ispea_department_id` INT,
+    `table_0ispea_name` VARCHAR(50),
+    `table_0ispea_budget` INT
+);
+
+INSERT INTO `table_w56b1h` (`table_w56b1h_emp_id`, `table_w56b1h_department_id`, `table_w56b1h_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_0ispea` (`table_0ispea_department_id`, `table_0ispea_name`, `table_0ispea_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ba59tu(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_W56B1H;
+
+    SELECT COALESCE(AVG(TABLE_W56B1H_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_W56B1H
+    WHERE TABLE_W56B1H_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    IF V_AVG_SALARY = 0 THEN
+        RETURN 50;
+    END IF;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_AVG_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+CREATE TABLE IF NOT EXISTS `table_08h4ix` (
+    `table_08h4ix_customer_id` INT,
+    `table_08h4ix_country` INT,
+    `table_08h4ix_registration_date` DATE
+);
+
+INSERT INTO `table_08h4ix` (`table_08h4ix_customer_id`, `table_08h4ix_country`, `table_08h4ix_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_SCORE_oafe40(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_08H4IX_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_08H4IX
+    WHERE TABLE_08H4IX_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(-72)) - -876 + (v_age_months);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+CREATE TABLE IF NOT EXISTS `table_whrfd8` (
+    `table_whrfd8_product_id` INT,
+    `table_whrfd8_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_whrfd8` (`table_whrfd8_product_id`, `table_whrfd8_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_WHRFD8_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_WHRFD8
+    WHERE TABLE_WHRFD8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9----- */
+CREATE TABLE IF NOT EXISTS `table_wzk567` (
+    `table_wzk567_emp_id` INT,
+    `table_wzk567_department_id` INT,
+    `table_wzk567_salary` INT,
+    `table_wzk567_hire_date` DATE,
+    `table_wzk567_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_wzk567` (`table_wzk567_emp_id`, `table_wzk567_department_id`, `table_wzk567_salary`, `table_wzk567_hire_date`, `table_wzk567_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ENGAGEMENT_INDEX_1zt9z9(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WZK567_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_WZK567_HIRE_DATE, CURDATE()), COALESCE(TABLE_WZK567_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_WZK567
+    WHERE TABLE_WZK567_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ENGAGEMENT_SCORE = (MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(-72)) - 782 + ((v_performance * 20) + (v_tenure_years * 5) + (v_salary / 1000));
+
+    RETURN V_ENGAGEMENT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+CREATE TABLE IF NOT EXISTS `table_l8y9dq` (
+    `table_l8y9dq_emp_id` INT,
+    `table_l8y9dq_department_id` INT,
+    `table_l8y9dq_salary` INT,
+    `table_l8y9dq_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_vt0noh` (
+    `table_vt0noh_department_id` INT,
+    `table_vt0noh_name` VARCHAR(50)
+);
+
+INSERT INTO `table_l8y9dq` (`table_l8y9dq_emp_id`, `table_l8y9dq_department_id`, `table_l8y9dq_salary`, `table_l8y9dq_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_vt0noh` (`table_vt0noh_department_id`, `table_vt0noh_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COST_PER_HIRE_d5d4pq(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_COUNT INT DEFAULT 0;
+    DECLARE V_RECRUITMENT_COST INT DEFAULT 0;
+    DECLARE V_COST_PER_HIRE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_HIRE_COUNT
+    FROM TABLE_L8Y9DQ
+    WHERE TABLE_L8Y9DQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_L8Y9DQ_HIRE_DATE) = YEAR(CURDATE());
+
+    SET V_RECRUITMENT_COST = 5000 + (V_HIRE_COUNT * 1000);
+
+    IF V_HIRE_COUNT = 0 THEN
+        RETURN V_RECRUITMENT_COST;
+    END IF;
+
+    SET V_COST_PER_HIRE = V_RECRUITMENT_COST / V_HIRE_COUNT;
+
+    RETURN V_COST_PER_HIRE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1143_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected INT DEFAULT 0;
+    DECLARE v_id INT;
+    DECLARE v_temp_ts INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT id FROM test_table WHERE UNCOMPRESS(id) IS NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1;
+
+    -- Statement 1: UPDATE with CONCAT and date conditions
+    UPDATE v1192506 AS x0 
+    SET v1192508 = CONCAT('1e-', v1192508) 
+    WHERE v1192510 >= '0000-00-00 00:00:00' 
+      AND v1192509 < '1998-12-29 00:00:00' 
+      AND CONCAT(v1192510, v1192508) = '0101';
+    SET v_affected = (MYSQL_FUNC_CALCULATE_TENURE_MONTHS_INDEX_9h2y9g(97)) - 533 + (row_count());
+    SET v_counter = v_counter + v_affected;
+
+    -- Statement 2: INSERT with UUID values
+    INSERT INTO v1192536 (v1192539, v1192543, v1192545, v1192538, v1192537, v1192540, v1192546, v1192544) 
+    VALUES (UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID());
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: INSERT with F1() calls (assuming F1() returns a value)
+    INSERT INTO v1192663 (v1192664) VALUES (F1()), (F1()), ('x'), ('x'), (F1()), (F1()), (F1()), (F1()), ('x'), ('x');
+    SET v_counter = v_counter + 10;
+
+    -- Statement 4: UPDATE with NATURAL JOIN and UNCOMPRESS check
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_temp_ts = UNIX_TIMESTAMP(NOW());
+        UPDATE test_table AS x1 
+        NATURAL JOIN v1192715 AS x6 
+        SET x1.id = v_temp_ts 
+        WHERE x1.id = v_id;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT
+    UPDATE v1192657 AS x1 
+    SET v1192658 = v_counter 
+    WHERE v1192659 = 'event44331_2' 
+    ORDER BY v1192659 DESC 
+    LIMIT 12;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Final processing with conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = -1;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1143_proc(1, 1, @out_result);
+
+SELECT @out_result;

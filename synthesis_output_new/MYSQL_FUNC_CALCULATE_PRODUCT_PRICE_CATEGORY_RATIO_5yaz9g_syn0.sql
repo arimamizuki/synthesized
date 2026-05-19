@@ -1,0 +1,423 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_fuz15j` (
+    `table_fuz15j_product_id` INT,
+    `table_fuz15j_category_id` INT,
+    `table_fuz15j_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fuz15j` (`table_fuz15j_product_id`, `table_fuz15j_category_id`, `table_fuz15j_price`) VALUES (1, 2, 1.0);
+
+/* -----Dependency for: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+CREATE TABLE IF NOT EXISTS table_wz9osw (
+    table_wz9osw_produto_id INT,
+    table_wz9osw_Quantidade_produto INT
+);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (1, 10);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (2, 5);
+
+INSERT INTO table_wz9osw (`table_wz9osw_produto_id`, `table_wz9osw_Quantidade_produto`) VALUES (3, 0);
+
+/* -----Called: MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(PROD_ID INT, QTDE_COMPRADA INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CONTADOR INT;
+    DECLARE ROWS_AFFECTED INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO CONTADOR FROM TABLE_WZ9OSW WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+
+    IF CONTADOR > 0 THEN
+        UPDATE TABLE_WZ9OSW SET TABLE_WZ9OSW_QUANTIDADE_PRODUTO = TABLE_WZ9OSW_QUANTIDADE_PRODUTO + QTDE_COMPRADA
+        WHERE TABLE_WZ9OSW_PRODUTO_ID = PROD_ID;
+        SET ROWS_AFFECTED = ROW_COUNT();
+    ELSE
+        INSERT INTO TABLE_WZ9OSW (`TABLE_WZ9OSW_PRODUTO_ID`, `TABLE_WZ9OSW_QUANTIDADE_PRODUTO`) VALUES (PROD_ID, QTDE_COMPRADA);
+        SET ROWS_AFFECTED = 1;
+    END IF;
+
+    RETURN ROWS_AFFECTED;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1----- */
+CREATE TABLE IF NOT EXISTS `table_mmjfvc` (
+    `table_mmjfvc_supplier_id` INT,
+    `table_mmjfvc_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_mmjfvc` (`table_mmjfvc_supplier_id`, `table_mmjfvc_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_MMJFVC_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_MMJFVC
+    WHERE TABLE_MMJFVC_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(93)) - -732 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(-77)) - -824 + ((MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(-95)) - -803 + (floor(v_rating * 10))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+CREATE TABLE IF NOT EXISTS `table_3o46m6` (
+    `table_3o46m6_campaign_id` INT,
+    `table_3o46m6_budget` INT,
+    `table_3o46m6_start_date` DATE,
+    `table_3o46m6_end_date` DATE,
+    `table_3o46m6_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_olefgc` (
+    `table_olefgc_conversion_id` INT,
+    `table_olefgc_campaign_id` INT,
+    `table_olefgc_conversion_value` INT
+);
+
+INSERT INTO `table_3o46m6` (`table_3o46m6_campaign_id`, `table_3o46m6_budget`, `table_3o46m6_start_date`, `table_3o46m6_end_date`, `table_3o46m6_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_olefgc` (`table_olefgc_conversion_id`, `table_olefgc_campaign_id`, `table_olefgc_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ROI_INDEX_bp4hjx(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_3O46M6_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_3O46M6
+    WHERE TABLE_3O46M6_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_OLEFGC_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_OLEFGC
+    WHERE TABLE_OLEFGC_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_INDEX = ((V_REVENUE - V_BUDGET) * 100) / V_BUDGET;
+
+    RETURN V_ROI_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+CREATE TABLE IF NOT EXISTS `table_ebcxyj` (
+    `table_ebcxyj_product_id` INT,
+    `table_ebcxyj_category_id` INT,
+    `table_ebcxyj_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ebcxyj` (`table_ebcxyj_product_id`, `table_ebcxyj_category_id`, `table_ebcxyj_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_AVG_tm1424(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_EBCXYJ_PRICE), 0)
+    INTO V_AVG
+    FROM TABLE_EBCXYJ
+    WHERE TABLE_EBCXYJ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+CREATE TABLE IF NOT EXISTS `table_tbqwc8` (
+    `table_tbqwc8_order_id` INT,
+    `table_tbqwc8_customer_id` INT,
+    `table_tbqwc8_order_date` DATE,
+    `table_tbqwc8_total_amount` DECIMAL(10,2),
+    `table_tbqwc8_shipping_method` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_di8erf` (
+    `table_di8erf_shipment_id` INT,
+    `table_di8erf_order_id` INT,
+    `table_di8erf_carrier` INT,
+    `table_di8erf_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_tbqwc8` (`table_tbqwc8_order_id`, `table_tbqwc8_customer_id`, `table_tbqwc8_order_date`, `table_tbqwc8_total_amount`, `table_tbqwc8_shipping_method`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+INSERT INTO `table_di8erf` (`table_di8erf_shipment_id`, `table_di8erf_order_id`, `table_di8erf_carrier`, `table_di8erf_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_COST_RATIO_yg1pzz(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_SHIPPING_COST INT DEFAULT 0;
+    DECLARE V_COST_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TBQWC8_TOTAL_AMOUNT, (MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj(-63)) - -436 + (0))
+    INTO V_ORDER_TOTAL
+    FROM TABLE_TBQWC8
+    WHERE TABLE_TBQWC8_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_DI8ERF_SHIPPING_COST, 0)
+    INTO V_SHIPPING_COST
+    FROM TABLE_DI8ERF
+    WHERE TABLE_DI8ERF_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_TOTAL = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COST_RATIO = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_COST_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj----- */
+CREATE TABLE IF NOT EXISTS `table_oiou2b` (
+    `table_oiou2b_order_id` INT,
+    `table_oiou2b_customer_id` INT,
+    `table_oiou2b_order_date` DATE,
+    `table_oiou2b_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d3ttqx` (
+    `table_d3ttqx_customer_id` INT,
+    `table_d3ttqx_country` INT
+);
+
+INSERT INTO `table_oiou2b` (`table_oiou2b_order_id`, `table_oiou2b_customer_id`, `table_oiou2b_order_date`, `table_oiou2b_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_d3ttqx` (`table_d3ttqx_customer_id`, `table_d3ttqx_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_D3TTQX_CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM TABLE_D3TTQX C
+    JOIN TABLE_OIOU2B O ON TABLE_D3TTQX_CUSTOMER_ID = TABLE_OIOU2B_CUSTOMER_ID
+    WHERE TABLE_D3TTQX_COUNTRY = COUNTRY_PARAM
+    GROUP BY TABLE_D3TTQX_CUSTOMER_ID
+    HAVING COUNT(TABLE_OIOU2B_ORDER_ID) > 1;
+
+    RETURN (MYSQL_FUNC_IS_PALINDROME_datj06(82)) - -422 + ((MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4()) - 922 + ((MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(92)) - -566 + (coalesce(v_repeat_customers, 0))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+CREATE TABLE IF NOT EXISTS `table_2vjwnh` (
+    `table_2vjwnh_subscription_id` INT,
+    `table_2vjwnh_customer_id` INT,
+    `table_2vjwnh_plan_type` VARCHAR(50),
+    `table_2vjwnh_start_date` DATE,
+    `table_2vjwnh_monthly_fee` INT,
+    `table_2vjwnh_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_es5g0e` (
+    `table_es5g0e_record_id` INT,
+    `table_es5g0e_subscription_id` INT,
+    `table_es5g0e_usage_date` DATE,
+    `table_es5g0e_mb_used` INT,
+    `table_es5g0e_call_minutes` INT
+);
+
+INSERT INTO `table_2vjwnh` (`table_2vjwnh_subscription_id`, `table_2vjwnh_customer_id`, `table_2vjwnh_plan_type`, `table_2vjwnh_start_date`, `table_2vjwnh_monthly_fee`, `table_2vjwnh_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', 1, '2024-01-01');
+
+INSERT INTO `table_es5g0e` (`table_es5g0e_record_id`, `table_es5g0e_subscription_id`, `table_es5g0e_usage_date`, `table_es5g0e_mb_used`, `table_es5g0e_call_minutes`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_OVERAGE_CHARGES_lkimve(SUBSCRIPTION_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_FEE INT DEFAULT 30;
+    DECLARE V_DATA_LIMIT INT DEFAULT 5;
+    DECLARE V_CALL_LIMIT INT DEFAULT 500;
+    DECLARE V_DATA_USED INT DEFAULT 0;
+    DECLARE V_CALLS_USED INT DEFAULT 0;
+    DECLARE V_OVERAGE_CHARGES INT DEFAULT 0;
+
+    SELECT TABLE_2VJWNH_PLAN_TYPE, TABLE_2VJWNH_MONTHLY_FEE
+    INTO V_PLAN_TYPE, V_MONTHLY_FEE
+    FROM TABLE_2VJWNH
+    WHERE TABLE_2VJWNH_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM;
+
+    SET V_DATA_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 50
+        WHEN 'GOLD' THEN 20
+        WHEN 'SILVER' THEN 10
+        ELSE 5
+    END;
+
+    SET V_CALL_LIMIT = CASE V_PLAN_TYPE
+        WHEN 'PREMIUM' THEN 2000
+        WHEN 'GOLD' THEN 1000
+        WHEN 'SILVER' THEN 500
+        ELSE 200
+    END;
+
+    SELECT COALESCE(SUM(TABLE_ES5G0E_MB_USED), 0), COALESCE(SUM(TABLE_ES5G0E_CALL_MINUTES), 0)
+    INTO V_DATA_USED, V_CALLS_USED
+    FROM TABLE_ES5G0E
+    WHERE TABLE_ES5G0E_SUBSCRIPTION_ID = SUBSCRIPTION_ID_PARAM
+      AND TABLE_ES5G0E_USAGE_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH);
+
+    IF V_DATA_USED > V_DATA_LIMIT * 1024 THEN
+        SET V_OVERAGE_CHARGES = V_OVERAGE_CHARGES + ((V_DATA_USED - V_DATA_LIMIT * 1024) / 1024) * 10;
+    END IF;
+
+    IF V_CALLS_USED > V_CALL_LIMIT THEN
+        SET V_OVERAGE_CHARGES = V_OVERAGE_CHARGES + ((V_CALLS_USED - V_CALL_LIMIT) / 100) * 5;
+    END IF;
+
+    RETURN V_OVERAGE_CHARGES;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN INT DEFAULT 100;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 25 UNION SELECT 5 UNION SELECT 30 UNION SELECT 15 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(-58)) - 1000 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I < V_MIN THEN
+            SET V_MIN = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DECIMAL_TO_BINARY_dor0am(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT_POSITION INT DEFAULT 1;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    IF V_TEMP = 0 THEN
+        RETURN 0;
+    END IF;
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 2;
+        SET V_RESULT = V_RESULT + (V_DIGIT * V_DIGIT_POSITION);
+        SET V_TEMP = V_TEMP DIV 2;
+        SET V_DIGIT_POSITION = V_DIGIT_POSITION * 10;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_datj06----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_datj06(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_ORIGINAL INT DEFAULT N;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        SET V_DIGIT = N % 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET N = N / 10;
+    END WHILE;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FUZ15J_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FUZ15J_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_FUZ15J
+    WHERE TABLE_FUZ15J_CATEGORY_ID = (SELECT TABLE_FUZ15J_CATEGORY_ID FROM TABLE_FUZ15J WHERE TABLE_FUZ15J_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_RATIO = (MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_WEIGHT_tbtnx1(38)) - 142 + ((MYSQL_FUNC_SP_ATUALIZAESTOQUEPROD_v47i01(17, 37)) - -647 + ((v_price * 100) / v_category_avg));
+
+    RETURN V_RATIO;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_CATEGORY_RATIO_5yaz9g(1);

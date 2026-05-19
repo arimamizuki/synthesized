@@ -1,0 +1,395 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v241055 (v241056 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v242398 (v242399 VARCHAR(1000), v242400 TIME(6));
+CREATE TABLE IF NOT EXISTS v242540 (v242542 INT, v242543 GEOMETRY, v241133 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v242441 (v242442 INT);
+CREATE TABLE IF NOT EXISTS v241559 (v241057 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v242492 (v241133 VARCHAR(50));
+INSERT INTO v241055 VALUES ('test1'), ('test2'), ('hon_ysuckl_'), ('test18');
+INSERT INTO v242398 VALUES (REPEAT('a', 800), '00:00:00.000001'), (REPEAT('b', 800), '00:00:00.000002'), (REPEAT('c', 800), '00:00:00.000003');
+INSERT INTO v242540 VALUES (1, ST_GEOMFROMTEXT('POINT(67 237)'), 'initial'), (2, ST_GEOMFROMTEXT('POINT(10 20)'), 'initial');
+INSERT INTO v242441 VALUES (1), (2), (3), (4), (5);
+INSERT INTO v241559 VALUES ('hon_ysuckl_'), ('test1');
+INSERT INTO v242492 VALUES ('test7'), ('other');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+CREATE TABLE IF NOT EXISTS `table_98hbly` (
+    `table_98hbly_category_id` INT,
+    `table_98hbly_stock_quantity` INT
+);
+
+INSERT INTO `table_98hbly` (`table_98hbly_category_id`, `table_98hbly_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_98HBLY
+    WHERE TABLE_98HBLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_98HBLY_STOCK_QUANTITY < 20;
+
+    RETURN (MYSQL_FUNC_FILM_IN_STOCK_eky5dj(-19, -15)) - 794 + ((MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(19)) - -891 + ((MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(-52)) - -439 + ((MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(-23)) - -814 + (v_count))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+CREATE TABLE IF NOT EXISTS `table_5byx69` (
+    `table_5byx69_loan_id` INT,
+    `table_5byx69_customer_id` INT,
+    `table_5byx69_principal` INT,
+    `table_5byx69_interest_rate` INT,
+    `table_5byx69_term_months` INT,
+    `table_5byx69_start_date` DATE,
+    `table_5byx69_remaining_balance` INT
+);
+
+INSERT INTO `table_5byx69` (`table_5byx69_loan_id`, `table_5byx69_customer_id`, `table_5byx69_principal`, `table_5byx69_interest_rate`, `table_5byx69_term_months`, `table_5byx69_start_date`, `table_5byx69_remaining_balance`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOAN_INTEREST_g8vr4l(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_INTEREST_RATE INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+    DECLARE V_MONTHLY_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5BYX69_PRINCIPAL, 0), COALESCE(TABLE_5BYX69_INTEREST_RATE, 0), COALESCE(TABLE_5BYX69_TERM_MONTHS, 0), COALESCE(TABLE_5BYX69_REMAINING_BALANCE, 0)
+    INTO V_PRINCIPAL, V_INTEREST_RATE, V_TERM_MONTHS, V_REMAINING_BALANCE
+    FROM TABLE_5BYX69
+    WHERE TABLE_5BYX69_LOAN_ID = LOAN_ID_PARAM;
+
+    IF V_PRINCIPAL = 0 OR V_TERM_MONTHS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_MONTHLY_INTEREST = (V_REMAINING_BALANCE * V_INTEREST_RATE) / (100 * 12);
+
+    RETURN CAST(V_MONTHLY_INTEREST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+CREATE TABLE IF NOT EXISTS `table_ndpa18` (
+    `table_ndpa18_order_id` INT,
+    `table_ndpa18_customer_id` INT,
+    `table_ndpa18_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ndpa18` (`table_ndpa18_order_id`, `table_ndpa18_customer_id`, `table_ndpa18_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NDPA18_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_NDPA18
+    WHERE TABLE_NDPA18_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+CREATE TABLE IF NOT EXISTS `table_cyzrxc` (
+    `table_cyzrxc_emp_id` INT,
+    `table_cyzrxc_salary` INT
+);
+
+INSERT INTO `table_cyzrxc` (`table_cyzrxc_emp_id`, `table_cyzrxc_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_TIER_ii3df1(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_CYZRXC_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_CYZRXC
+    WHERE TABLE_CYZRXC_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 75000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+CREATE TABLE IF NOT EXISTS table_8j3nma (
+    table_8j3nma_inventory_id INT PRIMARY KEY,
+    table_8j3nma_film_id INT,
+    table_8j3nma_store_id INT
+);
+
+INSERT INTO table_8j3nma (`table_8j3nma_inventory_id`, `table_8j3nma_film_id`, `table_8j3nma_store_id`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_FILM_IN_STOCK_eky5dj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FILM_IN_STOCK_eky5dj(P_FILM_ID INT, P_STORE_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE P_FILM_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    FROM TABLE_8J3NMA
+    WHERE TABLE_8J3NMA_FILM_ID = P_FILM_ID
+    AND TABLE_8J3NMA_STORE_ID = P_STORE_ID
+    AND TABLE_8J3NMA_INVENTORY_ID > 0
+    INTO P_FILM_COUNT;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(98)) - 519 + ((MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(-8)) - -955 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x(-4)) - 143 + (p_film_count)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x----- */
+CREATE TABLE IF NOT EXISTS `table_cim6h5` (
+    `table_cim6h5_customer_id` INT,
+    `table_cim6h5_status` VARCHAR(50),
+    `table_cim6h5_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cim6h5` (`table_cim6h5_customer_id`, `table_cim6h5_status`, `table_cim6h5_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT TABLE_CIM6H5_STATUS, COALESCE(TABLE_CIM6H5_MONTHLY_COST, 0)
+    INTO V_STATUS, V_COST
+    FROM TABLE_CIM6H5
+    WHERE TABLE_CIM6H5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERIMETER_SQUARE_8a3cty(SIDE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN SIDE * 4;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+CREATE TABLE IF NOT EXISTS `table_sqshp3` (
+    `table_sqshp3_emp_id` INT,
+    `table_sqshp3_department_id` INT,
+    `table_sqshp3_hire_date` DATE
+);
+
+INSERT INTO `table_sqshp3` (`table_sqshp3_emp_id`, `table_sqshp3_department_id`, `table_sqshp3_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EXPERIENCE_INDEX_dqdj5b(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_SQSHP3_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_SQSHP3
+    WHERE TABLE_SQSHP3_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(-46, -13)) - 229 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (floor(v_avg_tenure * 10)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+CREATE TABLE IF NOT EXISTS `table_83jk04` (
+    `table_83jk04_transaction_id` INT,
+    `table_83jk04_account_id` INT,
+    `table_83jk04_transaction_date` DATE,
+    `table_83jk04_amount` DECIMAL(10,2),
+    `table_83jk04_transaction_type` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4xsou8` (
+    `table_4xsou8_account_id` INT,
+    `table_4xsou8_customer_id` INT,
+    `table_4xsou8_balance` INT,
+    `table_4xsou8_account_type` INT
+);
+
+INSERT INTO `table_83jk04` (`table_83jk04_transaction_id`, `table_83jk04_account_id`, `table_83jk04_transaction_date`, `table_83jk04_amount`, `table_83jk04_transaction_type`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_4xsou8` (`table_4xsou8_account_id`, `table_4xsou8_customer_id`, `table_4xsou8_balance`, `table_4xsou8_account_type`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROCESS_TRANSACTION_BATCH_bx0jcb(ACCOUNT_ID_PARAM INT, MIN_AMOUNT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_DEBITS INT DEFAULT 0;
+    DECLARE V_TOTAL_CREDITS INT DEFAULT 0;
+    DECLARE V_NET_CHANGE INT DEFAULT 0;
+    DECLARE V_TX_COUNT INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0), COUNT(*)
+    INTO V_TOTAL_CREDITS, V_TX_COUNT
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'CREDIT'
+      AND TABLE_83JK04_AMOUNT >= MIN_AMOUNT;
+
+    SELECT COALESCE(SUM(TABLE_83JK04_AMOUNT), 0)
+    INTO V_TOTAL_DEBITS
+    FROM TABLE_83JK04
+    WHERE TABLE_83JK04_ACCOUNT_ID = ACCOUNT_ID_PARAM
+      AND TABLE_83JK04_TRANSACTION_TYPE = 'DEBIT';
+
+    SELECT TABLE_4XSOU8_BALANCE INTO V_BALANCE FROM TABLE_4XSOU8 WHERE TABLE_4XSOU8_ACCOUNT_ID = ACCOUNT_ID_PARAM;
+
+    SET V_NET_CHANGE = V_TOTAL_CREDITS - V_TOTAL_DEBITS;
+
+    RETURN COALESCE(V_BALANCE, 0) + V_NET_CHANGE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1777(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_last_value INT;
+    DECLARE v_sum_val INT;
+    DECLARE v_geom GEOMETRY;
+    DECLARE cur CURSOR FOR SELECT LAST_VALUE(x5.v242442) RESPECT NULLS OVER (PARTITION BY x5.v242442 ORDER BY x5.v242442 RANGE BETWEEN 253 FOLLOWING AND 118 FOLLOWING), SUM(x5.v242442) OVER (ORDER BY x5.v242442 DESC, x5.v242442) FROM v242441 AS x5 WINDOW x1 AS (ORDER BY TIMEDIFF(x5.v242442, '00:00:00') ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE v241055
+    SET @sql1 = 'UPDATE v241055 AS x1 SET v241056 = ? WHERE LEFT(v241056, 1) > ?';
+    PREPARE stmt1 FROM @sql1;
+    SET @new_val = 'test18';
+    SET @char_check = 'n';
+    EXECUTE stmt1 USING @new_val, @char_check;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: UPDATE v242398 with REPEAT and MICROSECOND
+    SET @sql2 = 'UPDATE v242398 AS x1 SET v242399 = ? WHERE x1.v242400 = MICROSECOND(CURRENT_TIME(6))';
+    PREPARE stmt2 FROM @sql2;
+    SET @repeat_val = REPEAT('a', 800);
+    EXECUTE stmt2 USING @repeat_val;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE v242540 with geometry
+    SET @sql3 = 'UPDATE v242540 AS x0 SET x0.v242543 = ? WHERE x0.v242542 = ? LIMIT 90';
+    PREPARE stmt3 FROM @sql3;
+    SET @geom_val = ST_GEOMFROMTEXT('GEOMETRYCOLLECTION(POLYGON((0 0,0 10,-10 10,-10 0,0 0)),POLYGON((0 0,0 10,10 10,10 0,0 0)))');
+    SET @cat_id = @category1_id;
+    EXECUTE stmt3 USING @geom_val, @cat_id;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: UPDATE v242492 and v241559
+    SET @sql4 = 'UPDATE v242492 AS x0, v241559 AS x5 SET x0.v241133 = ? WHERE v241057 LIKE ?';
+    PREPARE stmt4 FROM @sql4;
+    SET @new_val4 = 'test7';
+    SET @like_pattern = 'hon_ysuckl_';
+    EXECUTE stmt4 USING @new_val4, @like_pattern;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 5: SELECT with window functions using CURSOR and loops
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_last_value, v_sum_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Use CASE to process the values
+        CASE
+            WHEN v_last_value > 0 THEN
+                SET v_counter = v_counter + 1;
+            WHEN v_last_value = 0 THEN
+                SET v_counter = v_counter + 2;
+            ELSE
+                SET v_counter = v_counter + 3;
+        END CASE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final loop to ensure we used WHILE
+    WHILE v_counter < 100 DO
+        SET v_counter = v_counter + 10;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1777(1, 1, @out_result);
+
+SELECT @out_result;

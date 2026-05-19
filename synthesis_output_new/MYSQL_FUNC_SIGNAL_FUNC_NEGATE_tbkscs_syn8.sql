@@ -1,0 +1,374 @@
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(-20)) - 225 + ((MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac(-60)) - 349 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(38)) - -120 + (result)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+CREATE TABLE IF NOT EXISTS `table_rsa7ps` (
+    `table_rsa7ps_supplier_id` INT,
+    `table_rsa7ps_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_rsa7ps` (`table_rsa7ps_supplier_id`, `table_rsa7ps_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_QUALITY_RATING_y7uoc3(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_RSA7PS_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_RSA7PS
+    WHERE TABLE_RSA7PS_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac----- */
+CREATE TABLE IF NOT EXISTS `table_vedznu` (
+    `table_vedznu_student_id` INT,
+    `table_vedznu_first_name` VARCHAR(50),
+    `table_vedznu_last_name` VARCHAR(50),
+    `table_vedznu_grade_level` INT,
+    `table_vedznu_enrollment_date` DATE,
+    `table_vedznu_tuition_balance` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wc9t0r` (
+    `table_wc9t0r_payment_id` INT,
+    `table_wc9t0r_student_id` INT,
+    `table_wc9t0r_amount` DECIMAL(10,2),
+    `table_wc9t0r_payment_date` DATE,
+    `table_wc9t0r_payment_method` INT
+);
+
+INSERT INTO `table_vedznu` (`table_vedznu_student_id`, `table_vedznu_first_name`, `table_vedznu_last_name`, `table_vedznu_grade_level`, `table_vedznu_enrollment_date`, `table_vedznu_tuition_balance`) VALUES (1, '2024-01-01', '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_wc9t0r` (`table_wc9t0r_payment_id`, `table_wc9t0r_student_id`, `table_wc9t0r_amount`, `table_wc9t0r_payment_date`, `table_wc9t0r_payment_method`) VALUES (1, 2, 1.0, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUITION_AFTER_PAYMENT_prl7ac(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TUITION_BALANCE INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_REMAINING_BALANCE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEDZNU_TUITION_BALANCE, 0)
+    INTO V_TUITION_BALANCE
+    FROM TABLE_VEDZNU
+    WHERE TABLE_VEDZNU_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WC9T0R_AMOUNT), 0) INTO V_TOTAL_PAYMENTS
+    FROM TABLE_WC9T0R
+    WHERE TABLE_WC9T0R_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_REMAINING_BALANCE = V_TUITION_BALANCE - V_TOTAL_PAYMENTS;
+
+    IF V_REMAINING_BALANCE < 0 THEN
+        SET V_REMAINING_BALANCE = 0;
+    END IF;
+
+    RETURN CAST(V_REMAINING_BALANCE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+CREATE TABLE IF NOT EXISTS `table_lypw1w` (
+    `table_lypw1w_customer_id` INT,
+    `table_lypw1w_order_id` INT,
+    `table_lypw1w_order_date` DATE
+);
+
+INSERT INTO `table_lypw1w` (`table_lypw1w_customer_id`, `table_lypw1w_order_id`, `table_lypw1w_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+
+    SELECT MAX(TABLE_LYPW1W_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_LYPW1W
+    WHERE TABLE_LYPW1W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COURSE_TUITION_ROI_vnsm35(92)) - -579 + (month(v_last_order_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_TUITION_ROI_vnsm35----- */
+CREATE TABLE IF NOT EXISTS `table_rjqsvx` (
+    `table_rjqsvx_course_id` INT,
+    `table_rjqsvx_instructor_id` INT,
+    `table_rjqsvx_course_name` VARCHAR(50),
+    `table_rjqsvx_credit_hours` INT,
+    `table_rjqsvx_enrollment_limit` INT,
+    `table_rjqsvx_tuition_per_credit` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_cx2jv0` (
+    `table_cx2jv0_enrollment_id` INT,
+    `table_cx2jv0_student_id` INT,
+    `table_cx2jv0_course_id` INT,
+    `table_cx2jv0_enrollment_date` DATE,
+    `table_cx2jv0_grade` INT
+);
+
+INSERT INTO `table_rjqsvx` (`table_rjqsvx_course_id`, `table_rjqsvx_instructor_id`, `table_rjqsvx_course_name`, `table_rjqsvx_credit_hours`, `table_rjqsvx_enrollment_limit`, `table_rjqsvx_tuition_per_credit`) VALUES (1, 1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_cx2jv0` (`table_cx2jv0_enrollment_id`, `table_cx2jv0_student_id`, `table_cx2jv0_course_id`, `table_cx2jv0_enrollment_date`, `table_cx2jv0_grade`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_TUITION_ROI_vnsm35----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_TUITION_ROI_vnsm35(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CREDIT_HOURS INT DEFAULT 3;
+    DECLARE V_TUITION_PER_CREDIT INT DEFAULT 500;
+    DECLARE V_ENROLLED_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_GRADE INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RJQSVX_CREDIT_HOURS, 3), COALESCE(TABLE_RJQSVX_TUITION_PER_CREDIT, 500)
+    INTO V_CREDIT_HOURS, V_TUITION_PER_CREDIT
+    FROM TABLE_RJQSVX
+    WHERE TABLE_RJQSVX_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_CX2JV0_GRADE), 0)
+    INTO V_ENROLLED_COUNT, V_AVG_GRADE
+    FROM TABLE_CX2JV0
+    WHERE TABLE_CX2JV0_COURSE_ID = COURSE_ID_PARAM;
+
+    SET V_ROI_SCORE = (MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(40)) - -799 + ((v_enrolled_count * v_credit_hours * v_tuition_per_credit) / 1000);
+
+    IF V_AVG_GRADE >= 90 THEN
+        SET V_ROI_SCORE = V_ROI_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+CREATE TABLE IF NOT EXISTS `table_rqpbfb` (
+    `table_rqpbfb_emp_id` INT,
+    `table_rqpbfb_salary` INT
+);
+
+INSERT INTO `table_rqpbfb` (`table_rqpbfb_emp_id`, `table_rqpbfb_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_RQPBFB_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_RQPBFB
+    WHERE TABLE_RQPBFB_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 500);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+CREATE TABLE IF NOT EXISTS `table_t8em8p` (
+    `table_t8em8p_emp_id` INT,
+    `table_t8em8p_salary` INT,
+    `table_t8em8p_hire_date` DATE,
+    `table_t8em8p_department_id` INT
+);
+
+INSERT INTO `table_t8em8p` (`table_t8em8p_emp_id`, `table_t8em8p_salary`, `table_t8em8p_hire_date`, `table_t8em8p_department_id`) VALUES (1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BONUS_n3u5dv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(DEPARTMENT_ID_PARAM INT, PERFORMANCE_RATING INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_BASE INT DEFAULT 1000;
+    DECLARE V_FINAL_BONUS INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_T8EM8P_SALARY), (MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(38)) - -370 + (0)) INTO V_DEPT_AVG_SALARY
+    FROM TABLE_T8EM8P
+    WHERE TABLE_T8EM8P_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    CASE PERFORMANCE_RATING
+        WHEN 5 THEN SET V_FINAL_BONUS = V_BONUS_BASE * 3;
+        WHEN 4 THEN SET V_FINAL_BONUS = (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(10)) - 357 + (v_bonus_base * 2);
+        WHEN 3 THEN SET V_FINAL_BONUS = V_BONUS_BASE;
+        WHEN 2 THEN SET V_FINAL_BONUS = V_BONUS_BASE / 2;
+        ELSE SET V_FINAL_BONUS = 0;
+    END CASE;
+
+    RETURN V_FINAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_LUCKY_NUMBER_x1qt80(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM_DIGITS INT DEFAULT 0;
+    DECLARE V_PRODUCT_DIGITS INT DEFAULT 1;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_TEMP = ABS(N);
+
+    DIGIT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM_DIGITS = V_SUM_DIGITS + V_DIGIT;
+        IF V_DIGIT != 0 THEN
+            SET V_PRODUCT_DIGITS = V_PRODUCT_DIGITS * V_DIGIT;
+        END IF;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE DIGIT_LOOP;
+
+    SET V_RESULT = V_SUM_DIGITS - V_PRODUCT_DIGITS;
+
+    IF V_RESULT > 1 THEN
+        IF V_RESULT = 2 THEN RETURN 1; END IF;
+        IF V_RESULT % 2 = 0 THEN RETURN 0; END IF;
+
+        DECLARE_CHECK: BEGIN
+            DECLARE V_I INT DEFAULT 3;
+            WHILE V_I * V_I <= V_RESULT DO
+                IF V_RESULT % V_I = 0 THEN
+                    RETURN 0;
+                END IF;
+                SET V_I = V_I + 2;
+            END WHILE;
+        END DECLARE_CHECK;
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+CREATE TABLE IF NOT EXISTS `table_nn64hd` (
+    `table_nn64hd_customer_id` INT,
+    `table_nn64hd_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_u31e1j` (
+    `table_u31e1j_order_id` INT,
+    `table_u31e1j_customer_id` INT,
+    `table_u31e1j_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_nn64hd` (`table_nn64hd_customer_id`, `table_nn64hd_country`) VALUES (1, 1);
+
+INSERT INTO `table_u31e1j` (`table_u31e1j_order_id`, `table_u31e1j_customer_id`, `table_u31e1j_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_zknajv(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_REVENUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), (MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(-61, -51)) - 85 + (0))
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_U31E1J O
+    JOIN TABLE_NN64HD C ON TABLE_U31E1J_CUSTOMER_ID = TABLE_NN64HD_CUSTOMER_ID
+    WHERE TABLE_NN64HD_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_U31E1J_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_REVENUE
+    FROM TABLE_U31E1J;
+
+    IF V_TOTAL_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_COUNTRY_REVENUE * 100) / V_TOTAL_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_BONUS_n3u5dv(-27, 79)) - 857 + ((MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + (-p_n));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_NEGATE_tbkscs(1);

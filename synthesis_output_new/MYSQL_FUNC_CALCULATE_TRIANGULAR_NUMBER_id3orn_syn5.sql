@@ -1,0 +1,407 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4----- */
+CREATE TABLE IF NOT EXISTS `table_tgtqbv` (
+    `table_tgtqbv_vehicle_id` INT,
+    `table_tgtqbv_owner_id` INT,
+    `table_tgtqbv_vehicle_type` VARCHAR(50),
+    `table_tgtqbv_make` INT,
+    `table_tgtqbv_model` INT,
+    `table_tgtqbv_year` INT,
+    `table_tgtqbv_insured_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_suofj7` (
+    `table_suofj7_claim_id` INT,
+    `table_suofj7_vehicle_id` INT,
+    `table_suofj7_claim_date` DATE,
+    `table_suofj7_claim_amount` DECIMAL(10,2),
+    `table_suofj7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_tgtqbv` (`table_tgtqbv_vehicle_id`, `table_tgtqbv_owner_id`, `table_tgtqbv_vehicle_type`, `table_tgtqbv_make`, `table_tgtqbv_model`, `table_tgtqbv_year`, `table_tgtqbv_insured_value`) VALUES (1, 1, '2024-01-01', 1, 1, 1, 1);
+
+INSERT INTO `table_suofj7` (`table_suofj7_claim_id`, `table_suofj7_vehicle_id`, `table_suofj7_claim_date`, `table_suofj7_claim_amount`, `table_suofj7_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4(VEHICLE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INSURED_VALUE INT DEFAULT 0;
+    DECLARE V_VEHICLE_YEAR INT DEFAULT 2020;
+    DECLARE V_TOTAL_CLAIMS INT DEFAULT 0;
+    DECLARE V_BASE_PREMIUM INT DEFAULT 500;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_TGTQBV_INSURED_VALUE, 50000), COALESCE(YEAR(CURDATE()) - TABLE_TGTQBV_YEAR, 0)
+    INTO V_INSURED_VALUE, V_VEHICLE_YEAR
+    FROM TABLE_TGTQBV
+    WHERE TABLE_TGTQBV_VEHICLE_ID = VEHICLE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_CLAIMS
+    FROM TABLE_SUOFJ7
+    WHERE TABLE_SUOFJ7_VEHICLE_ID = VEHICLE_ID_PARAM AND TABLE_SUOFJ7_STATUS = 'APPROVED';
+
+    SET V_FINAL_PREMIUM = (MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8()) - -842 + ((v_insured_value / 1000) + v_base_premium);
+
+    IF V_VEHICLE_YEAR < 2015 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + 100;
+    END IF;
+
+    IF V_TOTAL_CLAIMS > 0 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM + (V_TOTAL_CLAIMS * 200);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 17 UNION SELECT 34 UNION SELECT 51 UNION SELECT 68 UNION SELECT 85 UNION SELECT 102 UNION SELECT 119 UNION SELECT 136 UNION SELECT 153 UNION SELECT 170 UNION SELECT 187 UNION SELECT 204 UNION SELECT 221 UNION SELECT 238 UNION SELECT 255 UNION SELECT 272 UNION SELECT 289;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+CREATE TABLE IF NOT EXISTS `table_a7d4j5` (
+    `table_a7d4j5_number_id` INT,
+    `table_a7d4j5_customer_id` INT,
+    `table_a7d4j5_area_code` INT,
+    `table_a7d4j5_number_type` INT,
+    `table_a7d4j5_monthly_fee` INT,
+    `table_a7d4j5_activation_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_r7szof` (
+    `table_r7szof_number_id` INT,
+    `table_r7szof_call_minutes` INT,
+    `table_r7szof_data_mb` TEXT,
+    `table_r7szof_sms_count` INT,
+    `table_r7szof_billing_month` INT
+);
+
+INSERT INTO `table_a7d4j5` (`table_a7d4j5_number_id`, `table_a7d4j5_customer_id`, `table_a7d4j5_area_code`, `table_a7d4j5_number_type`, `table_a7d4j5_monthly_fee`, `table_a7d4j5_activation_date`) VALUES (1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_r7szof` (`table_r7szof_number_id`, `table_r7szof_call_minutes`, `table_r7szof_data_mb`, `table_r7szof_sms_count`, `table_r7szof_billing_month`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(NUMBER_ID_PARAM INT, BILLING_MONTH_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_CALL_MINUTES INT DEFAULT 0;
+    DECLARE V_DATA_MB INT DEFAULT 0;
+    DECLARE V_SMS_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_CALL_OVERAGE INT DEFAULT 0;
+
+    SELECT TABLE_A7D4J5_MONTHLY_FEE, COALESCE(TABLE_R7SZOF_CALL_MINUTES, 0), COALESCE(TABLE_R7SZOF_DATA_MB, 0), COALESCE(TABLE_R7SZOF_SMS_COUNT, 0)
+    INTO V_MONTHLY_FEE, V_CALL_MINUTES, V_DATA_MB, V_SMS_COUNT
+    FROM TABLE_A7D4J5 T
+    LEFT JOIN TABLE_R7SZOF U ON TABLE_A7D4J5_NUMBER_ID = TABLE_R7SZOF_NUMBER_ID AND TABLE_R7SZOF_BILLING_MONTH = BILLING_MONTH_PARAM
+    WHERE TABLE_A7D4J5_NUMBER_ID = NUMBER_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_MONTHLY_FEE;
+
+    IF V_CALL_MINUTES > 500 THEN
+        SET V_CALL_OVERAGE = V_CALL_MINUTES - 500;
+        SET V_TOTAL_CHARGES = V_TOTAL_CHARGES + (V_CALL_OVERAGE * 2);
+    END IF;
+
+    IF V_DATA_MB > 5000 THEN
+        SET V_TOTAL_CHARGES = (MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(1)) - -822 + (v_total_charges + ((v_data_mb - 5000) / 100) * 5);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(55)) - -264 + (cast(v_total_charges as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+CREATE TABLE IF NOT EXISTS `table_djvdv7` (
+    `table_djvdv7_emp_id` INT,
+    `table_djvdv7_manager_id` INT,
+    `table_djvdv7_department_id` INT,
+    `table_djvdv7_salary` INT,
+    `table_djvdv7_hire_date` DATE
+);
+
+INSERT INTO `table_djvdv7` (`table_djvdv7_emp_id`, `table_djvdv7_manager_id`, `table_djvdv7_department_id`, `table_djvdv7_salary`, `table_djvdv7_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORGANIZATIONAL_SPAN_herefq(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_DJVDV7
+    WHERE TABLE_DJVDV7_MANAGER_ID = EMP_ID_PARAM;
+
+    RETURN V_DIRECT_REPORTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t----- */
+CREATE TABLE IF NOT EXISTS `table_j5f09c` (
+    `table_j5f09c_customer_id` INT,
+    `table_j5f09c_registration_date` DATE
+);
+
+INSERT INTO `table_j5f09c` (`table_j5f09c_customer_id`, `table_j5f09c_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGISTRATION_WEEK_od181t(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_WEEK INT DEFAULT 0;
+
+    SELECT WEEK(TABLE_J5F09C_REGISTRATION_DATE)
+    INTO V_WEEK
+    FROM TABLE_J5F09C
+    WHERE TABLE_J5F09C_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_WEEK;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(P_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+    DECLARE V_DIGIT INT;
+    DECLARE V_DIGIT_COUNT INT DEFAULT 0;
+
+    SET V_ORIGINAL = ABS(P_NUM);
+    SET V_TEMP = V_ORIGINAL;
+
+    COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT_COUNT = V_DIGIT_COUNT + 1;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE COUNT_LOOP;
+
+    SET V_TEMP = V_ORIGINAL;
+
+    POWER_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + CAST(POW(V_DIGIT, V_DIGIT_COUNT) AS UNSIGNED);
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE POWER_LOOP;
+
+    IF V_SUM = V_ORIGINAL THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13(PRINCIPAL INT, RATE_PERCENT INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FINAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_YEAR_COUNTER INT DEFAULT 1;
+    DECLARE V_CURRENT_AMOUNT INT DEFAULT 0;
+
+    IF PRINCIPAL <= 0 OR YEARS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT_AMOUNT = PRINCIPAL;
+
+    INTEREST_LOOP: WHILE V_YEAR_COUNTER <= YEARS DO
+        SET V_CURRENT_AMOUNT = (MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(-98, 26)) - 600 + (v_current_amount) + (V_CURRENT_AMOUNT * RATE_PERCENT / 100);
+        SET V_YEAR_COUNTER = V_YEAR_COUNTER + 1;
+    END WHILE INTEREST_LOOP;
+
+    SET V_FINAL_AMOUNT = V_CURRENT_AMOUNT;
+
+    RETURN FLOOR(V_FINAL_AMOUNT);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+CREATE TABLE IF NOT EXISTS `table_gttu5s` (
+    `table_gttu5s_service_id` INT,
+    `table_gttu5s_property_id` INT,
+    `table_gttu5s_cleaner_id` INT,
+    `table_gttu5s_service_date` DATE,
+    `table_gttu5s_duration_hours` INT,
+    `table_gttu5s_base_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_34bwey` (
+    `table_34bwey_property_id` INT,
+    `table_34bwey_property_type` VARCHAR(50),
+    `table_34bwey_area_sqft` INT,
+    `table_34bwey_num_rooms` INT
+);
+
+INSERT INTO `table_gttu5s` (`table_gttu5s_service_id`, `table_gttu5s_property_id`, `table_gttu5s_cleaner_id`, `table_gttu5s_service_date`, `table_gttu5s_duration_hours`, `table_gttu5s_base_price`) VALUES (1, 2, 3, '2024-01-01', 5, 1.0);
+
+INSERT INTO `table_34bwey` (`table_34bwey_property_id`, `table_34bwey_property_type`, `table_34bwey_area_sqft`, `table_34bwey_num_rooms`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CLEANING_PRICE_6wc24f(PROPERTY_ID_PARAM INT, SERVICE_TYPE INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA INT DEFAULT 0;
+    DECLARE V_ROOMS INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 50;
+    DECLARE V_TOTAL_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_34BWEY_AREA_SQFT, 500), COALESCE(TABLE_34BWEY_NUM_ROOMS, 2)
+    INTO V_AREA, V_ROOMS
+    FROM TABLE_34BWEY
+    WHERE TABLE_34BWEY_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_TOTAL_PRICE = V_BASE_PRICE;
+
+    SET V_TOTAL_PRICE = V_TOTAL_PRICE + (V_AREA / 100) * 10;
+
+    SET V_TOTAL_PRICE = (MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(49)) - -401 + (v_total_price + (v_rooms * 15));
+
+    IF SERVICE_TYPE = 'DEEP' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 150 / 100;
+    ELSEIF SERVICE_TYPE = 'MOVE_OUT' THEN
+        SET V_TOTAL_PRICE = V_TOTAL_PRICE * 175 / 100;
+    END IF;
+
+    RETURN CAST(V_TOTAL_PRICE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MOVES INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(-23)) - 351 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_COUNTER <= N DO
+        SET V_MOVES = V_MOVES * 2;
+        SET V_MOVES = V_MOVES + 1;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE MY_LOOP;
+
+    RETURN V_MOVES;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+CREATE TABLE IF NOT EXISTS `table_js4wmr` (
+    `table_js4wmr_customer_id` INT,
+    `table_js4wmr_plan_type` VARCHAR(50),
+    `table_js4wmr_start_date` DATE,
+    `table_js4wmr_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_taalq5` (
+    `table_taalq5_customer_id` INT,
+    `table_taalq5_tier_level` INT
+);
+
+INSERT INTO `table_js4wmr` (`table_js4wmr_customer_id`, `table_js4wmr_plan_type`, `table_js4wmr_start_date`, `table_js4wmr_status`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_taalq5` (`table_taalq5_customer_id`, `table_taalq5_tier_level`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TENURE_MONTHS_id9b20(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_TENURE_MONTHS INT DEFAULT 0;
+
+    SELECT TABLE_JS4WMR_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_JS4WMR
+    WHERE TABLE_JS4WMR_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TENURE_MONTHS = TIMESTAMPDIFF(MONTH, V_START_DATE, CURDATE());
+
+    RETURN V_TENURE_MONTHS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_COMPOUND_INTEREST_f2cw13(28, -49, -32)) - 632 + ((MYSQL_FUNC_CALCULATE_AUTO_PREMIUM_up9kw4(-42)) - 869 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_ewsudt(-70)) - -852 + ((MYSQL_FUNC_CALCULATE_TELECOM_CHARGES_zjssee(-84, 99)) - -608 + (v_sum) + v_counter);
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(1);

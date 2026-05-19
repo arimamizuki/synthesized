@@ -1,0 +1,371 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1ac6i8` (
+    `table_1ac6i8_category_id` INT,
+    `table_1ac6i8_stock_quantity` INT
+);
+
+INSERT INTO `table_1ac6i8` (`table_1ac6i8_category_id`, `table_1ac6i8_stock_quantity`) VALUES (1, 1);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+CREATE TABLE IF NOT EXISTS `table_lypw1w` (
+    `table_lypw1w_customer_id` INT,
+    `table_lypw1w_order_id` INT,
+    `table_lypw1w_order_date` DATE
+);
+
+INSERT INTO `table_lypw1w` (`table_lypw1w_customer_id`, `table_lypw1w_order_id`, `table_lypw1w_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+
+    SELECT MAX(TABLE_LYPW1W_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_LYPW1W
+    WHERE TABLE_LYPW1W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(-30)) - -103 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(37)) - 567 + (month(v_last_order_date)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+CREATE TABLE IF NOT EXISTS `table_2bqs47` (
+    `table_2bqs47_emp_id` INT,
+    `table_2bqs47_hire_date` DATE
+);
+
+INSERT INTO `table_2bqs47` (`table_2bqs47_emp_id`, `table_2bqs47_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2BQS47_HIRE_DATE)
+    INTO V_MONTH
+    FROM TABLE_2BQS47
+    WHERE TABLE_2BQS47_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+CREATE TABLE IF NOT EXISTS `table_o1nktm` (
+    `table_o1nktm_appraisal_id` INT,
+    `table_o1nktm_customer_id` INT,
+    `table_o1nktm_item_id` INT,
+    `table_o1nktm_item_type` VARCHAR(50),
+    `table_o1nktm_carat_weight` INT,
+    `table_o1nktm_clarity_grade` INT,
+    `table_o1nktm_appraisal_value` INT,
+    `table_o1nktm_appraisal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_pnmyy1` (
+    `table_pnmyy1_item_id` INT,
+    `table_pnmyy1_item_type` VARCHAR(50),
+    `table_pnmyy1_metal_type` VARCHAR(50),
+    `table_pnmyy1_gemstone_type` VARCHAR(50),
+    `table_pnmyy1_purchase_date` DATE
+);
+
+INSERT INTO `table_o1nktm` (`table_o1nktm_appraisal_id`, `table_o1nktm_customer_id`, `table_o1nktm_item_id`, `table_o1nktm_item_type`, `table_o1nktm_carat_weight`, `table_o1nktm_clarity_grade`, `table_o1nktm_appraisal_value`, `table_o1nktm_appraisal_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_pnmyy1` (`table_pnmyy1_item_id`, `table_pnmyy1_item_type`, `table_pnmyy1_metal_type`, `table_pnmyy1_gemstone_type`, `table_pnmyy1_purchase_date`) VALUES (1, 'test', 'test', 'test', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_JEWELRY_INSURANCE_VALUE_88vt7i(ITEM_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CARAT_WEIGHT INT DEFAULT 0;
+    DECLARE V_APPRAISAL_VALUE INT DEFAULT 0;
+    DECLARE V_METAL_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O1NKTM_CARAT_WEIGHT, 1), COALESCE(TABLE_O1NKTM_APPRAISAL_VALUE, 1000)
+    INTO V_CARAT_WEIGHT, V_APPRAISAL_VALUE
+    FROM TABLE_O1NKTM
+    WHERE TABLE_O1NKTM_ITEM_ID = ITEM_ID_PARAM;
+
+    SELECT CASE TABLE_PNMYY1_METAL_TYPE
+        WHEN 'PLATINUM' THEN 3
+        WHEN 'GOLD' THEN 2
+        WHEN 'SILVER' THEN 1
+        ELSE 1
+    END INTO V_METAL_MULTIPLIER
+    FROM TABLE_PNMYY1
+    WHERE TABLE_PNMYY1_ITEM_ID = ITEM_ID_PARAM;
+
+    SET V_TOTAL_VALUE = V_APPRAISAL_VALUE * V_METAL_MULTIPLIER + V_CARAT_WEIGHT * 100;
+
+    RETURN CAST(V_TOTAL_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+CREATE TABLE IF NOT EXISTS `table_g2p8j5` (
+    `table_g2p8j5_order_id` INT,
+    `table_g2p8j5_customer_id` INT,
+    `table_g2p8j5_order_date` DATE,
+    `table_g2p8j5_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_zzb55x` (
+    `table_zzb55x_customer_id` INT,
+    `table_zzb55x_country` INT
+);
+
+INSERT INTO `table_g2p8j5` (`table_g2p8j5_order_id`, `table_g2p8j5_customer_id`, `table_g2p8j5_order_date`, `table_g2p8j5_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_zzb55x` (`table_zzb55x_customer_id`, `table_zzb55x_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_ORDER_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_G2P8J5_TOTAL_AMOUNT), 0)
+    INTO V_AVG_ORDER_VALUE
+    FROM TABLE_G2P8J5 O
+    JOIN TABLE_ZZB55X C ON TABLE_G2P8J5_CUSTOMER_ID = TABLE_ZZB55X_CUSTOMER_ID
+    WHERE TABLE_ZZB55X_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp(-54)) - -535 + ((MYSQL_FUNC_GET_MIN_cm5woy(-14, -29)) - 829 + (floor(v_avg_order_value)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_MIN_cm5woy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_MIN_cm5woy(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF A < (MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(-12)) - 741 + (b) THEN
+        RETURN A;
+    END IF;
+    RETURN B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+CREATE TABLE IF NOT EXISTS `table_8pj70z` (
+    `table_8pj70z_booking_id` INT,
+    `table_8pj70z_guest_id` INT,
+    `table_8pj70z_room_id` INT,
+    `table_8pj70z_check_in_date` DATE,
+    `table_8pj70z_check_out_date` DATE,
+    `table_8pj70z_room_rate` INT,
+    `table_8pj70z_extra_charges` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_lmlc8e` (
+    `table_lmlc8e_room_id` INT,
+    `table_lmlc8e_room_type` VARCHAR(50),
+    `table_lmlc8e_base_rate` INT,
+    `table_lmlc8e_max_occupancy` INT
+);
+
+INSERT INTO `table_8pj70z` (`table_8pj70z_booking_id`, `table_8pj70z_guest_id`, `table_8pj70z_room_id`, `table_8pj70z_check_in_date`, `table_8pj70z_check_out_date`, `table_8pj70z_room_rate`, `table_8pj70z_extra_charges`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_lmlc8e` (`table_lmlc8e_room_id`, `table_lmlc8e_room_type`, `table_lmlc8e_base_rate`, `table_lmlc8e_max_occupancy`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HOTEL_TOTAL_COST_p09j57(BOOKING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHECK_IN DATE;
+    DECLARE V_CHECK_OUT DATE;
+    DECLARE V_NIGHTS INT DEFAULT 0;
+    DECLARE V_ROOM_RATE INT DEFAULT 100;
+    DECLARE V_EXTRA_CHARGES INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_8PJ70Z_CHECK_IN_DATE, CURDATE()), COALESCE(TABLE_8PJ70Z_CHECK_OUT_DATE, CURDATE())
+    INTO V_CHECK_IN, V_CHECK_OUT
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_ROOM_RATE, 100) INTO V_ROOM_RATE
+    FROM TABLE_8PJ70Z HB
+    JOIN TABLE_LMLC8E R ON TABLE_8PJ70Z_ROOM_ID = TABLE_LMLC8E_ROOM_ID
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SELECT COALESCE(TABLE_8PJ70Z_EXTRA_CHARGES, 0) INTO V_EXTRA_CHARGES
+    FROM TABLE_8PJ70Z
+    WHERE TABLE_8PJ70Z_BOOKING_ID = BOOKING_ID_PARAM;
+
+    SET V_NIGHTS = DATEDIFF(V_CHECK_OUT, V_CHECK_IN);
+
+    IF V_NIGHTS <= 0 THEN
+        SET V_NIGHTS = 1;
+    END IF;
+
+    SET V_TOTAL_COST = (V_NIGHTS * V_ROOM_RATE) + V_EXTRA_CHARGES;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp----- */
+CREATE TABLE IF NOT EXISTS `table_vt1lm2` (
+    `table_vt1lm2_customer_id` INT,
+    `table_vt1lm2_registration_date` DATE,
+    `table_vt1lm2_total_orders` DECIMAL(10,2),
+    `table_vt1lm2_total_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vt1lm2` (`table_vt1lm2_customer_id`, `table_vt1lm2_registration_date`, `table_vt1lm2_total_orders`, `table_vt1lm2_total_spent`) VALUES (1, '2024-01-01', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_dxj0sp(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_REGISTRATION_YEAR INT;
+    DECLARE V_LOYALTY_YEARS INT;
+    DECLARE V_CURRENT_YEAR INT DEFAULT YEAR(CURDATE());
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VT1LM2_TOTAL_ORDERS, 0), COALESCE(TABLE_VT1LM2_TOTAL_SPENT, 0), YEAR(TABLE_VT1LM2_REGISTRATION_DATE)
+    INTO V_TOTAL_ORDERS, V_TOTAL_SPENT, V_REGISTRATION_YEAR
+    FROM TABLE_VT1LM2
+    WHERE TABLE_VT1LM2_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_LOYALTY_YEARS = V_CURRENT_YEAR - V_REGISTRATION_YEAR;
+
+    IF V_LOYALTY_YEARS < 0 THEN
+        SET V_LOYALTY_YEARS = 0;
+    END IF;
+
+    SET V_VALUE_SCORE = (V_TOTAL_SPENT / 100) + (V_TOTAL_ORDERS * 10) + (V_LOYALTY_YEARS * 50);
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(64)) - 180 + (v_value_score);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+CREATE TABLE IF NOT EXISTS `table_yrlxl9` (
+    `table_yrlxl9_customer_id` INT,
+    `table_yrlxl9_country` INT
+);
+
+INSERT INTO `table_yrlxl9` (`table_yrlxl9_customer_id`, `table_yrlxl9_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_RATIO_w6rxuh(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNTRY_CUSTOMERS
+    FROM TABLE_YRLXL9
+    WHERE TABLE_YRLXL9_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_YRLXL9;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (V_COUNTRY_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(START_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE START_VAL > 0 DO
+        SET V_RESULT = (MYSQL_FUNC_EMP_INFO_rpit5m(-29)) - 978 + (v_result + start_val);
+        SET START_VAL = START_VAL - 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+CREATE TABLE IF NOT EXISTS table_k95o9w (
+    table_k95o9w_emp_no INT,
+    table_k95o9w_first_name VARCHAR(50)
+);
+
+INSERT INTO table_k95o9w (`table_k95o9w_emp_no`, `table_k95o9w_first_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_EMP_INFO_rpit5m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_INFO_rpit5m(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_K95O9W E 
+    WHERE TABLE_K95O9W_EMP_NO = P_EMP_NO;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_1AC6I8_STOCK_QUANTITY), 0)
+    INTO V_STOCK
+    FROM TABLE_1AC6I8
+    WHERE TABLE_1AC6I8_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_DECREMENT_ndvbik(-61)) - 169 + ((MYSQL_FUNC_CALCULATE_COUNTRY_AVERAGE_ORDER_VALUE_klz4fd(-42)) - -323 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(-20)) - 225 + (v_stock)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_sqxul3(1);

@@ -1,0 +1,417 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_wsg468` (
+    `table_wsg468_emp_id` INT,
+    `table_wsg468_department_id` INT,
+    `table_wsg468_salary` INT,
+    `table_wsg468_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_z73mh9` (
+    `table_z73mh9_department_id` INT,
+    `table_z73mh9_name` VARCHAR(50)
+);
+
+INSERT INTO `table_wsg468` (`table_wsg468_emp_id`, `table_wsg468_department_id`, `table_wsg468_salary`, `table_wsg468_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_z73mh9` (`table_z73mh9_department_id`, `table_z73mh9_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(PRICE INT, QTY INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISCOUNT DECIMAL(10,2);
+
+    CASE
+        WHEN QTY >= 100 THEN SET V_DISCOUNT = PRICE * 0.20;
+        WHEN QTY >= 50 THEN SET V_DISCOUNT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(-82)) - 947 + (price * 0.15);
+        WHEN QTY >= 20 THEN SET V_DISCOUNT = PRICE * 0.10;
+        WHEN QTY >= 10 THEN SET V_DISCOUNT = (MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(-66)) - 448 + ((MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + (price * 0.05));
+        ELSE SET V_DISCOUNT = 0;
+    END CASE;
+
+    RETURN PRICE - V_DISCOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, 0), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(-63)) - 671 + (v_quality_score - 10);
+    END IF;
+
+    RETURN CAST(V_QUALITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_SEARCH_iprnk9(VAL INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN VAL < 0 THEN RETURN 'NEGATIVE';
+        WHEN VAL = 0 THEN RETURN 'ZERO';
+        WHEN VAL > 0 AND VAL < 100 THEN RETURN 'POSITIVE_SMALL';
+        WHEN VAL >= 100 THEN RETURN 'POSITIVE_LARGE';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+CREATE TABLE IF NOT EXISTS `table_kyivf2` (
+    `table_kyivf2_emp_id` INT,
+    `table_kyivf2_department_id` INT,
+    `table_kyivf2_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_53omk0` (
+    `table_53omk0_emp_id` INT,
+    `table_53omk0_bonus_amount` DECIMAL(10,2),
+    `table_53omk0_bonus_date` DATE
+);
+
+INSERT INTO `table_kyivf2` (`table_kyivf2_emp_id`, `table_kyivf2_department_id`, `table_kyivf2_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_53omk0` (`table_53omk0_emp_id`, `table_53omk0_bonus_amount`, `table_53omk0_bonus_date`) VALUES (1, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_COMPENSATION_ajyrlu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_SALARY INT DEFAULT 0;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_ANNUAL_COMPENSATION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KYIVF2_SALARY, 0) INTO V_BASE_SALARY
+    FROM TABLE_KYIVF2
+    WHERE TABLE_KYIVF2_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_53OMK0_BONUS_AMOUNT), 0) INTO V_TOTAL_BONUS
+    FROM TABLE_53OMK0
+    WHERE TABLE_53OMK0_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ANNUAL_COMPENSATION = (V_BASE_SALARY * 12) + V_TOTAL_BONUS;
+
+    RETURN V_ANNUAL_COMPENSATION;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+CREATE TABLE IF NOT EXISTS `table_jni2uy` (
+    `table_jni2uy_emp_id` INT,
+    `table_jni2uy_department_id` INT,
+    `table_jni2uy_salary` INT
+);
+
+INSERT INTO `table_jni2uy` (`table_jni2uy_emp_id`, `table_jni2uy_department_id`, `table_jni2uy_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_kv64ah(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_RANK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_JNI2UY_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_JNI2UY
+    WHERE TABLE_JNI2UY_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COUNT(DISTINCT TABLE_JNI2UY_DEPARTMENT_ID) + 1
+    INTO V_RANK
+    FROM TABLE_JNI2UY
+    WHERE (SELECT AVG(TABLE_JNI2UY_SALARY) FROM TABLE_JNI2UY WHERE TABLE_JNI2UY_DEPARTMENT_ID = TABLE_JNI2UY_DEPARTMENT_ID) > V_AVG_SALARY;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(9)) - -129 + ((MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + (v_rank));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, 0), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + (v_total_amount - v_paid_amount);
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = 15;
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = 10;
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (V_BALANCE_DUE * V_PENALTY_RATE) / 100;
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_REGISTRATION_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+CREATE TABLE IF NOT EXISTS `table_7oa9eq` (
+    `table_7oa9eq_treatment_id` INT,
+    `table_7oa9eq_patient_id` INT,
+    `table_7oa9eq_dentist_id` INT,
+    `table_7oa9eq_treatment_type` VARCHAR(50),
+    `table_7oa9eq_treatment_date` DATE,
+    `table_7oa9eq_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_eidrga` (
+    `table_eidrga_plan_id` INT,
+    `table_eidrga_patient_id` INT,
+    `table_eidrga_coverage_percent` INT,
+    `table_eidrga_annual_max` INT
+);
+
+INSERT INTO `table_7oa9eq` (`table_7oa9eq_treatment_id`, `table_7oa9eq_patient_id`, `table_7oa9eq_dentist_id`, `table_7oa9eq_treatment_type`, `table_7oa9eq_treatment_date`, `table_7oa9eq_cost`) VALUES (1, 2, 3, 'test', '2024-01-01', 1.0);
+
+INSERT INTO `table_eidrga` (`table_eidrga_plan_id`, `table_eidrga_patient_id`, `table_eidrga_coverage_percent`, `table_eidrga_annual_max`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DENTAL_COVERAGE_8ec8ng(TREATMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TREATMENT_COST INT DEFAULT 0;
+    DECLARE V_COVERAGE_PERCENT INT DEFAULT 50;
+    DECLARE V_ANNUAL_MAX INT DEFAULT 1500;
+    DECLARE V_TOTAL_USED INT DEFAULT 0;
+    DECLARE V_COVERED_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_7OA9EQ_COST, (MYSQL_FUNC_FIND_LCM_ss65f4(50, -25)) - 12 + (0))
+    INTO V_TREATMENT_COST
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT TABLE_EIDRGA_COVERAGE_PERCENT, TABLE_EIDRGA_ANNUAL_MAX
+    INTO V_COVERAGE_PERCENT, V_ANNUAL_MAX
+    FROM TABLE_7OA9EQ DT
+    JOIN TABLE_EIDRGA DP ON TABLE_7OA9EQ_PATIENT_ID = TABLE_EIDRGA_PATIENT_ID
+    WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_7OA9EQ_COST), 0) INTO V_TOTAL_USED
+    FROM TABLE_7OA9EQ
+    WHERE TABLE_7OA9EQ_PATIENT_ID = (SELECT TABLE_7OA9EQ_PATIENT_ID FROM TABLE_7OA9EQ WHERE TABLE_7OA9EQ_TREATMENT_ID = TREATMENT_ID_PARAM);
+
+    SET V_COVERED_AMOUNT = (MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(29)) - -945 + (v_treatment_cost * v_coverage_percent / 100);
+
+    IF V_TOTAL_USED > V_ANNUAL_MAX THEN
+        SET V_COVERED_AMOUNT = 0;
+    END IF;
+
+    RETURN CAST(V_COVERED_AMOUNT AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIND_LCM_ss65f4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_LCM_ss65f4(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_TEMP_A INT;
+    DECLARE V_TEMP_B INT;
+
+    SET V_TEMP_A = ABS(A);
+    SET V_TEMP_B = ABS(B);
+
+    IF V_TEMP_A = 0 OR V_TEMP_B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_TEMP_B != 0 DO
+        SET V_GCD = V_TEMP_B;
+        SET V_TEMP_B = V_TEMP_A MOD V_TEMP_B;
+        SET V_TEMP_A = V_GCD;
+    END WHILE;
+
+    RETURN (ABS(A) / V_GCD) * ABS(B);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_kdzd5s(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_EXPERIENCE_INDEX INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_WSG468_HIRE_DATE, CURDATE()), COALESCE(TABLE_WSG468_SALARY, 0)
+    INTO V_TENURE_YEARS, V_SALARY
+    FROM TABLE_WSG468
+    WHERE TABLE_WSG468_EMP_ID = EMP_ID_PARAM;
+
+    SET V_EXPERIENCE_INDEX = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(-57, -26)) - 168 + ((v_tenure_years * 15) + (v_salary / 500));
+
+    RETURN V_EXPERIENCE_INDEX;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_EXPERIENCE_LEVEL_INDEX_uqixuf(1);

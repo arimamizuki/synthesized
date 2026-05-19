@@ -1,0 +1,393 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f----- */
+CREATE TABLE IF NOT EXISTS `table_hhbwcq` (
+    `table_hhbwcq_customer_id` INT,
+    `table_hhbwcq_monthly_cost` DECIMAL(10,2),
+    `table_hhbwcq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hhbwcq` (`table_hhbwcq_customer_id`, `table_hhbwcq_monthly_cost`, `table_hhbwcq_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_HHBWCQ_MONTHLY_COST, 0), TABLE_HHBWCQ_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_HHBWCQ
+    WHERE TABLE_HHBWCQ_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(7)) - 690 + ((MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(-70)) - -682 + (v_monthly_cost * 5));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+CREATE TABLE IF NOT EXISTS `table_o7b1hn` (
+    `table_o7b1hn_case_id` INT,
+    `table_o7b1hn_client_id` INT,
+    `table_o7b1hn_attorney_id` INT,
+    `table_o7b1hn_case_type` VARCHAR(50),
+    `table_o7b1hn_filing_date` DATE,
+    `table_o7b1hn_status` VARCHAR(50),
+    `table_o7b1hn_estimated_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sn0pid` (
+    `table_sn0pid_task_id` INT,
+    `table_sn0pid_case_id` INT,
+    `table_sn0pid_task_name` VARCHAR(50),
+    `table_sn0pid_hours_billed` INT,
+    `table_sn0pid_hourly_rate` INT
+);
+
+INSERT INTO `table_o7b1hn` (`table_o7b1hn_case_id`, `table_o7b1hn_client_id`, `table_o7b1hn_attorney_id`, `table_o7b1hn_case_type`, `table_o7b1hn_filing_date`, `table_o7b1hn_status`, `table_o7b1hn_estimated_value`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_sn0pid` (`table_sn0pid_task_id`, `table_sn0pid_case_id`, `table_sn0pid_task_name`, `table_sn0pid_hours_billed`, `table_sn0pid_hourly_rate`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_BILLING INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O7B1HN_ESTIMATED_VALUE, 0)
+    INTO V_ESTIMATED_VALUE
+    FROM TABLE_O7B1HN
+    WHERE TABLE_O7B1HN_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED * TABLE_SN0PID_HOURLY_RATE), 0), COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED), 0)
+    INTO V_TOTAL_BILLING, V_TOTAL_HOURS
+    FROM TABLE_SN0PID
+    WHERE TABLE_SN0PID_CASE_ID = CASE_ID_PARAM;
+
+    IF V_ESTIMATED_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = V_ESTIMATED_VALUE - V_TOTAL_BILLING;
+
+    IF V_TOTAL_HOURS > 100 THEN
+        SET V_PROFITABILITY = V_PROFITABILITY - (V_TOTAL_HOURS - 100) * 10;
+    END IF;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+CREATE TABLE IF NOT EXISTS `table_ar5of1` (
+    `table_ar5of1_product_id` INT,
+    `table_ar5of1_category_id` INT,
+    `table_ar5of1_price` DECIMAL(10,2),
+    `table_ar5of1_stock_quantity` INT
+);
+
+INSERT INTO `table_ar5of1` (`table_ar5of1_product_id`, `table_ar5of1_category_id`, `table_ar5of1_price`, `table_ar5of1_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INVENTORY_VALUE_wx3w2f(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_AR5OF1_PRICE * TABLE_AR5OF1_STOCK_QUANTITY), 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_AR5OF1
+    WHERE TABLE_AR5OF1_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_INVENTORY_VALUE / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(SUM INT, INTEREST INT, YEARS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(-53)) - -849 + ((MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(-68)) - -235 + ((MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(54)) - -610 + ((MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(-77)) - -936 + (cast(sum * pow(1 + interest / 100.0, years) as signed)))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+CREATE TABLE IF NOT EXISTS `table_vh9l8d` (
+    `table_vh9l8d_emp_id` INT,
+    `table_vh9l8d_department_id` INT,
+    `table_vh9l8d_salary` INT,
+    `table_vh9l8d_hire_date` DATE,
+    `table_vh9l8d_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_vh9l8d` (`table_vh9l8d_emp_id`, `table_vh9l8d_department_id`, `table_vh9l8d_salary`, `table_vh9l8d_hire_date`, `table_vh9l8d_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_ELIGIBLE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VH9L8D_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_VH9L8D_HIRE_DATE, CURDATE()), COALESCE(TABLE_VH9L8D_SALARY, 0)
+    INTO V_PERFORMANCE_RATING, V_YEARS_EMPLOYED, V_SALARY
+    FROM TABLE_VH9L8D
+    WHERE TABLE_VH9L8D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_PERFORMANCE_RATING >= 3.5 AND V_YEARS_EMPLOYED >= 1 THEN
+        SET V_BONUS_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_BONUS_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+CREATE TABLE IF NOT EXISTS `table_sq14za` (
+    `table_sq14za_emp_id` INT,
+    `table_sq14za_salary` INT
+);
+
+INSERT INTO `table_sq14za` (`table_sq14za_emp_id`, `table_sq14za_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_NORMALIZED_nalrzr(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_SQ14ZA_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_SQ14ZA
+    WHERE TABLE_SQ14ZA_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6----- */
+CREATE TABLE IF NOT EXISTS `table_ecx228` (
+    `table_ecx228_product_id` INT,
+    `table_ecx228_category_id` INT,
+    `table_ecx228_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_o3ius2` (
+    `table_o3ius2_category_id` INT,
+    `table_o3ius2_name` VARCHAR(50)
+);
+
+INSERT INTO `table_ecx228` (`table_ecx228_product_id`, `table_ecx228_category_id`, `table_ecx228_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_o3ius2` (`table_o3ius2_category_id`, `table_o3ius2_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVERAGE_PRICE_a1j0y6(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_ECX228_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_ECX228
+    WHERE TABLE_ECX228_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+CREATE TABLE IF NOT EXISTS `table_7fkt7q` (
+    `table_7fkt7q_customer_id` INT,
+    `table_7fkt7q_registration_date` DATE,
+    `table_7fkt7q_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_0kckz6` (
+    `table_0kckz6_order_id` INT,
+    `table_0kckz6_customer_id` INT,
+    `table_0kckz6_order_date` DATE,
+    `table_0kckz6_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_7fkt7q` (`table_7fkt7q_customer_id`, `table_7fkt7q_registration_date`, `table_7fkt7q_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_0kckz6` (`table_0kckz6_order_id`, `table_0kckz6_customer_id`, `table_0kckz6_order_date`, `table_0kckz6_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SEASONAL_DEMAND_INDEX_9j427j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_MONTH INT DEFAULT 0;
+    DECLARE V_AVG_MONTHLY_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CURRENT_SPEND DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEMAND_INDEX INT DEFAULT 0;
+
+    SELECT MONTH(CURDATE())
+    INTO V_CURRENT_MONTH;
+
+    SELECT COALESCE(AVG(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_AVG_MONTHLY_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY YEAR(TABLE_0KCKZ6_ORDER_DATE), MONTH(TABLE_0KCKZ6_ORDER_DATE);
+
+    SELECT COALESCE(SUM(TABLE_0KCKZ6_TOTAL_AMOUNT), 0)
+    INTO V_CURRENT_SPEND
+    FROM TABLE_0KCKZ6
+    WHERE TABLE_0KCKZ6_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND YEAR(TABLE_0KCKZ6_ORDER_DATE) = YEAR(CURDATE())
+    AND MONTH(TABLE_0KCKZ6_ORDER_DATE) = V_CURRENT_MONTH;
+
+    IF V_AVG_MONTHLY_SPEND = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_DEMAND_INDEX = (MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(-37)) - 464 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(37)) - 181 + ((v_current_spend * 100) / v_avg_monthly_spend));
+
+    RETURN V_DEMAND_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        SET V_I = V_I + 1;
+        IF V_I MOD 2 = 0 THEN
+            ITERATE MY_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+        IF V_I >= N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+CREATE TABLE IF NOT EXISTS `table_aw8lqb` (
+    `table_aw8lqb_patient_id` INT,
+    `table_aw8lqb_name` VARCHAR(50),
+    `table_aw8lqb_date_of_birth` DATE,
+    `table_aw8lqb_blood_type` VARCHAR(50),
+    `table_aw8lqb_insurance_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ev6fi` (
+    `table_5ev6fi_appt_id` INT,
+    `table_5ev6fi_patient_id` INT,
+    `table_5ev6fi_doctor_id` INT,
+    `table_5ev6fi_appt_date` DATE,
+    `table_5ev6fi_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_u95tmt` (
+    `table_u95tmt_bill_id` INT,
+    `table_u95tmt_patient_id` INT,
+    `table_u95tmt_total_amount` DECIMAL(10,2),
+    `table_u95tmt_paid_amount` INT
+);
+
+INSERT INTO `table_aw8lqb` (`table_aw8lqb_patient_id`, `table_aw8lqb_name`, `table_aw8lqb_date_of_birth`, `table_aw8lqb_blood_type`, `table_aw8lqb_insurance_id`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_5ev6fi` (`table_5ev6fi_appt_id`, `table_5ev6fi_patient_id`, `table_5ev6fi_doctor_id`, `table_5ev6fi_appt_date`, `table_5ev6fi_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+INSERT INTO `table_u95tmt` (`table_u95tmt_bill_id`, `table_u95tmt_patient_id`, `table_u95tmt_total_amount`, `table_u95tmt_paid_amount`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(PATIENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_BILLS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_PENDING_APPOINTMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U95TMT_TOTAL_AMOUNT), 0), COALESCE(SUM(TABLE_U95TMT_PAID_AMOUNT), 0)
+    INTO V_TOTAL_BILLS, V_TOTAL_PAID
+    FROM TABLE_U95TMT
+    WHERE TABLE_U95TMT_PATIENT_ID = PATIENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_PENDING_APPOINTMENTS
+    FROM TABLE_5EV6FI
+    WHERE TABLE_5EV6FI_PATIENT_ID = PATIENT_ID_PARAM AND TABLE_5EV6FI_STATUS = 'PENDING';
+
+    SET V_BALANCE = V_TOTAL_BILLS - V_TOTAL_PAID;
+
+    IF V_BALANCE < 0 THEN
+        SET V_BALANCE = 0;
+    END IF;
+
+    RETURN V_BALANCE + (V_PENDING_APPOINTMENTS * 100);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= (MYSQL_FUNC_UFN_CALCULATE_FUTURE_VALUE_05pst4(3, 84, -40)) - 945 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SCORE_1gwl0f(98)) - -6 + (v_sum) + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(1);

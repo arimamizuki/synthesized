@@ -1,0 +1,465 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1133747 (
+    v1133748 INT AUTO_INCREMENT PRIMARY KEY,
+    v1133749 VARCHAR(4000),
+    v1133750 VARCHAR(4000)
+);
+CREATE TABLE IF NOT EXISTS v1133714 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133749 VARCHAR(4000)
+);
+CREATE TABLE IF NOT EXISTS v1133648 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133649 INT
+);
+CREATE TABLE IF NOT EXISTS v1133675 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1133748 INT
+);
+INSERT INTO v1133747 (v1133749, v1133750) VALUES
+('joe', 'localhost'),
+('test', 'wp_administrators'),
+(REPEAT('a', 4000), REPEAT('o', 4000));
+INSERT INTO v1133714 (v1133749) VALUES
+('sample1'),
+('sample2'),
+(REPEAT('a', 4000));
+INSERT INTO v1133648 (v1133649) VALUES
+(1),
+(3),
+(0);
+INSERT INTO v1133675 (v1133748) VALUES
+(1),
+(2),
+(58);
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_GRADE_x7scay----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_GRADE_x7scay(SCORE INT) RETURNS VARCHAR(2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE
+        WHEN SCORE >= 90 THEN RETURN 'A';
+        WHEN SCORE >= 80 THEN RETURN 'B';
+        WHEN SCORE >= 70 THEN RETURN 'C';
+        WHEN SCORE >= 60 THEN RETURN 'D';
+        ELSE RETURN 'F';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = (MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + (0 - v_numeric_val);
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A * P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, 0), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1----- */
+CREATE TABLE IF NOT EXISTS `table_wv7ee6` (
+    `table_wv7ee6_emp_id` INT,
+    `table_wv7ee6_department_id` INT,
+    `table_wv7ee6_salary` INT,
+    `table_wv7ee6_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_aqveda` (
+    `table_aqveda_department_id` INT,
+    `table_aqveda_name` VARCHAR(50)
+);
+
+INSERT INTO `table_wv7ee6` (`table_wv7ee6_emp_id`, `table_wv7ee6_department_id`, `table_wv7ee6_salary`, `table_wv7ee6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_aqveda` (`table_aqveda_department_id`, `table_aqveda_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+    DECLARE V_QUALITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_WV7EE6_SALARY), 0), COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_WV7EE6_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_SALARY, V_AVG_TENURE
+    FROM TABLE_WV7EE6
+    WHERE TABLE_WV7EE6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_QUALITY_INDEX = (V_AVG_SALARY / 100) + (V_AVG_TENURE * 5);
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + (v_quality_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = (MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(-44, -90)) - -623 + ((MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(-18)) - 945 + ((MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(55)) - 19 + (0))) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_COUNT - V_PRIOR_COUNT) * 100) / V_PRIOR_COUNT;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+CREATE TABLE IF NOT EXISTS `table_9ywali` (
+    `table_9ywali_campaign_id` INT,
+    `table_9ywali_budget` INT,
+    `table_9ywali_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_06pwt4` (
+    `table_06pwt4_conversion_id` INT,
+    `table_06pwt4_campaign_id` INT,
+    `table_06pwt4_conversion_value` INT
+);
+
+INSERT INTO `table_9ywali` (`table_9ywali_campaign_id`, `table_9ywali_budget`, `table_9ywali_status`) VALUES (1, 1, 'test');
+
+INSERT INTO `table_06pwt4` (`table_06pwt4_conversion_id`, `table_06pwt4_campaign_id`, `table_06pwt4_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONVERSION_VALUE_INDEX_7mjgxe(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_VALUE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_VALUE_INDEX DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_06PWT4_CONVERSION_VALUE), 0), COUNT(*)
+    INTO V_TOTAL_VALUE, V_CONVERSION_COUNT
+    FROM TABLE_06PWT4
+    WHERE TABLE_06PWT4_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CONVERSION_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VALUE_INDEX = V_TOTAL_VALUE / V_CONVERSION_COUNT;
+
+    RETURN FLOOR(V_VALUE_INDEX);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+CREATE TABLE IF NOT EXISTS `table_kelao0` (
+    `table_kelao0_customer_id` INT,
+    `table_kelao0_tier_level` INT,
+    `table_kelao0_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_rcenak` (
+    `table_rcenak_order_id` INT,
+    `table_rcenak_customer_id` INT,
+    `table_rcenak_order_date` DATE,
+    `table_rcenak_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_kelao0` (`table_kelao0_customer_id`, `table_kelao0_tier_level`, `table_kelao0_registration_date`) VALUES (1, 1, '2024-01-01');
+
+INSERT INTO `table_rcenak` (`table_rcenak_order_id`, `table_rcenak_customer_id`, `table_rcenak_order_date`, `table_rcenak_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TIER_UPGRADE_ELIGIBILITY_unmphz(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'REGULAR';
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_CUSTOMER_AGE_DAYS INT DEFAULT 0;
+    DECLARE V_UPGRADE_ELIGIBLE INT DEFAULT 0;
+
+    SELECT TABLE_KELAO0_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_RCENAK_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_SPENT
+    FROM TABLE_RCENAK
+    WHERE TABLE_RCENAK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_KELAO0_REGISTRATION_DATE)
+    INTO V_CUSTOMER_AGE_DAYS
+    FROM TABLE_KELAO0
+    WHERE TABLE_KELAO0_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_TIER_LEVEL = 'BRONZE' AND V_TOTAL_SPENT >= 1000 AND V_CUSTOMER_AGE_DAYS >= 90 THEN
+        SET V_UPGRADE_ELIGIBLE = (MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(-15)) - 118 + (1);
+    ELSEIF V_TIER_LEVEL = 'SILVER' AND V_TOTAL_SPENT >= 5000 AND V_CUSTOMER_AGE_DAYS >= 180 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    ELSEIF V_TIER_LEVEL = 'GOLD' AND V_TOTAL_SPENT >= 10000 AND V_CUSTOMER_AGE_DAYS >= 365 THEN
+        SET V_UPGRADE_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_UPGRADE_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+CREATE TABLE IF NOT EXISTS `table_z9tv6r` (
+    `table_z9tv6r_shipment_id` INT,
+    `table_z9tv6r_order_id` INT,
+    `table_z9tv6r_carrier_id` INT,
+    `table_z9tv6r_shipping_cost` DECIMAL(10,2),
+    `table_z9tv6r_weight_kg` INT,
+    `table_z9tv6r_shipping_date` DATE,
+    `table_z9tv6r_delivery_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1odmhx` (
+    `table_1odmhx_carrier_id` INT,
+    `table_1odmhx_name` VARCHAR(50),
+    `table_1odmhx_base_rate` INT,
+    `table_1odmhx_weight_rate` INT
+);
+
+INSERT INTO `table_z9tv6r` (`table_z9tv6r_shipment_id`, `table_z9tv6r_order_id`, `table_z9tv6r_carrier_id`, `table_z9tv6r_shipping_cost`, `table_z9tv6r_weight_kg`, `table_z9tv6r_shipping_date`, `table_z9tv6r_delivery_date`) VALUES (1, 2, 3, 1.0, 5, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_1odmhx` (`table_1odmhx_carrier_id`, `table_1odmhx_name`, `table_1odmhx_base_rate`, `table_1odmhx_weight_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(SHIPMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_DATE DATE;
+    DECLARE V_EXPECTED_DELIVERY DATE;
+    DECLARE V_ACTUAL_DELIVERY DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_Z9TV6R_SHIPPING_DATE, TABLE_Z9TV6R_DELIVERY_DATE
+    INTO V_SHIPPING_DATE, V_ACTUAL_DELIVERY
+    FROM TABLE_Z9TV6R
+    WHERE TABLE_Z9TV6R_SHIPMENT_ID = SHIPMENT_ID_PARAM;
+
+    IF V_SHIPPING_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EXPECTED_DELIVERY = DATE_ADD(V_SHIPPING_DATE, INTERVAL 7 DAY);
+
+    IF V_ACTUAL_DELIVERY IS NULL THEN
+        SET V_DELAY_DAYS = DATEDIFF(CURDATE(), V_EXPECTED_DELIVERY);
+    ELSE
+        SET V_DELAY_DAYS = DATEDIFF(V_ACTUAL_DELIVERY, V_EXPECTED_DELIVERY);
+    END IF;
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_SURFACE_AREA_s5vlpb(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SLANT_HEIGHT DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    SET V_SLANT_HEIGHT = SQRT(RADIUS * RADIUS + HEIGHT * HEIGHT);
+    SET V_SURFACE_AREA = 3.14159 * RADIUS * (RADIUS + V_SLANT_HEIGHT);
+
+    RETURN FLOOR(V_SURFACE_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0294_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_compare INT;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(4000);
+    DECLARE cur CURSOR FOR SELECT v1133749 FROM v1133747 WHERE v1133748 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: UPDATE with JOIN and complex functions
+    UPDATE v1133747 AS x1
+    JOIN v1133714 AS x6 ON x1.v1133749 = x6.v1133749
+    SET x1.v1133749 = STRCMP(DATE_FORMAT(UTC_TIMESTAMP(), 'x'), UTC_TIME())
+    WHERE x1.v1133749 = REPEAT('a', 4000) AND x1.v1133750 = REPEAT('o', 4000);
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_GRADE_x7scay(-13)) - -740 + (v_counter) + v_update_count;
+
+    -- Statement 2: UPDATE with CASE and variable assignment
+    SET @save_character_set_results = 'updated_value';
+    UPDATE v1133747 AS x0
+    SET x0.v1133750 = @save_character_set_results
+    WHERE NOT CASE
+        WHEN x0.v1133749 = 'joe' AND x0.v1133750 = 'localhost' AND x0.v1133749 = 'wp_administrators' THEN 'x'
+        ELSE '2015-01-01'
+    END IS NULL;
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 3: UPDATE with NOT condition and integer column
+    UPDATE v1133648 AS x1
+    SET x1.v1133649 = 3
+    WHERE NOT (1 AND x1.v1133649);
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 4: INSERT with DEFAULT
+    INSERT INTO v1133747 (v1133749, v1133750) VALUES (12, DEFAULT);
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 5: UPDATE with LEFT JOIN and LIKE condition
+    UPDATE v1133747 AS x0
+    LEFT OUTER JOIN v1133675 AS x1 ON x0.v1133748 = x0.v1133748
+    SET x0.v1133749 = 'v7n v6c v3l'
+    WHERE x0.v1133748 = 58 AND x0.v1133748 LIKE 'x';
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Procedural logic with cursor and loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF (MYSQL_FUNC_CALCULATE_WORKFORCE_QUALITY_INDEX_8i5ue1(-70)) - 186 + ((MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(62, 82)) - -855 + (v_done)) THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + LENGTH(v_val);
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic
+    IF v_counter > 100 THEN
+        SET result = v_counter;
+    ELSEIF v_counter BETWEEN 0 AND 100 THEN
+        SET result = v_counter * 2;
+    ELSE
+        SET result = 0;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0294_proc(1, 1, @out_result);
+
+SELECT @out_result;

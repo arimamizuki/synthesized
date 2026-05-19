@@ -1,0 +1,355 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_xsp4oe` (
+    `table_xsp4oe_order_id` INT,
+    `table_xsp4oe_customer_id` INT,
+    `table_xsp4oe_order_status` VARCHAR(50),
+    `table_xsp4oe_total_amount` DECIMAL(10,2),
+    `table_xsp4oe_order_date` DATE
+);
+
+INSERT INTO `table_xsp4oe` (`table_xsp4oe_order_id`, `table_xsp4oe_customer_id`, `table_xsp4oe_order_status`, `table_xsp4oe_total_amount`, `table_xsp4oe_order_date`) VALUES (1, 2, 'test', 1.0, '2024-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN V_NET_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_WARNING_kajfge----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_WARNING_kajfge() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'THIS IS A WARNING MESSAGE';
+    RETURN 44;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+CREATE TABLE IF NOT EXISTS `table_zdi6vu` (
+    `table_zdi6vu_emp_id` INT,
+    `table_zdi6vu_department_id` INT,
+    `table_zdi6vu_salary` INT,
+    `table_zdi6vu_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_yvxx5b` (
+    `table_yvxx5b_department_id` INT,
+    `table_yvxx5b_name` VARCHAR(50)
+);
+
+INSERT INTO `table_zdi6vu` (`table_zdi6vu_emp_id`, `table_zdi6vu_department_id`, `table_zdi6vu_salary`, `table_zdi6vu_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_yvxx5b` (`table_yvxx5b_department_id`, `table_yvxx5b_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(5,1) DEFAULT 0.0;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_ZDI6VU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_ZDI6VU
+    WHERE TABLE_ZDI6VU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(3)) - 420 + (floor(v_avg_tenure));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+CREATE TABLE IF NOT EXISTS `table_ck40yw` (
+    `table_ck40yw_policy_id` INT,
+    `table_ck40yw_customer_id` INT,
+    `table_ck40yw_policy_type` VARCHAR(50),
+    `table_ck40yw_coverage_amount` DECIMAL(10,2),
+    `table_ck40yw_premium_annual` INT,
+    `table_ck40yw_beneficiary_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_du7xpr` (
+    `table_du7xpr_claim_id` INT,
+    `table_du7xpr_policy_id` INT,
+    `table_du7xpr_claim_date` DATE,
+    `table_du7xpr_payout_amount` DECIMAL(10,2),
+    `table_du7xpr_status` VARCHAR(50)
+);
+
+INSERT INTO `table_ck40yw` (`table_ck40yw_policy_id`, `table_ck40yw_customer_id`, `table_ck40yw_policy_type`, `table_ck40yw_coverage_amount`, `table_ck40yw_premium_annual`, `table_ck40yw_beneficiary_id`) VALUES (1, 2, 'test', 1.0, 5, 6);
+
+INSERT INTO `table_du7xpr` (`table_du7xpr_claim_id`, `table_du7xpr_policy_id`, `table_du7xpr_claim_date`, `table_du7xpr_payout_amount`, `table_du7xpr_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LIFE_POLICY_VALUE_xqfb1g(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COVERAGE_AMOUNT INT DEFAULT 0;
+    DECLARE V_PREMIUM_ANNUAL INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID_IN INT DEFAULT 0;
+    DECLARE V_POLICY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_CK40YW_COVERAGE_AMOUNT, 0), COALESCE(TABLE_CK40YW_PREMIUM_ANNUAL, 0)
+    INTO V_COVERAGE_AMOUNT, V_PREMIUM_ANNUAL
+    FROM TABLE_CK40YW
+    WHERE TABLE_CK40YW_POLICY_ID = POLICY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_DU7XPR_PAYOUT_AMOUNT), 0) INTO V_TOTAL_PAID_IN
+    FROM TABLE_DU7XPR
+    WHERE TABLE_DU7XPR_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_POLICY_VALUE = V_COVERAGE_AMOUNT - V_TOTAL_PAID_IN;
+
+    RETURN CAST(V_POLICY_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+CREATE TABLE IF NOT EXISTS `table_qrf16h` (
+    `table_qrf16h_customer_id` INT,
+    `table_qrf16h_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_qrf16h` (`table_qrf16h_customer_id`, `table_qrf16h_plan_type`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_QRF16H_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_QRF16H
+    WHERE TABLE_QRF16H_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN 1000;
+        WHEN 'PREMIUM' THEN RETURN 500;
+        WHEN 'BASIC' THEN RETURN 100;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc(-60)) - 371 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = (MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(-52)) - -744 + (v_counter + 1);
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+CREATE TABLE IF NOT EXISTS `table_8dni6g` (
+    `table_8dni6g_customer_id` INT,
+    `table_8dni6g_country` INT
+);
+
+INSERT INTO `table_8dni6g` (`table_8dni6g_customer_id`, `table_8dni6g_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_dtft7o(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8DNI6G
+    WHERE TABLE_8DNI6G_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc----- */
+CREATE TABLE IF NOT EXISTS `table_3tnjz8` (
+    `table_3tnjz8_emp_id` INT,
+    `table_3tnjz8_salary` INT,
+    `table_3tnjz8_department_id` INT
+);
+
+INSERT INTO `table_3tnjz8` (`table_3tnjz8_emp_id`, `table_3tnjz8_salary`, `table_3tnjz8_department_id`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_DEPARTMENT_RATIO_v1ecnc(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+
+    SELECT TABLE_3TNJZ8_DEPARTMENT_ID, COALESCE(TABLE_3TNJZ8_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_3TNJZ8
+    WHERE TABLE_3TNJZ8_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_3TNJZ8_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_3TNJZ8
+    WHERE TABLE_3TNJZ8_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(-86)) - -288 + ((MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(49)) - -401 + (floor((v_salary * 100) / v_dept_avg)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_HANOI_MOVES_59bohv(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MOVES INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE V_COUNTER <= N DO
+        SET V_MOVES = V_MOVES * 2;
+        SET V_MOVES = V_MOVES + 1;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE MY_LOOP;
+
+    RETURN V_MOVES;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_QUARTER;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PENDING_COUNT INT DEFAULT 0;
+    DECLARE V_PROCESSING_COUNT INT DEFAULT 0;
+    DECLARE V_SHIPPED_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_PENDING INT DEFAULT 0;
+
+    SELECT COUNT(*) INTO V_PENDING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PENDING';
+
+    SELECT COUNT(*) INTO V_PROCESSING_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'PROCESSING';
+
+    SELECT COUNT(*) INTO V_SHIPPED_COUNT
+    FROM TABLE_XSP4OE
+    WHERE TABLE_XSP4OE_CUSTOMER_ID = CUSTOMER_ID_PARAM
+      AND TABLE_XSP4OE_ORDER_STATUS = 'SHIPPED';
+
+    SET V_TOTAL_PENDING = (MYSQL_FUNC_CALCULATE_PLAN_TIER_VALUE_zr02n7(-67)) - -489 + ((MYSQL_FUNC_SIGNAL_WARNING_kajfge()) - -526 + (v_pending_count + v_processing_count));
+
+    RETURN (MYSQL_FUNC_CALCULATE_FACTORIAL_ITERATIVE_0cwa76(67)) - -705 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_TENURE_AVG_oydcvv(21)) - 80 + ((MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(97)) - -373 + (v_total_pending)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_COUNT_PENDING_ORDERS_9y2rye(1);

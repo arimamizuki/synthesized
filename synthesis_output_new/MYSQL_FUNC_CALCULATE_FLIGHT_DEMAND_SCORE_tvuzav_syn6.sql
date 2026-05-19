@@ -1,0 +1,396 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_1v8mfd` (
+    `table_1v8mfd_flight_id` INT,
+    `table_1v8mfd_airline_code` INT,
+    `table_1v8mfd_origin` INT,
+    `table_1v8mfd_destination` INT,
+    `table_1v8mfd_distance_miles` INT,
+    `table_1v8mfd_base_price` DECIMAL(10,2),
+    `table_1v8mfd_available_seats` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_y7dilj` (
+    `table_y7dilj_booking_id` INT,
+    `table_y7dilj_flight_id` INT,
+    `table_y7dilj_passenger_id` INT,
+    `table_y7dilj_seat_class` INT,
+    `table_y7dilj_price_paid` INT
+);
+
+INSERT INTO `table_1v8mfd` (`table_1v8mfd_flight_id`, `table_1v8mfd_airline_code`, `table_1v8mfd_origin`, `table_1v8mfd_destination`, `table_1v8mfd_distance_miles`, `table_1v8mfd_base_price`, `table_1v8mfd_available_seats`) VALUES (1, 2, 3, 4, 5, 1.0, 7);
+
+INSERT INTO `table_y7dilj` (`table_y7dilj_booking_id`, `table_y7dilj_flight_id`, `table_y7dilj_passenger_id`, `table_y7dilj_seat_class`, `table_y7dilj_price_paid`) VALUES (1, 2, 3, 4, 5);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4----- */
+CREATE TABLE IF NOT EXISTS `table_r4nmyl` (
+    `table_r4nmyl_order_id` INT,
+    `table_r4nmyl_customer_id` INT,
+    `table_r4nmyl_order_date` DATE,
+    `table_r4nmyl_total_amount` DECIMAL(10,2),
+    `table_r4nmyl_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_o5gt4k` (
+    `table_o5gt4k_refund_id` INT,
+    `table_o5gt4k_order_id` INT,
+    `table_o5gt4k_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_r4nmyl` (`table_r4nmyl_order_id`, `table_r4nmyl_customer_id`, `table_r4nmyl_order_date`, `table_r4nmyl_total_amount`, `table_r4nmyl_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_o5gt4k` (`table_o5gt4k_refund_id`, `table_o5gt4k_order_id`, `table_o5gt4k_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_PROFIT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_R4NMYL_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_R4NMYL
+    WHERE TABLE_R4NMYL_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_O5GT4K_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_O5GT4K
+    WHERE TABLE_O5GT4K_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_PROFIT = V_ORDER_TOTAL - V_REFUND_TOTAL;
+
+    RETURN V_PROFIT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+CREATE TABLE IF NOT EXISTS `table_6fslpk` (
+    `table_6fslpk_project_id` INT,
+    `table_6fslpk_client_id` INT,
+    `table_6fslpk_project_manager_id` INT,
+    `table_6fslpk_budget` INT,
+    `table_6fslpk_spent_amount` DECIMAL(10,2),
+    `table_6fslpk_status` VARCHAR(50)
+);
+
+INSERT INTO `table_6fslpk` (`table_6fslpk_project_id`, `table_6fslpk_client_id`, `table_6fslpk_project_manager_id`, `table_6fslpk_budget`, `table_6fslpk_spent_amount`, `table_6fslpk_status`) VALUES (1, 2, 3, 4, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_SPENT INT DEFAULT 0;
+    DECLARE V_VARIANCE INT DEFAULT 0;
+    DECLARE V_VARIANCE_PCT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_6FSLPK_BUDGET, 0), COALESCE(TABLE_6FSLPK_SPENT_AMOUNT, 0)
+    INTO V_BUDGET, V_SPENT
+    FROM TABLE_6FSLPK
+    WHERE TABLE_6FSLPK_PROJECT_ID = PROJECT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VARIANCE = (MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(-80)) - 507 + (v_budget - v_spent);
+    SET V_VARIANCE_PCT = (V_VARIANCE * 100) / V_BUDGET;
+
+    RETURN V_VARIANCE_PCT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+CREATE TABLE IF NOT EXISTS `table_bzkg88` (
+    `table_bzkg88_customer_id` INT,
+    `table_bzkg88_registration_date` DATE
+);
+
+INSERT INTO `table_bzkg88` (`table_bzkg88_customer_id`, `table_bzkg88_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ACQUISITION_YEAR_x4wg6i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ACQUISITION_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_BZKG88_REGISTRATION_DATE)
+    INTO V_ACQUISITION_YEAR
+    FROM TABLE_BZKG88
+    WHERE TABLE_BZKG88_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(29)) - 332 + (v_acquisition_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb----- */
+CREATE TABLE IF NOT EXISTS `table_s8sk8e` (
+    `table_s8sk8e_contract_id` INT,
+    `table_s8sk8e_customer_id` INT,
+    `table_s8sk8e_contract_type` VARCHAR(50),
+    `table_s8sk8e_start_date` DATE,
+    `table_s8sk8e_end_date` DATE,
+    `table_s8sk8e_monthly_payment` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_d072ki` (
+    `table_d072ki_payment_id` INT,
+    `table_d072ki_contract_id` INT,
+    `table_d072ki_payment_date` DATE,
+    `table_d072ki_amount_paid` INT,
+    `table_d072ki_is_on_time` DATE
+);
+
+INSERT INTO `table_s8sk8e` (`table_s8sk8e_contract_id`, `table_s8sk8e_customer_id`, `table_s8sk8e_contract_type`, `table_s8sk8e_start_date`, `table_s8sk8e_end_date`, `table_s8sk8e_monthly_payment`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_d072ki` (`table_d072ki_payment_id`, `table_d072ki_contract_id`, `table_d072ki_payment_date`, `table_d072ki_amount_paid`, `table_d072ki_is_on_time`) VALUES (1, 2, '2024-01-01', 4, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONTRACT_HEALTH_SCORE_9f8khb(CONTRACT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENTS INT DEFAULT 0;
+    DECLARE V_ON_TIME_PAYMENTS INT DEFAULT 0;
+    DECLARE V_PAYMENT_HEALTH INT DEFAULT 0;
+    DECLARE V_DAYS_UNTIL_EXPIRY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S8SK8E_MONTHLY_PAYMENT, 0)
+    INTO V_MONTHLY_PAYMENT
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_D072KI_IS_ON_TIME = 1 THEN 1 END)
+    INTO V_TOTAL_PAYMENTS, V_ON_TIME_PAYMENTS
+    FROM TABLE_D072KI
+    WHERE TABLE_D072KI_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_S8SK8E_END_DATE, CURDATE())
+    INTO V_DAYS_UNTIL_EXPIRY
+    FROM TABLE_S8SK8E
+    WHERE TABLE_S8SK8E_CONTRACT_ID = CONTRACT_ID_PARAM;
+
+    IF V_TOTAL_PAYMENTS > 0 THEN
+        SET V_PAYMENT_HEALTH = (MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7(-4)) - -561 + ((v_on_time_payments * 100) / v_total_payments);
+    ELSE
+        SET V_PAYMENT_HEALTH = 100;
+    END IF;
+
+    IF V_DAYS_UNTIL_EXPIRY < 30 THEN
+        SET V_PAYMENT_HEALTH = V_PAYMENT_HEALTH - 20;
+    END IF;
+
+    RETURN GREATEST(V_PAYMENT_HEALTH, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7----- */
+CREATE TABLE IF NOT EXISTS `table_vijcv8` (
+    `table_vijcv8_emp_id` INT,
+    `table_vijcv8_department_id` INT,
+    `table_vijcv8_salary` INT,
+    `table_vijcv8_hire_date` DATE,
+    `table_vijcv8_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_vijcv8` (`table_vijcv8_emp_id`, `table_vijcv8_department_id`, `table_vijcv8_salary`, `table_vijcv8_hire_date`, `table_vijcv8_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INNOVATION_INDEX_qo91z7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_INNOVATION_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VIJCV8_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_VIJCV8_HIRE_DATE, CURDATE()), COALESCE(TABLE_VIJCV8_SALARY, 0)
+    INTO V_PERFORMANCE, V_TENURE_YEARS, V_SALARY
+    FROM TABLE_VIJCV8
+    WHERE TABLE_VIJCV8_EMP_ID = EMP_ID_PARAM;
+
+    SET V_INNOVATION_INDEX = (V_PERFORMANCE * 30) + (V_TENURE_YEARS * 5) - (V_SALARY / 1000);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(-67)) - -826 + (v_innovation_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+CREATE TABLE IF NOT EXISTS `table_2yndtv` (
+    `table_2yndtv_customer_id` INT,
+    `table_2yndtv_status` VARCHAR(50),
+    `table_2yndtv_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2yndtv` (`table_2yndtv_customer_id`, `table_2yndtv_status`, `table_2yndtv_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_2YNDTV_STATUS, COALESCE(TABLE_2YNDTV_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_2YNDTV
+    WHERE TABLE_2YNDTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN LEAST(100, V_MONTHLY_COST * 5);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(A INT, B INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'DIVISION BY ZERO';
+    END IF;
+    IF ABS((MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l()) - -767 + (a / b)) > 1000000 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT IS VERY LARGE';
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MIN_4_VALUES_3sha9l() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN INT DEFAULT 1000;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 25 UNION SELECT 50 UNION SELECT 75 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF (MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(37)) - 567 + (v_i) < (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try()) - 105 + (v_min) THEN
+            SET V_MIN = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_8_c37try() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+CREATE TABLE IF NOT EXISTS `table_2bqs47` (
+    `table_2bqs47_emp_id` INT,
+    `table_2bqs47_hire_date` DATE
+);
+
+INSERT INTO `table_2bqs47` (`table_2bqs47_emp_id`, `table_2bqs47_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_HIRE_MONTH_o3ow5v(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_2BQS47_HIRE_DATE)
+    INTO V_MONTH
+    FROM TABLE_2BQS47
+    WHERE TABLE_2BQS47_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav(FLIGHT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BASE_PRICE INT DEFAULT 200;
+    DECLARE V_AVAILABLE_SEATS INT DEFAULT 100;
+    DECLARE V_BOOKED_SEATS INT DEFAULT 0;
+    DECLARE V_DEMAND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_1V8MFD_BASE_PRICE, 200), COALESCE(TABLE_1V8MFD_AVAILABLE_SEATS, 100)
+    INTO V_BASE_PRICE, V_AVAILABLE_SEATS
+    FROM TABLE_1V8MFD
+    WHERE TABLE_1V8MFD_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BOOKED_SEATS
+    FROM TABLE_Y7DILJ
+    WHERE TABLE_Y7DILJ_FLIGHT_ID = FLIGHT_ID_PARAM;
+
+    SET V_DEMAND_SCORE = ((V_AVAILABLE_SEATS - V_BOOKED_SEATS) * 100) / V_AVAILABLE_SEATS;
+
+    IF V_BASE_PRICE > 500 THEN
+        SET V_DEMAND_SCORE = (MYSQL_FUNC_SIGNAL_FUNC_SAFE_DIVIDE_lrxdw4(19, 100)) - -110 + (v_demand_score - 20);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PROJECT_VARIANCE_PERCENTAGE_lqkigz(-31)) - -921 + ((MYSQL_FUNC_CALCULATE_PROFIT_AFTER_REFUNDS_6phmy4(-57)) - 852 + (cast(v_demand_score as signed)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_FLIGHT_DEMAND_SCORE_tvuzav(1);

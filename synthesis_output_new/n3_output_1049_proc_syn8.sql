@@ -1,0 +1,463 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1178765 (v1178766 INT, v1178767 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1178834 (v1178835 TEXT, v1178836 INT);
+CREATE TABLE IF NOT EXISTS v1179057 (v1178835 TEXT, v1178836 INT);
+CREATE TABLE IF NOT EXISTS v1178779 (v1178781 INT);
+CREATE TABLE IF NOT EXISTS v1179142 (v1179143 INT);
+CREATE TABLE IF NOT EXISTS v1178890 (v1178891 INT);
+INSERT INTO v1178765 VALUES (1, '2'), (2, '3'), (3, '2');
+INSERT INTO v1178834 VALUES ('old', 1), ('old', 2);
+INSERT INTO v1179057 VALUES ('old', 1), ('old', 2);
+INSERT INTO v1178779 VALUES (0), (1), (2);
+INSERT INTO v1179142 VALUES (18), (6), (84), (4), (2), (3);
+INSERT INTO v1178890 VALUES (1), (3), (2);
+
+/* -----Dependency for: synth_output_1684----- */
+CREATE TABLE IF NOT EXISTS v205653 (
+    v205654 INT DEFAULT (123 * 1),
+    v205655 JSON DEFAULT (JSON_ARRAY(v205654))
+) AS SELECT 4 AS x3;
+CREATE TABLE IF NOT EXISTS v204430 (
+    v203902 INT,
+    v203903 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v204367 (
+    v204368 INT,
+    v204369 INT,
+    v204370 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v203794 (
+    v203795 INT,
+    v203796 DATETIME
+);
+CREATE TABLE IF NOT EXISTS v204022 (
+    v204023 INT,
+    v204024 VARCHAR(50)
+);
+INSERT INTO v204430 (v203902, v203903) VALUES (NULL, 'test1'), (NULL, 'test2'), (5, 'test3');
+INSERT INTO v204367 (v204368, v204369, v204370) VALUES (1, 10, 'alpha'), (2, 20, 'beta'), (3, 30, 'gamma');
+INSERT INTO v203794 (v203795, v203796) VALUES (500, NOW()), (1000, NOW()), (1500, NOW());
+INSERT INTO v204022 (v204023, v204024) VALUES (100, 'initial'), (200, 'initial2');
+
+/* -----Called: synth_output_1684----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1684(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_json_val JSON;
+    DECLARE v_select_val INT;
+    DECLARE v_update_affected INT DEFAULT 0;
+    DECLARE v_insert_id INT;
+    DECLARE v_loop_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val INT;
+    DECLARE cur CURSOR FOR SELECT v203902 FROM v204430 WHERE v203902 IS NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Statement 1: CREATE TABLE v205653 - use it to insert data from p1 and p2
+    INSERT INTO v205653 (v205654, v205655) VALUES (p1, JSON_ARRAY(p2));
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: SELECT x3.v203902 FROM v204430 AS x3 WHERE x3.v203902 IS NULL
+    -- Use cursor to iterate over NULL values
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_loop_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+    SET v_loop_done = FALSE;
+
+    -- Statement 3: CREATE INDEX v205755 - already created in setup, use it for optimization check
+    -- Simulate index usage by checking if table exists and index is present
+    IF EXISTS (SELECT 1 FROM information_schema.statistics WHERE table_name = 'v204367' AND index_name = 'v205755') THEN
+        SET v_counter = v_counter + 100;
+    END IF;
+
+    -- Statement 4: UPDATE v203794 AS x1 SET v203795 = 932 WHERE NOT v203795 BETWEEN SUBTIME(DATE('0000-00-00 00:00:00'), '19:30:30.005477') AND CURRENT_TIME()
+    -- Use dynamic SQL with conditional logic
+    SET @sql_update = 'UPDATE v203794 SET v203795 = 932 WHERE NOT v203795 BETWEEN SUBTIME(DATE(''0000-00-00 00:00:00''), ''19:30:30.005477'') AND CURRENT_TIME()';
+    PREPARE stmt_update FROM @sql_update;
+    EXECUTE stmt_update;
+    SET v_update_affected = ROW_COUNT();
+    DEALLOCATE PREPARE stmt_update;
+    SET v_counter = v_counter + v_update_affected;
+
+    -- Statement 5: INSERT INTO v204022 (v204023) VALUES (998)
+    -- Use a WHILE loop to insert multiple times based on p1
+    WHILE p1 > 0 DO
+        INSERT INTO v204022 (v204023) VALUES (998);
+        SET v_counter = v_counter + 1;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+    -- Use CASE to determine final result
+    CASE
+        WHEN v_counter > 0 THEN
+            SET result = v_counter;
+        ELSE
+            SET result = 0;
+    END CASE;
+
+    -- Cleanup
+    DROP TABLE IF EXISTS v205653;
+    DROP TABLE IF EXISTS v204430;
+    DROP TABLE IF EXISTS v204367;
+    DROP TABLE IF EXISTS v203794;
+    DROP TABLE IF EXISTS v204022;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7----- */
+CREATE TABLE IF NOT EXISTS `table_9vv48d` (
+    `table_9vv48d_customer_id` INT,
+    `table_9vv48d_country` INT
+);
+
+INSERT INTO `table_9vv48d` (`table_9vv48d_customer_id`, `table_9vv48d_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_9VV48D
+    WHERE TABLE_9VV48D_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(-81)) - -95 + ((MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(-93)) - -187 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+CREATE TABLE IF NOT EXISTS `table_2ae0z4` (
+    `table_2ae0z4_engagement_id` INT,
+    `table_2ae0z4_client_id` INT,
+    `table_2ae0z4_consultant_id` INT,
+    `table_2ae0z4_start_date` DATE,
+    `table_2ae0z4_end_date` DATE,
+    `table_2ae0z4_hourly_rate` INT,
+    `table_2ae0z4_hours_billed` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_x9wqza` (
+    `table_x9wqza_consultant_id` INT,
+    `table_x9wqza_name` VARCHAR(50),
+    `table_x9wqza_expertise_area` INT,
+    `table_x9wqza_seniority_level` INT
+);
+
+INSERT INTO `table_2ae0z4` (`table_2ae0z4_engagement_id`, `table_2ae0z4_client_id`, `table_2ae0z4_consultant_id`, `table_2ae0z4_start_date`, `table_2ae0z4_end_date`, `table_2ae0z4_hourly_rate`, `table_2ae0z4_hours_billed`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_x9wqza` (`table_x9wqza_consultant_id`, `table_x9wqza_name`, `table_x9wqza_expertise_area`, `table_x9wqza_seniority_level`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONSULTING_REVENUE_b65h2b(CONSULTANT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_AVG_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_ACTIVE_ENGAGEMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2AE0Z4_HOURS_BILLED), 0), COALESCE(AVG(TABLE_2AE0Z4_HOURLY_RATE), 0)
+    INTO V_TOTAL_HOURS, V_AVG_HOURLY_RATE
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= DATE_SUB(CURDATE(), INTERVAL 365 DAY);
+
+    SELECT COUNT(*) INTO V_ACTIVE_ENGAGEMENTS
+    FROM TABLE_2AE0Z4
+    WHERE TABLE_2AE0Z4_CONSULTANT_ID = CONSULTANT_ID_PARAM
+      AND TABLE_2AE0Z4_END_DATE >= CURDATE();
+
+    SET V_TOTAL_REVENUE = V_TOTAL_HOURS * V_AVG_HOURLY_RATE;
+
+    IF V_ACTIVE_ENGAGEMENTS >= 3 THEN
+        SET V_TOTAL_REVENUE = V_TOTAL_REVENUE + (V_TOTAL_REVENUE * 10 / 100);
+    END IF;
+
+    RETURN CAST(V_TOTAL_REVENUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+CREATE TABLE IF NOT EXISTS `table_th8mrt` (
+    `table_th8mrt_customer_id` INT,
+    `table_th8mrt_order_id` INT
+);
+
+INSERT INTO `table_th8mrt` (`table_th8mrt_customer_id`, `table_th8mrt_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MIN(TABLE_TH8MRT_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_TH8MRT
+    WHERE TABLE_TH8MRT_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(36)) - 963 + ((MYSQL_FUNC_CURSOR_FUNC_COUNT_20_VALUES_zb2u3k()) - 766 + (v_order_id));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_20_VALUES_zb2u3k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_20_VALUES_zb2u3k() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 5 UNION SELECT 10 UNION SELECT 15 UNION SELECT 20 UNION SELECT 25
+        UNION SELECT 30 UNION SELECT 35 UNION SELECT 40 UNION SELECT 45 UNION SELECT 50
+        UNION SELECT 55 UNION SELECT 60 UNION SELECT 65 UNION SELECT 70 UNION SELECT 75
+        UNION SELECT 80 UNION SELECT 85 UNION SELECT 90 UNION SELECT 95 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = (MYSQL_FUNC_CALCULATE_EMPLOYEE_BONUS_INDEX_2n6ybg(-66)) - -248 + (v_count + 1);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_BONUS_INDEX_2n6ybg----- */
+CREATE TABLE IF NOT EXISTS `table_b480sv` (
+    `table_b480sv_emp_id` INT,
+    `table_b480sv_salary` INT
+);
+
+INSERT INTO `table_b480sv` (`table_b480sv_emp_id`, `table_b480sv_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_BONUS_INDEX_2n6ybg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_BONUS_INDEX_2n6ybg(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_B480SV_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_B480SV
+    WHERE TABLE_B480SV_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY * 0.1);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_v6isiv(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = -P_N;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+CREATE TABLE IF NOT EXISTS table_pi4u01 (
+    table_pi4u01_name VARCHAR(50)
+);
+
+INSERT INTO table_pi4u01 (`table_pi4u01_name`) VALUES ('test');
+
+/* -----Called: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(START_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE TOWN_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TOWN_COUNT 
+    FROM TABLE_PI4U01 
+    WHERE TABLE_PI4U01_NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN TOWN_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_9_VALUES_5was73() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 9 UNION SELECT 18 UNION SELECT 27 UNION SELECT 36 UNION SELECT 45 UNION SELECT 54 UNION SELECT 63 UNION SELECT 72 UNION SELECT 81;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(-93)) - 706 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+CREATE TABLE IF NOT EXISTS `table_rgkml5` (
+    `table_rgkml5_campaign_id` INT,
+    `table_rgkml5_status` VARCHAR(50),
+    `table_rgkml5_budget` INT
+);
+
+INSERT INTO `table_rgkml5` (`table_rgkml5_campaign_id`, `table_rgkml5_status`, `table_rgkml5_budget`) VALUES (1, 'test', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_l6tu0n(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT TABLE_RGKML5_STATUS, COALESCE(TABLE_RGKML5_BUDGET, 0)
+    INTO V_STATUS, V_BUDGET
+    FROM TABLE_RGKML5
+    WHERE TABLE_RGKML5_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN V_BUDGET
+        WHEN 'PAUSED' THEN V_BUDGET / 2
+        WHEN 'COMPLETED' THEN V_BUDGET * 2
+        ELSE V_BUDGET / 4
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1049_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE cur CURSOR FOR SELECT v1179143 FROM v1179142 WHERE v1179143 IN (18, 6, 84, 4, 2, 3);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -1;
+    END;
+
+    -- Adapt statement 1: UPDATE with window function
+    UPDATE v1178765 AS x1 
+    SET v1178767 = 'Updating the row' 
+    WHERE v1178767 = '2' 
+    ORDER BY AVG(COS(-66365726)) OVER (ORDER BY v1178766 ROWS BETWEEN UNBOUNDED FOLLOWING AND CURRENT ROW) 
+    LIMIT 3;
+CALL synth_output_1684(-97, 69, @_syn_11194);
+    SET v_counter = (MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(37)) - 848 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_VALUE_h4x6v7(0)) - 249 + (@_syn_11194 - 0 + (v_counter))) + ROW_COUNT();
+
+    -- Adapt statement 2: UPDATE with JSON and STRCMP
+    UPDATE v1178834 AS x1, v1179057 AS x6 
+    SET x1.v1178835 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' 
+    WHERE STRCMP(DATE_FORMAT(UTC_TIMESTAMP(), '%x'), UTC_TIME()) = 0 
+    ORDER BY v1178836 DESC, v1178835 DESC 
+    LIMIT 0;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Adapt statement 3: UPDATE with CASE
+    UPDATE v1178779 AS x0 
+    SET x0.v1178781 = p1 
+    WHERE 1 = 1 
+    ORDER BY CASE WHEN 10.100000 IS NULL THEN 1 ELSE 0 END DESC, 10.100000 DESC;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Adapt statement 4: UPDATE with IN and BETWEEN using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1179142 AS x1 
+        SET v1179143 = p2 
+        WHERE v1179143 = v_val;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Adapt statement 5: UPDATE with variable and BETWEEN using IF
+    IF p1 > 0 THEN
+        UPDATE v1178890 AS x0 
+        SET v1178891 = p1 
+        WHERE x0.v1178891 IN (1, 3) 
+        AND v1178891 BETWEEN 20010804 AND 2155 
+        ORDER BY (ROW_NUMBER() OVER ()) 
+        LIMIT 42;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Use CASE for final result
+    CASE 
+        WHEN v_counter > 0 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1049_proc(1, 1, @out_result);
+
+SELECT @out_result;

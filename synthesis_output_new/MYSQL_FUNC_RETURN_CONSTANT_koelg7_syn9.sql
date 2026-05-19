@@ -1,0 +1,416 @@
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+CREATE TABLE IF NOT EXISTS `table_pdl5fs` (
+    `table_pdl5fs_product_id` INT,
+    `table_pdl5fs_name` VARCHAR(50),
+    `table_pdl5fs_sku` INT,
+    `table_pdl5fs_stock_quantity` INT,
+    `table_pdl5fs_reorder_point` INT,
+    `table_pdl5fs_unit_cost` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tlwljf` (
+    `table_tlwljf_order_id` INT,
+    `table_tlwljf_supplier_id` INT,
+    `table_tlwljf_order_date` DATE,
+    `table_tlwljf_expected_delivery` INT,
+    `table_tlwljf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_pdl5fs` (`table_pdl5fs_product_id`, `table_pdl5fs_name`, `table_pdl5fs_sku`, `table_pdl5fs_stock_quantity`, `table_pdl5fs_reorder_point`, `table_pdl5fs_unit_cost`) VALUES (1, 'test', 3, 4, 5, 1.0);
+
+INSERT INTO `table_tlwljf` (`table_tlwljf_order_id`, `table_tlwljf_supplier_id`, `table_tlwljf_order_date`, `table_tlwljf_expected_delivery`, `table_tlwljf_status`) VALUES (1, 1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_REORDER_POINT INT DEFAULT 0;
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_PRIORITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_PDL5FS_STOCK_QUANTITY, 0), COALESCE(TABLE_PDL5FS_REORDER_POINT, 10), COALESCE(TABLE_PDL5FS_UNIT_COST, 0)
+    INTO V_STOCK_QUANTITY, V_REORDER_POINT, V_UNIT_COST
+    FROM TABLE_PDL5FS
+    WHERE TABLE_PDL5FS_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SET V_PRIORITY_SCORE = V_REORDER_POINT - V_STOCK_QUANTITY;
+
+    IF V_UNIT_COST > 100 THEN
+        SET V_PRIORITY_SCORE = V_PRIORITY_SCORE + 5;
+    END IF;
+
+    RETURN CAST(V_PRIORITY_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+CREATE TABLE IF NOT EXISTS `table_i56p0d` (
+    `table_i56p0d_emp_id` INT,
+    `table_i56p0d_salary` INT,
+    `table_i56p0d_hire_date` DATE
+);
+
+INSERT INTO `table_i56p0d` (`table_i56p0d_emp_id`, `table_i56p0d_salary`, `table_i56p0d_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I56P0D_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_I56P0D_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_I56P0D
+    WHERE TABLE_I56P0D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_SALARY / V_TENURE_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0----- */
+CREATE TABLE IF NOT EXISTS `table_brru3s` (
+    `table_brru3s_customer_id` INT,
+    `table_brru3s_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_brru3s` (`table_brru3s_customer_id`, `table_brru3s_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BRRU3S_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_BRRU3S
+    WHERE TABLE_BRRU3S_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp()) - -504 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(-42)) - 150 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(83)) - -929 + (v_monthly_cost * 12)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+CREATE TABLE IF NOT EXISTS `table_ffie3d` (
+    `table_ffie3d_product_id` INT,
+    `table_ffie3d_category_id` INT,
+    `table_ffie3d_supplier_id` INT,
+    `table_ffie3d_unit_cost` DECIMAL(10,2),
+    `table_ffie3d_unit_price` DECIMAL(10,2),
+    `table_ffie3d_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_wl2lrm` (
+    `table_wl2lrm_order_id` INT,
+    `table_wl2lrm_product_id` INT,
+    `table_wl2lrm_quantity` INT
+);
+
+INSERT INTO `table_ffie3d` (`table_ffie3d_product_id`, `table_ffie3d_category_id`, `table_ffie3d_supplier_id`, `table_ffie3d_unit_cost`, `table_ffie3d_unit_price`, `table_ffie3d_stock_quantity`) VALUES (1, 2, 3, 1.0, 1.0, 6);
+
+INSERT INTO `table_wl2lrm` (`table_wl2lrm_order_id`, `table_wl2lrm_product_id`, `table_wl2lrm_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PROFITABILITY_INDEX_87jfv4(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_UNIT_COST INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_STOCK_QUANTITY INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PROFIT_MARGIN INT DEFAULT 0;
+    DECLARE V_SALES_VOLUME INT DEFAULT 0;
+    DECLARE V_PROFITABILITY_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_FFIE3D_UNIT_COST, 0), COALESCE(TABLE_FFIE3D_UNIT_PRICE, 0), COALESCE(TABLE_FFIE3D_STOCK_QUANTITY, 0)
+    INTO V_UNIT_COST, V_UNIT_PRICE, V_STOCK_QUANTITY
+    FROM TABLE_FFIE3D
+    WHERE TABLE_FFIE3D_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_WL2LRM_QUANTITY), 0)
+    INTO V_SALES_VOLUME
+    FROM TABLE_WL2LRM
+    WHERE TABLE_WL2LRM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_UNIT_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFIT_MARGIN = ((V_UNIT_PRICE - V_UNIT_COST) * 100) / V_UNIT_PRICE;
+
+    SET V_PROFITABILITY_INDEX = (V_PROFIT_MARGIN * V_SALES_VOLUME) / GREATEST(V_STOCK_QUANTITY, 1);
+
+    RETURN V_PROFITABILITY_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq----- */
+CREATE TABLE IF NOT EXISTS `table_7s2v0h` (
+    `table_7s2v0h_category_id` INT,
+    `table_7s2v0h_price` DECIMAL(10,2),
+    `table_7s2v0h_stock_quantity` INT
+);
+
+INSERT INTO `table_7s2v0h` (`table_7s2v0h_category_id`, `table_7s2v0h_price`, `table_7s2v0h_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PROFIT_MARGIN_uqhruq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_7S2V0H_PRICE), 0), COALESCE(SUM(TABLE_7S2V0H_STOCK_QUANTITY), 0)
+    INTO V_AVG_PRICE, V_TOTAL_STOCK
+    FROM TABLE_7S2V0H
+    WHERE TABLE_7S2V0H_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(-20)) - 225 + ((MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(-96)) - -783 + (floor((v_avg_price * v_total_stock) / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+CREATE TABLE IF NOT EXISTS `table_0m87zv` (
+    `table_0m87zv_ticket_id` INT,
+    `table_0m87zv_concert_id` INT,
+    `table_0m87zv_customer_id` INT,
+    `table_0m87zv_seat_section` INT,
+    `table_0m87zv_seat_row` INT,
+    `table_0m87zv_seat_number` INT,
+    `table_0m87zv_price_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_psltnn` (
+    `table_psltnn_concert_id` INT,
+    `table_psltnn_artist_id` INT,
+    `table_psltnn_venue_id` INT,
+    `table_psltnn_concert_date` DATE,
+    `table_psltnn_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0m87zv` (`table_0m87zv_ticket_id`, `table_0m87zv_concert_id`, `table_0m87zv_customer_id`, `table_0m87zv_seat_section`, `table_0m87zv_seat_row`, `table_0m87zv_seat_number`, `table_0m87zv_price_paid`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_psltnn` (`table_psltnn_concert_id`, `table_psltnn_artist_id`, `table_psltnn_venue_id`, `table_psltnn_concert_date`, `table_psltnn_base_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE_PAID INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 100;
+    DECLARE V_DAYS_TO_CONCERT INT DEFAULT 0;
+    DECLARE V_RESALE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_RESALE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0M87ZV_PRICE_PAID, 100)
+    INTO V_PRICE_PAID
+    FROM TABLE_0M87ZV
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_PSLTNN_CONCERT_DATE, CURDATE())
+    INTO V_DAYS_TO_CONCERT
+    FROM TABLE_0M87ZV CT
+    JOIN TABLE_PSLTNN C ON TABLE_0M87ZV_CONCERT_ID = TABLE_PSLTNN_CONCERT_ID
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    IF V_DAYS_TO_CONCERT < 7 THEN
+        SET V_RESALE_MULTIPLIER = 3;
+    ELSEIF V_DAYS_TO_CONCERT < 30 THEN
+        SET V_RESALE_MULTIPLIER = 2;
+    ELSE
+        SET V_RESALE_MULTIPLIER = 1;
+    END IF;
+
+    SET V_RESALE_VALUE = V_PRICE_PAID * V_RESALE_MULTIPLIER;
+
+    RETURN CAST(V_RESALE_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+CREATE TABLE IF NOT EXISTS `table_lypw1w` (
+    `table_lypw1w_customer_id` INT,
+    `table_lypw1w_order_id` INT,
+    `table_lypw1w_order_date` DATE
+);
+
+INSERT INTO `table_lypw1w` (`table_lypw1w_customer_id`, `table_lypw1w_order_id`, `table_lypw1w_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_MONTH_mb4lp7(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER_DATE DATE;
+
+    SELECT MAX(TABLE_LYPW1W_ORDER_DATE)
+    INTO V_LAST_ORDER_DATE
+    FROM TABLE_LYPW1W
+    WHERE TABLE_LYPW1W_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_EMP_AVG_SALARY_5keii4(-89)) - -964 + (0);
+    END IF;
+
+    RETURN MONTH(V_LAST_ORDER_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+CREATE TABLE IF NOT EXISTS table_4rpywt (
+    table_4rpywt_emp_no INT,
+    table_4rpywt_first_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS table_qtgf21 (
+    table_qtgf21_emp_no INT,
+    table_qtgf21_salary DECIMAL(10,2)
+);
+
+INSERT INTO table_4rpywt (`table_4rpywt_emp_no`, `table_4rpywt_first_name`) VALUES (10001, 'Georgi');
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 60117);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 62102);
+
+INSERT INTO table_qtgf21 (`table_qtgf21_emp_no`, `table_qtgf21_salary`) VALUES (10001, 66074);
+
+/* -----Called: MYSQL_FUNC_EMP_AVG_SALARY_5keii4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_EMP_AVG_SALARY_5keii4(P_EMP_NO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE AVG_SALARY INT;
+    
+    SELECT CAST(AVG(TABLE_QTGF21_SALARY) AS UNSIGNED) INTO AVG_SALARY
+    FROM TABLE_4RPYWT E 
+    JOIN TABLE_QTGF21 S ON TABLE_4RPYWT_EMP_NO = TABLE_QTGF21_EMP_NO
+    WHERE TABLE_4RPYWT_EMP_NO = P_EMP_NO;
+    
+    RETURN AVG_SALARY;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+CREATE TABLE IF NOT EXISTS table_rfse4k (
+    table_rfse4k_employee_id INT,
+    table_rfse4k_first_name VARCHAR(50),
+    table_rfse4k_last_name VARCHAR(50),
+    table_rfse4k_salary INT
+);
+
+INSERT INTO table_rfse4k (`table_rfse4k_employee_id`, `table_rfse4k_first_name`, `table_rfse4k_last_name`, `table_rfse4k_salary`) VALUES (1, 'test', 'test', 4);
+
+/* -----Called: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_RFSE4K
+    WHERE TABLE_RFSE4K_SALARY > 35000
+    ORDER BY TABLE_RFSE4K_FIRST_NAME, TABLE_RFSE4K_LAST_NAME, TABLE_RFSE4K_EMPLOYEE_ID;
+    
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn(35)) - -224 + (result_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn----- */
+CREATE TABLE IF NOT EXISTS `table_4c3hky` (
+    `table_4c3hky_order_id` INT,
+    `table_4c3hky_customer_id` INT,
+    `table_4c3hky_order_date` DATE,
+    `table_4c3hky_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_8sqbth` (
+    `table_8sqbth_customer_id` INT,
+    `table_8sqbth_country` INT
+);
+
+INSERT INTO `table_4c3hky` (`table_4c3hky_order_id`, `table_4c3hky_customer_id`, `table_4c3hky_order_date`, `table_4c3hky_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_8sqbth` (`table_8sqbth_customer_id`, `table_8sqbth_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_REVENUE_SHARE_n74brn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+    DECLARE V_CUSTOMER_REVENUE INT DEFAULT 0;
+    DECLARE V_COUNTRY_REVENUE INT DEFAULT 0;
+    DECLARE V_REVENUE_SHARE INT DEFAULT 0;
+
+    SELECT TABLE_8SQBTH_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_8SQBTH
+    WHERE TABLE_8SQBTH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4C3HKY_TOTAL_AMOUNT), 0)
+    INTO V_CUSTOMER_REVENUE
+    FROM TABLE_4C3HKY
+    WHERE TABLE_4C3HKY_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4C3HKY_TOTAL_AMOUNT), 0)
+    INTO V_COUNTRY_REVENUE
+    FROM TABLE_4C3HKY O
+    JOIN TABLE_8SQBTH C ON TABLE_4C3HKY_CUSTOMER_ID = TABLE_8SQBTH_CUSTOMER_ID
+    WHERE TABLE_8SQBTH_COUNTRY = V_CUSTOMER_COUNTRY;
+
+    IF V_COUNTRY_REVENUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_REVENUE_SHARE = (V_CUSTOMER_REVENUE * 100) / V_COUNTRY_REVENUE;
+
+    RETURN V_REVENUE_SHARE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RETURN_CONSTANT_koelg7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_VALUE_k8nir0(18)) - 860 + ((MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(63)) - 405 + ((MYSQL_FUNC_CALCULATE_REORDER_PRIORITY_75io9j(51)) - 292 + (42)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_RETURN_CONSTANT_koelg7();

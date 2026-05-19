@@ -1,0 +1,394 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_hyqlgg` (
+    `table_hyqlgg_campaign_id` INT,
+    `table_hyqlgg_status` VARCHAR(50)
+);
+
+INSERT INTO `table_hyqlgg` (`table_hyqlgg_campaign_id`, `table_hyqlgg_status`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+CREATE TABLE IF NOT EXISTS `table_0lv4pt` (
+    `table_0lv4pt_case_id` INT,
+    `table_0lv4pt_attorney_id` INT,
+    `table_0lv4pt_case_type` VARCHAR(50),
+    `table_0lv4pt_filing_date` DATE,
+    `table_0lv4pt_settlement_amount` DECIMAL(10,2),
+    `table_0lv4pt_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ljafqt` (
+    `table_ljafqt_attorney_id` INT,
+    `table_ljafqt_name` VARCHAR(50),
+    `table_ljafqt_hourly_rate` INT,
+    `table_ljafqt_experience_years` INT
+);
+
+INSERT INTO `table_0lv4pt` (`table_0lv4pt_case_id`, `table_0lv4pt_attorney_id`, `table_0lv4pt_case_type`, `table_0lv4pt_filing_date`, `table_0lv4pt_settlement_amount`, `table_0lv4pt_status`) VALUES (1, 2, 'test', '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_ljafqt` (`table_ljafqt_attorney_id`, `table_ljafqt_name`, `table_ljafqt_hourly_rate`, `table_ljafqt_experience_years`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEGAL_CASE_VALUE_458n80(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SETTLEMENT_AMOUNT INT DEFAULT 0;
+    DECLARE V_ATTORNEY_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 200;
+    DECLARE V_CASE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0LV4PT_SETTLEMENT_AMOUNT, 0)
+    INTO V_SETTLEMENT_AMOUNT
+    FROM TABLE_0LV4PT
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LJAFQT_HOURLY_RATE, 200)
+    INTO V_HOURLY_RATE
+    FROM TABLE_0LV4PT LC
+    JOIN TABLE_LJAFQT A ON TABLE_0LV4PT_ATTORNEY_ID = TABLE_LJAFQT_ATTORNEY_ID
+    WHERE TABLE_0LV4PT_CASE_ID = CASE_ID_PARAM;
+
+    SET V_CASE_VALUE = V_SETTLEMENT_AMOUNT;
+
+    IF V_CASE_VALUE > 100000 THEN
+        SET V_CASE_VALUE = V_CASE_VALUE - (V_CASE_VALUE * 10 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(82, 8, 46)) - -254 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(-66)) - -296 + (cast(v_case_value as signed)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+CREATE TABLE IF NOT EXISTS `table_bl5369` (
+    `table_bl5369_emp_id` INT,
+    `table_bl5369_department_id` INT
+);
+
+INSERT INTO `table_bl5369` (`table_bl5369_emp_id`, `table_bl5369_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_LEVEL_SCORE_2vnr4t(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_EMP_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_BL5369_DEPARTMENT_ID
+    INTO V_DEPT_ID
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_EMP_COUNT
+    FROM TABLE_BL5369
+    WHERE TABLE_BL5369_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN V_EMP_COUNT / 10;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GEOMETRIC_SEQUENCE_NTH_o8q5e9(A1 INT, R INT, N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NTH_TERM INT DEFAULT 0;
+    SET V_NTH_TERM = (MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(-72)) - -876 + (a1 * pow(r, n - 1));
+    RETURN V_NTH_TERM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+CREATE TABLE IF NOT EXISTS `table_whrfd8` (
+    `table_whrfd8_product_id` INT,
+    `table_whrfd8_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_whrfd8` (`table_whrfd8_product_id`, `table_whrfd8_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_TIER_INDEX_rm302k(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_WHRFD8_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_WHRFD8
+    WHERE TABLE_WHRFD8_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_PRICE > 1000 THEN
+        RETURN 5;
+    ELSEIF V_PRICE > 500 THEN
+        RETURN 4;
+    ELSEIF V_PRICE > 200 THEN
+        RETURN 3;
+    ELSEIF V_PRICE > 50 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+CREATE TABLE IF NOT EXISTS `table_573a30` (
+    `table_573a30_campaign_id` INT,
+    `table_573a30_channel` INT,
+    `table_573a30_budget_allocated` INT,
+    `table_573a30_start_date` DATE,
+    `table_573a30_end_date` DATE,
+    `table_573a30_leads_generated` INT,
+    `table_573a30_conversions` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_i7rfnt` (
+    `table_i7rfnt_spend_id` INT,
+    `table_i7rfnt_campaign_id` INT,
+    `table_i7rfnt_spend_date` DATE,
+    `table_i7rfnt_amount_spent` DECIMAL(10,2)
+);
+
+INSERT INTO `table_573a30` (`table_573a30_campaign_id`, `table_573a30_channel`, `table_573a30_budget_allocated`, `table_573a30_start_date`, `table_573a30_end_date`, `table_573a30_leads_generated`, `table_573a30_conversions`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1, 1);
+
+INSERT INTO `table_i7rfnt` (`table_i7rfnt_spend_id`, `table_i7rfnt_campaign_id`, `table_i7rfnt_spend_date`, `table_i7rfnt_amount_spent`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_ROI_xye2jz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_LEADS_GENERATED INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPEND INT DEFAULT 0;
+    DECLARE V_ROI_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_573A30_BUDGET_ALLOCATED, (MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_SCORE_dk6trh(64)) - -797 + (0)), COALESCE(TABLE_573A30_LEADS_GENERATED, 0), COALESCE(TABLE_573A30_CONVERSIONS, 0)
+    INTO V_BUDGET, V_LEADS_GENERATED, V_CONVERSIONS
+    FROM TABLE_573A30
+    WHERE TABLE_573A30_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_I7RFNT_AMOUNT_SPENT), 0) INTO V_TOTAL_SPEND
+    FROM TABLE_I7RFNT
+    WHERE TABLE_I7RFNT_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI_SCORE = ((V_CONVERSIONS * 100) - V_TOTAL_SPEND) * 100 / V_BUDGET;
+
+    RETURN CAST(V_ROI_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_SCORE_dk6trh----- */
+CREATE TABLE IF NOT EXISTS `table_qin6xh` (
+    `table_qin6xh_customer_id` INT,
+    `table_qin6xh_registration_date` DATE,
+    `table_qin6xh_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4m84yh` (
+    `table_4m84yh_order_id` INT,
+    `table_4m84yh_customer_id` INT,
+    `table_4m84yh_order_date` DATE,
+    `table_4m84yh_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_qin6xh` (`table_qin6xh_customer_id`, `table_qin6xh_registration_date`, `table_qin6xh_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_4m84yh` (`table_4m84yh_order_id`, `table_4m84yh_customer_id`, `table_4m84yh_order_date`, `table_4m84yh_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_SCORE_dk6trh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_CHURN_RISK_SCORE_dk6trh(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 999;
+    DECLARE V_ORDER_FREQUENCY DECIMAL(5,2) DEFAULT 0.00;
+    DECLARE V_CHURN_RISK INT DEFAULT 0;
+
+    SELECT DATEDIFF(CURDATE(), MAX(TABLE_4M84YH_ORDER_DATE))
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_4M84YH
+    WHERE TABLE_4M84YH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*) / GREATEST(DATEDIFF(CURDATE(), MIN(TABLE_4M84YH_ORDER_DATE)) / 30, 1)
+    INTO V_ORDER_FREQUENCY
+    FROM TABLE_4M84YH
+    WHERE TABLE_4M84YH_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_CHURN_RISK = LEAST(V_DAYS_SINCE_LAST_ORDER / 7 * 10, 100) - (V_ORDER_FREQUENCY * 15);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(-13)) - -191 + (greatest(v_churn_risk, 0));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+CREATE TABLE IF NOT EXISTS `table_8cjtte` (
+    `table_8cjtte_product_id` INT,
+    `table_8cjtte_supplier_id` INT,
+    `table_8cjtte_price` DECIMAL(10,2),
+    `table_8cjtte_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_upwhhl` (
+    `table_upwhhl_supplier_id` INT,
+    `table_upwhhl_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_8cjtte` (`table_8cjtte_product_id`, `table_8cjtte_supplier_id`, `table_8cjtte_price`, `table_8cjtte_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_upwhhl` (`table_upwhhl_supplier_id`, `table_upwhhl_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_VALUE_SCORE_cp4s2k(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_PRODUCT_COUNT INT DEFAULT 0;
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_VALUE_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_UPWHHL_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_UPWHHL
+    WHERE TABLE_UPWHHL_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_8CJTTE_PRICE), 0)
+    INTO V_PRODUCT_COUNT, V_AVG_PRICE
+    FROM TABLE_8CJTTE
+    WHERE TABLE_8CJTTE_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    SET V_VALUE_SCORE = (V_RATING * 20) + (V_PRODUCT_COUNT * 5) + (V_AVG_PRICE / 10);
+
+    RETURN V_VALUE_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56----- */
+CREATE TABLE IF NOT EXISTS `table_76sh7x` (
+    `table_76sh7x_order_id` INT,
+    `table_76sh7x_customer_id` INT,
+    `table_76sh7x_order_date` DATE,
+    `table_76sh7x_total_amount` DECIMAL(10,2),
+    `table_76sh7x_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_kfhtet` (
+    `table_kfhtet_shipment_id` INT,
+    `table_kfhtet_order_id` INT,
+    `table_kfhtet_carrier` INT,
+    `table_kfhtet_shipping_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_76sh7x` (`table_76sh7x_order_id`, `table_76sh7x_customer_id`, `table_76sh7x_order_date`, `table_76sh7x_total_amount`, `table_76sh7x_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_kfhtet` (`table_kfhtet_shipment_id`, `table_kfhtet_order_id`, `table_kfhtet_carrier`, `table_kfhtet_shipping_cost`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CARRIER_SELECTION_INDEX_hjrn56(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_COST DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_ORDER_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_SELECTION_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_KFHTET_SHIPPING_COST, 0), COALESCE(TABLE_76SH7X_TOTAL_AMOUNT, 1)
+    INTO V_SHIPPING_COST, V_ORDER_TOTAL
+    FROM TABLE_76SH7X O
+    LEFT JOIN TABLE_KFHTET S ON TABLE_76SH7X_ORDER_ID = TABLE_KFHTET_ORDER_ID
+    WHERE TABLE_76SH7X_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_SELECTION_INDEX = (V_SHIPPING_COST * 100) / V_ORDER_TOTAL;
+
+    RETURN V_SELECTION_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(VAL INT, MIN_VAL INT, MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(-85, -16)) - 531 + (val) < MIN_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE BELOW MINIMUM';
+    END IF;
+    IF VAL > MAX_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE ABOVE MAXIMUM';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_STRING_REPEAT_ewez6b(STR INT, COUNT_VAL INT) RETURNS VARCHAR(500) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT VARCHAR(500) DEFAULT '';
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COUNT_VAL < 0 OR COUNT_VAL > 100 THEN
+        RETURN NULL;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = CONCAT(V_RESULT, STR);
+        SET V_I = V_I + 1;
+    UNTIL V_I >= COUNT_VAL END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_HYQLGG_STATUS
+    INTO V_STATUS
+    FROM TABLE_HYQLGG
+    WHERE TABLE_HYQLGG_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CAMPAIGN_VALUE_rsc3du(1);

@@ -1,0 +1,461 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_rangjq` (
+    `table_rangjq_product_id` INT,
+    `table_rangjq_category_id` INT,
+    `table_rangjq_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_nfbddz` (
+    `table_nfbddz_category_id` INT,
+    `table_nfbddz_name` VARCHAR(50)
+);
+
+INSERT INTO `table_rangjq` (`table_rangjq_product_id`, `table_rangjq_category_id`, `table_rangjq_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_nfbddz` (`table_nfbddz_category_id`, `table_nfbddz_name`) VALUES (1, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+CREATE TABLE IF NOT EXISTS `table_vh9l8d` (
+    `table_vh9l8d_emp_id` INT,
+    `table_vh9l8d_department_id` INT,
+    `table_vh9l8d_salary` INT,
+    `table_vh9l8d_hire_date` DATE,
+    `table_vh9l8d_performance_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_vh9l8d` (`table_vh9l8d_emp_id`, `table_vh9l8d_department_id`, `table_vh9l8d_salary`, `table_vh9l8d_hire_date`, `table_vh9l8d_performance_rating`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_BONUS_ELIGIBLE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VH9L8D_PERFORMANCE_RATING, 0), TIMESTAMPDIFF(YEAR, TABLE_VH9L8D_HIRE_DATE, CURDATE()), COALESCE(TABLE_VH9L8D_SALARY, 0)
+    INTO V_PERFORMANCE_RATING, V_YEARS_EMPLOYED, V_SALARY
+    FROM TABLE_VH9L8D
+    WHERE TABLE_VH9L8D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_PERFORMANCE_RATING >= 3.5 AND V_YEARS_EMPLOYED >= (MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(32)) - -528 + ((MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(-26)) - 648 + (1)) THEN
+        SET V_BONUS_ELIGIBLE = 1;
+    END IF;
+
+    RETURN V_BONUS_ELIGIBLE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+CREATE TABLE IF NOT EXISTS `table_21q6aw` (
+    `table_21q6aw_rental_id` INT,
+    `table_21q6aw_customer_id` INT,
+    `table_21q6aw_bicycle_id` INT,
+    `table_21q6aw_rental_date` DATE,
+    `table_21q6aw_rental_hours` INT,
+    `table_21q6aw_hourly_rate` INT,
+    `table_21q6aw_return_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_cb6kwj` (
+    `table_cb6kwj_bicycle_id` INT,
+    `table_cb6kwj_bicycle_type` VARCHAR(50),
+    `table_cb6kwj_condition` INT,
+    `table_cb6kwj_value` INT
+);
+
+INSERT INTO `table_21q6aw` (`table_21q6aw_rental_id`, `table_21q6aw_customer_id`, `table_21q6aw_bicycle_id`, `table_21q6aw_rental_date`, `table_21q6aw_rental_hours`, `table_21q6aw_hourly_rate`, `table_21q6aw_return_date`) VALUES (1, 1, 1, '2024-01-01', 1, 1, '2024-01-01');
+
+INSERT INTO `table_cb6kwj` (`table_cb6kwj_bicycle_id`, `table_cb6kwj_bicycle_type`, `table_cb6kwj_condition`, `table_cb6kwj_value`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BICYCLE_RENTAL_COST_u7qof5(RENTAL_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RENTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 10;
+    DECLARE V_BICYCLE_VALUE INT DEFAULT 500;
+    DECLARE V_INSURANCE_FEE INT DEFAULT 0;
+    DECLARE V_TOTAL_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_21Q6AW_RENTAL_HOURS, 1), COALESCE(TABLE_21Q6AW_HOURLY_RATE, 10)
+    INTO V_RENTAL_HOURS, V_HOURLY_RATE
+    FROM TABLE_21Q6AW
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SELECT COALESCE(TABLE_CB6KWJ_VALUE, 500) INTO V_BICYCLE_VALUE
+    FROM TABLE_21Q6AW BR
+    JOIN TABLE_CB6KWJ B ON TABLE_21Q6AW_BICYCLE_ID = TABLE_CB6KWJ_BICYCLE_ID
+    WHERE TABLE_21Q6AW_RENTAL_ID = RENTAL_ID_PARAM;
+
+    SET V_TOTAL_COST = V_RENTAL_HOURS * V_HOURLY_RATE;
+
+    IF V_BICYCLE_VALUE > 1000 THEN
+        SET V_INSURANCE_FEE = V_RENTAL_HOURS * 5;
+        SET V_TOTAL_COST = V_TOTAL_COST + V_INSURANCE_FEE;
+    END IF;
+
+    RETURN CAST(V_TOTAL_COST AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+CREATE TABLE IF NOT EXISTS `table_4swy4z` (
+    `table_4swy4z_order_id` INT,
+    `table_4swy4z_product_id` INT,
+    `table_4swy4z_quantity_ordered` INT,
+    `table_4swy4z_start_date` DATE,
+    `table_4swy4z_completion_date` DATE,
+    `table_4swy4z_defect_count` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_e7kyph` (
+    `table_e7kyph_product_id` INT,
+    `table_e7kyph_name` VARCHAR(50),
+    `table_e7kyph_unit_price` DECIMAL(10,2),
+    `table_e7kyph_production_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_4swy4z` (`table_4swy4z_order_id`, `table_4swy4z_product_id`, `table_4swy4z_quantity_ordered`, `table_4swy4z_start_date`, `table_4swy4z_completion_date`, `table_4swy4z_defect_count`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_e7kyph` (`table_e7kyph_product_id`, `table_e7kyph_name`, `table_e7kyph_unit_price`, `table_e7kyph_production_cost`) VALUES (1, 'test', 1.0, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_QUALITY_SCORE_jwel8i(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY_ORDERED INT DEFAULT 0;
+    DECLARE V_DEFECT_COUNT INT DEFAULT 0;
+    DECLARE V_QUALITY_SCORE INT DEFAULT 100;
+    DECLARE V_REWORK_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4SWY4Z_QUANTITY_ORDERED, 0), COALESCE(TABLE_4SWY4Z_DEFECT_COUNT, 0)
+    INTO V_QUANTITY_ORDERED, V_DEFECT_COUNT
+    FROM TABLE_4SWY4Z
+    WHERE TABLE_4SWY4Z_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_QUANTITY_ORDERED = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_QUALITY_SCORE = ((V_QUANTITY_ORDERED - V_DEFECT_COUNT) * 100) / V_QUANTITY_ORDERED;
+
+    IF V_DEFECT_COUNT > 10 THEN
+        SET V_REWORK_COST = V_DEFECT_COUNT * 50;
+        SET V_QUALITY_SCORE = V_QUALITY_SCORE - 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(57)) - 382 + (cast(v_quality_score as signed));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+CREATE TABLE IF NOT EXISTS `table_gwdcp2` (
+    `table_gwdcp2_order_id` INT,
+    `table_gwdcp2_customer_id` INT,
+    `table_gwdcp2_order_date` DATE,
+    `table_gwdcp2_total_amount` DECIMAL(10,2),
+    `table_gwdcp2_shipping_method` INT,
+    `table_gwdcp2_estimated_delivery_days` INT
+);
+
+INSERT INTO `table_gwdcp2` (`table_gwdcp2_order_id`, `table_gwdcp2_customer_id`, `table_gwdcp2_order_date`, `table_gwdcp2_total_amount`, `table_gwdcp2_shipping_method`, `table_gwdcp2_estimated_delivery_days`) VALUES (1, 2, '2024-01-01', 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 0;
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'STANDARD';
+
+    SELECT COALESCE(TABLE_GWDCP2_ESTIMATED_DELIVERY_DAYS, 5), TABLE_GWDCP2_SHIPPING_METHOD
+    INTO V_ESTIMATED_DAYS, V_SHIPPING_METHOD
+    FROM TABLE_GWDCP2
+    WHERE TABLE_GWDCP2_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_ACTUAL_DAYS = V_ESTIMATED_DAYS + 2;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'EXPRESS' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 15);
+        WHEN 'PRIORITY' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 12);
+        WHEN 'STANDARD' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 10);
+        ELSE SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 8);
+    END CASE;
+
+    RETURN GREATEST(V_RELIABILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BUG9056_FUNC1_c3545j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BUG9056_FUNC1_c3545j(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A + B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+CREATE TABLE IF NOT EXISTS table_pi4u01 (
+    table_pi4u01_name VARCHAR(50)
+);
+
+INSERT INTO table_pi4u01 (`table_pi4u01_name`) VALUES ('test');
+
+/* -----Called: MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(START_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE TOWN_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO TOWN_COUNT 
+    FROM TABLE_PI4U01 
+    WHERE TABLE_PI4U01_NAME LIKE CONCAT(CAST(START_STR AS CHAR), '%');
+    
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(-23)) - 273 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2(65)) - -721 + (town_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2----- */
+CREATE TABLE IF NOT EXISTS `table_s0k6pd` (
+    `table_s0k6pd_supplier_id` INT,
+    `table_s0k6pd_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_s0k6pd` (`table_s0k6pd_supplier_id`, `table_s0k6pd_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_RATING_INDEX_m4rye2(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_S0K6PD_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_S0K6PD
+    WHERE TABLE_S0K6PD_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(-96)) - -783 + (floor(v_rating));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+CREATE TABLE IF NOT EXISTS `table_0m87zv` (
+    `table_0m87zv_ticket_id` INT,
+    `table_0m87zv_concert_id` INT,
+    `table_0m87zv_customer_id` INT,
+    `table_0m87zv_seat_section` INT,
+    `table_0m87zv_seat_row` INT,
+    `table_0m87zv_seat_number` INT,
+    `table_0m87zv_price_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_psltnn` (
+    `table_psltnn_concert_id` INT,
+    `table_psltnn_artist_id` INT,
+    `table_psltnn_venue_id` INT,
+    `table_psltnn_concert_date` DATE,
+    `table_psltnn_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0m87zv` (`table_0m87zv_ticket_id`, `table_0m87zv_concert_id`, `table_0m87zv_customer_id`, `table_0m87zv_seat_section`, `table_0m87zv_seat_row`, `table_0m87zv_seat_number`, `table_0m87zv_price_paid`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_psltnn` (`table_psltnn_concert_id`, `table_psltnn_artist_id`, `table_psltnn_venue_id`, `table_psltnn_concert_date`, `table_psltnn_base_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE_PAID INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 100;
+    DECLARE V_DAYS_TO_CONCERT INT DEFAULT 0;
+    DECLARE V_RESALE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_RESALE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0M87ZV_PRICE_PAID, 100)
+    INTO V_PRICE_PAID
+    FROM TABLE_0M87ZV
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_PSLTNN_CONCERT_DATE, CURDATE())
+    INTO V_DAYS_TO_CONCERT
+    FROM TABLE_0M87ZV CT
+    JOIN TABLE_PSLTNN C ON TABLE_0M87ZV_CONCERT_ID = TABLE_PSLTNN_CONCERT_ID
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    IF V_DAYS_TO_CONCERT < 7 THEN
+        SET V_RESALE_MULTIPLIER = 3;
+    ELSEIF V_DAYS_TO_CONCERT < 30 THEN
+        SET V_RESALE_MULTIPLIER = 2;
+    ELSE
+        SET V_RESALE_MULTIPLIER = 1;
+    END IF;
+
+    SET V_RESALE_VALUE = V_PRICE_PAID * V_RESALE_MULTIPLIER;
+
+    RETURN CAST(V_RESALE_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+CREATE TABLE IF NOT EXISTS `table_foekw5` (
+    `table_foekw5_emp_id` INT,
+    `table_foekw5_department_id` INT,
+    `table_foekw5_salary` INT,
+    `table_foekw5_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_p5a7l2` (
+    `table_p5a7l2_department_id` INT,
+    `table_p5a7l2_name` VARCHAR(50),
+    `table_p5a7l2_location` INT
+);
+
+INSERT INTO `table_foekw5` (`table_foekw5_emp_id`, `table_foekw5_department_id`, `table_foekw5_salary`, `table_foekw5_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_p5a7l2` (`table_p5a7l2_department_id`, `table_p5a7l2_name`, `table_p5a7l2_location`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_QUARTILE_dwbjox(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_DEPT_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_QUARTILE INT DEFAULT 2;
+
+    SELECT TABLE_FOEKW5_SALARY
+    INTO V_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_FOEKW5_SALARY), 0)
+    INTO V_DEPT_AVG_SALARY
+    FROM TABLE_FOEKW5
+    WHERE TABLE_FOEKW5_DEPARTMENT_ID = (SELECT TABLE_FOEKW5_DEPARTMENT_ID FROM TABLE_FOEKW5 WHERE TABLE_FOEKW5_EMP_ID = EMP_ID_PARAM);
+
+    IF V_SALARY > V_DEPT_AVG_SALARY * 1.5 THEN
+        SET V_QUARTILE = (MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(85)) - -325 + (4);
+    ELSEIF V_SALARY > V_DEPT_AVG_SALARY * 1.25 THEN
+        SET V_QUARTILE = 3;
+    ELSEIF V_SALARY < V_DEPT_AVG_SALARY * 0.75 THEN
+        SET V_QUARTILE = 1;
+    END IF;
+
+    RETURN V_QUARTILE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+CREATE TABLE IF NOT EXISTS `table_77c9lm` (
+    `table_77c9lm_emp_id` INT,
+    `table_77c9lm_dept_id` INT,
+    `table_77c9lm_manager_id` INT,
+    `table_77c9lm_salary` INT,
+    `table_77c9lm_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0zp2ks` (
+    `table_0zp2ks_dept_id` INT,
+    `table_0zp2ks_name` VARCHAR(50)
+);
+
+INSERT INTO `table_77c9lm` (`table_77c9lm_emp_id`, `table_77c9lm_dept_id`, `table_77c9lm_manager_id`, `table_77c9lm_salary`, `table_77c9lm_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0zp2ks` (`table_0zp2ks_dept_id`, `table_0zp2ks_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_SIZE INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_77C9LM_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_77C9LM_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_SIZE
+    FROM TABLE_77C9LM E
+    JOIN TABLE_0ZP2KS D ON TABLE_77C9LM_DEPT_ID = TABLE_0ZP2KS_DEPT_ID
+    WHERE TABLE_0ZP2KS_DEPT_ID = (SELECT TABLE_77C9LM_DEPT_ID FROM TABLE_77C9LM WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_READINESS_SCORE = (V_YEARS_EMPLOYED * 10) + (V_DIRECT_REPORTS * 15) + ((V_DEPT_SIZE * 100) / 1000);
+
+    IF V_SALARY > 100000 THEN
+        SET V_READINESS_SCORE = V_READINESS_SCORE + 20;
+    END IF;
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_COMPETITIVENESS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_RANGJQ_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_RANGJQ_PRICE), 1)
+    INTO V_CATEGORY_AVG
+    FROM TABLE_RANGJQ
+    WHERE TABLE_RANGJQ_CATEGORY_ID = (SELECT TABLE_RANGJQ_CATEGORY_ID FROM TABLE_RANGJQ WHERE TABLE_RANGJQ_PRODUCT_ID = PRODUCT_ID_PARAM);
+
+    SET V_COMPETITIVENESS = (V_CATEGORY_AVG * 100) / V_PRICE;
+
+    RETURN (MYSQL_FUNC_USP_GET_TOWNS_STARTING_WITH_anj7xt(37)) - 848 + ((MYSQL_FUNC_BUG9056_FUNC1_c3545j(86, -61)) - -879 + ((MYSQL_FUNC_CALCULATE_YEARLY_BONUS_ELIGIBILITY_ynmfkj(-77)) - -936 + (floor(v_competitiveness))));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_PRICE_COMPETITIVENESS_INDEX_1ybrx2(1);

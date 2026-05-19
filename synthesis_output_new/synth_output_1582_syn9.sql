@@ -1,0 +1,528 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v163797 (
+    v163798 VARCHAR(255),
+    v163799 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v164023 (
+    v164024 VARCHAR(255),
+    v164025 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v163737 (
+    v163738 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v163904 (
+    id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v164390 (
+    v164391 INT
+);
+CREATE TABLE IF NOT EXISTS v164335 (
+    v164337 DATETIME(6)
+);
+INSERT INTO v163797 (v163798, v163799) VALUES
+('test', 'initial'),
+('hello', 'world'),
+('foo', 'bar');
+INSERT INTO v164023 (v164024, v164025) VALUES
+('1', '1'),
+('2', '1'),
+('3', '1'),
+('w', '1'),
+('w/U', '1');
+INSERT INTO v163737 (v163738) VALUES
+(ST_GEOMFROMTEXT('POINT(0 0)')),
+(ST_GEOMFROMTEXT('POINT(10 10)'));
+INSERT INTO v163904 (id) VALUES (1), (2);
+INSERT INTO v164390 (v164391) VALUES (0), (0);
+INSERT INTO v164335 (v164337) VALUES ('2020-01-01 00:00:00.000000');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526----- */
+CREATE TABLE IF NOT EXISTS `table_yfm7r6` (
+    `table_yfm7r6_product_id` INT,
+    `table_yfm7r6_price` DECIMAL(10,2),
+    `table_yfm7r6_stock_quantity` INT
+);
+
+INSERT INTO `table_yfm7r6` (`table_yfm7r6_product_id`, `table_yfm7r6_price`, `table_yfm7r6_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INVENTORY_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_YFM7R6_PRICE, 0) * COALESCE(TABLE_YFM7R6_STOCK_QUANTITY, 0)
+    INTO V_INVENTORY_VALUE
+    FROM TABLE_YFM7R6
+    WHERE TABLE_YFM7R6_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(-60)) - -225 + ((MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(-23, -81)) - 130 + (v_inventory_value));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+CREATE TABLE IF NOT EXISTS `table_wp8tiy` (
+    `table_wp8tiy_order_id` INT,
+    `table_wp8tiy_customer_id` INT,
+    `table_wp8tiy_order_date` DATE,
+    `table_wp8tiy_status` VARCHAR(50),
+    `table_wp8tiy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d83unb` (
+    `table_d83unb_order_id` INT,
+    `table_d83unb_product_id` INT,
+    `table_d83unb_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_7n22ut` (
+    `table_7n22ut_product_id` INT,
+    `table_7n22ut_category_id` INT,
+    `table_7n22ut_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_wp8tiy` (`table_wp8tiy_order_id`, `table_wp8tiy_customer_id`, `table_wp8tiy_order_date`, `table_wp8tiy_status`, `table_wp8tiy_total_amount`) VALUES (1, 2, '2024-01-01', 'test', 1.0);
+
+INSERT INTO `table_d83unb` (`table_d83unb_order_id`, `table_d83unb_product_id`, `table_d83unb_quantity`) VALUES (1, 2, 3);
+
+INSERT INTO `table_7n22ut` (`table_7n22ut_product_id`, `table_7n22ut_category_id`, `table_7n22ut_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PREFERENCE_SCORE_kxeyjo(CUSTOMER_ID_PARAM INT, CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_TOTAL_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_CATEGORY_REVENUE INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_PREFERENCE_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_D83UNB_QUANTITY * TABLE_7N22UT_PRICE), (MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(-51)) - -128 + (0))
+    INTO V_CATEGORY_ORDER_COUNT, V_CATEGORY_REVENUE
+    FROM TABLE_WP8TIY O
+    JOIN TABLE_D83UNB OI ON TABLE_WP8TIY_ORDER_ID = TABLE_D83UNB_ORDER_ID
+    JOIN TABLE_7N22UT P ON TABLE_D83UNB_PRODUCT_ID = TABLE_7N22UT_PRODUCT_ID
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_7N22UT_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_WP8TIY_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDER_COUNT, V_TOTAL_REVENUE
+    FROM TABLE_WP8TIY
+    WHERE TABLE_WP8TIY_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_WP8TIY_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_ORDER_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PREFERENCE_SCORE = ((V_CATEGORY_ORDER_COUNT * 1.0) / V_TOTAL_ORDER_COUNT * 50) +
+                             ((V_CATEGORY_REVENUE * 1.0) / V_TOTAL_REVENUE * 50);
+
+    RETURN FLOOR(V_PREFERENCE_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+CREATE TABLE IF NOT EXISTS `table_ei7t2d` (
+    `table_ei7t2d_student_id` INT,
+    `table_ei7t2d_name` VARCHAR(50),
+    `table_ei7t2d_major_id` INT,
+    `table_ei7t2d_gpa` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_2i0311` (
+    `table_2i0311_major_id` INT,
+    `table_2i0311_name` VARCHAR(50),
+    `table_2i0311_department` INT
+);
+
+INSERT INTO `table_ei7t2d` (`table_ei7t2d_student_id`, `table_ei7t2d_name`, `table_ei7t2d_major_id`, `table_ei7t2d_gpa`) VALUES (1, 'test', 1, 1);
+
+INSERT INTO `table_2i0311` (`table_2i0311_major_id`, `table_2i0311_name`, `table_2i0311_department`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HONOR_ROLL_tdb1tq(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GPA DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_CREDITS INT DEFAULT 0;
+    DECLARE V_DEPARTMENT VARCHAR(50) DEFAULT '';
+    DECLARE V_HONOR_POINTS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_EI7T2D_GPA, 0.00), COALESCE(TABLE_2I0311_DEPARTMENT, 'UNKNOWN')
+    INTO V_GPA, V_DEPARTMENT
+    FROM TABLE_EI7T2D S
+    JOIN TABLE_2I0311 M ON TABLE_EI7T2D_MAJOR_ID = TABLE_2I0311_MAJOR_ID
+    WHERE TABLE_EI7T2D_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_HONOR_POINTS = ROUND(V_GPA * 100);
+
+    CASE V_DEPARTMENT
+        WHEN 'ENGINEERING' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 10;
+        WHEN 'MEDICINE' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 15;
+        WHEN 'LAW' THEN SET V_HONOR_POINTS = V_HONOR_POINTS + 12;
+        ELSE SET V_HONOR_POINTS = V_HONOR_POINTS + 5;
+    END CASE;
+
+    RETURN V_HONOR_POINTS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+CREATE TABLE IF NOT EXISTS `table_bzoodp` (
+    `table_bzoodp_property_id` INT,
+    `table_bzoodp_landlord_id` INT,
+    `table_bzoodp_property_type` VARCHAR(50),
+    `table_bzoodp_monthly_rent` INT,
+    `table_bzoodp_deposit_amount` DECIMAL(10,2),
+    `table_bzoodp_num_units` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_s3k6c0` (
+    `table_s3k6c0_lease_id` INT,
+    `table_s3k6c0_property_id` INT,
+    `table_s3k6c0_tenant_id` INT,
+    `table_s3k6c0_start_date` DATE,
+    `table_s3k6c0_end_date` DATE,
+    `table_s3k6c0_monthly_payment` INT
+);
+
+INSERT INTO `table_bzoodp` (`table_bzoodp_property_id`, `table_bzoodp_landlord_id`, `table_bzoodp_property_type`, `table_bzoodp_monthly_rent`, `table_bzoodp_deposit_amount`, `table_bzoodp_num_units`) VALUES (1, 2, 'test', 4, 1.0, 6);
+
+INSERT INTO `table_s3k6c0` (`table_s3k6c0_lease_id`, `table_s3k6c0_property_id`, `table_s3k6c0_tenant_id`, `table_s3k6c0_start_date`, `table_s3k6c0_end_date`, `table_s3k6c0_monthly_payment`) VALUES (1, 2, 3, '2024-01-01', '2024-01-01', 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LEASE_RISK_SCORE_3fg69j(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_NUM_UNITS INT DEFAULT 0;
+    DECLARE V_OCCUPIED_UNITS INT DEFAULT 0;
+    DECLARE V_VACANCY_RATE INT DEFAULT 0;
+    DECLARE V_RISK_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_BZOODP_MONTHLY_RENT, 0), COALESCE(TABLE_BZOODP_NUM_UNITS, 1)
+    INTO V_MONTHLY_RENT, V_NUM_UNITS
+    FROM TABLE_BZOODP
+    WHERE TABLE_BZOODP_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_OCCUPIED_UNITS
+    FROM TABLE_S3K6C0
+    WHERE TABLE_S3K6C0_PROPERTY_ID = PROPERTY_ID_PARAM
+      AND TABLE_S3K6C0_END_DATE > CURDATE();
+
+    IF V_NUM_UNITS = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(12, -60)) - -907 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q(-36)) - -255 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(16)) - 145 + (100)));
+    END IF;
+
+    SET V_VACANCY_RATE = ((V_NUM_UNITS - V_OCCUPIED_UNITS) * 100) / V_NUM_UNITS;
+    SET V_RISK_SCORE = (MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(95)) - 779 + (v_vacancy_rate);
+
+    IF V_MONTHLY_RENT > 5000 THEN
+        SET V_RISK_SCORE = V_RISK_SCORE + 10;
+    END IF;
+
+    RETURN CAST(V_RISK_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+CREATE TABLE IF NOT EXISTS `table_xil7fm` (
+    `table_xil7fm_emp_id` INT,
+    `table_xil7fm_department_id` INT,
+    `table_xil7fm_salary` INT
+);
+
+INSERT INTO `table_xil7fm` (`table_xil7fm_emp_id`, `table_xil7fm_department_id`, `table_xil7fm_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_PERCENTILE_ogk3zf(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 0)
+    INTO V_DEPT_AVG
+    FROM TABLE_XIL7FM
+    WHERE TABLE_XIL7FM_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XIL7FM_SALARY), 1)
+    INTO V_OVERALL_AVG
+    FROM TABLE_XIL7FM;
+
+    RETURN FLOOR((V_DEPT_AVG * 100) / V_OVERALL_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_SUM_yxko4q(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    WHILE V_I <= N DO
+        SET V_SUM = V_SUM + V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+CREATE TABLE IF NOT EXISTS table_i88pr4 (
+    table_i88pr4_id INT,
+    table_i88pr4_preco INT
+);
+
+INSERT INTO table_i88pr4 (`table_i88pr4_id`, `table_i88pr4_preco`) VALUES (2, 100);
+
+/* -----Called: MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_VER_PRECO_PRODUTO_2umk9h(VAR_PRODUTO INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    
+    SELECT TABLE_I88PR4_PRECO INTO RESULT
+    FROM TABLE_I88PR4
+    WHERE TABLE_I88PR4.TABLE_I88PR4_ID = VAR_PRODUTO;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCM_GCD_4345nx(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_GCD INT DEFAULT 0;
+    DECLARE V_LCM INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+    DECLARE V_REMAINDER INT DEFAULT 0;
+
+    SET V_TEMP_A = A;
+    SET V_TEMP_B = B;
+
+    GCD_LOOP: WHILE V_TEMP_B != 0 DO
+        SET V_REMAINDER = (MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza(47)) - 704 + (v_temp_a) % V_TEMP_B;
+        SET V_TEMP_A = V_TEMP_B;
+        SET V_TEMP_B = V_REMAINDER;
+    END WHILE GCD_LOOP;
+
+    SET V_GCD = V_TEMP_A;
+
+    IF V_GCD = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LCM = (A / V_GCD) * B;
+
+    RETURN V_LCM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza----- */
+CREATE TABLE IF NOT EXISTS `table_xf6ad9` (
+    `table_xf6ad9_order_id` INT,
+    `table_xf6ad9_customer_id` INT,
+    `table_xf6ad9_order_date` DATE,
+    `table_xf6ad9_total_amount` DECIMAL(10,2),
+    `table_xf6ad9_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_hcchnd` (
+    `table_hcchnd_customer_id` INT,
+    `table_hcchnd_country` INT
+);
+
+INSERT INTO `table_xf6ad9` (`table_xf6ad9_order_id`, `table_xf6ad9_customer_id`, `table_xf6ad9_order_date`, `table_xf6ad9_total_amount`, `table_xf6ad9_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_hcchnd` (`table_hcchnd_customer_id`, `table_hcchnd_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_AVERAGE_ORDER_VALUE_vd7fza(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNTRY VARCHAR(50) DEFAULT '';
+    DECLARE V_CUSTOMER_AVG_ORDER INT DEFAULT 0;
+    DECLARE V_REGIONAL_AVG_ORDER INT DEFAULT 0;
+
+    SELECT TABLE_HCCHND_COUNTRY
+    INTO V_CUSTOMER_COUNTRY
+    FROM TABLE_HCCHND
+    WHERE TABLE_HCCHND_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_XF6AD9_TOTAL_AMOUNT), (MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(63)) - 405 + (0))
+    INTO V_CUSTOMER_AVG_ORDER
+    FROM TABLE_XF6AD9
+    WHERE TABLE_XF6AD9_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_XF6AD9_STATUS = 'COMPLETED';
+
+    SELECT COALESCE(AVG(TABLE_XF6AD9_TOTAL_AMOUNT), 0)
+    INTO V_REGIONAL_AVG_ORDER
+    FROM TABLE_XF6AD9 O
+    JOIN TABLE_HCCHND C ON TABLE_XF6AD9_CUSTOMER_ID = TABLE_HCCHND_CUSTOMER_ID
+    WHERE TABLE_HCCHND_COUNTRY = V_CUSTOMER_COUNTRY AND TABLE_XF6AD9_STATUS = 'COMPLETED';
+
+    IF V_REGIONAL_AVG_ORDER = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR((V_CUSTOMER_AVG_ORDER * 100) / V_REGIONAL_AVG_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+CREATE TABLE IF NOT EXISTS `table_i56p0d` (
+    `table_i56p0d_emp_id` INT,
+    `table_i56p0d_salary` INT,
+    `table_i56p0d_hire_date` DATE
+);
+
+INSERT INTO `table_i56p0d` (`table_i56p0d_emp_id`, `table_i56p0d_salary`, `table_i56p0d_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COMPENSATION_TENURE_INDEX_uoki9c(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_I56P0D_SALARY, 0), TIMESTAMPDIFF(YEAR, TABLE_I56P0D_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_I56P0D
+    WHERE TABLE_I56P0D_EMP_ID = EMP_ID_PARAM;
+
+    IF V_TENURE_YEARS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_SALARY / V_TENURE_YEARS);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1582(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(255);
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_date DATETIME(6);
+    DECLARE cur CURSOR FOR SELECT v164024 FROM v164023 WHERE v164025 = CAST(p1 AS CHAR);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, @errmsg = MESSAGE_TEXT;
+        SET result = -(MYSQL_FUNC_CALCULATE_INVENTORY_VALUE_i2i526(67)) - -69 + (1);
+    END;
+
+    -- Statement 1: UPDATE with REPEAT and LEFT
+    SET @sql1 = 'UPDATE v163797 AS x1 SET x1.v163799 = REPEAT(LEFT(v163798, 1), 200) ORDER BY v163799 LIMIT 1';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: CTE with SELECT and CONCAT
+    BEGIN
+        DECLARE v_cte_result VARCHAR(255);
+        SET @sql2 = 'WITH x7(x8) AS (SELECT CASE WHEN x6.v164025 IN (''0'') THEN x6.v164025 END AS x11 FROM v164023 AS x6) SELECT CONCAT(LEFT(x6.v164025, CHAR_LENGTH(x6.v164024) - 2006), LEFT(RIGHT(CONCAT(''what '', CONCAT(''is '', ''happening'')), 9), 123)) INTO @cte_val FROM v164023 AS x6 WHERE (x6.v164025 = 1 AND x6.v164024 IN (1, 2) AND (x6.v164024 = ''w'' OR x6.v164024 LIKE ''w/%'')) OR (x6.v164025 = 1 AND x6.v164024 IN (3) AND (x6.v164024 = ''w/U'' OR x6.v164025 LIKE ''w/U/%'')) OR (x6.v164024 = '''' AND x6.v164025 = '' '' AND (x6.v164024 < 5 OR x6.v164025 IS NULL) AND (NOT (x6.v164024 > 16) OR x6.v164025 > 17) AND (x6.v164024 = ''w'')) LIMIT 1';
+        PREPARE stmt2 FROM @sql2;
+        EXECUTE stmt2;
+        DEALLOCATE PREPARE stmt2;
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Statement 3: UPDATE with ST_GEOMFROMTEXT
+    SET @sql3 = 'UPDATE v163737 AS x1, v163904 AS x4 SET v163738 = ST_GEOMFROMTEXT(''POINT(163 157)'')';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with integer set
+    SET @sql4 = 'UPDATE v164390 AS x1, v163904 AS x4 SET v164391 = 103';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: INSERT with datetime value
+    SET @sql5 = 'INSERT INTO v164335 (v164337) VALUES (''0000-00-00 01:00:00.999000'')';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + 1;
+
+    -- Procedural logic: Loop through cursor and use IF/CASE
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+        CASE
+            WHEN v_val = '1' THEN
+                SET v_counter = v_counter + 10;
+            WHEN v_val = '2' THEN
+                SET v_counter = v_counter + 20;
+            ELSE
+                SET v_counter = v_counter + 5;
+        END CASE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Additional procedural structure: WHILE loop
+    WHILE p1 > 0 DO
+        SET v_counter = v_counter + p2;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+    -- Final IF/ELSE check
+    IF v_counter > 100 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = v_counter + 50;
+    END IF;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1582(1, 1, @out_result);
+
+SELECT @out_result;

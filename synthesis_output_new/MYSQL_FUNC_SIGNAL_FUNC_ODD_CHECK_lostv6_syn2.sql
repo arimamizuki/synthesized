@@ -1,0 +1,355 @@
+/* -----Called: MYSQL_FUNC_IS_PRIME_ffuaq7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_ffuaq7(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    IF N <= (MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8(22)) - -874 + (1) THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(40)) - 730 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (0));
+    END IF;
+    IF N <= 3 THEN
+        RETURN 1;
+    END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN
+        RETURN 0;
+    END IF;
+    WHILE V_I * V_I <= N DO
+        IF N % V_I = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8----- */
+CREATE TABLE IF NOT EXISTS `table_ybxz48` (
+    `table_ybxz48_product_id` INT,
+    `table_ybxz48_category_id` INT,
+    `table_ybxz48_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ybxz48` (`table_ybxz48_product_id`, `table_ybxz48_category_id`, `table_ybxz48_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_MIN_PRICE_b7qfv8(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MIN(TABLE_YBXZ48_PRICE), 0)
+    INTO V_MIN_PRICE
+    FROM TABLE_YBXZ48
+    WHERE TABLE_YBXZ48_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC3_yq9y3r()) - 806 + (floor(v_min_price));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC3_yq9y3r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC3_yq9y3r() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(14)) - -332 + (0)), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC2_ktdgwa()) - 741 + (floor(v_price / 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_ktdgwa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_ktdgwa() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw----- */
+CREATE TABLE IF NOT EXISTS `table_ckk542` (
+    `table_ckk542_customer_id` INT,
+    `table_ckk542_registration_date` DATE,
+    `table_ckk542_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_t475kq` (
+    `table_t475kq_order_id` INT,
+    `table_t475kq_customer_id` INT,
+    `table_t475kq_order_date` DATE,
+    `table_t475kq_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ckk542` (`table_ckk542_customer_id`, `table_ckk542_registration_date`, `table_ckk542_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_t475kq` (`table_t475kq_order_id`, `table_t475kq_customer_id`, `table_t475kq_order_date`, `table_t475kq_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VELOCITY_SCORE_kjudyw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT_30D INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT_60D INT DEFAULT 0;
+    DECLARE V_VELOCITY_SCORE DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_30D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    SELECT COUNT(*)
+    INTO V_ORDER_COUNT_60D
+    FROM TABLE_T475KQ
+    WHERE TABLE_T475KQ_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_T475KQ_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 60 DAY);
+
+    IF V_ORDER_COUNT_60D = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_VELOCITY_SCORE = (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + ((v_order_count_30d * 2.0) / v_order_count_60d * 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj(-47)) - -478 + (floor(v_velocity_score));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = V_QUANTITY * V_UNIT_PRICE;
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = V_TOTAL + (V_TOTAL * V_REFILLS * 80 / 100);
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = V_TOTAL + 25;
+    END IF;
+
+    RETURN CAST(V_TOTAL AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj----- */
+CREATE TABLE IF NOT EXISTS `table_vdmsbr` (
+    `table_vdmsbr_product_id` INT,
+    `table_vdmsbr_category_id` INT,
+    `table_vdmsbr_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_tpusoe` (
+    `table_tpusoe_category_id` INT,
+    `table_tpusoe_name` VARCHAR(50),
+    `table_tpusoe_parent_category_id` INT
+);
+
+INSERT INTO `table_vdmsbr` (`table_vdmsbr_product_id`, `table_vdmsbr_category_id`, `table_vdmsbr_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_tpusoe` (`table_tpusoe_category_id`, `table_tpusoe_name`, `table_tpusoe_parent_category_id`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_RANGE_RATIO_h8ahrj(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_MIN_PRICE INT DEFAULT 0;
+    DECLARE V_RANGE_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_VDMSBR_PRICE), (MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2(-70)) - 660 + (0)), COALESCE(MIN(TABLE_VDMSBR_PRICE), 0)
+    INTO V_MAX_PRICE, V_MIN_PRICE
+    FROM TABLE_VDMSBR
+    WHERE TABLE_VDMSBR_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MIN_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RANGE_RATIO = (V_MAX_PRICE - V_MIN_PRICE) / V_MIN_PRICE;
+
+    RETURN V_RANGE_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2----- */
+CREATE TABLE IF NOT EXISTS `table_zb0s9i` (
+    `table_zb0s9i_emp_id` INT,
+    `table_zb0s9i_dept_id` INT,
+    `table_zb0s9i_salary` INT,
+    `table_zb0s9i_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_6cxx64` (
+    `table_6cxx64_dept_id` INT,
+    `table_6cxx64_name` VARCHAR(50),
+    `table_6cxx64_is_remote_friendly` INT
+);
+
+INSERT INTO `table_zb0s9i` (`table_zb0s9i_emp_id`, `table_zb0s9i_dept_id`, `table_zb0s9i_salary`, `table_zb0s9i_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_6cxx64` (`table_6cxx64_dept_id`, `table_6cxx64_name`, `table_6cxx64_is_remote_friendly`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REMOTE_WORK_PRODUCTIVITY_SCORE_i0whm2(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DEPT_REMOTE_FRIENDLY INT DEFAULT 0;
+    DECLARE V_PRODUCTIVITY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_ZB0S9I_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_ZB0S9I_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_ZB0S9I
+    WHERE TABLE_ZB0S9I_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6CXX64_IS_REMOTE_FRIENDLY, 0)
+    INTO V_DEPT_REMOTE_FRIENDLY
+    FROM TABLE_6CXX64 D
+    JOIN TABLE_ZB0S9I E ON TABLE_6CXX64_DEPT_ID = TABLE_ZB0S9I_DEPT_ID
+    WHERE TABLE_ZB0S9I_EMP_ID = EMP_ID_PARAM;
+
+    SET V_PRODUCTIVITY_SCORE = (V_YEARS_EMPLOYED * 10) + (V_SALARY / 10000 * 5);
+
+    IF V_DEPT_REMOTE_FRIENDLY = 1 THEN
+        SET V_PRODUCTIVITY_SCORE = V_PRODUCTIVITY_SCORE + 15;
+    END IF;
+
+    RETURN V_PRODUCTIVITY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_IS_PRIME_ffuaq7(-51)) - 682 + (val) MOD 2 = 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE MUST BE ODD';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_SIGNAL_FUNC_ODD_CHECK_lostv6(1);

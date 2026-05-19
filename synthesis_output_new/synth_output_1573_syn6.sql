@@ -1,0 +1,432 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v160346 (v160347 INT);
+CREATE TABLE IF NOT EXISTS v161112 (v161113 BIGINT PRIMARY KEY);
+CREATE TABLE IF NOT EXISTS v160570 (id INT, data VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v160613 (v160614 INT, v160615 INT);
+CREATE TABLE IF NOT EXISTS v161172 (v161173 INT CHECK (v161173 < 10), v161174 INT CHECK (v161174 < 10));
+INSERT INTO v160346 VALUES (1), (2), (3);
+INSERT INTO v160570 VALUES (1, 'test'), (2, 'data');
+INSERT INTO v160613 VALUES (1, 5), (2, 10);
+INSERT INTO v161172 VALUES (5, 3), (7, 8);
+
+/* -----Dependency for: sp_procedure_bug6866_proc----- */
+CREATE TABLE IF NOT EXISTS tv (
+    a1 INT
+);
+INSERT INTO tv VALUES (1), (2), (3), (4), (5);
+
+/* -----Called: sp_procedure_bug6866_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_procedure_bug6866_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_a1 INT;
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT a1 FROM tv WHERE a1 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    IF p2 > 0 THEN
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO v_a1;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_count = v_count + 1;
+        END LOOP;
+        CLOSE cur;
+        SET result = v_count;
+    ELSE
+        CASE p1
+            WHEN 0 THEN SET result = 0;
+            WHEN 1 THEN SET result = 10;
+            ELSE SET result = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt(-11)) - 97 + (-1);
+        END CASE;
+    END IF;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt----- */
+CREATE TABLE IF NOT EXISTS `table_2anzr4` (
+    `table_2anzr4_customer_id` INT,
+    `table_2anzr4_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2anzr4` (`table_2anzr4_customer_id`, `table_2anzr4_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_dx5dlt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2ANZR4_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_2ANZR4
+    WHERE TABLE_2ANZR4_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_MONTHLY_COST;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+CREATE TABLE IF NOT EXISTS `table_90sd8x` (
+    `table_90sd8x_property_id` INT,
+    `table_90sd8x_location` INT,
+    `table_90sd8x_bedrooms` INT,
+    `table_90sd8x_bathrooms` INT,
+    `table_90sd8x_monthly_rent` INT,
+    `table_90sd8x_property_tax_annual` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_19x1zt` (
+    `table_19x1zt_request_id` INT,
+    `table_19x1zt_property_id` INT,
+    `table_19x1zt_request_date` DATE,
+    `table_19x1zt_estimated_cost` DECIMAL(10,2),
+    `table_19x1zt_priority` INT
+);
+
+INSERT INTO `table_90sd8x` (`table_90sd8x_property_id`, `table_90sd8x_location`, `table_90sd8x_bedrooms`, `table_90sd8x_bathrooms`, `table_90sd8x_monthly_rent`, `table_90sd8x_property_tax_annual`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_19x1zt` (`table_19x1zt_request_id`, `table_19x1zt_property_id`, `table_19x1zt_request_date`, `table_19x1zt_estimated_cost`, `table_19x1zt_priority`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_RENT INT DEFAULT 0;
+    DECLARE V_ANNUAL_PROPERTY_TAX INT DEFAULT 0;
+    DECLARE V_MAINTENANCE_COST_ANNUAL INT DEFAULT 0;
+    DECLARE V_ANNUAL_INCOME INT DEFAULT 0;
+    DECLARE V_NET_YIELD INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_90SD8X_MONTHLY_RENT, 0), COALESCE(TABLE_90SD8X_PROPERTY_TAX_ANNUAL, 0)
+    INTO V_MONTHLY_RENT, V_ANNUAL_PROPERTY_TAX
+    FROM TABLE_90SD8X
+    WHERE TABLE_90SD8X_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_19X1ZT_ESTIMATED_COST), 0)
+    INTO V_MAINTENANCE_COST_ANNUAL
+    FROM TABLE_19X1ZT
+    WHERE TABLE_19X1ZT_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_ANNUAL_INCOME = (MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(3, -9)) - 797 + ((v_monthly_rent * 12) - v_annual_property_tax - v_maintenance_cost_annual);
+
+    RETURN V_ANNUAL_INCOME;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusterset_members (
+    clusterset_id VARCHAR(36),
+    cluster_id VARCHAR(36),
+    view_id BIGINT UNSIGNED
+);
+
+CREATE TABLE IF NOT EXISTS mysql_innodb_cluster_metadata.clusters (
+    cluster_id VARCHAR(36),
+    clusterset_id VARCHAR(36)
+);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusterset_members (clusterset_id, cluster_id, view_id) VALUES ('test', 'test', 3);
+
+INSERT INTO mysql_innodb_cluster_metadata.clusters (cluster_id, clusterset_id) VALUES ('test', 'test');
+
+/* -----Called: MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_V2_CS_MEMBER_REMOVED_o9jgw5(CS_ID INT, CLUSTER_ID INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE CSVID BIGINT UNSIGNED DEFAULT 1;
+    DECLARE CS_ID_STR VARCHAR(36);
+    DECLARE CLUSTER_ID_STR VARCHAR(36);
+    
+    SET CS_ID_STR = CONCAT('CS', CS_ID);
+    SET CLUSTER_ID_STR = CONCAT('CLUSTER', CLUSTER_ID);
+    
+    DELETE FROM MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS
+    WHERE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTERSET_ID = CS_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.CLUSTER_ID = CLUSTER_ID_STR
+      AND MYSQL_INNODB_CLUSTER_METADATA.CLUSTERSET_MEMBERS.VIEW_ID = CSVID;
+
+    UPDATE MYSQL_INNODB_CLUSTER_METADATA.CLUSTERS C
+    SET C.CLUSTERSET_ID = NULL
+    WHERE C.CLUSTER_ID = CLUSTER_ID_STR;
+
+    RETURN (MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(-64)) - 947 + ((MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(86, -32)) - -679 + (1));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CONE_VOLUME_fghcio(RADIUS INT, HEIGHT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_VOLUME DECIMAL(10,2) DEFAULT 0.00;
+    SET V_VOLUME = (MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(-16, -81, -94, 91)) - -433 + ((3.14159 * radius * radius * height) / 3);
+    RETURN (MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(-47, -54)) - -523 + (floor(v_volume));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MANHATTAN_DISTANCE_tkuu8u(X1 INT, Y1 INT, X2 INT, Y2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISTANCE INT DEFAULT 0;
+    SET V_DISTANCE = ABS(X1 - X2) + ABS(Y1 - Y2);
+    RETURN V_DISTANCE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LCS_LENGTH_bw1wez(STR1 INT, STR2 INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEN1 INT DEFAULT 0;
+    DECLARE V_LEN2 INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SET V_LEN1 = CHAR_LENGTH(STR1);
+    SET V_LEN2 = CHAR_LENGTH(STR2);
+
+    IF V_LEN1 = 0 OR V_LEN2 = 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_LEN1 DO
+        SET V_J = 1;
+        INNER_LOOP: WHILE V_J <= V_LEN2 DO
+            IF SUBSTRING(STR1, V_I, 1) = SUBSTRING(STR2, V_J, 1) THEN
+                SET V_COUNT = V_COUNT + 1;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+CREATE TABLE IF NOT EXISTS `table_7jm36x` (
+    `table_7jm36x_order_id` INT,
+    `table_7jm36x_order_date` DATE
+);
+
+INSERT INTO `table_7jm36x` (`table_7jm36x_order_id`, `table_7jm36x_order_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_YEAR_VALUE_rgy335(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEAR INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_7JM36X_ORDER_DATE)
+    INTO V_YEAR
+    FROM TABLE_7JM36X
+    WHERE TABLE_7JM36X_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(85)) - -325 + (v_year);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+CREATE TABLE IF NOT EXISTS `table_77c9lm` (
+    `table_77c9lm_emp_id` INT,
+    `table_77c9lm_dept_id` INT,
+    `table_77c9lm_manager_id` INT,
+    `table_77c9lm_salary` INT,
+    `table_77c9lm_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_0zp2ks` (
+    `table_0zp2ks_dept_id` INT,
+    `table_0zp2ks_name` VARCHAR(50)
+);
+
+INSERT INTO `table_77c9lm` (`table_77c9lm_emp_id`, `table_77c9lm_dept_id`, `table_77c9lm_manager_id`, `table_77c9lm_salary`, `table_77c9lm_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_0zp2ks` (`table_0zp2ks_dept_id`, `table_0zp2ks_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_PROMOTION_READINESS_klumsv(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_YEARS_EMPLOYED INT DEFAULT 0;
+    DECLARE V_DIRECT_REPORTS INT DEFAULT 0;
+    DECLARE V_DEPT_SIZE INT DEFAULT 0;
+    DECLARE V_READINESS_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_77C9LM_SALARY, 50000), TIMESTAMPDIFF(YEAR, TABLE_77C9LM_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_YEARS_EMPLOYED
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DIRECT_REPORTS
+    FROM TABLE_77C9LM
+    WHERE TABLE_77C9LM_MANAGER_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_DEPT_SIZE
+    FROM TABLE_77C9LM E
+    JOIN TABLE_0ZP2KS D ON TABLE_77C9LM_DEPT_ID = TABLE_0ZP2KS_DEPT_ID
+    WHERE TABLE_0ZP2KS_DEPT_ID = (SELECT TABLE_77C9LM_DEPT_ID FROM TABLE_77C9LM WHERE TABLE_77C9LM_EMP_ID = EMP_ID_PARAM);
+
+    SET V_READINESS_SCORE = (V_YEARS_EMPLOYED * 10) + (V_DIRECT_REPORTS * 15) + ((V_DEPT_SIZE * 100) / 1000);
+
+    IF V_SALARY > 100000 THEN
+        SET V_READINESS_SCORE = V_READINESS_SCORE + 20;
+    END IF;
+
+    RETURN V_READINESS_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+CREATE TABLE IF NOT EXISTS `table_xyocnl` (
+    `table_xyocnl_order_id` INT,
+    `table_xyocnl_customer_id` INT
+);
+
+INSERT INTO `table_xyocnl` (`table_xyocnl_order_id`, `table_xyocnl_customer_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_ID INT DEFAULT 0;
+
+    SELECT TABLE_XYOCNL_CUSTOMER_ID
+    INTO V_CUSTOMER_ID
+    FROM TABLE_XYOCNL
+    WHERE TABLE_XYOCNL_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN V_CUSTOMER_ID % 100;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1573(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_json_val JSON;
+    DECLARE cur CURSOR FOR SELECT id FROM v160570;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Use IF/ELSEIF/ELSE
+    IF p1 > 0 THEN
+CALL sp_procedure_bug6866_proc(9, -91, @_syn_6888);
+        SET v_counter = @_syn_6888 - @_io_result + (1);
+    ELSEIF p2 > 0 THEN
+        SET v_counter = 2;
+    ELSE
+        SET v_counter = 0;
+    END IF;
+
+    -- Statement 1: UPDATE using dynamic SQL
+    SET @sql1 = CONCAT('UPDATE v160346 AS x0 SET v160347 = ', p1);
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: CREATE TABLE AS SELECT with complex expressions
+    SET @sql2 = 'CREATE OR REPLACE TABLE v161112 (v161113 BIGINT PRIMARY KEY) AS 
+        SELECT EXTRACTVALUE(\'<a><b c="c"/><b c="d"/></a>\', \'/a/b[@c="c" or @c="d"]\') AS col1,
+        INET_NTOA(0) AS col2,
+        ST_DISTANCE(ST_GEOMFROMTEXT(\'POINT(0 0)\'), ST_GEOMFROMTEXT(\'LINESTRING(0 0, 50 45, 40 50, 0 0)\')) AS col3,
+        BIN_TO_UUID(UUID_TO_BIN(BIN_TO_UUID(UUID(), TRUE), TRUE), TRUE) AS col4,
+        SEC_TO_TIME(3600) AS col5,
+        ADDDATE(CAST(\'2023-01-01\' AS DATE), INTERVAL 1 DAY) AS col6,
+        EXTRACTVALUE(\'POINT(163 130)\', \'/*\') AS col7';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+
+    -- Statement 3: SELECT using CURSOR with LOOP
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_PROPERTY_NET_YIELD_pv5ong(-96)) - -88 + (v_val);
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: CREATE VIEW using CASE/WHEN
+    SET @sql4 = 'CREATE OR REPLACE VIEW v161152 AS 
+        SELECT CAST(LEAST(v160615, CASE (COT(v160614)) 
+            WHEN v160615 THEN v160615 
+            ELSE 0 END) AS SIGNED) AS col1,
+            CAST(\'2021-07-15 23:01:02\' AS DATETIME) AS col2 
+        FROM v160613';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+
+    -- Statement 5: CREATE TABLE AS SELECT with hint using WHILE loop
+    SET v_counter = 0;
+    WHILE v_counter < p2 DO
+        SET @sql5 = CONCAT('CREATE OR REPLACE TABLE v161172 (v161173 INT CHECK (v161173 < 10), v161174 INT CHECK (v161174 < 10)) AS 
+            SELECT /*+ NO_BNL(x3) */ ', v_counter);
+        PREPARE stmt5 FROM @sql5;
+        EXECUTE stmt5;
+        DEALLOCATE PREPARE stmt5;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- Use REPEAT...UNTIL for final calculation
+    REPEAT
+        SET v_counter = v_counter + 1;
+    UNTIL (MYSQL_FUNC_CALCULATE_ORDER_CUSTOMER_INDEX_x6g0w6(14)) - 678 + (v_counter > p1) END REPEAT;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1573(1, 1, @out_result);
+
+SELECT @out_result;

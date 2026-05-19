@@ -1,0 +1,427 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1137469 (v1137470 VARCHAR(100), v1137471 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1137526 (v1137527 VARCHAR(100), v1137528 BIGINT, v1137529 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1137658 (v1137659 VARCHAR(200), v1137661 VARCHAR(100), v1137662 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1137702 (v1137703 INT, v1137705 INT);
+CREATE TABLE IF NOT EXISTS v1137785 (v1137786 VARCHAR(100));
+INSERT INTO v1137469 VALUES ('u2_test', 'value1'), ('other', 'value2');
+INSERT INTO v1137526 VALUES ('test', 16, 'data'), ('sample', 32, 'more');
+INSERT INTO v1137658 VALUES ('2009-04-27', '2036-07-05', '9999-12-31');
+INSERT INTO v1137702 VALUES (5, 10), (15, 20);
+INSERT INTO v1137785 VALUES ('dummy');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+CREATE TABLE IF NOT EXISTS `table_cejk8t` (
+    `table_cejk8t_campaign_id` INT,
+    `table_cejk8t_channel` INT,
+    `table_cejk8t_budget` INT,
+    `table_cejk8t_status` VARCHAR(50)
+);
+
+INSERT INTO `table_cejk8t` (`table_cejk8t_campaign_id`, `table_cejk8t_channel`, `table_cejk8t_budget`, `table_cejk8t_status`) VALUES (1, 1, 1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_CEJK8T_CHANNEL, COALESCE(TABLE_CEJK8T_BUDGET, 0), TABLE_CEJK8T_STATUS
+    INTO V_CHANNEL, V_BUDGET, V_STATUS
+    FROM TABLE_CEJK8T
+    WHERE TABLE_CEJK8T_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN V_BUDGET / 100
+        WHEN 'ORGANIC' THEN V_BUDGET / 50
+        WHEN 'SOCIAL' THEN V_BUDGET / 75
+        ELSE V_BUDGET / 100
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(VAL INT, MIN_VAL INT, MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL < MIN_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE BELOW MINIMUM';
+    END IF;
+    IF VAL > MAX_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE ABOVE MAXIMUM';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10
+        UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20
+        UNION SELECT 22 UNION SELECT 24 UNION SELECT 26 UNION SELECT 28 UNION SELECT 30
+        UNION SELECT 32 UNION SELECT 34 UNION SELECT 36 UNION SELECT 38 UNION SELECT 40;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3(99)) - 383 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(-81)) - -95 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(-86)) - -288 + (v_sum))) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+CREATE TABLE IF NOT EXISTS `table_pphotv` (
+    `table_pphotv_customer_id` INT,
+    `table_pphotv_registration_date` DATE
+);
+
+INSERT INTO `table_pphotv` (`table_pphotv_customer_id`, `table_pphotv_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_70i5te(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUARTER INT DEFAULT 0;
+
+    SELECT QUARTER(TABLE_PPHOTV_REGISTRATION_DATE)
+    INTO V_QUARTER
+    FROM TABLE_PPHOTV
+    WHERE TABLE_PPHOTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_QUARTER;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+CREATE TABLE IF NOT EXISTS `table_th8mrt` (
+    `table_th8mrt_customer_id` INT,
+    `table_th8mrt_order_id` INT
+);
+
+INSERT INTO `table_th8mrt` (`table_th8mrt_customer_id`, `table_th8mrt_order_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_ID_g21ukt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_ID INT DEFAULT 0;
+
+    SELECT MIN(TABLE_TH8MRT_ORDER_ID)
+    INTO V_ORDER_ID
+    FROM TABLE_TH8MRT
+    WHERE TABLE_TH8MRT_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof(52)) - 216 + (v_order_id);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+CREATE TABLE IF NOT EXISTS `table_2iqm3m` (
+    `table_2iqm3m_emp_id` INT,
+    `table_2iqm3m_dept_id` INT,
+    `table_2iqm3m_salary` INT,
+    `table_2iqm3m_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_lbgcfs` (
+    `table_lbgcfs_dept_id` INT,
+    `table_lbgcfs_name` VARCHAR(50),
+    `table_lbgcfs_manager_id` INT,
+    `table_lbgcfs_salary_budget` INT
+);
+
+INSERT INTO `table_2iqm3m` (`table_2iqm3m_emp_id`, `table_2iqm3m_dept_id`, `table_2iqm3m_salary`, `table_2iqm3m_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_lbgcfs` (`table_lbgcfs_dept_id`, `table_lbgcfs_name`, `table_lbgcfs_manager_id`, `table_lbgcfs_salary_budget`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_UTILIZATION_k88dof(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_SALARY_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION_PERCENTAGE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_2IQM3M_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_2IQM3M
+    WHERE TABLE_2IQM3M_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_LBGCFS_SALARY_BUDGET, 1000000)
+    INTO V_SALARY_BUDGET
+    FROM TABLE_LBGCFS
+    WHERE TABLE_LBGCFS_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_SALARY_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION_PERCENTAGE = (V_TOTAL_SALARIES * 100) / V_SALARY_BUDGET;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(39)) - -286 + (v_utilization_percentage);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_REPEAT_FACTORIAL_lps8xd(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    REPEAT
+        SET V_RESULT = V_RESULT * N;
+        SET N = N - 1;
+    UNTIL N <= 1 END REPEAT;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3----- */
+CREATE TABLE IF NOT EXISTS `table_g2hzaq` (
+    `table_g2hzaq_campaign_id` INT,
+    `table_g2hzaq_channel` INT,
+    `table_g2hzaq_budget` INT,
+    `table_g2hzaq_start_date` DATE,
+    `table_g2hzaq_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_m35egj` (
+    `table_m35egj_conversion_id` INT,
+    `table_m35egj_campaign_id` INT,
+    `table_m35egj_conversion_date` DATE
+);
+
+INSERT INTO `table_g2hzaq` (`table_g2hzaq_campaign_id`, `table_g2hzaq_channel`, `table_g2hzaq_budget`, `table_g2hzaq_start_date`, `table_g2hzaq_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_m35egj` (`table_m35egj_conversion_id`, `table_m35egj_campaign_id`, `table_m35egj_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAILY_CONVERSION_RATE_dzhdg3(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_DAYS INT DEFAULT 0;
+    DECLARE V_DAILY_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CONVERSIONS
+    FROM TABLE_M35EGJ
+    WHERE TABLE_M35EGJ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_G2HZAQ_END_DATE, TABLE_G2HZAQ_START_DATE)
+    INTO V_CAMPAIGN_DAYS
+    FROM TABLE_G2HZAQ
+    WHERE TABLE_G2HZAQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_DAYS = (MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(-22)) - 154 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAILY_RATE = V_TOTAL_CONVERSIONS / V_CAMPAIGN_DAYS;
+
+    RETURN (MYSQL_FUNC_PROC_BIN_djqrc4()) - -36 + (v_daily_rate);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+CREATE TABLE IF NOT EXISTS `table_tmz1vx` (
+    `table_tmz1vx_cbin` INT
+);
+
+INSERT INTO `table_tmz1vx` (`table_tmz1vx_cbin`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIN_djqrc4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIN_djqrc4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_TMZ1VX_CBIN INTO RESULT FROM `TABLE_TMZ1VX` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+CREATE TABLE IF NOT EXISTS `table_2qmb5t` (
+    `table_2qmb5t_customer_id` INT,
+    `table_2qmb5t_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_82xo3l` (
+    `table_82xo3l_order_id` INT,
+    `table_82xo3l_customer_id` INT,
+    `table_82xo3l_order_date` DATE,
+    `table_82xo3l_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2qmb5t` (`table_2qmb5t_customer_id`, `table_2qmb5t_registration_date`) VALUES (1, '2024-01-01');
+
+INSERT INTO `table_82xo3l` (`table_82xo3l_order_id`, `table_82xo3l_customer_id`, `table_82xo3l_order_date`, `table_82xo3l_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_AVERAGE_INTERPURCHASE_DAYS_9l31jw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_LAST_ORDER_DATE DATE;
+    DECLARE V_TOTAL_DAYS INT DEFAULT 0;
+    DECLARE V_AVG_DAYS INT DEFAULT 0;
+
+    SELECT COUNT(*), MIN(TABLE_82XO3L_ORDER_DATE), MAX(TABLE_82XO3L_ORDER_DATE)
+    INTO V_ORDER_COUNT, V_FIRST_ORDER_DATE, V_LAST_ORDER_DATE
+    FROM TABLE_82XO3L
+    WHERE TABLE_82XO3L_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_ORDER_COUNT < 2 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_TOTAL_DAYS = DATEDIFF(V_LAST_ORDER_DATE, V_FIRST_ORDER_DATE);
+
+    IF V_TOTAL_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_DAYS = V_TOTAL_DAYS / (V_ORDER_COUNT - 1);
+
+    RETURN V_AVG_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0431_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_conn_id INT;
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_col1 VARCHAR(100);
+    DECLARE v_col2 VARCHAR(100);
+    
+    DECLARE cur CURSOR FOR SELECT v1137661, v1137659 FROM v1137658;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    
+    -- Statement 1: INSERT into v1137658 with adapted values using input params
+    INSERT INTO v1137658 (v1137662, v1137661, v1137659) 
+    VALUES (CONCAT('9999-12-31 23:59:59.', LPAD(p1, 7, '0')), 
+            CONCAT('2036-07-05 ', p2, ':00:00'), 
+            '2009-04-27 00:00:00.0000');
+    
+    -- Statement 2: UPDATE with LEFT JOIN adapted with input params
+    UPDATE v1137469 AS x1 
+    LEFT OUTER JOIN v1137526 AS x2 ON x1.v1137470 = x1.v1137470 
+    SET x1.v1137470 = x1.v1137471 
+    WHERE x1.v1137470 LIKE CONCAT('%u', p1, '%');
+    
+    -- Statement 3: UPDATE with variable and CAST adapted
+    SET @b = (MYSQL_FUNC_CALCULATE_CAMPAIGN_CHANNEL_SCORE_ny1e74(31)) - -295 + (cast(concat('insert into t1 values (''', p2, ''')') as char character set koi8r));
+    UPDATE v1137526 AS x1 
+    SET x1.v1137527 = @b 
+    WHERE x1.v1137527 = CAST('INSERT INTO t1 VALUES (''ä(p3)'')' AS CHAR CHARACTER SET koi8r);
+    
+    -- Statement 4: UPDATE with CONNECTION_ID() adapted
+    SET v_conn_id = CONNECTION_ID();
+    UPDATE v1137702 AS x1 
+    SET x1.v1137703 = 10 
+    WHERE x1.v1137705 = v_conn_id;
+    
+    -- Statement 5: UPDATE with JOIN and arithmetic adapted
+    UPDATE v1137526 AS x1 
+    JOIN v1137785 AS x2 ON x1.v1137527 = x1.v1137527 
+    SET x1.v1137528 = 1024 * 1024 * 1024 * 3 
+    WHERE x1.v1137527 = CAST(p2 AS CHAR);
+    
+    -- Use procedural structures: IF, WHILE, CURSOR
+    IF p1 > 0 THEN
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO v_col1, v_col2;
+            IF v_done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur;
+        
+        -- WHILE loop for additional processing
+        WHILE (MYSQL_FUNC_CURSOR_FUNC_SUM_20_VALUES_gzeucg()) - 546 + (v_counter < 10) DO
+            SET v_counter = v_counter + 1;
+            SET v_affected_rows = v_affected_rows + ROW_COUNT();
+        END WHILE;
+    ELSE
+        SET v_counter = -1;
+    END IF;
+    
+    -- CASE statement for final result determination
+    CASE 
+        WHEN v_counter > 5 THEN SET result = v_counter + p1;
+        WHEN v_counter BETWEEN 0 AND 5 THEN SET result = v_counter * p2;
+        ELSE SET result = v_affected_rows;
+    END CASE;
+    
+    SET result = result + v_affected_rows;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0431_proc(1, 1, @out_result);
+
+SELECT @out_result;

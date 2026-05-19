@@ -1,0 +1,393 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_2r9w30` (
+    `table_2r9w30_customer_id` INT,
+    `table_2r9w30_total_amount` DECIMAL(10,2),
+    `table_2r9w30_status` VARCHAR(50)
+);
+
+INSERT INTO `table_2r9w30` (`table_2r9w30_customer_id`, `table_2r9w30_total_amount`, `table_2r9w30_status`) VALUES (1, 1.0, 'test');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+CREATE TABLE IF NOT EXISTS `table_fedjkb` (
+    `table_fedjkb_product_id` INT,
+    `table_fedjkb_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fedjkb` (`table_fedjkb_product_id`, `table_fedjkb_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FEDJKB_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FEDJKB
+    WHERE TABLE_FEDJKB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x----- */
+CREATE TABLE IF NOT EXISTS `table_twy1qq` (
+    `table_twy1qq_campaign_id` INT,
+    `table_twy1qq_channel` INT,
+    `table_twy1qq_budget` INT,
+    `table_twy1qq_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_jfmesh` (
+    `table_jfmesh_conversion_id` INT,
+    `table_jfmesh_campaign_id` INT,
+    `table_jfmesh_conversion_value` INT
+);
+
+INSERT INTO `table_twy1qq` (`table_twy1qq_campaign_id`, `table_twy1qq_channel`, `table_twy1qq_budget`, `table_twy1qq_status`) VALUES (1, 1, 1, 'test');
+
+INSERT INTO `table_jfmesh` (`table_jfmesh_conversion_id`, `table_jfmesh_campaign_id`, `table_jfmesh_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_CHANNEL_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_TWY1QQ_CHANNEL, COALESCE(TABLE_TWY1QQ_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_TWY1QQ
+    WHERE TABLE_TWY1QQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSIONS
+    FROM TABLE_JFMESH
+    WHERE TABLE_JFMESH_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_CHANNEL_INDEX = (MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(-37)) - 464 + ((MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(-15)) - 118 + (v_conversions * 3));
+        WHEN 'ORGANIC' THEN SET V_CHANNEL_INDEX = V_CONVERSIONS * 5;
+        WHEN 'SOCIAL' THEN SET V_CHANNEL_INDEX = V_CONVERSIONS * 4;
+        ELSE SET V_CHANNEL_INDEX = V_CONVERSIONS * 2;
+    END CASE;
+
+    RETURN V_CHANNEL_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+CREATE TABLE IF NOT EXISTS `table_z9tv6r` (
+    `table_z9tv6r_shipment_id` INT,
+    `table_z9tv6r_order_id` INT,
+    `table_z9tv6r_carrier_id` INT,
+    `table_z9tv6r_shipping_cost` DECIMAL(10,2),
+    `table_z9tv6r_weight_kg` INT,
+    `table_z9tv6r_shipping_date` DATE,
+    `table_z9tv6r_delivery_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_1odmhx` (
+    `table_1odmhx_carrier_id` INT,
+    `table_1odmhx_name` VARCHAR(50),
+    `table_1odmhx_base_rate` INT,
+    `table_1odmhx_weight_rate` INT
+);
+
+INSERT INTO `table_z9tv6r` (`table_z9tv6r_shipment_id`, `table_z9tv6r_order_id`, `table_z9tv6r_carrier_id`, `table_z9tv6r_shipping_cost`, `table_z9tv6r_weight_kg`, `table_z9tv6r_shipping_date`, `table_z9tv6r_delivery_date`) VALUES (1, 2, 3, 1.0, 5, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_1odmhx` (`table_1odmhx_carrier_id`, `table_1odmhx_name`, `table_1odmhx_base_rate`, `table_1odmhx_weight_rate`) VALUES (1, 'test', 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAYS_245a7l(SHIPMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SHIPPING_DATE DATE;
+    DECLARE V_EXPECTED_DELIVERY DATE;
+    DECLARE V_ACTUAL_DELIVERY DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_Z9TV6R_SHIPPING_DATE, TABLE_Z9TV6R_DELIVERY_DATE
+    INTO V_SHIPPING_DATE, V_ACTUAL_DELIVERY
+    FROM TABLE_Z9TV6R
+    WHERE TABLE_Z9TV6R_SHIPMENT_ID = SHIPMENT_ID_PARAM;
+
+    IF V_SHIPPING_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(-20)) - 877 + ((MYSQL_FUNC_PROC2_mjor62()) - -749 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(37)) - 181 + (0)));
+    END IF;
+
+    SET V_EXPECTED_DELIVERY = DATE_ADD(V_SHIPPING_DATE, INTERVAL 7 DAY);
+
+    IF V_ACTUAL_DELIVERY IS NULL THEN
+        SET V_DELAY_DAYS = (MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (datediff(curdate(), v_expected_delivery));
+    ELSE
+        SET V_DELAY_DAYS = DATEDIFF(V_ACTUAL_DELIVERY, V_EXPECTED_DELIVERY);
+    END IF;
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN -1;
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_ITERATE_SKIP_nheit9(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        SET V_I = V_I + 1;
+        IF V_I MOD 2 = 0 THEN
+            ITERATE MY_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+        IF V_I >= N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC2_mjor62----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC2_mjor62() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+CREATE TABLE IF NOT EXISTS `table_qx7ezz` (
+    `table_qx7ezz_customer_id` INT,
+    `table_qx7ezz_registration_date` DATE,
+    `table_qx7ezz_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l1v2g` (
+    `table_4l1v2g_order_id` INT,
+    `table_4l1v2g_customer_id` INT,
+    `table_4l1v2g_order_date` DATE,
+    `table_4l1v2g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_qx7ezz` (`table_qx7ezz_customer_id`, `table_qx7ezz_registration_date`, `table_qx7ezz_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_4l1v2g` (`table_4l1v2g_order_id`, `table_4l1v2g_customer_id`, `table_4l1v2g_order_date`, `table_4l1v2g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HISTORICAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TREND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_HISTORICAL_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE < DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_HISTORICAL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_TREND_SCORE = ((V_RECENT_AVG - V_HISTORICAL_AVG) * 100) / V_HISTORICAL_AVG;
+
+    RETURN V_TREND_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+CREATE TABLE IF NOT EXISTS `table_aw8lqb` (
+    `table_aw8lqb_patient_id` INT,
+    `table_aw8lqb_name` VARCHAR(50),
+    `table_aw8lqb_date_of_birth` DATE,
+    `table_aw8lqb_blood_type` VARCHAR(50),
+    `table_aw8lqb_insurance_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_5ev6fi` (
+    `table_5ev6fi_appt_id` INT,
+    `table_5ev6fi_patient_id` INT,
+    `table_5ev6fi_doctor_id` INT,
+    `table_5ev6fi_appt_date` DATE,
+    `table_5ev6fi_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_u95tmt` (
+    `table_u95tmt_bill_id` INT,
+    `table_u95tmt_patient_id` INT,
+    `table_u95tmt_total_amount` DECIMAL(10,2),
+    `table_u95tmt_paid_amount` INT
+);
+
+INSERT INTO `table_aw8lqb` (`table_aw8lqb_patient_id`, `table_aw8lqb_name`, `table_aw8lqb_date_of_birth`, `table_aw8lqb_blood_type`, `table_aw8lqb_insurance_id`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_5ev6fi` (`table_5ev6fi_appt_id`, `table_5ev6fi_patient_id`, `table_5ev6fi_doctor_id`, `table_5ev6fi_appt_date`, `table_5ev6fi_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+INSERT INTO `table_u95tmt` (`table_u95tmt_bill_id`, `table_u95tmt_patient_id`, `table_u95tmt_total_amount`, `table_u95tmt_paid_amount`) VALUES (1, 2, 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PATIENT_BALANCE_c70gjx(PATIENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_BILLS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAID INT DEFAULT 0;
+    DECLARE V_BALANCE INT DEFAULT 0;
+    DECLARE V_PENDING_APPOINTMENTS INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_U95TMT_TOTAL_AMOUNT), (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg()) - 582 + (0)), COALESCE(SUM(TABLE_U95TMT_PAID_AMOUNT), 0)
+    INTO V_TOTAL_BILLS, V_TOTAL_PAID
+    FROM TABLE_U95TMT
+    WHERE TABLE_U95TMT_PATIENT_ID = PATIENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_PENDING_APPOINTMENTS
+    FROM TABLE_5EV6FI
+    WHERE TABLE_5EV6FI_PATIENT_ID = PATIENT_ID_PARAM AND TABLE_5EV6FI_STATUS = 'PENDING';
+
+    SET V_BALANCE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(-92)) - -488 + (v_total_bills - v_total_paid);
+
+    IF V_BALANCE < 0 THEN
+        SET V_BALANCE = 0;
+    END IF;
+
+    RETURN V_BALANCE + (V_PENDING_APPOINTMENTS * 100);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_2_4_6_8_tcv9jg() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+CREATE TABLE IF NOT EXISTS `table_8bnzgq` (
+    `table_8bnzgq_emp_id` INT,
+    `table_8bnzgq_department_id` INT
+);
+
+INSERT INTO `table_8bnzgq` (`table_8bnzgq_emp_id`, `table_8bnzgq_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEE_VALUE_bbcuch(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_8BNZGQ
+    WHERE TABLE_8BNZGQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT * 10;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_2R9W30_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL
+    FROM TABLE_2R9W30
+    WHERE TABLE_2R9W30_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_2R9W30_STATUS = 'COMPLETED';
+
+    RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_CONVERSION_INDEX_n64z2x(-77)) - -938 + ((MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(14)) - -293 + (floor(v_total)));
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_CUSTOMER_ORDER_VALUE_SUM_3t4pnu(1);

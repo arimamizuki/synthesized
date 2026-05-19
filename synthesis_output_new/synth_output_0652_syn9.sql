@@ -1,0 +1,477 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v15943 (
+    v15132 BINARY(16),
+    v15133 INT,
+    v15134 INT,
+    v15135 VARCHAR(100),
+    v15275 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v15003 (
+    v15004 TEXT
+);
+CREATE TABLE IF NOT EXISTS v15231 (
+    v15232 DATETIME
+);
+CREATE TABLE IF NOT EXISTS v15623 (
+    x1 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v15909 (
+    v15293 VARCHAR(10),
+    v15223 BLOB,
+    v15294 BLOB
+);
+CREATE TABLE IF NOT EXISTS x14 (
+    x13 INT
+);
+INSERT INTO v15943 VALUES 
+(UUID_TO_BIN(UUID(), TRUE), 10, 20, 'test1', 'desc1'),
+(UUID_TO_BIN(UUID(), TRUE), 5, 15, 'test2', 'desc2');
+INSERT INTO v15003 VALUES ('sample text'), ('another text'), (NULL);
+INSERT INTO v15231 VALUES ('2023-01-15'), ('2023-06-20'), ('2024-03-10');
+INSERT INTO v15623 VALUES (ST_GeomFromText('POINT(1 1)')), (ST_GeomFromText('POINT(2 2)'));
+INSERT INTO x14 VALUES (1), (2), (3);
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+CREATE TABLE IF NOT EXISTS `table_gmjb6t` (
+    `table_gmjb6t_cbit` BIT(1)
+);
+
+INSERT INTO `table_gmjb6t` (`table_gmjb6t_cbit`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT1_7d7is7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT1_7d7is7() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    
+    SELECT CAST(TABLE_GMJB6T_CBIT AS UNSIGNED) INTO RESULT 
+    FROM `TABLE_GMJB6T` 
+    LIMIT 1;
+    
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+CREATE TABLE IF NOT EXISTS `table_iy3rb0` (
+    `table_iy3rb0_order_id` INT,
+    `table_iy3rb0_customer_id` INT,
+    `table_iy3rb0_order_date` DATE,
+    `table_iy3rb0_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5xz50t` (
+    `table_5xz50t_customer_id` INT,
+    `table_5xz50t_country` INT
+);
+
+INSERT INTO `table_iy3rb0` (`table_iy3rb0_order_id`, `table_iy3rb0_customer_id`, `table_iy3rb0_order_date`, `table_iy3rb0_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_5xz50t` (`table_5xz50t_customer_id`, `table_5xz50t_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_ORDERS INT DEFAULT 0;
+    DECLARE V_PRIOR_ORDERS INT DEFAULT 0;
+    DECLARE V_GROWTH_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_PRIOR_ORDERS
+    FROM TABLE_IY3RB0 O
+    JOIN TABLE_5XZ50T C ON TABLE_IY3RB0_CUSTOMER_ID = TABLE_5XZ50T_CUSTOMER_ID
+    WHERE TABLE_5XZ50T_COUNTRY = COUNTRY_PARAM
+    AND YEAR(TABLE_IY3RB0_ORDER_DATE) = YEAR(CURDATE()) - 1;
+
+    IF V_PRIOR_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_INDEX = ((V_CURRENT_ORDERS - V_PRIOR_ORDERS) * 100) / V_PRIOR_ORDERS;
+
+    RETURN V_GROWTH_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+CREATE TABLE IF NOT EXISTS `table_yyt47f` (
+    `table_yyt47f_emp_id` INT,
+    `table_yyt47f_salary` INT
+);
+
+INSERT INTO `table_yyt47f` (`table_yyt47f_emp_id`, `table_yyt47f_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_YYT47F_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_YYT47F
+    WHERE TABLE_YYT47F_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv(37, 70)) - -740 + ((MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u(69)) - 975 + (floor(v_salary / 100)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u----- */
+CREATE TABLE IF NOT EXISTS `table_vnh9l5` (
+    `table_vnh9l5_customer_id` INT,
+    `table_vnh9l5_registration_date` DATE,
+    `table_vnh9l5_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_vf1don` (
+    `table_vf1don_order_id` INT,
+    `table_vf1don_customer_id` INT,
+    `table_vf1don_order_date` DATE,
+    `table_vf1don_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vnh9l5` (`table_vnh9l5_customer_id`, `table_vnh9l5_registration_date`, `table_vnh9l5_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_vf1don` (`table_vf1don_order_id`, `table_vf1don_customer_id`, `table_vf1don_order_date`, `table_vf1don_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_RECENCY_SCORE_xb4c1u(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_SINCE_LAST_ORDER INT DEFAULT 0;
+    DECLARE V_RECENCY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(DATEDIFF(CURDATE(), MAX(TABLE_VF1DON_ORDER_DATE)), 999)
+    INTO V_DAYS_SINCE_LAST_ORDER
+    FROM TABLE_VF1DON
+    WHERE TABLE_VF1DON_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RECENCY_SCORE = 100 - LEAST(V_DAYS_SINCE_LAST_ORDER, 100);
+
+    RETURN V_RECENCY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_NESTED_LOOP_SUM_jmmsxv(N INT, LEVELS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_LEVELS INT DEFAULT LEVELS;
+
+    IF LEVELS <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT + V_I;
+
+        IF V_LEVELS > 1 AND V_I > 1 THEN
+            SET V_LEVELS = V_LEVELS - 1;
+        END IF;
+
+        SET V_I = (MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(90)) - 112 + (v_i + 1);
+    END WHILE OUTER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+CREATE TABLE IF NOT EXISTS `table_3iwn00` (
+    `table_3iwn00_emp_id` INT,
+    `table_3iwn00_salary` INT
+);
+
+INSERT INTO `table_3iwn00` (`table_3iwn00_emp_id`, `table_3iwn00_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3IWN00_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_3IWN00
+    WHERE TABLE_3IWN00_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+CREATE TABLE IF NOT EXISTS `table_2yndtv` (
+    `table_2yndtv_customer_id` INT,
+    `table_2yndtv_status` VARCHAR(50),
+    `table_2yndtv_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2yndtv` (`table_2yndtv_customer_id`, `table_2yndtv_status`, `table_2yndtv_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_2YNDTV_STATUS, COALESCE(TABLE_2YNDTV_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_2YNDTV
+    WHERE TABLE_2YNDTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(81)) - 365 + (least(100, v_monthly_cost * 5));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+CREATE TABLE IF NOT EXISTS `table_bvk6ew` (
+    `table_bvk6ew_customer_id` INT
+);
+
+INSERT INTO `table_bvk6ew` (`table_bvk6ew_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_INDEX_VALUE_7lf851(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_BVK6EW
+    WHERE TABLE_BVK6EW_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s(-3)) - -990 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(-12)) - -92 + (v_count));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+CREATE TABLE IF NOT EXISTS `table_kr0ri6` (
+    `table_kr0ri6_emp_id` INT,
+    `table_kr0ri6_department_id` INT,
+    `table_kr0ri6_salary` INT,
+    `table_kr0ri6_hire_date` DATE
+);
+
+INSERT INTO `table_kr0ri6` (`table_kr0ri6_emp_id`, `table_kr0ri6_department_id`, `table_kr0ri6_salary`, `table_kr0ri6_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_GROWTH_RATE_oe8izm(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CURRENT_COUNT INT DEFAULT 0;
+    DECLARE V_PRIOR_COUNT INT DEFAULT 0;
+    DECLARE V_GROWTH_RATE INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CURRENT_COUNT
+    FROM TABLE_KR0RI6
+    WHERE TABLE_KR0RI6_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_PRIOR_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_GROWTH_RATE = ((V_CURRENT_COUNT - V_PRIOR_COUNT) * 100) / V_PRIOR_COUNT;
+
+    RETURN V_GROWTH_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s----- */
+CREATE TABLE IF NOT EXISTS `table_m51nf9` (
+    `table_m51nf9_customer_id` INT,
+    `table_m51nf9_plan_type` VARCHAR(50),
+    `table_m51nf9_monthly_fee` INT,
+    `table_m51nf9_start_date` DATE,
+    `table_m51nf9_referral_count` INT
+);
+
+INSERT INTO `table_m51nf9` (`table_m51nf9_customer_id`, `table_m51nf9_plan_type`, `table_m51nf9_monthly_fee`, `table_m51nf9_start_date`, `table_m51nf9_referral_count`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REFERRAL_BONUS_xscm3s(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REFERRAL_COUNT INT DEFAULT 0;
+    DECLARE V_MONTHLY_FEE INT DEFAULT 0;
+    DECLARE V_TIER_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_TOTAL_BONUS INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT COALESCE(TABLE_M51NF9_REFERRAL_COUNT, 0), TABLE_M51NF9_MONTHLY_FEE
+    INTO V_REFERRAL_COUNT, V_MONTHLY_FEE
+    FROM TABLE_M51NF9
+    WHERE TABLE_M51NF9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT TABLE_M51NF9_PLAN_TYPE
+    INTO V_PLAN_TYPE
+    FROM TABLE_M51NF9
+    WHERE TABLE_M51NF9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_TIER_MULTIPLIER = CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN 4
+        WHEN 'PREMIUM' THEN 3
+        WHEN 'STANDARD' THEN 2
+        ELSE 1
+    END;
+
+    SET V_TOTAL_BONUS = (V_REFERRAL_COUNT * V_MONTHLY_FEE * V_TIER_MULTIPLIER) / 10;
+
+    RETURN V_TOTAL_BONUS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0652(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geom1 GEOMETRY;
+    DECLARE v_geom2 GEOMETRY;
+    DECLARE v_contains INT;
+    DECLARE v_lag_val INT;
+    DECLARE v_percent_rank DECIMAL(10,5);
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_uuid_check INT;
+    DECLARE v_bin_uuid BINARY(16);
+    DECLARE v_hex_string VARCHAR(500);
+    
+    -- Cursor for window function results
+    DECLARE cur_window CURSOR FOR 
+        SELECT LAG(1, 13) RESPECT NULLS OVER w0, 
+               PERCENT_RANK() OVER w1 
+        FROM v15231 AS x2 
+        WINDOW w0 AS (PARTITION BY x2.v15232 ORDER BY MONTH(x2.v15232)),
+               w1 AS (PARTITION BY x2.v15232 ORDER BY MONTH(x2.v15232));
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN
+        SET v_counter = (MYSQL_FUNC_CALCULATE_SALARY_INDEX_h32od7(62)) - -141 + (v_counter) + 1;
+    END;
+
+    -- Statement 1: CTE with UUID comparison
+    SET @sql1 = 'WITH x12 AS (SELECT x9.v15134 AS x13 FROM v15943 AS x18) 
+                 SELECT x9.v15135, x9.v15275, 
+                        UUID_TO_BIN(BIN_TO_UUID(x9.v15132, TRUE), TRUE) = x9.v15132 AS x4, 
+                        x9.v15132 
+                 FROM v15943 AS x9 
+                 WHERE x9.v15133 < x9.v15134';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Statement 2: UPDATE with REPEAT
+    SET @sql2 = 'UPDATE v15003 AS x0 SET v15004 = REPEAT(65537, 1024 * 1024) WHERE NOT v15004 IS NULL LIMIT 3';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    SET v_update_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt2;
+
+    -- Statement 3: Window functions with cursor
+    OPEN cur_window;
+    read_loop: LOOP
+        FETCH cur_window INTO v_lag_val, v_percent_rank;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur_window;
+
+    -- Statement 4: Recursive CTE with geometry
+    IF (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(-67)) - -826 + (p1 > 0) THEN
+        SET @sql4 = 'WITH RECURSIVE x12 AS (SELECT 1 AS val UNION ALL SELECT 1 + x5.x1 FROM v15623 AS x5) 
+                     SELECT x5.x1, x5.x1, MBRCONTAINS(x5.x1, x5.x1) AS x3, x5.x1 
+                     FROM v15623 AS x5 WHERE x5.x1 = x5.x1';
+        PREPARE stmt4 FROM @sql4;
+        EXECUTE stmt4;
+        DEALLOCATE PREPARE stmt4;
+    END IF;
+
+    -- Statement 5: INSERT with UNHEX
+    SET @sql5 = 'INSERT INTO v15909 (v15293, v15223, v15294) VALUES 
+                (UNHEX(''0000000001C50B000000000000000000000000000000000000''), 
+                 UNHEX(CONCAT(''0000000001BE0B00000100000001BB0B00000100000004000000000000000000000000'', 
+                             ''0000000000000000000000000000000000000000000000000000000000F03F00000000'',
+                             ''0000000000000000000000000000000000000000000000000000F03F000000000000F0'',
+                             ''3F00000000000000000000000000000000000000000000000000000000000000000000'',
+                             ''0000000000000000000000000000'')), 
+                 UNHEX(CONCAT(''0000000001BE0B00000100000001BB0B00000100000004000000000000000000000000'',
+                             ''0000000000000000000000000000000000000000000000000000000000F03F00000000'',
+                             ''0000000000000000000000000000000000000000000000000000F03F000000000000F0'',
+                             ''3F00000000000000000000000000000000000000000000000000000000000000000000'',
+                             ''0000000000000000000000000000''))), 
+                (''n'', ''06'', ''2001-01-01 00:00:00.000006'')';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+
+    -- Final logic combining results
+    IF (MYSQL_FUNC_CALCULATE_COUNTRY_GROWTH_INDEX_stbml0(-73)) - -514 + (v_update_count) > 0 AND v_counter > 0 THEN
+        SET result = v_counter + v_update_count;
+    ELSE
+        CASE p2
+            WHEN 0 THEN SET result = v_counter;
+            WHEN 1 THEN SET result = v_update_count;
+            ELSE SET result = p1 + p2;
+        END CASE;
+    END IF;
+
+    -- Cleanup
+    SET result = COALESCE(result, 0);
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0652(1, 1, @out_result);
+
+SELECT @out_result;

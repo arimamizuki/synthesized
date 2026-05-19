@@ -1,0 +1,442 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v16269 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16271 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v16326 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16439 INT,
+    v16440 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v16330 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16332 VARCHAR(255),
+    v16333 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v16399 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16400 GEOMETRY,
+    v16401 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v16468 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16438 VARCHAR(50),
+    v16439 INT
+);
+CREATE TABLE IF NOT EXISTS v16586 (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    v16587 VARCHAR(100)
+);
+INSERT INTO v16269 (v16271) VALUES ('alpha'), ('beta'), ('gamma'), ('delta'), ('epsilon');
+INSERT INTO v16326 (v16439, v16440) VALUES (1, 'test1'), (2, 'test2'), (3, 'test3'), (NULL, 'test4');
+INSERT INTO v16330 (v16332, v16333) VALUES ('root@localhost', 'data1'), ('admin@localhost', 'data2'), ('user@localhost', 'data3');
+INSERT INTO v16399 (v16400, v16401) VALUES (ST_GEOMFROMTEXT('POINT(10 100)'), 'point1'), (NULL, 'point2'), (ST_GEOMFROMTEXT('POINT(15 150)'), 'point3');
+INSERT INTO v16468 (v16438, v16439) VALUES ('test_old', 1), ('test_old2', 2), ('test_old3', 3);
+INSERT INTO v16586 (v16587) VALUES ('initial_data');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+CREATE TABLE IF NOT EXISTS `table_w4154q` (
+    `table_w4154q_campaign_id` INT,
+    `table_w4154q_start_date` DATE,
+    `table_w4154q_end_date` DATE
+);
+
+INSERT INTO `table_w4154q` (`table_w4154q_campaign_id`, `table_w4154q_start_date`, `table_w4154q_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_W4154Q_START_DATE, TABLE_W4154Q_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W4154Q
+    WHERE TABLE_W4154Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(14)) - -293 + (0);
+    END IF;
+
+    RETURN DATEDIFF(V_END_DATE, V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+CREATE TABLE IF NOT EXISTS `table_fedjkb` (
+    `table_fedjkb_product_id` INT,
+    `table_fedjkb_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_fedjkb` (`table_fedjkb_product_id`, `table_fedjkb_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_SCORE_6gh081(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_FEDJKB_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_FEDJKB
+    WHERE TABLE_FEDJKB_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(-76, -89)) - 708 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BITWISE_MULTIPLY_ssg5my(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_IS_NEGATIVE INT DEFAULT 0;
+    DECLARE V_TEMP_A INT DEFAULT 0;
+    DECLARE V_TEMP_B INT DEFAULT 0;
+
+    IF A = 0 OR B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_IS_NEGATIVE = 0;
+    IF A < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET A = -A; END IF;
+    IF B < 0 THEN SET V_IS_NEGATIVE = 1 - V_IS_NEGATIVE; SET B = -B; END IF;
+
+    SET V_TEMP_A = A;
+
+    MULTIPLY_LOOP: WHILE V_TEMP_A > 0 DO
+        IF V_TEMP_A & 1 = 1 THEN
+            SET V_RESULT = V_RESULT + B;
+        END IF;
+        SET V_TEMP_A = V_TEMP_A >> 1;
+        SET B = B << 1;
+    END WHILE MULTIPLY_LOOP;
+
+    IF V_IS_NEGATIVE = 1 THEN
+        SET V_RESULT = -V_RESULT;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+CREATE TABLE IF NOT EXISTS `table_0nask3` (
+    `table_0nask3_emp_id` INT,
+    `table_0nask3_hire_date` DATE
+);
+
+INSERT INTO `table_0nask3` (`table_0nask3_emp_id`, `table_0nask3_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_YEARS_tqko7o(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_0NASK3_HIRE_DATE, CURDATE())
+    INTO V_YEARS
+    FROM TABLE_0NASK3
+    WHERE TABLE_0NASK3_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(-92)) - -502 + ((MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(-70)) - 440 + (v_years));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+CREATE TABLE IF NOT EXISTS `table_blvmk4` (
+    `table_blvmk4_product_id` INT,
+    `table_blvmk4_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_blvmk4` (`table_blvmk4_product_id`, `table_blvmk4_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PRICE_VALUE_v9zv1q(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_BLVMK4_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_BLVMK4
+    WHERE TABLE_BLVMK4_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a(-69)) - -58 + (floor(v_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a----- */
+CREATE TABLE IF NOT EXISTS `table_qo7hbf` (
+    `table_qo7hbf_emp_id` INT,
+    `table_qo7hbf_salary` INT
+);
+
+INSERT INTO `table_qo7hbf` (`table_qo7hbf_emp_id`, `table_qo7hbf_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_BUCKET_5gze6a(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_QO7HBF_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_QO7HBF
+    WHERE TABLE_QO7HBF_EMP_ID = EMP_ID_PARAM;
+
+    IF V_SALARY > 100000 THEN
+        RETURN 5;
+    ELSEIF V_SALARY > 70000 THEN
+        RETURN 4;
+    ELSEIF V_SALARY > 50000 THEN
+        RETURN 3;
+    ELSEIF V_SALARY > 30000 THEN
+        RETURN 2;
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+CREATE TABLE IF NOT EXISTS `table_02dgpw` (
+    `table_02dgpw_policy_id` INT,
+    `table_02dgpw_customer_id` INT,
+    `table_02dgpw_bike_value` INT,
+    `table_02dgpw_bike_type` VARCHAR(50),
+    `table_02dgpw_annual_premium` INT,
+    `table_02dgpw_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_beolwf` (
+    `table_beolwf_claim_id` INT,
+    `table_beolwf_policy_id` INT,
+    `table_beolwf_claim_date` DATE,
+    `table_beolwf_claim_amount` DECIMAL(10,2),
+    `table_beolwf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_02dgpw` (`table_02dgpw_policy_id`, `table_02dgpw_customer_id`, `table_02dgpw_bike_value`, `table_02dgpw_bike_type`, `table_02dgpw_annual_premium`, `table_02dgpw_deductible_amount`) VALUES (1, 2, 3, 'test', 5, 1.0);
+
+INSERT INTO `table_beolwf` (`table_beolwf_claim_id`, `table_beolwf_policy_id`, `table_beolwf_claim_date`, `table_beolwf_claim_amount`, `table_beolwf_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_02DGPW_BIKE_VALUE, 10000), COALESCE(TABLE_02DGPW_ANNUAL_PREMIUM, 500), COALESCE(TABLE_02DGPW_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_02DGPW
+    WHERE TABLE_02DGPW_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = V_BIKE_VALUE / 1000;
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi()) - -890 + (cast(v_final_premium as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_RANDOM_10_g610wi() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 13 UNION SELECT 27 UNION SELECT 42 UNION SELECT 58 UNION SELECT 63 UNION SELECT 71 UNION SELECT 89 UNION SELECT 94 UNION SELECT 11 UNION SELECT 35;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(-45)) - 460 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(-87)) - -496 + (v_sum)) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+CREATE TABLE IF NOT EXISTS `table_rpd9bu` (
+    `table_rpd9bu_customer_id` INT,
+    `table_rpd9bu_status` VARCHAR(50),
+    `table_rpd9bu_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rpd9bu` (`table_rpd9bu_customer_id`, `table_rpd9bu_status`, `table_rpd9bu_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_RPD9BU_STATUS, COALESCE(TABLE_RPD9BU_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_RPD9BU
+    WHERE TABLE_RPD9BU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+CREATE TABLE IF NOT EXISTS `table_uy67bq` (
+    `table_uy67bq_product_id` INT,
+    `table_uy67bq_price` DECIMAL(10,2),
+    `table_uy67bq_category_id` INT
+);
+
+INSERT INTO `table_uy67bq` (`table_uy67bq_product_id`, `table_uy67bq_price`, `table_uy67bq_category_id`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_xddr6l(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_UY67BQ_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_UY67BQ
+    WHERE TABLE_UY67BQ_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_PRICE / 10);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0665(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_cur CURSOR FOR SELECT id FROM v16330 WHERE v16332 = CURRENT_USER();
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: INSERT into v16586 (adapted with dynamic SQL)
+    SET @sql1 = 'INSERT INTO v16586 (v16587) VALUES (?);';
+    PREPARE stmt1 FROM @sql1;
+    SET @val1 = 'GREEK SMALL BETA';
+    EXECUTE stmt1 USING @val1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: UPDATE with LEFT JOIN
+    SET @sql2 = 'UPDATE v16468 AS x2 LEFT JOIN v16326 AS x7 ON x2.v16439 = 1 SET x2.v16438 = ? WHERE v16439 IN (2.0, NULL)';
+    PREPARE stmt2 FROM @sql2;
+    SET @val2 = 'test11';
+    EXECUTE stmt2 USING @val2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: CREATE VIEW (DDL executed directly)
+    SET @sql3 = 'CREATE OR REPLACE VIEW v16703 AS SELECT * FROM v16330 AS x1 WHERE x1.v16332 = CURRENT_USER()';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with geometry and complex conditions
+    SET @sql4 = 'UPDATE v16399 AS x0 SET v16400 = ST_GEOMFROMTEXT(?) WHERE NOT v16400 IS NULL AND v16400 <> v16400 AND v16400 BETWEEN v16400 AND CURRENT_TIME() OR v16400 <> LEAST(v16400, UTC_TIME())';
+    PREPARE stmt4 FROM @sql4;
+    SET @val4 = 'POINT(13 104)';
+    EXECUTE stmt4 USING @val4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: CREATE INDEX (DDL executed directly)
+    SET @sql5 = 'CREATE INDEX IF NOT EXISTS v16705 ON v16269(v16271)';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + 1;
+
+    -- CURSOR and loop to demonstrate procedural logic
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_temp;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Conditional check using CASE
+        CASE
+            WHEN (MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(-61)) - -192 + (p1 > 0 and p2 > 0) THEN
+                SET v_counter = v_counter + 10;
+            WHEN p1 > 0 THEN
+                SET v_counter = v_counter + 5;
+            ELSE
+                SET v_counter = v_counter + 1;
+        END CASE;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- WHILE loop as additional structure
+    WHILE v_counter < 100 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0665(1, 1, @out_result);
+
+SELECT @out_result;

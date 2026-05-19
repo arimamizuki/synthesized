@@ -1,0 +1,446 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1194401 (
+    v1194402 INT NOT NULL,
+    col1 TIME,
+    col2 TIME,
+    col3 TIME,
+    col4 TIME
+);
+CREATE TABLE IF NOT EXISTS v1194372 (
+    v1194373 DECIMAL(12,4)
+);
+CREATE TABLE IF NOT EXISTS v1194299 (
+    id INT
+);
+CREATE TABLE IF NOT EXISTS v1194506 (
+    v1194507 VARCHAR(32)
+);
+CREATE TABLE IF NOT EXISTS v1194140 (
+    v1194141 VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1193846 (
+    v1193847 VARCHAR(100)
+);
+INSERT INTO v1194401 VALUES (1, '10:09:10', '00:00:00', '00:01:41', '00:00:00.123');
+INSERT INTO v1194372 VALUES (100.0000), (200.0000), (300.0000);
+INSERT INTO v1194299 VALUES (1), (2), (3);
+INSERT INTO v1194506 VALUES ('test1'), ('test2');
+INSERT INTO v1194140 VALUES ('x'), ('y'), ('z');
+INSERT INTO v1193846 VALUES ('user1'), ('user2'), ('other');
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N < 0 THEN
+        RETURN -1;
+    END IF;
+
+    WHILE V_I <= P_N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+CREATE TABLE IF NOT EXISTS `table_82h4u6` (
+    `table_82h4u6_product_id` INT,
+    `table_82h4u6_category_id` INT
+);
+
+INSERT INTO `table_82h4u6` (`table_82h4u6_product_id`, `table_82h4u6_category_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_IS_PALINDROME_ozixtx(-53)) - 885 + ((MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(22)) - 481 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(79)) - -361 + (category_id_param % 50)));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+CREATE TABLE IF NOT EXISTS `table_qgf2wj` (
+    `table_qgf2wj_department_id` INT,
+    `table_qgf2wj_salary` INT
+);
+
+INSERT INTO `table_qgf2wj` (`table_qgf2wj_department_id`, `table_qgf2wj_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_AVG_SALARY_3l80bl(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_QGF2WJ_SALARY), 0)
+    INTO V_AVG
+    FROM TABLE_QGF2WJ
+    WHERE TABLE_QGF2WJ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACE INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(76, -47)) - 536 + (0) OR N > 100 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        INNER_LOOP: WHILE V_J <= N DO
+            IF V_I = V_J THEN
+                SET V_SUM = (MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(-70)) - -682 + (v_sum + (v_i * v_j));
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_J = 1;
+        SET V_I = (MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(-10)) - -619 + (v_i + 1);
+    END WHILE OUTER_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+CREATE TABLE IF NOT EXISTS `table_mkvps3` (
+    `table_mkvps3_property_id` INT,
+    `table_mkvps3_property_type` VARCHAR(50),
+    `table_mkvps3_bedrooms` INT,
+    `table_mkvps3_bathrooms` INT,
+    `table_mkvps3_square_feet` INT,
+    `table_mkvps3_year_built` INT,
+    `table_mkvps3_listing_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_uicgr5` (
+    `table_uicgr5_feature_id` INT,
+    `table_uicgr5_property_id` INT,
+    `table_uicgr5_feature_type` VARCHAR(50),
+    `table_uicgr5_value` INT
+);
+
+INSERT INTO `table_mkvps3` (`table_mkvps3_property_id`, `table_mkvps3_property_type`, `table_mkvps3_bedrooms`, `table_mkvps3_bathrooms`, `table_mkvps3_square_feet`, `table_mkvps3_year_built`, `table_mkvps3_listing_price`) VALUES (1, 'test', 3, 4, 5, 6, 1.0);
+
+INSERT INTO `table_uicgr5` (`table_uicgr5_feature_id`, `table_uicgr5_property_id`, `table_uicgr5_feature_type`, `table_uicgr5_value`) VALUES (1, 2, 'test', 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROPERTY_SCORE_x841z4(PROPERTY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BEDROOMS INT DEFAULT 0;
+    DECLARE V_BATHROOMS DECIMAL(3,1) DEFAULT 0.0;
+    DECLARE V_SQUARE_FEET INT DEFAULT 0;
+    DECLARE V_YEAR_BUILT INT DEFAULT 2000;
+    DECLARE V_FEATURE_COUNT INT DEFAULT 0;
+    DECLARE V_PROPERTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_MKVPS3_BEDROOMS, 0), COALESCE(TABLE_MKVPS3_BATHROOMS, 1.0), COALESCE(TABLE_MKVPS3_SQUARE_FEET, 1000), COALESCE(TABLE_MKVPS3_YEAR_BUILT, 2000)
+    INTO V_BEDROOMS, V_BATHROOMS, V_SQUARE_FEET, V_YEAR_BUILT
+    FROM TABLE_MKVPS3
+    WHERE TABLE_MKVPS3_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_FEATURE_COUNT
+    FROM TABLE_UICGR5
+    WHERE TABLE_UICGR5_PROPERTY_ID = PROPERTY_ID_PARAM;
+
+    SET V_PROPERTY_SCORE = (V_BEDROOMS * 20) + (V_BATHROOMS * 15) + (V_SQUARE_FEET / 100) + ((2024 - V_YEAR_BUILT) * 2) + (V_FEATURE_COUNT * 10);
+
+    RETURN V_PROPERTY_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+CREATE TABLE IF NOT EXISTS `table_o7b1hn` (
+    `table_o7b1hn_case_id` INT,
+    `table_o7b1hn_client_id` INT,
+    `table_o7b1hn_attorney_id` INT,
+    `table_o7b1hn_case_type` VARCHAR(50),
+    `table_o7b1hn_filing_date` DATE,
+    `table_o7b1hn_status` VARCHAR(50),
+    `table_o7b1hn_estimated_value` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sn0pid` (
+    `table_sn0pid_task_id` INT,
+    `table_sn0pid_case_id` INT,
+    `table_sn0pid_task_name` VARCHAR(50),
+    `table_sn0pid_hours_billed` INT,
+    `table_sn0pid_hourly_rate` INT
+);
+
+INSERT INTO `table_o7b1hn` (`table_o7b1hn_case_id`, `table_o7b1hn_client_id`, `table_o7b1hn_attorney_id`, `table_o7b1hn_case_type`, `table_o7b1hn_filing_date`, `table_o7b1hn_status`, `table_o7b1hn_estimated_value`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_sn0pid` (`table_sn0pid_task_id`, `table_sn0pid_case_id`, `table_sn0pid_task_name`, `table_sn0pid_hours_billed`, `table_sn0pid_hourly_rate`) VALUES (1, 2, 'test', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CASE_PROFITABILITY_i0u8o6(CASE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_VALUE INT DEFAULT 0;
+    DECLARE V_TOTAL_HOURS INT DEFAULT 0;
+    DECLARE V_HOURLY_RATE INT DEFAULT 0;
+    DECLARE V_TOTAL_BILLING INT DEFAULT 0;
+    DECLARE V_PROFITABILITY INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_O7B1HN_ESTIMATED_VALUE, 0)
+    INTO V_ESTIMATED_VALUE
+    FROM TABLE_O7B1HN
+    WHERE TABLE_O7B1HN_CASE_ID = CASE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED * TABLE_SN0PID_HOURLY_RATE), 0), COALESCE(SUM(TABLE_SN0PID_HOURS_BILLED), 0)
+    INTO V_TOTAL_BILLING, V_TOTAL_HOURS
+    FROM TABLE_SN0PID
+    WHERE TABLE_SN0PID_CASE_ID = CASE_ID_PARAM;
+
+    IF V_ESTIMATED_VALUE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PROFITABILITY = V_ESTIMATED_VALUE - V_TOTAL_BILLING;
+
+    IF V_TOTAL_HOURS > 100 THEN
+        SET V_PROFITABILITY = V_PROFITABILITY - (V_TOTAL_HOURS - 100) * 10;
+    END IF;
+
+    RETURN CAST(V_PROFITABILITY AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BRUTE_FORCE_STRING_MATCH_c2ygx5(TEXT INT, PATTERN INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEXT_LEN INT DEFAULT 0;
+    DECLARE V_PATTERN_LEN INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 0;
+    DECLARE V_MATCH_FOUND INT DEFAULT 0;
+
+    SET V_TEXT_LEN = (MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3(-5)) - 236 + (char_length(text));
+    SET V_PATTERN_LEN = CHAR_LENGTH(PATTERN);
+
+    IF V_PATTERN_LEN = 0 OR V_PATTERN_LEN > V_TEXT_LEN THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= V_TEXT_LEN - V_PATTERN_LEN + 1 DO
+        SET V_J = 1;
+        SET V_MATCH_FOUND = 1;
+
+        INNER_LOOP: WHILE V_J <= V_PATTERN_LEN DO
+            IF SUBSTRING(TEXT, V_I + V_J - 1, 1) != SUBSTRING(PATTERN, V_J, 1) THEN
+                SET V_MATCH_FOUND = 0;
+                LEAVE INNER_LOOP;
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+
+        IF V_MATCH_FOUND = 1 THEN
+            RETURN V_I;
+        END IF;
+
+        SET V_I = V_I + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+CREATE TABLE IF NOT EXISTS `table_00w3dk` (
+    `table_00w3dk_order_id` INT,
+    `table_00w3dk_customer_id` INT,
+    `table_00w3dk_order_date` DATE,
+    `table_00w3dk_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_00w3dk` (`table_00w3dk_order_id`, `table_00w3dk_customer_id`, `table_00w3dk_order_date`, `table_00w3dk_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECENT_ORDER_TOTAL_ogwwb3(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_00W3DK_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_TOTAL
+    FROM TABLE_00W3DK
+    WHERE TABLE_00W3DK_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_00W3DK_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+    RETURN FLOOR(V_RECENT_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PALINDROME_ozixtx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PALINDROME_ozixtx(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORIGINAL INT;
+    DECLARE V_REVERSED INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_ORIGINAL = NUM;
+    SET V_TEMP = ABS(NUM);
+
+    REVERSE_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_REVERSED = V_REVERSED * 10 + V_DIGIT;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE REVERSE_LOOP;
+
+    IF V_ORIGINAL < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_REVERSED = V_ORIGINAL THEN
+        RETURN (MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(88, -38)) - -356 + (1);
+    ELSE
+        RETURN 0;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MULTIPLY_NUMBERS_hookb5(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN A * B;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1155_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_time_val TIME;
+    DECLARE v_decimal_val DECIMAL(12,4);
+    DECLARE v_cast_val VARCHAR(32);
+    DECLARE v_char_val VARCHAR(10);
+    DECLARE v_sql_mode_val VARCHAR(100);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1194141 FROM v1194140 WHERE v1194141 = 'x';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1;
+
+    -- Statement 1: CREATE TABLE v1194401 with TIME values (adapted as INSERT)
+    INSERT INTO v1194401 (v1194402, col1, col2, col3, col4)
+    VALUES (p1, TIME('1000009:10:10'), TIME(TIMESTAMP('2001-01-01 00:00:00')), TIME(101.123456), TIME('00:00:00.123'));
+
+    -- Statement 2: UPDATE v1194372 with JOIN
+    UPDATE v1194372 AS x0
+    JOIN v1194299 AS x3 ON (x0.v1194373 = x0.v1194373)
+    SET x0.v1194373 = 112233.1234
+    WHERE x0.v1194373 >= -p1 AND x0.v1194373 < -128;
+
+    -- Statement 3: CREATE TABLE v1194506 with CAST (adapted as INSERT)
+    INSERT INTO v1194506 (v1194507)
+    VALUES (CAST(1 - POWER(2, 63) AS SIGNED));
+
+    -- Statement 4: UPDATE v1194140 with ORDER BY and LIMIT
+    UPDATE v1194140 AS x0
+    SET x0.v1194141 = 'updated'
+    WHERE x0.v1194141 = 'x' AND x0.v1194141 = 'x' AND x0.v1194141 > 'x'
+    ORDER BY (SELECT MIN(x0.v1194141) + MAX(x0.v1194141) FROM v1194140)
+    LIMIT 90;
+
+    -- Statement 5: UPDATE v1193846 with LIKE
+    UPDATE v1193846 AS x1
+    SET x1.v1193847 = 'new_mode'
+    WHERE x1.v1193847 LIKE 'u%';
+
+    -- Procedural logic using IF, CASE, WHILE
+    IF p1 > 0 THEN
+        SET v_counter = 1;
+    ELSE
+        SET v_counter = 0;
+    END IF;
+
+    CASE p2
+        WHEN 1 THEN
+            SET v_counter = (MYSQL_FUNC_CALCULATE_CATEGORY_INDEX_mwkpiy(-4)) - -813 + ((MYSQL_FUNC_HANDLER_FUNC_FACTORIAL_dsnw5g(-53)) - -673 + (v_counter)) + 10;
+        WHEN 2 THEN
+            SET v_counter = v_counter + 20;
+        ELSE
+            SET v_counter = v_counter + 30;
+    END CASE;
+
+    WHILE v_counter < 50 DO
+        SET v_counter = v_counter + 5;
+    END WHILE;
+
+    -- Cursor usage
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_char_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1155_proc(1, 1, @out_result);
+
+SELECT @out_result;

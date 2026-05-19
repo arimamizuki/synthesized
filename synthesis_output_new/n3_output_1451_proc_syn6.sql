@@ -1,0 +1,403 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1254355 (v1254356 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1254270 (v1254356 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1254554 (v1254555 TEXT, v1254556 INT);
+CREATE TABLE IF NOT EXISTS v1254262 (v1254555 TEXT);
+CREATE TABLE IF NOT EXISTS v1254387 (v1254388 VARCHAR(255), v1254389 DATE);
+CREATE TABLE IF NOT EXISTS v1254717 (v1254718 INT);
+INSERT INTO v1254355 VALUES ('test20'), ('test_ps_fetch'), ('idx'), ('n_diff_pfx02'), ('abc');
+INSERT INTO v1254270 VALUES ('test20'), ('other');
+INSERT INTO v1254554 VALUES (REPEAT('n', 4000), 10);
+INSERT INTO v1254262 VALUES (REPEAT('n', 4000));
+INSERT INTO v1254387 VALUES ('test_value', '2023-01-01');
+INSERT INTO v1254717 VALUES (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16);
+
+/* -----Dependency for: n3_output_0391_proc----- */
+CREATE TABLE IF NOT EXISTS v1135158 (v1135159 INT);
+CREATE TABLE IF NOT EXISTS v1135374 (v1135375 INT, v1135376 INT, v1135377 INT);
+CREATE TABLE IF NOT EXISTS v1135663 (v1135375 INT, v1135377 INT);
+CREATE TABLE IF NOT EXISTS v1135152 (v1135153 INT, v1135154 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1135434 (v1135435 INT);
+CREATE TABLE IF NOT EXISTS v1135427 (v1135428 TEXT);
+INSERT INTO v1135158 VALUES (1), (1);
+INSERT INTO v1135374 VALUES (1, 4, 10), (2, 3, 20), (3, 4, 30);
+INSERT INTO v1135663 VALUES (1, 10), (2, 20), (3, 30);
+INSERT INTO v1135152 VALUES (100, 'thread/sql/OneConnection'), (200, 'other/thread');
+INSERT INTO v1135434 VALUES (100), (158203);
+INSERT INTO v1135427 VALUES (''), ('');
+
+/* -----Called: n3_output_0391_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0391_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE v_temp INT;
+    DECLARE v_iter INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v1135435 FROM v1135434 WHERE v1135435 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Process INSERT INTO v1135158
+    INSERT INTO v1135158 (v1135159) VALUES (p1), (p2);
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process UPDATE v1135374 with LEFT JOIN
+    UPDATE v1135374 AS x0
+    LEFT JOIN v1135663 AS x1 ON x0.v1135375 = x0.v1135377 AND x0.v1135376 = 3
+    SET x0.v1135375 = p1
+    WHERE x0.v1135376 = 4;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process UPDATE v1135152 with LIKE
+    UPDATE v1135152 AS x0
+    SET x0.v1135153 = p2
+    WHERE x0.v1135154 LIKE 'thread/sql/OneConnection';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process INSERT INTO v1135434 using cursor loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        INSERT INTO v1135434 (v1135435) VALUES (v_val + p2);
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Process UPDATE v1135427 with REPEAT (capped to safe length)
+    SET v_temp = LEAST(p1, 1000);
+    UPDATE v1135427 AS x1
+    SET x1.v1135428 = REPEAT('1', v_temp)
+    WHERE v_temp > 0;
+
+    -- Conditional logic with IF/ELSEIF/ELSE
+    IF p1 > p2 THEN
+        SET result = v_counter + p1;
+    ELSEIF p1 = p2 THEN
+        SET result = v_counter * 2;
+    ELSE
+        SET result = v_counter + p2;
+    END IF;
+
+    -- WHILE loop for additional processing
+    WHILE v_iter < 3 DO
+        SET result = result + v_iter;
+        SET v_iter = v_iter + 1;
+    END WHILE;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+CREATE TABLE IF NOT EXISTS `table_mss9em` (
+    `table_mss9em_customer_id` INT
+);
+
+INSERT INTO `table_mss9em` (`table_mss9em_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUB_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_SUB_COUNT
+    FROM TABLE_MSS9EM
+    WHERE TABLE_MSS9EM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - 398 + (least(v_sub_count, 10));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(-57, -26)) - 168 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(PRICE INT, QTY INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISCOUNT DECIMAL(10,2);
+
+    CASE
+        WHEN QTY >= 100 THEN SET V_DISCOUNT = PRICE * 0.20;
+        WHEN QTY >= 50 THEN SET V_DISCOUNT = PRICE * 0.15;
+        WHEN QTY >= 20 THEN SET V_DISCOUNT = PRICE * 0.10;
+        WHEN QTY >= 10 THEN SET V_DISCOUNT = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0(83)) - -305 + (price * 0.05);
+        ELSE SET V_DISCOUNT = 0;
+    END CASE;
+
+    RETURN PRICE - V_DISCOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0----- */
+CREATE TABLE IF NOT EXISTS `table_9owccq` (
+    `table_9owccq_emp_id` INT,
+    `table_9owccq_department_id` INT,
+    `table_9owccq_salary` INT
+);
+
+INSERT INTO `table_9owccq` (`table_9owccq_emp_id`, `table_9owccq_department_id`, `table_9owccq_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_INDEX_3rnmf0(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_9OWCCQ_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_9OWCCQ
+    WHERE TABLE_9OWCCQ_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_PROC1_zwx1tl()) - 227 + ((MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(70, 92)) - 241 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = (MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(-81, -74, 100)) - 813 + (v_count) + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C) / 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_PROD_ev2ezo(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(-88)) - 867 + (p_a * p_b);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+CREATE TABLE IF NOT EXISTS `table_ch02g9` (
+    `table_ch02g9_customer_id` INT,
+    `table_ch02g9_country` INT
+);
+
+INSERT INTO `table_ch02g9` (`table_ch02g9_customer_id`, `table_ch02g9_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_REGION_CODE_0hijv5(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_CH02G9_COUNTRY
+    INTO V_COUNTRY
+    FROM TABLE_CH02G9
+    WHERE TABLE_CH02G9_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN CASE V_COUNTRY
+        WHEN 'USA' THEN 1
+        WHEN 'UK' THEN 2
+        WHEN 'CN' THEN 3
+        WHEN 'JP' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_zwx1tl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_zwx1tl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1451_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(255);
+    DECLARE v_cur CURSOR FOR SELECT v1254356 FROM v1254355 WHERE v1254356 LIKE 't%';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Use input parameters in conditional logic
+    IF p1 > 0 THEN
+        -- Adapt UPDATE with JOIN from statement 1
+        UPDATE v1254355 AS x0
+        INNER JOIN v1254270 AS x5 ON x0.v1254356 = 'test20'
+        SET x0.v1254356 = CONCAT('-', x0.v1254356)
+        WHERE x0.v1254356 IN ('test_ps_fetch', 'idx', 'n_diff_pfx02')
+        ORDER BY x0.v1254356 DESC, 
+                 CASE WHEN HEX(x0.v1254356) COLLATE utf8mb4_0900_as_ci IS NULL THEN 1 ELSE 0 END DESC, 
+                 HEX(x0.v1254356) COLLATE utf8mb4_0900_as_ci DESC;
+        
+CALL n3_output_0391_proc(17, 72, @_syn_15749);
+        SET v_counter = @_syn_15749 - @_io_result + (v_counter) + 1;
+    END IF;
+
+    -- Use CASE/WHEN for conditional logic
+    CASE p2
+        WHEN 1 THEN
+            -- Adapt UPDATE with JOIN from statement 2
+            UPDATE v1254554 AS x1
+            JOIN v1254262 AS x6 ON x1.v1254555 = x6.v1254555
+            SET x1.v1254556 = p1
+            WHERE x1.v1254555 = REPEAT('n', 4000) AND 3 = 3;
+            
+            SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(-43)) - -748 + (10);
+        WHEN 2 THEN
+            -- Adapt CREATE TABLE from statement 3
+            CREATE TABLE IF NOT EXISTS v1254618 (v1254619 CHAR(10) CHARACTER SET koi8r);
+            
+            -- Use loop to insert data
+            SET @i = 0;
+            WHILE @i < 3 DO
+                INSERT INTO v1254618 SELECT EXTRACTVALUE('<->test</->', '//*');
+                SET @i = @i + 1;
+            END WHILE;
+            
+            SET v_counter = v_counter + 100;
+        ELSE
+            -- Adapt UPDATE from statement 4
+            UPDATE v1254387 AS x1
+            SET x1.v1254388 = CONCAT('DATEDIFF_', (DATEDIFF(x1.v1254389, '0000-01-01') + 1))
+            WHERE x1.v1254389 = '2023-01-01' AND x1.v1254388 LIKE 't%';
+            
+            SET v_counter = v_counter + 1000;
+    END CASE;
+
+    -- Use cursor to iterate through results
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_val;
+        IF (MYSQL_FUNC_CURSOR_FUNC_COUNT_5_VALUES_6f7vwy()) - 510 + (v_done) THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Adapt UPDATE from statement 5 with LIMIT
+        UPDATE v1254717 AS x0
+        SET x0.v1254718 = x0.v1254718 + 1
+        WHERE x0.v1254718 > 4
+        ORDER BY x0.v1254718 DESC, x0.v1254718 DESC
+        LIMIT 12;
+        
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Use REPEAT...UNTIL for additional processing
+    SET @j = 0;
+    REPEAT
+        SET v_counter = v_counter + 1;
+        SET @j = @j + 1;
+    UNTIL @j >= 2 END REPEAT;
+
+    -- Set output result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1451_proc(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,391 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v167624 (v167625 INT, v167626 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v167662 (v167664 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v167832 (v167833 INT, v167834 VARCHAR(100), v167835 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v168028 (v168029 VARCHAR(1) DEFAULT NULL, v168030 VARCHAR(1) DEFAULT NULL);
+CREATE TABLE IF NOT EXISTS v167380 (v167381 VARCHAR(100));
+INSERT INTO v167624 VALUES (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'), (5, 'e');
+INSERT INTO v167662 VALUES ('ab123'), ('cd456'), ('ef789');
+INSERT INTO v167832 VALUES (1, 'test1', NULL), (2, 'test2', NULL), (3, 'test3', NULL);
+INSERT INTO v168028 VALUES (NULL, NULL), (NULL, NULL);
+INSERT INTO v167380 VALUES ('Old String 1'), ('Old String 2'), ('Old String 3');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_REGISTRATION_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DATE_dkn391----- */
+CREATE TABLE IF NOT EXISTS `table_ilnliq` (
+    `table_ilnliq_cdate` DATE
+);
+
+INSERT INTO `table_ilnliq` (`table_ilnliq_cdate`) VALUES ('2024-01-01');
+
+/* -----Called: MYSQL_FUNC_PROC_DATE_dkn391----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DATE_dkn391() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_ILNLIQ`;
+    RETURN (MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(-54, 7, 35)) - -988 + ((MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(-64)) - 182 + (result));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+CREATE TABLE IF NOT EXISTS `table_vevirx` (
+    `table_vevirx_order_id` INT,
+    `table_vevirx_customer_id` INT,
+    `table_vevirx_order_date` DATE,
+    `table_vevirx_total_amount` DECIMAL(10,2),
+    `table_vevirx_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_5od72a` (
+    `table_5od72a_refund_id` INT,
+    `table_5od72a_order_id` INT,
+    `table_5od72a_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_vevirx` (`table_vevirx_order_id`, `table_vevirx_customer_id`, `table_vevirx_order_date`, `table_vevirx_total_amount`, `table_vevirx_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_5od72a` (`table_5od72a_refund_id`, `table_5od72a_order_id`, `table_5od72a_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_PROMOTER_CONTRIBUTION_6qzvl0(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NPS_CONTRIBUTION INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_VEVIRX_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_VEVIRX
+    WHERE TABLE_VEVIRX_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_5OD72A_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_5OD72A
+    WHERE TABLE_5OD72A_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NPS_CONTRIBUTION = V_ORDER_TOTAL - (V_REFUND_TOTAL * 2);
+
+    RETURN V_NPS_CONTRIBUTION;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(88)) - 715 + (first_term + (num_terms - 1) * common_diff);
+    SET V_SUM = (NUM_TERMS * (FIRST_TERM + V_LAST_TERM)) / 2;
+
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - -792 + (v_sum);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+CREATE TABLE IF NOT EXISTS `table_fove5m` (
+    `table_fove5m_country` INT
+);
+
+INSERT INTO `table_fove5m` (`table_fove5m_country`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FOVE5M
+    WHERE TABLE_FOVE5M_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(1, -98)) - 240 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl()) - 788 + ((MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(10)) - -4 + (v_count)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIGITS_2fzxll----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + V_DIGIT;
+        SET V_TEMP = (MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(89)) - -224 + (v_temp div 10);
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+CREATE TABLE IF NOT EXISTS `table_biyadq` (
+    `table_biyadq_campaign_id` INT,
+    `table_biyadq_start_date` DATE,
+    `table_biyadq_status` VARCHAR(50)
+);
+
+INSERT INTO `table_biyadq` (`table_biyadq_campaign_id`, `table_biyadq_start_date`, `table_biyadq_status`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_RECENCY_INDEX_dajgdo(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_BIYADQ_START_DATE, TABLE_BIYADQ_STATUS
+    INTO V_START_DATE, V_STATUS
+    FROM TABLE_BIYADQ
+    WHERE TABLE_BIYADQ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_11_VALUES_3ld8dl() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 11 UNION SELECT 22 UNION SELECT 33 UNION SELECT 44 UNION SELECT 55 UNION SELECT 66 UNION SELECT 77 UNION SELECT 88 UNION SELECT 99 UNION SELECT 110 UNION SELECT 121;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+CREATE TABLE IF NOT EXISTS `table_xfpd87` (
+    `table_xfpd87_id` INT PRIMARY KEY,
+    `table_xfpd87_age` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ci4h3f` (
+    `table_ci4h3f_user_id` INT,
+    `table_ci4h3f_address` VARCHAR(30),
+    `table_ci4h3f_town` VARCHAR(30)
+);
+
+INSERT INTO `table_xfpd87` (`table_xfpd87_id`, `table_xfpd87_age`) VALUES (1, 2);
+
+INSERT INTO `table_ci4h3f` (`table_ci4h3f_user_id`, `table_ci4h3f_address`, `table_ci4h3f_town`) VALUES (1, 'test', 'test');
+
+/* -----Called: MYSQL_FUNC_UDP_MODIFY_USER_lj1ake----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UDP_MODIFY_USER_lj1ake(P_ADDRESS INT, V_TOWN INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE ROWS_UPDATED INT DEFAULT 0;
+    
+    UPDATE `TABLE_XFPD87` AS U
+    JOIN `TABLE_CI4H3F` AS A
+    ON U.`TABLE_XFPD87_ID` = A.`TABLE_CI4H3F_USER_ID`
+    SET `TABLE_XFPD87_AGE` = `TABLE_XFPD87_AGE` + 10
+    WHERE A.`TABLE_CI4H3F_ADDRESS` = CAST(P_ADDRESS AS CHAR) AND A.`TABLE_CI4H3F_TOWN` = CAST(V_TOWN AS CHAR);
+    
+    SET ROWS_UPDATED = ROW_COUNT();
+    
+    RETURN ROWS_UPDATED;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+CREATE TABLE IF NOT EXISTS `table_z8s8k5` (
+    `table_z8s8k5_customer_id` INT,
+    `table_z8s8k5_plan_type` VARCHAR(50),
+    `table_z8s8k5_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_z8s8k5` (`table_z8s8k5_customer_id`, `table_z8s8k5_plan_type`, `table_z8s8k5_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_TIER_VALUE_38i37c(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_Z8S8K5_PLAN_TYPE, COALESCE(TABLE_Z8S8K5_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_Z8S8K5
+    WHERE TABLE_Z8S8K5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN RETURN V_MONTHLY_COST * 10;
+        WHEN 'PREMIUM' THEN RETURN V_MONTHLY_COST * 5;
+        WHEN 'BASIC' THEN RETURN V_MONTHLY_COST * 2;
+        ELSE RETURN V_MONTHLY_COST;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1593(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_sum_val DECIMAL(30,0);
+    DECLARE v_row_num INT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_uuid BINARY(16);
+    DECLARE v_coer DECIMAL(10,0);
+    DECLARE v_pass_strength INT;
+    DECLARE v_regex_result VARCHAR(100);
+    DECLARE v_json_result JSON;
+    DECLARE v_rinst INT;
+    DECLARE v_token_result TEXT;
+    DECLARE cur CURSOR FOR SELECT SUM(x0.v167625) OVER (ROWS BETWEEN CURRENT ROW AND 10 FOLLOWING), ROW_NUMBER() OVER (ROWS BETWEEN CURRENT ROW AND 9223372036854775807 FOLLOWING) FROM v167624 AS x0 WINDOW x1 AS (ORDER BY CAST(x0.v167625 AS UNSIGNED) ROWS BETWEEN 1 PRECEDING AND CURRENT ROW);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: Window function SELECT with CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_sum_val, v_row_num;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 2: CREATE INDEX (DDL already executed, use it to verify existence)
+    SET @sql_index = 'SELECT COUNT(*) INTO @idx_count FROM information_schema.statistics WHERE table_name = ''v167662'' AND index_name = ''v167811''';
+    PREPARE stmt_idx FROM @sql_index;
+    EXECUTE stmt_idx;
+    DEALLOCATE PREPARE stmt_idx;
+    IF @idx_count = 0 THEN
+        SET v_counter = v_counter + 100;
+    END IF;
+
+    -- Statement 3: UPDATE with geometry
+    SET @sql_update = 'UPDATE v167832 AS x0 SET v167835 = ST_GEOMFROMTEXT(''POINT(31 125)'') WHERE CONCAT_WS(''string'', CONCAT(CONCAT(''08:50:27'', v167834 COLLATE utf8mb4_turkish_ci), LOWER(v167834))) <> ''xyz''';
+    PREPARE stmt_upd FROM @sql_update;
+    EXECUTE stmt_upd;
+    DEALLOCATE PREPARE stmt_upd;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: CREATE TABLE AS SELECT with complex functions
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 500;
+        SET @sql_ctas = 'CREATE TABLE IF NOT EXISTS v168028_temp AS SELECT UUID_TO_BIN(''12345678-1234-5678-1234-567812345678'', TRUE, FALSE) AS uuid_val, COERCIBILITY(@v1) AS coerc_val, VALIDATE_PASSWORD_STRENGTH(''password'', ''/a[floor(3.1)=3]'') AS pass_str, REGEXP_SUBSTR(''ağŸ[INV]£b'', ''.'', 3) AS regex_val, JSON_ARRAY(NTH_VALUE(CAST('''' AS JSON), 1) OVER (), '''') AS json_val, R_INSTR(NULL) AS rinst_val, VERSION_TOKENS_UNLOCK(''x'') AS token_val';
+        PREPARE stmt_ctas FROM @sql_ctas;
+        EXECUTE stmt_ctas;
+        DEALLOCATE PREPARE stmt_ctas;
+    END;
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT
+    SET @sql_upd2 = 'UPDATE v167380 AS x1 SET v167381 = ''New Test String'' ORDER BY v167381 LIMIT 1';
+    PREPARE stmt_upd2 FROM @sql_upd2;
+    EXECUTE stmt_upd2;
+    DEALLOCATE PREPARE stmt_upd2;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Procedural structures: LOOP, IF, HANDLER already used
+    -- Additional WHILE loop
+    WHILE v_counter < 50 DO
+        SET v_counter = v_counter + 10;
+    END WHILE;
+
+    -- CASE statement
+    CASE 
+        WHEN p1 > p2 THEN SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + (1000);
+        WHEN p1 = p2 THEN SET v_counter = v_counter + 2000;
+        ELSE SET v_counter = v_counter + 3000;
+    END CASE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_1593(1, 1, @out_result);
+
+SELECT @out_result;

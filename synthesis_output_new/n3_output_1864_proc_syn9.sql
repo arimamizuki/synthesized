@@ -1,0 +1,402 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1396493 (v1396494 TEXT, v1396495 INT);
+CREATE TABLE IF NOT EXISTS v1396460 (v1396461 INT);
+CREATE TABLE IF NOT EXISTS v1396513 (v1396515 GEOMETRY, v1396514 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v1396739 (v1396740 TEXT, v1396741 INT);
+CREATE TABLE IF NOT EXISTS v1396805 (v1396806 TEXT, v1396810 TEXT);
+INSERT INTO v1396493 VALUES ('test thread/innodb/srv_value', 1), ('other value', 2);
+INSERT INTO v1396460 VALUES (1), (NULL), (3);
+INSERT INTO v1396513 VALUES (ST_GEOMFROMTEXT('MULTIPOINT((1 1))', 4326), ST_GEOMFROMTEXT('POLYGON((1 1, 1 2, 2 2, 2 1, 1 1))', 4326));
+INSERT INTO v1396739 VALUES ('mysqltest_1_data', 10), ('another', 20);
+INSERT INTO v1396805 VALUES ('2015-01-01 10:10:10.00001-05:30', '2015-01-01 10:10:10.00001-05:30'), ('other', '2016-01-01');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+CREATE TABLE IF NOT EXISTS `table_4impjk` (
+    `table_4impjk_customer_id` INT,
+    `table_4impjk_plan_type` VARCHAR(50),
+    `table_4impjk_monthly_cost` DECIMAL(10,2),
+    `table_4impjk_start_date` DATE,
+    `table_4impjk_renewal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_akwwie` (
+    `table_akwwie_invoice_id` INT,
+    `table_akwwie_customer_id` INT,
+    `table_akwwie_invoice_date` DATE,
+    `table_akwwie_amount_due` DECIMAL(10,2),
+    `table_akwwie_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4impjk` (`table_4impjk_customer_id`, `table_4impjk_plan_type`, `table_4impjk_monthly_cost`, `table_4impjk_start_date`, `table_4impjk_renewal_date`) VALUES (1, 'test', 1.0, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_akwwie` (`table_akwwie_invoice_id`, `table_akwwie_customer_id`, `table_akwwie_invoice_date`, `table_akwwie_amount_due`, `table_akwwie_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_INVOICE_COUNT INT DEFAULT 0;
+    DECLARE V_PAID_INVOICES INT DEFAULT 0;
+    DECLARE V_RENEWAL_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_4IMPJK_PLAN_TYPE, COALESCE(TABLE_4IMPJK_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_4IMPJK
+    WHERE TABLE_4IMPJK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_AKWWIE_STATUS = 'PAID' THEN 1 END)
+    INTO V_INVOICE_COUNT, V_PAID_INVOICES
+    FROM TABLE_AKWWIE
+    WHERE TABLE_AKWWIE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RENEWAL_SCORE = (V_PAID_INVOICES * 100) / GREATEST(V_INVOICE_COUNT, 1);
+
+    IF V_PLAN_TYPE = 'ENTERPRISE' THEN
+        SET V_RENEWAL_SCORE = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(71)) - -181 + (v_renewal_score + 20);
+    ELSEIF V_PLAN_TYPE = 'PREMIUM' THEN
+        SET V_RENEWAL_SCORE = V_RENEWAL_SCORE + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x(-4)) - 143 + (least(v_renewal_score, 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x----- */
+CREATE TABLE IF NOT EXISTS `table_cim6h5` (
+    `table_cim6h5_customer_id` INT,
+    `table_cim6h5_status` VARCHAR(50),
+    `table_cim6h5_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_cim6h5` (`table_cim6h5_customer_id`, `table_cim6h5_status`, `table_cim6h5_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_SIMPLE_6qci1x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT TABLE_CIM6H5_STATUS, COALESCE(TABLE_CIM6H5_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(-74)) - -932 + ((MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(-34, -95)) - -502 + ((MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6(31)) - 84 + (0))))
+    INTO V_STATUS, V_COST
+    FROM TABLE_CIM6H5
+    WHERE TABLE_CIM6H5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_LEAP_YEAR_rfpwv6(YEAR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (YEAR % 4 = 0 AND YEAR % 100 != 0) OR (YEAR % 400 = 0) THEN
+        RETURN 1;
+    END IF;
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MODULO_qyr30x(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF P_B = 0 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(39)) - -77 + (-1);
+    END IF;
+    RETURN P_A MOD P_B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+CREATE TABLE IF NOT EXISTS `table_vg2w6v` (
+    `table_vg2w6v_emp_id` INT,
+    `table_vg2w6v_department_id` INT,
+    `table_vg2w6v_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_1f80w1` (
+    `table_1f80w1_department_id` INT,
+    `table_1f80w1_name` VARCHAR(50),
+    `table_1f80w1_budget` INT
+);
+
+INSERT INTO `table_vg2w6v` (`table_vg2w6v_emp_id`, `table_vg2w6v_department_id`, `table_vg2w6v_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_1f80w1` (`table_1f80w1_department_id`, `table_1f80w1_name`, `table_1f80w1_budget`) VALUES (1, 'test', 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_BUDGET_UTILIZATION_b5hwn5(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARIES DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_BUDGET DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_UTILIZATION DECIMAL(5,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_VG2W6V_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_VG2W6V
+    WHERE TABLE_VG2W6V_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_1F80W1_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_1F80W1
+    WHERE TABLE_1F80W1_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARIES / V_BUDGET) * 100;
+
+    RETURN FLOOR(V_UTILIZATION);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+CREATE TABLE IF NOT EXISTS `table_fvpibn` (
+    `table_fvpibn_product_id` INT,
+    `table_fvpibn_supplier_id` INT
+);
+
+INSERT INTO `table_fvpibn` (`table_fvpibn_product_id`, `table_fvpibn_supplier_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_SUPPLIER_COUNT_zuktx5(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUPPLIER_ID INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT TABLE_FVPIBN_SUPPLIER_ID
+    INTO V_SUPPLIER_ID
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FVPIBN
+    WHERE TABLE_FVPIBN_SUPPLIER_ID = V_SUPPLIER_ID;
+
+    RETURN (MYSQL_FUNC_PROC_SET_pl5j0s()) - -674 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+CREATE TABLE IF NOT EXISTS `table_4wesx0` (
+    `table_4wesx0_cset_col` INT
+);
+
+INSERT INTO `table_4wesx0` (`table_4wesx0_cset_col`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SET_pl5j0s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_4WESX0_CSET_COL INTO RESULT FROM `TABLE_4WESX0` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(-61)) - 25 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_jnsbf6(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy----- */
+CREATE TABLE IF NOT EXISTS `table_g6ufyg` (
+    `table_g6ufyg_emp_id` INT,
+    `table_g6ufyg_department_id` INT,
+    `table_g6ufyg_salary` INT
+);
+
+INSERT INTO `table_g6ufyg` (`table_g6ufyg_emp_id`, `table_g6ufyg_department_id`, `table_g6ufyg_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_RANK_wh1ydy(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MAX_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(MAX(TABLE_G6UFYG_SALARY), 0)
+    INTO V_MAX_SALARY
+    FROM TABLE_G6UFYG
+    WHERE TABLE_G6UFYG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(-77)) - 833 + (floor(v_max_salary / 10000));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+CREATE TABLE IF NOT EXISTS `table_9g21mv` (
+    `table_9g21mv_product_id` INT,
+    `table_9g21mv_category_id` INT,
+    `table_9g21mv_price` DECIMAL(10,2),
+    `table_9g21mv_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_knzctc` (
+    `table_knzctc_order_id` INT,
+    `table_knzctc_product_id` INT,
+    `table_knzctc_quantity` INT
+);
+
+INSERT INTO `table_9g21mv` (`table_9g21mv_product_id`, `table_9g21mv_category_id`, `table_9g21mv_price`, `table_9g21mv_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_knzctc` (`table_knzctc_order_id`, `table_knzctc_product_id`, `table_knzctc_quantity`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_PENETRATION_RATE_hhxskm(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_PRODUCT_ORDERS INT DEFAULT 0;
+    DECLARE V_PENETRATION_RATE INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_TOTAL_ORDERS
+    FROM TABLE_KNZCTC;
+
+    SELECT COUNT(DISTINCT TABLE_KNZCTC_ORDER_ID)
+    INTO V_PRODUCT_ORDERS
+    FROM TABLE_KNZCTC
+    WHERE TABLE_KNZCTC_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_TOTAL_ORDERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PENETRATION_RATE = (V_PRODUCT_ORDERS * 100) / V_TOTAL_ORDERS;
+
+    RETURN V_PENETRATION_RATE;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1864_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_text TEXT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1396461 FROM v1396460 WHERE v1396461 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with QUOTE and LIKE
+    IF (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(-24)) - 743 + (p1 > 0) THEN
+        UPDATE v1396493 AS x0 SET v1396494 = CONCAT('prefix_', p1) 
+        WHERE QUOTE(TRIM(CONCAT('    ', 'a'))) LIKE 'thread/innodb/srv\\\\_%';
+    END IF;
+
+    -- Statement 2: INSERT with values and NULL
+    INSERT INTO v1396460 (v1396461) VALUES (p2), (NULL);
+
+    -- Statement 3: INSERT with geometry functions
+    INSERT INTO v1396513 (v1396515, v1396514) VALUES 
+    (ST_GEOMFROMTEXT('MULTIPOINT((1 1))', 4326), ST_GEOMFROMTEXT('POLYGON((1 1, 1 2, 2 2, 2 1, 1 1))', 4326));
+
+    -- Statement 4: UPDATE with REPEAT and LIKE
+    UPDATE v1396739 AS x1 SET v1396740 = REPEAT('x', p1) WHERE v1396740 LIKE '%mysqltest_1%';
+
+    -- Statement 5: UPDATE with CAST
+    UPDATE v1396805 AS x1 SET v1396806 = CAST(p2 AS CHAR CHARACTER SET utf32) 
+    WHERE v1396810 = CAST('2015-01-01 10:10:10.00001-05:30' AS CHAR CHARACTER SET utf32);
+
+    -- Procedural logic with cursor and loop
+    SET v_count = 0;
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_count = v_count + v_val;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic with CASE
+    CASE 
+        WHEN v_count > 10 THEN
+            SET result = v_count;
+        WHEN v_count BETWEEN 5 AND 10 THEN
+            SET result = v_count * p1;
+        ELSE
+            SET result = v_count + p2;
+    END CASE;
+
+    -- Additional procedural logic with WHILE loop
+    WHILE v_count > 0 DO
+        SET v_count = v_count - 1;
+        IF v_count = 0 THEN
+            SET result = result + 100;
+        END IF;
+    END WHILE;
+
+    -- Ensure result is always set
+    IF result IS NULL THEN
+        SET result = 0;
+    END IF;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1864_proc(1, 1, @out_result);
+
+SELECT @out_result;

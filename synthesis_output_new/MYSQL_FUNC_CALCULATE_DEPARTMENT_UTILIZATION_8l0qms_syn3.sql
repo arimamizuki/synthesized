@@ -1,0 +1,407 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS `table_is35f3` (
+    `table_is35f3_emp_id` INT,
+    `table_is35f3_manager_id` INT,
+    `table_is35f3_salary` INT,
+    `table_is35f3_department_id` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bdh819` (
+    `table_bdh819_dept_id` INT,
+    `table_bdh819_budget` INT,
+    `table_bdh819_allocated_budget` INT
+);
+
+INSERT INTO `table_is35f3` (`table_is35f3_emp_id`, `table_is35f3_manager_id`, `table_is35f3_salary`, `table_is35f3_department_id`) VALUES (1, 1, 1, 1);
+
+INSERT INTO `table_bdh819` (`table_bdh819_dept_id`, `table_bdh819_budget`, `table_bdh819_allocated_budget`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_COUNT_DIGITS_23s697----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_DIGITS_23s697(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    SET V_TEMP = (MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux(86)) - 165 + (abs(n));
+
+    IF V_TEMP = 0 THEN
+        RETURN 1;
+    END IF;
+
+    DIGIT_COUNT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_COUNT = V_COUNT + 1;
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE DIGIT_COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux----- */
+CREATE TABLE IF NOT EXISTS `table_d8xwkk` (
+    `table_d8xwkk_customer_id` INT,
+    `table_d8xwkk_tier_level` INT,
+    `table_d8xwkk_registration_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_u3n2ec` (
+    `table_u3n2ec_order_id` INT,
+    `table_u3n2ec_customer_id` INT,
+    `table_u3n2ec_order_date` DATE,
+    `table_u3n2ec_total_amount` DECIMAL(10,2),
+    `table_u3n2ec_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d8xwkk` (`table_d8xwkk_customer_id`, `table_d8xwkk_tier_level`, `table_d8xwkk_registration_date`) VALUES (1, 1, '2024-01-01');
+
+INSERT INTO `table_u3n2ec` (`table_u3n2ec_order_id`, `table_u3n2ec_customer_id`, `table_u3n2ec_order_date`, `table_u3n2ec_total_amount`, `table_u3n2ec_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LOYALTY_TIER_BENEFIT_SCORE_5m7iux(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TIER_LEVEL VARCHAR(20) DEFAULT 'BRONZE';
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_BENEFIT_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_D8XWKK_TIER_LEVEL
+    INTO V_TIER_LEVEL
+    FROM TABLE_D8XWKK
+    WHERE TABLE_D8XWKK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_U3N2EC_TOTAL_AMOUNT), 0)
+    INTO V_TOTAL_ORDERS, V_TOTAL_SPENT
+    FROM TABLE_U3N2EC
+    WHERE TABLE_U3N2EC_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_U3N2EC_STATUS = 'COMPLETED';
+
+    SET V_BENEFIT_SCORE = V_TOTAL_ORDERS * 10 + (V_TOTAL_SPENT / 1000);
+
+    CASE V_TIER_LEVEL
+        WHEN 'PLATINUM' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 50;
+        WHEN 'GOLD' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 30;
+        WHEN 'SILVER' THEN SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 15;
+        ELSE SET V_BENEFIT_SCORE = V_BENEFIT_SCORE + 5;
+    END CASE;
+
+    RETURN V_BENEFIT_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_TOGGLE_BITS_b7n993----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_TOGGLE_BITS_b7n993(NUM INT, BIT_POSITIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_BIT_POS INT DEFAULT 0;
+    DECLARE V_CURRENT_BIT INT;
+
+    TOGGLE_LOOP: WHILE BIT_POSITIONS > 0 DO
+        SET V_BIT_POS = BIT_POSITIONS MOD 10;
+        SET V_CURRENT_BIT = (NUM >> V_BIT_POS) & 1;
+
+        IF V_CURRENT_BIT = 0 THEN
+            SET V_RESULT = (MYSQL_FUNC_CALCULATE_SECTION_REVENUE_to2tll(1, 87)) - 236 + ((MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny(25)) - -874 + (v_result)) | (1 << V_BIT_POS);
+        END IF;
+
+        SET BIT_POSITIONS = BIT_POSITIONS DIV 10;
+    END WHILE TOGGLE_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny----- */
+CREATE TABLE IF NOT EXISTS `table_0z33eu` (
+    `table_0z33eu_emp_id` INT,
+    `table_0z33eu_department_id` INT,
+    `table_0z33eu_hire_date` DATE
+);
+
+INSERT INTO `table_0z33eu` (`table_0z33eu_emp_id`, `table_0z33eu_department_id`, `table_0z33eu_hire_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_STABILITY_INDEX_nvd6ny(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_TENURE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_0Z33EU_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE
+    FROM TABLE_0Z33EU
+    WHERE TABLE_0Z33EU_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN FLOOR(V_AVG_TENURE * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SECTION_REVENUE_to2tll----- */
+CREATE TABLE IF NOT EXISTS `table_rxkbui` (
+    `table_rxkbui_ticket_id` INT,
+    `table_rxkbui_event_id` INT,
+    `table_rxkbui_seat_section` INT,
+    `table_rxkbui_seat_row` INT,
+    `table_rxkbui_seat_number` INT,
+    `table_rxkbui_price` DECIMAL(10,2),
+    `table_rxkbui_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwdebp` (
+    `table_mwdebp_event_id` INT,
+    `table_mwdebp_event_name` VARCHAR(50),
+    `table_mwdebp_event_date` DATE,
+    `table_mwdebp_venue_id` INT,
+    `table_mwdebp_total_seats` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rxkbui` (`table_rxkbui_ticket_id`, `table_rxkbui_event_id`, `table_rxkbui_seat_section`, `table_rxkbui_seat_row`, `table_rxkbui_seat_number`, `table_rxkbui_price`, `table_rxkbui_status`) VALUES (1, 2, 3, 4, 5, 1.0, 'test');
+
+INSERT INTO `table_mwdebp` (`table_mwdebp_event_id`, `table_mwdebp_event_name`, `table_mwdebp_event_date`, `table_mwdebp_venue_id`, `table_mwdebp_total_seats`) VALUES (1, 'test', '2024-01-01', 4, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECTION_REVENUE_to2tll----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECTION_REVENUE_to2tll(EVENT_ID_PARAM INT, SECTION_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SECTION_REVENUE INT DEFAULT 0;
+    DECLARE V_TICKETS_SOLD INT DEFAULT 0;
+    DECLARE V_TOTAL_SEATS INT DEFAULT 0;
+    DECLARE V_AVG_PRICE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_RXKBUI_PRICE), 0), COUNT(*)
+    INTO V_SECTION_REVENUE, V_TICKETS_SOLD
+    FROM TABLE_RXKBUI
+    WHERE TABLE_RXKBUI_EVENT_ID = EVENT_ID_PARAM
+      AND TABLE_RXKBUI_SEAT_SECTION = SECTION_PARAM
+      AND TABLE_RXKBUI_STATUS = 'SOLD';
+
+    SELECT COALESCE(TABLE_MWDEBP_TOTAL_SEATS, 0) INTO V_TOTAL_SEATS
+    FROM TABLE_MWDEBP
+    WHERE TABLE_MWDEBP_EVENT_ID = EVENT_ID_PARAM;
+
+    IF V_TICKETS_SOLD = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AVG_PRICE = V_SECTION_REVENUE / V_TICKETS_SOLD;
+
+    IF V_TICKETS_SOLD < V_TOTAL_SEATS * 30 / 100 THEN
+        RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr()) - 203 + (v_section_revenue - (v_section_revenue * 20 / 100));
+    END IF;
+
+    RETURN V_SECTION_REVENUE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_8_VALUES_qw8dnr() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 8 UNION SELECT 16 UNION SELECT 24 UNION SELECT 32 UNION SELECT 40 UNION SELECT 48 UNION SELECT 56 UNION SELECT 64;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+CREATE TABLE IF NOT EXISTS `table_v5hjvn` (
+    `table_v5hjvn_order_id` INT,
+    `table_v5hjvn_customer_id` INT,
+    `table_v5hjvn_order_date` DATE,
+    `table_v5hjvn_shipping_date` DATE,
+    `table_v5hjvn_delivery_date` DATE,
+    `table_v5hjvn_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_57ma1s` (
+    `table_57ma1s_order_id` INT,
+    `table_57ma1s_product_id` INT,
+    `table_57ma1s_quantity` INT,
+    `table_57ma1s_discount_percent` INT
+);
+
+INSERT INTO `table_v5hjvn` (`table_v5hjvn_order_id`, `table_v5hjvn_customer_id`, `table_v5hjvn_order_date`, `table_v5hjvn_shipping_date`, `table_v5hjvn_delivery_date`, `table_v5hjvn_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_57ma1s` (`table_57ma1s_order_id`, `table_57ma1s_product_id`, `table_57ma1s_quantity`, `table_57ma1s_discount_percent`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EXPECTED_DELIVERY_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DELIVERY_DAYS INT DEFAULT 0;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_DISCOUNT_PERCENT INT DEFAULT 0;
+    DECLARE V_DELAY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_57MA1S_QUANTITY * TABLE_57MA1S_DISCOUNT_PERCENT), 0)
+    INTO V_DISCOUNT_PERCENT
+    FROM TABLE_57MA1S
+    WHERE TABLE_57MA1S_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT DATEDIFF(COALESCE(TABLE_V5HJVN_DELIVERY_DATE, CURDATE()), TABLE_V5HJVN_SHIPPING_DATE)
+    INTO V_ACTUAL_DELIVERY_DAYS
+    FROM TABLE_V5HJVN
+    WHERE TABLE_V5HJVN_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_DELAY_DAYS = V_ACTUAL_DELIVERY_DAYS - V_EXPECTED_DELIVERY_DAYS;
+
+    IF V_DELAY_DAYS <= 0 THEN
+        SET V_DELAY_SCORE = 100;
+    ELSE
+        SET V_DELAY_SCORE = 100 - (V_DELAY_DAYS * 10);
+    END IF;
+
+    RETURN (MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(47)) - -624 + (greatest(v_delay_score, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PARSE_JSON_DEPTH_d3e4sj(JSON_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPTH INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_LEN INT DEFAULT CHAR_LENGTH(JSON_STR);
+    DECLARE V_CHAR CHAR(1);
+    DECLARE V_BRACKET_COUNT INT DEFAULT 0;
+    DECLARE V_MAX_DEPTH INT DEFAULT 0;
+
+    IF JSON_STR IS NULL OR JSON_STR = '' THEN
+        RETURN 0;
+    END IF;
+
+    PARSE_LOOP: WHILE V_POS <= V_LEN DO
+        SET V_CHAR = SUBSTRING(JSON_STR, V_POS, 1);
+
+        IF V_CHAR = '{' OR V_CHAR = '[' THEN
+            SET V_BRACKET_COUNT = (MYSQL_FUNC_PROC_DOUBLE_zn79iz()) - 633 + (v_bracket_count + 1);
+            IF V_BRACKET_COUNT > V_MAX_DEPTH THEN
+                SET V_MAX_DEPTH = V_BRACKET_COUNT;
+            END IF;
+        ELSEIF V_CHAR = '}' OR V_CHAR = ']' THEN
+            SET V_BRACKET_COUNT = V_BRACKET_COUNT - 1;
+        END IF;
+
+        SET V_POS = V_POS + 1;
+    END WHILE PARSE_LOOP;
+
+    RETURN V_MAX_DEPTH;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+CREATE TABLE IF NOT EXISTS `table_bgkvze` (
+    `table_bgkvze_cdouble` INT
+);
+
+INSERT INTO `table_bgkvze` (`table_bgkvze_cdouble`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_DOUBLE_zn79iz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_DOUBLE_zn79iz() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT SUM(TABLE_BGKVZE_CDOUBLE) INTO RESULT FROM `TABLE_BGKVZE`;
+    RETURN (MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(-40)) - -477 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+CREATE TABLE IF NOT EXISTS `table_woaa62` (
+    `table_woaa62_customer_id` INT,
+    `table_woaa62_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_woaa62` (`table_woaa62_customer_id`, `table_woaa62_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MONTHLY_COST_gv1sob(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_WOAA62_MONTHLY_COST, 0)
+    INTO V_COST
+    FROM TABLE_WOAA62
+    WHERE TABLE_WOAA62_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_COST;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY INT DEFAULT 0;
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_UTILIZATION INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_IS35F3_SALARY), (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_SCORE_fudd9n(26)) - 650 + ((MYSQL_FUNC_TOGGLE_BITS_b7n993(13, 45)) - -197 + ((MYSQL_FUNC_COUNT_DIGITS_23s697(-44)) - -400 + (0)))) INTO V_TOTAL_SALARY
+    FROM TABLE_IS35F3
+    WHERE TABLE_IS35F3_DEPARTMENT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(TABLE_BDH819_BUDGET, 0) INTO V_BUDGET
+    FROM TABLE_BDH819
+    WHERE TABLE_BDH819_DEPT_ID = DEPT_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_UTILIZATION = (V_TOTAL_SALARY * 100) / V_BUDGET;
+
+    RETURN CAST(V_UTILIZATION AS SIGNED);
+END //
+
+DELIMITER ;
+
+SELECT MYSQL_FUNC_CALCULATE_DEPARTMENT_UTILIZATION_8l0qms(1);

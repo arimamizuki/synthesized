@@ -1,0 +1,570 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1446202 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446203 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1446577 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446578 DECIMAL(10,2)
+);
+CREATE TABLE IF NOT EXISTS v1446181 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446182 DATETIME(6)
+);
+CREATE TABLE IF NOT EXISTS v1446547 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446182 DATETIME(6)
+);
+CREATE TABLE IF NOT EXISTS v1446596 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446606 DECIMAL(20,12),
+    v1446602 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1446522 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1446606 DECIMAL(20,12)
+);
+CREATE TABLE IF NOT EXISTS v1447201 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1447202 VARCHAR(255),
+    v1447203 VARCHAR(255),
+    v1447204 VARCHAR(255),
+    v1447205 VARCHAR(255),
+    v1447206 VARCHAR(255),
+    v1447207 VARCHAR(255),
+    v1447208 VARCHAR(255),
+    v1447209 VARCHAR(255),
+    v1447210 VARCHAR(255),
+    v1447211 VARCHAR(255),
+    v1447212 VARCHAR(255),
+    v1447213 VARCHAR(255),
+    v1447214 VARCHAR(255),
+    v1447215 VARCHAR(255),
+    v1447216 VARCHAR(255),
+    v1447217 VARCHAR(255),
+    v1447218 VARCHAR(255),
+    v1447219 VARCHAR(255),
+    v1447220 VARCHAR(255),
+    v1447221 VARCHAR(255),
+    v1447222 VARCHAR(255),
+    v1447223 VARCHAR(255),
+    v1447224 VARCHAR(255),
+    v1447225 VARCHAR(255),
+    v1447226 VARCHAR(255),
+    v1447227 VARCHAR(255),
+    v1447228 VARCHAR(255),
+    v1447229 VARCHAR(255),
+    v1447230 VARCHAR(255),
+    v1447231 VARCHAR(255),
+    v1447232 VARCHAR(255),
+    v1447233 VARCHAR(255),
+    v1447234 VARCHAR(255),
+    v1447235 VARCHAR(255),
+    v1447236 VARCHAR(255),
+    v1447237 VARCHAR(255),
+    v1447238 VARCHAR(255),
+    v1447239 VARCHAR(255),
+    v1447240 VARCHAR(255),
+    v1447241 VARCHAR(255),
+    v1447242 VARCHAR(255),
+    v1447243 VARCHAR(255),
+    v1447244 VARCHAR(255),
+    v1447245 VARCHAR(255),
+    v1447246 VARCHAR(255),
+    v1447247 VARCHAR(255),
+    v1447248 VARCHAR(255),
+    v1447249 VARCHAR(255),
+    v1447250 VARCHAR(255),
+    v1447251 VARCHAR(255),
+    v1447252 VARCHAR(255),
+    v1447253 VARCHAR(255),
+    v1447254 VARCHAR(255),
+    v1447255 VARCHAR(255),
+    v1447256 VARCHAR(255),
+    v1447257 VARCHAR(255),
+    v1447258 VARCHAR(255),
+    v1447259 VARCHAR(255),
+    v1447260 VARCHAR(255),
+    v1447261 VARCHAR(255),
+    v1447262 VARCHAR(255),
+    v1447263 VARCHAR(255),
+    v1447264 VARCHAR(255)
+) DEFAULT CHARACTER SET=cp1250;
+INSERT INTO v1446202 (v1446203) VALUES ('SQL'), ('ONE TIME'), ('RECURRING'), ('unlocked_user'), ('localhost'), (NULL);
+INSERT INTO v1446577 (v1446578) VALUES (1000), (0.25), (0.50), (1003), (1.00), (1.25), (1.50), (1011);
+INSERT INTO v1446181 (v1446182) VALUES ('2023-01-01 12:00:00.0'), ('9999-12-31 23:59:59.999999'), ('2024-06-15 08:30:00.5');
+INSERT INTO v1446547 (v1446182) VALUES ('2023-01-01 12:00:00.0'), ('2024-06-15 08:30:00.5');
+INSERT INTO v1446596 (v1446606, v1446602) VALUES (-5.00000000003, 'test'), (-990000.000001, 'sample'), (1.5, 'other');
+INSERT INTO v1446522 (v1446606) VALUES (-5.00000000003), (-990000.000001), (2.0);
+INSERT INTO v1447201 (v1447202) VALUES ('row1'), ('row2'), ('row3');
+
+/* -----Dependency for: n3_output_1049_proc----- */
+CREATE TABLE IF NOT EXISTS v1178765 (v1178766 INT, v1178767 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1178834 (v1178835 TEXT, v1178836 INT);
+CREATE TABLE IF NOT EXISTS v1179057 (v1178835 TEXT, v1178836 INT);
+CREATE TABLE IF NOT EXISTS v1178779 (v1178781 INT);
+CREATE TABLE IF NOT EXISTS v1179142 (v1179143 INT);
+CREATE TABLE IF NOT EXISTS v1178890 (v1178891 INT);
+INSERT INTO v1178765 VALUES (1, '2'), (2, '3'), (3, '2');
+INSERT INTO v1178834 VALUES ('old', 1), ('old', 2);
+INSERT INTO v1179057 VALUES ('old', 1), ('old', 2);
+INSERT INTO v1178779 VALUES (0), (1), (2);
+INSERT INTO v1179142 VALUES (18), (6), (84), (4), (2), (3);
+INSERT INTO v1178890 VALUES (1), (3), (2);
+
+/* -----Called: n3_output_1049_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1049_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT;
+    DECLARE cur CURSOR FOR SELECT v1179143 FROM v1179142 WHERE v1179143 IN (18, 6, 84, 4, 2, 3);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET result = -1;
+    END;
+
+    -- Adapt statement 1: UPDATE with window function
+    UPDATE v1178765 AS x1 
+    SET v1178767 = 'Updating the row' 
+    WHERE v1178767 = '2' 
+    ORDER BY AVG(COS(-66365726)) OVER (ORDER BY v1178766 ROWS BETWEEN UNBOUNDED FOLLOWING AND CURRENT ROW) 
+    LIMIT 3;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Adapt statement 2: UPDATE with JSON and STRCMP
+    UPDATE v1178834 AS x1, v1179057 AS x6 
+    SET x1.v1178835 = '{"Password_locking": {"failed_login_attempts": 2, "password_lock_time_days": "2"}}' 
+    WHERE STRCMP(DATE_FORMAT(UTC_TIMESTAMP(), '%x'), UTC_TIME()) = 0 
+    ORDER BY v1178836 DESC, v1178835 DESC 
+    LIMIT 0;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Adapt statement 3: UPDATE with CASE
+    UPDATE v1178779 AS x0 
+    SET x0.v1178781 = p1 
+    WHERE 1 = 1 
+    ORDER BY CASE WHEN 10.100000 IS NULL THEN 1 ELSE 0 END DESC, 10.100000 DESC;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Adapt statement 4: UPDATE with IN and BETWEEN using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1179142 AS x1 
+        SET v1179143 = p2 
+        WHERE v1179143 = v_val;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Adapt statement 5: UPDATE with variable and BETWEEN using IF
+    IF p1 > 0 THEN
+        UPDATE v1178890 AS x0 
+        SET v1178891 = p1 
+        WHERE x0.v1178891 IN (1, 3) 
+        AND v1178891 BETWEEN 20010804 AND 2155 
+        ORDER BY (ROW_NUMBER() OVER ()) 
+        LIMIT 42;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Use CASE for final result
+    CASE 
+        WHEN v_counter > 0 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_A > P_B THEN
+        SET V_RESULT = (MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(62, 82)) - -855 + (p_a - p_b);
+    ELSE
+        SET V_RESULT = P_B - P_A;
+    END IF;
+
+    IF V_ERROR = (MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(-66)) - 848 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(12)) - -371 + (1)) THEN
+        RETURN (MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(-75)) - 971 + (-1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+CREATE TABLE IF NOT EXISTS `table_nv01cq` (
+    `table_nv01cq_customer_id` INT,
+    `table_nv01cq_country` INT
+);
+
+INSERT INTO `table_nv01cq` (`table_nv01cq_customer_id`, `table_nv01cq_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_COUNT_83bm7e(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_NV01CQ
+    WHERE TABLE_NV01CQ_COUNTRY = COUNTRY_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+CREATE TABLE IF NOT EXISTS `table_9adjz6` (
+    `table_9adjz6_student_id` INT,
+    `table_9adjz6_name` VARCHAR(50),
+    `table_9adjz6_enrollment_date` DATE,
+    `table_9adjz6_graduation_year` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_9uabjr` (
+    `table_9uabjr_course_id` INT,
+    `table_9uabjr_credits` INT,
+    `table_9uabjr_difficulty_level` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_sz2t2v` (
+    `table_sz2t2v_student_id` INT,
+    `table_sz2t2v_course_id` INT,
+    `table_sz2t2v_grade` INT
+);
+
+INSERT INTO `table_9adjz6` (`table_9adjz6_student_id`, `table_9adjz6_name`, `table_9adjz6_enrollment_date`, `table_9adjz6_graduation_year`) VALUES (1, '2024-01-01', '2024-01-01', 1);
+
+INSERT INTO `table_9uabjr` (`table_9uabjr_course_id`, `table_9uabjr_credits`, `table_9uabjr_difficulty_level`) VALUES (1, 1, 1);
+
+INSERT INTO `table_sz2t2v` (`table_sz2t2v_student_id`, `table_sz2t2v_course_id`, `table_sz2t2v_grade`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ACADEMIC_PROGRESS_SCORE_auso6v(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ENROLLMENT_YEAR INT DEFAULT 0;
+    DECLARE V_GRADUATION_YEAR INT DEFAULT 0;
+    DECLARE V_YEARS_REMAINING INT DEFAULT 0;
+    DECLARE V_COMPLETED_CREDITS INT DEFAULT 0;
+    DECLARE V_REQUIRED_CREDITS INT DEFAULT 120;
+    DECLARE V_GRADE_POINT_AVG DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PROGRESS_SCORE INT DEFAULT 0;
+
+    SELECT YEAR(TABLE_9ADJZ6_ENROLLMENT_DATE), TABLE_9ADJZ6_GRADUATION_YEAR
+    INTO V_ENROLLMENT_YEAR, V_GRADUATION_YEAR
+    FROM TABLE_9ADJZ6
+    WHERE TABLE_9ADJZ6_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_YEARS_REMAINING = V_GRADUATION_YEAR - YEAR(CURDATE());
+
+    SELECT COALESCE(SUM(TABLE_9UABJR_CREDITS), 0)
+    INTO V_COMPLETED_CREDITS
+    FROM TABLE_SZ2T2V E
+    JOIN TABLE_9UABJR C ON TABLE_SZ2T2V_COURSE_ID = TABLE_9UABJR_COURSE_ID
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM AND TABLE_SZ2T2V_GRADE IN ('A', 'B', 'C', 'D', 'P');
+
+    SELECT COALESCE(AVG(CASE TABLE_SZ2T2V_GRADE
+        WHEN 'A' THEN 4.0 WHEN 'B' THEN 3.0 WHEN 'C' THEN 2.0 WHEN 'D' THEN 1.0 ELSE 0.0 END), 0.00)
+    INTO V_GRADE_POINT_AVG
+    FROM TABLE_SZ2T2V
+    WHERE TABLE_SZ2T2V_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_PROGRESS_SCORE = ((V_COMPLETED_CREDITS * 100) / V_REQUIRED_CREDITS) + (V_GRADE_POINT_AVG * 15) - (V_YEARS_REMAINING * 5);
+
+    RETURN GREATEST(V_PROGRESS_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = (MYSQL_FUNC_PROC_SET_pl5j0s()) - -674 + (0 - v_numeric_val);
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+CREATE TABLE IF NOT EXISTS `table_4wesx0` (
+    `table_4wesx0_cset_col` INT
+);
+
+INSERT INTO `table_4wesx0` (`table_4wesx0_cset_col`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_SET_pl5j0s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SET_pl5j0s() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_4WESX0_CSET_COL INTO RESULT FROM `TABLE_4WESX0` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+CREATE TABLE IF NOT EXISTS `table_e0783s` (
+    `table_e0783s_rx_id` INT,
+    `table_e0783s_patient_id` INT,
+    `table_e0783s_doctor_id` INT,
+    `table_e0783s_medication_id` INT,
+    `table_e0783s_quantity` INT,
+    `table_e0783s_refills_remaining` INT,
+    `table_e0783s_dispensed_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_ttjekq` (
+    `table_ttjekq_medication_id` INT,
+    `table_ttjekq_name` VARCHAR(50),
+    `table_ttjekq_unit_price` DECIMAL(10,2),
+    `table_ttjekq_requires_approval` INT
+);
+
+INSERT INTO `table_e0783s` (`table_e0783s_rx_id`, `table_e0783s_patient_id`, `table_e0783s_doctor_id`, `table_e0783s_medication_id`, `table_e0783s_quantity`, `table_e0783s_refills_remaining`, `table_e0783s_dispensed_date`) VALUES (1, 1, 1, 1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_ttjekq` (`table_ttjekq_medication_id`, `table_ttjekq_name`, `table_ttjekq_unit_price`, `table_ttjekq_requires_approval`) VALUES (1, 'test', 1.0, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRESCRIPTION_TOTAL_rnkes9(RX_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_QUANTITY INT DEFAULT 0;
+    DECLARE V_UNIT_PRICE INT DEFAULT 0;
+    DECLARE V_REFILLS INT DEFAULT 0;
+    DECLARE V_TOTAL INT DEFAULT 0;
+    DECLARE V_APPROVAL_REQUIRED INT DEFAULT 0;
+
+    SELECT TABLE_E0783S_QUANTITY, COALESCE(TABLE_TTJEKQ_UNIT_PRICE, 0), TABLE_E0783S_REFILLS_REMAINING, COALESCE(TABLE_TTJEKQ_REQUIRES_APPROVAL, 0)
+    INTO V_QUANTITY, V_UNIT_PRICE, V_REFILLS, V_APPROVAL_REQUIRED
+    FROM TABLE_E0783S P
+    JOIN TABLE_TTJEKQ M ON TABLE_E0783S_MEDICATION_ID = TABLE_TTJEKQ_MEDICATION_ID
+    WHERE TABLE_E0783S_RX_ID = RX_ID_PARAM;
+
+    SET V_TOTAL = V_QUANTITY * V_UNIT_PRICE;
+
+    IF V_REFILLS > 0 THEN
+        SET V_TOTAL = (MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(-81, 47)) - 533 + (v_total + (v_total * v_refills * 80 / 100));
+    END IF;
+
+    IF V_APPROVAL_REQUIRED = 1 THEN
+        SET V_TOTAL = V_TOTAL + 25;
+    END IF;
+
+    RETURN (MYSQL_FUNC_GET_ABS_x5vvm7(33)) - -280 + (cast(v_total as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUBTRACT_NUMBERS_5efvxh(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(86)) - -457 + (a - b);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+CREATE TABLE IF NOT EXISTS `table_s5c2sb` (
+    `table_s5c2sb_listing_id` INT,
+    `table_s5c2sb_employer_id` INT,
+    `table_s5c2sb_title` INT,
+    `table_s5c2sb_salary_min` INT,
+    `table_s5c2sb_salary_max` INT,
+    `table_s5c2sb_posted_date` DATE,
+    `table_s5c2sb_application_deadline` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_w5l6s0` (
+    `table_w5l6s0_application_id` INT,
+    `table_w5l6s0_listing_id` INT,
+    `table_w5l6s0_applicant_id` INT,
+    `table_w5l6s0_applied_date` DATE,
+    `table_w5l6s0_status` VARCHAR(50)
+);
+
+INSERT INTO `table_s5c2sb` (`table_s5c2sb_listing_id`, `table_s5c2sb_employer_id`, `table_s5c2sb_title`, `table_s5c2sb_salary_min`, `table_s5c2sb_salary_max`, `table_s5c2sb_posted_date`, `table_s5c2sb_application_deadline`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_w5l6s0` (`table_w5l6s0_application_id`, `table_w5l6s0_listing_id`, `table_w5l6s0_applicant_id`, `table_w5l6s0_applied_date`, `table_w5l6s0_status`) VALUES (1, 2, 3, '2024-01-01', 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LISTING_ENGAGEMENT_xbtt93(LISTING_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_MIN INT DEFAULT 0;
+    DECLARE V_SALARY_MAX INT DEFAULT 0;
+    DECLARE V_APPLICATION_COUNT INT DEFAULT 0;
+    DECLARE V_DAYS_SINCE_POSTED INT DEFAULT 0;
+    DECLARE V_ENGAGEMENT_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_S5C2SB_SALARY_MIN), 0), COALESCE(MAX(TABLE_S5C2SB_SALARY_MAX), 0), COUNT(*)
+    INTO V_SALARY_MIN, V_SALARY_MAX, V_APPLICATION_COUNT
+    FROM TABLE_S5C2SB L
+    LEFT JOIN TABLE_W5L6S0 A ON TABLE_S5C2SB_LISTING_ID = TABLE_W5L6S0_LISTING_ID
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM
+    GROUP BY TABLE_S5C2SB_LISTING_ID;
+
+    SELECT DATEDIFF(CURDATE(), TABLE_S5C2SB_POSTED_DATE) INTO V_DAYS_SINCE_POSTED
+    FROM TABLE_S5C2SB
+    WHERE TABLE_S5C2SB_LISTING_ID = LISTING_ID_PARAM;
+
+    IF V_DAYS_SINCE_POSTED = 0 THEN
+        SET V_DAYS_SINCE_POSTED = 1;
+    END IF;
+
+    SET V_ENGAGEMENT_SCORE = (V_APPLICATION_COUNT * 100) / V_DAYS_SINCE_POSTED;
+
+    IF V_SALARY_MAX > 100000 THEN
+        SET V_ENGAGEMENT_SCORE = V_ENGAGEMENT_SCORE + 20;
+    END IF;
+
+    RETURN CAST(V_ENGAGEMENT_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABS_x5vvm7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABS_x5vvm7(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N < 0 THEN
+        RETURN -N;
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1965_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_col_val VARCHAR(255);
+    DECLARE v_cur CURSOR FOR SELECT v1447202 FROM v1447201 LIMIT p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+    END;
+
+    -- Use IF/ELSEIF/ELSE to decide flow based on p1
+CALL n3_output_1049_proc(53, 9, @_syn_21843);
+    IF p1 > @_syn_21843 - @_io_result + (10) THEN
+        -- Statement 1: UPDATE with complex conditions
+        SET @d = CONCAT('updated_by_p1_', p1);
+        UPDATE v1446202 AS x0 SET v1446203 = @d WHERE NOT v1446203 IS NULL OR NOT v1446203 IN ('SQL') OR NOT v1446203 IN ('ONE TIME', 'RECURRING') OR (v1446203 = 'unlocked_user' AND v1446203 = 'localhost');
+        SET v_counter = (MYSQL_FUNC_HANDLER_FUNC_ABS_DIFF_lgmynh(25, 96)) - -883 + (v_counter) + 1;
+    ELSEIF p1 BETWEEN 5 AND 10 THEN
+        -- Statement 2: INSERT with values from p1 and p2
+        INSERT INTO v1446577 (v1446578) VALUES (p1), (p2), (p1 + p2), (p1 * 0.5), (p2 * 1.5);
+        SET v_counter = v_counter + 2;
+    ELSE
+        -- Statement 3: UPDATE with RIGHT JOIN and ORDER BY (adapted)
+        UPDATE v1446181 AS x0 RIGHT JOIN v1446547 AS x5 ON x0.v1446182 = x5.v1446182 SET x0.v1446182 = '2005-01-01 23:59:59.9' WHERE x0.v1446182 > '9999-12-31 23:59:59.999999' ORDER BY x0.v1446182 DESC;
+        SET v_counter = v_counter + 3;
+    END IF;
+
+    -- Use CASE/WHEN to handle p2
+    CASE
+        WHEN p2 > 100 THEN
+            -- Statement 4: UPDATE with NATURAL JOIN
+            SET @m = CONCAT('value_', p2);
+            UPDATE v1446596 AS x1 NATURAL JOIN v1446522 AS x6 SET v1446602 = @m WHERE x1.v1446606 IN (-5.00000000003, -990000.000001);
+            SET v_counter = v_counter + 4;
+        WHEN p2 BETWEEN 50 AND 100 THEN
+            -- Use WHILE loop to insert multiple rows
+            WHILE p2 > 0 DO
+                INSERT INTO v1447201 (v1447202) VALUES (CONCAT('loop_', p2));
+                SET p2 = p2 - 10;
+                SET v_counter = v_counter + 1;
+            END WHILE;
+        ELSE
+            -- Use REPEAT loop to demonstrate another structure
+            SET @i = 0;
+            REPEAT
+                INSERT INTO v1447201 (v1447203) VALUES (CONCAT('repeat_', @i));
+                SET @i = @i + 1;
+                SET v_counter = v_counter + 1;
+            UNTIL @i >= 3 END REPEAT;
+    END CASE;
+
+    -- Use LOOP with LEAVE and ITERATE for cursor processing
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_col_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        IF v_col_val IS NULL THEN
+            ITERATE read_loop;
+        END IF;
+        -- Statement 5: CREATE TABLE already done above, here we use the table meaningfully
+        -- Update a row in v1447201 based on cursor value
+        UPDATE v1447201 SET v1447204 = CONCAT('processed_', v_counter) WHERE v1447202 = v_col_val;
+        SET v_counter = v_counter + 10;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Set final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1965_proc(1, 1, @out_result);
+
+SELECT @out_result;

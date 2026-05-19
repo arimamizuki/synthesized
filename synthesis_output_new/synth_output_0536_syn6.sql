@@ -1,0 +1,434 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v9936 (
+    v9925 INT,
+    v9926 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v10008 (
+    v10009 INT,
+    v10010 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v10017 (
+    v10018 VARCHAR(50),
+    v10019 INT
+);
+CREATE TABLE IF NOT EXISTS v10124 (
+    v10125 INT,
+    v10126 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v10148 (
+    v10149 INT,
+    v10150 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v10253 (
+    v10254 DATE,
+    v10255 VARCHAR(50),
+    v10256 VARCHAR(255)
+);
+INSERT INTO v9936 VALUES (64, 'test'), (65, 'data'), (66, 'example'), (67, 'other');
+INSERT INTO v10008 VALUES (1, 'value1'), (2, 'value2');
+INSERT INTO v10017 VALUES ('2023-01-01', 1), ('2023-01-02', 2), ('w', 3), ('x', 4);
+INSERT INTO v10124 VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO v10148 VALUES (1, 'row1'), (2, 'row2'), (3, 'row3');
+INSERT INTO v10253 VALUES ('2023-01-01', 'cat1', 'initial'), ('2023-01-02', 'cat2', 'old');
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 19 UNION SELECT 38 UNION SELECT 57 UNION SELECT 76 UNION SELECT 95 UNION SELECT 114 UNION SELECT 133 UNION SELECT 152 UNION SELECT 171 UNION SELECT 190 UNION SELECT 209 UNION SELECT 228 UNION SELECT 247 UNION SELECT 266 UNION SELECT 285 UNION SELECT 304 UNION SELECT 323 UNION SELECT 342 UNION SELECT 361;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_MODULAR_INVERSE_kvhxs4(A INT, M INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_FOUND INT DEFAULT 0;
+
+    IF A < (MYSQL_FUNC_CALCULATE_GCD_60c9d8(-73, -88)) - 635 + ((MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4()) - 101 + (0)) THEN
+        SET A = -A;
+    END IF;
+
+    IF M <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    MY_LOOP: WHILE (MYSQL_FUNC_FUNC_198_LOOP_8skwc5()) - 754 + (v_i) < M DO
+        IF ((A * V_I) % M) = 1 THEN
+            SET V_RESULT = V_I;
+            SET V_FOUND = 1;
+            LEAVE MY_LOOP;
+        END IF;
+        SET V_I = V_I + 1;
+    END WHILE MY_LOOP;
+
+    IF V_FOUND = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FUNC_198_LOOP_8skwc5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FUNC_198_LOOP_8skwc5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE LOOP_COUNT INT DEFAULT 0;
+    DECLARE I INT DEFAULT 0;
+    
+    LABEL1: LOOP
+        SET I = I + 1;
+        SET LOOP_COUNT = LOOP_COUNT + 1;
+        IF I >= 3 THEN
+            LEAVE LABEL1;
+        END IF;
+    END LOOP LABEL1;
+    
+    RETURN LOOP_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_7_21k4h4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GCD_60c9d8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GCD_60c9d8(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TEMP INT DEFAULT 0;
+
+    IF (MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(-72)) - 944 + (a) < 0 THEN
+        SET A = -A;
+    END IF;
+
+    IF B < 0 THEN
+        SET B = -B;
+    END IF;
+
+    WHILE B > 0 DO
+        SET V_TEMP = B;
+        SET B = A % B;
+        SET A = V_TEMP;
+    END WHILE;
+
+    RETURN A;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+CREATE TABLE IF NOT EXISTS `table_4dqelz` (
+    `table_4dqelz_loan_id` INT,
+    `table_4dqelz_customer_id` INT,
+    `table_4dqelz_principal_amount` DECIMAL(10,2),
+    `table_4dqelz_interest_rate` INT,
+    `table_4dqelz_term_months` INT,
+    `table_4dqelz_monthly_payment` INT,
+    `table_4dqelz_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4dqelz` (`table_4dqelz_loan_id`, `table_4dqelz_customer_id`, `table_4dqelz_principal_amount`, `table_4dqelz_interest_rate`, `table_4dqelz_term_months`, `table_4dqelz_monthly_payment`, `table_4dqelz_status`) VALUES (1, 2, 1.0, 4, 5, 6, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TOTAL_LOAN_COST_vqzl1m(LOAN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRINCIPAL INT DEFAULT 0;
+    DECLARE V_MONTHLY_PAYMENT INT DEFAULT 0;
+    DECLARE V_TERM_MONTHS INT DEFAULT 0;
+    DECLARE V_TOTAL_PAYMENT INT DEFAULT 0;
+    DECLARE V_TOTAL_INTEREST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_4DQELZ_PRINCIPAL_AMOUNT, 0), COALESCE(TABLE_4DQELZ_MONTHLY_PAYMENT, 0), COALESCE(TABLE_4DQELZ_TERM_MONTHS, 12)
+    INTO V_PRINCIPAL, V_MONTHLY_PAYMENT, V_TERM_MONTHS
+    FROM TABLE_4DQELZ
+    WHERE TABLE_4DQELZ_LOAN_ID = LOAN_ID_PARAM;
+
+    SET V_TOTAL_PAYMENT = V_MONTHLY_PAYMENT * V_TERM_MONTHS;
+    SET V_TOTAL_INTEREST = V_TOTAL_PAYMENT - V_PRINCIPAL;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(-61)) - 263 + (greatest(v_total_interest, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_NEGATE_IF_pcen4o(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = -P_N;
+    ELSE
+        SET V_RESULT = P_N;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+CREATE TABLE IF NOT EXISTS `table_j0of1o` (
+    `table_j0of1o_order_id` INT,
+    `table_j0of1o_customer_id` INT,
+    `table_j0of1o_order_date` DATE,
+    `table_j0of1o_total_amount` DECIMAL(10,2),
+    `table_j0of1o_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6ftj9` (
+    `table_f6ftj9_refund_id` INT,
+    `table_f6ftj9_order_id` INT,
+    `table_f6ftj9_refund_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_j0of1o` (`table_j0of1o_order_id`, `table_j0of1o_customer_id`, `table_j0of1o_order_date`, `table_j0of1o_total_amount`, `table_j0of1o_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+INSERT INTO `table_f6ftj9` (`table_f6ftj9_refund_id`, `table_f6ftj9_order_id`, `table_f6ftj9_refund_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_NET_REVENUE_ey9q0m(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_TOTAL INT DEFAULT 0;
+    DECLARE V_REFUND_TOTAL INT DEFAULT 0;
+    DECLARE V_NET_REVENUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_J0OF1O_TOTAL_AMOUNT, 0)
+    INTO V_ORDER_TOTAL
+    FROM TABLE_J0OF1O
+    WHERE TABLE_J0OF1O_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6FTJ9_REFUND_AMOUNT), 0)
+    INTO V_REFUND_TOTAL
+    FROM TABLE_F6FTJ9
+    WHERE TABLE_F6FTJ9_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_NET_REVENUE = (MYSQL_FUNC_COUNT_STRING_PATTERN_oh4t33(-69, -75)) - -762 + (v_order_total - v_refund_total);
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i(-45)) - -866 + (v_net_revenue);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_STRING_PATTERN_oh4t33----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_STRING_PATTERN_oh4t33(INPUT_STR INT, PATTERN_STR INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_POS INT DEFAULT 1;
+    DECLARE V_STR_LEN INT DEFAULT CHAR_LENGTH(INPUT_STR);
+    DECLARE V_PAT_LEN INT DEFAULT CHAR_LENGTH(PATTERN_STR);
+    DECLARE V_CURRENT_SUB VARCHAR(50);
+
+    IF INPUT_STR IS NULL OR PATTERN_STR IS NULL OR V_PAT_LEN = 0 THEN
+        RETURN 0;
+    END IF;
+
+    COUNT_LOOP: WHILE V_POS <= V_STR_LEN - V_PAT_LEN + 1 DO
+        SET V_CURRENT_SUB = SUBSTRING(INPUT_STR, V_POS, V_PAT_LEN);
+        IF V_CURRENT_SUB = PATTERN_STR THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+        SET V_POS = V_POS + 1;
+    END WHILE COUNT_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i----- */
+CREATE TABLE IF NOT EXISTS `table_df1fvb` (
+    `table_df1fvb_customer_id` INT,
+    `table_df1fvb_status` VARCHAR(50)
+);
+
+INSERT INTO `table_df1fvb` (`table_df1fvb_customer_id`, `table_df1fvb_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_dx3g5i(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_DF1FVB
+    WHERE TABLE_DF1FVB_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_DF1FVB_STATUS = 'ACTIVE';
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0536(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val INT;
+    DECLARE v_row_count INT;
+    DECLARE v_sql_state VARCHAR(5);
+    DECLARE v_msg_text VARCHAR(255);
+    DECLARE v_errno INT;
+    DECLARE v_cur CURSOR FOR SELECT v10149 FROM v10148;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            v_sql_state = RETURNED_SQLSTATE,
+            v_errno = MYSQL_ERRNO,
+            v_msg_text = MESSAGE_TEXT;
+        SET result = -1;
+    END;
+
+    -- Statement 1: UPDATE with JOIN and complex conditions
+    SET @sql1 = 'UPDATE v10017 AS x1 JOIN v10124 AS x4 ON ((x1.v10018 >= 2 OR x1.v10018 >= 2) AND x1.v10018 > 0 AND (x1.v10018 = \'w\')) SET v10018 = \'2007-01-03\'';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    SET v_row_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = (MYSQL_FUNC_CURSOR_FUNC_SUM_19_VALUES_cajtlw()) - 398 + (v_counter) + v_row_count;
+
+    -- Statement 2: UPDATE with CONCAT and YEAR calculation
+    SET @sql2 = 'UPDATE v10253 AS x0 SET v10256 = CONCAT(v10256, \', Updated\') WHERE (YEAR(v10254) - YEAR(v10254)) >> (\'\' COLLATE \'utf8mb4_0900_ai_ci\') LIMIT 4';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    SET v_row_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + v_row_count;
+
+    -- Statement 3: UPDATE with LEFT JOIN and REPEAT
+    SET @sql3 = 'UPDATE v9936 AS x1 LEFT OUTER JOIN v10008 AS x6 ON x1.v9925 = 1 SET x1.v9925 = REPEAT(\'a\', 300 * 7158278827 * 0.01) WHERE v9925 BETWEEN 64 AND 66';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    SET v_row_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt3;
+    SET v_counter = v_counter + v_row_count;
+
+    -- Statement 4: SELECT with ROLES_GRAPHML() - use cursor
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_val;
+        IF v_done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Statement 5: UPDATE with CONCAT and TRIM
+    SET @sql5 = 'UPDATE v10017 AS x1 SET v10018 = CONCAT(\'@\', TRIM(LEADING \'.\' FROM CONCAT(\'.\', v10018))) WHERE (NOW() - INTERVAL \'3\' DAY) >> (\'\' COLLATE \'utf8mb4_0900_ai_ci\') LIMIT 999499999';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    SET v_row_count = ROW_COUNT();
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + v_row_count;
+
+    -- Use IF/ELSE to set result based on counter
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Use CASE for additional logic
+    CASE
+        WHEN v_counter > 100 THEN
+            SET result = 100;
+        WHEN v_counter > 50 THEN
+            SET result = 50;
+        ELSE
+            SET result = v_counter;
+    END CASE;
+
+    -- Use WHILE loop for demonstration
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0536(1, 1, @out_result);
+
+SELECT @out_result;

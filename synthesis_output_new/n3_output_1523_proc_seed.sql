@@ -1,0 +1,84 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1273570 (v1273571 INT, v1273572 INT, v1273026 INT);
+CREATE TABLE IF NOT EXISTS v1273025 (v1273026 INT, v1273027 INT);
+CREATE TABLE IF NOT EXISTS v1273387 (v1273388 INT, v1273389 INT);
+CREATE TABLE IF NOT EXISTS v1273164 (v1273165 INT, v1273166 INT);
+CREATE TABLE IF NOT EXISTS v1273485 (v1273486 INT, v1273487 INT);
+CREATE TABLE IF NOT EXISTS v1273871 (v1273872 INT, v1273873 INT);
+CREATE TABLE IF NOT EXISTS v1273884 (v1273885 INT, v1273886 INT);
+INSERT INTO v1273570 VALUES (10000, 50, 1), (10001, 60, 2), (10002, 70, 3);
+INSERT INTO v1273025 VALUES (1, 10), (2, 20), (3, 30);
+INSERT INTO v1273387 VALUES (1, 100), (2, 200), (3, 300);
+INSERT INTO v1273164 VALUES (128, 128), (129, 129), (130, 130);
+INSERT INTO v1273485 VALUES (128, 1), (129, 2), (130, 3);
+INSERT INTO v1273871 VALUES (82, 82), (83, 83), (84, 84);
+INSERT INTO v1273884 VALUES (82, 1), (83, 2), (84, 3);
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1523_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v1273872 FROM v1273871 WHERE v1273872 BETWEEN 32 AND 43;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Use input parameters meaningfully
+    SET v_val = p1 + p2;
+
+    -- Statement 1: UPDATE with RIGHT OUTER JOIN
+    UPDATE v1273570 AS x1, v1273025 AS x6 RIGHT OUTER JOIN v1273387 AS x7 ON (x6.v1273026 = x6.v1273026) 
+    SET v1273572 = v_val 
+    WHERE v1273571 = 10000;
+
+    -- Statement 2: UPDATE with LEFT JOIN and complex CASE
+    UPDATE v1273164 AS x0 LEFT JOIN v1273485 AS x6 ON (x0.v1273166 = 128 AND x0.v1273165 = x0.v1273166 AND x0.v1273166 = x0.v1273166) 
+    SET v1273165 = 4 * v1273166 
+    WHERE (CASE WHEN v1273166 THEN NOW(2) WHEN JSON_EXTRACT(v1273165, '$.w') THEN v1273166 < v1273166 ELSE v1273166 <= 1 END) <=> v1273165;
+
+    -- Statement 3: UPDATE with NATURAL JOIN and conditional logic
+    IF p1 > 0 THEN
+        UPDATE v1273871 AS x0 NATURAL JOIN v1273884 AS x1 
+        SET v1273872 = 82 
+        WHERE v_val = v_val AND x0.v1273872 = x0.v1273872;
+    END IF;
+
+    -- Statement 4: UPDATE with REPEAT and conditional
+    WHILE v_counter < 5 DO
+        UPDATE v1273871 AS x1 
+        SET v1273872 = v_val 
+        WHERE x1.v1273872 = REPEAT('a', p2) AND v1273872 = 830910;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- Statement 5: UPDATE with BETWEEN and negation
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1273871 AS x0 
+        SET x0.v1273872 = -x0.v1273872 
+        WHERE v1273872 BETWEEN 32 AND 43;
+    END LOOP;
+    CLOSE cur;
+
+    -- Set output result based on procedural logic
+    CASE 
+        WHEN v_val > 100 THEN SET result = v_val;
+        WHEN v_val BETWEEN 50 AND 100 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1523_proc(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,401 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1149646 (id INT AUTO_INCREMENT PRIMARY KEY, v1149649 INT, v1149650 DATETIME);
+CREATE TABLE IF NOT EXISTS v1149752 (id INT AUTO_INCREMENT PRIMARY KEY, v1149753 VARCHAR(4000), extra_col INT);
+CREATE TABLE IF NOT EXISTS v1149699 (id INT AUTO_INCREMENT PRIMARY KEY, v1149700 VARCHAR(4000));
+CREATE TABLE IF NOT EXISTS v1149615 (id INT AUTO_INCREMENT PRIMARY KEY, v1149617 VARCHAR(20), v1149616 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v1149850 (id INT AUTO_INCREMENT PRIMARY KEY, v1149851 INT);
+INSERT INTO v1149646 (v1149649, v1149650) VALUES (10, NOW()), (20, NOW() - INTERVAL 1 DAY), (30, NOW() + INTERVAL 1 DAY);
+INSERT INTO v1149752 (v1149753, extra_col) VALUES ('test', 1), ('Prepaid', 2), ('0.5', 3), ('44444.44444', 4);
+INSERT INTO v1149699 (v1149700) VALUES ('initial1'), ('initial2'), ('initial3');
+INSERT INTO v1149615 (v1149617, v1149616) VALUES ('100', 'abc'), ('200', 'def');
+INSERT INTO v1149850 (v1149851) VALUES (50), (100), (150), (200);
+
+/* -----Dependency for: n3_output_1958_proc----- */
+CREATE TABLE IF NOT EXISTS v1442531 (v1442533 CHAR(10), v1442532 INT);
+CREATE TABLE IF NOT EXISTS v1442642 (v1442643 INT, v1442644 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1442602 (v1442603 INT, v1442604 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1442274 (v1442275 INT, x2 POINT);
+CREATE TABLE IF NOT EXISTS v1443484 (v1443485 VARCHAR(50), v1443486 INT);
+CREATE TABLE IF NOT EXISTS v1443696 (v1443697 INT, v1443698 INT);
+CREATE TABLE IF NOT EXISTS test_table (id VARCHAR(50), data INT);
+INSERT INTO v1442531 VALUES ('100:04:04', 1), ('200:05:05', 2), ('300:06:06', 3);
+INSERT INTO v1442642 VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO v1442602 VALUES (1, 'x'), (2, 'y'), (3, 'z');
+INSERT INTO v1442274 VALUES (1, ST_GEOMFROMTEXT('POINT(0 0)')), (2, ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO v1443484 VALUES ('fq', 10), ('1901', 20), ('01-02-03 12:34:56', 30);
+INSERT INTO v1443696 VALUES (4, 1), (6, 2), (8, 3);
+INSERT INTO test_table VALUES ('MYSQLtest', 100), ('other', 200), ('MYSQLtest', 300);
+
+/* -----Called: n3_output_1958_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1958_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1443697 FROM v1443696 WHERE v1443697 % 2 = 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Update statement 1: Use p1 and p2 to modify WHERE condition
+    UPDATE v1442531 AS x1 
+    LEFT JOIN v1442642 AS x7 ON TRUE 
+    LEFT JOIN v1442602 AS x8 ON x7.v1442643 = x7.v1442643 AND x7.v1442643 = x7.v1442643 
+    SET x1.v1442533 = @int_two 
+    WHERE v1442533 = '100:04:04' AND p1 > 0;
+
+    -- Update statement 2: Geometry update with conditional check
+    UPDATE v1442274 AS x1 
+    SET x2 = ST_GEOMFROMTEXT('POINT(139 84)') 
+    WHERE NOT (x1.v1442275 IN (x1.x2, x1.x2)) AND p2 > 0;
+
+    -- Update statement 3: Using p1 to control variable assignment
+    SET @f = p1;
+    UPDATE v1443484 AS x1 
+    SET v1443485 = @f 
+    WHERE v1443485 IN ('fq', '1901', '01-02-03 12:34:56');
+
+    -- Update statement 4: Process even values using cursor loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1443696 AS x1 
+        SET v1443697 = v1443697 / NULLIF(1, 0) 
+        WHERE v1443697 % 2 = 0;
+        
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Update statement 5: Conditional update with ORDER BY and LIMIT
+    IF p1 > p2 THEN
+        UPDATE test_table AS x1 
+        SET id = 'MYSQLtest' 
+        WHERE id = id 
+        ORDER BY id, id 
+        LIMIT 90;
+        SET v_counter = v_counter + 10;
+    ELSE
+        SET v_counter = v_counter + 5;
+    END IF;
+
+    -- Final result calculation using CASE
+    CASE 
+        WHEN v_counter > 0 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+CREATE TABLE IF NOT EXISTS `table_89kc2r` (
+    `table_89kc2r_campaign_id` INT,
+    `table_89kc2r_budget` INT
+);
+
+INSERT INTO `table_89kc2r` (`table_89kc2r_campaign_id`, `table_89kc2r_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_89KC2R_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_89KC2R
+    WHERE TABLE_89KC2R_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET > 100000 THEN
+        RETURN 5;
+    ELSEIF V_BUDGET > 50000 THEN
+        RETURN 4;
+    ELSEIF V_BUDGET > 10000 THEN
+        RETURN 3;
+    ELSEIF V_BUDGET > 5000 THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(-39, -48)) - 175 + ((MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(41)) - -841 + (2));
+    ELSE
+        RETURN 1;
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv----- */
+CREATE TABLE IF NOT EXISTS `table_o0411s` (
+    `table_o0411s_category_id` INT,
+    `table_o0411s_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_o0411s` (`table_o0411s_category_id`, `table_o0411s_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_TOTAL_VALUE_zcbslv(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_O0411S_PRICE), 0)
+    INTO V_TOTAL
+    FROM TABLE_O0411S
+    WHERE TABLE_O0411S_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (floor(v_total));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = (MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(14)) - -332 + (0) THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+CREATE TABLE IF NOT EXISTS `table_e57zui` (
+    `table_e57zui_product_id` INT,
+    `table_e57zui_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_e57zui` (`table_e57zui_product_id`, `table_e57zui_price`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRICE_BUCKET_gmrtgh(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_E57ZUI_PRICE, 0)
+    INTO V_PRICE
+    FROM TABLE_E57ZUI
+    WHERE TABLE_E57ZUI_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN FLOOR(V_PRICE / 100);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+CREATE TABLE IF NOT EXISTS `table_42hbdg` (
+    `table_42hbdg_emp_id` INT,
+    `table_42hbdg_department_id` INT,
+    `table_42hbdg_salary` INT,
+    `table_42hbdg_hire_date` DATE,
+    `table_42hbdg_performance_score` INT
+);
+
+INSERT INTO `table_42hbdg` (`table_42hbdg_emp_id`, `table_42hbdg_department_id`, `table_42hbdg_salary`, `table_42hbdg_hire_date`, `table_42hbdg_performance_score`) VALUES (1, 1, 1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_RANK_mupry8(DEPARTMENT_ID_PARAM INT, EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_EMP_SALARY INT DEFAULT 0;
+    DECLARE V_RANK INT DEFAULT 0;
+    DECLARE V_BELOW_COUNT INT DEFAULT 0;
+    DECLARE V_ABOVE_COUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_42HBDG_SALARY, 0) INTO V_EMP_SALARY
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_BELOW_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY < V_EMP_SALARY;
+
+    SELECT COUNT(*) INTO V_ABOVE_COUNT
+    FROM TABLE_42HBDG
+    WHERE TABLE_42HBDG_DEPARTMENT_ID = DEPARTMENT_ID_PARAM AND TABLE_42HBDG_SALARY > V_EMP_SALARY;
+
+    SET V_RANK = V_BELOW_COUNT + 1;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(-41)) - -247 + (v_rank);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MAX_2eyzah(MAX_ITER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    WHILE V_I < MAX_ITER AND V_RESULT < 1000 DO
+        SET V_RESULT = V_RESULT + V_I;
+        SET V_I = (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(-91)) - 732 + ((MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(-32)) - -298 + (v_i + 1));
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+CREATE TABLE IF NOT EXISTS `table_6jyzbz` (
+    `table_6jyzbz_supplier_id` INT,
+    `table_6jyzbz_supplier_rating` DECIMAL(3,1)
+);
+
+INSERT INTO `table_6jyzbz` (`table_6jyzbz_supplier_id`, `table_6jyzbz_supplier_rating`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUPPLIER_SCORE_68fxaf(SUPPLIER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RATING DECIMAL(3,1) DEFAULT 0.0;
+
+    SELECT COALESCE(TABLE_6JYZBZ_SUPPLIER_RATING, 3.0)
+    INTO V_RATING
+    FROM TABLE_6JYZBZ
+    WHERE TABLE_6JYZBZ_SUPPLIER_ID = SUPPLIER_ID_PARAM;
+
+    RETURN FLOOR(V_RATING * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0----- */
+CREATE TABLE IF NOT EXISTS `table_6a0wz4` (
+    `table_6a0wz4_emp_id` INT,
+    `table_6a0wz4_department_id` INT,
+    `table_6a0wz4_salary` INT
+);
+
+INSERT INTO `table_6a0wz4` (`table_6a0wz4_emp_id`, `table_6a0wz4_department_id`, `table_6a0wz4_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VALUE_iaz0r0(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_6A0WZ4_SALARY), 0)
+    INTO V_TOTAL_SALARY
+    FROM TABLE_6A0WZ4
+    WHERE TABLE_6A0WZ4_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6(-83)) - 868 + (floor(v_total_salary / 1000));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6----- */
+CREATE TABLE IF NOT EXISTS `table_a2mkwz` (
+    `table_a2mkwz_campaign_id` INT,
+    `table_a2mkwz_start_date` DATE
+);
+
+INSERT INTO `table_a2mkwz` (`table_a2mkwz_campaign_id`, `table_a2mkwz_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_START_MONTH_09nbw6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTH INT DEFAULT 0;
+
+    SELECT MONTH(TABLE_A2MKWZ_START_DATE)
+    INTO V_MONTH
+    FROM TABLE_A2MKWZ
+    WHERE TABLE_A2MKWZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_MONTH;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0731_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_ts DATETIME;
+    DECLARE v_str VARCHAR(4000);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1149851 FROM v1149850 WHERE v1149851 <= 100 ORDER BY v1149851 DESC LIMIT 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with ADDTIME and system variable @d
+CALL n3_output_1958_proc(93, -17, @_syn_7861);
+    SET @d = @_syn_7861 - @_io_result + (p1);
+    UPDATE v1149646 AS x1 SET v1149649 = @d WHERE v1149650 >= ADDTIME(NOW(), '2 02:01:01');
+
+    -- Statement 2: UPDATE with REPEAT and IN list
+    UPDATE v1149752 AS x1 SET v1149753 = REPEAT('c', 4000) WHERE v1149753 IN (0.2, 'Prepaid', 'SLAVESIDE_DISABLED', 'statement/abstract/Query', '44444.44444', 0.5, 'test', 'tab5');
+
+    -- Statement 3: UPDATE with REPEAT, using p2 as condition
+    UPDATE v1149699 AS x0 SET v1149700 = REPEAT('c', 4000) WHERE id = p2;
+
+    -- Statement 4: INSERT with parameters
+    INSERT INTO v1149615 (v1149617, v1149616) VALUES (CAST(p1 AS CHAR), CAST(p2 AS CHAR));
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT, using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1149850 AS x0 SET x0.v1149851 = @d WHERE x0.v1149851 <= 100 ORDER BY x0.v1149851, v1149851 DESC LIMIT (MYSQL_FUNC_CALCULATE_BUDGET_BUCKET_yrqt1v(2)) - 487 + (1);
+    END LOOP;
+    CLOSE cur;
+
+    -- Procedural logic: IF/ELSE and WHILE loop
+    IF p1 > p2 THEN
+        SET v_counter = 1;
+        WHILE v_counter < 5 DO
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    ELSE
+        SET v_counter = 0;
+        CASE
+            WHEN p1 = 0 THEN SET v_counter = 100;
+            WHEN p1 = 1 THEN SET v_counter = 200;
+            ELSE SET v_counter = 300;
+        END CASE;
+    END IF;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0731_proc(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,426 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1138631 (v1138636 VARCHAR(50), v1138635 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1138835 (v1138836 INT, v1138837 VARCHAR(50), v1138838 VARCHAR(50), v1138839 INT);
+CREATE TABLE IF NOT EXISTS v1138845 (v1138836 INT, v1138837 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1138711 (v1138712 INT, v1138713 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1138638 (v1138712 INT, v1138713 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1138686 (v1138687 INT, v1138688 VARCHAR(50), v1138689 INT);
+CREATE TABLE IF NOT EXISTS v1138882 (v1138883 BIGINT(20) AUTO_INCREMENT PRIMARY KEY, v1138884 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS x6 (v1138712 INT);
+INSERT INTO v1138631 (v1138636, v1138635) VALUES ('default', 'value'), ('test', 'data');
+INSERT INTO v1138835 (v1138836, v1138837, v1138838, v1138839) VALUES (1, 'tab6', 'InnoDB', 15), (2, 'tab5', 'MyISAM', 25);
+INSERT INTO v1138845 (v1138836, v1138837) VALUES (1, 'joined'), (2, 'data');
+INSERT INTO v1138711 (v1138712, v1138713) VALUES (1, 'row1'), (2, 'row2'), (3, 'row3'), (4, 'row4'), (5, 'row5');
+INSERT INTO v1138638 (v1138712, v1138713) VALUES (1, 'nat1'), (2, 'nat2'), (3, 'nat3');
+INSERT INTO v1138686 (v1138687, v1138688, v1138689) VALUES (1, '2010-10-01 00:00:00', 100), (2, '2010-10-02 00:00:00', 200);
+INSERT INTO v1138882 (v1138884) VALUES ('initial');
+INSERT INTO x6 (v1138712) VALUES (1), (2), (3);
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(62, 82)) - -855 + (1) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_COUNT = V_COUNT + 1;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_CONVERT_AND_MULTIPLY_yqqdit(INPUT_VAL INT, MULTIPLIER INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NUMERIC_VAL INT DEFAULT 0;
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    SET V_NUMERIC_VAL = CAST(INPUT_VAL AS SIGNED);
+
+    IF V_NUMERIC_VAL < 0 THEN
+        SET V_NUMERIC_VAL = 0 - V_NUMERIC_VAL;
+    END IF;
+
+    SET V_RESULT = V_NUMERIC_VAL * MULTIPLIER;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = 1 OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+CREATE TABLE IF NOT EXISTS `table_exbt6p` (
+    `table_exbt6p_task_id` INT,
+    `table_exbt6p_project_id` INT,
+    `table_exbt6p_assignee_id` INT,
+    `table_exbt6p_estimated_hours` INT,
+    `table_exbt6p_actual_hours` INT,
+    `table_exbt6p_status` VARCHAR(50),
+    `table_exbt6p_priority` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o0kik0` (
+    `table_o0kik0_project_id` INT,
+    `table_o0kik0_project_name` VARCHAR(50),
+    `table_o0kik0_start_date` DATE,
+    `table_o0kik0_deadline` INT,
+    `table_o0kik0_budget` INT
+);
+
+INSERT INTO `table_exbt6p` (`table_exbt6p_task_id`, `table_exbt6p_project_id`, `table_exbt6p_assignee_id`, `table_exbt6p_estimated_hours`, `table_exbt6p_actual_hours`, `table_exbt6p_status`, `table_exbt6p_priority`) VALUES (1, 1, 1, 1, 1, '2024-01-01', 1);
+
+INSERT INTO `table_o0kik0` (`table_o0kik0_project_id`, `table_o0kik0_project_name`, `table_o0kik0_start_date`, `table_o0kik0_deadline`, `table_o0kik0_budget`) VALUES (1, 'test', '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(PROJECT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ESTIMATED INT DEFAULT 0;
+    DECLARE V_TOTAL_ACTUAL INT DEFAULT 0;
+    DECLARE V_COMPLETED_TASKS INT DEFAULT 0;
+    DECLARE V_TOTAL_TASKS INT DEFAULT 0;
+    DECLARE V_HEALTH_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_EXBT6P_ESTIMATED_HOURS), 0), COALESCE(SUM(TABLE_EXBT6P_ACTUAL_HOURS), 0), COUNT(*)
+    INTO V_TOTAL_ESTIMATED, V_TOTAL_ACTUAL, V_TOTAL_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_COMPLETED_TASKS
+    FROM TABLE_EXBT6P
+    WHERE TABLE_EXBT6P_PROJECT_ID = PROJECT_ID_PARAM AND TABLE_EXBT6P_STATUS = 'COMPLETED';
+
+    IF V_TOTAL_TASKS = 0 THEN
+        RETURN (MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t(96)) - 82 + ((MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(22)) - 481 + (50));
+    END IF;
+
+    SET V_HEALTH_SCORE = (V_COMPLETED_TASKS * 100) / V_TOTAL_TASKS;
+
+    IF V_TOTAL_ACTUAL > V_TOTAL_ESTIMATED THEN
+        SET V_HEALTH_SCORE = V_HEALTH_SCORE - 20;
+    END IF;
+
+    RETURN CAST(V_HEALTH_SCORE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MATRIX_TRACE_t2hndk(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TRACE INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+    DECLARE V_J INT DEFAULT 1;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF N <= 0 OR N > 100 THEN
+        RETURN 0;
+    END IF;
+
+    OUTER_LOOP: WHILE V_I <= N DO
+        INNER_LOOP: WHILE V_J <= N DO
+            IF V_I = V_J THEN
+                SET V_SUM = (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + (v_sum + (v_i * v_j));
+            END IF;
+            SET V_J = V_J + 1;
+        END WHILE INNER_LOOP;
+        SET V_J = 1;
+        SET V_I = (MYSQL_FUNC_PROC1_cvo8ys()) - 819 + ((MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(-92)) - -502 + (v_i + 1));
+    END WHILE OUTER_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+CREATE TABLE IF NOT EXISTS `table_02dgpw` (
+    `table_02dgpw_policy_id` INT,
+    `table_02dgpw_customer_id` INT,
+    `table_02dgpw_bike_value` INT,
+    `table_02dgpw_bike_type` VARCHAR(50),
+    `table_02dgpw_annual_premium` INT,
+    `table_02dgpw_deductible_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_beolwf` (
+    `table_beolwf_claim_id` INT,
+    `table_beolwf_policy_id` INT,
+    `table_beolwf_claim_date` DATE,
+    `table_beolwf_claim_amount` DECIMAL(10,2),
+    `table_beolwf_status` VARCHAR(50)
+);
+
+INSERT INTO `table_02dgpw` (`table_02dgpw_policy_id`, `table_02dgpw_customer_id`, `table_02dgpw_bike_value`, `table_02dgpw_bike_type`, `table_02dgpw_annual_premium`, `table_02dgpw_deductible_amount`) VALUES (1, 2, 3, 'test', 5, 1.0);
+
+INSERT INTO `table_beolwf` (`table_beolwf_claim_id`, `table_beolwf_policy_id`, `table_beolwf_claim_date`, `table_beolwf_claim_amount`, `table_beolwf_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MOTORCYCLE_INSURANCE_PREMIUM_vcyvap(POLICY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BIKE_VALUE INT DEFAULT 0;
+    DECLARE V_ANNUAL_PREMIUM INT DEFAULT 500;
+    DECLARE V_DEDUCTIBLE_AMOUNT INT DEFAULT 0;
+    DECLARE V_RISK_FACTOR INT DEFAULT 0;
+    DECLARE V_FINAL_PREMIUM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_02DGPW_BIKE_VALUE, 10000), COALESCE(TABLE_02DGPW_ANNUAL_PREMIUM, 500), COALESCE(TABLE_02DGPW_DEDUCTIBLE_AMOUNT, 500)
+    INTO V_BIKE_VALUE, V_ANNUAL_PREMIUM, V_DEDUCTIBLE_AMOUNT
+    FROM TABLE_02DGPW
+    WHERE TABLE_02DGPW_POLICY_ID = POLICY_ID_PARAM;
+
+    SET V_RISK_FACTOR = V_BIKE_VALUE / 1000;
+    SET V_FINAL_PREMIUM = V_ANNUAL_PREMIUM + V_RISK_FACTOR * 10;
+
+    IF V_DEDUCTIBLE_AMOUNT > 1000 THEN
+        SET V_FINAL_PREMIUM = V_FINAL_PREMIUM - (V_FINAL_PREMIUM * 15 / 100);
+    END IF;
+
+    RETURN CAST(V_FINAL_PREMIUM AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_PROC1_cvo8ys----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC1_cvo8ys() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(-90, -25)) - -977 + (0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_DIVIDE_NUMBERS_gzcx86(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+    RETURN A / B;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t----- */
+CREATE TABLE IF NOT EXISTS `table_sn1j61` (
+    `table_sn1j61_customer_id` INT,
+    `table_sn1j61_name` VARCHAR(50),
+    `table_sn1j61_email` INT,
+    `table_sn1j61_registration_date` DATE,
+    `table_sn1j61_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_m1ll2a` (
+    `table_m1ll2a_order_id` INT,
+    `table_m1ll2a_customer_id` INT,
+    `table_m1ll2a_order_date` DATE,
+    `table_m1ll2a_total_amount` DECIMAL(10,2),
+    `table_m1ll2a_shipping_country` INT
+);
+
+INSERT INTO `table_sn1j61` (`table_sn1j61_customer_id`, `table_sn1j61_name`, `table_sn1j61_email`, `table_sn1j61_registration_date`, `table_sn1j61_country`) VALUES (1, '2024-01-01', 1, '2024-01-01', 1);
+
+INSERT INTO `table_m1ll2a` (`table_m1ll2a_order_id`, `table_m1ll2a_customer_id`, `table_m1ll2a_order_date`, `table_m1ll2a_total_amount`, `table_m1ll2a_shipping_country`) VALUES (1, 2, '2024-01-01', 1.0, 5);
+
+/* -----Called: MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CUSTOMER_STATS_aqdl2t(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_ORDERS INT DEFAULT 0;
+    DECLARE V_TOTAL_SPENT INT DEFAULT 0;
+    DECLARE V_AVG_ORDER_VALUE INT DEFAULT 0;
+    DECLARE V_ORDER_COUNT INT DEFAULT 0;
+    DECLARE V_COUNTRY VARCHAR(50) DEFAULT '';
+
+    SELECT TABLE_SN1J61_COUNTRY, COUNT(*), SUM(TABLE_M1LL2A_TOTAL_AMOUNT)
+    INTO V_COUNTRY, V_TOTAL_ORDERS, V_TOTAL_SPENT
+    FROM TABLE_SN1J61 C
+    LEFT JOIN TABLE_M1LL2A O ON TABLE_SN1J61_CUSTOMER_ID = TABLE_M1LL2A_CUSTOMER_ID
+    WHERE TABLE_SN1J61_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    GROUP BY TABLE_SN1J61_CUSTOMER_ID, TABLE_SN1J61_COUNTRY;
+
+    SET V_ORDER_COUNT = V_TOTAL_ORDERS;
+
+    IF V_ORDER_COUNT > 0 THEN
+        SET V_AVG_ORDER_VALUE = V_TOTAL_SPENT / V_ORDER_COUNT;
+    END IF;
+
+    RETURN COALESCE(V_AVG_ORDER_VALUE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0477_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v1138836 FROM v1138835 WHERE v1138837 = 'tab6';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET result = -(MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(60)) - -138 + (1);
+    END;
+    
+    -- Statement 1: INSERT into v1138631 using parameters
+    IF p1 > 0 THEN
+        INSERT INTO v1138631 (v1138636, v1138635) VALUES (CONCAT('param_', p1), CONCAT('value_', p2));
+        SET v_counter = (MYSQL_FUNC_CURSOR_FUNC_COUNT_7_VALUES_vuh9f4()) - 671 + (v_counter) + ROW_COUNT();
+    END IF;
+    
+    -- Statement 2: UPDATE v1138835 with LEFT JOIN using parameter
+    SET @poly2 = CONCAT('polygon_', p1);
+    UPDATE v1138835 AS x1 
+    LEFT JOIN v1138845 AS x4 ON x1.v1138836 = x1.v1138836 
+    SET v1138837 = @poly2 
+    WHERE v1138837 = 'tab6' 
+      AND v1138838 = 'InnoDB' 
+      AND x1.v1138836 > p1;
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 3: CREATE TABLE with SELECT and use window function
+    CREATE TABLE IF NOT EXISTS v1138882_temp AS
+    SELECT @@character_set_connection AS x2, MAX(v1138839) OVER (ORDER BY v1138836) AS x3
+    FROM v1138835;
+    SET v_counter = v_counter + (SELECT COUNT(*) FROM v1138882_temp);
+    DROP TABLE IF EXISTS v1138882_temp;
+    
+    -- Statement 4: UPDATE with NATURAL JOIN and subquery condition using cursor
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF (MYSQL_FUNC_CALCULATE_PROJECT_HEALTH_us0z8g(53)) - 254 + (v_val > p2) THEN
+            UPDATE v1138711 AS x1 
+            NATURAL JOIN v1138638 AS x5 
+            SET x1.v1138712 = p1 
+            WHERE NOT EXISTS(
+                SELECT 'x' FROM x6 AS x7 
+                WHERE x1.v1138712 = 1 
+                  AND x1.v1138712 = x1.v1138712 
+                  AND (x1.v1138712 >= 4 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 < 5 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 = x1.v1138712 OR x1.v1138712 IS NULL OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 >= 2 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 >= 4 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 <= 2 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 < 1 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 = x1.v1138712 OR x1.v1138712 IS NULL)
+                  AND (x1.v1138712 = 1)
+            ) IS FALSE;
+            SET v_counter = v_counter + ROW_COUNT();
+        END IF;
+    END LOOP;
+    CLOSE v_cur;
+    
+    -- Statement 5: UPDATE with ORDER BY using parameter
+    SET @master_dump_pid = p1 + p2;
+    UPDATE v1138686 AS x0 
+    SET v1138688 = @master_dump_pid 
+    WHERE v1138688 = '2010-10-01 00:00:00' 
+    ORDER BY 6 - x0.v1138688, x0.v1138687;
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Final result using CASE
+    CASE 
+        WHEN v_counter > 100 THEN SET result = 1;
+        WHEN v_counter > 50 THEN SET result = 2;
+        WHEN v_counter > 10 THEN SET result = 3;
+        ELSE SET result = v_counter;
+    END CASE;
+    
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0477_proc(1, 1, @out_result);
+
+SELECT @out_result;

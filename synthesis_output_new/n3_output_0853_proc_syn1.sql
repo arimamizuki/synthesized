@@ -1,0 +1,474 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1158521 (v1158522 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1158841 (v1158842 DECIMAL(64, 0), v1158843 VARBINARY(514) DEFAULT (TIME_TO_SEC(v1158842)));
+CREATE TABLE IF NOT EXISTS v1158519 (v1158520 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1158671 (v1158520 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1158676 (v1158677 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1158596 (v1158677 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1158865 (v1158866 VARCHAR(255));
+INSERT INTO v1158521 VALUES ('test'), ('dbl_one'), ('dbl_two'), ('dbl_five');
+INSERT INTO v1158841 VALUES (100, NULL), (200, NULL), (300, NULL);
+INSERT INTO v1158519 VALUES ('abc'), ('xyz'), ('abcxyz');
+INSERT INTO v1158671 VALUES ('abc'), ('def');
+INSERT INTO v1158676 VALUES ('j'), ('k'), ('龡龡');
+INSERT INTO v1158596 VALUES ('j'), ('l');
+INSERT INTO v1158865 VALUES ('statement/test'), ('transaction'), ('other');
+
+/* -----Dependency for: n3_output_0954_proc----- */
+CREATE TABLE IF NOT EXISTS v1167537 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1167538 VARCHAR(255),
+    v1167540 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1167420 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1167421 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1166811 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1166812 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1167546 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1167547 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1167735 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1167740 INT,
+    v1167750 VARCHAR(255),
+    v1167745 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS v1167761 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1167762 VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS test_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    test_col VARCHAR(255)
+);
+INSERT INTO v1167537 (v1167538, v1167540) VALUES ('psmith', 'root'), ('test', 'data'), ('admin', 'root');
+INSERT INTO v1167420 (v1167421) VALUES ('psmith'), ('john'), ('admin');
+INSERT INTO v1166811 (v1166812) VALUES ('root'), ('test'), ('admin');
+INSERT INTO v1167546 (v1167547) VALUES ('data'), ('root'), ('test');
+INSERT INTO v1167735 (v1167740, v1167750, v1167745) VALUES (1, '2008-07-05', 'data'), (2, '10:10:10.99992', 'test'), (3, '1999-12-31 21:00:09', 'root'), (NULL, NULL, 'other');
+INSERT INTO v1167761 (v1167762) VALUES ('1'), ('0'), (NULL);
+INSERT INTO test_table (test_col) VALUES ('1'), ('0'), ('test');
+
+/* -----Called: n3_output_0954_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0954_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val VARCHAR(255);
+    DECLARE v_cur CURSOR FOR SELECT v1167750 FROM v1167735 WHERE v1167740 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+    END;
+
+    -- First UPDATE with LEFT JOIN
+    UPDATE v1167537 AS x0 LEFT JOIN v1167420 AS x5 ON x0.v1167538 = 'psmith' AND x0.v1167538 = x0.v1167538 
+    SET v1167538 = 'mysqltest_2' 
+    WHERE MATCH(v1167540, v1167538) AGAINST('root') 
+    ORDER BY SUM(v1167540), SUM(x0.v1167538 + x0.v1167540) 
+    LIMIT 0;
+
+    -- Second UPDATE with STRAIGHT_JOIN
+    UPDATE v1166811 AS x0 STRAIGHT_JOIN v1167546 AS x6 ON (x0.v1166812 = x0.v1166812) 
+    SET v1166812 = 'mysqltest_2' 
+    WHERE MATCH(v1166812, v1166812) AGAINST('root') 
+    ORDER BY HEX(v1166812), CASE WHEN v1166812 IS NULL THEN 1 ELSE 0 END DESC, v1166812 DESC 
+    LIMIT 20;
+
+    -- INSERT with values from parameters
+    INSERT INTO v1167735 (v1167740, v1167750) VALUES (p1, '2008-07-05'), (p2, '053026'), (1, '10:10:10.99992'), (2, '-9999999999'), (3, '1999-12-31 21:00:09'), (3, '2037-01-01 23:59:58.990000'), (NULL, NULL), (NULL, NULL);
+
+    -- UPDATE with NATURAL JOIN and conditional logic
+    IF p1 > 0 THEN
+        UPDATE v1167761 AS x0 NATURAL JOIN test_table AS x4 
+        SET v1167762 = '2009-01-02 23:59:59.999999' 
+        WHERE x0.v1167762 = 1 AND x0.v1167762 = 1 OR x0.v1167762 IS NULL;
+    ELSE
+        UPDATE v1167761 AS x0 NATURAL JOIN test_table AS x4 
+        SET v1167762 = '2009-01-02 23:59:59.999999' 
+        WHERE x0.v1167762 = 0;
+    END IF;
+
+    -- Create index (DDL handled in setup)
+    -- Use cursor to iterate over inserted data
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+        
+        -- Use CASE for conditional counting
+        CASE 
+            WHEN v_val LIKE '2008%' THEN
+                SET v_counter = v_counter + 10;
+            WHEN v_val LIKE '10:%' THEN
+                SET v_counter = v_counter + 20;
+            ELSE
+                SET v_counter = v_counter + (MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(-41)) - -403 + (5);
+        END CASE;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Final WHILE loop to adjust result
+    WHILE v_counter > 100 DO
+        SET v_counter = v_counter - 50;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+CREATE TABLE IF NOT EXISTS `table_gkpv1s` (
+    `table_gkpv1s_department_id` INT
+);
+
+INSERT INTO `table_gkpv1s` (`table_gkpv1s_department_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_INDEX_4bnssc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_GKPV1S
+    WHERE TABLE_GKPV1S_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(P_A INT, P_B INT, P_C INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C + P_D) / 4;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb----- */
+CREATE TABLE IF NOT EXISTS `table_o9xb6z` (
+    `table_o9xb6z_department_id` INT,
+    `table_o9xb6z_salary` INT
+);
+
+INSERT INTO `table_o9xb6z` (`table_o9xb6z_department_id`, `table_o9xb6z_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_O9XB6Z_SALARY), 0)
+    INTO V_AVG_SALARY
+    FROM TABLE_O9XB6Z
+    WHERE TABLE_O9XB6Z_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(-24)) - 743 + ((MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(-47, 81)) - -438 + (floor(v_avg_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_PERCENTAGE_ho7i2s(PART INT, TOTAL INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF TOTAL = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'TOTAL CANNOT BE ZERO';
+    END IF;
+    IF PART < 0 OR TOTAL < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUES CANNOT BE NEGATIVE';
+    END IF;
+    RETURN (PART / TOTAL) * 100;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+CREATE TABLE IF NOT EXISTS `table_4impjk` (
+    `table_4impjk_customer_id` INT,
+    `table_4impjk_plan_type` VARCHAR(50),
+    `table_4impjk_monthly_cost` DECIMAL(10,2),
+    `table_4impjk_start_date` DATE,
+    `table_4impjk_renewal_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_akwwie` (
+    `table_akwwie_invoice_id` INT,
+    `table_akwwie_customer_id` INT,
+    `table_akwwie_invoice_date` DATE,
+    `table_akwwie_amount_due` DECIMAL(10,2),
+    `table_akwwie_status` VARCHAR(50)
+);
+
+INSERT INTO `table_4impjk` (`table_4impjk_customer_id`, `table_4impjk_plan_type`, `table_4impjk_monthly_cost`, `table_4impjk_start_date`, `table_4impjk_renewal_date`) VALUES (1, 'test', 1.0, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_akwwie` (`table_akwwie_invoice_id`, `table_akwwie_customer_id`, `table_akwwie_invoice_date`, `table_akwwie_amount_due`, `table_akwwie_status`) VALUES (1, 2, '2024-01-01', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_LIKELIHOOD_pswctw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_INVOICE_COUNT INT DEFAULT 0;
+    DECLARE V_PAID_INVOICES INT DEFAULT 0;
+    DECLARE V_RENEWAL_SCORE INT DEFAULT 0;
+
+    SELECT TABLE_4IMPJK_PLAN_TYPE, COALESCE(TABLE_4IMPJK_MONTHLY_COST, 0)
+    INTO V_PLAN_TYPE, V_MONTHLY_COST
+    FROM TABLE_4IMPJK
+    WHERE TABLE_4IMPJK_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT COUNT(*), COUNT(CASE WHEN TABLE_AKWWIE_STATUS = 'PAID' THEN 1 END)
+    INTO V_INVOICE_COUNT, V_PAID_INVOICES
+    FROM TABLE_AKWWIE
+    WHERE TABLE_AKWWIE_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SET V_RENEWAL_SCORE = (V_PAID_INVOICES * 100) / GREATEST(V_INVOICE_COUNT, 1);
+
+    IF V_PLAN_TYPE = 'ENTERPRISE' THEN
+        SET V_RENEWAL_SCORE = V_RENEWAL_SCORE + 20;
+    ELSEIF V_PLAN_TYPE = 'PREMIUM' THEN
+        SET V_RENEWAL_SCORE = V_RENEWAL_SCORE + 10;
+    END IF;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(-98)) - 261 + (least(v_renewal_score, 100));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+CREATE TABLE IF NOT EXISTS `table_rqpbfb` (
+    `table_rqpbfb_emp_id` INT,
+    `table_rqpbfb_salary` INT
+);
+
+INSERT INTO `table_rqpbfb` (`table_rqpbfb_emp_id`, `table_rqpbfb_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_RQPBFB_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_RQPBFB
+    WHERE TABLE_RQPBFB_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(-34)) - -424 + ((MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882(-3)) - -773 + (floor(v_salary / 500)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_ARMSTRONG_NUMBER_gix882(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_TEMP INT DEFAULT 0;
+    DECLARE V_DIGITS INT DEFAULT 0;
+    DECLARE V_DIGIT INT DEFAULT 0;
+
+    SET V_TEMP = N;
+    SET V_DIGITS = LENGTH(CAST(N AS CHAR));
+
+    WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP % 10;
+        SET V_SUM = V_SUM + POW(V_DIGIT, V_DIGITS);
+        SET V_TEMP = V_TEMP / 10;
+    END WHILE;
+
+    IF V_SUM = N THEN
+        RETURN 1;
+    END IF;
+
+    RETURN 0;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+CREATE TABLE IF NOT EXISTS `table_nsm6c8` (
+    `table_nsm6c8_campaign_id` INT,
+    `table_nsm6c8_status` VARCHAR(50)
+);
+
+INSERT INTO `table_nsm6c8` (`table_nsm6c8_campaign_id`, `table_nsm6c8_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_INDEX_hyf31w(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+
+    SELECT TABLE_NSM6C8_STATUS
+    INTO V_STATUS
+    FROM TABLE_NSM6C8
+    WHERE TABLE_NSM6C8_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_STATUS
+        WHEN 'ACTIVE' THEN 100
+        WHEN 'PAUSED' THEN 50
+        WHEN 'COMPLETED' THEN 75
+        WHEN 'CANCELLED' THEN 0
+        ELSE 10
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0853_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val VARCHAR(255);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_dbl_one VARCHAR(255) DEFAULT 'dbl_one';
+    DECLARE v_dbl_two VARCHAR(255) DEFAULT 'dbl_two';
+    DECLARE v_dbl_five VARCHAR(255) DEFAULT 'dbl_five';
+    DECLARE v_test VARCHAR(255) DEFAULT 'test';
+    DECLARE v_m VARCHAR(255) DEFAULT 'modified';
+    DECLARE v_affected INT DEFAULT 0;
+
+    -- Cursor for processing v1158841
+    DECLARE cur CURSOR FOR SELECT v1158842 FROM v1158841 WHERE v1158842 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE v1158521
+    UPDATE v1158521 AS x1 SET v1158522 = v_test WHERE v1158522 IN (v_dbl_one, v_dbl_two, v_dbl_five);
+    SET v_counter = (MYSQL_FUNC_CALCULATE_SALARY_INDEX_VALUE_jiih90(40)) - -799 + (v_counter) + ROW_COUNT();
+
+    -- Statement 2: CREATE TABLE already handled in setup, but we do INSERT with derived value
+    INSERT INTO v1158841 (v1158842, v1158843) VALUES (500, TIME_TO_SEC(500));
+
+    -- Statement 3: UPDATE with RIGHT OUTER JOIN
+    UPDATE v1158519 AS x0 
+    RIGHT OUTER JOIN v1158671 AS x4 ON x0.v1158520 = x0.v1158520 
+    SET x0.v1158520 = REPLACE(x0.v1158520, 'x', 'y') 
+    WHERE x0.v1158520 IS NOT NULL AND x0.v1158520 <> 'xyz';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 4: UPDATE with LEFT JOIN
+    UPDATE v1158676 AS x0 
+    LEFT JOIN v1158596 AS x4 ON x0.v1158677 = '2' 
+    SET x0.v1158677 = REPLACE(x0.v1158677, '龡龡', 'y') 
+    WHERE (x0.v1158677 >= 'j');
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 5: UPDATE with LIKE/OR
+    UPDATE v1158865 AS x1 SET v1158866 = v_m WHERE v1158866 LIKE ('statement/%') OR v1158866 = 'transaction';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Procedural loop using CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic
+    IF (MYSQL_FUNC_HANDLER_FUNC_AVG_FOUR_lehgbp(6, -93, 36, 22)) - -267 + (p1) > 0 THEN
+        SET v_counter = v_counter + p1;
+    ELSE
+        SET v_counter = v_counter + p2;
+    END IF;
+
+    -- CASE statement
+    CASE 
+        WHEN v_counter > 10 THEN SET result = v_counter * 2;
+        WHEN v_counter > 5 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+
+    -- WHILE loop
+CALL n3_output_0954_proc(-67, -98, @_syn_9071);
+    WHILE (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_AVG_4e1jfb(-2)) - 964 + (@_syn_9071 - @_io_result + (v_counter < 20)) DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0853_proc(1, 1, @out_result);
+
+SELECT @out_result;

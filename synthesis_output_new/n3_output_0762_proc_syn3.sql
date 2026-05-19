@@ -1,0 +1,510 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1151962 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1151963 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1151964 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1151965 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1151966 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1151967 TEXT,
+    FULLTEXT INDEX ft_idx (v1151967)
+);
+CREATE TABLE IF NOT EXISTS v1151986 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1151987 VARCHAR(100),
+    v1151988 INT
+);
+CREATE TABLE IF NOT EXISTS v1152005 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1151965 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1152010 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1152011 VARCHAR(100)
+);
+INSERT INTO v1151962 (v1151963) VALUES ('00:10:00'), ('POINT(134 238)'), ('b20438524');
+INSERT INTO v1151964 (v1151965) VALUES (NULL), ('some_value'), (NULL);
+INSERT INTO v1151966 (v1151967) VALUES ('foobar test'), ('some text'), ('foobar');
+INSERT INTO v1151986 (v1151987, v1151988) VALUES ('test', 10), ('user', 5), ('admin', 20);
+INSERT INTO v1152005 (v1151965) VALUES (NULL), ('value2'), (NULL);
+INSERT INTO v1152010 (v1152011) VALUES ('mysql'), ('t'), ('PRIMARY'), ('size');
+
+/* -----Dependency for: synth_output_1196----- */
+CREATE TABLE IF NOT EXISTS v73441 (
+    v73443 INT,
+    v73442 DATETIME
+);
+CREATE TABLE IF NOT EXISTS v73713 (
+    v73714 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v73750 (
+    v73311 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v73276 (
+    v73278 INT,
+    v73277 INT,
+    v73276_id INT AUTO_INCREMENT PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS v73751 (
+    v73332 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS x9 (dummy INT);
+CREATE TABLE IF NOT EXISTS x13 (dummy INT);
+CREATE TABLE IF NOT EXISTS x14 (dummy INT);
+CREATE TABLE IF NOT EXISTS x16 (dummy INT);
+INSERT INTO v73441 (v73443, v73442) VALUES (1, '2011-10-15 10:00:00'), (2, '2011-10-20 12:00:00'), (3, '2011-09-01 08:00:00');
+INSERT INTO v73713 (v73714) VALUES ('abc'), ('xyz'), ('Rdlpikti');
+INSERT INTO v73750 (v73311) VALUES ('0'), ('1'), ('KKK'), ('ABC');
+INSERT INTO v73276 (v73278, v73277) VALUES (10, 20), (30, 40), (50, 60);
+INSERT INTO v73751 (v73332) VALUES (ST_GEOMFROMTEXT('POINT(5 5)')), (ST_GEOMFROMTEXT('POINT(10 10)')), (ST_GEOMFROMTEXT('POINT(1 1)'));
+INSERT INTO x9 VALUES (0);
+INSERT INTO x13 VALUES (0);
+INSERT INTO x14 VALUES (0);
+INSERT INTO x16 VALUES (0);
+
+/* -----Called: synth_output_1196----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1196(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_var1 INT;
+    DECLARE v_var2 VARCHAR(100);
+    DECLARE v_var3 VARCHAR(100);
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v73311 FROM v73750 WHERE v73311 BETWEEN v73311 AND 'KKK';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Statement 1: WITH RECURSIVE x8 AS (SELECT 0 UNION SELECT 1 FROM x9) SELECT x6.v73443, x6.v73442, EXTRACT(QUARTER FROM '2004-04-15') AS x3, x6.v73443 FROM v73441 AS x6 WHERE x6.v73442 BETWEEN '2011-10-01 00:00:00' AND '2011-10-29 02:00:00'
+    SET @sql1 = "WITH RECURSIVE x8 AS (SELECT 0 UNION SELECT 1 FROM x9) SELECT COUNT(*) INTO @cnt1 FROM v73441 AS x6 WHERE x6.v73442 BETWEEN '2011-10-01 00:00:00' AND '2011-10-29 02:00:00'";
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + @cnt1;
+
+    -- Statement 2: WITH RECURSIVE x10 AS (SELECT @start_node AS x11 UNION SELECT x7.v73714 FROM x13, x14 WHERE x7.v73714 = x7.v73714) SELECT x7.v73714, x7.v73714, COALESCE('string', NULL) AS x4, x7.v73714 FROM v73713 AS x7 WHERE x7.v73714 <= REPEAT(SUBSTRING(UPPER('Rdlpikti'), 1, 2), 8)
+    SET @start_node = 'abc';
+    SET @sql2 = "WITH RECURSIVE x10 AS (SELECT @start_node AS x11 UNION SELECT x7.v73714 FROM x13, x14 WHERE x7.v73714 = x7.v73714) SELECT COUNT(*) INTO @cnt2 FROM v73713 AS x7 WHERE x7.v73714 <= REPEAT(SUBSTRING(UPPER('Rdlpikti'), 1, 2), 8)";
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + @cnt2;
+
+    -- Statement 3: WITH x11 AS (SELECT CASE WHEN x7.v73311 IN ('0') THEN x7.v73311 END AS x13 FROM x14), x12 AS (SELECT ROW_NUMBER() OVER (ORDER BY x7.v73311), x7.v73311 FROM x16) SELECT x7.v73311, x7.v73311, ROW_NUMBER() OVER (PARTITION BY x7.v73311 ORDER BY x7.v73311, x7.v73311) AS x4, x7.v73311 FROM v73750 AS x7 WHERE x7.v73311 BETWEEN x7.v73311 AND 'KKK'
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_var3;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE v_cur;
+    SET v_done = 0;
+
+    -- Statement 4: Already used CREATE INDEX v73833 ON v73276((v73278 + 1), (v73277 + 2), (v73277 + 3), (v73277 + 4), (v73278 + 5)) in setup, no additional logic needed
+
+    -- Statement 5: UPDATE v73751 AS x1 SET v73332 = ST_GEOMFROMTEXT('POINT(139 84)') WHERE x1.v73332 = '2000-01-01 01:02:03.4567' AND MBRCONTAINS(ST_GEOMFROMTEXT('Polygon((0 0, 0 7, 7 7, 7 0, 0 0))'), v73332)
+    SET @sql5 = "UPDATE v73751 AS x1 SET v73332 = ST_GEOMFROMTEXT('POINT(139 84)') WHERE ST_AsText(x1.v73332) = 'POINT(5 5)' AND MBRCONTAINS(ST_GEOMFROMTEXT('Polygon((0 0, 0 7, 7 7, 7 0, 0 0))'), v73332)";
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5;
+    DEALLOCATE PREPARE stmt5;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Use IF/ELSEIF/ELSE for procedural logic
+    IF v_counter > 5 THEN
+        SET result = v_counter;
+    ELSEIF v_counter = 0 THEN
+        SET result = -1;
+    ELSE
+        SET result = v_counter * 2;
+    END IF;
+
+    -- Use WHILE loop for additional processing
+    WHILE p1 > 0 DO
+        SET result = result + 1;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+    -- Use REPEAT loop for more complexity
+    REPEAT
+        SET result = result + 1;
+        SET p2 = p2 - 1;
+    UNTIL p2 <= 0 END REPEAT;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+CREATE TABLE IF NOT EXISTS `table_ndpa18` (
+    `table_ndpa18_order_id` INT,
+    `table_ndpa18_customer_id` INT,
+    `table_ndpa18_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_ndpa18` (`table_ndpa18_order_id`, `table_ndpa18_customer_id`, `table_ndpa18_total_amount`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_NDPA18_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_NDPA18
+    WHERE TABLE_NDPA18_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww(ROW_NUM INT, COL_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+
+    IF COL_NUM = (MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk(-78, -61)) - -697 + (0) OR COL_NUM = ROW_NUM THEN
+        RETURN 1;
+    END IF;
+
+    IF COL_NUM > ROW_NUM OR COL_NUM < 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_I = 0;
+    WHILE V_I < COL_NUM DO
+        SET V_RESULT = (MYSQL_FUNC_COUNT_BITS_SET_oucg37(78)) - -862 + (v_result * (row_num - v_i));
+        SET V_RESULT = V_RESULT / (V_I + 1);
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_BITS_SET_oucg37----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_BITS_SET_oucg37(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    WHILE N > 0 DO
+        SET V_COUNT = (MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(3)) - -870 + (v_count) + (N & 1);
+        SET N = N >> 1;
+    END WHILE;
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+CREATE TABLE IF NOT EXISTS `table_2mw6qm` (
+    `table_2mw6qm_campaign_id` INT,
+    `table_2mw6qm_channel` INT,
+    `table_2mw6qm_budget` INT,
+    `table_2mw6qm_start_date` DATE,
+    `table_2mw6qm_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_85e570` (
+    `table_85e570_conversion_id` INT,
+    `table_85e570_campaign_id` INT,
+    `table_85e570_conversion_value` INT
+);
+
+INSERT INTO `table_2mw6qm` (`table_2mw6qm_campaign_id`, `table_2mw6qm_channel`, `table_2mw6qm_budget`, `table_2mw6qm_start_date`, `table_2mw6qm_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_85e570` (`table_85e570_conversion_id`, `table_85e570_campaign_id`, `table_85e570_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_EFFICIENCY_RATIO_ye6ipp(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_EFFICIENCY_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_2MW6QM_BUDGET, (MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(100)) - 766 + (0))
+    INTO V_BUDGET
+    FROM TABLE_2MW6QM
+    WHERE TABLE_2MW6QM_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_85E570_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_85E570
+    WHERE TABLE_85E570_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_EFFICIENCY_RATIO = (V_REVENUE * 100) / V_BUDGET;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(-21, -81)) - 764 + (v_efficiency_ratio);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+CREATE TABLE IF NOT EXISTS `table_6ac5k9` (
+    `table_6ac5k9_campaign_id` INT,
+    `table_6ac5k9_start_date` DATE,
+    `table_6ac5k9_end_date` DATE
+);
+
+INSERT INTO `table_6ac5k9` (`table_6ac5k9_campaign_id`, `table_6ac5k9_start_date`, `table_6ac5k9_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_6AC5K9_END_DATE
+    INTO V_END_DATE
+    FROM TABLE_6AC5K9
+    WHERE TABLE_6AC5K9_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN GREATEST(DATEDIFF(V_END_DATE, CURDATE()), 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ROUND_DIV_q4dauk(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_B = 0 THEN
+        RETURN -1;
+    END IF;
+
+    SET V_RESULT = ROUND(P_A / P_B);
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RUNNING_TOTALS_nu2kgk(START_VAL INT, COUNT_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 0;
+    DECLARE V_SQUARED_SUM INT DEFAULT 0;
+
+    IF COUNT_VAL <= (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(-93)) - -109 + (0) OR COUNT_VAL > 1000 THEN
+        RETURN 0;
+    END IF;
+
+    LOOP_STMT: WHILE V_COUNTER < COUNT_VAL DO
+        SET V_SUM = V_SUM + (START_VAL + V_COUNTER);
+        SET V_SQUARED_SUM = V_SQUARED_SUM + ((START_VAL + V_COUNTER) * (START_VAL + V_COUNTER));
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE LOOP_STMT;
+
+    RETURN V_SQUARED_SUM / NULLIF(V_SUM, 0);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+CREATE TABLE IF NOT EXISTS `table_y4xawp` (
+    `table_y4xawp_dept_id` INT,
+    `table_y4xawp_budget` INT,
+    `table_y4xawp_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ab2uoo` (
+    `table_ab2uoo_emp_id` INT,
+    `table_ab2uoo_dept_id` INT,
+    `table_ab2uoo_salary` INT
+);
+
+INSERT INTO `table_y4xawp` (`table_y4xawp_dept_id`, `table_y4xawp_budget`, `table_y4xawp_headcount`) VALUES (1, 1, 1);
+
+INSERT INTO `table_ab2uoo` (`table_ab2uoo_emp_id`, `table_ab2uoo_dept_id`, `table_ab2uoo_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_HEADROOM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y4XAWP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_Y4XAWP
+    WHERE TABLE_Y4XAWP_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_AB2UOO_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_AB2UOO
+    WHERE TABLE_AB2UOO_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_HEADROOM = V_BUDGET - V_TOTAL_SALARIES;
+
+    RETURN V_HEADROOM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N > 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0762_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_timediff VARCHAR(100);
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v1151963 FROM v1151962 WHERE v1151963 = 'b20438524';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Update 1: Use MATCH AGAINST with fulltext index
+    UPDATE v1151966 AS x0 
+    SET v1151967 = CONCAT('updated_', p1) 
+    WHERE MATCH(x0.v1151967) AGAINST('foobar' IN BOOLEAN MODE);
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_count = (MYSQL_FUNC_HANDLER_FUNC_IS_POSITIVE_knrt8y(13)) - -126 + (v_count) + v_update_count;
+
+    -- Update 2: Use TIMEDIFF with geometry-like string
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_timediff;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1151962 AS x1 
+        SET v1151963 = TIMEDIFF(v_timediff, '01:00:00') 
+        WHERE v1151963 = 'b20438524';
+        
+        GET DIAGNOSTICS v_update_count = ROW_COUNT;
+        SET v_count = v_count + v_update_count;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Update 3: Use parameters in WHERE clause
+    UPDATE v1151986 AS x0 
+    SET v1151988 = p2 
+    WHERE v1151987 = CONCAT('user', p1) AND v1151988 = 5;
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_count = v_count + v_update_count;
+
+    -- Update 4: Join update with IS NULL condition
+    UPDATE v1151964 AS x0 
+    INNER JOIN v1152005 AS x4 ON x0.id = x4.id 
+    SET x0.v1151965 = CONCAT('updated_', p2) 
+    WHERE x0.v1151965 IS NULL;
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_count = v_count + v_update_count;
+
+    -- Update 5: Update with multiple conditions using CASE
+    CASE 
+        WHEN p1 > 0 THEN
+            UPDATE v1152010 AS x0 
+            SET x0.v1152011 = CONCAT('mysql_', p2) 
+            WHERE v1152011 = 'mysql' AND v1152011 = 't' AND v1152011 = 'PRIMARY' AND v1152011 = 'size';
+        ELSE
+            UPDATE v1152010 AS x0 
+            SET x0.v1152011 = CONCAT('default_', p2) 
+            WHERE v1152011 = 'mysql';
+    END CASE;
+
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_count = v_count + v_update_count;
+
+    -- WHILE loop to verify updates
+    SET v_done = 0;
+    WHILE v_done < 3 DO
+        SET v_done = v_done + 1;
+CALL synth_output_1196(91, 97, @_syn_8076);
+        IF (MYSQL_FUNC_CALCULATE_PASCAL_TRIANGLE_ELEMENT_ab61ww(-56, 98)) - 55 + ((MYSQL_FUNC_CALCULATE_ORDER_REVENUE_VALUE_sw91kc(-52)) - -439 + (@_syn_8076 - 196 + (v_done = 1))) THEN
+            SELECT COUNT(*) INTO v_update_count FROM v1151966 WHERE v1151967 LIKE 'updated_%';
+        ELSEIF v_done = 2 THEN
+            SELECT COUNT(*) INTO v_update_count FROM v1151986 WHERE v1151988 = p2;
+        ELSE
+            SELECT COUNT(*) INTO v_update_count FROM v1152010 WHERE v1152011 LIKE CONCAT('mysql_', p2);
+        END IF;
+        SET v_count = v_count + v_update_count;
+    END WHILE;
+
+    SET result = v_count;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0762_proc(1, 1, @out_result);
+
+SELECT @out_result;

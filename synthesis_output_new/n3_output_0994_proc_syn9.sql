@@ -1,0 +1,453 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1170462 (v1170463 INT, v1170464 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1170907 (v1170908 VARCHAR(50), v1170909 INT);
+CREATE TABLE IF NOT EXISTS v1170911 (v1170912 VARCHAR(50), v1170913 INT, v1170914 VARCHAR(50), v1170915 VARCHAR(50), v1170916 INT, v1170917 INT, v1170918 VARCHAR(50), v1170919 VARCHAR(50), v1170920 INT, v1170921 VARCHAR(50), v1170922 INT, v1170923 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1171108 (v1171109 TEXT(66) CHARACTER SET euckr);
+INSERT INTO v1170462 VALUES (1, 'test'), (15, 'sample'), (20, 'data');
+INSERT INTO v1170907 VALUES ('2023-01-01 10:00:00', 5), ('2023-02-01 12:00:00', 8), ('invalid', 3);
+INSERT INTO v1170911 (v1170912, v1170913, v1170914, v1170915, v1170916, v1170917, v1170918, v1170919, v1170920, v1170921, v1170922, v1170923) VALUES ('test', 1, 'value1', 'desc1', 10, 100, 'ext1', 'info1', 50, 'label1', 200, 'flag1');
+INSERT INTO v1171108 VALUES ('initial data');
+
+/* -----Called: MYSQL_FUNC_SUM_OF_DIGITS_2fzxll----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(NUM);
+
+    SUM_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        SET V_SUM = V_SUM + V_DIGIT;
+        SET V_TEMP = V_TEMP DIV 10;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8(ITERATIONS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_INSIDE_CIRCLE INT DEFAULT 0;
+    DECLARE V_X DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_Y DECIMAL(10,6) DEFAULT 0.00;
+    DECLARE V_COUNTER INT DEFAULT 0;
+    DECLARE V_DISTANCE DECIMAL(10,6) DEFAULT 0.00;
+
+    IF ITERATIONS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_COUNTER = 0;
+
+    PI_LOOP: WHILE V_COUNTER < ITERATIONS DO
+        SET V_X = (MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu(-20)) - -569 + ((MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(34)) - -560 + (rand() * 2 - 1));
+        SET V_Y = RAND() * 2 - 1;
+        SET V_DISTANCE = (MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(11)) - -163 + (sqrt(v_x * v_x + v_y * v_y));
+
+        IF V_DISTANCE <= 1 THEN
+            SET V_INSIDE_CIRCLE = V_INSIDE_CIRCLE + 1;
+        END IF;
+
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE PI_LOOP;
+
+    RETURN (V_INSIDE_CIRCLE * 4) / ITERATIONS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+CREATE TABLE IF NOT EXISTS `table_exts6s` (
+    `table_exts6s_employee_id` INT,
+    `table_exts6s_department_id` INT,
+    `table_exts6s_salary` INT,
+    `table_exts6s_performance_rating` DECIMAL(3,1)
+);
+
+CREATE TABLE IF NOT EXISTS `table_4gafba` (
+    `table_4gafba_bonus_id` INT,
+    `table_4gafba_employee_id` INT,
+    `table_4gafba_bonus_amount` DECIMAL(10,2),
+    `table_4gafba_bonus_date` DATE
+);
+
+INSERT INTO `table_exts6s` (`table_exts6s_employee_id`, `table_exts6s_department_id`, `table_exts6s_salary`, `table_exts6s_performance_rating`) VALUES (1, 2, 3, 1.0);
+
+INSERT INTO `table_4gafba` (`table_4gafba_bonus_id`, `table_4gafba_employee_id`, `table_4gafba_bonus_amount`, `table_4gafba_bonus_date`) VALUES (1, 2, 1.0, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PERFORMANCE_BONUS_ss0s8d(EMPLOYEE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_PERFORMANCE_RATING DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_PREVIOUS_BONUS_TOTAL INT DEFAULT 0;
+    DECLARE V_BONUS_AMOUNT INT DEFAULT 0;
+    DECLARE V_RATING_MULTIPLIER DECIMAL(3,2) DEFAULT 1.00;
+
+    SELECT COALESCE(TABLE_EXTS6S_SALARY, 0), COALESCE(TABLE_EXTS6S_PERFORMANCE_RATING, 3.00)
+    INTO V_SALARY, V_PERFORMANCE_RATING
+    FROM TABLE_EXTS6S
+    WHERE TABLE_EXTS6S_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_4GAFBA_BONUS_AMOUNT), 0)
+    INTO V_PREVIOUS_BONUS_TOTAL
+    FROM TABLE_4GAFBA
+    WHERE TABLE_4GAFBA_EMPLOYEE_ID = EMPLOYEE_ID_PARAM;
+
+    SET V_RATING_MULTIPLIER = V_PERFORMANCE_RATING / 3.00;
+
+    SET V_BONUS_AMOUNT = (MYSQL_FUNC_PROC_MEDIUMINT_iqspxc()) - 983 + ((v_salary * v_rating_multiplier) / 10);
+
+    IF V_PERFORMANCE_RATING >= 4.5 THEN
+        SET V_BONUS_AMOUNT = (MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(80)) - -781 + (v_bonus_amount) + (V_BONUS_AMOUNT * 50 / 100);
+    END IF;
+
+    RETURN V_BONUS_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+CREATE TABLE IF NOT EXISTS `table_3honbg` (
+    `table_3honbg_product_id` INT,
+    `table_3honbg_category_id` INT,
+    `table_3honbg_price` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_oj1tlr` (
+    `table_oj1tlr_category_id` INT,
+    `table_oj1tlr_name` VARCHAR(50)
+);
+
+INSERT INTO `table_3honbg` (`table_3honbg_product_id`, `table_3honbg_category_id`, `table_3honbg_price`) VALUES (1, 2, 1.0);
+
+INSERT INTO `table_oj1tlr` (`table_oj1tlr_category_id`, `table_oj1tlr_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_PRICE_INDEX_0p73xd(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_PRICE INT DEFAULT 0;
+    DECLARE V_PRICE_INDEX INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_3HONBG_PRICE), 0), COALESCE(MAX(TABLE_3HONBG_PRICE), 0)
+    INTO V_AVG_PRICE, V_MAX_PRICE
+    FROM TABLE_3HONBG
+    WHERE TABLE_3HONBG_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_MAX_PRICE = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_PRICE_INDEX = (V_AVG_PRICE * 100) / V_MAX_PRICE;
+
+    RETURN V_PRICE_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+CREATE TABLE IF NOT EXISTS `table_v3is6r` (
+    `table_v3is6r_cmediumint` MEDIUMINT
+);
+
+INSERT INTO `table_v3is6r` (`table_v3is6r_cmediumint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_MEDIUMINT_iqspxc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_MEDIUMINT_iqspxc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT COUNT(*) INTO RESULT FROM `TABLE_V3IS6R`;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+CREATE TABLE IF NOT EXISTS `table_h9b2gz` (
+    `table_h9b2gz_campaign_id` INT,
+    `table_h9b2gz_channel` INT,
+    `table_h9b2gz_budget` INT,
+    `table_h9b2gz_start_date` DATE,
+    `table_h9b2gz_end_date` DATE,
+    `table_h9b2gz_status` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_ettoso` (
+    `table_ettoso_conversion_id` INT,
+    `table_ettoso_campaign_id` INT,
+    `table_ettoso_conversion_value` INT
+);
+
+INSERT INTO `table_h9b2gz` (`table_h9b2gz_campaign_id`, `table_h9b2gz_channel`, `table_h9b2gz_budget`, `table_h9b2gz_start_date`, `table_h9b2gz_end_date`, `table_h9b2gz_status`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_ettoso` (`table_ettoso_conversion_id`, `table_ettoso_campaign_id`, `table_ettoso_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MARKETING_ATTRIBUTION_SCORE_btpt6x(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_CONVERSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_REVENUE INT DEFAULT 0;
+    DECLARE V_CAMPAIGN_BUDGET INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(SUM(TABLE_ETTOSO_CONVERSION_VALUE), 0)
+    INTO V_TOTAL_CONVERSIONS, V_TOTAL_REVENUE
+    FROM TABLE_ETTOSO
+    WHERE TABLE_ETTOSO_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(TABLE_H9B2GZ_BUDGET, 0)
+    INTO V_CAMPAIGN_BUDGET
+    FROM TABLE_H9B2GZ
+    WHERE TABLE_H9B2GZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_CAMPAIGN_BUDGET > 0 THEN
+        SET V_ROI = ((V_TOTAL_REVENUE - V_CAMPAIGN_BUDGET) * 100) / V_CAMPAIGN_BUDGET;
+    END IF;
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu----- */
+CREATE TABLE IF NOT EXISTS `table_j2j32s` (
+    `table_j2j32s_emp_id` INT,
+    `table_j2j32s_manager_id` INT,
+    `table_j2j32s_salary` INT,
+    `table_j2j32s_name` VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS `table_0bfnrs` (
+    `table_0bfnrs_dept_id` INT,
+    `table_0bfnrs_manager_id` INT
+);
+
+INSERT INTO `table_j2j32s` (`table_j2j32s_emp_id`, `table_j2j32s_manager_id`, `table_j2j32s_salary`, `table_j2j32s_name`) VALUES (1, 1, 1, 'test');
+
+INSERT INTO `table_0bfnrs` (`table_0bfnrs_dept_id`, `table_0bfnrs_manager_id`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIND_EMPLOYEE_LEVEL_w61ycu(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LEVEL INT DEFAULT 0;
+    DECLARE V_MANAGER_ID INT;
+    DECLARE V_CURRENT_EMP INT;
+    DECLARE V_MAX_ITERATIONS INT DEFAULT 100;
+    DECLARE V_ITERATION INT DEFAULT 0;
+
+    SET V_CURRENT_EMP = (MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(57)) - 382 + (emp_id_param);
+
+    LEVEL_LOOP: WHILE V_CURRENT_EMP IS NOT NULL AND V_ITERATION < V_MAX_ITERATIONS DO
+        SELECT TABLE_J2J32S_MANAGER_ID INTO V_MANAGER_ID
+        FROM TABLE_J2J32S
+        WHERE TABLE_J2J32S_EMP_ID = V_CURRENT_EMP;
+
+        IF V_MANAGER_ID IS NULL THEN
+            LEAVE LEVEL_LOOP;
+        END IF;
+
+        SET V_LEVEL = (MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk(64)) - -651 + (v_level) + 1;
+        SET V_CURRENT_EMP = V_MANAGER_ID;
+        SET V_ITERATION = (MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-9)) - -807 + (v_iteration + 1);
+    END WHILE LEVEL_LOOP;
+
+    RETURN V_LEVEL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+CREATE TABLE IF NOT EXISTS `table_gwdcp2` (
+    `table_gwdcp2_order_id` INT,
+    `table_gwdcp2_customer_id` INT,
+    `table_gwdcp2_order_date` DATE,
+    `table_gwdcp2_total_amount` DECIMAL(10,2),
+    `table_gwdcp2_shipping_method` INT,
+    `table_gwdcp2_estimated_delivery_days` INT
+);
+
+INSERT INTO `table_gwdcp2` (`table_gwdcp2_order_id`, `table_gwdcp2_customer_id`, `table_gwdcp2_order_date`, `table_gwdcp2_total_amount`, `table_gwdcp2_shipping_method`, `table_gwdcp2_estimated_delivery_days`) VALUES (1, 2, '2024-01-01', 1.0, 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DELIVERY_RELIABILITY_SCORE_iy7kpf(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ESTIMATED_DAYS INT DEFAULT 5;
+    DECLARE V_ACTUAL_DAYS INT DEFAULT 0;
+    DECLARE V_RELIABILITY_SCORE INT DEFAULT 0;
+    DECLARE V_SHIPPING_METHOD VARCHAR(20) DEFAULT 'STANDARD';
+
+    SELECT COALESCE(TABLE_GWDCP2_ESTIMATED_DELIVERY_DAYS, 5), TABLE_GWDCP2_SHIPPING_METHOD
+    INTO V_ESTIMATED_DAYS, V_SHIPPING_METHOD
+    FROM TABLE_GWDCP2
+    WHERE TABLE_GWDCP2_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_ACTUAL_DAYS = V_ESTIMATED_DAYS + 2;
+
+    CASE V_SHIPPING_METHOD
+        WHEN 'EXPRESS' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 15);
+        WHEN 'PRIORITY' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 12);
+        WHEN 'STANDARD' THEN SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 10);
+        ELSE SET V_RELIABILITY_SCORE = 100 - ((V_ACTUAL_DAYS - V_ESTIMATED_DAYS) * 8);
+    END CASE;
+
+    RETURN GREATEST(V_RELIABILITY_SCORE, 0);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LEAVE_LABEL_4d7uqk(MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    OUTER_LABEL: WHILE V_RESULT < MAX_VAL DO
+        SET V_RESULT = V_RESULT + 1;
+        IF V_RESULT = 50 THEN
+            LEAVE OUTER_LABEL;
+        END IF;
+    END WHILE;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0994_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_col_val VARCHAR(50);
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_temp_result INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v1170908 FROM v1170907 WHERE v1170909 BETWEEN 4 AND 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN
+        SET v_counter = -1;
+    END;
+
+    -- Statement 1: UPDATE v1170462 adapted with p1
+    UPDATE v1170462 AS x1 SET v1170464 = '2000-01-01 01:03:03.456' WHERE v1170463 > p1 AND v1170463 <= p1 + 10;
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 2: UPDATE v1170907 with CONVERT_TZ and complex conditions
+    UPDATE v1170907 AS x0 SET v1170908 = CONVERT_TZ(v1170908, 'UTC', 'UTC') WHERE x0.v1170908 BETWEEN 4 AND 10 AND v1170908 >= v1170908 AND x0.v1170908 BETWEEN v1170908 AND v1170908 OR v1170908 <> LEAST(v1170908, UTC_TIME()) ORDER BY v1170909 LIMIT p2;
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 3: INSERT adapted with cursor iteration
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_col_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        INSERT INTO v1170911 (v1170917, v1170920, v1170916, v1170919, v1170914, v1170918, v1170923, v1170913, v1170915, v1170922, v1170921, v1170912) 
+        VALUES (p1 * p2, 203907, 37, 'dialysis', v_col_val, 'extents', '0', 556, 496, 108110, 'LAT SMALL N', '2003-05-16 23:53:29');
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: UPDATE v1170907 with conditional logic
+    IF p1 > p2 THEN
+        UPDATE v1170907 AS x0 SET v1170908 = @tzid WHERE v1170908 > 'f';
+    ELSE
+        UPDATE v1170907 AS x0 SET v1170908 = CONCAT('updated_', p1) WHERE v1170908 > 'f';
+    END IF;
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 5: CREATE TABLE AS SELECT with error handling
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLWARNING BEGIN END;
+        CREATE TABLE IF NOT EXISTS v1171108_temp (v1171109 TEXT(66) CHARACTER SET euckr) AS 
+        SELECT CASE 10 WHEN 8 THEN 'MED PKG' WHEN 2 THEN '29' ELSE 'MED P' END AS v1171109 
+        FROM dual 
+        GROUP BY PRINTF('Ar', 9) <= 'BUILDING';
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Final result calculation using loop and case
+    WHILE (MYSQL_FUNC_SUM_OF_DIGITS_2fzxll(10)) - -4 + (v_counter < 100) DO
+        SET v_counter = v_counter + 1;
+        CASE 
+            WHEN (MYSQL_FUNC_MONTE_CARLO_PI_ITERATIONS_8s5mu8(-28)) - -749 + (v_counter > 50) THEN
+                SET v_temp_result = v_temp_result + 1;
+            WHEN v_counter > 20 THEN
+                SET v_temp_result = v_temp_result + 2;
+            ELSE
+                SET v_temp_result = v_temp_result + 3;
+        END CASE;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0994_proc(1, 1, @out_result);
+
+SELECT @out_result;

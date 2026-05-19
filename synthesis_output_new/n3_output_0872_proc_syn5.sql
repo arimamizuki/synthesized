@@ -1,0 +1,490 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1160844 (v1160845 JSON);
+CREATE TABLE IF NOT EXISTS v1160974 (v1160975 INT);
+CREATE TABLE IF NOT EXISTS v1160816 (v1160975 INT);
+CREATE TABLE IF NOT EXISTS v1161017 (v1161018 INT, v1161020 VARCHAR(50), v1161021 INT);
+CREATE TABLE IF NOT EXISTS v1160901 (v1160902 INT);
+CREATE TABLE IF NOT EXISTS v1160967 (v1160902 INT);
+CREATE TABLE IF NOT EXISTS v1160999 (v1161000 DECIMAL(5,1));
+INSERT INTO v1160844 VALUES (JSON_ARRAY(1, 2, 3)), ('10'), ('20');
+INSERT INTO v1160974 VALUES (1), (1), (2), (3);
+INSERT INTO v1160816 VALUES (1), (1), (4), (5);
+INSERT INTO v1161017 VALUES (1, 'matt', 100), (2, 'john', 200), (3, 'matt', 300);
+INSERT INTO v1160901 VALUES (104), (105), (106);
+INSERT INTO v1160967 VALUES (104), (105), (107);
+INSERT INTO v1160999 VALUES (0.0), (0.5), (1.0), (0.3);
+
+/* -----Dependency for: n3_output_1371_proc----- */
+CREATE TABLE IF NOT EXISTS v1236591 (
+    v1236591_id INT AUTO_INCREMENT PRIMARY KEY,
+    v1236592 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1236292 (
+    v1236296 DATETIME,
+    v1236293 DATETIME,
+    v1236295 DATETIME
+);
+CREATE TABLE IF NOT EXISTS v1236351 (
+    v1236352 INT
+);
+CREATE TABLE IF NOT EXISTS v1236816 (
+    v1236816_id INT AUTO_INCREMENT PRIMARY KEY,
+    v1236816_val VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1236613 (
+    v1236614 VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1236504 (
+    v1236504_id INT AUTO_INCREMENT PRIMARY KEY,
+    v1236504_val VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1236854 (
+    v1236855 INT
+);
+CREATE TABLE IF NOT EXISTS v1236894 (
+    v1236895 INT
+);
+INSERT INTO v1236591 (v1236592) VALUES ('test1'), ('test2'), ('test3');
+INSERT INTO v1236292 VALUES (NULL, NULL, NULL);
+INSERT INTO v1236351 VALUES (10), (20), (30);
+INSERT INTO v1236816 (v1236816_val) VALUES ('A'), ('B'), ('C');
+INSERT INTO v1236613 VALUES ('A'), ('B'), ('C');
+INSERT INTO v1236504 (v1236504_val) VALUES ('X'), ('Y'), ('Z');
+INSERT INTO v1236854 VALUES (1), (2), (3), (10), (-5), (-10);
+
+/* -----Called: n3_output_1371_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1371_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_avg_val DECIMAL(10,2) DEFAULT 0;
+    DECLARE v_cur_val INT DEFAULT 0;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1236855 FROM v1236854 WHERE v1236855 <= -9 ORDER BY v1236855;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with COALESCE and TIMESTAMP
+    UPDATE v1236591 AS x1 
+    SET x1.v1236592 = p1 
+    WHERE v1236592 IN (COALESCE(v1236592, TIMESTAMP('2003-09-10')), x1.v1236592);
+
+    -- Statement 2: INSERT with STR_TO_DATE
+    INSERT INTO v1236292 (v1236296, v1236293, v1236295) 
+    VALUES (STR_TO_DATE('2004.12.12 10:22:59', '%Y.%m.%d %T'), 
+            STR_TO_DATE('2019-12-31', '%Y-%m-%d'), 
+            STR_TO_DATE('00.00.0000', '%d.%m.%Y'));
+
+    -- Statement 3: Multi-table UPDATE with JOIN
+    UPDATE v1236351 AS x1, v1236816 AS x7, v1236613 AS x3 
+    JOIN v1236504 AS x8 ON (x3.v1236614 = x3.v1236614 AND x3.v1236614 = 'B' AND x3.v1236614 = x3.v1236614) 
+    SET v1236352 = p1 
+    WHERE v1236352 = 10;
+
+    -- Statement 4: CREATE TABLE AS SELECT with TO_SECONDS
+    CREATE TABLE IF NOT EXISTS v1236894_new (v1236895 INT) AS 
+    SELECT TO_SECONDS(NULL) AS x2;
+
+    -- Procedural logic with IF/ELSE and WHILE loop
+    IF p1 > 0 THEN
+        -- Statement 5: UPDATE with complex ORDER BY and window functions
+        UPDATE v1236854 AS x1 
+        SET v1236855 = p2 
+        WHERE v1236855 <= -9 
+        ORDER BY CASE 
+            WHEN AVG(SUM(v1236855)) OVER (ORDER BY MONTH(v1236855) RANGE BETWEEN 118 PRECEDING AND 1 FOLLOWING) IS NULL 
+            THEN 1 
+            ELSE 0 
+        END, 
+        AVG(SUM(v1236855)) OVER (ORDER BY MONTH(v1236855) RANGE BETWEEN 118 PRECEDING AND 1 FOLLOWING),
+        CASE WHEN '2002' = '2002' THEN 'Y' ELSE 0 END,
+        CASE WHEN X(1, 1) IS NULL THEN 1 ELSE 0 END,
+        X(1, 1) 
+        LIMIT 400;
+
+        -- Cursor to iterate over updated values
+        OPEN cur;
+        read_loop: LOOP
+            FETCH cur INTO v_cur_val;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur;
+    ELSE
+        -- REPEAT loop as alternative procedural structure
+        REPEAT
+            SET v_counter = v_counter + 1;
+        UNTIL v_counter >= p2 END REPEAT;
+    END IF;
+
+    -- Use CASE/WHEN for final result calculation
+    SET result = CASE 
+        WHEN v_counter > 100 THEN v_counter * p1
+        WHEN v_counter > 50 THEN v_counter * p2
+        ELSE v_counter + p1 + p2
+    END;
+
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 1;
+
+    MY_LOOP: LOOP
+        IF V_I MOD 2 = 1 THEN
+            SET V_SUM = (MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(20)) - 70 + (v_sum + v_i);
+        END IF;
+        SET V_I = V_I + 1;
+        IF V_I > N THEN
+            LEAVE MY_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht----- */
+CREATE TABLE IF NOT EXISTS `table_kforn5` (
+    `table_kforn5_customer_id` INT,
+    `table_kforn5_order_id` INT,
+    `table_kforn5_order_date` DATE
+);
+
+INSERT INTO `table_kforn5` (`table_kforn5_customer_id`, `table_kforn5_order_id`, `table_kforn5_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_FIRST_ORDER_MONTH_ckj4ht(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_FIRST_ORDER_DATE DATE;
+
+    SELECT MIN(TABLE_KFORN5_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM TABLE_KFORN5
+    WHERE TABLE_KFORN5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(11)) - 630 + ((MYSQL_FUNC_CALCULATE_POWER_y2j5yj(-1, -27)) - 377 + ((MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(-52)) - 167 + ((MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(-95)) - -934 + (0))));
+    END IF;
+
+    RETURN MONTH(V_FIRST_ORDER_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+CREATE TABLE IF NOT EXISTS `table_an7207` (
+    `table_an7207_emp_id` INT,
+    `table_an7207_manager_id` INT,
+    `table_an7207_department_id` INT,
+    `table_an7207_salary` INT,
+    `table_an7207_hire_date` DATE
+);
+
+INSERT INTO `table_an7207` (`table_an7207_emp_id`, `table_an7207_manager_id`, `table_an7207_department_id`, `table_an7207_salary`, `table_an7207_hire_date`) VALUES (1, 1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TENURE_ADJUSTED_SALARY_ly64bm(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY INT DEFAULT 0;
+    DECLARE V_TENURE_YEARS INT DEFAULT 0;
+    DECLARE V_ADJUSTED_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_AN7207_SALARY, TIMESTAMPDIFF(YEAR, TABLE_AN7207_HIRE_DATE, CURDATE())
+    INTO V_SALARY, V_TENURE_YEARS
+    FROM TABLE_AN7207
+    WHERE TABLE_AN7207_EMP_ID = EMP_ID_PARAM;
+
+    SET V_ADJUSTED_SALARY = V_SALARY * (1 + V_TENURE_YEARS * 0.02);
+
+    RETURN FLOOR(V_ADJUSTED_SALARY);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+CREATE TABLE IF NOT EXISTS `table_42vfje` (
+    `table_42vfje_customer_id` INT,
+    `table_42vfje_country` INT,
+    `table_42vfje_registration_date` DATE
+);
+
+INSERT INTO `table_42vfje` (`table_42vfje_customer_id`, `table_42vfje_country`, `table_42vfje_registration_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CUSTOMER_REGISTRATION_YEAR_uw73gn(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_42VFJE
+    WHERE TABLE_42VFJE_COUNTRY = COUNTRY_PARAM AND YEAR(TABLE_42VFJE_REGISTRATION_DATE) = YEAR(CURDATE());
+
+    RETURN (MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(-58)) - -294 + (v_customer_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+CREATE TABLE IF NOT EXISTS `table_crekql` (
+    `table_crekql_campaign_id` INT,
+    `table_crekql_channel` INT,
+    `table_crekql_budget` INT,
+    `table_crekql_start_date` DATE,
+    `table_crekql_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_f6yunz` (
+    `table_f6yunz_conversion_id` INT,
+    `table_f6yunz_campaign_id` INT,
+    `table_f6yunz_conversion_value` INT
+);
+
+INSERT INTO `table_crekql` (`table_crekql_campaign_id`, `table_crekql_channel`, `table_crekql_budget`, `table_crekql_start_date`, `table_crekql_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_f6yunz` (`table_f6yunz_conversion_id`, `table_f6yunz_campaign_id`, `table_f6yunz_conversion_value`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_MULTI_CHANNEL_ROI_c6so1h(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_ROI INT DEFAULT 0;
+
+    SELECT TABLE_CREKQL_CHANNEL, COALESCE(TABLE_CREKQL_BUDGET, 0)
+    INTO V_CHANNEL, V_BUDGET
+    FROM TABLE_CREKQL
+    WHERE TABLE_CREKQL_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_F6YUNZ_CONVERSION_VALUE), 0)
+    INTO V_REVENUE
+    FROM TABLE_F6YUNZ
+    WHERE TABLE_F6YUNZ_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_BUDGET = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_ROI = (MYSQL_FUNC_SIGNAL_FUNC_MODULO_zwano2(96, 73)) - -57 + (((v_revenue - v_budget) * 100) / v_budget);
+
+    RETURN V_ROI;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_MODULO_zwano2----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_MODULO_zwano2(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF B = 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'MODULO BY ZERO IS NOT ALLOWED';
+    END IF;
+    RETURN A MOD B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_POWER_y2j5yj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_POWER_y2j5yj(BASE INT, EXPONENT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 0;
+
+    IF EXPONENT < 0 THEN
+        RETURN 0;
+    END IF;
+
+    POWER_LOOP: WHILE V_COUNTER < EXPONENT DO
+        SET V_RESULT = V_RESULT * BASE;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE POWER_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+CREATE TABLE IF NOT EXISTS `table_9xgqho` (
+    `table_9xgqho_product_id` INT,
+    `table_9xgqho_category_id` INT,
+    `table_9xgqho_price` DECIMAL(10,2),
+    `table_9xgqho_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_izucf1` (
+    `table_izucf1_category_id` INT,
+    `table_izucf1_category_name` VARCHAR(50)
+);
+
+INSERT INTO `table_9xgqho` (`table_9xgqho_product_id`, `table_9xgqho_category_id`, `table_9xgqho_price`, `table_9xgqho_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_izucf1` (`table_izucf1_category_id`, `table_izucf1_category_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_CATEGORY_AVERAGE_PRICE_b6u1p1(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE INT;
+    DECLARE V_MIN_PRICE INT;
+    DECLARE V_MAX_PRICE INT;
+    DECLARE V_PRODUCT_COUNT INT;
+
+    SELECT COALESCE(AVG(TABLE_9XGQHO_PRICE), (MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(90)) - 112 + (0)), MIN(TABLE_9XGQHO_PRICE), MAX(TABLE_9XGQHO_PRICE), COUNT(*)
+    INTO V_AVG_PRICE, V_MIN_PRICE, V_MAX_PRICE, V_PRODUCT_COUNT
+    FROM TABLE_9XGQHO
+    WHERE TABLE_9XGQHO_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    IF V_PRODUCT_COUNT = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_AVG_PRICE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+CREATE TABLE IF NOT EXISTS `table_3iwn00` (
+    `table_3iwn00_emp_id` INT,
+    `table_3iwn00_salary` INT
+);
+
+INSERT INTO `table_3iwn00` (`table_3iwn00_emp_id`, `table_3iwn00_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SALARY_INDEX_q23ris(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_3IWN00_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_3IWN00
+    WHERE TABLE_3IWN00_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 1000);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0872_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_json_val JSON;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cur_val INT;
+    DECLARE v_temp INT;
+    
+    DECLARE cur CURSOR FOR SELECT v1160975 FROM v1160974 WHERE v1160975 = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1000;
+
+    -- Process first UPDATE with JSON
+    SELECT v1160845 INTO v_json_val FROM v1160844 LIMIT 1;
+    IF JSON_TYPE(v_json_val) = 'ARRAY' THEN
+        UPDATE v1160844 AS x0 SET v1160845 = JSON_EXTRACT(v1160845, '$[0]') WHERE JSON_TYPE(v1160845) = 'ARRAY';
+    ELSE
+        UPDATE v1160844 AS x0 SET v1160845 = CAST((1 * CAST(v1160845 AS SIGNED)) AS JSON) WHERE JSON_TYPE(v1160845) != 'ARRAY';
+    END IF;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process second UPDATE with LEFT JOIN and loop
+    SET @a = p1;
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cur_val;
+        IF (MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_ODD_SUM_4rrtw2(-80)) - -964 + (v_done) THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1160974 AS x1 
+        LEFT JOIN v1160816 AS x2 ON x1.v1160975 = x2.v1160975 
+        SET x1.v1160975 = @a 
+        WHERE x1.v1160975 = v_cur_val;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Process third UPDATE with CASE
+    SET v_temp = 0;
+CALL n3_output_1371_proc(-87, -26, @_syn_9298);
+    WHILE @_syn_9298 - @_io_result + (v_temp < 3) DO
+        UPDATE v1161017 AS x1 
+        SET v1161020 = 'bbbb' 
+        WHERE x1.v1161020 = 'matt' 
+        AND x1.v1161020 = CONCAT('', x1.v1161018)
+        AND x1.v1161018 = x1.v1161021;
+        SET v_counter = v_counter + ROW_COUNT();
+        SET v_temp = v_temp + 1;
+    END WHILE;
+
+    -- Process fourth UPDATE with NATURAL JOIN
+    CASE 
+        WHEN p2 > 0 THEN
+            UPDATE v1160901 AS x1 
+            NATURAL JOIN v1160967 AS x4 
+            SET x1.v1160902 = '107' 
+            WHERE x1.v1160902 = 104 OR x1.v1160902 = 105;
+        ELSE
+            UPDATE v1160901 AS x1 
+            NATURAL JOIN v1160967 AS x4 
+            SET x1.v1160902 = '108' 
+            WHERE x1.v1160902 = 104 OR x1.v1160902 = 105;
+    END CASE;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process fifth UPDATE with IN clause
+    SET @g = p1 + p2;
+    UPDATE v1160999 AS x0 
+    SET v1161000 = @g 
+    WHERE v1161000 IN (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9);
+    SET v_counter = v_counter + ROW_COUNT();
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0872_proc(1, 1, @out_result);
+
+SELECT @out_result;

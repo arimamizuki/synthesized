@@ -1,0 +1,395 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v32405 (v32406 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v32641 (v32406 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v32620 (v32621 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v32580 (v32621 GEOMETRY);
+CREATE TABLE IF NOT EXISTS v32435 (v32435_id INT, v32435_data VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v31871 (v31872 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v32589 (v32590 GEOMETRY, v32591 INT);
+CREATE TABLE IF NOT EXISTS v32087 (dummy INT);
+CREATE TABLE IF NOT EXISTS x5 (x8 INT, x9 INT);
+CREATE TABLE IF NOT EXISTS x11 (x10 INT);
+INSERT INTO v32405 VALUES ('xep80'), ('1'), ('ger'), ('ts2'), ('4'), ('999999'), ('256');
+INSERT INTO v32641 VALUES ('xep80'), ('1'), ('ger'), ('ts2'), ('4'), ('999999'), ('256');
+INSERT INTO v32620 VALUES (ST_GEOMFROMTEXT('POINT(1 1)')), (ST_GEOMFROMTEXT('POINT(2 2)'));
+INSERT INTO v32580 VALUES (ST_GEOMFROMTEXT('POINT(1 1)')), (ST_GEOMFROMTEXT('POINT(3 3)'));
+INSERT INTO v32435 VALUES (1, 'test1'), (2, 'test2');
+INSERT INTO v31871 VALUES ('v7n v5n v3l'), ('normal'), ('100000000000000000000000000000000000');
+INSERT INTO v32589 VALUES (ST_GEOMFROMTEXT('POINT(1 3)'), 1), (ST_GEOMFROMTEXT('POINT(2 4)'), 2);
+INSERT INTO v32087 VALUES (0);
+INSERT INTO x5 VALUES (1, 1);
+INSERT INTO x11 VALUES (1);
+
+/* -----Dependency for: n3_output_1143_proc----- */
+CREATE TABLE IF NOT EXISTS v1192506 (v1192508 VARCHAR(100), v1192510 VARCHAR(100), v1192509 DATE);
+CREATE TABLE IF NOT EXISTS v1192536 (v1192539 VARCHAR(36), v1192543 VARCHAR(36), v1192545 VARCHAR(36), v1192538 VARCHAR(36), v1192537 VARCHAR(36), v1192540 VARCHAR(36), v1192546 VARCHAR(36), v1192544 VARCHAR(36));
+CREATE TABLE IF NOT EXISTS v1192663 (v1192664 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS test_table (id INT);
+CREATE TABLE IF NOT EXISTS v1192715 (id INT);
+CREATE TABLE IF NOT EXISTS v1192657 (v1192658 INT, v1192659 VARCHAR(100));
+INSERT INTO v1192506 VALUES ('1e-5', '0101', '1997-06-15'), ('1e-10', '0101', '1999-01-01'), ('test', '0101', '1998-06-15');
+INSERT INTO v1192536 VALUES (UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID());
+INSERT INTO v1192663 VALUES ('value1'), ('value2'), ('x'), ('x'), ('value3'), ('value4');
+INSERT INTO test_table VALUES (1), (2), (3);
+INSERT INTO v1192715 VALUES (1), (2), (3);
+INSERT INTO v1192657 VALUES (100, 'event44331_2'), (200, 'other_event'), (300, 'event44331_2');
+
+/* -----Called: n3_output_1143_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1143_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected INT DEFAULT 0;
+    DECLARE v_id INT;
+    DECLARE v_temp_ts INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT id FROM test_table WHERE UNCOMPRESS(id) IS NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1;
+
+    -- Statement 1: UPDATE with CONCAT and date conditions
+    UPDATE v1192506 AS x0 
+    SET v1192508 = CONCAT('1e-', v1192508) 
+    WHERE v1192510 >= '0000-00-00 00:00:00' 
+      AND v1192509 < '1998-12-29 00:00:00' 
+      AND CONCAT(v1192510, v1192508) = '0101';
+    SET v_affected = ROW_COUNT();
+    SET v_counter = v_counter + v_affected;
+
+    -- Statement 2: INSERT with UUID values
+    INSERT INTO v1192536 (v1192539, v1192543, v1192545, v1192538, v1192537, v1192540, v1192546, v1192544) 
+    VALUES (UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID(), UUID());
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: INSERT with F1() calls (assuming F1() returns a value)
+    INSERT INTO v1192663 (v1192664) VALUES (F1()), (F1()), ('x'), ('x'), (F1()), (F1()), (F1()), (F1()), ('x'), ('x');
+    SET v_counter = v_counter + 10;
+
+    -- Statement 4: UPDATE with NATURAL JOIN and UNCOMPRESS check
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_temp_ts = UNIX_TIMESTAMP(NOW());
+        UPDATE test_table AS x1 
+        NATURAL JOIN v1192715 AS x6 
+        SET x1.id = v_temp_ts 
+        WHERE x1.id = v_id;
+        SET v_counter = v_counter + ROW_COUNT();
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: UPDATE with ORDER BY and LIMIT
+    UPDATE v1192657 AS x1 
+    SET v1192658 = v_counter 
+    WHERE v1192659 = 'event44331_2' 
+    ORDER BY v1192659 DESC 
+    LIMIT 12;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Final processing with conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = -1;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_SCORE_q3frwd----- */
+CREATE TABLE IF NOT EXISTS `table_yl66tm` (
+    `table_yl66tm_customer_id` INT,
+    `table_yl66tm_status` VARCHAR(50)
+);
+
+INSERT INTO `table_yl66tm` (`table_yl66tm_customer_id`, `table_yl66tm_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_SCORE_q3frwd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_SCORE_q3frwd(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT TABLE_YL66TM_STATUS
+    INTO V_STATUS
+    FROM TABLE_YL66TM
+    WHERE TABLE_YL66TM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    CASE V_STATUS
+        WHEN 'ACTIVE' THEN RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(-55)) - -818 + (100);
+        WHEN 'PAUSED' THEN RETURN 50;
+        WHEN 'CANCELLED' THEN RETURN 0;
+        WHEN 'PENDING' THEN RETURN 25;
+        ELSE RETURN 10;
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+CREATE TABLE IF NOT EXISTS `table_ah3i1s` (
+    `table_ah3i1s_campaign_id` INT,
+    `table_ah3i1s_budget` INT
+);
+
+INSERT INTO `table_ah3i1s` (`table_ah3i1s_campaign_id`, `table_ah3i1s_budget`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_AH3I1S_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_AH3I1S
+    WHERE TABLE_AH3I1S_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN V_BUDGET / 1000;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+CREATE TABLE IF NOT EXISTS `table_qx7ezz` (
+    `table_qx7ezz_customer_id` INT,
+    `table_qx7ezz_registration_date` DATE,
+    `table_qx7ezz_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_4l1v2g` (
+    `table_4l1v2g_order_id` INT,
+    `table_4l1v2g_customer_id` INT,
+    `table_4l1v2g_order_date` DATE,
+    `table_4l1v2g_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_qx7ezz` (`table_qx7ezz_customer_id`, `table_qx7ezz_registration_date`, `table_qx7ezz_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_4l1v2g` (`table_4l1v2g_order_id`, `table_4l1v2g_customer_id`, `table_4l1v2g_order_date`, `table_4l1v2g_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RECENT_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HISTORICAL_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_TREND_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_RECENT_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE >= DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    SELECT COALESCE(AVG(TABLE_4L1V2G_TOTAL_AMOUNT), 0)
+    INTO V_HISTORICAL_AVG
+    FROM TABLE_4L1V2G
+    WHERE TABLE_4L1V2G_CUSTOMER_ID = CUSTOMER_ID_PARAM
+    AND TABLE_4L1V2G_ORDER_DATE < DATE_SUB(CURDATE(), INTERVAL 90 DAY);
+
+    IF V_HISTORICAL_AVG = 0 THEN
+        RETURN 100;
+    END IF;
+
+    SET V_TREND_SCORE = ((V_RECENT_AVG - V_HISTORICAL_AVG) * 100) / V_HISTORICAL_AVG;
+
+    RETURN V_TREND_SCORE;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+CREATE TABLE IF NOT EXISTS `table_xuw9z4` (
+    `table_xuw9z4_emp_id` INT,
+    `table_xuw9z4_department_id` INT
+);
+
+INSERT INTO `table_xuw9z4` (`table_xuw9z4_emp_id`, `table_xuw9z4_department_id`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_EMPLOYEES_COUNT_jqdgnj(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_XUW9Z4
+    WHERE TABLE_XUW9Z4_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_PROC_SMALLINT_2839ti()) - -79 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_SMALLINT_2839ti----- */
+CREATE TABLE IF NOT EXISTS `table_hoexfu` (
+    `table_hoexfu_csmallint` SMALLINT
+);
+
+INSERT INTO `table_hoexfu` (`table_hoexfu_csmallint`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_SMALLINT_2839ti----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_SMALLINT_2839ti() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_HOEXFU_CSMALLINT INTO RESULT FROM `TABLE_HOEXFU` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o(63, -73)) - -416 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(55)) - -95 + (result));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_INCOME_3qm0om(TAXABLE INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TAX DECIMAL(10,2);
+
+    CASE
+        WHEN TAXABLE <= 10000 THEN SET V_TAX = TAXABLE * 0.10;
+        WHEN TAXABLE <= 50000 THEN SET V_TAX = 1000 + (TAXABLE - 10000) * 0.20;
+        WHEN TAXABLE <= 100000 THEN SET V_TAX = 9000 + (TAXABLE - 50000) * 0.30;
+        ELSE SET V_TAX = 24000 + (TAXABLE - 100000) * 0.40;
+    END CASE;
+
+    RETURN V_TAX;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SECTOR_AREA_ny1k4o(RADIUS INT, ANGLE_DEGREES INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+    SET V_AREA = 3.14159 * RADIUS * RADIUS * ANGLE_DEGREES / 360;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(87)) - 599 + (floor(v_area));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn----- */
+CREATE TABLE IF NOT EXISTS `table_jgwy5p` (
+    `table_jgwy5p_order_id` INT,
+    `table_jgwy5p_customer_id` INT,
+    `table_jgwy5p_order_date` DATE
+);
+
+INSERT INTO `table_jgwy5p` (`table_jgwy5p_order_id`, `table_jgwy5p_customer_id`, `table_jgwy5p_order_date`) VALUES (1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_LAST_ORDER_DAYS_1ewkhn(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_ORDER DATE;
+
+    SELECT MAX(TABLE_JGWY5P_ORDER_DATE)
+    INTO V_LAST_ORDER
+    FROM TABLE_JGWY5P
+    WHERE TABLE_JGWY5P_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_LAST_ORDER IS NULL THEN
+        RETURN 999;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_LAST_ORDER);
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0904(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_text VARCHAR(50);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v32621 FROM v32620;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: UPDATE with JOIN (adapted with dynamic SQL)
+    SET @sql1 = 'UPDATE v32405 AS x0 JOIN v32641 AS x3 ON x0.v32406 = x0.v32406 SET x0.v32406 = ? WHERE x0.v32406 = ? AND x0.v32406 = ? AND x0.v32406 = ? AND ? >= x0.v32406 AND ? <= x0.v32406 AND x0.v32406 = x0.v32406 AND x0.v32406 = x0.v32406 AND x0.v32406 = x0.v32406 AND (x0.v32406 = ? OR x0.v32406 = ? OR x0.v32406 = ?) AND x0.v32406 = ?';
+    PREPARE stmt1 FROM @sql1;
+    SET @a1 = 'ts2', @a2 = 'xep80', @a3 = '1', @a4 = 'ger', @a5 = '2001-12-21 23:14:24', @a6 = '2001-12-21 23:14:24', @a7 = '4', @a8 = '999999', @a9 = '1', @a10 = '256';
+    EXECUTE stmt1 USING @a1, @a2, @a3, @a4, @a5, @a6, @a7, @a8, @a9, @a10;
+    DEALLOCATE PREPARE stmt1;
+
+    -- Statement 2: SELECT with spatial MBRCONTAINS (use CURSOR)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_geom;
+        IF (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_STATUS_SCORE_q3frwd(-74)) - -317 + (v_done) THEN
+            LEAVE read_loop;
+        END IF;
+        SELECT COUNT(*) INTO v_counter FROM v32580 WHERE MBRCONTAINS(v_geom, v_geom);
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 3: Simple SELECT (use SELECT INTO with condition)
+    SELECT COUNT(*) INTO v_counter FROM v32435 WHERE v32435_id = p1;
+    IF (MYSQL_FUNC_CALCULATE_CUSTOMER_VALUE_TREND_zlhpaw(-20)) - 877 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_BUDGET_INDEX_z492kd(-55)) - -818 + (v_counter > 0)) THEN
+        SET v_counter = v_counter + 100;
+    ELSE
+        SET v_counter = 0;
+    END IF;
+
+    -- Statement 4: UPDATE with WHERE (use dynamic SQL with WHILE loop)
+    SET @counter4 = 0;
+    WHILE @counter4 < 3 DO
+        SET @sql4 = 'UPDATE v31871 SET v31872 = ? WHERE v31872 > ?';
+        PREPARE stmt4 FROM @sql4;
+        SET @b1 = 'updated_value', @b2 = '100000000000000000000000000000000000';
+        EXECUTE stmt4 USING @b1, @b2;
+        DEALLOCATE PREPARE stmt4;
+        SET @counter4 = @counter4 + 1;
+    END WHILE;
+
+    -- Statement 5: Complex UPDATE with LEFT JOIN and spatial (use CASE/WHEN)
+    CASE 
+        WHEN p2 = 1 THEN
+            SET @sql5 = 'UPDATE v32589 AS x0 LEFT JOIN v32087 AS x4 LEFT JOIN x5 ON x5.x8 = x11.x10 ON (((x0.v32590 = x0.v32590 AND x0.v32590 IS NULL) OR (x0.v32591 = x0.v32590 AND x0.v32590 = ?)) AND ((x0.v32590 = x0.ST_GEOMFROMWKB(ST_ASWKB(POINT(1, 3))) AND x0.v32591 = 2) OR (x0.ST_GEOMFROMWKB(ST_ASWKB(POINT(1, 3))) = x0.v32591 AND x0.v32590 = 2))) SET x0.v32590 = ? WHERE x0.v32591 = ? AND ST_GEOMFROMWKB(ST_ASWKB(POINT(1, 3))) = ?';
+            PREPARE stmt5 FROM @sql5;
+            SET @c1 = 'ustralia', @c2 = ST_ASWKB(POINT(1,3)), @c3 = 1, @c4 = 2;
+            EXECUTE stmt5 USING @c1, @c2, @c3, @c4;
+            DEALLOCATE PREPARE stmt5;
+            SET v_counter = v_counter + 1000;
+        ELSE
+            SET v_counter = v_counter + 500;
+    END CASE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0904(1, 1, @out_result);
+
+SELECT @out_result;

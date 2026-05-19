@@ -1,0 +1,470 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1491983 (v1491985 INT, v1491979_id INT);
+CREATE TABLE IF NOT EXISTS v1492092 (v1492093 BIGINT(5) NOT NULL DEFAULT 1, v1492094 VARCHAR(55), INDEX(v1492094));
+CREATE TABLE IF NOT EXISTS test_table (id VARCHAR(40));
+CREATE TABLE IF NOT EXISTS v1492206 (v1492207 DECIMAL(25,7));
+CREATE TABLE IF NOT EXISTS v1491979 (x2 VARCHAR(100));
+INSERT INTO v1491983 VALUES (0, 1), (0, 2), (0, 3);
+INSERT INTO v1492092 (v1492093, v1492094) VALUES (1, 'a'), (2, 'b'), (3, 'c');
+INSERT INTO test_table (id) VALUES ('test1'), ('test2');
+INSERT INTO v1492206 (v1492207) VALUES (99991231235959.0000009), (99991231235959.9);
+INSERT INTO v1491979 (x2) VALUES ('10:50:50.123'), ('11:30:00.456');
+
+/* -----Dependency for: n3_output_0489_proc----- */
+CREATE TABLE IF NOT EXISTS v1139220 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1139221 DATETIME DEFAULT NULL,
+    v1139222 VARCHAR(1000) DEFAULT NULL
+);
+CREATE TABLE IF NOT EXISTS v1139201 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1139221 INT DEFAULT NULL,
+    v1139202 INT DEFAULT NULL
+);
+CREATE TABLE IF NOT EXISTS v1139209 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1139210 INT DEFAULT NULL,
+    v1139211 VARCHAR(10) DEFAULT NULL
+);
+CREATE TABLE IF NOT EXISTS v1139188 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1139210 INT DEFAULT NULL,
+    v1139211 VARCHAR(10) DEFAULT NULL
+);
+CREATE TABLE IF NOT EXISTS v1139240 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1139202 INT DEFAULT NULL
+);
+INSERT INTO v1139220 (v1139221) VALUES (NULL), ('2023-01-15'), ('2022-06-06'), (NULL);
+INSERT INTO v1139201 (v1139221, v1139202) VALUES (10, 5), (20, 3), (5, 8), (30, 2);
+INSERT INTO v1139209 (v1139210, v1139211) VALUES (3, 'x'), (8, 'y'), (1, 'x'), (12, 'z');
+INSERT INTO v1139188 (v1139210, v1139211) VALUES (5, 'x'), (2, 'y'), (7, 'x'), (9, 'w');
+INSERT INTO v1139240 (v1139202) VALUES (10), (5), (11), (3);
+
+/* -----Called: n3_output_0489_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0489_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_temp_date DATETIME;
+    DECLARE v_temp_int INT;
+    DECLARE v_temp_str VARCHAR(10);
+    DECLARE v_case_result INT;
+    DECLARE v_update_count INT DEFAULT 0;
+    
+    DECLARE cur1 CURSOR FOR 
+        SELECT v1139221 FROM v1139220 WHERE v1139221 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET v_counter = -1;
+    END;
+
+    -- Statement 1: INSERT with NULL value adapted using input parameters
+    INSERT INTO v1139220 (v1139221) VALUES 
+        (CASE WHEN p1 > 0 THEN '2024-01-01' ELSE NULL END),
+        (CASE WHEN p2 > 0 THEN '2024-06-15' ELSE NULL END);
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 2: UPDATE with date condition adapted using variables
+    SET v_temp_date = '2017-06-06 00:00:00';
+    UPDATE v1139220 AS x0 
+    SET v1139221 = v_temp_date 
+    WHERE v1139221 > DATE_SUB(NOW(), INTERVAL p1 DAY);
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 3: UPDATE with JOIN and complex condition adapted
+    UPDATE v1139220 AS x0 
+    JOIN v1139201 AS x1 ON (x0.v1139221 = x0.v1139221) 
+    SET v1139222 = REPEAT('a', 800) 
+    WHERE (v1139222 IS NULL OR LENGTH(v1139222) < 5 OR v1139221 > DATE('2015-01-01')) 
+      AND (x0.v1139222 IS NULL AND x0.v1139221 IS NOT NULL)
+    LIMIT 5;
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 4: UPDATE with RIGHT OUTER JOIN and ORDER BY/LIMIT adapted
+    SET @k = p1 + p2;
+    UPDATE v1139209 AS x1 
+    RIGHT OUTER JOIN v1139188 AS x5 ON x1.v1139211 = x1.v1139211 
+    SET v1139210 = @k 
+    WHERE v1139211 = 'x' AND v1139210 > 1 AND v1139211 >= '1'
+    ORDER BY v1139210 
+    LIMIT 12;
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 5: UPDATE with NATURAL JOIN and CASE expression adapted
+    UPDATE v1139201 AS x0 
+    NATURAL JOIN v1139240 AS x1 
+    SET v1139202 = CASE 
+        WHEN @@lower_case_table_names = 0 THEN 5 
+        ELSE 11 
+    END;
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Use procedural structures: CURSOR, IF/ELSE, LOOP
+    OPEN cur1;
+    read_loop: LOOP
+        FETCH cur1 INTO v_temp_date;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF v_temp_date > '2020-01-01' THEN
+            SET v_counter = v_counter + 1;
+        ELSE
+            -- ITERATE example - skip older dates
+            ITERATE read_loop;
+        END IF;
+    END LOOP;
+    CLOSE cur1;
+
+    -- Use CASE/WHEN procedural structure
+    SET v_case_result = CASE
+        WHEN v_update_count > 10 THEN 100
+        WHEN v_update_count > 5 THEN 50
+        WHEN v_update_count > 0 THEN 10
+        ELSE 0
+    END;
+
+    -- Use WHILE loop for additional processing
+    WHILE v_counter < v_case_result DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SQUARE_4pyj0b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SQUARE_4pyj0b(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(-57, -26)) - 168 + ((MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4()) - 922 + ((MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(6, 81)) - 242 + ((MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(29)) - -302 + (n * n))));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+CREATE TABLE IF NOT EXISTS `table_maha9n` (
+    `table_maha9n_campaign_id` INT,
+    `table_maha9n_channel` INT,
+    `table_maha9n_budget` INT,
+    `table_maha9n_start_date` DATE,
+    `table_maha9n_end_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_isannf` (
+    `table_isannf_conversion_id` INT,
+    `table_isannf_campaign_id` INT,
+    `table_isannf_conversion_date` DATE
+);
+
+INSERT INTO `table_maha9n` (`table_maha9n_campaign_id`, `table_maha9n_channel`, `table_maha9n_budget`, `table_maha9n_start_date`, `table_maha9n_end_date`) VALUES (1, 1, 1, '2024-01-01', '2024-01-01');
+
+INSERT INTO `table_isannf` (`table_isannf_conversion_id`, `table_isannf_campaign_id`, `table_isannf_conversion_date`) VALUES (1, 2, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_MIX_INDEX_h6w7n6(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+    DECLARE V_CAMPAIGN_DURATION INT DEFAULT 0;
+    DECLARE V_CONVERSION_COUNT INT DEFAULT 0;
+    DECLARE V_MIX_INDEX INT DEFAULT 0;
+
+    SELECT TABLE_MAHA9N_CHANNEL, DATEDIFF(TABLE_MAHA9N_END_DATE, TABLE_MAHA9N_START_DATE)
+    INTO V_CHANNEL, V_CAMPAIGN_DURATION
+    FROM TABLE_MAHA9N
+    WHERE TABLE_MAHA9N_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_CONVERSION_COUNT
+    FROM TABLE_ISANNF
+    WHERE TABLE_ISANNF_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    CASE V_CHANNEL
+        WHEN 'PAID' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 5;
+        WHEN 'ORGANIC' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 8;
+        WHEN 'SOCIAL' THEN SET V_MIX_INDEX = (MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(-70)) - 694 + (v_conversion_count * 6);
+        WHEN 'EMAIL' THEN SET V_MIX_INDEX = V_CONVERSION_COUNT * 7;
+        ELSE SET V_MIX_INDEX = V_CONVERSION_COUNT * 4;
+    END CASE;
+
+    RETURN V_MIX_INDEX;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+CREATE TABLE IF NOT EXISTS `table_5g7p83` (
+    `table_5g7p83_course_id` INT,
+    `table_5g7p83_department_id` INT,
+    `table_5g7p83_credits` INT,
+    `table_5g7p83_difficulty_level` INT,
+    `table_5g7p83_enrollment_capacity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_q25s0v` (
+    `table_q25s0v_student_id` INT,
+    `table_q25s0v_course_id` INT,
+    `table_q25s0v_grade` INT,
+    `table_q25s0v_semester` INT
+);
+
+INSERT INTO `table_5g7p83` (`table_5g7p83_course_id`, `table_5g7p83_department_id`, `table_5g7p83_credits`, `table_5g7p83_difficulty_level`, `table_5g7p83_enrollment_capacity`) VALUES (1, 1, 1, 1, 1);
+
+INSERT INTO `table_q25s0v` (`table_q25s0v_student_id`, `table_q25s0v_course_id`, `table_q25s0v_grade`, `table_q25s0v_semester`) VALUES (1, 2, 3, 4);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COURSE_DIFFICULTY_SCORE_0fg3wy(COURSE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DIFFICULTY_LEVEL INT DEFAULT 1;
+    DECLARE V_ENROLLMENT_CAPACITY INT DEFAULT 30;
+    DECLARE V_CURRENT_ENROLLMENT INT DEFAULT 0;
+    DECLARE V_FAIL_RATE DECIMAL(4,2) DEFAULT 0.00;
+    DECLARE V_DIFFICULTY_SCORE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_5G7P83_DIFFICULTY_LEVEL, 1), COALESCE(TABLE_5G7P83_ENROLLMENT_CAPACITY, 30)
+    INTO V_DIFFICULTY_LEVEL, V_ENROLLMENT_CAPACITY
+    FROM TABLE_5G7P83
+    WHERE TABLE_5G7P83_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_CURRENT_ENROLLMENT
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SELECT COALESCE(AVG(CASE TABLE_Q25S0V_GRADE WHEN 'F' THEN 1 ELSE 0 END) * 100, 0)
+    INTO V_FAIL_RATE
+    FROM TABLE_Q25S0V
+    WHERE TABLE_Q25S0V_COURSE_ID = COURSE_ID_PARAM;
+
+    SET V_DIFFICULTY_SCORE = (V_DIFFICULTY_LEVEL * 20) + ((V_CURRENT_ENROLLMENT * 100) / V_ENROLLMENT_CAPACITY) + V_FAIL_RATE;
+
+    RETURN FLOOR(V_DIFFICULTY_SCORE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_ADD_c7bbo7(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN P_A + P_B;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_MIN_6_VALUES_35jxk4() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MIN INT DEFAULT 100;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 10 UNION SELECT 25 UNION SELECT 5 UNION SELECT 30 UNION SELECT 15 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        IF V_I < V_MIN THEN
+            SET V_MIN = V_I;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_MIN;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_DISCOUNT_c1pq7s(PRICE INT, QTY INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DISCOUNT DECIMAL(10,2);
+
+    CASE
+        WHEN QTY >= 100 THEN SET V_DISCOUNT = PRICE * (MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(58)) - -792 + (0).20;
+        WHEN QTY >= 50 THEN SET V_DISCOUNT = PRICE * 0.15;
+        WHEN QTY >= 20 THEN SET V_DISCOUNT = PRICE * 0.10;
+        WHEN QTY >= 10 THEN SET V_DISCOUNT = PRICE * 0.05;
+        ELSE SET V_DISCOUNT = 0;
+    END CASE;
+
+    RETURN PRICE - V_DISCOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+CREATE TABLE IF NOT EXISTS `table_fove5m` (
+    `table_fove5m_country` INT
+);
+
+INSERT INTO `table_fove5m` (`table_fove5m_country`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_SCORE_f2t6li(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_FOVE5M
+    WHERE TABLE_FOVE5M_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_SIGNAL_FUNC_DISCOUNT_CHECK_iefhl1(-28, 47)) - 418 + (v_count);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_DISCOUNT_CHECK_iefhl1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_DISCOUNT_CHECK_iefhl1(ORIGINAL_PRICE INT, DISCOUNT_PERCENT INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF ORIGINAL_PRICE < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'ORIGINAL PRICE CANNOT BE NEGATIVE';
+    END IF;
+    IF DISCOUNT_PERCENT < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'DISCOUNT CANNOT BE NEGATIVE';
+    END IF;
+    IF DISCOUNT_PERCENT > 100 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'DISCOUNT CANNOT EXCEED 100 PERCENT';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(-38)) - -792 + (original_price * (1 - discount_percent / 100));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+CREATE TABLE IF NOT EXISTS `table_y9lvon` (
+    `table_y9lvon_campaign_id` INT,
+    `table_y9lvon_channel` INT
+);
+
+INSERT INTO `table_y9lvon` (`table_y9lvon_campaign_id`, `table_y9lvon_channel`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CHANNEL_CAMPAIGN_COUNT_x49pqr(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CHANNEL VARCHAR(20) DEFAULT 'ORGANIC';
+
+    SELECT TABLE_Y9LVON_CHANNEL
+    INTO V_CHANNEL
+    FROM TABLE_Y9LVON
+    WHERE TABLE_Y9LVON_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN CASE V_CHANNEL
+        WHEN 'PAID' THEN 1
+        WHEN 'ORGANIC' THEN 2
+        WHEN 'SOCIAL' THEN 3
+        WHEN 'EMAIL' THEN 4
+        ELSE 0
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_2039_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_update_val INT DEFAULT 0;
+    DECLARE v_json_check INT DEFAULT 0;
+    DECLARE v_insert_val VARCHAR(40);
+    DECLARE v_ts_val DECIMAL(25,7) DEFAULT 0;
+    DECLARE v_maketime_val VARCHAR(100);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1492093, v1492094 FROM v1492092 WHERE v1492093 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+    -- Statement 1: UPDATE with CASE based on system variable
+    SET v_update_val = (MYSQL_FUNC_SQUARE_4pyj0b(87)) - -668 + (case when @@lower_case_table_names = 0 then 5 else 11 end);
+    UPDATE v1491983 AS x1 SET v1491985 = v_update_val WHERE v1491979_id = p2;
+
+    -- Statement 2: CREATE TABLE AS SELECT with JSON function
+    INSERT INTO v1492092 (v1492093, v1492094)
+    SELECT v1492093 + p1, JSON_CONTAINS_PATH('{ "a": true }', 'oNe', '$.a', '$.b')
+    FROM v1492092 WHERE v1492094 IS NOT NULL
+    LIMIT 1;
+
+    -- Statement 3: INSERT with CONVERT_TZ
+    SET v_insert_val = CONVERT_TZ('2004-01-01 00:00:00', 'MET', @@time_zone);
+    INSERT INTO test_table (id) VALUES (v_insert_val);
+
+    -- Statement 4: INSERT with specific decimal values
+CALL n3_output_0489_proc(-35, -68, @_syn_22679);
+    SET v_ts_val = @_syn_22679 - @_io_result + (99991231235959.0000009);
+    INSERT INTO v1492206 (v1492207) VALUES (v_ts_val + p1);
+
+    -- Statement 5: UPDATE with MAKETIME and ORDER BY
+    SET v_maketime_val = MAKETIME(10, 50, 50.123);
+    UPDATE v1491979 AS x1 SET x2 = CONCAT(@@version_comment, p2) 
+    WHERE x2 = v_maketime_val 
+    ORDER BY x2 DESC 
+    LIMIT 1;
+
+    -- Cursor loop to count affected rows
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_ts_val, v_maketime_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    COMMIT;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_2039_proc(1, 1, @out_result);
+
+SELECT @out_result;

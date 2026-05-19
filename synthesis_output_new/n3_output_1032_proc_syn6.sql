@@ -1,0 +1,523 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1175983 (v1175984 INT, v1175985 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1175611 (v1175612 INT, v1175613 INT, v1175614 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1175898 (v1175899 INT, v1175900 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1176315 (v1176316 GEOMETRY, v1176317 GEOMETRY, v1176318 VARCHAR(100), v1176319 INT);
+CREATE TABLE IF NOT EXISTS v1176302 (v1176303 VARCHAR(50), v1176304 INT);
+INSERT INTO v1175983 VALUES (1, 'test1'), (2, 'test2'), (3, 'test3');
+INSERT INTO v1175611 VALUES (1, 10, 'alpha'), (2, 20, 'beta'), (3, 30, 'gamma');
+INSERT INTO v1175898 VALUES (11, 'old1'), (12, 'old2'), (13, 'old3');
+INSERT INTO v1176315 VALUES (ST_GeomFromText('POINT(0 0)'), ST_GeomFromText('POINT(1 1)'), 'initial', 0);
+INSERT INTO v1176302 VALUES ('test_value', 1), ('another_test', 2), ('prefix_test', 3);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+CREATE TABLE IF NOT EXISTS `table_y4xawp` (
+    `table_y4xawp_dept_id` INT,
+    `table_y4xawp_budget` INT,
+    `table_y4xawp_headcount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_ab2uoo` (
+    `table_ab2uoo_emp_id` INT,
+    `table_ab2uoo_dept_id` INT,
+    `table_ab2uoo_salary` INT
+);
+
+INSERT INTO `table_y4xawp` (`table_y4xawp_dept_id`, `table_y4xawp_budget`, `table_y4xawp_headcount`) VALUES (1, 1, 1);
+
+INSERT INTO `table_ab2uoo` (`table_ab2uoo_emp_id`, `table_ab2uoo_dept_id`, `table_ab2uoo_salary`) VALUES (1, 2, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_TOTAL_SALARIES INT DEFAULT 0;
+    DECLARE V_HEADROOM INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y4XAWP_BUDGET, 0)
+    INTO V_BUDGET
+    FROM TABLE_Y4XAWP
+    WHERE TABLE_Y4XAWP_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_AB2UOO_SALARY), 0)
+    INTO V_TOTAL_SALARIES
+    FROM TABLE_AB2UOO
+    WHERE TABLE_AB2UOO_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_HEADROOM = V_BUDGET - V_TOTAL_SALARIES;
+
+    RETURN V_HEADROOM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_1559_proc----- */
+CREATE TABLE IF NOT EXISTS v1283961 (v1283962 INT, v1283963 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1284220 (v1284221 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1284271 (v1284271_id INT, v1284271_val VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1284203 (v1284204 DECIMAL(10,2));
+CREATE TABLE IF NOT EXISTS v1283859 (v1283859_id INT, v1283859_val VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1284018 (v1284019 VARCHAR(200));
+CREATE TABLE IF NOT EXISTS v1283807 (v1283808 VARCHAR(255), v1283815 GEOMETRY, v1283819 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1283563 (v1283563_id INT, v1283563_val VARCHAR(100));
+INSERT INTO v1283961 VALUES (1, 'test'), (2, 'blue'), (3, 'ST_Y');
+INSERT INTO v1284220 VALUES ('TABLE_NAME'), ('test20'), ('other');
+INSERT INTO v1284271 VALUES (1, 'test20'), (2, 'test30');
+INSERT INTO v1284203 VALUES (11.11), (22.22), (33.33);
+INSERT INTO v1283859 VALUES (1, 'join_val'), (2, 'other_val');
+INSERT INTO v1284018 VALUES ('initial');
+INSERT INTO v1283807 VALUES ('initial', ST_GEOMFROMTEXT('POINT(0 0)'), 'test');
+INSERT INTO v1283563 VALUES (1, 'test');
+
+/* -----Called: n3_output_1559_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1559_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val VARCHAR(200);
+    DECLARE v_geo GEOMETRY;
+    DECLARE v_char_len INT DEFAULT 0;
+    DECLARE v_export_result VARCHAR(100);
+    DECLARE v_affected_rows INT DEFAULT 0;
+    
+    DECLARE cur CURSOR FOR SELECT v1284019 FROM v1284018 WHERE v1284019 LIKE '%ｱ%';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    
+    -- Statement 1: UPDATE with EXPORT_SET
+    SET v_export_result = EXPORT_SET(1, 'ST_Y', 'N', '', 8);
+    UPDATE v1283961 AS x1 
+    SET v1283963 = 'modified_' 
+    WHERE v_export_result = 'blue' 
+    ORDER BY v1283962 
+    LIMIT 12;
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 2: UPDATE with INNER JOIN and user variable
+    SET @ujis4 = CONCAT('prefix_', p1);
+    UPDATE v1284220 AS x0 
+    INNER JOIN v1284271 AS x5 ON x0.v1284221 = 'test20' 
+    SET x0.v1284221 = @ujis4 
+    WHERE v1284221 = 'TABLE_NAME';
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 3: UPDATE with RIGHT JOIN and CONVERT_TZ
+    UPDATE v1284203 AS x0 
+    RIGHT JOIN v1283859 AS x8 ON x0.v1284204 = x8.v1283859_id 
+    SET x0.v1284204 = CONVERT_TZ(x0.v1284204, 'UTC', 'Europe/Moscow') 
+    WHERE x0.v1284204 <=> '11.11';
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 4: INSERT with multibyte characters
+    INSERT INTO v1284018 (v1284019) VALUES (CONCAT(' ｱｲｳｴｵ ', p1));
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 5: UPDATE with ST_CONTAINS and LEFT
+    UPDATE v1283807 AS x1, v1283563 AS x5 
+    SET v1283808 = LEFT(v1283819, CHAR_LENGTH(CONCAT(v1283808, ' ', v1283819)) - 2004) 
+    WHERE ST_CONTAINS(ST_GEOMFROMTEXT('POLYGON((-100 100, -400 100, -400 400, -100 400, -100 100))'), v1283815) 
+       OR ST_CONTAINS(ST_GEOMFROMTEXT('POLYGON((-0.0001 -0.0002, -0.0001 0.00002, 0.00000005 0.000001, 0.0000025 -0.001, -0.0001 -0.0002))'), v1283815);
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Procedural logic: CURSOR loop with IF/ELSE
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF CHAR_LENGTH(v_val) > 5 THEN
+            SET v_char_len = (MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600()) - 356 + (v_char_len) + 1;
+        ELSE
+            SET v_char_len = v_char_len + 2;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+    
+    -- Procedural logic: WHILE loop with CASE
+    WHILE v_counter < 10 DO
+        SET v_counter = v_counter + 1;
+        CASE 
+            WHEN (MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(75)) - 232 + (v_counter % 2 = 0) THEN
+                SET v_char_len = v_char_len + 1;
+            ELSE
+                SET v_char_len = v_char_len + 2;
+        END CASE;
+    END WHILE;
+    
+    -- Final result using procedural logic
+    IF (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(17)) - 78 + (v_char_len > 0) THEN
+        SET result = v_counter + v_char_len;
+    ELSE
+        SET result = v_counter;
+    END IF;
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_100_dih600() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM BIGINT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50
+        UNION SELECT 51 UNION SELECT 52 UNION SELECT 53 UNION SELECT 54 UNION SELECT 55 UNION SELECT 56 UNION SELECT 57 UNION SELECT 58 UNION SELECT 59 UNION SELECT 60
+        UNION SELECT 61 UNION SELECT 62 UNION SELECT 63 UNION SELECT 64 UNION SELECT 65 UNION SELECT 66 UNION SELECT 67 UNION SELECT 68 UNION SELECT 69 UNION SELECT 70
+        UNION SELECT 71 UNION SELECT 72 UNION SELECT 73 UNION SELECT 74 UNION SELECT 75 UNION SELECT 76 UNION SELECT 77 UNION SELECT 78 UNION SELECT 79 UNION SELECT 80
+        UNION SELECT 81 UNION SELECT 82 UNION SELECT 83 UNION SELECT 84 UNION SELECT 85 UNION SELECT 86 UNION SELECT 87 UNION SELECT 88 UNION SELECT 89 UNION SELECT 90
+        UNION SELECT 91 UNION SELECT 92 UNION SELECT 93 UNION SELECT 94 UNION SELECT 95 UNION SELECT 96 UNION SELECT 97 UNION SELECT 98 UNION SELECT 99 UNION SELECT 100;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(50, -34, -66)) - -113 + (v_sum + v_i);
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_RANGE_CHECK_g8rvip(VAL INT, MIN_VAL INT, MAX_VAL INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF VAL < MIN_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE BELOW MINIMUM';
+    END IF;
+    IF VAL > MAX_VAL THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'VALUE ABOVE MAXIMUM';
+    END IF;
+    RETURN VAL;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+CREATE TABLE IF NOT EXISTS `table_gc4iyl` (
+    `table_gc4iyl_customer_id` INT,
+    `table_gc4iyl_registration_date` DATE
+);
+
+INSERT INTO `table_gc4iyl` (`table_gc4iyl_customer_id`, `table_gc4iyl_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_MONTHS_jzrk6x(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_MONTHS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(MONTH, TABLE_GC4IYL_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_MONTHS
+    FROM TABLE_GC4IYL
+    WHERE TABLE_GC4IYL_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(-32)) - -480 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(-87)) - -496 + (v_age_months));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+CREATE TABLE IF NOT EXISTS `table_rpd9bu` (
+    `table_rpd9bu_customer_id` INT,
+    `table_rpd9bu_status` VARCHAR(50),
+    `table_rpd9bu_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_rpd9bu` (`table_rpd9bu_customer_id`, `table_rpd9bu_status`, `table_rpd9bu_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_MONTHLY_INDEX_dcdcut(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_RPD9BU_STATUS, COALESCE(TABLE_RPD9BU_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_RPD9BU
+    WHERE TABLE_RPD9BU_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 5;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+CREATE TABLE IF NOT EXISTS `table_6x50qw` (
+    `table_6x50qw_product_id` INT,
+    `table_6x50qw_category_id` INT,
+    `table_6x50qw_price` DECIMAL(10,2),
+    `table_6x50qw_stock_quantity` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_dg2mja` (
+    `table_dg2mja_category_id` INT,
+    `table_dg2mja_name` VARCHAR(50)
+);
+
+INSERT INTO `table_6x50qw` (`table_6x50qw_product_id`, `table_6x50qw_category_id`, `table_6x50qw_price`, `table_6x50qw_stock_quantity`) VALUES (1, 2, 1.0, 4);
+
+INSERT INTO `table_dg2mja` (`table_dg2mja_category_id`, `table_dg2mja_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_BULK_STOCK_RATIO_9w75se(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_THRESHOLD INT DEFAULT 500;
+    DECLARE V_BULK_STOCK INT DEFAULT 0;
+    DECLARE V_BULK_RATIO INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_TOTAL_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    SELECT COALESCE(SUM(TABLE_6X50QW_STOCK_QUANTITY), 0)
+    INTO V_BULK_STOCK
+    FROM TABLE_6X50QW
+    WHERE TABLE_6X50QW_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_6X50QW_STOCK_QUANTITY > V_BULK_THRESHOLD;
+
+    IF V_TOTAL_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_BULK_RATIO = (V_BULK_STOCK * 100) / V_TOTAL_STOCK;
+
+    RETURN V_BULK_RATIO;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+CREATE TABLE IF NOT EXISTS `table_9w5f3o` (
+    `table_9w5f3o_emp_id` INT,
+    `table_9w5f3o_department_id` INT,
+    `table_9w5f3o_salary` INT
+);
+
+INSERT INTO `table_9w5f3o` (`table_9w5f3o_emp_id`, `table_9w5f3o_department_id`, `table_9w5f3o_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_9W5F3O_DEPARTMENT_ID, COALESCE(TABLE_9W5F3O_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9W5F3O_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj(-63)) - -436 + (floor((v_salary * 100) / v_dept_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj----- */
+CREATE TABLE IF NOT EXISTS `table_oiou2b` (
+    `table_oiou2b_order_id` INT,
+    `table_oiou2b_customer_id` INT,
+    `table_oiou2b_order_date` DATE,
+    `table_oiou2b_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_d3ttqx` (
+    `table_d3ttqx_customer_id` INT,
+    `table_d3ttqx_country` INT
+);
+
+INSERT INTO `table_oiou2b` (`table_oiou2b_order_id`, `table_oiou2b_customer_id`, `table_oiou2b_order_date`, `table_oiou2b_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_d3ttqx` (`table_d3ttqx_customer_id`, `table_d3ttqx_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REPEAT_CUSTOMER_COUNT_152fcj(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REPEAT_CUSTOMERS INT DEFAULT 0;
+
+    SELECT COUNT(DISTINCT TABLE_D3TTQX_CUSTOMER_ID)
+    INTO V_REPEAT_CUSTOMERS
+    FROM TABLE_D3TTQX C
+    JOIN TABLE_OIOU2B O ON TABLE_D3TTQX_CUSTOMER_ID = TABLE_OIOU2B_CUSTOMER_ID
+    WHERE TABLE_D3TTQX_COUNTRY = COUNTRY_PARAM
+    GROUP BY TABLE_D3TTQX_CUSTOMER_ID
+    HAVING COUNT(TABLE_OIOU2B_ORDER_ID) > 1;
+
+    RETURN (MYSQL_FUNC_RECURSIVE_SUM_pkwdud(86, 70)) - -171 + (coalesce(v_repeat_customers, 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_RECURSIVE_SUM_pkwdud----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_RECURSIVE_SUM_pkwdud(N INT, DEPTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF DEPTH <= 0 OR N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    CALC_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = V_RESULT + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE CALC_LOOP;
+
+    IF DEPTH > 1 THEN
+        SET V_RESULT = V_RESULT + RECURSIVE_SUM(N - 1, DEPTH - 1);
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1032_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geo1 GEOMETRY;
+    DECLARE v_geo2 GEOMETRY;
+    DECLARE v_json_depth INT;
+    DECLARE v_char_len INT;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_index_exists INT DEFAULT 0;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Create indexes (DDL statements)
+    CREATE INDEX v1176207 ON v1175983(v1175984);
+    CREATE INDEX v1176218 ON v1175611(v1175613, v1175612);
+
+    -- Check if indexes were created successfully
+    SELECT COUNT(*) INTO v_index_exists 
+    FROM information_schema.statistics 
+    WHERE table_name = 'v1175983' AND index_name = 'v1176207';
+    
+    IF v_index_exists > 0 THEN
+CALL n3_output_1559_proc(97, -69, @_syn_10995);
+        SET v_counter = @_syn_10995 - @_io_result + (v_counter) + (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_HEADROOM_uwea0h(-93)) - -109 + (10);
+    END IF;
+
+    -- UPDATE with WHERE clause using input parameter
+    UPDATE v1175898 AS x1 
+    SET v1175899 = p1 
+    WHERE v1175899 = 11;
+    
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- INSERT with geometry and complex functions
+    SET v_geo1 = ST_MPOLYFROMWKB(ST_ASWKB(MULTIPOLYGON(POLYGON(LINESTRING(POINT(0, 3), POINT(3, 3), POINT(3, 0), POINT(0, 3))))));
+    SET v_geo2 = ST_GEOMFROMTEXT('POINT(162 254)');
+    
+    INSERT INTO v1176315 (v1176319, v1176316, v1176317, v1176318) 
+    VALUES (p2, v_geo1, v_geo2, CONCAT('test_', p1, '_', p2));
+
+    -- UPDATE with string manipulation
+    UPDATE v1176302 AS x0 
+    SET v1176303 = LEFT(v1176303, CHAR_LENGTH(v1176303) - 2) 
+    WHERE x0.v1176303 IN ('test_value', 'another_test', 'prefix_test');
+    
+    GET DIAGNOSTICS v_update_count = ROW_COUNT;
+    SET v_counter = v_counter + v_update_count;
+
+    -- Loop to process and validate data
+    SET v_counter = 0;
+    CASE 
+        WHEN p1 > 0 THEN
+            BEGIN
+                DECLARE done INT DEFAULT FALSE;
+                DECLARE cur_v1175611_v1 INT;
+                DECLARE cur_v1175611_v2 INT;
+                DECLARE cur CURSOR FOR 
+                    SELECT v1175612, v1175613 FROM v1175611 WHERE v1175612 = p1;
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+                OPEN cur;
+                read_loop: LOOP
+                    FETCH cur INTO cur_v1175611_v1, cur_v1175611_v2;
+                    IF done THEN
+                        LEAVE read_loop;
+                    END IF;
+                    SET v_counter = v_counter + cur_v1175611_v2;
+                END LOOP;
+                CLOSE cur;
+            END;
+        ELSE
+            SET v_counter = -1;
+    END CASE;
+
+    -- Final validation using JSON function
+    SET v_json_depth = JSON_DEPTH('["key1", "key2", "key3", "key4"]');
+    IF v_json_depth = 2 THEN
+        SET v_counter = v_counter + 100;
+    END IF;
+
+    -- Use REGEXP_LIKE to check data integrity
+    SELECT COUNT(*) INTO v_char_len 
+    FROM v1176302 
+    WHERE REGEXP_LIKE(v1176303, '^[a-z_]+$');
+    
+    SET v_counter = v_counter + v_char_len;
+
+    -- Output result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1032_proc(1, 1, @out_result);
+
+SELECT @out_result;

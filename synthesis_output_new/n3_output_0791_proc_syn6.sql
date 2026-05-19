@@ -1,0 +1,586 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1153539 (v1153540 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1153747 (v1153748 INT, v1153750 VARCHAR(100), v1153751 INT);
+CREATE TABLE IF NOT EXISTS v1154014 (v1154015 INT, x2 TEXT);
+CREATE TABLE IF NOT EXISTS v1154005 (v1154006 INT);
+CREATE TABLE IF NOT EXISTS v1153918 (v1153919 INT, x2 INT);
+CREATE TABLE IF NOT EXISTS v1153962 (v1153963 INT);
+CREATE TABLE IF NOT EXISTS v1153722 (v1153723 INT);
+CREATE TABLE IF NOT EXISTS v1153891 (v1153891_id INT);
+INSERT INTO v1153539 VALUES ('innodb_flush_sync'), ('innodb_max_dirty_pages_pct');
+INSERT INTO v1153747 VALUES (1, 'test1', 10), (2, 'test2', 20), (3, 'test3', 30);
+INSERT INTO v1154014 (v1154015, x2) VALUES (1, ST_ASTEXT(ST_GEOMFROMTEXT('POINT(5 10)')));
+INSERT INTO v1154005 VALUES (-7), (-8), (5);
+INSERT INTO v1153918 VALUES (155, 1), (155, 2), (156, 3);
+INSERT INTO v1153962 VALUES (1), (2), (3);
+INSERT INTO v1153722 VALUES (2), (3);
+INSERT INTO v1153891 VALUES (1), (2);
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+CREATE TABLE IF NOT EXISTS `table_vkipu5` (
+    `table_vkipu5_customer_id` INT,
+    `table_vkipu5_status` VARCHAR(50),
+    `table_vkipu5_monthly_cost` DECIMAL(10,2),
+    `table_vkipu5_plan_type` VARCHAR(50)
+);
+
+INSERT INTO `table_vkipu5` (`table_vkipu5_customer_id`, `table_vkipu5_status`, `table_vkipu5_monthly_cost`, `table_vkipu5_plan_type`) VALUES (1, 'test', 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_PLAN_TYPE VARCHAR(20) DEFAULT 'BASIC';
+
+    SELECT TABLE_VKIPU5_STATUS, COALESCE(TABLE_VKIPU5_MONTHLY_COST, 0), TABLE_VKIPU5_PLAN_TYPE
+    INTO V_STATUS, V_MONTHLY_COST, V_PLAN_TYPE
+    FROM TABLE_VKIPU5
+    WHERE TABLE_VKIPU5_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN CASE V_PLAN_TYPE
+        WHEN 'ENTERPRISE' THEN V_MONTHLY_COST * 3
+        WHEN 'PREMIUM' THEN V_MONTHLY_COST * 2
+        ELSE V_MONTHLY_COST
+    END;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_0393----- */
+CREATE TABLE IF NOT EXISTS v5590 (v5592 BIGINT, v5574_id INT);
+CREATE TABLE IF NOT EXISTS v5574 (v5574_id INT, v5574_name VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v5223 (v5224 INT, v5225 VARCHAR(20));
+CREATE TABLE IF NOT EXISTS v5463 (v5464 TIME, v5465 INT);
+CREATE TABLE IF NOT EXISTS v5506 (v5507 VARCHAR(100), v5508 INT);
+CREATE TABLE IF NOT EXISTS v5278 (v5278_id INT, v5278_data VARCHAR(50));
+INSERT INTO v5590 VALUES (100, 1), (200, 2), (300, 3);
+INSERT INTO v5574 VALUES (1, 'alpha'), (2, 'beta'), (3, 'gamma');
+INSERT INTO v5223 VALUES (-2, 'test1'), (-2, 'test2'), (10, 'test3');
+INSERT INTO v5463 VALUES ('10:00:00', 1), ('12:30:00', 2), ('15:45:00', 3);
+INSERT INTO v5506 VALUES ('abc123', 10), ('def456', 20), ('ghi789', 30);
+INSERT INTO v5278 VALUES (1, 'row1'), (2, 'row2'), (3, 'row3');
+
+/* -----Called: synth_output_0393----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0393(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_var1 BIGINT DEFAULT 0;
+    DECLARE v_var2 INT DEFAULT 0;
+    DECLARE v_var3 TIME DEFAULT '00:00:00';
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val VARCHAR(50);
+    DECLARE v_rand1 DOUBLE;
+    DECLARE v_rand2 DOUBLE;
+    
+    -- Cursor for SELECT statement
+    DECLARE cur CURSOR FOR SELECT v5278_data FROM v5278;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Statement 1: UPDATE with NATURAL JOIN
+    SET @sql1 = 'UPDATE v5590 AS x0 NATURAL JOIN v5574 AS x1 SET v5592 = 2147483648';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = (MYSQL_FUNC_SAFE_DIVIDE_WITH_NULL_HANDLING_90x7pj(-51, 21, 12)) - -146 + (v_counter) + (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(56)) - -857 + (1);
+
+    -- Statement 2: UPDATE with condition
+    SET @sql2 = 'UPDATE v5223 AS x1 SET v5224 = v5224 + 50 WHERE v5224 = -2';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with RAND() condition
+    SET v_rand1 = RAND();
+    SET v_rand2 = RAND();
+    IF v_rand1 < v_rand2 THEN
+        SET @sql3 = 'UPDATE v5463 AS x1 SET v5464 = ''11:22:33.123'' WHERE RAND() < RAND()';
+        PREPARE stmt3 FROM @sql3;
+        EXECUTE stmt3;
+        DEALLOCATE PREPARE stmt3;
+        SET v_counter = v_counter + 1;
+    ELSE
+        SET v_counter = v_counter + 2;
+    END IF;
+
+    -- Statement 4: CREATE INDEX
+    SET @sql4 = 'CREATE INDEX v5624 ON v5506((SUBSTRING(v5507, 1, 2)))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: SELECT with CURSOR
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Final output using CASE structure
+    CASE 
+        WHEN v_counter > 5 THEN
+            SET result = v_counter * p1;
+        WHEN v_counter <= 5 THEN
+            SET result = v_counter * p2;
+        ELSE
+            SET result = 0;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt----- */
+CREATE TABLE IF NOT EXISTS `table_y799fm` (
+    `table_y799fm_product_id` INT,
+    `table_y799fm_stock_quantity` INT
+);
+
+INSERT INTO `table_y799fm` (`table_y799fm_product_id`, `table_y799fm_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_VALUE_ed8jrt(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_Y799FM_STOCK_QUANTITY, 0)
+    INTO V_STOCK
+    FROM TABLE_Y799FM
+    WHERE TABLE_Y799FM_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    RETURN V_STOCK;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+CREATE TABLE IF NOT EXISTS `table_5fzj9q` (
+    `table_5fzj9q_customer_id` INT,
+    `table_5fzj9q_status` VARCHAR(50)
+);
+
+INSERT INTO `table_5fzj9q` (`table_5fzj9q_customer_id`, `table_5fzj9q_status`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ACTIVE_CHECK_9rsk67(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_5FZJ9Q
+    WHERE TABLE_5FZJ9Q_CUSTOMER_ID = CUSTOMER_ID_PARAM AND TABLE_5FZJ9Q_STATUS = 'ACTIVE';
+
+    RETURN CASE WHEN V_COUNT > 0 THEN 1 ELSE 0 END;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_DIVIDE_WITH_NULL_HANDLING_90x7pj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_DIVIDE_WITH_NULL_HANDLING_90x7pj(A INT, B INT, C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    IF A IS NULL OR B IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    IF B = 0 THEN
+        SET V_RESULT = 0;
+    ELSE
+        SET V_RESULT = A / B;
+    END IF;
+
+    IF C IS NOT NULL AND C != 0 THEN
+        SET V_RESULT = V_RESULT + (A / C);
+        SET V_COUNT = V_COUNT + 1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_1197_proc----- */
+CREATE TABLE IF NOT EXISTS v1201239 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1201240 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v1201501 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1201502 TEXT
+);
+CREATE TABLE IF NOT EXISTS v1201452 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1201455 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1201149 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1201150 VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1201363 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1201364 VARCHAR(100),
+    v1201365 VARCHAR(100)
+);
+INSERT INTO v1201239 (v1201240) VALUES ('test'), ('sample'), ('data');
+INSERT INTO v1201501 (v1201502) VALUES ('initial'), ('values'), ('here');
+INSERT INTO v1201452 (v1201455) VALUES ('aa'), ('bb'), ('cc');
+INSERT INTO v1201149 (v1201150) VALUES ('+'), ('-'), ('*');
+INSERT INTO v1201363 (v1201364, v1201365) VALUES ('aa', 'bb'), ('xx', 'yy'), ('a b a b a b a b ', 'zz');
+
+/* -----Called: n3_output_1197_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1197_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp_val VARCHAR(100);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val VARCHAR(100);
+    
+    -- Cursor for processing table data
+    DECLARE cur CURSOR FOR SELECT v1201240 FROM v1201239;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    
+    -- Use IF/ELSE to control flow based on input parameters
+    IF p1 > 0 THEN
+        -- Statement 1: INSERT into v1201239 with values
+        INSERT INTO v1201239 (v1201240) VALUES (299), (000), ('0.0'), (3220), (148020);
+        SET v_counter = v_counter + 1;
+    ELSE
+        -- Use CASE/WHEN for conditional processing
+        CASE p2
+            WHEN 1 THEN
+                -- Statement 2: INSERT into v1201501 with complex values
+                INSERT INTO v1201501 (v1201502) VALUES 
+                    ('reminiscence'), (52), ('17:18:46.036378'), ('-8388609'),
+                    ('0000-00-00 00:00:00.000004'), ('First Row'), (17), ('0'),
+                    (MASTER_POS_WAIT('dummy arg', 4711, 1)), (236112),
+                    ('2009-01-31'), ('ff'), (1),
+                    (ST_GEOMFROMTEXT('MULTIPOLYGON(((-115.006363 36.305435,-114.992394 36.305202,-114.991219 36.305975,-114.991163 36.306845,-114.989432 36.309452,-114.978275 36.312642,-114.977363 36.311978,-114.975327 36.312344,-114.96502 36.31597,-114.963364 36.313629,-114.961723 36.313721,-114.956398 36.316057,-114.951882 36.320979,-114.947073 36.323475,-114.945207 36.326451,-114.945207 36.326451,-114.944132 36.326061,-114.94003 36.326588,-114.924017 36.334484,-114.923281 36.334146,-114.92564 36.331504,-114.94072 36.319282,-114.945348 36.314812,-114.948091 36.314762,-114.951755 36.316211,-114.952446 36.313883,-114.952644 36.309488,-114.944725 36.313083,-114.93706 36.32043,-114.932478 36.323497,-114.924556 36.327708,-114.922608 36.329715,-114.92009 36.328695,-114.912105 36.323566,-114.901647 36.317952,-114.897436 36.313968,-114.895344 36.309573,-114.891699 36.304398,-114.890569 36.303551,-114.886356 36.302702,-114.885141 36.301351,-114.885709 36.297391,-114.892499 36.290893,-114.902142 36.288974,-114.904941 36.288838,-114.905308 36.289845,-114.906325 36.290395,-114.909916 36.289549,-114.914527 36.287535,-114.918797 36.284423,-114.922982 36.279731,-114.924113 36.277282,-114.924057 36.275817,-114.927733 36.27053,-114.929354 36.269029,-114.929354 36.269029,-114.950856 36.268715,-114.950768 36.264324,-114.960206 36.264293,-114.960301 36.268943,-115.006662 36.268929,-115.008583 36.265619,-115.00665 36.264247,-115.006659 36.246873,-115.006659 36.246873,-115.006838 36.247697,-115.010764 36.247774,-115.015609 36.25113,-115.015765 36.254505,-115.029517 36.254619,-115.038573 36.249317,-115.038573 36.249317,-115.023403 36.25841,-115.023873 36.258994,-115.031845 36.259829,-115.03183 36.261053,-115.025561 36.261095,-115.036417 36.274632,-115.033729 36.276041,-115.032217 36.274851,-115.029845 36.273959,-115.029934 36.274966,-115.025763 36.274896,-115.025406 36.281044,-115.028731 36.284471,-115.036497 36.290377,-115.042071 36.291039,-115.026759 36.298478,-115.008995 36.301966,-115.006363 36.305435),(-115.079835 36.244369,-115.079735 36.260186,-115.076435 36.262369,-115.069758 36.265,-115.070235 36.268757,-115.064542 36.268655,-115.061843 36.269857,-115.062676 36.270693,-115.06305 36.272344,-115.059051 36.281023,-115.05918 36.283008,-115.060591 36.285246,-115.061913 36.290022,-115.062499 36.306353,-115.062499 36.306353,-115.060918 36.30642,-115.06112 36.289779,-115.05713 36.2825,-115.057314 36.279446,-115.060779 36.274659,-115.061366 36.27209,-115.057858 36.26557,-115.055805 36.262883,-115.054688 36.262874,-115.047335 36.25037,-115.044234 36.24637,-115.052434 36.24047,-115.061734 36.23507,-115.061934 36.22677,-115.061934 36.22677,-115.061491 36.225267,-115.062024 36.218194,-115.060134 36.218278,-115.060133 36.210771,-115.057833 36.210771,-115.057433 36.196271,-115.062233 36.196271,-115.062233 36.190371,-115.062233 36.190371,-115.065533 36.190371,-115.071333 36.188571,-115.098331 36.188275,-115.098331 36.188275,-115.098435 36.237569,-115.097535 36.240369,-115.097535 36.240369,-115.093235 36.240369,-115.089135 36.240469,-115.083135 36.240569,-115.083135 36.240569,-115.079835 36.244369)))')),
+                    (1), ('uncovering'), ((MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(-95)) - 317 + (2)), ('abc');
+                SET v_counter = v_counter + 2;
+            WHEN 2 THEN
+                -- Statement 3: UPDATE v1201452 with REGEXP_REPLACE
+                UPDATE v1201452 AS x1 SET x1.v1201455 = REGEXP_REPLACE('bb', 'y', 'y');
+                SET v_counter = v_counter + 3;
+            ELSE
+                -- Statement 4: INSERT into v1201149
+                INSERT INTO v1201149 (v1201150) VALUES ('+');
+                SET v_counter = v_counter + 4;
+        END CASE;
+    END IF;
+    
+    -- Use WHILE loop to iterate through cursor
+    OPEN cur;
+    WHILE NOT v_done DO
+        FETCH cur INTO v_cursor_val;
+        IF NOT v_done THEN
+            -- Statement 5: UPDATE v1201363 with complex condition
+            UPDATE v1201363 AS x1 
+            SET v1201364 = v1201365 + 'x' 
+            WHERE v1201364 = REPEAT(LEFT(v1201364, 1), 2) 
+            AND v1201364 = REPEAT('a b ', 4096);
+            SET v_counter = v_counter + 5;
+        END IF;
+    END WHILE;
+    CLOSE cur;
+    
+    -- Use REPEAT...UNTIL for additional processing
+    REPEAT
+        SET v_counter = v_counter + 1;
+    UNTIL v_counter >= 10
+    END REPEAT;
+    
+    -- Set the output result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+CREATE TABLE IF NOT EXISTS `table_9s6p4u` (
+    `table_9s6p4u_invoice_id` INT,
+    `table_9s6p4u_customer_id` INT,
+    `table_9s6p4u_issue_date` DATE,
+    `table_9s6p4u_due_date` DATE,
+    `table_9s6p4u_total_amount` DECIMAL(10,2),
+    `table_9s6p4u_paid_amount` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_bmbjed` (
+    `table_bmbjed_payment_id` INT,
+    `table_bmbjed_invoice_id` INT,
+    `table_bmbjed_payment_date` DATE,
+    `table_bmbjed_amount_paid` INT,
+    `table_bmbjed_payment_method` INT
+);
+
+INSERT INTO `table_9s6p4u` (`table_9s6p4u_invoice_id`, `table_9s6p4u_customer_id`, `table_9s6p4u_issue_date`, `table_9s6p4u_due_date`, `table_9s6p4u_total_amount`, `table_9s6p4u_paid_amount`) VALUES (1, 2, '2024-01-01', '2024-01-01', 1.0, 6);
+
+INSERT INTO `table_bmbjed` (`table_bmbjed_payment_id`, `table_bmbjed_invoice_id`, `table_bmbjed_payment_date`, `table_bmbjed_amount_paid`, `table_bmbjed_payment_method`) VALUES (1, 2, '2024-01-01', 4, 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LATE_PAYMENT_PENALTY_x1abbt(INVOICE_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DAYS_OVERDUE INT DEFAULT 0;
+    DECLARE V_BALANCE_DUE INT DEFAULT 0;
+    DECLARE V_PENALTY_RATE INT DEFAULT 5;
+    DECLARE V_PENALTY_AMOUNT INT DEFAULT 0;
+    DECLARE V_DUE_DATE DATE;
+    DECLARE V_TOTAL_AMOUNT INT DEFAULT 0;
+    DECLARE V_PAID_AMOUNT INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_9S6P4U_TOTAL_AMOUNT, (MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(24)) - -431 + (0)), COALESCE(TABLE_9S6P4U_PAID_AMOUNT, 0), TABLE_9S6P4U_DUE_DATE
+    INTO V_TOTAL_AMOUNT, V_PAID_AMOUNT, V_DUE_DATE
+    FROM TABLE_9S6P4U
+    WHERE TABLE_9S6P4U_INVOICE_ID = INVOICE_ID_PARAM;
+
+    SET V_BALANCE_DUE = V_TOTAL_AMOUNT - V_PAID_AMOUNT;
+
+    IF V_BALANCE_DUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_DAYS_OVERDUE = DATEDIFF(CURDATE(), V_DUE_DATE);
+
+    IF V_DAYS_OVERDUE <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF V_DAYS_OVERDUE > 90 THEN
+        SET V_PENALTY_RATE = 15;
+    ELSEIF V_DAYS_OVERDUE > 30 THEN
+        SET V_PENALTY_RATE = 10;
+    END IF;
+
+    SET V_PENALTY_AMOUNT = (V_BALANCE_DUE * V_PENALTY_RATE) / 100;
+
+    RETURN V_PENALTY_AMOUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_IS_PRIME_OPTIMIZED_y30s11(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_I INT DEFAULT 2;
+    DECLARE V_SQRT_N INT DEFAULT 0;
+
+    IF N <= (MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(37)) - 714 + (1) THEN RETURN 0; END IF;
+    IF N <= 3 THEN RETURN 1; END IF;
+    IF N % 2 = 0 OR N % 3 = 0 THEN RETURN 0; END IF;
+
+    SET V_SQRT_N = FLOOR(SQRT(N));
+    SET V_I = 5;
+
+    PRIME_LOOP: WHILE V_I <= V_SQRT_N DO
+        IF N % V_I = 0 OR N % (V_I + 2) = 0 THEN
+            RETURN 0;
+        END IF;
+        SET V_I = V_I + 6;
+    END WHILE PRIME_LOOP;
+
+    RETURN 1;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+CREATE TABLE IF NOT EXISTS `table_l9v62y` (
+    `table_l9v62y_student_id` INT,
+    `table_l9v62y_school_id` INT,
+    `table_l9v62y_grade_level` INT,
+    `table_l9v62y_subjects_needed` INT,
+    `table_l9v62y_session_rate` INT,
+    `table_l9v62y_scholarship_percent` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_o7ya9e` (
+    `table_o7ya9e_session_id` INT,
+    `table_o7ya9e_student_id` INT,
+    `table_o7ya9e_tutor_id` INT,
+    `table_o7ya9e_session_date` DATE,
+    `table_o7ya9e_duration_minutes` INT,
+    `table_o7ya9e_subjects_covered` INT
+);
+
+INSERT INTO `table_l9v62y` (`table_l9v62y_student_id`, `table_l9v62y_school_id`, `table_l9v62y_grade_level`, `table_l9v62y_subjects_needed`, `table_l9v62y_session_rate`, `table_l9v62y_scholarship_percent`) VALUES (1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_o7ya9e` (`table_o7ya9e_session_id`, `table_o7ya9e_student_id`, `table_o7ya9e_tutor_id`, `table_o7ya9e_session_date`, `table_o7ya9e_duration_minutes`, `table_o7ya9e_subjects_covered`) VALUES (1, 2, 3, '2024-01-01', 5, 6);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TUTORING_BALANCE_xwwgfn(STUDENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SESSION_RATE INT DEFAULT 40;
+    DECLARE V_SCHOLARSHIP_PERCENT INT DEFAULT 0;
+    DECLARE V_TOTAL_SESSIONS INT DEFAULT 0;
+    DECLARE V_TOTAL_CHARGES INT DEFAULT 0;
+    DECLARE V_BALANCE_OWED INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_L9V62Y_SESSION_RATE, 40), COALESCE(TABLE_L9V62Y_SCHOLARSHIP_PERCENT, 0)
+    INTO V_SESSION_RATE, V_SCHOLARSHIP_PERCENT
+    FROM TABLE_L9V62Y
+    WHERE TABLE_L9V62Y_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SELECT COUNT(*) INTO V_TOTAL_SESSIONS
+    FROM TABLE_O7YA9E
+    WHERE TABLE_O7YA9E_STUDENT_ID = STUDENT_ID_PARAM;
+
+    SET V_TOTAL_CHARGES = V_TOTAL_SESSIONS * V_SESSION_RATE;
+    SET V_BALANCE_OWED = V_TOTAL_CHARGES - (V_TOTAL_CHARGES * V_SCHOLARSHIP_PERCENT / 100);
+
+    RETURN (MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n()) - 420 + (cast(v_balance_owed as signed));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_ODD_1_TO_19_r2706n() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 3 UNION SELECT 5 UNION SELECT 7 UNION SELECT 9
+        UNION SELECT 11 UNION SELECT 13 UNION SELECT 15 UNION SELECT 17 UNION SELECT 19;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0791_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_geotext TEXT;
+    DECLARE v_geo_valid INT DEFAULT 0;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT x2 FROM v1154014 WHERE v1154015 = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -(MYSQL_FUNC_CALCULATE_SUBSCRIPTION_VALUE_TIER_77hg9e(7)) - -792 + (1);
+    END;
+
+    -- Get geometry text from table
+    OPEN cur;
+    FETCH cur INTO v_geotext;
+    IF NOT done THEN
+        SET v_geo_valid = 1;
+    END IF;
+    CLOSE cur;
+
+    -- Conditional logic based on geometry existence
+    IF v_geo_valid = 1 THEN
+        -- Adapt UPDATE 1: Use p1 to set value
+        UPDATE v1153539 SET v1153540 = CONCAT('modified_', p1) 
+        WHERE v1153540 IN ('innodb_flush_sync', 'innodb_max_dirty_pages_pct');
+CALL synth_output_0393(27, 89, @_syn_8436);
+        SET v_counter = @_syn_8436 - 189 + (v_counter) + 1;
+    END IF;
+
+    -- Loop with UPDATE 2
+    SET @counter_loop = 0;
+    WHILE @counter_loop < p2 DO
+        -- Adapt UPDATE 2: Use p1 and p2 in WHERE
+        UPDATE v1153747 SET v1153750 = CONCAT('updated_', p1) 
+        WHERE v1153748 = v1153748 
+        ORDER BY v1153748 DESC, v1153751 DESC 
+        LIMIT 1;
+        SET @counter_loop = @counter_loop + 1;
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    -- CASE statement for UPDATE 3
+    CASE 
+        WHEN p1 > 0 THEN
+            -- Adapt UPDATE 4: Use p1 to set value
+            UPDATE v1154005 SET v1154006 = p1 WHERE v1154006 IN (-7, -8);
+            SET v_counter = v_counter + 10;
+        ELSE
+            -- Adapt UPDATE 4 with negative p1
+            UPDATE v1154005 SET v1154006 = -p1 WHERE v1154006 IN (-7, -8);
+            SET v_counter = v_counter + 20;
+    END CASE;
+
+    -- Complex UPDATE 5 with joins
+    IF p2 > 0 THEN
+        UPDATE v1153918 AS x1 
+        LEFT JOIN v1153962 AS x2 ON x1.x2 = x1.v1153919 AND x1.x2 = 3 
+        LEFT OUTER JOIN v1153722 AS x7 ON x2.v1153963 = x2.v1153963 
+        INNER JOIN v1153891 AS x12 ON x7.v1153723 = 2 
+        SET x1.x2 = p1 
+        WHERE v1153919 = 155;
+        SET v_counter = v_counter + 100;
+    END IF;
+
+    -- REPEAT loop for final processing
+    SET @repeat_counter = 0;
+    REPEAT
+        SET v_counter = v_counter + 1;
+        SET @repeat_counter = @repeat_counter + 1;
+    UNTIL @repeat_counter >= p1 END REPEAT;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0791_proc(1, 1, @out_result);
+
+SELECT @out_result;

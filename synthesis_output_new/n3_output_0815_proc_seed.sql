@@ -1,0 +1,80 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1156509 (v1156510 BIGINT);
+CREATE TABLE IF NOT EXISTS v1156507 (v1156508 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1156621 (id INT);
+CREATE TABLE IF NOT EXISTS v1156710 (v1156711 TIME, v1156712 DATETIME, v1156713 INT DEFAULT 1);
+CREATE TEMPORARY TABLE IF NOT EXISTS v1156737 (v1156738 TIME(4) CHECK (v1156738 BETWEEN 10 AND 30));
+CREATE TABLE IF NOT EXISTS v1156743 (v1156744 BIGINT UNSIGNED AUTO_INCREMENT, PRIMARY KEY (v1156744)) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARACTER SET=latin2;
+INSERT INTO v1156509 VALUES (10), (20), (30);
+INSERT INTO v1156507 VALUES ('test UPDATE CASCADE'), ('hello world'), ('foo bar');
+INSERT INTO v1156621 VALUES (1), (2), (3);
+INSERT INTO v1156710 VALUES ('12:00:00', '2023-01-01 12:00:00', 5);
+INSERT INTO v1156743 (v1156744) VALUES (NULL), (NULL), (NULL);
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0815_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_geom_contains INT DEFAULT 0;
+    DECLARE v_floor_val DECIMAL(20,1) DEFAULT 0;
+    DECLARE v_geom_result INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_temp_time TIME(4) DEFAULT '15:00:00';
+    DECLARE v_auto_id BIGINT UNSIGNED DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_like_val VARCHAR(100);
+    DECLARE v_cursor_done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v1156508 FROM v1156507 WHERE v1156508 LIKE '%UPDATE CASCADE%';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Statement 1: CREATE TABLE with spatial function
+    SELECT ST_CONTAINS(ST_GEOMFROMTEXT('GEOMETRYCOLLECTION(LINESTRING(0 0, 3 0), LINESTRING(2 0, 2 8))'), ST_GEOMFROMTEXT('LINESTRING(0 0, 2 0, 2 4)')) INTO v_geom_result;
+    SELECT FLOOR(CAST(-999999999999999999.9 AS DECIMAL(19, 1))) INTO v_floor_val;
+    INSERT INTO v1156710 (v1156711, v1156712, v1156713) VALUES (CURTIME(), NOW(), v_geom_result);
+
+    -- Statement 2: UPDATE with condition
+    IF p1 > 0 THEN
+        UPDATE v1156509 AS x1 SET v1156510 = 20010101101112 WHERE 10 = v1156510;
+        SET v_update_count = v_update_count + ROW_COUNT();
+    END IF;
+
+    -- Statement 3: CREATE TEMPORARY TABLE with CHECK constraint
+    WHILE v_update_count < p2 DO
+        SET v_temp_time = SEC_TO_TIME(p1 * 3600);
+        IF v_temp_time BETWEEN '00:00:10' AND '00:00:30' THEN
+            INSERT INTO v1156737 (v1156738) VALUES (v_temp_time);
+        END IF;
+        SET v_update_count = v_update_count + 1;
+    END WHILE;
+
+    -- Statement 4: CREATE TABLE with AUTO_INCREMENT
+    CASE
+        WHEN p1 > 100 THEN
+            INSERT INTO v1156743 (v1156744) VALUES (NULL);
+            SET v_auto_id = LAST_INSERT_ID();
+        ELSE
+            INSERT INTO v1156743 (v1156744) VALUES (NULL), (NULL);
+            SET v_auto_id = LAST_INSERT_ID() + 1;
+    END CASE;
+
+    -- Statement 5: UPDATE with LEFT JOIN and LIKE
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_like_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE v1156507 AS x0 LEFT JOIN v1156621 AS x4 ON FALSE SET v1156508 = v_like_val WHERE v1156508 LIKE '%UPDATE CASCADE%';
+    END LOOP;
+    CLOSE cur;
+
+    SET result = v_geom_result + v_update_count + v_auto_id;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0815_proc(1, 1, @out_result);
+
+SELECT @out_result;

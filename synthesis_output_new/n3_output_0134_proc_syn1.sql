@@ -1,0 +1,337 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1131402 (v1131403 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1131398 (id INT AUTO_INCREMENT PRIMARY KEY, v1131403 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1131461 (v1131462 VARCHAR(255), v1131463 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1131375 (v1131376 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1131425 (v1131426 VARCHAR(255));
+INSERT INTO v1131402 (v1131403) VALUES ('TABLE'), ('ABC'), ('00:00:00.123456'), (100);
+INSERT INTO v1131398 (v1131403) VALUES ('TABLE'), ('XYZ'), ('TEST');
+INSERT INTO v1131461 (v1131462, v1131463) VALUES (10, 7), (8, '2001-10-15'), (12, '2009-02-21 11:35:50'), (13, 'w'), ('2009-04-05', '04:25:03'), ('00:00:00', 'q'), (9, '00:00:00'), ('2001-05-27 08:41:01', 'l'), ('2004-05-25', '18:39:28'), ('2005-01-17', 'd'), ('2003-08-28', 'k'), (7, 'a'), (4, '1900-01-01'), (NULL, '05:34:27'), ('2006-11-10 10:08:49', '11:13:16'), (1, 'n'), (26, 6), ('2001-03-03', '03:20:29'), ('2001-09-10 18:10:10', NULL), ('2007-06-17', NULL), ('2008-09-11', '10:39:48'), (NULL, '2007-06-09 02:05:46'), (32, '2000-07-03 00:00:00'), ('2005-12-15', '2001-04-15 14:12:38'), (203, '2005-05-10'), ('2008-01-22', '08:33:38'), (7, '19:27:01'), (NULL, 'f'), (38, '17:16:58'), (0, '16:44:24'), (1, '2005-12-09'), (41, '2002-10-18 00:00:00'), ('2002-03-16', 'l'), (43, '2006-07-20'), ('1900-01-01', '12:50:41'), ('2002-09-13', 'h'), ('2002-08-17', '1900-01-01 00:00:00'), (47, '00:00:00'), ('2003-04-22 16:42:22', NULL), ('2008-07-05', '06:16:28');
+INSERT INTO v1131375 (v1131376) VALUES ('ABC'), ('XYZ'), ('DEF');
+INSERT INTO v1131425 (v1131426) VALUES (18), ('row 2');
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+CREATE TABLE IF NOT EXISTS `table_kzmcio` (
+    `table_kzmcio_emp_id` INT,
+    `table_kzmcio_department_id` INT,
+    `table_kzmcio_salary` INT,
+    `table_kzmcio_hire_date` DATE
+);
+
+INSERT INTO `table_kzmcio` (`table_kzmcio_emp_id`, `table_kzmcio_department_id`, `table_kzmcio_salary`, `table_kzmcio_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_HEADCOUNT_INDEX INT DEFAULT 0;
+
+    SELECT COUNT(*), COALESCE(AVG(TABLE_KZMCIO_SALARY), 0)
+    INTO V_HEADCOUNT, V_AVG_SALARY
+    FROM TABLE_KZMCIO
+    WHERE TABLE_KZMCIO_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_HEADCOUNT_INDEX = (V_HEADCOUNT * 10) + (V_AVG_SALARY / 100);
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(-64)) - 779 + (v_headcount_index);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+CREATE TABLE IF NOT EXISTS `table_udtj01` (
+    `table_udtj01_product_id` INT,
+    `table_udtj01_category_id` INT,
+    `table_udtj01_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_udtj01` (`table_udtj01_product_id`, `table_udtj01_category_id`, `table_udtj01_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_al1hoa(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_UDTJ01_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_UDTJ01
+    WHERE TABLE_UDTJ01_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(57)) - 618 + ((MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-22, -100)) - 716 + (floor(v_avg_price)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(SET_OF_LETTERS INT, WORD INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SET_OF_LETTERS_STR VARCHAR(50);
+    DECLARE WORD_STR VARCHAR(50);
+    
+    SET SET_OF_LETTERS_STR = CAST(SET_OF_LETTERS AS CHAR);
+    SET WORD_STR = CAST(WORD AS CHAR);
+    
+    RETURN (SELECT WORD_STR REGEXP SET_OF_LETTERS_STR);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+CREATE TABLE IF NOT EXISTS `table_fxzaop` (
+    `table_fxzaop_emp_id` INT,
+    `table_fxzaop_hire_date` DATE
+);
+
+INSERT INTO `table_fxzaop` (`table_fxzaop_emp_id`, `table_fxzaop_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_TENURE_d4e9bf(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_FXZAOP_HIRE_DATE, CURDATE())
+    INTO V_TENURE
+    FROM TABLE_FXZAOP
+    WHERE TABLE_FXZAOP_EMP_ID = EMP_ID_PARAM;
+
+    RETURN V_TENURE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_POWER_qu7vlp(BASE INT, EXP INT) RETURNS DECIMAL(10,2) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF BASE < 0 AND EXP != FLOOR(EXP) THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'CANNOT RAISE NEGATIVE BASE TO FRACTIONAL EXPONENT';
+    END IF;
+    IF BASE = 0 AND EXP < 0 THEN
+        SIGNAL SQLSTATE '22012' SET MESSAGE_TEXT = 'CANNOT RAISE ZERO TO NEGATIVE POWER';
+    END IF;
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(-17)) - -96 + (pow(base, exp));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+CREATE TABLE IF NOT EXISTS `table_cnc54j` (
+    `table_cnc54j_customer_id` INT
+);
+
+INSERT INTO `table_cnc54j` (`table_cnc54j_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_ID_MOD_cupk4j(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN CUSTOMER_ID_PARAM % 10;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+CREATE TABLE IF NOT EXISTS `table_5ajvmd` (
+    `table_5ajvmd_product_id` INT,
+    `table_5ajvmd_category_id` INT,
+    `table_5ajvmd_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_5ajvmd` (`table_5ajvmd_product_id`, `table_5ajvmd_category_id`, `table_5ajvmd_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_6h5ixq(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AVG_PRICE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(AVG(TABLE_5AJVMD_PRICE), 0)
+    INTO V_AVG_PRICE
+    FROM TABLE_5AJVMD
+    WHERE TABLE_5AJVMD_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(-61)) - -192 + (floor(v_avg_price));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+CREATE TABLE IF NOT EXISTS `table_w4154q` (
+    `table_w4154q_campaign_id` INT,
+    `table_w4154q_start_date` DATE,
+    `table_w4154q_end_date` DATE
+);
+
+INSERT INTO `table_w4154q` (`table_w4154q_campaign_id`, `table_w4154q_start_date`, `table_w4154q_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_TOTAL_DAYS_gwk9tv(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_W4154Q_START_DATE, TABLE_W4154Q_END_DATE
+    INTO V_START_DATE, V_END_DATE
+    FROM TABLE_W4154Q
+    WHERE TABLE_W4154Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL OR V_END_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(17)) - -679 + (datediff(v_end_date, v_start_date));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+CREATE TABLE IF NOT EXISTS `table_98hbly` (
+    `table_98hbly_category_id` INT,
+    `table_98hbly_stock_quantity` INT
+);
+
+INSERT INTO `table_98hbly` (`table_98hbly_category_id`, `table_98hbly_stock_quantity`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_LOW_STOCK_COUNT_rv2iur(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_COUNT
+    FROM TABLE_98HBLY
+    WHERE TABLE_98HBLY_CATEGORY_ID = CATEGORY_ID_PARAM AND TABLE_98HBLY_STOCK_QUANTITY < 20;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0134_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_val VARCHAR(255);
+    DECLARE v_cursor CURSOR FOR SELECT v1131403 FROM v1131402 WHERE v1131403 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    
+    -- Statement 1: UPDATE with JOIN
+    UPDATE v1131402 AS x1 
+    JOIN v1131398 AS x6 ON x1.v1131403 = x6.v1131403 
+    SET x1.v1131403 = LEFT(x1.v1131403, CHAR_LENGTH(x1.v1131403) - 2) 
+    WHERE x1.v1131403 = 'TABLE';
+    
+    -- Statement 2: INSERT multiple rows into v1131461
+    INSERT INTO v1131461 (v1131462, v1131463) VALUES 
+        (p1, p2),
+        (8, '2001-10-15'),
+        (12, '2009-02-21 11:35:50'),
+        (13, 'w'),
+        ('2009-04-05', '04:25:03'),
+        ('00:00:00', 'q'),
+        (9, '00:00:00'),
+        ('2001-05-27 08:41:01', 'l'),
+        ('2004-05-25', '18:39:28'),
+        ('2005-01-17', 'd'),
+        ('2003-08-28', 'k'),
+        (7, 'a'),
+        (4, '1900-01-01'),
+        (NULL, '05:34:27'),
+        ('2006-11-10 10:08:49', '11:13:16'),
+        (1, 'n'),
+        (26, 6),
+        ('2001-03-03', '03:20:29'),
+        ('2001-09-10 18:10:10', NULL),
+        ('2007-06-17', NULL),
+        ('2008-09-11', '10:39:48'),
+        (NULL, '2007-06-09 02:05:46'),
+        (32, '2000-07-03 00:00:00'),
+        ('2005-12-15', '2001-04-15 14:12:38'),
+        (203, '2005-05-10'),
+        ('2008-01-22', '08:33:38'),
+        (7, '19:27:01'),
+        (NULL, 'f'),
+        (38, '17:16:58'),
+        (0, '16:44:24'),
+        (1, '2005-12-09'),
+        (41, '2002-10-18 00:00:00'),
+        ('2002-03-16', 'l'),
+        (43, '2006-07-20'),
+        ('1900-01-01', '12:50:41'),
+        ('2002-09-13', 'h'),
+        ('2002-08-17', '1900-01-01 00:00:00'),
+        (47, '00:00:00'),
+        ('2003-04-22 16:42:22', NULL),
+        ('2008-07-05', '06:16:28');
+    
+    -- Statement 3: UPDATE v1131375 with condition using p1
+    IF p1 > 0 THEN
+        UPDATE v1131375 AS x0 SET v1131376 = v1131376 WHERE v1131376 = 'ABC';
+        SET v_counter = (MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-22, -100)) - 716 + (v_counter) + 1;
+    ELSE
+        SET v_counter = v_counter - 1;
+    END IF;
+    
+    -- Statement 4: INSERT into v1131402
+    INSERT INTO v1131402 (v1131403) VALUES ('00:00:00.123456'), (100);
+    
+    -- Statement 5: INSERT into v1131425
+    INSERT INTO v1131425 (v1131426) VALUES (18), ('row 2');
+    
+    -- Use cursor to process results and demonstrate loop/conditional
+    OPEN v_cursor;
+    read_loop: LOOP
+        FETCH v_cursor INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        CASE 
+            WHEN v_val LIKE '0%' THEN
+                SET v_counter = v_counter + 10;
+            WHEN (MYSQL_FUNC_CALCULATE_DEPARTMENT_HEADCOUNT_INDEX_zmvelc(-24)) - 612 + (v_val like '%t%') THEN
+                SET v_counter = v_counter + 5;
+            ELSE
+                SET v_counter = v_counter + 1;
+        END CASE;
+    END LOOP;
+    CLOSE v_cursor;
+    
+    -- Set output parameter
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0134_proc(1, 1, @out_result);
+
+SELECT @out_result;

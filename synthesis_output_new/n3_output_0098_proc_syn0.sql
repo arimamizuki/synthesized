@@ -1,0 +1,437 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1130897 (v1130898 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1130995 (v1130996 VARCHAR(50), v1130997 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1130950 (v1130952 VARCHAR(10));
+CREATE TABLE IF NOT EXISTS v1130918 (v1130919 VARCHAR(50), v1130921 VARCHAR(100));
+INSERT INTO v1130897 (v1130898) VALUES ('initial'), ('data'), ('seed');
+INSERT INTO v1130995 (v1130996, v1130997) VALUES ('init', '1'), ('data', '2'), ('seed', '3');
+INSERT INTO v1130950 (v1130952) VALUES ('x'), ('y'), ('z');
+INSERT INTO v1130918 (v1130919, v1130921) VALUES ('test1', 'value1'), ('test2', 'value2'), ('test3', 'value3');
+
+/* -----Dependency for: n3_output_0933_proc----- */
+CREATE TABLE IF NOT EXISTS v1165781 (v1165782 VARCHAR(255), v1165783 VARCHAR(255), v1165784 INT);
+CREATE TABLE IF NOT EXISTS v1165316 (v1165317 VARCHAR(255), v1165318 INT);
+CREATE TABLE IF NOT EXISTS v1165334 (v1165336 DATETIME, v1165338 DECIMAL(10,2), v1165339 INT);
+CREATE TABLE IF NOT EXISTS v1165212 (v1165213 VARCHAR(255), v1165214 BIGINT UNSIGNED);
+CREATE TABLE IF NOT EXISTS v1165713 (v1165213 VARCHAR(255), v1165214 BIGINT UNSIGNED);
+CREATE TABLE IF NOT EXISTS v1165174 (v1165178 GEOMETRY, v1165183 GEOMETRY, v1165182 GEOMETRY, v1165187 VARCHAR(255));
+INSERT INTO v1165781 VALUES ('test', '2001-01-01 00:01:01', 5);
+INSERT INTO v1165316 VALUES ('2002-01-09 01:30:00', 1);
+INSERT INTO v1165334 VALUES ('2023-01-01 12:00:00', 50.00, 1);
+INSERT INTO v1165212 VALUES ('wait/synch/mutex/mysys/THR_LOCK::mutex', 100);
+INSERT INTO v1165713 VALUES ('wait/synch/mutex/mysys/THR_LOCK::mutex', 200);
+INSERT INTO v1165174 VALUES (ST_GEOMFROMTEXT('POINT(0 0)'), ST_GEOMFROMTEXT('POINT(1 1)'), ST_GEOMFROMTEXT('MULTIPOLYGON(((0 0,1 0,1 1,0 1,0 0)))'), 'localhost');
+
+/* -----Called: n3_output_0933_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0933_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_geom1 GEOMETRY;
+    DECLARE v_geom2 GEOMETRY;
+    DECLARE v_geom3 GEOMETRY;
+    DECLARE v_connection_str VARCHAR(255);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cur CURSOR FOR SELECT v1165178, v1165183, v1165182, v1165187 FROM v1165174;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- First UPDATE: Adapt with CONCAT and RTRIM
+    UPDATE v1165781 AS x1 
+    SET v1165783 = CONCAT('2001-01-01 00:01:01', RTRIM(v1165782)) 
+    WHERE v1165784 >= p1;
+    
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Second UPDATE: Use UNIX_TIMESTAMP with condition
+    UPDATE v1165316 AS x0 
+    SET v1165318 = UNIX_TIMESTAMP('1990-08-03 00:00') 
+    WHERE v1165317 <> '2002-01-09 01:30:00' AND v1165318 = p2;
+    
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- INSERT with NOW() and decimal value
+    INSERT INTO v1165334 (v1165336, v1165338, v1165339) 
+    VALUES (NOW(), 100.55, p1);
+    
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Third UPDATE: Multi-table with ORDER BY and LIMIT
+    UPDATE v1165212 AS x0, v1165713 AS x5 
+    SET x0.v1165214 = 18446744073709551615 
+    WHERE x0.v1165213 = 'wait/synch/mutex/mysys/THR_LOCK::mutex' 
+    AND x5.v1165213 = x0.v1165213
+    ORDER BY x0.v1165213 ASC 
+    LIMIT p2;
+    
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- INSERT with geometry functions
+    INSERT INTO v1165174 (v1165178, v1165183, v1165182, v1165187) 
+    VALUES (ST_GEOMFROMTEXT('POINT(205 13)'), 
+            ST_GEOMFROMTEXT('POINT(618432704 760982731)'), 
+            ST_GEOMFROMTEXT('MULTIPOLYGON(((4 1,0 -18,6 -18,17 -18,19 8,4 1)))'), 
+            CONCAT('x', p1, p2));
+    
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Cursor loop to process geometry data
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_geom1, v_geom2, v_geom3, v_connection_str;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Use IF/ELSEIF to check geometry types
+        IF ST_GeometryType(v_geom1) = 'POINT' THEN
+            SET v_counter = v_counter + 1;
+        ELSEIF ST_GeometryType(v_geom1) = 'MULTIPOLYGON' THEN
+            SET v_counter = v_counter + 2;
+        ELSE
+            SET v_counter = v_counter + 3;
+        END IF;
+        
+        -- WHILE loop example (simple iteration)
+        WHILE v_affected_rows > 0 DO
+            SET v_affected_rows = v_affected_rows - 1;
+            SET v_counter = v_counter + 1;
+        END WHILE;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Use CASE to determine final result based on counter value
+    CASE 
+        WHEN v_counter > 100 THEN
+            SET result = v_counter * p1;
+        WHEN v_counter > 50 THEN
+            SET result = v_counter + p2;
+        ELSE
+            SET result = v_counter;
+    END CASE;
+
+    -- Clean up temporary data (optional)
+    DELETE FROM v1165781 WHERE v1165784 < p1;
+    DELETE FROM v1165316 WHERE v1165318 = UNIX_TIMESTAMP('1990-08-03 00:00');
+    DELETE FROM v1165334 WHERE v1165339 = p1;
+    DELETE FROM v1165212 WHERE v1165214 = 18446744073709551615;
+    DELETE FROM v1165174 WHERE v1165187 LIKE CONCAT('x', p1, '%');
+    
+    -- REPEAT loop for final adjustment
+    REPEAT
+        SET result = result - 1;
+    UNTIL result <= 0 END REPEAT;
+    
+    SET result = ABS(result);
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 3;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = V_RESULT * V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 1;
+    DECLARE COUNTER INT DEFAULT 1;
+
+    IF N < (MYSQL_FUNC_PROC_YEAR_pmoygo()) - 253 + ((MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(63)) - -880 + (0)) THEN
+        RETURN 0;
+    END IF;
+
+    SIMPLE_LOOP: WHILE COUNTER <= N DO
+        SET RESULT = (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5()) - -417 + (result) * COUNTER;
+        SET COUNTER = COUNTER + 1;
+    END WHILE SIMPLE_LOOP;
+
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+CREATE TABLE IF NOT EXISTS `table_a3kxxw` (
+    `table_a3kxxw_campaign_id` INT,
+    `table_a3kxxw_status` VARCHAR(50),
+    `table_a3kxxw_start_date` DATE,
+    `table_a3kxxw_end_date` DATE
+);
+
+INSERT INTO `table_a3kxxw` (`table_a3kxxw_campaign_id`, `table_a3kxxw_status`, `table_a3kxxw_start_date`, `table_a3kxxw_end_date`) VALUES (1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_6nj5wi(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START DATE;
+    DECLARE V_END DATE;
+
+    SELECT TABLE_A3KXXW_START_DATE, TABLE_A3KXXW_END_DATE
+    INTO V_START, V_END
+    FROM TABLE_A3KXXW
+    WHERE TABLE_A3KXXW_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END IS NULL OR V_START IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(-67)) - -826 + (0);
+    END IF;
+
+    RETURN DATEDIFF(V_END, V_START);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+CREATE TABLE IF NOT EXISTS `table_2yndtv` (
+    `table_2yndtv_customer_id` INT,
+    `table_2yndtv_status` VARCHAR(50),
+    `table_2yndtv_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_2yndtv` (`table_2yndtv_customer_id`, `table_2yndtv_status`, `table_2yndtv_monthly_cost`) VALUES (1, 'test', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_RENEWAL_PROBABILITY_1j2gzt(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT TABLE_2YNDTV_STATUS, COALESCE(TABLE_2YNDTV_MONTHLY_COST, 0)
+    INTO V_STATUS, V_MONTHLY_COST
+    FROM TABLE_2YNDTV
+    WHERE TABLE_2YNDTV_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN LEAST(100, V_MONTHLY_COST * 5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+CREATE TABLE IF NOT EXISTS `table_qkugmq` (
+    `table_qkugmq_cyear` INT
+);
+
+INSERT INTO `table_qkugmq` (`table_qkugmq_cyear`) VALUES (2024);
+
+/* -----Called: MYSQL_FUNC_PROC_YEAR_pmoygo----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_YEAR_pmoygo() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT;
+    SELECT TABLE_QKUGMQ_CYEAR INTO RESULT FROM `TABLE_QKUGMQ` LIMIT 1;
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(-81, -74, 100)) - 813 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_AVG_THREE_xc902v(P_A INT, P_B INT, P_C INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = (P_A + P_B + P_C) / 3;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_a0deh5() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT (MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8()) - -842 + (1) UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_SPHERE_SURFACE_AREA_rxuoit(63)) - 838 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SPHERE_SURFACE_AREA_rxuoit----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SPHERE_SURFACE_AREA_rxuoit(RADIUS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SURFACE_AREA DECIMAL(10,2) DEFAULT 0.00;
+    SET V_SURFACE_AREA = 4 * 3.14159 * RADIUS * RADIUS;
+    RETURN FLOOR(V_SURFACE_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_17_VALUES_xcumj8() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 17 UNION SELECT 34 UNION SELECT 51 UNION SELECT 68 UNION SELECT 85 UNION SELECT 102 UNION SELECT 119 UNION SELECT 136 UNION SELECT 153 UNION SELECT 170 UNION SELECT 187 UNION SELECT 204 UNION SELECT 221 UNION SELECT 238 UNION SELECT 255 UNION SELECT 272 UNION SELECT 289;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0098_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_val VARCHAR(50);
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_temp INT DEFAULT 0;
+    
+    DECLARE cur CURSOR FOR SELECT v1130898 FROM v1130897;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    INSERT INTO v1130897 (v1130898) VALUES (p1), (p2), (p1 + p2);
+    
+    INSERT INTO v1130995 (v1130997) VALUES (p1);
+    
+    IF (MYSQL_FUNC_CALCULATE_FACTORIAL_SIMPLE_7lronz(85)) - 701 + (p1) > 0 THEN
+        INSERT INTO v1130995 (v1130996) VALUES (p1), (p2), (p1 + p2);
+    ELSE
+        INSERT INTO v1130995 (v1130996) VALUES (5), ('2001-01-01 10:10:10.999991'), (''), ('180027'), ('2007-07-19 08:36:00');
+    END IF;
+    
+CALL n3_output_0933_proc(-71, -100, @_syn_1057);
+    CASE @_syn_1057 - @_io_result + (p2)
+        WHEN (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_3_TO_8_13u6e3()) - 100 + (1) THEN
+            INSERT INTO v1130950 (v1130952) VALUES ('1a');
+        WHEN 2 THEN
+            INSERT INTO v1130950 (v1130952) VALUES ('2b');
+        ELSE
+            INSERT INTO v1130950 (v1130952) VALUES ('3c');
+    END CASE;
+    
+    INSERT INTO v1130918 (v1130919, v1130921) VALUES 
+        (p1, 'foo bar'),
+        (p2, '019004'),
+        (p1 + p2, '2009-07-08 20:24:29.025421'),
+        (p1 * p2, 569),
+        (p1 - p2, 'GRANT ALL ON f2 TO test_2 with table locked');
+    
+    SET v_temp = p1;
+    WHILE v_temp > 0 DO
+        SET v_sum = v_sum + v_temp;
+        SET v_temp = v_temp - 1;
+    END WHILE;
+    
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_count = v_count + 1;
+    END LOOP;
+    CLOSE cur;
+    
+    IF v_count > 0 THEN
+        SET result = v_sum + v_count + p2;
+    ELSE
+        SET result = v_sum + p1 + p2;
+    END IF;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0098_proc(1, 1, @out_result);
+
+SELECT @out_result;

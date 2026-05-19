@@ -1,0 +1,471 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v32462 (
+    v32463 INT,
+    v32465 VARCHAR(100),
+    v32467 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v32167 (
+    v32168 INT,
+    v32169 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v31943 (
+    v31872 INT
+);
+CREATE TABLE IF NOT EXISTS v32784 (
+    v32785 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v32719 (
+    v32785 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v33028 (
+    v33029 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS x11 (dummy INT);
+CREATE TABLE IF NOT EXISTS x12 (dummy INT);
+CREATE TABLE IF NOT EXISTS x13 (dummy INT);
+CREATE TABLE IF NOT EXISTS x14 (dummy INT);
+INSERT INTO v32462 VALUES (1, 'test1', 'Table_open_cache_overflows'), (2, 'test2', 'other');
+INSERT INTO v32167 VALUES (10, 'max_connections'), (20, 'autocommit'), (30, 'other');
+INSERT INTO v31943 VALUES (2), (5), (6), (3);
+INSERT INTO v32784 VALUES ('memory/temptable_1'), ('memory/temptable_2'), ('other');
+INSERT INTO v32719 VALUES ('memory/temptable_1'), ('memory/temptable_2');
+INSERT INTO v33028 VALUES ('IRM');
+INSERT INTO x11 VALUES (1);
+INSERT INTO x12 VALUES (1);
+INSERT INTO x13 VALUES (1);
+INSERT INTO x14 VALUES (1);
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(N INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N MOD 15 = 0 THEN
+        RETURN 'FIZZBUZZ';
+    ELSEIF N MOD 3 = 0 THEN
+        RETURN 'FIZZ';
+    ELSEIF N MOD 5 = 0 THEN
+        RETURN 'BUZZ';
+    ELSE
+        RETURN CAST(N AS CHAR);
+    END IF;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+CREATE TABLE IF NOT EXISTS `table_2vrwu4` (
+    `table_2vrwu4_emp_id` INT,
+    `table_2vrwu4_hire_date` DATE
+);
+
+INSERT INTO `table_2vrwu4` (`table_2vrwu4_emp_id`, `table_2vrwu4_hire_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRE_DAY_OF_YEAR_glij1l(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HIRE_DATE DATE;
+
+    SELECT TABLE_2VRWU4_HIRE_DATE
+    INTO V_HIRE_DATE
+    FROM TABLE_2VRWU4
+    WHERE TABLE_2VRWU4_EMP_ID = EMP_ID_PARAM;
+
+    IF V_HIRE_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(-9)) - 520 + (0);
+    END IF;
+
+    RETURN DAYOFYEAR(V_HIRE_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+CREATE TABLE IF NOT EXISTS `table_d7zjcs` (
+    `table_d7zjcs_order_id` INT,
+    `table_d7zjcs_customer_id` INT,
+    `table_d7zjcs_order_date` DATE,
+    `table_d7zjcs_shipped_date` DATE,
+    `table_d7zjcs_status` VARCHAR(50)
+);
+
+INSERT INTO `table_d7zjcs` (`table_d7zjcs_order_id`, `table_d7zjcs_customer_id`, `table_d7zjcs_order_date`, `table_d7zjcs_shipped_date`, `table_d7zjcs_status`) VALUES (1, 1, '2024-01-01', '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SHIPPING_DELAY_n0n3d5(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_ORDER_DATE DATE;
+    DECLARE V_SHIPPED_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_D7ZJCS_ORDER_DATE, TABLE_D7ZJCS_SHIPPED_DATE
+    INTO V_ORDER_DATE, V_SHIPPED_DATE
+    FROM TABLE_D7ZJCS
+    WHERE TABLE_D7ZJCS_ORDER_ID = ORDER_ID_PARAM;
+
+    IF V_ORDER_DATE IS NULL THEN
+        RETURN -1;
+    END IF;
+
+    IF V_SHIPPED_DATE IS NULL THEN
+        SET V_SHIPPED_DATE = CURDATE();
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_SHIPPED_DATE, V_ORDER_DATE);
+
+    IF V_DELAY_DAYS < 0 THEN
+        SET V_DELAY_DAYS = 0;
+    END IF;
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_1_TO_50_69m4d6() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10
+        UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20
+        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30
+        UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40
+        UNION SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_1406_proc----- */
+CREATE TABLE IF NOT EXISTS v1242973 (v1242974 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1243374 (v1242974 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1243536 (v1243537 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1243483 (v1243537 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1242715 (v1242717 DECIMAL(10,2), v1242718 VARCHAR(600));
+CREATE TABLE IF NOT EXISTS v1242979 (v1242980 VARCHAR(4000));
+CREATE TABLE IF NOT EXISTS v1243686 (v1243687 VARCHAR(100));
+INSERT INTO v1242973 VALUES ('table_lock_waits_summary_bbbb'), ('test');
+INSERT INTO v1243374 VALUES ('table_lock_waits_summary_bbbb'), ('other');
+INSERT INTO v1243536 VALUES ('x'), ('test20');
+INSERT INTO v1243483 VALUES ('test20'), ('y');
+INSERT INTO v1242715 VALUES (0.5, 'test'), (0.2, 'example');
+INSERT INTO v1242979 VALUES (REPEAT('a', 4000)), (REPEAT('o', 4000));
+INSERT INTO v1243686 VALUES ('initial');
+
+/* -----Called: n3_output_1406_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1406_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_d VARCHAR(100);
+    DECLARE v_col6 VARCHAR(4000);
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1242980 FROM v1242979 WHERE v1242980 = REPEAT('a', 4000);
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    SET @d = 'test20';
+    
+    -- First UPDATE: LEFT JOIN with REPLACE
+    UPDATE v1242973 AS x2 LEFT JOIN v1243374 AS x7 ON x2.v1242974 = x2.v1242974 
+    SET x2.v1242974 = REPLACE(x2.v1242974, 'table_lock_waits_summary_', 'tlws_') 
+    WHERE x2.v1242974 = 'bbbb';
+    
+    IF ROW_COUNT() > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+    
+    -- Second UPDATE: INNER JOIN with variable assignment
+    UPDATE v1243536 AS x0 INNER JOIN v1243483 AS x3 ON x0.v1243537 = 'test20' 
+    SET x0.v1243537 = @d 
+    WHERE x0.v1243537 = 'x' AND x0.v1243537 = 'x' AND x0.v1243537 > 'x';
+    
+    IF ROW_COUNT() > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+    
+    -- Third UPDATE: REPEAT function
+    UPDATE v1242715 AS x1 SET v1242718 = REPEAT('a', 600) WHERE v1242717 >= 0.1;
+    
+    IF ROW_COUNT() > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+    
+    -- Fourth UPDATE: STRAIGHT_JOIN with cursor iteration
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_col6;
+        IF (MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(-72)) - 326 + (done) THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1242979 AS x1 STRAIGHT_JOIN v1242979 AS x4 ON (x1.v1242980 = x1.v1242980) 
+        SET x1.v1242980 = v_col6 
+        WHERE x1.v1242980 = REPEAT('a', 4000) AND x1.v1242980 = REPEAT('o', 4000);
+        
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+    
+    -- INSERT statement
+    INSERT INTO v1243686 (v1243687) VALUES ('test1');
+    SET v_counter = v_counter + 1;
+    
+    -- Final result using CASE
+    SET result = CASE 
+        WHEN v_counter >= 5 THEN v_counter
+        WHEN v_counter >= 3 THEN v_counter * 2
+        ELSE v_counter * 3
+    END;
+    
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+CREATE TABLE IF NOT EXISTS `table_07mi7x` (
+    `table_07mi7x_emp_id` INT,
+    `table_07mi7x_hire_date` DATE,
+    `table_07mi7x_salary` INT
+);
+
+INSERT INTO `table_07mi7x` (`table_07mi7x_emp_id`, `table_07mi7x_hire_date`, `table_07mi7x_salary`) VALUES (1, '2024-01-01', 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_EXPERIENCE_VALUE_zjj0cd(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TENURE INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_07MI7X_HIRE_DATE, CURDATE()), COALESCE(TABLE_07MI7X_SALARY, 0)
+    INTO V_TENURE, V_SALARY
+    FROM TABLE_07MI7X
+    WHERE TABLE_07MI7X_EMP_ID = EMP_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(12)) - -766 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(-89)) - -487 + ((v_tenure * 1000) + floor(v_salary / 1000)));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_FIBONACCI_pqwxco(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PREV BIGINT DEFAULT 0;
+    DECLARE V_CURR BIGINT DEFAULT 1;
+    DECLARE V_NEXT BIGINT;
+    DECLARE V_I INT DEFAULT 2;
+
+    IF N = 0 THEN RETURN 0;
+    ELSEIF N = 1 THEN RETURN 1;
+    END IF;
+
+    WHILE V_I <= N DO
+        SET V_NEXT = V_PREV + V_CURR;
+        SET V_PREV = V_CURR;
+        SET V_CURR = V_NEXT;
+        SET V_I = V_I + 1;
+    END WHILE;
+
+    RETURN V_CURR;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_WHILE_MOD_waw940(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+
+    WHILE N > 0 DO
+        IF N MOD 2 = 0 THEN
+            SET V_COUNT = (MYSQL_FUNC_PROC_VECTOR_nlaylc()) - -362 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(73)) - -110 + (v_count)) + 1;
+        END IF;
+        SET N = N - 1;
+    END WHILE;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww----- */
+CREATE TABLE IF NOT EXISTS `table_tpxpnn` (
+    `table_tpxpnn_emp_id` INT,
+    `table_tpxpnn_salary` INT
+);
+
+INSERT INTO `table_tpxpnn` (`table_tpxpnn_emp_id`, `table_tpxpnn_salary`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_COMPENSATION_INDEX_yn1tww(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_TPXPNN_SALARY, 0)
+    INTO V_SALARY
+    FROM TABLE_TPXPNN
+    WHERE TABLE_TPXPNN_EMP_ID = EMP_ID_PARAM;
+
+    RETURN FLOOR(V_SALARY / 10000);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+CREATE TABLE IF NOT EXISTS `table_95d2jl` (
+    `table_95d2jl_vec` INT
+);
+
+INSERT INTO `table_95d2jl` (`table_95d2jl_vec`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_VECTOR_nlaylc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_VECTOR_nlaylc() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_95D2JL_VEC INTO RESULT FROM `TABLE_95D2JL` LIMIT 1;
+    RETURN RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0908(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val VARCHAR(100);
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v32465 FROM v32462 WHERE v32467 = 'Table_open_cache_overflows';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    
+    -- Statement 1: INSERT INTO v33028
+    INSERT INTO v33028 (v33029) VALUES ('IRM');
+CALL n3_output_1406_proc(89, 56, @_syn_4234);
+    SET v_counter = @_syn_4234 - @_io_result + (v_counter) + 1;
+    
+    -- Statement 2: WITH RECURSIVE with SELECT...INTO
+    BEGIN
+        DECLARE v_cte_count INT;
+        SET @sql = 'WITH RECURSIVE x10 AS (SELECT COUNT(*) as cnt FROM x11) SELECT cnt INTO @v_cte_count FROM x10';
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+        SET v_counter = v_counter + 1;
+    END;
+    
+    -- Statement 3: UPDATE with JOIN
+    BEGIN
+        UPDATE v32784 AS x1 
+        JOIN v32719 AS x5 ON x1.v32785 = x1.v32785 
+        SET x1.v32785 = '2006-11-06' 
+        WHERE x1.v32785 LIKE 'memory/temptable%';
+        SET v_counter = v_counter + 1;
+    END;
+    
+    -- Statement 4: WITH RECURSIVE with CURSOR
+    BEGIN
+        DECLARE v_val2 VARCHAR(100);
+        DECLARE v_done2 INT DEFAULT FALSE;
+        DECLARE cur2 CURSOR FOR 
+            WITH RECURSIVE x10 AS (
+                SELECT 1 AS val FROM x11, x12 AS x15, x13 AS x16 
+                JOIN x14 ON 1=1 
+                LIMIT 100000000
+            )
+            SELECT v32168, v32169 FROM v32167 
+            WHERE v32169 IN ('max_connections', 'autocommit');
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done2 = TRUE;
+        
+        OPEN cur2;
+        read_loop: LOOP
+            FETCH cur2 INTO v_val, v_val2;
+            IF (MYSQL_FUNC_FLOW_CONTROL_FUNC_FIZZBUZZ_407mmy(-6)) - 570 + (v_done2) THEN
+                LEAVE read_loop;
+            END IF;
+            SET v_counter = v_counter + 1;
+        END LOOP;
+        CLOSE cur2;
+    END;
+    
+    -- Statement 5: WITH RECURSIVE with complex string operation
+    BEGIN
+        DECLARE v_num INT;
+        DECLARE v_done3 INT DEFAULT FALSE;
+        DECLARE cur3 CURSOR FOR 
+            WITH RECURSIVE x9 AS (
+                SELECT X() as x_val FROM x12
+            )
+            SELECT v31872 FROM v31943 
+            WHERE v31872 IN (2, 5, 6);
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done3 = TRUE;
+        
+        OPEN cur3;
+        loop3: WHILE NOT v_done3 DO
+            FETCH cur3 INTO v_num;
+            IF NOT v_done3 THEN
+                SET v_counter = v_counter + v_num;
+            END IF;
+        END WHILE;
+        CLOSE cur3;
+    END;
+    
+    -- Use IF/ELSEIF/ELSE to determine final result
+    IF v_counter > 100 THEN
+        SET result = v_counter;
+    ELSEIF v_counter > 50 THEN
+        SET result = v_counter * 2;
+    ELSE
+        SET result = v_counter + 100;
+    END IF;
+    
+END; //
+
+DELIMITER ;
+
+CALL synth_output_0908(1, 1, @out_result);
+
+SELECT @out_result;

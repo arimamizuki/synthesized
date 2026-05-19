@@ -1,0 +1,399 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1170462 (v1170463 INT, v1170464 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1170907 (v1170908 VARCHAR(50), v1170909 INT);
+CREATE TABLE IF NOT EXISTS v1170911 (v1170912 VARCHAR(50), v1170913 INT, v1170914 VARCHAR(50), v1170915 VARCHAR(50), v1170916 INT, v1170917 INT, v1170918 VARCHAR(50), v1170919 VARCHAR(50), v1170920 INT, v1170921 VARCHAR(50), v1170922 INT, v1170923 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1171108 (v1171109 TEXT(66) CHARACTER SET euckr);
+INSERT INTO v1170462 VALUES (1, 'test'), (15, 'sample'), (20, 'data');
+INSERT INTO v1170907 VALUES ('2023-01-01 10:00:00', 5), ('2023-02-01 12:00:00', 8), ('invalid', 3);
+INSERT INTO v1170911 (v1170912, v1170913, v1170914, v1170915, v1170916, v1170917, v1170918, v1170919, v1170920, v1170921, v1170922, v1170923) VALUES ('test', 1, 'value1', 'desc1', 10, 100, 'ext1', 'info1', 50, 'label1', 200, 'flag1');
+INSERT INTO v1171108 VALUES ('initial data');
+
+/* -----Dependency for: synth_output_0432----- */
+CREATE TABLE IF NOT EXISTS v6212 (id INT, col1 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v6477 (v6478 INT, v6479 INT, col1 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v6589 (v6357 INT, x2 INT);
+CREATE TABLE IF NOT EXISTS v6236 (v6237 TIME, v6239 DATETIME, v6243 DECIMAL(10,2), v6247 JSON, v6241 JSON, v6240 DATETIME, v6250 DATE);
+CREATE TABLE IF NOT EXISTS v6084 (v6085 INT, v6086 INT);
+CREATE TABLE IF NOT EXISTS x10 (v6478 INT, v6479 INT);
+CREATE TABLE IF NOT EXISTS x18 (v6357 INT);
+CREATE TABLE IF NOT EXISTS x19 (v6357 INT);
+CREATE TABLE IF NOT EXISTS x13 (v6085 INT, v6086 INT);
+INSERT INTO v6212 VALUES (1, 'test'), (2, 'data');
+INSERT INTO v6477 VALUES (1, 100, 'abc'), (2, 200, 'def');
+INSERT INTO v6589 VALUES (1, 2), (3, 4);
+INSERT INTO v6236 VALUES ('15:44:00', '2038-01-19 03:14:07.999999+00:00', 10.5, '{"id":9}', '{"id":8}', '2015-01-01 10:10:10.0001+05:30', '1901-01-01');
+INSERT INTO v6084 VALUES (1, 10), (2, 20);
+INSERT INTO x10 VALUES (1, 100), (2, 200);
+INSERT INTO x18 VALUES (1), (3);
+INSERT INTO x19 VALUES (2), (4);
+INSERT INTO x13 VALUES (1, 10), (2, 20);
+
+/* -----Called: synth_output_0432----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0432(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp1 INT;
+    DECLARE v_temp2 INT;
+    DECLARE v_json_val JSON;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v6085, v6086 FROM v6084 WHERE v6085 = '2015-01-01 04:40:10.001';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Statement 1: CREATE VIEW (simulated as SELECT INTO)
+    SELECT RTRIM('ъ') INTO @view_result FROM v6212 AS x2 LIMIT 1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 2: WITH RECURSIVE x9 (simulated with loop)
+    SET @counter = 1;
+    WHILE @counter <= 10000 DO
+        SET @sha2 = CONCAT(SHA2(RAND(), 0), SHA2(RAND(), 0));
+        SET @counter = @counter + 1;
+    END WHILE;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: WITH RECURSIVE x10 (simulated with IF/CASE)
+    SET @start_node = p1;
+    SET @x17 = @start_node;
+    SET @v6357 = p2;
+    SET @x2 = p2;
+    IF @v6357 = @x2 THEN
+        SET @x17 = @x2;
+    ELSE
+        SET @x17 = @v6357;
+    END IF;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: INSERT INTO v6236 (dynamic SQL)
+    SET @sql = "INSERT INTO v6236 (v6237, v6239, v6243, v6247, v6241, v6240, v6250) VALUES (CAST('15:44:00' AS TIME), CAST('2038-01-19 03:14:07.999999+00:00' AS DATETIME), CAST(DATE(NULL) AS DECIMAL), CAST('{\"id\":9}' AS JSON), CAST('{\"id\":8}' AS JSON), CAST('2015-01-01 10:10:10.0001+05:30' AS DATETIME), CAST('1901-01-01' AS DATE))";
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 5: WITH RECURSIVE x11 (using CURSOR and LOOP)
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp1, v_temp2;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET @max_val = (SELECT MAX(v6086) FROM v6084 WHERE v6085 = '2015-01-01 04:40:10.001');
+        SET v_counter = v_counter + @max_val;
+    END LOOP;
+    CLOSE cur;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+CREATE TABLE IF NOT EXISTS `table_cpfd8s` (
+    `table_cpfd8s_category_id` INT,
+    `table_cpfd8s_price` DECIMAL(10,2),
+    `table_cpfd8s_stock_quantity` INT
+);
+
+INSERT INTO `table_cpfd8s` (`table_cpfd8s_category_id`, `table_cpfd8s_price`, `table_cpfd8s_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STOCK_VALUE DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(SUM(TABLE_CPFD8S_PRICE * TABLE_CPFD8S_STOCK_QUANTITY), 0)
+    INTO V_STOCK_VALUE
+    FROM TABLE_CPFD8S
+    WHERE TABLE_CPFD8S_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz(-22)) - -750 + ((MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(60)) - -138 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav()) - 194 + (floor(v_stock_value))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_EVEN_1_TO_20_c37pav() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR
+        SELECT 2 UNION SELECT 4 UNION SELECT 6 UNION SELECT 8 UNION SELECT 10
+        UNION SELECT 12 UNION SELECT 14 UNION SELECT 16 UNION SELECT 18 UNION SELECT 20;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FIBONACCI_RECURSIVE_07c1y0(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N = (MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(-98)) - 261 + (1) OR N = 2 THEN
+        RETURN 1;
+    END IF;
+
+    RETURN FIBONACCI_RECURSIVE(N - 1) + FIBONACCI_RECURSIVE(N - 2);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_ZERO_ni4ve3(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_N = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz----- */
+CREATE TABLE IF NOT EXISTS `table_k0i4vp` (
+    `table_k0i4vp_campaign_id` INT,
+    `table_k0i4vp_start_date` DATE,
+    `table_k0i4vp_end_date` DATE
+);
+
+INSERT INTO `table_k0i4vp` (`table_k0i4vp_campaign_id`, `table_k0i4vp_start_date`, `table_k0i4vp_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DURATION_DAYS_dygvnz(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DURATION INT DEFAULT 0;
+
+    SELECT DATEDIFF(TABLE_K0I4VP_END_DATE, TABLE_K0I4VP_START_DATE)
+    INTO V_DURATION
+    FROM TABLE_K0I4VP
+    WHERE TABLE_K0I4VP_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(28)) - 602 + (v_duration);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_GET_ABSOLUTE_VALUE_g2q8pn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    IF (MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(-61, -51)) - 85 + (n) < 0 THEN
+        RETURN (MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(14)) - 195 + (-n);
+    END IF;
+    RETURN N;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_BINARY_TO_DECIMAL_3gw28s(BINARY_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+    DECLARE V_DIGIT INT;
+    DECLARE V_POSITION INT DEFAULT 0;
+    DECLARE V_TEMP INT;
+
+    SET V_TEMP = ABS(BINARY_NUM);
+
+    CONVERT_LOOP: WHILE V_TEMP > 0 DO
+        SET V_DIGIT = V_TEMP MOD 10;
+        IF V_DIGIT NOT IN (0, 1) THEN
+            RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(69)) - -699 + (-1);
+        END IF;
+        SET V_RESULT = V_RESULT + (V_DIGIT * POW(2, V_POSITION));
+        SET V_TEMP = V_TEMP DIV 10;
+        SET V_POSITION = V_POSITION + 1;
+    END WHILE CONVERT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm----- */
+CREATE TABLE IF NOT EXISTS `table_kg7iws` (
+    `table_kg7iws_campaign_id` INT,
+    `table_kg7iws_status` VARCHAR(50),
+    `table_kg7iws_budget` INT,
+    `table_kg7iws_start_date` DATE
+);
+
+INSERT INTO `table_kg7iws` (`table_kg7iws_campaign_id`, `table_kg7iws_status`, `table_kg7iws_budget`, `table_kg7iws_start_date`) VALUES (1, '2024-01-01', 1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_EFFICIENCY_SIMPLE_xf0rfm(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'DRAFT';
+    DECLARE V_BUDGET INT DEFAULT 0;
+    DECLARE V_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_KG7IWS_STATUS, COALESCE(TABLE_KG7IWS_BUDGET, 0), DATEDIFF(CURDATE(), TABLE_KG7IWS_START_DATE)
+    INTO V_STATUS, V_BUDGET, V_DAYS
+    FROM TABLE_KG7IWS
+    WHERE TABLE_KG7IWS_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' OR V_DAYS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_BUDGET / V_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_ADD_xo4klz(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0994_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_col_val VARCHAR(50);
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_temp_result INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT v1170908 FROM v1170907 WHERE v1170909 BETWEEN 4 AND 10;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN
+        SET v_counter = -1;
+    END;
+
+    -- Statement 1: UPDATE v1170462 adapted with p1
+    UPDATE v1170462 AS x1 SET v1170464 = '2000-01-01 01:03:03.456' WHERE v1170463 > p1 AND v1170463 <= p1 + 10;
+    SET v_affected_rows = ROW_COUNT();
+CALL synth_output_0432(65, -3, @_syn_10556);
+    SET v_counter = @_syn_10556 - 4 + (v_counter) + v_affected_rows;
+
+    -- Statement 2: UPDATE v1170907 with CONVERT_TZ and complex conditions
+    UPDATE v1170907 AS x0 SET v1170908 = CONVERT_TZ(v1170908, 'UTC', 'UTC') WHERE x0.v1170908 BETWEEN 4 AND 10 AND v1170908 >= v1170908 AND x0.v1170908 BETWEEN v1170908 AND v1170908 OR v1170908 <> LEAST(v1170908, UTC_TIME()) ORDER BY v1170909 LIMIT p2;
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 3: INSERT adapted with cursor iteration
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_col_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        INSERT INTO v1170911 (v1170917, v1170920, v1170916, v1170919, v1170914, v1170918, v1170923, v1170913, v1170915, v1170922, v1170921, v1170912) 
+        VALUES (p1 * p2, 203907, 37, 'dialysis', v_col_val, 'extents', '0', 556, 496, 108110, 'LAT SMALL N', '2003-05-16 23:53:29');
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 4: UPDATE v1170907 with conditional logic
+    IF p1 > p2 THEN
+        UPDATE v1170907 AS x0 SET v1170908 = @tzid WHERE v1170908 > 'f';
+    ELSE
+        UPDATE v1170907 AS x0 SET v1170908 = CONCAT('updated_', p1) WHERE v1170908 > 'f';
+    END IF;
+    SET v_affected_rows = ROW_COUNT();
+    SET v_counter = v_counter + v_affected_rows;
+
+    -- Statement 5: CREATE TABLE AS SELECT with error handling
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLWARNING BEGIN END;
+        CREATE TABLE IF NOT EXISTS v1171108_temp (v1171109 TEXT(66) CHARACTER SET euckr) AS 
+        SELECT CASE 10 WHEN 8 THEN 'MED PKG' WHEN 2 THEN '29' ELSE 'MED P' END AS v1171109 
+        FROM dual 
+        GROUP BY PRINTF('Ar', 9) <= 'BUILDING';
+        SET v_counter = v_counter + 1;
+    END;
+
+    -- Final result calculation using loop and case
+    WHILE v_counter < 100 DO
+        SET v_counter = v_counter + 1;
+        CASE 
+            WHEN (MYSQL_FUNC_CALCULATE_CATEGORY_STOCK_VALUE_t1c6of(35)) - -547 + (v_counter > 50) THEN
+                SET v_temp_result = v_temp_result + 1;
+            WHEN v_counter > 20 THEN
+                SET v_temp_result = v_temp_result + 2;
+            ELSE
+                SET v_temp_result = v_temp_result + 3;
+        END CASE;
+    END WHILE;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0994_proc(1, 1, @out_result);
+
+SELECT @out_result;

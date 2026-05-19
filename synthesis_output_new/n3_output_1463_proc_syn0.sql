@@ -1,0 +1,517 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1257048 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1257049 INT,
+    v1257050 INT
+);
+CREATE TABLE IF NOT EXISTS v1257056 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1257056_id INT,
+    v1257057 INT
+);
+CREATE TABLE IF NOT EXISTS v1257535 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1257537 INT,
+    v1257538 VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v1258076 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1258077 INT,
+    v1258078 VARCHAR(100),
+    v1258079 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v1258040 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    v1258041 VARBINARY(255)
+);
+INSERT INTO v1257048 (v1257049, v1257050) VALUES (-12, 10), (1, 15), (5, 7), (-12, 3);
+INSERT INTO v1257056 (v1257056_id, v1257057) VALUES (1, 5), (2, 2), (3, 10), (4, 1);
+INSERT INTO v1257535 (v1257537, v1257538) VALUES (100, '1985'), (200, '2010'), (-50, '2025'), (300, '1975');
+INSERT INTO v1258076 (v1258077, v1258078, v1258079) VALUES (10, 'hello world ', 'abc'), (20, 'test ', 'xyz'), (30, 'data ', 'def');
+INSERT INTO v1258040 (v1258041) VALUES (NULL);
+
+/* -----Dependency for: synth_output_0943----- */
+CREATE TABLE IF NOT EXISTS v37524 (
+    v37525 VARCHAR(10),
+    v37526 INT,
+    v37527 VARCHAR(10)
+);
+CREATE TABLE IF NOT EXISTS v37563 (
+    x1 GEOMETRY,
+    x2 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v37548 (
+    v37541 DATE
+);
+CREATE TABLE IF NOT EXISTS v37540 (
+    v37546 INT
+);
+CREATE TABLE IF NOT EXISTS v37592 (
+    v37541 DATE
+);
+CREATE TABLE IF NOT EXISTS x11 (
+    id INT
+);
+INSERT INTO v37524 VALUES ('abc', NULL, 'abc'), ('def', 1, 'def'), ('ghi', NULL, 'ghi');
+INSERT INTO v37563 VALUES (ST_GEOMFROMTEXT('POINT(100 50)'), ST_GEOMFROMTEXT('POINT(100 50)'));
+INSERT INTO v37548 VALUES ('2023-01-01'), ('2023-06-15'), ('2024-12-31');
+INSERT INTO v37540 VALUES (1), (2), (3);
+INSERT INTO v37592 VALUES ('2023-01-01'), ('2024-06-15');
+INSERT INTO x11 VALUES (1), (2);
+
+/* -----Called: synth_output_0943----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_0943(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_avg_year DECIMAL(10,2);
+    DECLARE v_date_val DATE;
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE cur CURSOR FOR 
+        SELECT v37541 FROM v37548 WHERE v37541 > DATE('2023-01-01');
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    -- Statement 1: UPDATE v37524 with dynamic SQL
+    SET @sql1 = 'UPDATE v37524 AS x1 SET v37525 = ''mno'' WHERE x1.v37526 IS NULL AND x1.v37527 = x1.v37527 AND x1.v37525 = x1.v37527 AND x1.v37526 = x1.v37527 AND x1.v37526 = x1.v37526';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1;
+    DEALLOCATE PREPARE stmt1;
+    
+    -- Statement 2: UPDATE v37563 with geometry
+    SET @sql2 = 'UPDATE v37563 AS x0 SET x1 = ST_GEOMFROMTEXT(''POINT(198 82)'') WHERE x0.x1 = x0.x2 AND x0.x2 = x0.x2 AND x0.x2 = x0.x2';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    DEALLOCATE PREPARE stmt2;
+    
+    -- Statement 3: CTE with window function logic
+    SET @sql3 = 'WITH x9 AS (SELECT v37541 + INTERVAL 1 DAY FROM x11) SELECT AVG(YEAR(v37541)) INTO @avg_year FROM v37548 WHERE v37541 > DATE(''2023-01-01'')';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3;
+    DEALLOCATE PREPARE stmt3;
+    
+    SET v_avg_year = @avg_year;
+    
+    -- Statement 4: UPDATE v37540
+    SET @sql4 = 'UPDATE v37540 AS x0 SET v37546 = 2';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    DEALLOCATE PREPARE stmt4;
+    
+    -- Statement 5: CREATE VIEW (already created, now use cursor to process)
+    OPEN cur;
+    
+    read_loop: LOOP
+        FETCH cur INTO v_date_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        SET v_counter = v_counter + 1;
+        
+        -- Use IF/ELSEIF for conditional logic
+        IF v_avg_year IS NOT NULL THEN
+            IF YEAR(v_date_val) > v_avg_year THEN
+                SET v_temp = v_temp + 10;
+            ELSEIF YEAR(v_date_val) = v_avg_year THEN
+                SET v_temp = v_temp + 5;
+            ELSE
+                SET v_temp = v_temp + 1;
+            END IF;
+        END IF;
+    END LOOP;
+    
+    CLOSE cur;
+    
+    -- Use CASE/WHEN for final result determination
+    CASE 
+        WHEN v_counter > 0 AND v_temp > 20 THEN
+            SET result = v_counter + p1;
+        WHEN v_counter > 0 THEN
+            SET result = v_counter + p2;
+        ELSE
+            SET result = 0;
+    END CASE;
+    
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+CREATE TABLE IF NOT EXISTS `table_6ac5k9` (
+    `table_6ac5k9_campaign_id` INT,
+    `table_6ac5k9_start_date` DATE,
+    `table_6ac5k9_end_date` DATE
+);
+
+INSERT INTO `table_6ac5k9` (`table_6ac5k9_campaign_id`, `table_6ac5k9_start_date`, `table_6ac5k9_end_date`) VALUES (1, '2024-01-01', '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_END_DATE DATE;
+
+    SELECT TABLE_6AC5K9_END_DATE
+    INTO V_END_DATE
+    FROM TABLE_6AC5K9
+    WHERE TABLE_6AC5K9_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_END_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(-71)) - -118 + ((MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(40)) - -9 + ((MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj()) - -627 + (0)));
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(5)) - 584 + (greatest(datediff(v_end_date, curdate()), 0));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_7_VALUES_ee16mj() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 7 UNION SELECT 14 UNION SELECT 21 UNION SELECT 28 UNION SELECT 35 UNION SELECT 42 UNION SELECT 49;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = V_SUM + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1----- */
+CREATE TABLE IF NOT EXISTS `table_ke2igu` (
+    `table_ke2igu_campaign_id` INT,
+    `table_ke2igu_start_date` DATE
+);
+
+INSERT INTO `table_ke2igu` (`table_ke2igu_campaign_id`, `table_ke2igu_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CAMPAIGN_AGE_DAYS_lsq7w1(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_KE2IGU_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_KE2IGU
+    WHERE TABLE_KE2IGU_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SIGNAL_FUNC_FACTORIAL_CHECK_85taug(N INT) RETURNS BIGINT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT BIGINT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 2;
+    IF N < 0 THEN
+        SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'FACTORIAL NOT DEFINED FOR NEGATIVE NUMBERS';
+    END IF;
+    IF N > 20 THEN
+        SIGNAL SQLSTATE '01000' SET MESSAGE_TEXT = 'WARNING: RESULT MAY EXCEED BIGINT RANGE';
+    END IF;
+    WHILE V_I <= N DO
+        SET V_RESULT = V_RESULT * V_I;
+        SET V_I = V_I + 1;
+    END WHILE;
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+CREATE TABLE IF NOT EXISTS `table_z15ice` (
+    `table_z15ice_emp_id` INT,
+    `table_z15ice_department_id` INT,
+    `table_z15ice_salary` INT,
+    `table_z15ice_hire_date` DATE
+);
+
+CREATE TABLE IF NOT EXISTS `table_sjykhx` (
+    `table_sjykhx_department_id` INT,
+    `table_sjykhx_name` VARCHAR(50)
+);
+
+INSERT INTO `table_z15ice` (`table_z15ice_emp_id`, `table_z15ice_department_id`, `table_z15ice_salary`, `table_z15ice_hire_date`) VALUES (1, 1, 1, '2024-01-01');
+
+INSERT INTO `table_sjykhx` (`table_sjykhx_department_id`, `table_sjykhx_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_HIRING_EFFICIENCY_iouoto(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_NEW_HIRES INT DEFAULT 0;
+    DECLARE V_TOTAL_EMPLOYEES INT DEFAULT 0;
+    DECLARE V_HIRING_EFFICIENCY INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_NEW_HIRES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM
+    AND YEAR(TABLE_Z15ICE_HIRE_DATE) = YEAR(CURDATE());
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_EMPLOYEES
+    FROM TABLE_Z15ICE
+    WHERE TABLE_Z15ICE_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    IF V_TOTAL_EMPLOYEES = (MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(-61, -17)) - -135 + (0) THEN
+        RETURN 0;
+    END IF;
+
+    SET V_HIRING_EFFICIENCY = (V_NEW_HIRES * 100) / V_TOTAL_EMPLOYEES;
+
+    RETURN (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(-70)) - 116 + (v_hiring_efficiency);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_COUNT_PRIMES_IN_RANGE_xya51v(P_START_NUM INT, P_END_NUM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_COUNT INT DEFAULT 0;
+    DECLARE V_CURRENT INT;
+    DECLARE V_DIVISOR INT;
+    DECLARE V_IS_PRIME INT;
+    DECLARE V_SQRT_VAL INT;
+
+    IF P_START_NUM > P_END_NUM THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CURRENT = P_START_NUM;
+
+    OUTER_LOOP: WHILE V_CURRENT <= P_END_NUM DO
+        SET V_IS_PRIME = 1;
+
+        IF V_CURRENT <= 1 THEN
+            SET V_IS_PRIME = 0;
+        ELSEIF V_CURRENT = 2 THEN
+            SET V_IS_PRIME = 1;
+        ELSEIF V_CURRENT % 2 = 0 THEN
+            SET V_IS_PRIME = 0;
+        ELSE
+            SET V_SQRT_VAL = CAST(SQRT(V_CURRENT) AS UNSIGNED);
+            SET V_DIVISOR = 3;
+            INNER_LOOP: WHILE V_DIVISOR <= V_SQRT_VAL DO
+                IF V_CURRENT % V_DIVISOR = 0 THEN
+                    SET V_IS_PRIME = 0;
+                    LEAVE INNER_LOOP;
+                END IF;
+                SET V_DIVISOR = V_DIVISOR + 2;
+            END WHILE INNER_LOOP;
+        END IF;
+
+        IF V_IS_PRIME = 1 THEN
+            SET V_COUNT = V_COUNT + 1;
+        END IF;
+
+        SET V_CURRENT = V_CURRENT + 1;
+    END WHILE OUTER_LOOP;
+
+    RETURN V_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+CREATE TABLE IF NOT EXISTS `table_9u90c7` (
+    `table_9u90c7_customer_id` INT,
+    `table_9u90c7_monthly_cost` DECIMAL(10,2),
+    `table_9u90c7_status` VARCHAR(50)
+);
+
+INSERT INTO `table_9u90c7` (`table_9u90c7_customer_id`, `table_9u90c7_monthly_cost`, `table_9u90c7_status`) VALUES (1, 1.0, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_ANNUAL_REVENUE_k5vzu6(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+    DECLARE V_STATUS VARCHAR(20) DEFAULT 'INACTIVE';
+
+    SELECT COALESCE(TABLE_9U90C7_MONTHLY_COST, (MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr(11)) - 962 + (0)), TABLE_9U90C7_STATUS
+    INTO V_MONTHLY_COST, V_STATUS
+    FROM TABLE_9U90C7
+    WHERE TABLE_9U90C7_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_STATUS != 'ACTIVE' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN V_MONTHLY_COST * 12;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr----- */
+CREATE TABLE IF NOT EXISTS `table_s8vg31` (
+    `table_s8vg31_customer_id` INT,
+    `table_s8vg31_monthly_cost` DECIMAL(10,2)
+);
+
+INSERT INTO `table_s8vg31` (`table_s8vg31_customer_id`, `table_s8vg31_monthly_cost`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_REVENUE_INDEX_us6ryr(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_MONTHLY_COST INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_S8VG31_MONTHLY_COST, 0)
+    INTO V_MONTHLY_COST
+    FROM TABLE_S8VG31
+    WHERE TABLE_S8VG31_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX_fq1r3w(86)) - -598 + (v_monthly_cost * 10);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX_fq1r3w----- */
+CREATE TABLE IF NOT EXISTS `table_g74w23` (
+    `table_g74w23_customer_id` INT,
+    `table_g74w23_registration_date` DATE
+);
+
+INSERT INTO `table_g74w23` (`table_g74w23_customer_id`, `table_g74w23_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX_fq1r3w----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_AGE_INDEX_fq1r3w(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AGE_YEARS INT DEFAULT 0;
+
+    SELECT TIMESTAMPDIFF(YEAR, TABLE_G74W23_REGISTRATION_DATE, CURDATE())
+    INTO V_AGE_YEARS
+    FROM TABLE_G74W23
+    WHERE TABLE_G74W23_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN V_AGE_YEARS;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1463_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_hex_value VARCHAR(64);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_temp_val INT;
+    DECLARE v_loop_counter INT DEFAULT 0;
+    
+    DECLARE cur CURSOR FOR 
+        SELECT v1257057 FROM v1257056 WHERE v1257057 > 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Process first UPDATE: update v1257048 using input parameters
+    IF p1 > 0 THEN
+        UPDATE v1257048 AS x1 
+        SET v1257050 = v1257050 % 2 
+        WHERE v1257049 = -12 OR v1257049 = 1;
+CALL synth_output_0943(-37, -62, @_syn_15864);
+        SET v_counter = @_syn_15864 - -60 + (v_counter) + ROW_COUNT();
+    END IF;
+
+    -- Process second UPDATE using cursor loop
+    SET v_done = FALSE;
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        UPDATE v1257056 AS x1 
+        SET v1257057 = v1257057 
+        WHERE v1257057 > 1;
+        
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Process third UPDATE with conditional logic
+    CASE 
+        WHEN p2 > 0 THEN
+            UPDATE v1257535 AS x0 
+            SET x0.v1257537 = -v1257537 
+            WHERE v1257538 BETWEEN '1970' AND '2020';
+            SET v_counter = v_counter + ROW_COUNT();
+        ELSE
+            SET v_counter = v_counter + 10;
+    END CASE;
+
+    -- Process fourth UPDATE with loop and LIMIT
+    SET v_loop_counter = 0;
+    WHILE (MYSQL_FUNC_CALCULATE_CAMPAIGN_DAYS_REMAINING_ukjpze(100)) - 766 + (v_loop_counter < 3) DO
+        UPDATE v1258076 AS x0 
+        SET v1258077 = p1 
+        WHERE v1258078 LIKE '% ' 
+        ORDER BY HEX(v1258077) COLLATE utf8mb4_0900_as_ci, v1258079 
+        LIMIT 1;
+        SET v_counter = v_counter + ROW_COUNT();
+        SET v_loop_counter = v_loop_counter + 1;
+    END WHILE;
+
+    -- Process INSERT statement
+    INSERT INTO v1258040 (v1258041) 
+    VALUES (UNHEX(CONCAT('0000000001D20700000200000000000000000000000000000000000000000000000000', '0000000000000000F03F000000000000F03F0000000000000000')));
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Set output result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1463_proc(1, 1, @out_result);
+
+SELECT @out_result;

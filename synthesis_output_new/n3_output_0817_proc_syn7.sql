@@ -1,0 +1,414 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1156710 (
+    v1156712 INT,
+    v1156713 INT,
+    x4 INT,
+    x5 INT,
+    v1156711 INT
+);
+CREATE TABLE IF NOT EXISTS v1156495 (
+    v1156712 INT,
+    x5 INT
+);
+CREATE TABLE IF NOT EXISTS v1156793 (
+    v1156794 DECIMAL(20,10)
+);
+CREATE TABLE IF NOT EXISTS v1156745 (
+    v1156746 DECIMAL(10,5),
+    v1156747 INT
+);
+CREATE TABLE IF NOT EXISTS v1156894 (
+    v1156895 INT PRIMARY KEY AUTO_INCREMENT,
+    v1156896 VARCHAR(255),
+    x3 BIGINT,
+    x4 BIGINT
+);
+INSERT INTO v1156710 (v1156712, v1156713, x4, x5, v1156711) VALUES
+(1, 10, 5, 3, 100),
+(2, 20, 30, 5, 200),
+(3, 30, 15, 8, 300),
+(4, 40, 25, 10, 400);
+INSERT INTO v1156495 (v1156712, x5) VALUES
+(1, 3),
+(2, 5),
+(3, 8),
+(4, 10);
+INSERT INTO v1156745 (v1156746, v1156747) VALUES
+(0.5, 100),
+(1.5, 200),
+(2.5, 300),
+(3.5, 400);
+INSERT INTO v1156793 (v1156794) VALUES
+(0.0001), (0.0002), (0.0003);
+
+/* -----Dependency for: sp_procedure_into_dumpfile_proc----- */
+CREATE TABLE IF NOT EXISTS test_t1 (
+    col1 INT,
+    col2 INT
+);
+INSERT INTO test_t1 VALUES (1, 10), (2, 20), (3, 30), (4, 40), (5, 50);
+
+/* -----Called: sp_procedure_into_dumpfile_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE sp_procedure_into_dumpfile_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_col1 INT;
+    DECLARE v_col2 INT;
+    DECLARE v_sum INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT col1, col2 FROM test_t1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    -- Insert the input values into the table
+    INSERT INTO test_t1 VALUES (p1, p2);
+
+    -- Loop through the table using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_col1, v_col2;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        -- Conditional logic: if col1 is even, add col2 to sum; else subtract
+        IF v_col1 % 2 = 0 THEN
+            SET v_sum = v_sum + v_col2;
+        ELSE
+            SET v_sum = v_sum - v_col2;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use a simple WHILE loop to adjust the sum
+    WHILE v_sum < 0 DO
+        SET v_sum = v_sum + p1;
+    END WHILE;
+
+    -- Use CASE to finalize result
+    CASE
+        WHEN v_sum > 100 THEN SET result = v_sum % 100;
+        WHEN v_sum BETWEEN 0 AND 100 THEN SET result = v_sum;
+        ELSE SET result = 0;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+CREATE TABLE IF NOT EXISTS `table_mss9em` (
+    `table_mss9em_customer_id` INT
+);
+
+INSERT INTO `table_mss9em` (`table_mss9em_customer_id`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUB_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_SUB_COUNT
+    FROM TABLE_MSS9EM
+    WHERE TABLE_MSS9EM_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(-9)) - -807 + ((MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(75)) - 232 + ((MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(37)) - 100 + (least(v_sub_count, 10))));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_LOOP_BREAK_spzg7p(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    READ_LOOP: LOOP
+        SET V_RESULT = V_RESULT + 1;
+        IF V_RESULT >= N THEN
+            LEAVE READ_LOOP;
+        END IF;
+    END LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+CREATE TABLE IF NOT EXISTS `table_9w5f3o` (
+    `table_9w5f3o_emp_id` INT,
+    `table_9w5f3o_department_id` INT,
+    `table_9w5f3o_salary` INT
+);
+
+INSERT INTO `table_9w5f3o` (`table_9w5f3o_emp_id`, `table_9w5f3o_department_id`, `table_9w5f3o_salary`) VALUES (1, 1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_EMPLOYEE_POSITION_INDEX_osyc4x(EMP_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_DEPT_ID INT DEFAULT 0;
+    DECLARE V_SALARY DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_DEPT_AVG DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT TABLE_9W5F3O_DEPARTMENT_ID, COALESCE(TABLE_9W5F3O_SALARY, 0)
+    INTO V_DEPT_ID, V_SALARY
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_EMP_ID = EMP_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_9W5F3O_SALARY), 1)
+    INTO V_DEPT_AVG
+    FROM TABLE_9W5F3O
+    WHERE TABLE_9W5F3O_DEPARTMENT_ID = V_DEPT_ID;
+
+    RETURN FLOOR((V_SALARY * 100) / V_DEPT_AVG);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_LARGE_FACTORIAL_9fdelf(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N < 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF N > 12 THEN
+        SET N = 12;
+    END IF;
+
+    FACT_LOOP: WHILE V_COUNTER <= N DO
+        SET V_RESULT = (MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn(-48, -36)) - -714 + (v_result) * V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE FACT_LOOP;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DIFF_fnu5nn(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A - P_B;
+
+    IF V_ERROR = (MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(-22, -100)) - 716 + (1) THEN
+        RETURN -1;
+    END IF;
+
+    RETURN (MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(63)) - -746 + (v_result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+CREATE TABLE IF NOT EXISTS `table_bfv8ex` (
+    `table_bfv8ex_emp_id` INT,
+    `table_bfv8ex_department_id` INT,
+    `table_bfv8ex_salary` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_fkalwd` (
+    `table_fkalwd_department_id` INT,
+    `table_fkalwd_name` VARCHAR(50)
+);
+
+INSERT INTO `table_bfv8ex` (`table_bfv8ex_emp_id`, `table_bfv8ex_department_id`, `table_bfv8ex_salary`) VALUES (1, 1, 1);
+
+INSERT INTO `table_fkalwd` (`table_fkalwd_department_id`, `table_fkalwd_name`) VALUES (1, 'test');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_SALARY_VARIANCE_3c4pif(DEPARTMENT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SALARY_VARIANCE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_MAX_SALARY INT DEFAULT 0;
+    DECLARE V_MIN_SALARY INT DEFAULT 0;
+
+    SELECT COALESCE(MAX(TABLE_BFV8EX_SALARY), 0), COALESCE(MIN(TABLE_BFV8EX_SALARY), 0)
+    INTO V_MAX_SALARY, V_MIN_SALARY
+    FROM TABLE_BFV8EX
+    WHERE TABLE_BFV8EX_DEPARTMENT_ID = DEPARTMENT_ID_PARAM;
+
+    SET V_SALARY_VARIANCE = V_MAX_SALARY - V_MIN_SALARY;
+
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(94, 16)) - 161 + (floor(v_salary_variance));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_IS_DIVISIBLE_r02xlf(P_N INT, P_D INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    IF P_D = 0 THEN
+        RETURN -1;
+    END IF;
+
+    IF P_N MOD P_D = 0 THEN
+        SET V_RESULT = 1;
+    ELSE
+        SET V_RESULT = 0;
+    END IF;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_UFN_IS_WORD_COMPRISED_3lc213(SET_OF_LETTERS INT, WORD INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE SET_OF_LETTERS_STR VARCHAR(50);
+    DECLARE WORD_STR VARCHAR(50);
+    
+    SET SET_OF_LETTERS_STR = CAST(SET_OF_LETTERS AS CHAR);
+    SET WORD_STR = CAST(WORD AS CHAR);
+    
+    RETURN (SELECT WORD_STR REGEXP SET_OF_LETTERS_STR);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(P_N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_N * 2;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0817_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val1 INT DEFAULT 0;
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_ceiling_val BIGINT;
+    DECLARE v_floor_val BIGINT;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cursor_val DECIMAL(20,10);
+    DECLARE cur CURSOR FOR SELECT v1156794 FROM v1156793 WHERE v1156794 > 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    -- Create v1156894 table with data from the AS SELECT clause
+    CREATE TABLE IF NOT EXISTS v1156894_temp AS
+    SELECT CEIL(CAST(99999999999999999.9 AS DECIMAL(18, 1))) AS x3, 
+           FLOOR(CAST(-99999999999999999.9 AS DECIMAL(18, 1))) AS x4;
+
+    INSERT INTO v1156894 (v1156896, x3, x4)
+    SELECT CONCAT('test_', p1), x3, x4 FROM v1156894_temp;
+    DROP TABLE IF EXISTS v1156894_temp;
+
+    -- First UPDATE: Using COALESCE with variable
+    SET @val1 = p1;
+    UPDATE v1156710 AS x1 SET x4 = @val1 WHERE v1156713 = COALESCE(NULL, '');
+
+    -- Second UPDATE: Using LEFT JOIN with CASE expression
+    UPDATE v1156710 AS x0 
+    LEFT JOIN v1156495 AS x1 ON x0.x5 = x0.v1156712 AND x0.x4 = 30 
+    SET v1156711 = 1190087942 
+    WHERE x0.x4 > CASE 
+        WHEN x0.x5 = x0.x5 - 2 THEN x0.x4 
+        ELSE x0.x4 - 1 
+    END;
+
+    -- Third UPDATE: Simple conditional update
+    IF p2 > 0 THEN
+        UPDATE v1156745 AS x1 SET v1156747 = 210 WHERE v1156746 > 0.0e0;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- INSERT with multiple values from cursor loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cursor_val;
+        IF (MYSQL_FUNC_HANDLER_FUNC_DOUBLE_o2es4q(42)) - 948 + ((MYSQL_FUNC_CALCULATE_SUBSCRIPTION_COUNT_BUCKET_8y1rya(-43)) - -748 + (v_done)) THEN
+            LEAVE read_loop;
+        END IF;
+        
+        INSERT INTO v1156793 (v1156794) VALUES (v_cursor_val * p1);
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Complex conditional logic with CASE
+    SET v_row_count = (SELECT COUNT(*) FROM v1156894);
+CALL sp_procedure_into_dumpfile_proc(71, -4, @_syn_8701);
+    CASE
+        WHEN @_syn_8701 - @_io_result + (v_row_count > 5) THEN
+            SET result = 100 + v_counter;
+        WHEN v_row_count BETWEEN 2 AND 5 THEN
+            SET result = 200 + v_counter;
+        ELSE
+            SET result = 300 + v_counter;
+    END CASE;
+
+    -- Final validation using WHILE loop
+    WHILE v_counter < 5 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+    SET result = result + v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0817_proc(1, 1, @out_result);
+
+SELECT @out_result;

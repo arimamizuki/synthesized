@@ -1,0 +1,675 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1147226 (
+    v1147227 VARCHAR(50),
+    v1147228 INT
+);
+CREATE TABLE IF NOT EXISTS v1147279 (
+    v1147280 INT
+);
+CREATE TABLE IF NOT EXISTS v1147281 (
+    v1147280 INT
+);
+CREATE TABLE IF NOT EXISTS v1147299 (
+    v1147300 VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS v1147301 (
+    v1147227 VARCHAR(50),
+    v1147228 INT
+);
+CREATE TABLE IF NOT EXISTS v1147335 (
+    v1147336 GEOMETRY
+);
+INSERT INTO v1147226 VALUES ('2010-00-01 00:00:00', 10), ('2020-01-01', 20), ('2023-06-15', 30);
+INSERT INTO v1147279 VALUES (1), (2), (3);
+INSERT INTO v1147281 VALUES (1), (2), (3);
+INSERT INTO v1147299 VALUES ('default'), ('test');
+INSERT INTO v1147301 VALUES ('2010-00-01 00:00:00', 5), ('2020-01-01', 15);
+INSERT INTO v1147335 VALUES (ST_GEOMFROMTEXT('POINT(0 0)'));
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+CREATE TABLE IF NOT EXISTS `table_0m87zv` (
+    `table_0m87zv_ticket_id` INT,
+    `table_0m87zv_concert_id` INT,
+    `table_0m87zv_customer_id` INT,
+    `table_0m87zv_seat_section` INT,
+    `table_0m87zv_seat_row` INT,
+    `table_0m87zv_seat_number` INT,
+    `table_0m87zv_price_paid` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_psltnn` (
+    `table_psltnn_concert_id` INT,
+    `table_psltnn_artist_id` INT,
+    `table_psltnn_venue_id` INT,
+    `table_psltnn_concert_date` DATE,
+    `table_psltnn_base_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_0m87zv` (`table_0m87zv_ticket_id`, `table_0m87zv_concert_id`, `table_0m87zv_customer_id`, `table_0m87zv_seat_section`, `table_0m87zv_seat_row`, `table_0m87zv_seat_number`, `table_0m87zv_price_paid`) VALUES (1, 1, 1, 1, 1, 1, 1);
+
+INSERT INTO `table_psltnn` (`table_psltnn_concert_id`, `table_psltnn_artist_id`, `table_psltnn_venue_id`, `table_psltnn_concert_date`, `table_psltnn_base_price`) VALUES (1, 2, 3, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(TICKET_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE_PAID INT DEFAULT 0;
+    DECLARE V_BASE_PRICE INT DEFAULT 100;
+    DECLARE V_DAYS_TO_CONCERT INT DEFAULT 0;
+    DECLARE V_RESALE_MULTIPLIER INT DEFAULT 1;
+    DECLARE V_RESALE_VALUE INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_0M87ZV_PRICE_PAID, 100)
+    INTO V_PRICE_PAID
+    FROM TABLE_0M87ZV
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    SELECT DATEDIFF(TABLE_PSLTNN_CONCERT_DATE, CURDATE())
+    INTO V_DAYS_TO_CONCERT
+    FROM TABLE_0M87ZV CT
+    JOIN TABLE_PSLTNN C ON TABLE_0M87ZV_CONCERT_ID = TABLE_PSLTNN_CONCERT_ID
+    WHERE TABLE_0M87ZV_TICKET_ID = TICKET_ID_PARAM;
+
+    IF V_DAYS_TO_CONCERT < 7 THEN
+        SET V_RESALE_MULTIPLIER = 3;
+    ELSEIF V_DAYS_TO_CONCERT < 30 THEN
+        SET V_RESALE_MULTIPLIER = 2;
+    ELSE
+        SET V_RESALE_MULTIPLIER = 1;
+    END IF;
+
+    SET V_RESALE_VALUE = V_PRICE_PAID * V_RESALE_MULTIPLIER;
+
+    RETURN CAST(V_RESALE_VALUE AS SIGNED);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_1540----- */
+CREATE TABLE IF NOT EXISTS v150096 (v150097 TEXT CHARACTER SET utf8mb3);
+CREATE TABLE IF NOT EXISTS v149644 (v149645 TEXT CHARACTER SET utf8mb3, v149646 TEXT CHARACTER SET utf8mb3, v149647 TEXT CHARACTER SET utf8mb3, v149648 TEXT CHARACTER SET utf8mb3);
+CREATE TABLE IF NOT EXISTS v149612 (v149645 TEXT CHARACTER SET utf8mb3, v149646 TEXT CHARACTER SET utf8mb3, v149647 TEXT CHARACTER SET utf8mb3, v149648 TEXT CHARACTER SET utf8mb3);
+CREATE TABLE IF NOT EXISTS v150825 (v150826 INT NOT NULL, v150827 CHAR(3) NOT NULL, PRIMARY KEY (v150826));
+CREATE TABLE IF NOT EXISTS v150835 (v150836 VARCHAR(2) CHARACTER SET utf32);
+CREATE TABLE IF NOT EXISTS v150810 (v150811 TEXT CHARACTER SET utf8mb3, v150812 TEXT CHARACTER SET utf8mb3, v150813 TEXT CHARACTER SET utf8mb3, v150814 TEXT CHARACTER SET utf8mb3);
+INSERT INTO v150096 VALUES ('new_dest'), ('Phil'), ('other');
+INSERT INTO v149644 VALUES ('ger', 'ger', '999999', 'xep80'), ('1', '1', '5', '1'), ('4', '4', '1', '1');
+INSERT INTO v149612 VALUES ('ger', 'ger', '999999', 'xep80');
+INSERT INTO v150825 VALUES (1, 'ABC'), (2, 'DEF'), (3, 'GHI');
+INSERT INTO v150835 VALUES ('AB'), ('CD'), ('EF');
+INSERT INTO v150810 VALUES ('2023-01-01', '2023-01-01', '2023-01-01', '2023-01-01');
+
+/* -----Called: synth_output_1540----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1540(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_affected_rows INT DEFAULT 0;
+    DECLARE v_temp_val VARCHAR(100);
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_cur CURSOR FOR SELECT v150826 FROM v150825 WHERE v150826 > p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        SET result = -1;
+    END;
+
+    -- Statement 1: UPDATE v150096
+    SET @sql1 = 'UPDATE v150096 AS x0 SET x0.v150097 = ? WHERE v150097 = ?';
+    SET @val1 = 'Phil';
+    SET @val2 = 'new_dest';
+    PREPARE stmt1 FROM @sql1;
+    EXECUTE stmt1 USING @val1, @val2;
+    SET v_affected_rows = ROW_COUNT();
+    DEALLOCATE PREPARE stmt1;
+    
+    IF v_affected_rows > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+
+    -- Statement 2: CREATE TABLE v150810 (already created in setup, use it)
+    SET @sql2 = 'INSERT INTO v150810 (v150811, v150812, v150813, v150814) VALUES (CAST(UNIX_TIMESTAMP() AS CHAR), CAST(UNIX_TIMESTAMP() AS CHAR), CAST(UNIX_TIMESTAMP() AS CHAR), CAST(UNIX_TIMESTAMP() AS CHAR))';
+    PREPARE stmt2 FROM @sql2;
+    EXECUTE stmt2;
+    SET v_affected_rows = ROW_COUNT();
+    DEALLOCATE PREPARE stmt2;
+
+    IF v_affected_rows > 0 THEN
+        SET v_counter = v_counter + 2;
+    END IF;
+
+    -- Statement 3: UPDATE v149644 with NATURAL RIGHT JOIN
+    SET @sql3 = 'UPDATE v149644 AS x1 NATURAL RIGHT JOIN v149612 AS x5 SET x1.v149648 = CONCAT(x1.v149647, ?, ?) WHERE x1.v149648 = ? AND x1.v149648 = ? AND x1.v149645 = ? AND ? >= x1.v149645 AND ? <= x1.v149648 AND x1.v149645 = x1.v149646 AND x1.v149646 = x1.v149646 AND x1.v149647 = x1.v149647 AND (x1.v149645 = ? OR x1.v149647 = ? OR x1.v149647 = ?) AND x1.v149648 = ? AND x1.v149648 = x1.v149648 AND x1.v149648 = x1.v149645 AND x1.v149648 <=> x1.v149646 AND x1.v149647 > ?';
+    SET @sep1 = ', ';
+    SET @sep2 = 'Updated';
+    SET @cond1 = 'xep80';
+    SET @cond2 = '1';
+    SET @cond3 = 'ger';
+    SET @cond4 = '2001-12-21 23:14:24';
+    SET @cond5 = '2001-12-21 23:14:24';
+    SET @cond6 = '4';
+    SET @cond7 = '999999';
+    SET @cond8 = '1';
+    SET @cond9 = '1';
+    SET @cond10 = '5';
+    PREPARE stmt3 FROM @sql3;
+    EXECUTE stmt3 USING @sep1, @sep2, @cond1, @cond2, @cond3, @cond4, @cond5, @cond6, @cond7, @cond8, @cond9, @cond10;
+    SET v_affected_rows = ROW_COUNT();
+    DEALLOCATE PREPARE stmt3;
+
+    CASE 
+        WHEN v_affected_rows > 0 THEN
+            SET v_counter = v_counter + 3;
+        ELSE
+            SET v_counter = v_counter - 1;
+    END CASE;
+
+    -- Statement 4: CREATE TABLE v150825 (already created in setup, use it)
+    SET @sql4 = 'INSERT INTO v150825 (v150826, v150827) SELECT CEIL(CAST(-922337203685477580 AS DECIMAL(13, 101))), FLOOR(CAST(-0.1111111111 AS DECIMAL(18, 55)))';
+    PREPARE stmt4 FROM @sql4;
+    EXECUTE stmt4;
+    SET v_affected_rows = ROW_COUNT();
+    DEALLOCATE PREPARE stmt4;
+
+    WHILE v_affected_rows > 0 AND v_counter < 100 DO
+        SET v_counter = v_counter + 4;
+        SET v_affected_rows = v_affected_rows - 1;
+    END WHILE;
+
+    -- Statement 5: CREATE TABLE v150835 (already created in setup, use it)
+    SET @sql5 = 'INSERT INTO v150835 (v150836) SELECT CEIL(CAST(-29223372036854775809 AS UNSIGNED)) AS x2 FROM DUAL WHERE ST_TOUCHES(ST_GEOMFROMTEXT(?), ST_GEOMFROMTEXT(?)) = 1';
+    SET @geom1 = 'LINESTRING(0 0,5 0,10 0)';
+    SET @geom2 = 'MULTIPOINT(10 0)';
+    PREPARE stmt5 FROM @sql5;
+    EXECUTE stmt5 USING @geom1, @geom2;
+    SET v_affected_rows = ROW_COUNT();
+    DEALLOCATE PREPARE stmt5;
+
+    -- Cursor loop to iterate over v150825
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_temp_val;
+        IF v_done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 5;
+    END LOOP;
+    CLOSE v_cur;
+
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(FIRST_TERM INT, COMMON_DIFF INT, NUM_TERMS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_LAST_TERM INT DEFAULT 0;
+    DECLARE V_SUM INT DEFAULT 0;
+
+    IF NUM_TERMS <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_LAST_TERM = (MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0()) - -394 + (first_term + (num_terms - 1) * common_diff);
+    SET V_SUM = (NUM_TERMS * (FIRST_TERM + V_LAST_TERM)) / 2;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_SUM_15_VALUES_m0uxf0() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 15 UNION SELECT 30 UNION SELECT 45 UNION SELECT 60 UNION SELECT 75 UNION SELECT 90 UNION SELECT 105 UNION SELECT 120 UNION SELECT 135 UNION SELECT 150 UNION SELECT 165 UNION SELECT 180 UNION SELECT 195 UNION SELECT 210 UNION SELECT 225;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = 1 THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_SUM = (MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(96)) - 268 + (v_sum) + V_I;
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+CREATE TABLE IF NOT EXISTS `table_esg3nc` (
+    `table_esg3nc_customer_id` INT,
+    `table_esg3nc_registration_date` DATE
+);
+
+INSERT INTO `table_esg3nc` (`table_esg3nc_customer_id`, `table_esg3nc_registration_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CUSTOMER_QUARTER_INDEX_yi6we4(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+
+    SELECT TABLE_ESG3NC_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_ESG3NC
+    WHERE TABLE_ESG3NC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_REGISTRATION_DATE IS NULL THEN
+        RETURN 0;
+    END IF;
+
+    RETURN QUARTER(V_REGISTRATION_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+CREATE TABLE IF NOT EXISTS `table_m5s0fu` (
+    `table_m5s0fu_product_id` INT,
+    `table_m5s0fu_price` DECIMAL(10,2),
+    `table_m5s0fu_stock_quantity` INT
+);
+
+INSERT INTO `table_m5s0fu` (`table_m5s0fu_product_id`, `table_m5s0fu_price`, `table_m5s0fu_stock_quantity`) VALUES (1, 1.0, 3);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(PRODUCT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_PRICE DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_STOCK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_M5S0FU_PRICE, (MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_y3897b(-49)) - -739 + (0)), COALESCE(TABLE_M5S0FU_STOCK_QUANTITY, 0)
+    INTO V_PRICE, V_STOCK
+    FROM TABLE_M5S0FU
+    WHERE TABLE_M5S0FU_PRODUCT_ID = PRODUCT_ID_PARAM;
+
+    IF V_STOCK = 0 THEN
+        RETURN 0;
+    END IF;
+
+    RETURN FLOOR(V_PRICE / V_STOCK);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_y3897b----- */
+CREATE TABLE IF NOT EXISTS `table_688o6i` (
+    `table_688o6i_order_id` INT,
+    `table_688o6i_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_688o6i` (`table_688o6i_order_id`, `table_688o6i_total_amount`) VALUES (1, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_y3897b----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_ORDER_REVENUE_INDEX_y3897b(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_TOTAL DECIMAL(10,2) DEFAULT 0.00;
+
+    SELECT COALESCE(TABLE_688O6I_TOTAL_AMOUNT, 0)
+    INTO V_TOTAL
+    FROM TABLE_688O6I
+    WHERE TABLE_688O6I_ORDER_ID = ORDER_ID_PARAM;
+
+    RETURN FLOOR(V_TOTAL * 0.5);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: synth_output_1715----- */
+CREATE TABLE IF NOT EXISTS v214287 (v214288 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v214454 (v214455 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v214530 (v214531 INT);
+CREATE TABLE IF NOT EXISTS v214412 (v214413 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v214593 (v214531 INT);
+CREATE TABLE IF NOT EXISTS v214593_geo (v214531 INT, geom GEOMETRY);
+INSERT INTO v214287 VALUES ('wait/io/table/sql/handler'), ('wait/lock/table/sql/handler'), ('wait/lock/metadata/sql/mdl'), ('test13'), ('фЫв test');
+INSERT INTO v214454 VALUES ('POINT(163 157)');
+INSERT INTO v214530 VALUES (1), (2), (3), (4), (5), (128);
+INSERT INTO v214412 VALUES ('old_plugin_server'), ('25411_test'), ('new_plugin_server');
+INSERT INTO v214593 VALUES (128), (129), (130);
+INSERT INTO v214593_geo VALUES (128, ST_GeomFromText('POINT(163 157)'));
+
+/* -----Called: synth_output_1715----- */
+
+DELIMITER //
+
+CREATE PROCEDURE synth_output_1715(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_var INT;
+    DECLARE v_str VARCHAR(255);
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v214531 FROM v214593 WHERE v214531 = p1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Statement 1: SELECT from v214593 with conditional check
+    SELECT COUNT(*) INTO v_var FROM v214593 AS x2 WHERE x2.v214531 = x2.v214531 AND x2.v214531 = x2.v214531 AND x2.v214531 = 128;
+    IF v_var > 0 THEN
+        SET v_counter = v_counter + 1;
+    END IF;
+
+    -- Statement 2: UPDATE v214287 with dynamic SQL
+    SET @sql1 = 'UPDATE v214287 AS x1 SET x1.v214288 = ? WHERE v214288 IN (?, ?, ?)';
+    PREPARE stmt1 FROM @sql1;
+    SET @a = 'test13';
+    SET @b = 'wait/io/table/sql/handler';
+    SET @c = 'wait/lock/table/sql/handler';
+    SET @d = 'wait/lock/metadata/sql/mdl';
+    EXECUTE stmt1 USING @a, @b, @c, @d;
+    DEALLOCATE PREPARE stmt1;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 3: UPDATE with JOIN and REVERSE function
+    SET @sql2 = 'UPDATE v214287 AS x1 JOIN v214454 AS x5 ON x1.v214288 = REVERSE(?) SET v214288 = NULL WHERE v214288 LIKE ?';
+    PREPARE stmt2 FROM @sql2;
+    SET @e = 'POINT(163 157)';
+    SET @f = '%фЫв%';
+    EXECUTE stmt2 USING @e, @f;
+    DEALLOCATE PREPARE stmt2;
+    SET v_counter = v_counter + 1;
+
+    -- Statement 4: UPDATE with arithmetic and BETWEEN
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_var;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET @sql3 = 'UPDATE v214530 AS x1 SET x1.v214531 = (v214531 + 1) % 2 WHERE v214531 BETWEEN ? AND ? AND v214531 >= ?';
+        PREPARE stmt3 FROM @sql3;
+        SET @g = 1;
+        SET @h = 3;
+        SET @i = 5;
+        EXECUTE stmt3 USING @g, @h, @i;
+        DEALLOCATE PREPARE stmt3;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: UPDATE with LIKE pattern
+    SET @sql4 = 'UPDATE v214412 AS x0 SET v214413 = ? WHERE v214413 LIKE ?';
+    PREPARE stmt4 FROM @sql4;
+    SET @j = 'new_plugin_server';
+    SET @k = '%25411%';
+    EXECUTE stmt4 USING @j, @k;
+    DEALLOCATE PREPARE stmt4;
+    SET v_counter = v_counter + 1;
+
+    -- Use CASE/WHEN for final result
+    CASE
+        WHEN v_counter >= 5 THEN SET result = v_counter;
+        ELSE SET result = 0;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_1876_proc----- */
+CREATE TABLE IF NOT EXISTS v1403083 (
+    v1403084 INT,
+    v1403085 INT,
+    v1403086 INT,
+    v1403087 INT
+);
+CREATE TABLE IF NOT EXISTS v1403344 (
+    v1403345 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1403342 (
+    v1403343 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v1403192 (
+    v1403193 INT,
+    v1403194 INT,
+    x3 INT
+);
+CREATE TABLE IF NOT EXISTS v1403000 (
+    v1403001 INT
+);
+INSERT INTO v1403083 VALUES (1, 10, 1, 10), (2, 20, 2, 20), (3, 30, 3, 30), (4, 40, 4, 40);
+INSERT INTO v1403344 VALUES ('abc'), ('xyz'), ('test'), ('pattern');
+INSERT INTO v1403342 VALUES (ST_GEOMFROMTEXT('POINT(0 0)'));
+INSERT INTO v1403192 VALUES (100, 200, 1), (200, 300, 2), (300, 400, 3);
+INSERT INTO v1403000 VALUES (5), (10), (15), (20);
+
+/* -----Called: n3_output_1876_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1876_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_val INT;
+    DECLARE v_cur CURSOR FOR SELECT v1403343 FROM v1403342;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    
+    -- Statement 1: UPDATE with SOUNDEX and complex conditions
+    UPDATE v1403083 AS x1 SET v1403085 = 86 
+    WHERE x1.v1403086 = 1 
+      AND x1.v1403084 = x1.v1403086 
+      AND (x1.v1403086 >= 4 OR x1.v1403084 IS NULL) 
+      AND (x1.v1403084 < 5 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403087 = x1.v1403085 OR x1.v1403085 IS NULL OR x1.v1403084 IS NULL) 
+      AND (x1.v1403084 >= 2 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 >= 4 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 <= 2 OR x1.v1403087 IS NULL) 
+      AND (x1.v1403084 < 1 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 = x1.v1403085 OR x1.v1403086 IS NULL) 
+      AND SOUNDEX(v1403084) = SOUNDEX(v1403087);
+    
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 2: UPDATE with LIKE pattern using input param
+    SET @pattern = CONCAT('%', (MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(-36)) - -831 + (p1), '%');
+    UPDATE v1403344 AS x1 SET v1403345 = 3 WHERE v1403345 LIKE @pattern;
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 3: INSERT geometry using ST_GEOMFROMTEXT
+    INSERT INTO v1403342 (v1403343) VALUES (ST_GEOMFROMTEXT('MULTIPOLYGON(((-115.006363 36.305435,-114.992394 36.305202,-114.991219 36.305975,-114.991163 36.306845,-114.989432 36.309452,-114.978275 36.312642,-114.977363 36.311978,-114.975327 36.312344,-114.96502 36.31597,-114.963364 36.313629,-114.961723 36.313721,-114.956398 36.316057,-114.951882 36.320979,-114.947073 36.323475,-114.945207 36.326451,-114.945207 36.326451,-114.944132 36.326061,-114.94003 36.326588,-114.924017 36.334484,-114.923281 36.334146,-114.92564 36.331504,-114.94072 36.319282,-114.945348 36.314812,-114.948091 36.314762,-114.951755 36.316211,-114.952446 36.313883,-114.952644 36.309488,-114.944725 36.313083,-114.93706 36.32043,-114.932478 36.323497,-114.924556 36.327708,-114.922608 36.329715,-114.92009 36.328695,-114.912105 36.323566,-114.901647 36.317952,-114.897436 36.313968,-114.895344 36.309573,-114.891699 36.304398,-114.890569 36.303551,-114.886356 36.302702,-114.885141 36.301351,-114.885709 36.297391,-114.892499 36.290893,-114.902142 36.288974,-114.904941 36.288838,-114.905308 36.289845,-114.906325 36.290395,-114.909916 36.289549,-114.914527 36.287535,-114.918797 36.284423,-114.922982 36.279731,-114.924113 36.277282,-114.924057 36.275817,-114.927733 36.27053,-114.929354 36.269029,-114.929354 36.269029,-114.950856 36.268715,-114.950768 36.264324,-114.960206 36.264293,-114.960301 36.268943,-115.006662 36.268929,-115.008583 36.265619,-115.00665 36.264247,-115.006659 36.246873,-115.006659 36.246873,-115.006838 36.247697,-115.010764 36.247774,-115.015609 36.25113,-115.015765 36.254505,-115.029517 36.254619,-115.038573 36.249317,-115.038573 36.249317,-115.023403 36.25841,-115.023873 36.258994,-115.031845 36.259829,-115.03183 36.261053,-115.025561 36.261095,-115.036417 36.274632,-115.033729 36.276041,-115.032217 36.274851,-115.029845 36.273959,-115.029934 36.274966,-115.025763 36.274896,-115.025406 36.281044,-115.028731 36.284471,-115.036497 36.290377,-115.042071 36.291039,-115.026759 36.298478,-115.008995 36.301966,-115.006363 36.305435),(-115.079835 36.244369,-115.079735 36.260186,-115.076435 36.262369,-115.069758 36.265,-115.070235 36.268757,-115.064542 36.268655,-115.061843 36.269857,-115.062676 36.270693,-115.06305 36.272344,-115.059051 36.281023,-115.05918 36.283008,-115.060591 36.285246,-115.061913 36.290022,-115.062499 36.306353,-115.062499 36.306353,-115.060918 36.30642,-115.06112 36.289779,-115.05713 36.2825,-115.057314 36.279446,-115.060779 36.274659,-115.061366 36.27209,-115.057858 36.26557,-115.055805 36.262883,-115.054688 36.262874,-115.047335 36.25037,-115.044234 36.24637,-115.052434 36.24047,-115.061734 36.23507,-115.061934 36.22677,-115.061934 36.22677,-115.061491 36.225267,-115.062024 36.218194,-115.060134 36.218278,-115.060133 36.210771,-115.057833 36.210771,-115.057433 36.196271,-115.062233 36.196271,-115.062233 36.190371,-115.062233 36.190371,-115.065533 36.190371,-115.071333 36.188571,-115.098331 36.188275,-115.098331 36.188275,-115.098435 36.237569,-115.097535 36.240369,-115.097535 36.240369,-115.093235 36.240369,-115.089135 36.240469,-115.083135 36.240569,-115.083135 36.240569,-115.079835 36.244369)))'));
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 4: UPDATE with COALESCE and subquery using cursor loop
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_geom;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF p1 > 0 THEN
+            UPDATE v1403192 AS x0 SET v1403193 = p2 WHERE x3 IN (SELECT COALESCE(v1403194, 0) FROM v1403192);
+            SET v_counter = v_counter + ROW_COUNT();
+        ELSE
+            SET v_counter = v_counter + 0;
+        END IF;
+    END LOOP;
+    CLOSE v_cur;
+    
+    -- Statement 5: UPDATE with self-reference and WHILE loop
+    SET v_val = p1;
+    WHILE v_val > 0 DO
+        UPDATE v1403000 AS x1 SET v1403001 = p2 WHERE x1.v1403001 = v1403001;
+        SET v_counter = v_counter + ROW_COUNT();
+        SET v_val = v_val - 1;
+    END WHILE;
+    
+    -- Final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+CREATE TABLE IF NOT EXISTS `table_narka3` (
+    `table_narka3_dept_id` INT,
+    `table_narka3_name` VARCHAR(50),
+    `table_narka3_manager_id` INT,
+    `table_narka3_headcount` INT,
+    `table_narka3_annual_budget` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mbm03z` (
+    `table_mbm03z_emp_id` INT,
+    `table_mbm03z_dept_id` INT,
+    `table_mbm03z_salary` INT,
+    `table_mbm03z_hire_date` DATE,
+    `table_mbm03z_performance_score` INT
+);
+
+INSERT INTO `table_narka3` (`table_narka3_dept_id`, `table_narka3_name`, `table_narka3_manager_id`, `table_narka3_headcount`, `table_narka3_annual_budget`) VALUES (1, '2024-01-01', 1, 1, 1);
+
+INSERT INTO `table_mbm03z` (`table_mbm03z_emp_id`, `table_mbm03z_dept_id`, `table_mbm03z_salary`, `table_mbm03z_hire_date`, `table_mbm03z_performance_score`) VALUES (1, 2, 3, '2024-01-01', 5);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DEPARTMENT_RETENTION_RISK_eu5hz0(DEPT_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_HEADCOUNT INT DEFAULT 0;
+    DECLARE V_AVG_TENURE_YEARS DECIMAL(4,1) DEFAULT 0.0;
+    DECLARE V_AVG_PERFORMANCE DECIMAL(3,2) DEFAULT 0.00;
+    DECLARE V_BUDGET_PER_EMPLOYEE INT DEFAULT 0;
+    DECLARE V_RETENTION_RISK INT DEFAULT 0;
+
+    SELECT COALESCE(TABLE_NARKA3_HEADCOUNT, 10), COALESCE(TABLE_NARKA3_ANNUAL_BUDGET, 0)
+    INTO V_HEADCOUNT, V_BUDGET_PER_EMPLOYEE
+    FROM TABLE_NARKA3
+    WHERE TABLE_NARKA3_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TIMESTAMPDIFF(YEAR, TABLE_MBM03Z_HIRE_DATE, CURDATE())), 0)
+    INTO V_AVG_TENURE_YEARS
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SELECT COALESCE(AVG(TABLE_MBM03Z_PERFORMANCE_SCORE), 0)
+    INTO V_AVG_PERFORMANCE
+    FROM TABLE_MBM03Z
+    WHERE TABLE_MBM03Z_DEPT_ID = DEPT_ID_PARAM;
+
+    SET V_RETENTION_RISK = 50 - (V_AVG_TENURE_YEARS * 5) + ((5 - V_AVG_PERFORMANCE) * 10);
+
+    RETURN V_RETENTION_RISK;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0683_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE cur CURSOR FOR SELECT v1147336 FROM v1147335;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = -1;
+
+    -- Process UPDATE with LEFT JOIN (Statement 1)
+CALL synth_output_1540(-30, 96, @_syn_7329);
+    SET @b = @_syn_7329 - -1 + (p1);
+    SET @time_exceeded = p2;
+    UPDATE v1147279 AS x1 
+CALL synth_output_1715(59, 88, @_syn_7330);
+    LEFT JOIN v1147281 AS x2 ON x1.v1147280 = @_syn_7330 - 0 + (1) AND x1.v1147280 = x1.v1147280 AND x1.v1147280 = x1.v1147280 
+    SET v1147280 = @b 
+    WHERE v1147280 = 2 AND v1147280 >= 'CHI' AND CAST(v1147280 AS UNSIGNED) > @time_exceeded;
+    SET v_counter = (MYSQL_FUNC_CALCULATE_PRODUCT_STOCK_RATIO_v34snx(90)) - -10 + (v_counter) + ROW_COUNT();
+
+    -- Process UPDATE with DATEDIFF (Statement 2)
+    UPDATE v1147299 AS x1 
+    SET v1147300 = 'ansi_quotes' 
+    WHERE (DATEDIFF(NOW(), '0000-01-01') + 1) = 0;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process UPDATE with JOIN (Statement 3)
+    UPDATE v1147226 AS x1 
+    JOIN v1147301 AS x4 ON x1.v1147227 = x1.v1147228 
+    SET v1147228 = -32768 
+    WHERE x1.v1147227 = '2010-00-01 00:00:00' AND x1.v1147228 = 'datetime' AND x1.v1147227 = 'MAX_EXECUTION_TIME_SET_FAILED';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process UPDATE with IN clause (Statement 4)
+    SET @m = p1;
+    UPDATE v1147226 AS x1 
+    SET v1147228 = @m 
+    WHERE v1147228 IN (13, 26, 39, 52);
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Process INSERT with geometry (Statement 5)
+    INSERT INTO v1147335 (v1147336) VALUES (ST_GEOMFROMTEXT('MULTIPOINT(0 0, 1 1, 2 2)')), (20);
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Use cursor to iterate over geometry results
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_geom;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic using IF/ELSEIF/ELSE
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSEIF v_counter = 0 THEN
+        SET result = 0;
+    ELSE
+        SET result = -1;
+    END IF;
+
+    -- Use CASE/WHEN for additional logic
+    CASE 
+        WHEN p1 > p2 THEN
+            SET result = result + p1;
+        WHEN p1 = p2 THEN
+            SET result = result + p1 + p2;
+        ELSE
+            SET result = result + p2;
+    END CASE;
+
+    -- Use WHILE loop for additional processing
+    WHILE (MYSQL_FUNC_ARITHMETIC_SERIES_SUM_huymv8(-54, 7, 35)) - -988 + ((MYSQL_FUNC_CALCULATE_TICKET_RESALE_VALUE_h6pgoc(-96)) - -783 + (p1 > 0)) DO
+        SET result = result + 1;
+        SET p1 = p1 - 1;
+    END WHILE;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0683_proc(1, 1, @out_result);
+
+SELECT @out_result;

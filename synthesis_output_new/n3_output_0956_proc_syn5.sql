@@ -1,0 +1,371 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1167761 (id INT AUTO_INCREMENT PRIMARY KEY, v1167762 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1167799 (id INT AUTO_INCREMENT PRIMARY KEY, v1167800 VARCHAR(5000));
+CREATE TABLE IF NOT EXISTS v1167712 (id INT AUTO_INCREMENT PRIMARY KEY, v1167713 INT);
+CREATE TABLE IF NOT EXISTS v1167882 (id INT AUTO_INCREMENT PRIMARY KEY, v1167883 VARCHAR(10));
+INSERT INTO v1167761 (v1167762) VALUES ('1,2,3'), ('4,5,6'), ('7,8,9');
+INSERT INTO v1167799 (v1167800) VALUES ('test'), ('sample'), ('data');
+INSERT INTO v1167712 (v1167713) VALUES (1), (2), (3), (4), (5), (6);
+INSERT INTO v1167882 (v1167883) VALUES (''), (' '), ('abc'), (''), ('xyz');
+
+/* -----Dependency for: n3_output_0208_proc----- */
+CREATE TABLE IF NOT EXISTS v1132284 (v1132285 INT, v1132286 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1132286 (v1132287 CHAR(10), v1132288 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1132319 (v1132320 INT, v1132321 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1132324 (v1132325 INT, v1132326 CHAR(10));
+CREATE TABLE IF NOT EXISTS v1132358 (v1132360 INT);
+CREATE TABLE IF NOT EXISTS v1132362 (v1132363 INT);
+CREATE TABLE IF NOT EXISTS v1132392 (v1132393 INT);
+INSERT INTO v1132284 VALUES (100, 'A'), (200, 'B'), (300, 'C'), (50, 'D');
+INSERT INTO v1132286 VALUES ('s', 'X'), ('t', 'Y'), ('u', 'Z');
+INSERT INTO v1132319 VALUES (1, 'M'), (2, 'N');
+INSERT INTO v1132324 VALUES (10, 'O'), (20, 'P');
+INSERT INTO v1132358 VALUES (100), (200), (300);
+INSERT INTO v1132362 VALUES (1), (2), (3), (4), (5);
+INSERT INTO v1132392 VALUES (1), (2), (3);
+
+/* -----Called: n3_output_0208_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0208_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cur CURSOR FOR SELECT v1132360 FROM v1132358;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Insert into v1132358 using input parameters
+    INSERT INTO v1132358 (v1132360) VALUES (p1), (p2);
+
+    -- Update v1132362 with a variable
+    SET @i = p1;
+    UPDATE v1132362 AS x0 SET v1132363 = @i WHERE v1132363 = '' ORDER BY v1132363 DESC LIMIT 3;
+
+    -- Update v1132286 with complex expression
+    UPDATE v1132286 AS x0 SET v1132287 = 'fish' WHERE v1132287 = 's' ORDER BY (EXPORT_SET(v1132287, x0.v1132288, NTH_VALUE('4714-05-04', 1) OVER (), SUM(v1132287) OVER x6)) LIMIT 0;
+
+    -- Update v1132284 with LEFT JOIN and CASE
+    UPDATE v1132284 AS x0 LEFT JOIN v1132319 AS x1 ON (x0.v1132285 = x0.v1132285) SET v1132285 = 'B' WHERE v1132285 > 110 ORDER BY CASE WHEN v1132285 IS NULL THEN 1 ELSE 0 END DESC, v1132285 DESC LIMIT 90;
+
+    -- Update v1132392 with LEFT JOIN
+    UPDATE v1132392 AS x0 LEFT JOIN v1132324 AS x1 ON (x0.v1132393 = x0.v1132393) SET x0.v1132393 = NULL;
+
+    -- Cursor to iterate over v1132358
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + v_temp;
+    END LOOP;
+    CLOSE cur;
+
+    -- Conditional logic to determine result
+    IF v_counter > 1000 THEN
+        SET result = v_counter;
+    ELSEIF v_counter > 500 THEN
+        SET result = v_counter * 2;
+    ELSE
+        SET result = v_counter + p1 + p2;
+    END IF;
+
+    -- WHILE loop for additional processing
+    WHILE v_counter < 2000 DO
+        SET v_counter = v_counter + 1;
+    END WHILE;
+
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+CREATE TABLE IF NOT EXISTS `table_m3vpww` (
+    `table_m3vpww_cbit10` INT
+);
+
+INSERT INTO `table_m3vpww` (`table_m3vpww_cbit10`) VALUES (1);
+
+/* -----Called: MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT INT DEFAULT 0;
+    SELECT TABLE_M3VPWW_CBIT10 INTO RESULT FROM `TABLE_M3VPWW` LIMIT 1;
+    RETURN (MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(28)) - 620 + (result);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+CREATE TABLE IF NOT EXISTS `table_3c891b` (
+    `table_3c891b_customer_id` INT,
+    `table_3c891b_country` INT
+);
+
+INSERT INTO `table_3c891b` (`table_3c891b_customer_id`, `table_3c891b_country`) VALUES (1, 1);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_COUNTRY_CODE_INDEX_tqb1e7(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CUSTOMER_COUNT INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_CUSTOMER_COUNT
+    FROM TABLE_3C891B
+    WHERE TABLE_3C891B_COUNTRY = COUNTRY_PARAM;
+
+    RETURN (MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym(16)) - -306 + (v_customer_count);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym----- */
+CREATE TABLE IF NOT EXISTS `table_8ltuyy` (
+    `table_8ltuyy_order_id` INT,
+    `table_8ltuyy_customer_id` INT,
+    `table_8ltuyy_order_date` DATE,
+    `table_8ltuyy_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_35umu5` (
+    `table_35umu5_customer_id` INT,
+    `table_35umu5_country` INT
+);
+
+INSERT INTO `table_8ltuyy` (`table_8ltuyy_order_id`, `table_8ltuyy_customer_id`, `table_8ltuyy_order_date`, `table_8ltuyy_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_35umu5` (`table_35umu5_customer_id`, `table_35umu5_country`) VALUES (1, 2);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_REGIONAL_CUSTOMER_CONCENTRATION_9xo2ym(COUNTRY_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGIONAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_TOTAL_CUSTOMERS INT DEFAULT 0;
+    DECLARE V_CONCENTRATION INT DEFAULT 0;
+
+    SELECT COUNT(*)
+    INTO V_REGIONAL_CUSTOMERS
+    FROM TABLE_35UMU5
+    WHERE TABLE_35UMU5_COUNTRY = COUNTRY_PARAM;
+
+    SELECT COUNT(*)
+    INTO V_TOTAL_CUSTOMERS
+    FROM TABLE_35UMU5;
+
+    IF V_TOTAL_CUSTOMERS = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_CONCENTRATION = (V_REGIONAL_CUSTOMERS * 100) / V_TOTAL_CUSTOMERS;
+
+    RETURN V_CONCENTRATION;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_5_twpxzf----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_5_twpxzf() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 1;
+    DECLARE V_I INT DEFAULT 0;
+    DECLARE V_DONE INT DEFAULT 0;
+    DECLARE CUR CURSOR FOR SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET V_DONE = 1;
+
+    OPEN CUR;
+    READ_LOOP: LOOP
+        FETCH CUR INTO V_I;
+        IF V_DONE = (MYSQL_FUNC_SAFE_DIVIDE_5yo93a(93, -83)) - 250 + ((MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4(-65)) - -383 + (1)) THEN
+            LEAVE READ_LOOP;
+        END IF;
+        SET V_RESULT = (MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(-32, -14)) - 813 + ((MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(0, 100)) - 462 + (v_result * v_i));
+    END LOOP;
+    CLOSE CUR;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RING_AREA_yihq0r(INNER_RADIUS INT, OUTER_RADIUS INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_AREA DECIMAL(10,2) DEFAULT 0.00;
+
+    IF INNER_RADIUS >= OUTER_RADIUS THEN
+        RETURN 0;
+    END IF;
+
+    SET V_AREA = 3.14159 * (OUTER_RADIUS * OUTER_RADIUS - INNER_RADIUS * INNER_RADIUS);
+    RETURN FLOOR(V_AREA);
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FAHRENHEIT_TO_CELSIUS_vep9q4(FAHRENHEIT INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CELSIUS DECIMAL(5,2) DEFAULT 0.00;
+    SET V_CELSIUS = (FAHRENHEIT - 32) * 5 / 9;
+    RETURN (MYSQL_FUNC_HANDLER_FUNC_SUM_wqxr60(86, 76)) - 700 + (floor(v_celsius));
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_HANDLER_FUNC_SUM_wqxr60----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_HANDLER_FUNC_SUM_wqxr60(P_A INT, P_B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT;
+    DECLARE V_ERROR INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET V_ERROR = 1;
+
+    SET V_RESULT = P_A + P_B;
+
+    IF V_ERROR = 1 THEN
+        RETURN -1;
+    END IF;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_RECTANGLE_AREA_nd57bj(LENGTH INT, WIDTH INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    RETURN LENGTH * WIDTH;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_SAFE_DIVIDE_5yo93a----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_SAFE_DIVIDE_5yo93a(A INT, B INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_RESULT INT DEFAULT 0;
+
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '22012' BEGIN SET V_RESULT = 0; END;
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '2201I' BEGIN SET V_RESULT = 0; END;
+
+    IF B = 0 THEN
+        RETURN 0;
+    END IF;
+
+    SET V_RESULT = A / B;
+
+    RETURN V_RESULT;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0956_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_cur_val VARCHAR(100);
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_row_count INT DEFAULT 0;
+    DECLARE v_loop_count INT DEFAULT 0;
+    
+    DECLARE cur CURSOR FOR SELECT v1167800 FROM v1167799 WHERE v1167800 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+
+    -- Statement 1: Update v1167761 using DAYOFWEEK condition (adapted inline)
+    SET @d = (MYSQL_FUNC_CURSOR_FUNC_PRODUCT_1_TO_5_twpxzf()) - 325 + (concat('p1_', p1));
+    UPDATE v1167761 AS x1 SET v1167762 = @d WHERE FIND_IN_SET(DAYOFWEEK(CURRENT_DATE), v1167762);
+    SET v_update_count = (MYSQL_FUNC_PROC_BIT10_FUNC_fa1eqn()) - -505 + (v_update_count) + ROW_COUNT();
+
+    -- Statement 2: Insert into v1167799 with parameterized value
+    INSERT INTO v1167799 (v1167800) VALUES (p1);
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 3: Update v1167799 with special character comparison (adapted)
+    UPDATE v1167799 AS x1 SET v1167800 = 'ggg' WHERE v1167800 = REPEAT('स', 4000) AND v1167800 = REPEAT('o', 4000);
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 4: Update v1167712 with ORDER BY and LIMIT (adapted)
+    SET @g = p2;
+    UPDATE v1167712 AS x0 SET v1167713 = @g WHERE v1167713 = 4 ORDER BY v1167713, v1167713 DESC LIMIT 5;
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Statement 5: Update v1167882 with empty string conditions
+    UPDATE v1167882 AS x0 SET v1167883 = 84 WHERE v1167883 = '' AND v1167883 = ' ' AND v1167883 = '';
+    SET v_update_count = v_update_count + ROW_COUNT();
+
+    -- Use cursor to iterate over v1167799 and demonstrate loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_cur_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+CALL n3_output_0208_proc(58, -86, @_syn_10106);
+        SET v_counter = v_counter + @_syn_10106 - @_io_result + (1);
+        IF v_counter > p1 THEN
+            ITERATE read_loop;
+        END IF;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use CASE to determine final result based on update count
+    CASE
+        WHEN v_update_count > 10 THEN
+            SET result = 100;
+        WHEN v_update_count > 5 THEN
+            SET result = 50;
+        ELSE
+            SET result = v_counter;
+    END CASE;
+
+    -- Demonstrate REPEAT loop as additional procedural structure
+    SET v_loop_count = 0;
+    REPEAT
+        SET v_loop_count = v_loop_count + 1;
+    UNTIL v_loop_count >= p2 END REPEAT;
+
+    -- Add final adjustment to result using IF
+    IF v_loop_count > 0 THEN
+        SET result = result + v_loop_count;
+    END IF;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0956_proc(1, 1, @out_result);
+
+SELECT @out_result;

@@ -1,0 +1,549 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1403083 (
+    v1403084 INT,
+    v1403085 INT,
+    v1403086 INT,
+    v1403087 INT
+);
+CREATE TABLE IF NOT EXISTS v1403344 (
+    v1403345 VARCHAR(100)
+);
+CREATE TABLE IF NOT EXISTS v1403342 (
+    v1403343 GEOMETRY
+);
+CREATE TABLE IF NOT EXISTS v1403192 (
+    v1403193 INT,
+    v1403194 INT,
+    x3 INT
+);
+CREATE TABLE IF NOT EXISTS v1403000 (
+    v1403001 INT
+);
+INSERT INTO v1403083 VALUES (1, 10, 1, 10), (2, 20, 2, 20), (3, 30, 3, 30), (4, 40, 4, 40);
+INSERT INTO v1403344 VALUES ('abc'), ('xyz'), ('test'), ('pattern');
+INSERT INTO v1403342 VALUES (ST_GEOMFROMTEXT('POINT(0 0)'));
+INSERT INTO v1403192 VALUES (100, 200, 1), (200, 300, 2), (300, 400, 3);
+INSERT INTO v1403000 VALUES (5), (10), (15), (20);
+
+/* -----Dependency for: n3_output_0512_proc----- */
+CREATE TABLE IF NOT EXISTS v1140123 (v1140124 VARCHAR(50), v1140125 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1140131 (v1140132 INT);
+CREATE TABLE IF NOT EXISTS v1140450 (v1140451 CHAR(50), v1140452 INT);
+CREATE TABLE IF NOT EXISTS v1140042 (v1140043 VARCHAR(50));
+CREATE TABLE IF NOT EXISTS v1140286 (v1140287 VARCHAR(256));
+INSERT INTO v1140123 VALUES ('sample1', 'test1'), ('sample2', 'test2');
+INSERT INTO v1140131 VALUES (1), (2), (3);
+INSERT INTO v1140450 VALUES ('a', -2), ('b', -5);
+INSERT INTO v1140042 VALUES ('100'), ('200');
+INSERT INTO v1140286 VALUES ('abc'), ('def');
+
+/* -----Called: n3_output_0512_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0512_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cur CURSOR FOR SELECT v1140132 FROM v1140131 WHERE v1140132 >= -9223372036854775808 AND v1140132 < -9;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION SET result = -1;
+
+    -- Use parameter p1 to control logic
+    IF p1 > 0 THEN
+        INSERT INTO v1140123 (v1140124, v1140125) VALUES ('707003', '0102031'), ('Hasid', 228115);
+        SET v_counter = v_counter + 1;
+    ELSE
+        INSERT INTO v1140123 (v1140124, v1140125) VALUES ('default', CAST(p2 AS CHAR));
+        SET v_counter = v_counter + 2;
+    END IF;
+
+    -- Update with parameter condition
+    UPDATE v1140131 AS x0 SET v1140132 = 103 WHERE v1140132 >= -9223372036854775808 AND v1140132 < -9 AND v1140132 < p2;
+
+    -- Create table with check constraint
+    CREATE TABLE IF NOT EXISTS v1140450 (v1140451 CHAR(50), v1140452 INT CHECK (v1140452 < -1));
+
+    -- Loop through cursor and count
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_val;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Insert with parameter
+    INSERT INTO v1140042 (v1140043) VALUES (CAST(p1 AS CHAR));
+
+    -- Update with repeat function
+    WHILE p2 > 0 DO
+        UPDATE v1140286 AS x1 SET v1140287 = REPEAT('a', 256) WHERE v1140287 >= -9223372036854775808 AND v1140287 < -68;
+        SET p2 = p2 - 1;
+    END WHILE;
+
+    -- CASE statement for final result
+    CASE
+        WHEN v_counter > 10 THEN SET result = 100;
+        WHEN v_counter > 5 THEN SET result = 50;
+        ELSE SET result = v_counter;
+    END CASE;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_0396_proc----- */
+CREATE TABLE IF NOT EXISTS v1135785 (v1135786 TEXT);
+CREATE TABLE IF NOT EXISTS v1135737 (v1135738 BIGINT UNSIGNED);
+CREATE TABLE IF NOT EXISTS v1135761 (v1135763 VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v1135813 (v1135814 INT);
+CREATE TABLE IF NOT EXISTS v1135817 (v1135818 VARCHAR(255), v1135820 INT);
+INSERT INTO v1135785 VALUES (''), (''), ('');
+INSERT INTO v1135737 VALUES (0), (0), (0);
+INSERT INTO v1135761 VALUES ('test'), ('sample'), ('other');
+INSERT INTO v1135813 VALUES (1), (2), (3), (NULL), (NULL);
+INSERT INTO v1135817 VALUES ('a', 0), ('b', 1), ('c', 0), ('d', 1);
+
+/* -----Called: n3_output_0396_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0396_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_text_val TEXT;
+    DECLARE v_big_val BIGINT UNSIGNED;
+    DECLARE v_update_count INT DEFAULT 0;
+    DECLARE v_found_rows INT DEFAULT 0;
+    DECLARE v_loop_done INT DEFAULT FALSE;
+    DECLARE v_temp_id INT;
+    DECLARE cur CURSOR FOR SELECT v1135814 FROM v1135813 WHERE v1135814 IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_loop_done = TRUE;
+
+    -- Statement 1: INSERT with CONCAT/REPEAT
+    SET v_text_val = CONCAT(REPEAT('x', 32000), 'z');
+    INSERT INTO v1135785 (v1135786) VALUES (v_text_val);
+    SET v_counter = (MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(56)) - -630 + (v_counter) + ROW_COUNT();
+
+    -- Statement 2: INSERT with big integer overflow (wrapped in IF condition using p1)
+CALL n3_output_0007_proc(76, -99, @_syn_4052);
+    IF @_syn_4052 - @_io_result + ((MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(-51)) - 445 + (p1 > 0)) THEN
+        INSERT INTO v1135737 (v1135738) VALUES (18446744073709551000 + 1);
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Statement 3: UPDATE with pattern matching and p2 condition
+    UPDATE v1135761 AS x0 SET v1135763 = '0' WHERE v1135763 LIKE CONCAT('s', '%') AND p2 > 0;
+    SET v_update_count = ROW_COUNT();
+    SET v_counter = v_counter + v_update_count;
+
+    -- Statement 4: INSERT multiple values with NULLs using a loop
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_temp_id;
+        IF v_loop_done THEN
+            LEAVE read_loop;
+        END IF;
+        INSERT INTO v1135813 (v1135814) VALUES (v_temp_id), (NULL), (v_temp_id + 1);
+        SET v_counter = v_counter + 3;
+    END LOOP;
+    CLOSE cur;
+
+    -- Statement 5: UPDATE using FOUND_ROWS() with IF condition
+    SELECT FOUND_ROWS() INTO v_found_rows;
+    IF v_found_rows > 0 AND p1 > 0 THEN
+        UPDATE v1135817 AS x1 SET v1135818 = CAST(p2 AS CHAR) WHERE v1135820 = 1;
+        SET v_counter = v_counter + ROW_COUNT();
+    END IF;
+
+    -- Final output
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+CREATE TABLE IF NOT EXISTS `table_6t26dr` (
+    `table_6t26dr_order_id` INT,
+    `table_6t26dr_customer_id` INT,
+    `table_6t26dr_order_date` DATE,
+    `table_6t26dr_total_amount` DECIMAL(10,2)
+);
+
+CREATE TABLE IF NOT EXISTS `table_9i40nw` (
+    `table_9i40nw_order_id` INT,
+    `table_9i40nw_product_id` INT,
+    `table_9i40nw_quantity` INT,
+    `table_9i40nw_unit_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_6t26dr` (`table_6t26dr_order_id`, `table_6t26dr_customer_id`, `table_6t26dr_order_date`, `table_6t26dr_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+INSERT INTO `table_9i40nw` (`table_9i40nw_order_id`, `table_9i40nw_product_id`, `table_9i40nw_quantity`, `table_9i40nw_unit_price`) VALUES (1, 2, 3, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_GROSS_PROFIT_yhol5j(ORDER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REVENUE INT DEFAULT 0;
+    DECLARE V_COST INT DEFAULT 0;
+    DECLARE V_GROSS_PROFIT INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(TABLE_9I40NW_QUANTITY * TABLE_9I40NW_UNIT_PRICE), 0)
+    INTO V_REVENUE
+    FROM TABLE_9I40NW
+    WHERE TABLE_9I40NW_ORDER_ID = ORDER_ID_PARAM;
+
+    SELECT COALESCE(TABLE_6T26DR_TOTAL_AMOUNT, 0)
+    INTO V_COST
+    FROM TABLE_6T26DR
+    WHERE TABLE_6T26DR_ORDER_ID = ORDER_ID_PARAM;
+
+    SET V_GROSS_PROFIT = V_REVENUE - V_COST;
+
+    RETURN V_GROSS_PROFIT;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: n3_output_0007_proc----- */
+CREATE TABLE IF NOT EXISTS v0 (v1 INT, v2 INT);
+CREATE TABLE IF NOT EXISTS v4 (v1 INT, v2 INT);
+CREATE TABLE IF NOT EXISTS films (title VARCHAR(255));
+CREATE TABLE IF NOT EXISTS v6 (v1 INT);
+INSERT INTO v0 VALUES (1, 10), (2, 20), (3, 30);
+INSERT INTO v4 VALUES (1, 1);
+INSERT INTO films VALUES ('The Matrix'), ('Inception'), ('Interstellar');
+INSERT INTO v6 VALUES (44);
+
+/* -----Called: n3_output_0007_proc----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0007_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_val1 INT;
+    DECLARE v_val2 INT;
+    DECLARE v_film_title VARCHAR(255);
+    DECLARE done INT DEFAULT FALSE;
+    
+    DECLARE cur CURSOR FOR SELECT v1, v2 FROM v0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Create index on films table
+    CREATE INDEX title_idx_nulls_low ON films (title ASC);
+
+    -- Use input parameters to insert into v4
+    INSERT INTO v4 VALUES (p1, p2);
+
+    -- Use input parameters to update v6
+    UPDATE v6 SET v1 = v1 + p1 WHERE v1 = 44;
+
+    -- Loop through v0 table using cursor
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO v_val1, v_val2;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Conditional logic using CASE
+        CASE
+            WHEN v_val1 > p1 THEN
+                SET v_counter = (MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(-38)) - 455 + (v_counter) + 1;
+            WHEN v_val2 > p2 THEN
+                SET v_counter = v_counter + 2;
+            ELSE
+                SET v_counter = v_counter + 3;
+        END CASE;
+        
+        -- Use ITERATE to skip certain rows
+        IF v_val1 = p1 THEN
+            ITERATE read_loop;
+        END IF;
+        
+        -- Use WHILE loop for additional processing
+        WHILE v_val2 > 0 DO
+            SET v_counter = v_counter + 1;
+            SET v_val2 = v_val2 - 1;
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+
+    -- Use SELECT INTO with CTE to get film title
+    WITH film_cte AS (
+        SELECT title FROM films WHERE title LIKE 'I%'
+    )
+    SELECT title INTO v_film_title FROM film_cte LIMIT 1;
+
+    -- Final conditional check
+    IF v_film_title IS NOT NULL THEN
+        SET result = v_counter + LENGTH(v_film_title);
+    ELSE
+        SET result = v_counter;
+    END IF;
+
+    -- Clean up: drop the index we created
+    DROP INDEX title_idx_nulls_low ON films;
+END; //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+CREATE TABLE IF NOT EXISTS `table_ejio0q` (
+    `table_ejio0q_campaign_id` INT,
+    `table_ejio0q_start_date` DATE
+);
+
+INSERT INTO `table_ejio0q` (`table_ejio0q_campaign_id`, `table_ejio0q_start_date`) VALUES (1, '2024-01-01');
+
+/* -----Called: MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_DAYS_SINCE_CAMPAIGN_START_y2x1rj(CAMPAIGN_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_START_DATE DATE;
+
+    SELECT TABLE_EJIO0Q_START_DATE
+    INTO V_START_DATE
+    FROM TABLE_EJIO0Q
+    WHERE TABLE_EJIO0Q_CAMPAIGN_ID = CAMPAIGN_ID_PARAM;
+
+    IF V_START_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(4)) - 925 + (0);
+    END IF;
+
+    RETURN DATEDIFF(CURDATE(), V_START_DATE);
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+CREATE TABLE IF NOT EXISTS `table_lotxra` (
+    `table_lotxra_customer_id` INT,
+    `table_lotxra_registration_date` DATE,
+    `table_lotxra_country` INT
+);
+
+CREATE TABLE IF NOT EXISTS `table_mwrsxc` (
+    `table_mwrsxc_order_id` INT,
+    `table_mwrsxc_customer_id` INT,
+    `table_mwrsxc_order_date` DATE,
+    `table_mwrsxc_total_amount` DECIMAL(10,2)
+);
+
+INSERT INTO `table_lotxra` (`table_lotxra_customer_id`, `table_lotxra_registration_date`, `table_lotxra_country`) VALUES (1, '2024-01-01', 1);
+
+INSERT INTO `table_mwrsxc` (`table_mwrsxc_order_id`, `table_mwrsxc_customer_id`, `table_mwrsxc_order_date`, `table_mwrsxc_total_amount`) VALUES (1, 2, '2024-01-01', 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_FIRST_PURCHASE_DELAY_qe6mfl(CUSTOMER_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_REGISTRATION_DATE DATE;
+    DECLARE V_FIRST_ORDER_DATE DATE;
+    DECLARE V_DELAY_DAYS INT DEFAULT 0;
+
+    SELECT TABLE_LOTXRA_REGISTRATION_DATE
+    INTO V_REGISTRATION_DATE
+    FROM TABLE_LOTXRA
+    WHERE TABLE_LOTXRA_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    SELECT MIN(TABLE_MWRSXC_ORDER_DATE)
+    INTO V_FIRST_ORDER_DATE
+    FROM TABLE_MWRSXC
+    WHERE TABLE_MWRSXC_CUSTOMER_ID = CUSTOMER_ID_PARAM;
+
+    IF V_FIRST_ORDER_DATE IS NULL THEN
+        RETURN (MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(-77)) - -853 + (0);
+    END IF;
+
+    SET V_DELAY_DAYS = DATEDIFF(V_FIRST_ORDER_DATE, V_REGISTRATION_DATE);
+
+    RETURN V_DELAY_DAYS;
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+CREATE TABLE IF NOT EXISTS `table_u6vck3` (
+    `table_u6vck3_product_id` INT,
+    `table_u6vck3_category_id` INT,
+    `table_u6vck3_price` DECIMAL(10,2)
+);
+
+INSERT INTO `table_u6vck3` (`table_u6vck3_product_id`, `table_u6vck3_category_id`, `table_u6vck3_price`) VALUES (1, 2, 1.0);
+
+/* -----Called: MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_CATEGORY_AVG_PRICE_RATIO_32m8kg(CATEGORY_ID_PARAM INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_CATEGORY_AVG DECIMAL(10,2) DEFAULT 0.00;
+    DECLARE V_OVERALL_AVG DECIMAL(10,2) DEFAULT 1.00;
+
+    SELECT COALESCE(AVG(TABLE_U6VCK3_PRICE), 0), COALESCE(AVG(TABLE_U6VCK3_PRICE), 1)
+    INTO V_CATEGORY_AVG, V_OVERALL_AVG
+    FROM TABLE_U6VCK3
+    WHERE TABLE_U6VCK3_CATEGORY_ID = CATEGORY_ID_PARAM;
+
+    RETURN (MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp()) - -504 + (floor((v_category_avg * 100) / v_overall_avg));
+END //
+
+DELIMITER ;
+
+/* -----Dependency for: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+CREATE TABLE IF NOT EXISTS table_rfse4k (
+    table_rfse4k_employee_id INT,
+    table_rfse4k_first_name VARCHAR(50),
+    table_rfse4k_last_name VARCHAR(50),
+    table_rfse4k_salary INT
+);
+
+INSERT INTO table_rfse4k (`table_rfse4k_employee_id`, `table_rfse4k_first_name`, `table_rfse4k_last_name`, `table_rfse4k_salary`) VALUES (1, 'test', 'test', 4);
+
+/* -----Called: MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_USP_GET_EMPLOYEES_SALARY_ABOVE_35000_dktnzp() RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE RESULT_COUNT INT DEFAULT 0;
+    
+    SELECT COUNT(*) INTO RESULT_COUNT
+    FROM TABLE_RFSE4K
+    WHERE TABLE_RFSE4K_SALARY > 35000
+    ORDER BY TABLE_RFSE4K_FIRST_NAME, TABLE_RFSE4K_LAST_NAME, TABLE_RFSE4K_EMPLOYEE_ID;
+    
+    RETURN RESULT_COUNT;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_FLOW_CONTROL_FUNC_CASE_WEEKDAY_s0u5g6(DAY_NUM INT) RETURNS VARCHAR(20) NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    CASE DAY_NUM
+        WHEN 1 THEN RETURN 'MONDAY';
+        WHEN 2 THEN RETURN 'TUESDAY';
+        WHEN 3 THEN RETURN 'WEDNESDAY';
+        WHEN 4 THEN RETURN 'THURSDAY';
+        WHEN 5 THEN RETURN 'FRIDAY';
+        WHEN 6 THEN RETURN 'SATURDAY';
+        WHEN 7 THEN RETURN 'SUNDAY';
+        ELSE RETURN 'INVALID';
+    END CASE;
+END //
+
+DELIMITER ;
+
+/* -----Called: MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn----- */
+
+DELIMITER //
+
+CREATE FUNCTION MYSQL_FUNC_CALCULATE_TRIANGULAR_NUMBER_id3orn(N INT) RETURNS INT NOT DETERMINISTIC READS SQL DATA
+BEGIN
+    DECLARE V_SUM INT DEFAULT 0;
+    DECLARE V_COUNTER INT DEFAULT 1;
+
+    IF N <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    SUM_LOOP: WHILE V_COUNTER <= N DO
+        SET V_SUM = V_SUM + V_COUNTER;
+        SET V_COUNTER = V_COUNTER + 1;
+    END WHILE SUM_LOOP;
+
+    RETURN V_SUM;
+END //
+
+DELIMITER ;
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_1876_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_done INT DEFAULT 0;
+    DECLARE v_geom GEOMETRY;
+    DECLARE v_val INT;
+    DECLARE v_cur CURSOR FOR SELECT v1403343 FROM v1403342;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
+    
+    -- Statement 1: UPDATE with SOUNDEX and complex conditions
+    UPDATE v1403083 AS x1 SET v1403085 = 86 
+CALL n3_output_0512_proc(36, 87, @_syn_20771);
+    WHERE x1.v1403086 = @_syn_20771 - @_io_result + (1) 
+      AND x1.v1403084 = x1.v1403086 
+      AND (x1.v1403086 >= 4 OR x1.v1403084 IS NULL) 
+      AND (x1.v1403084 < 5 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403087 = x1.v1403085 OR x1.v1403085 IS NULL OR x1.v1403084 IS NULL) 
+      AND (x1.v1403084 >= 2 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 >= 4 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 <= 2 OR x1.v1403087 IS NULL) 
+      AND (x1.v1403084 < 1 OR x1.v1403086 IS NULL) 
+      AND (x1.v1403084 = x1.v1403085 OR x1.v1403086 IS NULL) 
+      AND SOUNDEX(v1403084) = SOUNDEX(v1403087);
+    
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 2: UPDATE with LIKE pattern using input param
+    SET @pattern = CONCAT('%', p1, '%');
+    UPDATE v1403344 AS x1 SET v1403345 = 3 WHERE v1403345 LIKE @pattern;
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 3: INSERT geometry using ST_GEOMFROMTEXT
+    INSERT INTO v1403342 (v1403343) VALUES (ST_GEOMFROMTEXT('MULTIPOLYGON(((-115.006363 36.305435,-114.992394 36.305202,-114.991219 36.305975,-114.991163 36.306845,-114.989432 36.309452,-114.978275 36.312642,-114.977363 36.311978,-114.975327 36.312344,-114.96502 36.31597,-114.963364 36.313629,-114.961723 36.313721,-114.956398 36.316057,-114.951882 36.320979,-114.947073 36.323475,-114.945207 36.326451,-114.945207 36.326451,-114.944132 36.326061,-114.94003 36.326588,-114.924017 36.334484,-114.923281 36.334146,-114.92564 36.331504,-114.94072 36.319282,-114.945348 36.314812,-114.948091 36.314762,-114.951755 36.316211,-114.952446 36.313883,-114.952644 36.309488,-114.944725 36.313083,-114.93706 36.32043,-114.932478 36.323497,-114.924556 36.327708,-114.922608 36.329715,-114.92009 36.328695,-114.912105 36.323566,-114.901647 36.317952,-114.897436 36.313968,-114.895344 36.309573,-114.891699 36.304398,-114.890569 36.303551,-114.886356 36.302702,-114.885141 36.301351,-114.885709 36.297391,-114.892499 36.290893,-114.902142 36.288974,-114.904941 36.288838,-114.905308 36.289845,-114.906325 36.290395,-114.909916 36.289549,-114.914527 36.287535,-114.918797 36.284423,-114.922982 36.279731,-114.924113 36.277282,-114.924057 36.275817,-114.927733 36.27053,-114.929354 36.269029,-114.929354 36.269029,-114.950856 36.268715,-114.950768 36.264324,-114.960206 36.264293,-114.960301 36.268943,-115.006662 36.268929,-115.008583 36.265619,-115.00665 36.264247,-115.006659 36.246873,-115.006659 36.246873,-115.006838 36.247697,-115.010764 36.247774,-115.015609 36.25113,-115.015765 36.254505,-115.029517 36.254619,-115.038573 36.249317,-115.038573 36.249317,-115.023403 36.25841,-115.023873 36.258994,-115.031845 36.259829,-115.03183 36.261053,-115.025561 36.261095,-115.036417 36.274632,-115.033729 36.276041,-115.032217 36.274851,-115.029845 36.273959,-115.029934 36.274966,-115.025763 36.274896,-115.025406 36.281044,-115.028731 36.284471,-115.036497 36.290377,-115.042071 36.291039,-115.026759 36.298478,-115.008995 36.301966,-115.006363 36.305435),(-115.079835 36.244369,-115.079735 36.260186,-115.076435 36.262369,-115.069758 36.265,-115.070235 36.268757,-115.064542 36.268655,-115.061843 36.269857,-115.062676 36.270693,-115.06305 36.272344,-115.059051 36.281023,-115.05918 36.283008,-115.060591 36.285246,-115.061913 36.290022,-115.062499 36.306353,-115.062499 36.306353,-115.060918 36.30642,-115.06112 36.289779,-115.05713 36.2825,-115.057314 36.279446,-115.060779 36.274659,-115.061366 36.27209,-115.057858 36.26557,-115.055805 36.262883,-115.054688 36.262874,-115.047335 36.25037,-115.044234 36.24637,-115.052434 36.24047,-115.061734 36.23507,-115.061934 36.22677,-115.061934 36.22677,-115.061491 36.225267,-115.062024 36.218194,-115.060134 36.218278,-115.060133 36.210771,-115.057833 36.210771,-115.057433 36.196271,-115.062233 36.196271,-115.062233 36.190371,-115.062233 36.190371,-115.065533 36.190371,-115.071333 36.188571,-115.098331 36.188275,-115.098331 36.188275,-115.098435 36.237569,-115.097535 36.240369,-115.097535 36.240369,-115.093235 36.240369,-115.089135 36.240469,-115.083135 36.240569,-115.083135 36.240569,-115.079835 36.244369)))'));
+    SET v_counter = v_counter + ROW_COUNT();
+    
+    -- Statement 4: UPDATE with COALESCE and subquery using cursor loop
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_geom;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF p1 > 0 THEN
+            UPDATE v1403192 AS x0 SET v1403193 = p2 WHERE x3 IN (SELECT COALESCE(v1403194, 0) FROM v1403192);
+            SET v_counter = v_counter + ROW_COUNT();
+        ELSE
+            SET v_counter = v_counter + 0;
+        END IF;
+    END LOOP;
+    CLOSE v_cur;
+    
+    -- Statement 5: UPDATE with self-reference and WHILE loop
+    SET v_val = p1;
+CALL n3_output_0396_proc(61, -55, @_syn_20770);
+    WHILE @_syn_20770 - @_io_result + (v_val) > 0 DO
+        UPDATE v1403000 AS x1 SET v1403001 = p2 WHERE x1.v1403001 = v1403001;
+        SET v_counter = v_counter + ROW_COUNT();
+        SET v_val = v_val - 1;
+    END WHILE;
+    
+    -- Final result
+    SET result = v_counter;
+END; //
+
+DELIMITER ;
+
+CALL n3_output_1876_proc(1, 1, @out_result);
+
+SELECT @out_result;
