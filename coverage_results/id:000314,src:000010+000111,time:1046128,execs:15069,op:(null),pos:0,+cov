@@ -1,0 +1,86 @@
+/* -----Dependencies----- */
+CREATE TABLE IF NOT EXISTS v1134656 (v1134657 BIGINT UNSIGNED, v1134658 INT);
+CREATE TABLE IF NOT EXISTS v1134678 (v1134679 VARCHAR(100), v1134680 VARCHAR(100));
+CREATE TABLE IF NOT EXISTS v1134731 (v1134732 BIGINT UNSIGNED);
+CREATE TABLE IF NOT EXISTS v1134792 (v1134793 DATETIME, v1134794 VARCHAR(1024) CHARACTER SET utf8mb3, v1134795 VARCHAR(1024) CHARACTER SET latin1, v1134796 VARCHAR(1024) CHARACTER SET utf8mb3, v1134797 VARCHAR(10) CHARACTER SET latin1, v1134798 INT AUTO_INCREMENT PRIMARY KEY, v1134799 VARCHAR(10) CHARACTER SET latin1, v1134800 DATE, v1134801 INT, v1134802 VARCHAR(10) CHARACTER SET utf8mb3, v1134803 VARCHAR(10) CHARACTER SET utf8mb3, v1134804 INT, v1134805 DATETIME, v1134806 DATE, v1134807 VARCHAR(1024) CHARACTER SET latin1, INDEX(v1134794), INDEX(v1134797), INDEX(v1134806), INDEX(v1134802), INDEX(v1134793), INDEX(v1134795), INDEX(v1134796));
+CREATE TABLE IF NOT EXISTS v1134630 (v1134631 INT);
+INSERT INTO v1134656 VALUES (18446744073709551614, 1), (18446744073709551614, 2), (18446744073709551614, 3);
+INSERT INTO v1134678 VALUES ('''mysqltest_3''@''localhost''', 'initial');
+INSERT INTO v1134731 VALUES (18446744073709551614), (18446744073709551614);
+INSERT INTO v1134792 (v1134793, v1134794, v1134795, v1134796, v1134797, v1134799, v1134800, v1134801, v1134802, v1134803, v1134804, v1134805, v1134806, v1134807) VALUES (NOW(), 'test', 'test', 'test', 'test', 'test', '2023-01-01', 10, 'test', 'test', 20, NOW(), '2023-01-01', 'test');
+INSERT INTO v1134630 VALUES (NULL), (NULL), (NULL);
+
+/* -----Main Routine----- */
+
+DELIMITER //
+
+CREATE PROCEDURE n3_output_0352_proc(IN p1 INT, IN p2 INT, OUT result INT)
+BEGIN
+    DECLARE v_counter INT DEFAULT 0;
+    DECLARE v_temp BIGINT UNSIGNED;
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_cur CURSOR FOR SELECT v1134732 FROM v1134731 WHERE v1134732 = 18446744073709551614 ORDER BY OCT(v1134732) LIMIT 0;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_counter = v_counter + 1;
+
+    -- Statement 1: UPDATE v1134656
+    UPDATE v1134656 AS x1 SET v1134657 = x1.v1134657 + x1.v1134657 + 10 WHERE v1134657 = 18446744073709551614 ORDER BY v1134657 LIMIT 12;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 2: UPDATE v1134678 with parameterized value
+    UPDATE v1134678 AS x0 SET v1134680 = CONCAT('user_', p1) WHERE v1134679 = '''mysqltest_3''@''localhost''';
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 3: UPDATE v1134731 with division by zero (handled by handler)
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLWARNING, SQLEXCEPTION BEGIN END;
+        UPDATE v1134731 AS x1 SET v1134732 = (1 / 0) WHERE v1134732 = 18446744073709551614 ORDER BY (OCT(v1134732)) LIMIT 0;
+    END;
+
+    -- Statement 4: CREATE TABLE v1134792 (already created in setup, so we insert data based on params)
+    INSERT INTO v1134792 (v1134793, v1134794, v1134795, v1134796, v1134797, v1134799, v1134800, v1134801, v1134802, v1134803, v1134804, v1134805, v1134806, v1134807) 
+    VALUES (NOW(), CONCAT('data_', p1), CONCAT('data_', p2), 'test', 'test', 'test', DATE_ADD('2023-01-01', INTERVAL p1 DAY), p2, 'test', 'test', p1 * 10, NOW(), '2023-01-01', 'test');
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Statement 5: UPDATE v1134630
+    UPDATE v1134630 AS x0 SET x0.v1134631 = p1 WHERE x0.v1134631 IS NULL;
+    SET v_counter = v_counter + ROW_COUNT();
+
+    -- Use cursor (even though it returns nothing, it demonstrates procedural structure)
+    OPEN v_cur;
+    read_loop: LOOP
+        FETCH v_cur INTO v_temp;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+        SET v_counter = v_counter + 1;
+    END LOOP;
+    CLOSE v_cur;
+
+    -- Conditional logic
+    IF v_counter > 0 THEN
+        SET result = v_counter;
+    ELSE
+        SET result = 0;
+    END IF;
+
+    -- Loop example with WHILE
+    WHILE p1 > 0 DO
+        SET p1 = p1 - 1;
+        SET result = result + 1;
+    END WHILE;
+
+    -- Case statement
+    CASE p2
+        WHEN 0 THEN SET result = result + 100;
+        WHEN 1 THEN SET result = result + 200;
+        ELSE SET result = result + 300;
+    END CASE;
+
+END; //
+
+DELIMITER ;
+
+CALL n3_output_0352_proc(1, 1, @out_result);
+
+SELECT @out_result;
